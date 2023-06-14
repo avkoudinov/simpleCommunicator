@@ -1,0 +1,11 @@
+Bewertungen für Ihre Nachrichten im Forum '{site_name}' gelöscht
+
+Sehr geehrter {user_name},
+
+Moderator '{moderator_name}' hat {count} Bewertungen für Ihre Nachrichten im Forum '{site_name}' gelöscht.
+
+{site_url}
+
+Mit freundlichen Grüßen,
+
+Forumsverwaltung

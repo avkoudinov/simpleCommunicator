@@ -1,0 +1,16 @@
+New moderator in the forum of '{site_name}' you are moderating 
+
+Dear {user_name},
+
+On the forum where you are the moderator:
+
+{forum_name}
+{forum_url}
+
+Administrator '{administrator_name}' added a new moderator:
+
+{moderator_name}
+
+Yours faithfully,
+
+Forum administration

@@ -1,0 +1,31 @@
+Ваши сообщения на форуме '{site_name}' перенесены в другую тему
+
+Уважаемый(ая) {user_name},
+
+{moved_count} ваших сообщений в теме: 
+
+{source_topic_name}
+{source_topic_url}
+
+На форуме: 
+
+{source_forum_name}
+{source_forum_url}
+
+было перенесено в тему:
+
+{target_topic_name}
+{target_topic_url}
+
+На форуме:
+
+{target_forum_name}
+{target_forum_url}
+
+Первое перенесенное cообщение:
+
+{first_post_url}
+
+С уважением,
+
+Администрация форума

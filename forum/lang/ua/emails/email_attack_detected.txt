@@ -1,0 +1,25 @@
+Підозра на DOS атаку на форумі '{site_name}'
+
+Шановний(а) {administrator_name},
+
+Ви отримали це повідомлення тому, що є адміністратором форуму '{site_name}':
+
+{site_url}
+
+На форумі відвернена DOS атака з IP адреси:
+
+{iIp} - https://whatismyipaddress.com/ip/{ip}
+
+З даного IP адреси було здійснено {hits} запитів ({atype}) в {check_period} хвилин.
+
+Загальна кількість атак: {total_attacks}
+Перша атака: {first_attack}
+Остання атака: {last_attack}
+
+Перегляд статистики:
+
+{statistics_url}
+
+З повагою,
+
+Адміністрація форуму

@@ -1,0 +1,22 @@
+New user on forum '{site_name}'
+
+Dear {administrator_name},
+
+You received this message because you are the administrator of forum '{site_name}':
+
+{site_url}
+
+A new user has registered on the forum:
+
+Login: {user_login}
+Username: {user_name}
+Email address: {user_email}
+IP address: {ip} - https://whatismyipaddress.com/ip/{ip}
+
+His account must be approved by the administrator. You can view and approve your account details at the following link:
+
+{user_edit_url}
+
+Yours faithfully,
+
+Forum administration

@@ -1,0 +1,11 @@
+Your ratings on the forum '{site_name}' have been removed
+
+Dear {user_name},
+
+{count} of your ratings have been removed on the forum '{site_name}'
+
+{site_url}
+
+Yours faithfully,
+
+Forum administration

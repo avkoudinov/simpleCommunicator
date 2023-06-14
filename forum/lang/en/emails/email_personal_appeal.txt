@@ -1,0 +1,28 @@
+You were asked for your attention on the forum '{site_name}' 
+
+Dear {user_name},
+
+On the forum:
+
+{forum_name}
+{forum_url}
+
+in the topic:
+
+{topic_name}
+
+member '{author_name}' asked for your attention in a post:
+
+{post_url}
+
+If you do not want to reset the mark of new messages, in order not to lose information about possible unread messages before this message, use this link to go to the message:
+
+{post_url_unread}
+
+Short message text:
+
+{message}
+
+Yours faithfully,
+
+Forum administration

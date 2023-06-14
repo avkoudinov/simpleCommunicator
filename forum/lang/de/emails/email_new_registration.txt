@@ -1,0 +1,12 @@
+Neuer Benutzer im Forum '{site_name}'
+
+Liebe(r) {subscriber_name},
+
+Ein neuer Benutzer hat sich im Forum registriert:
+
+Benutzername: {user_name}
+Profil: {user_url}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

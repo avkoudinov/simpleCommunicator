@@ -1,0 +1,10 @@
+#
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+RewriteRule "^robots\.txt$"  "robots/%{HTTP_HOST}.txt"  [NS]
+RewriteRule "^sitemap\.xml$" "sitemap/%{HTTP_HOST}.xml" [NS]
+
+</IfModule>
+#

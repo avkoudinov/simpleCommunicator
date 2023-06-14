@@ -1,0 +1,34 @@
+Ihre Nachricht wurde im Forum '{site_name}' beantwortet.
+
+Liebe(r) {user_name},
+
+Im Forum:
+
+{forum_name}
+{forum_url}
+
+im Thema:
+
+{topic_name}
+
+Der Teilnehmer '{Autorenname}' hat auf Ihre Nachricht geantwortet.
+
+Ihre Nachrichtenadresse:
+
+{citated_post_url}
+
+Neue Antwortnachrichtenadresse:
+
+{post_url}
+
+Wenn Sie die Markierung neuer Nachrichten nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Nachrichten vor dieser Nachricht zu verlieren, verwenden Sie diesen Link, um zur Nachricht zu gelangen:
+
+{post_url_unread}
+
+Kurzer Antworttext:
+
+{message}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

@@ -1,0 +1,21 @@
+New request via the contact form on the forum '{site_name}'
+
+A new request has been received on the forum '{site_name}'
+
+{site_url}
+
+Time: {time}
+IP address: {ip} - https://whatismyipaddress.com/ip/{ip}
+Fingerprint: {user_marker} 
+
+Sender: {email}
+
+Subject: {subject}
+
+Message:
+
+{message}
+
+Yours faithfully,
+
+Forum administration

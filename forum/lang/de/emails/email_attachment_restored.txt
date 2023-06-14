@@ -1,0 +1,23 @@
+Ihr Anhang wurde auf dem '{site_name}' wiederhergestellt
+
+Liebe(r) {user_name},
+
+Ihr Anhang in der Nachricht vom {post_date} im Thema:
+
+{topic_name}
+{post_url}
+
+Im Forum:
+
+{forum_name}
+{forum_url}
+
+wurde vom Moderator '{moderator_name}' wiederhergestellt.
+
+Kurznachrichtentext:
+
+{message}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

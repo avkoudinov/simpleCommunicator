@@ -1,0 +1,21 @@
+Aktivieren des Profils im Forum '{site_name}'
+
+Liebe(r) {user_name},
+
+Sie haben diese Nachricht erhalten, weil Sie Ihre E-Mail-Adresse geändert oder eine Reaktivierung in Ihrem Forum-Konto '{site_name}' angefordert haben.
+
+{site_url}
+
+Deine Benutzerkontendetails:
+
+Login: {user_login}
+Benutzername: {user_name}
+E-Mail-Adresse: {user_email}
+
+Um den Vorgang der Aktivierung Ihres Kontos abzuschließen, besuchen Sie bitte den folgenden Link:
+
+{activation_url}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung 

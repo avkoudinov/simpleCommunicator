@@ -1,0 +1,25 @@
+Verdacht auf DOS-Angriff im Forum '{site_name}'
+
+Liebe(r) {administrator_name},
+
+Sie haben diese Nachricht erhalten, weil Sie der Administrator des Forums '{site_name}' sind:
+
+{site_url}
+
+DOS-Angriff von IP-Adresse wurde im Forum verhindert:
+
+{ip} - https://whatismyipaddress.com/ip/{ip}
+
+{hits} Anfragen ({atype}) wurden von dieser IP-Adresse in {check_period} Minuten gesendet.
+
+Gesamtzahl der Angriffe: {total_attacks}
+Erster Angriff: {first_attack}
+Letzter Angriff: {last_attack}
+
+Anzeigen der Statistik:
+
+{statistics_url}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

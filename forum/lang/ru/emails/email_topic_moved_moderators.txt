@@ -1,0 +1,22 @@
+Перенос модерируемой темы в другой форум на '{site_name}' 
+
+Уважаемый(ая) {user_name},
+
+Тема, в которой вы являетесь модератором:
+
+{topic_name}
+{topic_url}
+
+была перенесена модератором '{moderator_name}' из форума:
+
+{source_forum_name}
+{source_forum_url}
+
+в форум:
+
+{target_forum_name}
+{target_forum_url}
+
+С уважением,
+
+Администрация форума

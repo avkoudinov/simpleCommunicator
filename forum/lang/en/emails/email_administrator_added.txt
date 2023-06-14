@@ -1,0 +1,11 @@
+New administrator on forum '{site_name}'
+
+Dear {user_name},
+
+On forum '{site_name}' where you are an administrator, the forum owner has added a new administrator:
+
+{administrator_name}
+
+Yours faithfully,
+
+Forum administration

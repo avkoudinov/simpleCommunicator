@@ -1,0 +1,18 @@
+#
+    ssl_protocols               TLSv1.2 TLSv1.3;
+    ssl_ciphers                 EECDH+AES256+AESGCM;
+    ssl_prefer_server_ciphers   off;
+
+    ssl_dhparam                 /etc/ssl/dh4096.pem;
+    ssl_ecdh_curve              secp384r1;
+
+    ssl_stapling                on;
+    ssl_stapling_verify         on;
+    resolver                    217.16.16.12 217.16.20.12 217.16.22.12;
+
+    ssl_session_cache           shared:SSL:10m;
+    ssl_session_tickets         off;
+    ssl_session_timeout         1d;
+
+    add_header                  Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+#

@@ -1,0 +1,13 @@
+Your messages on forum '{site_name}' have been deleted
+
+Dear {user_name},
+
+All your messages on forum '{site_name}'
+
+{site_url}
+
+were deleted by moderator '{moderator_name}'.
+
+Yours faithfully,
+
+Forum administration

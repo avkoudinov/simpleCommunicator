@@ -1,0 +1,11 @@
+Neuer Administrator im Forum '{site_name}'
+
+Liebe(r) {user_name},
+
+Im Forum '{site_name}', in dem Sie Administrator sind, hat der Forenbesitzer einen neuen Administrator hinzugefügt:
+
+{administrator_name}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

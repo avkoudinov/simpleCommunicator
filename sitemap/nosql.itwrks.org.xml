@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+   <url>
+
+      <loc>https://nosql.itwrks.org/</loc>
+
+      <changefreq>monthly</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+   <url>
+
+      <loc>https://nosql.itwrks.org/nosql.php</loc>
+
+      <changefreq>monthly</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+   <url>
+
+      <loc>https://nosql.itwrks.org/album/</loc>
+
+      <changefreq>weekly</changefreq>
+
+      <priority>0.5</priority>
+
+   </url>
+
+   <url>
+
+      <loc>https://nosql.itwrks.org/vstrechy/</loc>
+
+      <changefreq>weekly</changefreq>
+
+      <priority>0.5</priority>
+
+   </url>
+
+   <url>
+
+      <loc>https://nosql.itwrks.org/forum/</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+ 
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=3</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=4</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=6</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=7</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=9</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=12</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=13</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=15</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=16</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=17</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+ 
+     <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=19</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=20</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=21</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=22</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=23</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=24</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=25</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=26</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=27</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=28</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+     <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=29</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://nosql.itwrks.org/forum/forum.php?fid=30</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+</urlset>

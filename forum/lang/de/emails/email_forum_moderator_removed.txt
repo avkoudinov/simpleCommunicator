@@ -1,0 +1,16 @@
+Entfernen eines Moderators im moderierten Forum-Bereich vom '{site_name}' 
+
+Liebe(r) {user_name},
+
+In dem Forum, in dem Sie der Moderator sind:
+
+{forum_name}
+{forum_url}
+
+Der Administrator '{administrator_name}' hat dem Benutzer die Moderatorrechte entzogen:
+
+{moderator_name}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

@@ -1,0 +1,12 @@
+Erteiling von Rechten zum Moderieren eines Forums auf '{site_name}'
+
+Liebe(r) {user_name},
+
+Ihnen wurden Moderationsrechte auf das Forum gewährt:
+
+{forum_name}
+{forum_url}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

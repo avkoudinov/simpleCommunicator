@@ -1,0 +1,21 @@
+Neue Anfrage über das Kontaktformular im Forum '{site_name}'
+
+Eine neue Anfrage im Forum '{site_name}' ist eingegangen
+
+{Seiten-URL}
+
+Zeit: {time}
+IP-Adresse: {ip} - https://whatismyipaddress.com/ip/{ip}
+Fingerprint: {user_marker} 
+
+Absender: {email}
+
+Betreff: {subject}
+
+Nachricht:
+
+{message}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

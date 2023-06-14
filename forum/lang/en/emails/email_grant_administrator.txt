@@ -1,0 +1,11 @@
+Granting administrator rights to '{site_name}'
+
+Dear {user_name},
+
+The forum owner has given you administrator rights to '{site_name}':
+
+{site_url}
+
+Yours faithfully,
+
+Forum administration

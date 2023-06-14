@@ -1,0 +1,15 @@
+Multiple unsuccessful attempts to enter the forum '{site_name}' using the login of a user
+
+Dear {admin_name},
+
+There have been multiple unsuccessful attempts to log into the forum '{site_name}' under the login '{user_login}' of the user '{user_name}'.
+
+{site_url}
+
+from IP address:
+
+{ip} - https://whatismyipaddress.com/ip/{ip}
+
+Yours faithfully,
+
+Forum administration

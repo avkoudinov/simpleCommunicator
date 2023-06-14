@@ -1,0 +1,34 @@
+Your message was answered on the forum '{site_name}'
+
+Dear {user_name},
+
+On the forum:
+
+{forum_name}
+{forum_url}
+
+in the topic:
+
+{topic_name}
+
+the member '{author_name}' replied to your message.
+
+Your message address:
+
+{citated_post_url}
+
+New message address:
+
+{post_url}
+
+If you do not want to reset the mark of new messages, in order not to lose information about possible unread messages before this message, use this link to go to the message:
+
+{post_url_unread}
+
+Short answer text:
+
+{message}
+
+Yours faithfully,
+
+Forum administration

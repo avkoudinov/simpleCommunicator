@@ -1,0 +1,30 @@
+Neue Bachricht im abonierten Thema im Forum '{site_name}'
+
+Liebe(r) {user_name},
+
+Im Forum:
+
+{forum_name}
+{forum_url}
+
+in dem Thema, dem Sie folgen:
+
+{topic_name}
+
+Der Teilnehmer '{author_name}' hat eine neue Nachricht hinzugefügt.
+
+Adresse der ersten ungelesenen Nachricht:
+
+{post_url}
+
+Wenn Sie die Markierung neuer Nachrichten nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Nachrichten vor dieser Nachricht zu verlieren, verwenden Sie diesen Link, um zur Nachricht zu gelangen:
+
+{post_url_unread}
+
+Kurznachrichtentext:
+
+{message}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

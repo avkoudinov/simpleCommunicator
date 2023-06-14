@@ -1,0 +1,11 @@
+Removing the administrator on forum '{site_name}'
+
+Dear {user_name},
+
+On forum '{site_name}', where you are an administrator, the owner of the forum has removed the administrator rights from the user:
+
+{administrator_name}
+
+Yours faithfully,
+
+Forum administration

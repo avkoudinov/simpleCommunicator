@@ -1,0 +1,21 @@
+Activating the profile on the forum '{site_name}'
+
+Dear {user_name},
+
+You received this message because you changed your email address or requested reactivation on your forum account '{site_name}'
+
+{site_url}
+
+Your account details:
+
+Login: {user_login}
+Username: {user_name}
+Email address: {user_email}
+
+To complete the process of activating your account, please visit the following link:
+
+{activation_url}
+
+Yours faithfully,
+
+Forum administration

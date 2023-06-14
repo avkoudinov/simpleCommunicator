@@ -1,0 +1,11 @@
+Removing ratings for your messages on the forum '{site_name}'
+
+Dear {user_name},
+
+Moderator '{moderator_name}' has removed {count} ratings for your messages on the forum '{site_name}'
+
+{site_url}
+
+Yours faithfully,
+
+Forum administration

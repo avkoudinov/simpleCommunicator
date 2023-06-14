@@ -1,0 +1,28 @@
+[mysqld]
+
+#####
+# https://dev.mysql.com/doc/refman/8.0/en/
+
+###### * MySQL Server Administration * The MySQL Server * Server System Variables
+#
+skip-name-resolve
+
+###### * The InnoDB Storage Engine * InnoDB Startup Options and System Variables
+#
+# innodb_dedicated_server = ON
+innodb_buffer_pool_size = 8G
+# innodb_doublewrite = OFF # * For ZFS
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT_NO_FSYNC
+# innodb_log_file_size = 1024M
+# innodb_log_group_home_dir = /mnt/localfs/mysqldb_redo
+innodb_redo_log_capacity = 2147483648
+# innodb_use_native_aio = OFF # * For ZFS
+#
+
+##### * Replication * Replication and Binary Logging Options and Variables * Binary Logging Options and Variables
+#
+binlog_expire_logs_seconds = 86400
+log_bin
+
+#

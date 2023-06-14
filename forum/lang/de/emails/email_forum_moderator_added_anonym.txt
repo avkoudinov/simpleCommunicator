@@ -1,0 +1,16 @@
+Neuer Moderator im Forum vom '{site_name}', den Sie moderieren. 
+
+Liebe(r) {user_name},
+
+In dem Forum, in dem Sie der Moderator sind:
+
+{forum_name}
+{forum_url}
+
+Ein neuer Moderator wurde hinzugefügt:
+
+{moderator_name}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

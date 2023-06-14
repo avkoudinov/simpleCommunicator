@@ -1,0 +1,21 @@
+There was a request for moderator rights on a topic in the forum you are moderating '{site_name}'
+
+Dear {moderator_name},
+
+On the forum:
+
+{forum_name}
+{forum_url}
+
+the user '{user_name}' has asked for moderator rights on the topic he created:
+
+{topic_name}
+{topic_url}
+
+Short message text:
+
+{message}
+
+Yours faithfully,
+
+Forum administration

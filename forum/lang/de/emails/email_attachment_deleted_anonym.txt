@@ -1,0 +1,23 @@
+Ihr Anhang '{site_name}' wurde im Forum gelöscht
+
+Liebe(r) {user_name},
+
+Ihr Anhang in der Nachricht vom {post_date} im Thema:
+
+{topic_name}
+{post_url}
+
+Im Forum:
+
+{forum_name}
+{forum_url}
+
+wurde entfernt.
+
+Kurznachrichtentext:
+
+{message}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

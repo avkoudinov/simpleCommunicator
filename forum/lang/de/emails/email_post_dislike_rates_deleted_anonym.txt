@@ -1,0 +1,11 @@
+Bewertungen für Ihre Nachrichten im Forum '{site_name}' entfernt
+
+Liebe(r) {user_name},
+
+{count} Bewertungen für Ihre Nachrichten im Forum '{site_name}' wurden gelöscht
+
+{site_url}
+
+Mit freundlichen Grüßen,
+
+Forumsverwaltung

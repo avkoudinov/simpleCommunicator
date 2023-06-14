@@ -1,0 +1,12 @@
+Granting rights to moderate a topic on '{site_name}'
+
+Dear {user_name},
+
+Moderator '{moderator_name}' has granted you moderation rights on the topic:
+
+{topic_name}
+{topic_url}
+
+Yours faithfully,
+
+Forum administration

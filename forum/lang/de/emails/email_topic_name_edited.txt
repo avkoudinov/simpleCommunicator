@@ -1,0 +1,22 @@
+Название вашей темы на форуме '{site_name}' изменено
+
+Уважаемый(ая) {user_name},
+
+Название вашей темы: 
+
+{source_topic_name}
+{topic_url}
+
+На форуме:
+
+{forum_name}
+{forum_url}
+
+было изменено модератором '{moderator_name}' на
+
+{new_topic_name}
+{topic_url}
+
+С уважением,
+
+Администрация форума

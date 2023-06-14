@@ -1,0 +1,19 @@
+--- php.ini.default     2021-11-09 23:00:09.000000000 +0300
++++ php.ini     2022-12-28 18:35:03.942254473 +0300
+@@ -157,7 +157,7 @@
+ ; php.ini Options  ;
+ ;;;;;;;;;;;;;;;;;;;;
+ ; Name for user-defined php.ini (.htaccess) files. Default is ".user.ini"
+-;user_ini.filename = ".user.ini"
++user_ini.filename = ".user.ini"
+
+ ; To disable this feature set this option to an empty value
+ ;user_ini.filename =
+@@ -1204,6 +1204,7 @@
+ [browscap]
+ ; http://php.net/browscap
+ ;browscap = extra/browscap.ini
++browscap = /opt/etc/php/extra/browscap.ini
+
+ [Session]
+ ; Handler used to store/retrieve data.

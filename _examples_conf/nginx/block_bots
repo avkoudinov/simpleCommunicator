@@ -1,0 +1,5 @@
+#
+    if ($http_user_agent ~* SemrushBot|MJ12bot|AhrefsBot|BLEXBot|dotbot) {
+        return 444;
+    }
+#

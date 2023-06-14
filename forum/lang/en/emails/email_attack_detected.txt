@@ -1,0 +1,25 @@
+Suspected DOS attack on forum '{site_name}'
+
+Dear {administrator_name},
+
+You received this message because you are the administrator of forum '{site_name}':
+
+{site_url}
+
+DOS attack from IP address has been prevented on the forum:
+
+{ip} - https://whatismyipaddress.com/ip/{ip}
+
+{Hits} requests ({atype}) were made from this IP address in {check_period} minutes.
+
+Total number of attacks: {total_attacks}
+First attack: {first_attack}
+Last attack: {last_attack}
+
+Viewing statistics:
+
+{statistics_url}
+
+Yours faithfully,
+
+Forum administration

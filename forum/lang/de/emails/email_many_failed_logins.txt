@@ -1,0 +1,15 @@
+Mehrere erfolglose Versuche, sich im Forum '{site_name}' mit Ihrem Login anzumelden
+
+Liebe(r) {user_name},
+
+Es gab mehrere erfolglose Versuche, sich im Forum '{site_name}' anzumelden.
+
+{site_url}
+
+unter Ihrem Login '{user_login}' von der IP-Adresse:
+
+{ip} - https://whatismyipaddress.com/ip/{ip}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

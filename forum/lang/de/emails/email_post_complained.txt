@@ -1,0 +1,38 @@
+Es gab eine Beschwerde über eine Nachricht im Forumbereich vom '{site_name}', den Sie moderieren
+
+Liebe(r) {user_name},
+
+Im Forum:
+
+{forum_name}
+{forum_url}
+
+im Betreff:
+
+{topic_name}
+
+Benutzer '{notifier}' hat sich über die Nachricht beschwert.
+
+Verletzer:
+
+{violator}
+
+Kurznachrichtentext:
+
+{message}
+
+Beschwerde:
+
+{comment}
+
+Nachrichtenadresse:
+
+{post_url}
+
+Wenn Sie die Markierung neuer Nachrichten nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Nachrichten vor dieser Nachricht zu verlieren, verwenden Sie diesen Link, um zur Nachricht zu gelangen:
+
+{post_url_unread}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

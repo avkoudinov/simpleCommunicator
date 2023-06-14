@@ -1,0 +1,31 @@
+Тема на форуме '{site_name}' объединена с другой темой
+
+Уважаемый(ая) {user_name},
+
+Вы подписаны на уведомления о новых сообщениях в теме:
+
+{target_topic_name}
+{target_topic_url}
+
+На форуме: 
+
+{target_forum_name}
+{target_forum_url}
+
+Данная тема была объединена с темой:
+
+{source_topic_name}
+{source_topic_url}
+
+На форуме:
+
+{source_forum_name}
+{source_forum_url}
+
+Первое cообщение перенесенной темы:
+
+{first_post_url}
+
+С уважением,
+
+Администрация форума

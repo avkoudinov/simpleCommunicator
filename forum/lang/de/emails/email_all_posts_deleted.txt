@@ -1,0 +1,13 @@
+Ihre Nachrichten im Forum '{site_name}' wurden gelöscht
+
+Liebe(r) {user_name},
+
+Alle Ihre Nachrichten im Forum '{site_name}'
+
+{site_url}
+
+wurden vom Moderator '{moderator_name}' gelöscht.
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

@@ -1,0 +1,27 @@
+Ihre Nachricht im Forum '{site_name}' wurde gelöscht
+
+Sehr geehrte(r) {user_name},
+
+Ihre Nachricht vom {post_date} im Thema:
+
+{topic_name}
+{post_url}
+
+Im Forum:
+
+{forum_name}
+{forum_url}
+
+wurde vom Moderator '{moderator_name}' gelöscht.
+
+Kurzer Nachrichtentext:
+
+{message}
+
+Grund für das Löschen:
+
+{comment}
+
+Mit freundlichen Grüßen,
+
+Forumsverwaltung

@@ -1,0 +1,12 @@
+Erteilung von Rechten zum Moderieren eines Forenthemas auf '{site_name}'
+
+Liebe(r) {user_name},
+
+Der Moderator '{moderator_name}' hat Ihnen die Berechtigung gegeben, das Thema zu moderieren:
+
+{topic_name}
+{topic_url}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

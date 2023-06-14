@@ -1,0 +1,11 @@
+Your posts on the forum '{site_name}' have been deleted
+
+Dear {user_name},
+
+Your last {count} posts have been deleted on the forum '{site_name}'
+
+{site_url}
+
+Yours faithfully,
+
+Forum administration

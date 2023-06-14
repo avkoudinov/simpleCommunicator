@@ -1,0 +1,21 @@
+Es wurde eine Anfrage nach Moderatorrechten für ein Thema im Forum vom '{site_name}' gestellt, den Sie moderieren 
+
+Liebe(r) {moderator_name},
+
+Im Forum:
+
+{forum_name}
+{forum_url}
+
+Benutzer '{user_name}' hat nach Moderatorrechten für das von ihm erstellte Thema gefragt:
+
+{topic_name}
+{topic_url}
+
+Kurznachrichtentext:
+
+{message}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description>
+  <version>23.05.14</version>
+  
+  <caption 
+  ru="Старый добрый скуль"
+  ua="Старий добрий скуль"
+  neru="Старый добрый скуль"
+  en="Старий добрий скуль"
+  de="Altes gutes sql.ru"
+  />
+
+  <properties>
+
+    <property
+    name="pin_the_menu" 
+    type="checkbox"
+    default="0"
+    
+    ru="Прикреплять меню при скроллинге"
+    ua="Прикріплювати меню при скролінгу"
+    neru="Прикреплять меню при скроллинге"
+    en="Pin menu by scrolling"
+    de="Menü beim Scrollen anheften"
+    />
+  
+    <property
+    name="show_df_logotype" 
+    type="checkbox"
+    default="0"
+    
+    ru="Показывать картинку-логотип"
+    ua="Показывать картинку-логотип"
+    neru="Показывать картинку-логотип"
+    en="Show logo picture"
+    de="Logo-Bild anzeigen"
+    />
+  
+    <property
+    name="show_my_part_topics" 
+    type="checkbox"
+    default="0"
+    restriction="user"
+    
+    ru="Показывать опцию меню 'С моим участием'"
+    ua="Показувати опцію меню 'З моєю участю'"
+    neru="Показывать опцию меню 'С моим участием'"
+    en="Show the menu option 'Participated'"
+    de="Die Menü-Option 'Teilgenommen' anzeigen"
+    />
+
+    <property
+    name="no_success_report" 
+    type="checkbox"
+    default="0"
+    
+    ru="Не показывать всплывающие сообщения об успешной операции"
+    ua="Не показувати спливаючі повідомлення про успішну операцію"
+    neru="Не показывать всплывающие сообщения об успешной операции"
+    en="Do not show pop-up success messages"
+    de="Popup-Erfolgsmeldungen nicht anzeigen"
+    />
+    
+    <property
+    name="no_confirmation_of_uncritical_actions" 
+    type="checkbox"
+    default="0"
+    
+    ru="Не запрашивать подтверждения некритичных действий"
+    ua="Не запрошувати підтвердження некритичних дій"
+    neru="Не запрашивать подтверждения некритичных действий"
+    en="Do not ask for confirmation of non-critical actions"
+    de="Nach der Bestätigung unkritischer Aktionen nicht fragen"
+    />
+    
+    <property
+    name="no_confirmation_of_dislikes" 
+    type="checkbox"
+    default="1"
+    users_only="1"
+    dislikes_active="1"
+    
+    ru="Не запрашивать подтверждения дизлайков"
+    ua="Не запитувати підтвердження дізлайков"
+    neru="Не запрашивать подтверждения дизлайков"
+    en="Do not ask for confirmation of dislikes"
+    de="Nach der Bestätigung der Dislikes nicht fragen"
+    />
+
+    <property
+    name="no_confirmation_of_any_actions" 
+    type="checkbox"
+    default="0"
+    
+    ru="Не запрашивать подтверждения любых действий"
+    ua="Не запрошувати підтвердження будь-яких дій"
+    neru="Не запрашивать подтверждения любых действий"
+    en="Do not ask for confirmation of any actions"
+    de="Nach der Bestätigung jeglicher Aktionen nicht fragen"
+    />
+
+  </properties>
+  
+</description>

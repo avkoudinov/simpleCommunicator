@@ -1,0 +1,11 @@
+Ihre Beiträge im Forum '{site_name}' wurden gelöscht
+
+Liebe(r) {user_name},
+
+Ihre letzten {count} Beiträge wurden im Forum '{site_name}' gelöscht.
+
+{site_url}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

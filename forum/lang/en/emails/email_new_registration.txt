@@ -1,0 +1,12 @@
+New user on forum '{site_name}'
+
+Dear {subscriber_name},
+
+A new user has registered on the forum:
+
+Username: {user_name}
+Profile: {user_url}
+
+Yours faithfully,
+
+Forum administration

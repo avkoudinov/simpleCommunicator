@@ -1,0 +1,11 @@
+Ihre Bewertungen im Forum '{site_name}' wurden gelöscht
+
+Liebe(r) {user_name},
+
+{count} Ihrer Bewertungen wurden im Forum '{site_name}' gelöscht.
+
+{site_url}
+
+Mit freundlichen Grüßen,
+
+Forumverwaltung

@@ -1,0 +1,31 @@
+Перенос сообщений из другой темы в подписанную тему на форуме '{site_name}' 
+
+Уважаемый(ая) {user_name},
+
+Вы подписаны на уведомления о новых сообщениях в теме:
+
+{target_topic_name}
+{target_topic_url}
+
+На форуме:
+
+{target_forum_name}
+{target_forum_url}
+
+Модератор '{moderator_name}' перенес в данную тему {moved_count} сообщений из темы:
+
+{source_topic_name}
+{source_topic_url}
+
+На форуме:
+
+{source_forum_name}
+{source_forum_url}
+
+Первое перенесенное cообщение:
+
+{first_post_url}
+
+С уважением,
+
+Администрация форума

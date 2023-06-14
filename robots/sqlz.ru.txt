@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://sqlz.ru/sitemap.xml

@@ -1,0 +1,23 @@
+Your attachment has been deleted on the forum '{site_name}'
+
+Dear {user_name},
+
+Your attachment in the message from {post_date} in the topic:
+
+{topic_name}
+{post_url}
+
+On the forum:
+
+{forum_name}
+{forum_url}
+
+was deleted by moderator '{moderator_name}'.
+
+Short message text:
+
+{message}
+
+Yours faithfully,
+
+Forum administration

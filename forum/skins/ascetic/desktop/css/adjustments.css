@@ -1,0 +1,61 @@
+.never_visited_topic,
+.never_visited_topic a:link,
+.never_visited_topic a:active,
+.never_visited_topic a:visited,
+.never_visited_topic a:hover
+{
+  color: #FF8000;
+}
+
+.self_blocked
+{
+  color: #CF5B56;
+}
+
+.forum_name_bar .new_in_forums
+{
+  display: none !important;
+}
+
+.forum_name_bar .forum_with_new_indicator
+{
+  display: none !important;
+}
+
+.post_message_table.comment_post tr.message_area td
+{
+  background-color: #EEEEEE;
+}
+
+.post_message_table.thematic_post tr.message_area td
+{
+  background-color: #EEEEEE;
+}
+
+.attention_event,
+.negative_event,
+.moderator_event,
+.moderated_topic_row td.topic_name_col, 
+.moderated_topic_row td.topic_name_col td
+{
+  background-color: #EEEEEE !important;
+}
+
+.post_table.comment_post td.message_cell,
+.post_table.comment_post td.message_action_cell,
+.post_table.comment_post .post_rating td
+{
+  background-color: #EEEEEE;
+}
+
+.post_table.thematic_post td.message_cell,
+.post_table.thematic_post td.message_action_cell,
+.post_table.thematic_post .post_rating td
+{
+  background-color: #EEEEEE;
+}
+
+.online_users_area
+{
+  display: none;
+}
