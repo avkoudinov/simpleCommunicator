@@ -8,7 +8,11 @@
 <br>
 Тестирование, поиск уязвимостей — <a href="http://fintank.ru/game/">Пашэ</a>
 <br>
-Техническая поддержка — <a href="https://anton.koudinov.ru/">Антон</a></p> 
+Техническая поддержка — <a href="https://anton.koudinov.ru/">Антон</a>
+<br>
+<br>
+Демонстрация работы — <a href="https://nosql.itwrks.org/forum/forums.php">Дедофорум NoSQL.ru</a>
+</p>
 
 <h2>Лицензия</h2>
 
