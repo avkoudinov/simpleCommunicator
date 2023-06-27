@@ -51,7 +51,7 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             break;
 
         case "kroleg-pipe":
-            return "${nl}[kroleg-pipe]${nl2}";
+            return "{$nl}[kroleg-pipe]{$nl2}";
             break;
 
         case "audio":

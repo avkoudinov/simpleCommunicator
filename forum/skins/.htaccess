@@ -1,6 +1,7 @@
-Order Deny,Allow
-Deny from all 
+<FilesMatch "">
+    Require all denied
+</FilesMatch>
 
-<FilesMatch ".+\.(js|css|png|gif|jpg|jpeg|svg|webp)$">
-Allow From All
+<FilesMatch "\.(js|css|png|gif|jpg|jpeg|svg|webp)$">
+    Require all granted
 </FilesMatch>

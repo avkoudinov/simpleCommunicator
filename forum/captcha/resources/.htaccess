@@ -1,2 +1,3 @@
-Order Deny,Allow
-Deny from all 
+<FilesMatch "">
+    Require all denied
+</FilesMatch>
