@@ -31005,7 +31005,7 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        $start_date = back_adjust_timezone(xstrtotime($start_date));
+        $start_date = xstrtotime($start_date);
         
         if (!empty($hour) && is_numeric($hour)) {
             $start_date += $hour * 3600;
@@ -31014,6 +31014,8 @@ abstract class ForumManager
             $start_date += $minute * 60;
         }
         
+        $start_date = back_adjust_timezone($start_date);
+
         $where = "where {$prfx}_post.deleted <> 1 and {$prfx}_post.creation_date >= '" . $dbw->format_datetime($start_date) . "'";
         if (!empty($fid) && is_numeric($fid)) {
             $fid = $dbw->escape($fid);
@@ -31126,7 +31128,7 @@ abstract class ForumManager
     } // find_moderated_users
     
     //-----------------------------------------------------------------
-    function bulk_delete_posts_by_users()
+    function bulk_delete_posts_by_users($fid, $start_date, $hour, $minute)
     {
         global $settings;
         
@@ -31140,7 +31142,7 @@ abstract class ForumManager
             return false;
         }
         
-        $start_date = iso_date(reqvar("start_date"), text("DateFormat"));
+        $start_date = iso_date($start_date, text("DateFormat"));
         if (empty($start_date) || $start_date == "error") {
             MessageHandler::setError(text("ErrStartDateEmpty"));
             MessageHandler::setErrorElement("start_date");
@@ -31159,7 +31161,7 @@ abstract class ForumManager
             $current_uid = "0";
         }
 
-        $start_date = back_adjust_timezone(xstrtotime($start_date));
+        $start_date = xstrtotime($start_date);
         
         if (!empty($hour) && is_numeric($hour)) {
             $start_date += $hour * 3600;
@@ -31168,7 +31170,8 @@ abstract class ForumManager
             $start_date += $minute * 60;
         }
         
-        $fid = reqvar("forum");
+        $start_date = back_adjust_timezone($start_date);
+        
         $is_private = false;
         
         $email_template_prefix = "email_posts_bulk_deleted";
