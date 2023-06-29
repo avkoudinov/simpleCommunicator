@@ -855,7 +855,7 @@ elseif (!reqvar_empty("bulk_delete")) {
     if (!$fmanager->is_moderator()) {
         MessageHandler::setError(text("ErrActionNotAllowed"));
     } else {
-        $response['success'] = $fmanager->bulk_delete_posts_by_users();
+        $response['success'] = $fmanager->bulk_delete_posts_by_users(reqvar("forum"), reqvar("start_date"), reqvar("hour"), reqvar("minute"));
     }
 } //---------------------------------------------------------------------
 elseif (!reqvar_empty("change_password")) {
