@@ -3,8 +3,6 @@
 <head>
 <title><?php echo_html($title); ?></title>
 
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Google.Analytics.php') ?>
-
 <meta name="format-detection" content="telephone=no">
 
 <script type="text/JavaScript">
@@ -28,13 +26,9 @@ $cache_appendix = "?v=" . $skin_version;
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=1200"/>
 
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Meta.Tags_nosql_forum.php') ?>
-
 <link rel="stylesheet" href="calendar/calendar.css<?php echo($cache_appendix); ?>" type="text/css"/>
 
 <link rel="stylesheet" href="highlight.old/styles/vs.css<?php echo($cache_appendix); ?>" type="text/css"/>
-
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/fonts_googleapis.css<?php echo($cache_appendix); ?>" type="text/css"/>
 
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/multiselect.css<?php echo($cache_appendix); ?>" type="text/css"/>
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/file_input.css<?php echo($cache_appendix); ?>" type="text/css"/>
@@ -233,8 +227,6 @@ if(!empty($_SESSION["hide_pictures"])) $body_class .= " hide_picture_mode";
 if(empty($_SESSION["donot_hide_adult_pictures"])) $body_class .= " hide_adult_picture_mode";
 ?>
 <body class="desktop <?php echo($body_class); ?>">
-
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Yandex.Metrica.php') ?>
 
 <!--
 <div id="fb-root"></div>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description>
+  <version>20.09.27</version>
+  
+  <caption 
+  ru="Синий минималистичеcкий"
+  ua="Синій мінімалістічеcкій"
+  en="Blue minimalistic"
+  de="Blau minimalistisch"
+  />
+  
+  <properties>
+
+    <property
+    name="pin_the_menu" 
+    type="checkbox"
+    default = "0"
+    
+    ru="Прикреплять меню при скроллинге"
+    ua="Прикріплювати меню при скролінгу"
+    en="Pin menu by scrolling"
+    de="Menü beim Scrollen anheften"
+    />
+  
+    <property
+    name="show_my_part_topics" 
+    type="checkbox"
+    default = "0"
+    restriction="user"
+    
+    ru="Показывать опцию меню 'С моим участием'"
+    ua="Показувати опцію меню 'З моєю участю'"
+    en="Show the menu option 'Participated'"
+    de="Die Menü-Option 'Teilgenommen' anzeigen"
+    />
+
+    <property
+    name="no_success_report" 
+    type="checkbox"
+    default = "0"
+    
+    ru="Не показывать всплывающие сообщения об успешной операции"
+    ua="Не показувати спливаючі повідомлення про успішну операцію"
+    en="Do not show pop-up success messages"
+    de="Popup-Erfolgsmeldungen nicht anzeigen"
+    />
+    
+    <property
+    name="no_confirmation_of_uncritical_actions" 
+    type="checkbox"
+    default = "0"
+    
+    ru="Не запрашивать подтверждения некритичных действий"
+    ua="Не запрошувати підтвердження некритичних дій"
+    en="Do not ask for confirmation of non-critical actions"
+    de="Nach der Bestätigung unkritischer Aktionen nicht fragen"
+    />
+    
+  </properties>
+  
+</description>
+ 

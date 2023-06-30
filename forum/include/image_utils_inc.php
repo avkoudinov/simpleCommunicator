@@ -611,9 +611,8 @@ function create_latex_png($formula, $density, $out_file)
         throw new \Exception('Failed to create tex file!');
     }
     
-    ////$command = 'cd ' . $temp_dir . '; ' . '/usr/bin/latex' . ' ' . $hash . '.tex < /dev/null |grep ^!|grep -v Emergency > ' . $temp_dir . $hash . '.err 2> /dev/null 2>&1';
     $command = 'cd ' . $temp_dir . '; ' . 'export HOME=/home/apache; /usr/bin/latex' . ' ' . $hash . '.tex < /dev/null | grep ^! | grep -v Emergency > ' . $temp_dir . $hash . '.err > /dev/null 2>&1';
-    //debug_message($command);
+
     if (shell_exec($command) === null) {
         //throw new \Exception('Unable to compile LaTeX formula!');
     }

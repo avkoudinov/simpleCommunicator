@@ -14,6 +14,10 @@ values (\'PRIVATE_MESSAGES\', current_timestamp, \'1\', \'1\')
 ';
 
 $sql_cmds[] = '
+insert into v1_forum_statistics (forum_id) values (1)
+';
+
+$sql_cmds[] = '
 insert into v1_dual (dummy_val) values (\'0\')
 ';
 

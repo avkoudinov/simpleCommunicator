@@ -744,6 +744,36 @@ create unique index v1_ignore_history_unq on v1_ignore_history
 ';
 
 $sql_cmds[] = '
+create table v1_ignored_forums
+(
+   forum_id             int not null,
+   user_id              int not null
+)
+';
+
+$sql_cmds[] = '
+create unique index v1_ignored_forums_unq on v1_ignored_forums
+(
+   forum_id,
+   user_id
+)
+';
+
+$sql_cmds[] = '
+create index v1_ignored_forums_user_id_idx on v1_ignored_forums
+(
+   user_id
+)
+';
+
+$sql_cmds[] = '
+create index v1_ignored_forums_forum_id_idx on v1_ignored_forums
+(
+   forum_id
+)
+';
+
+$sql_cmds[] = '
 create table v1_ignored_guests
 (
    user_id              int not null,
@@ -1406,36 +1436,6 @@ $sql_cmds[] = '
 create index v1_post_subscription_user_id_idx on v1_post_subscription
 (
    user_id
-)
-';
-
-$sql_cmds[] = '
-create table v1_preferred_forum
-(
-   user_id              int not null,
-   forum_id             int not null
-)
-';
-
-$sql_cmds[] = '
-create unique index v1_preferred_forum_unq on v1_preferred_forum
-(
-   user_id,
-   forum_id
-)
-';
-
-$sql_cmds[] = '
-create index v1_preferred_forum_user_id_idx on v1_preferred_forum
-(
-   user_id
-)
-';
-
-$sql_cmds[] = '
-create index v1_preferred_forum_forum_id_idx on v1_preferred_forum
-(
-   forum_id
 )
 ';
 
