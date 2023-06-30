@@ -16722,7 +16722,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date && !$this->is_moderator()) {
+        if ($min_creation_date <= $target_creation_date) {
             MessageHandler::setError(text("ErrTopicsMergeStartDate"));
             return false;
         }
@@ -17499,7 +17499,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date && !$this->is_moderator()) {
+        if ($min_creation_date <= $target_creation_date) {
             MessageHandler::setError(text("ErrPostsMoveStartDate"));
             $dbw->rollback_transaction();
             return false;

@@ -12,7 +12,7 @@ create table v1_attachment (
    user_id              int                  null,
    favourite            tinyint              not null default 0,
    last_post_id         int                  not null,
-   constraint v1_attachment_pk primary key (id)
+   constraint PK_V1_ATTACHMENT primary key (id)
 )
 ';
 
@@ -164,7 +164,7 @@ create table v1_events (
    comment              text                 null,
    source_topic_name    varchar(1000)        null,
    source_topic_id      int                  null,
-   constraint v1_events_pk primary key (id)
+   constraint PK_V1_EVENTS primary key (id)
 )
 ';
 
@@ -300,7 +300,7 @@ create table v1_forum (
    access_duration      int                  null,
    access_message_count int                  null,
    stringent_rules      tinyint              not null default 0,
-   constraint v1_forum_pk primary key nonclustered (id)
+   constraint PK_V1_FORUM primary key nonclustered (id)
 )
 ';
 
@@ -650,6 +650,32 @@ ignored_user_id ASC
 ';
 
 $sql_cmds[] = '
+create table v1_ignored_forums (
+   forum_id             int                  not null,
+   user_id              int                  not null
+)
+';
+
+$sql_cmds[] = '
+create unique index v1_ignored_forums_unq on v1_ignored_forums (
+forum_id ASC,
+user_id ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_ignored_forums_user_id_idx on v1_ignored_forums (
+user_id ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_ignored_forums_forum_id_idx on v1_ignored_forums (
+forum_id ASC
+)
+';
+
+$sql_cmds[] = '
 create table v1_ignored_guests (
    user_id              int                  not null,
    guest_name           varchar(255)         not null,
@@ -806,7 +832,7 @@ create table v1_moderator_log (
    redundant            tinyint              not null default 0,
    source_topic_name    varchar(1000)        null,
    source_topic_id      int                  null,
-   constraint v1_moderator_log_pk primary key nonclustered (id)
+   constraint PK_V1_MODERATOR_LOG primary key nonclustered (id)
 )
 ';
 
@@ -908,7 +934,7 @@ create table v1_poll_options (
    id                   int                  identity,
    name                 varchar(700)         not null,
    topic_id             int                  not null,
-   constraint v1_poll_options_pk primary key (id)
+   constraint PK_V1_POLL_OPTIONS primary key (id)
 )
 ';
 
@@ -985,7 +1011,7 @@ create table v1_post (
    is_adult             tinyint              not null default 0,
    is_system            tinyint              not null default 0,
    ref                  int                  null,
-   constraint v1_post_pk primary key nonclustered (id)
+   constraint PK_V1_POST primary key nonclustered (id)
 )
 ';
 
@@ -1138,7 +1164,7 @@ create table v1_post_history (
    text_content         text                 null,
    html_content         text                 null,
    post_id              int                  not null,
-   constraint v1_post_history_pk primary key (id)
+   constraint PK_V1_POST_HISTORY primary key (id)
 )
 ';
 
@@ -1156,7 +1182,7 @@ create table v1_post_rating (
    post_id              int                  not null,
    user_id              int                  not null,
    rater_ignored        tinyint              not null default 0,
-   constraint v1_post_rating_pk primary key (id)
+   constraint PK_V1_POST_RATING primary key (id)
 )
 ';
 
@@ -1389,7 +1415,7 @@ create table v1_topic (
    profiled_topic       tinyint              not null default 0,
    request_moderation   tinyint              not null default 0,
    ref                  int                  null,
-   constraint v1_topic_pk primary key nonclustered (id)
+   constraint PK_V1_TOPIC primary key nonclustered (id)
 )
 ';
 
@@ -1730,7 +1756,7 @@ create table v1_user (
    custom_css           text                 null,
    custom_smiles        text                 null,
    ref                  int                  null,
-   constraint v1_user_pk primary key nonclustered (id)
+   constraint PK_V1_USER primary key nonclustered (id)
 )
 ';
 
@@ -1895,7 +1921,7 @@ create table v1_user_tags (
    id                   int                  identity,
    name                 varchar(255)         null,
    user_id              int                  not null,
-   constraint v1_user_tags_pk primary key nonclustered (id)
+   constraint PK_V1_USER_TAGS primary key nonclustered (id)
 )
 ';
 
