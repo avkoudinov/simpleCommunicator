@@ -3352,6 +3352,12 @@
 
   /* END: progress indicator */ 
   
+  .ascii_art 
+  { 
+    border-radius: 2px; 
+    padding: 5px; 
+  }
+  
   #drag_drop_zone 
   {
     border-width: 1px; 

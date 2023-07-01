@@ -5,3 +5,4 @@
 <FilesMatch "\.(js|css|png|gif|jpg|jpeg|svg|webp)$">
     Require all granted
 </FilesMatch>
+

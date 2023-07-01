@@ -7074,6 +7074,16 @@ label.rules_agreemnt
 
 /* END: Coub */
 
+.ascii_art 
+{ 
+  font-family: "Ubuntu Mono", "Courier New";
+  display: inline-block; 
+  border-radius: 4px; 
+  padding: 10px; 
+  font-weight: normal;
+  text-rendering: optimizeSpeed;
+}
+
 #drag_drop_zone 
 {
   border: 2px solid gray; 
