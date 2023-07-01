@@ -62,6 +62,16 @@
 </li>
 </ul>
 
+----
+![Forums list with a Guest user](_screenshots/simpleCommunicator-forums-guest.png)
+
+----
+![Forums list with a logged in Administrator user](_screenshots/simpleCommunicator-forums-adm.png)
+
+----
+![Separate forum with a logged in Administrator user](_screenshots/simpleCommunicator-forum-adm.png)
+
+
 <h2>Преимущества</h2>
 
 <p>Форум прост в реализации и удобен в использовании.</p>
