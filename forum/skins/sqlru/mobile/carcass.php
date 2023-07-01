@@ -4,6 +4,8 @@
 
 <meta name="format-detection" content="telephone=no">
 
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
 <title><?php echo_html($title); ?></title>
 
 <script type="text/JavaScript">
@@ -30,6 +32,8 @@ $cache_appendix = "?v=" . $skin_version;
 <link rel="stylesheet" href="calendar/calendar.css<?php echo($cache_appendix); ?>" type="text/css"/>
 
 <link rel="stylesheet" href="highlight.old/styles/vs.css<?php echo($cache_appendix); ?>" type="text/css"/>
+
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/fonts_googleapis.css<?php echo($cache_appendix); ?>" type="text/css"/>
 
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/multiselect.css<?php echo($cache_appendix); ?>" type="text/css"/>
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/file_input.css<?php echo($cache_appendix); ?>" type="text/css"/>

@@ -7514,6 +7514,16 @@ a.coub_short_container
 
 /* END: Coub */
 
+.ascii_art 
+{ 
+  font-family: "Ubuntu Mono", "Courier New";
+  display: inline-block; 
+  border-radius: 2px; 
+  padding: 5px; 
+  font-weight: normal;
+  text-rendering: optimizeSpeed;
+}
+
 #drag_drop_zone 
 {
   position: absolute;
