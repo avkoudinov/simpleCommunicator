@@ -79,6 +79,8 @@ class MySQL_DBWorker extends DBWorker
     //--------------------------------------------------------------------
     function connect($db_server = "", $db_name = "", $db_user = "", $db_password = "", $read_only = false)
     {
+        mysqli_report(MYSQLI_REPORT_OFF);
+
         $this->last_error = null;
         $this->last_error_id = null;
         $this->last_query = null;
