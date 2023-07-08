@@ -483,6 +483,9 @@ $moderator_caption = $fmanager->is_admin() ? text("Administrator") : text("Moder
 
 <?php endif; ?>
 
+
+
+
 <?php if($fmanager->is_admin()): ?>
 
 <tr>
@@ -501,6 +504,9 @@ if(!empty($moderator_caption))
 </tr>
 
 <?php endif; ?>
+
+
+
 
 <?php if($fmanager->is_moderator()): ?>
 
@@ -521,9 +527,9 @@ if(!empty($moderator_caption))
 </tr>
 <?php endif; ?>
 
-<?php endif; ?>
 
-<?php if($fmanager->is_moderator() && $fmanager->may_see_ip()): ?>
+
+<?php if($fmanager->may_see_ip()): ?>
 
 <tr>
 <td>
@@ -555,9 +561,18 @@ if(!empty($moderator_caption))
 </td>
 </tr>
 
+<?php endif; ?>
+
+
+<?php if($fmanager->is_moderator()): ?>
+
 <tr>
 <td colspan="2"></td>
 </tr>
+
+<?php endif; ?>
+
+
 
 <?php if(count($moderated_restricted_forum_list) > 0): ?>
 
@@ -593,6 +608,7 @@ if(!empty($moderator_caption))
 </tr>
 
 <?php endif; ?>
+
 
 <?php 
 if(!empty($user_data["forum_blocked"])) $user_data["forum_blocked"] = array_intersect_key($user_data["forum_blocked"], $moderated_forum_list);
@@ -746,7 +762,22 @@ if(!empty($user_data["forum_blocked"])):
 <td><?php echo_html(text("Forum")); ?>:</td>
 <td>
 <select name="forum" onchange="activate_ban_checkbox()">
-<option value=""><?php echo_html($fmanager->global_ban_allowed() ? text("ForAllForums") : text("ForAllModeratedForums")); ?></option>
+
+<?php if ($fmanager->is_admin()): ?>
+
+<option value="-9"><?php echo_html(text("ForAllForums")); ?></option>
+
+<?php elseif($fmanager->global_ban_allowed()): ?>
+
+<option value="-9"><?php echo_html(text("ForAllForums")); ?></option>
+<option value=""><?php echo_html(text("ForAllModeratedForums")); ?></option>
+
+<?php else: ?>
+
+<option value=""><?php echo_html(text("ForAllModeratedForums")); ?></option>
+
+<?php endif ?>
+
 <?php foreach($moderated_forum_list as $fid => $fname): ?>
 <option value="<?php echo_html($fid); ?>"><?php echo_html($fname); ?></option>
 <?php endforeach; ?>

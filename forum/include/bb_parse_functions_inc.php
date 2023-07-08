@@ -269,8 +269,12 @@ function bb_process_url_simple($bbcode, $action, $name, $default, $params, $cont
         $content = urldecode(trim($content));
     }
     
-    if (!$bbcode->IsValidURL($href)) {
-        return htmlspecialchars($params['_tag']) . $content . htmlspecialchars($params['_endtag']);
+    if (strlen($href) > 700) {
+        return htmlspecialchars($params['_tag']) . "url too long" . htmlspecialchars($params['_endtag']);
+    }
+  
+    if (!check_url_validity($href)) {
+        return htmlspecialchars($params['_tag']) . escape_html($content) . htmlspecialchars($params['_endtag']);
     }
     
     $href = check_relative_url($href, "{{base_url}}");
@@ -320,8 +324,12 @@ function bb_process_url($bbcode, $action, $name, $default, $params, $content)
         $content = rawurldecode(trim($content));
     }
     
-    if (!$bbcode->IsValidURL($href)) {
-        return htmlspecialchars($params['_tag']) . $content . htmlspecialchars($params['_endtag']);
+    if (strlen($href) > 700) {
+        return htmlspecialchars($params['_tag']) . "url too long" . htmlspecialchars($params['_endtag']);
+    }
+  
+    if (!check_url_validity($href)) {
+        return htmlspecialchars($params['_tag']) . escape_html($content) . htmlspecialchars($params['_endtag']);
     }
     
     $bbcode->has_link = 1;
@@ -498,6 +506,14 @@ function bb_process_img($bbcode, $action, $name, $default, $params, $content)
     
     $large_src = $src;
     
+    if (strlen($large_src) > 700) {
+        return "[img]url too long[/img]<br/><br/>";
+    }
+  
+    if (!check_url_validity($large_src)) {
+        return "[img]" . escape_html(urldecode($large_src)) . "[/img]<br/><br/>";
+    }
+
     $alternative_code = "";
     if (!check_hot_linking($src, $alternative_code)) {
         return $alternative_code;
@@ -611,6 +627,14 @@ function bb_process_smile($bbcode, $action, $name, $default, $params, $content)
         $src = trim($default);
     } else {
         $src = trim($content);
+    }
+    
+    if (strlen($src) > 700) {
+        return "[smile]url too long[/smile]";
+    }
+  
+    if (!check_url_validity($src)) {
+        return "[smile]" . escape_html(urldecode($src)) . "[/smile]";
     }
     
     if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src, $matches)) {
@@ -1969,6 +1993,17 @@ function check_relative_url($url, $replacement = "")
     
     return $url;
 } // check_relative_url
+//------------------------------------------------------------------------------
+function check_url_validity($url)
+{
+  if (strpos($url, ">") !== false || strpos($url, "<") !== false) return false;
+  
+  $url = urldecode($url);
+  
+  if (strpos($url, ">") !== false || strpos($url, "<") !== false) return false;
+
+  return true;
+} // check_url_validity
 //------------------------------------------------------------------------------
 function remove_post_citations(&$input, &$output)
 {

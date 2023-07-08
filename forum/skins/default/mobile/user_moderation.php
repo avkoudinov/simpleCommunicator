@@ -447,7 +447,6 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 <td></td>
 </tr>
 
-
 <?php if($fmanager->is_moderator()): ?>
 
 <tr>
@@ -456,6 +455,7 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 </tr>
 
 <?php endif; ?>
+
 
 <?php if($fmanager->is_admin()): ?>
 
@@ -467,6 +467,8 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 
 <?php endif; ?>
 
+
+
 <?php if($fmanager->is_moderator()): ?>
 
 <?php if(!empty($settings["rates_active"])): ?>
@@ -477,9 +479,7 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 </tr>
 <?php endif; ?>
 
-<?php endif; ?>
-
-<?php if($fmanager->is_moderator() && $fmanager->may_see_ip()): ?>
+<?php if($fmanager->may_see_ip()): ?>
 
 <tr>
 <td>
@@ -498,13 +498,12 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 
 
 
-<?php if($fmanager->is_moderator()): ?>
+
+<?php if(count($moderated_restricted_forum_list) > 0): ?>
 
 <tr>
 <td></td>
 </tr>
-
-<?php if(count($moderated_restricted_forum_list) > 0): ?>
 
 <tr>
 <th class="subheader"><?php echo_html(text("AccessToRestrictedForums")); ?></th>
@@ -533,10 +532,6 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 </tr>
 
 <?php endif; ?>
-
-<tr>
-<td></td>
-</tr>
 
 
 <?php 
@@ -690,7 +685,22 @@ if(!empty($user_data["forum_blocked"])):
 <tr>
 <td>
 <select name="forum" onchange="activate_ban_checkbox()">
-<option value=""><?php echo_html($fmanager->global_ban_allowed() ? text("ForAllForums") : text("ForAllModeratedForums")); ?></option>
+
+<?php if ($fmanager->is_admin()): ?>
+
+<option value="-9"><?php echo_html(text("ForAllForums")); ?></option>
+
+<?php elseif($fmanager->global_ban_allowed()): ?>
+
+<option value="-9"><?php echo_html(text("ForAllForums")); ?></option>
+<option value=""><?php echo_html(text("ForAllModeratedForums")); ?></option>
+
+<?php else: ?>
+
+<option value=""><?php echo_html(text("ForAllModeratedForums")); ?></option>
+
+<?php endif ?>
+
 <?php foreach($moderated_forum_list as $fid => $fname): ?>
 <option value="<?php echo_html($fid); ?>"><?php echo_html($fname); ?></option>
 <?php endforeach; ?>
