@@ -5307,10 +5307,10 @@
         </text>
 
         <text id="ForAllForums">
-            <en>On all forums</en>
-            <de>Auf alle Foren</de>
-            <ru>На всех форумах</ru>
-            <ua>На усіх форумах</ua>
+            <en>Globally on all forums</en>
+            <de>Global auf alle Foren</de>
+            <ru>Глобально на всех форумах</ru>
+            <ua>Глобально на усіх форумах</ua>
         </text>
 
         <text id="ForAllModeratedForums">
