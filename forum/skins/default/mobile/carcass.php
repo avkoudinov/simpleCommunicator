@@ -561,23 +561,16 @@ if(preg_match("/.*(#.*)$/", $url, $matches))
   $url = str_replace($anchor, "", $url);
 }
 
-$target = "desktop=1";
+$target_action = "return switch_skin('desktop')";
 $target_caption = text("DesktopVersion");
 if($view_mode == "mobile") 
 {
-  $target = "tablet=1";
+  $target_action = "return switch_skin('tablet')";
   $target_caption = text("TabletVersion");
 }
 
-$url = str_replace("mobile=1", "", $url);
-$url = str_replace("desktop=1", "", $url);
-$url = str_replace("tablet=1", "", $url);
-$url = rtrim($url, "&?");
-if(strpos($url, "?") === false) $url .= "?$target" . $anchor;
-else                            $url .= "&$target" . $anchor;
-
 ?>
-<a href="<?php echo($url); ?>"><?php echo_html($target_caption); ?></a>&nbsp;&nbsp;&nbsp;
+<a href="<?php echo($url); ?>" onclick="<?php echo($target_action); ?>"><?php echo_html($target_caption); ?></a>&nbsp;&nbsp;&nbsp;
 
 <a href="contact.php"><?php echo_html(text("Contact")); ?></a>&nbsp;&nbsp;&nbsp;
 

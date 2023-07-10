@@ -29427,6 +29427,22 @@ abstract class ForumManager
     } // check_skin
     
     //-----------------------------------------------------------------
+    function switch_skin($skin)
+    {
+        if ($skin == "mobile") {
+            $device = "mobile";
+        } elseif ($skin == "tablet") {
+            $device = "tablet";
+        } else {
+            $device = "desktop";
+        }
+        
+        set_cookie("q_device", $device, time() + 90 * 24 * 3600);
+        
+        return true;
+    } // switch_skin
+
+    //-----------------------------------------------------------------
     function define_view_path(&$skin, &$view_path, &$view_mode, &$skin_version)
     {
         $skin = "";
@@ -29439,22 +29455,14 @@ abstract class ForumManager
         
         $device = get_cookie("q_device");
         
-        if (!reqvar_empty("mobile")) {
-            $device = "mobile";
-        }
-        if (!reqvar_empty("tablet")) {
-            $device = "tablet";
-        }
-        if (!reqvar_empty("desktop")) {
-            $device = "desktop";
-        }
-        
         // first time, cookie is not set yet
         // and it is a smartphone
         if (empty($device) && detect_device(val_or_empty($_SERVER["HTTP_USER_AGENT"])) == "smartphone") {
             $device = "mobile";
         } elseif (empty($device) && detect_device(val_or_empty($_SERVER["HTTP_USER_AGENT"])) == "tablet") {
             $device = "tablet";
+        } elseif (empty($device)) {
+            $device = "desktop";
         }
         
         set_cookie("q_device", $device, time() + 90 * 24 * 3600);
