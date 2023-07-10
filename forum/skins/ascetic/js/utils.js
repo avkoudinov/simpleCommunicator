@@ -2630,6 +2630,62 @@ function clear_profile_data()
   return false;
 } // clear_profile_data
 // --------------------------------------------------------
+var switch_skin_ajax = null;
+
+function switch_skin(skin)
+{
+  Forum.show_sys_progress_indicator(true);
+
+  if(!switch_skin_ajax)
+  {
+    switch_skin_ajax = new Forum.AJAX();
+
+    switch_skin_ajax.timeout = TIMEOUT;
+
+    switch_skin_ajax.beforestart = function() { break_check_new_messages(); };
+    switch_skin_ajax.aftercomplete = function(error) { activate_check_new_messages(); };
+
+    switch_skin_ajax.onload = function(text, xml)
+    {
+      try
+      {
+        var response = JSON.parse(text);
+
+        Forum.handle_response_messages(response);
+
+        if(response.success)
+        {
+          delay_reload();
+          return;
+        }
+      }
+      catch(err)
+      {
+        Forum.handle_ajax_error(this, err.message, this.last_url, {});
+      }
+
+      Forum.show_sys_progress_indicator(false);
+    };
+
+    switch_skin_ajax.onerror = function(error, url, info)
+    {
+      Forum.show_sys_progress_indicator(false);
+
+      Forum.handle_ajax_error(this, error, url, info);
+    };
+  }
+  
+  switch_skin_ajax.abort();
+  switch_skin_ajax.resetParams();
+
+  switch_skin_ajax.setPOST('switch_skin', skin);
+  switch_skin_ajax.setPOST('hash', get_protection_hash());
+
+  switch_skin_ajax.request("ajax/process.php");
+
+  return false;
+} // switch_skin
+// --------------------------------------------------------
 var tab_left = false;
 function signal_new(state)
 {
