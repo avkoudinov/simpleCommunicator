@@ -48,6 +48,9 @@ elseif (!$fmanager->check_hash()) {
 elseif (!reqvar_empty("clear_profile_data")) {
     $response['success'] = $fmanager->clear_profile_data();
 } //---------------------------------------------------------------------
+elseif (!reqvar_empty("switch_skin")) {
+    $response['success'] = $fmanager->switch_skin(reqvar("switch_skin"));
+} //---------------------------------------------------------------------
 elseif (!reqvar_empty("verify_password")) {
     $response['success'] = $fmanager->verify_password(reqvar("fid"), reqvar("password"));
     
