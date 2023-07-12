@@ -62,6 +62,32 @@
 </li>
 </ul>
 
+Некоторые нюансы установки и работы форума (в зависимости от используемого рабочего окружения операционной системы и сопутствующих сервисов, ниже применимо к окружению ОС RHEL 8).
+
+- Пользователь, с правами которого работает веб-сервер, например Apache, должен иметь права на запись в директории форума `jobs`, `log`, `tmp`, `user_data` и, хотя бы разово на этапе инсталляции, в файлы `include/admin_config_inc.php`, `include/config_inc.php`.
+
+- В случае, если применяются контекстные политики SELINUX и рабочая директория форума отлична от рабочей директории веб-сервера по умолчанию, необходимо применить соответствующие контектсные политики, например:
+```
+semanage fcontext -a -t httpd_sys_rw_content_t "/<path to directory>/forum(/.*)?"
+restorecon -Rvv /<path to directory>/forum/
+```
+
+- Если у пользователя, с правами которого осуществляется соединение с сервером баз данных, отсутствует привилегия на созданиие базы данных, необходимо предварительно создать требуемую базу данных вручную, например, следующим образом для СУБД MySQL:
+```
+CREATE DATABASE db_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+- Возможно понадобится доустановка пакетов, необходимых для работы основных и опциональных функций форума:
+```
+php, php-gd, php-mysqlnd, php-bcmath, pngquant, ffmpeg, ImageMagick, dvipng, texlive, zip
+```
+
+- Для корректной работы генерации LATEX формул может потребоваться изменить рабочее окружение для пользователя, с правами которого работает веб-сервер при вызове программы обработки LATEX в файле `include/image_utils_inc.php` (приведены изменения по сравнению с оригинальной master версией):
+```
+    ////$command = 'cd ' . $temp_dir . '; ' . '/usr/bin/latex' . ' ' . $hash . '.tex < /dev/null |grep ^!|grep -v Emergency > ' . $temp_dir . $hash . '.err 2> /dev/null 2>&1';
+    $command = 'cd ' . $temp_dir . '; ' . 'export HOME=/home/apache; /usr/bin/latex' . ' ' . $hash . '.tex < /dev/null | grep ^! | grep -v Emergency > ' . $temp_dir . $hash . '.err > /dev/null 2>&1';
+```
+
 ----
 ![Forums list with a Guest user](_screenshots/simpleCommunicator-forums-guest.png)
 

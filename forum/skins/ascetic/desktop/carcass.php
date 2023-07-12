@@ -290,14 +290,8 @@ if(preg_match("/.*(#.*)$/", $url, $matches))
   $anchor = $matches[1];
   $url = str_replace($anchor, "", $url);
 }
-
-$url = str_replace("mobile=1", "", $url);
-$url = str_replace("desktop=1", "", $url);
-$url = rtrim($url, "&?");
-if(strpos($url, "?") === false) $url .= "?mobile=1" . $anchor;
-else                            $url .= "&mobile=1" . $anchor;
 ?>
-<a href="<?php echo($url); ?>"><?php echo_html(text("MobileVersion")); ?></a>&nbsp;&nbsp;&nbsp;
+<a href="<?php echo($url); ?>" onclick="return switch_skin('mobile')"><?php echo_html(text("MobileVersion")); ?></a>&nbsp;&nbsp;&nbsp;
 
 <a href="contact.php"><?php echo_html(text("Contact")); ?></a>&nbsp;&nbsp;&nbsp;
 

@@ -4146,9 +4146,9 @@ abstract class ForumManager
             $now = $dbw->format_datetime(time());
             
             $query = "insert into {$prfx}_forum
-               (name, description, allow_edit, hide_from_robots, no_guests, restricted_guest_mode, user_posting_as_guest, restricted_access, protected_by_password, deleted, password, creation_date, sort_order, access_duration, access_message_count)
+               (name, description, allow_edit, hide_from_robots, no_guests, restricted_guest_mode, user_posting_as_guest, restricted_access, stringent_rules, protected_by_password, deleted, password, creation_date, sort_order, access_duration, access_message_count)
                 values
-               ($forum_name, $forum_description, $allow_edit, $hide_from_robots, $no_guests, $restricted_guest_mode, $user_posting_as_guest, $restricted_access, $protected_by_password, $deleted, $password, '$now', $sort_order, $access_duration, $access_message_count)";
+               ($forum_name, $forum_description, $allow_edit, $hide_from_robots, $no_guests, $restricted_guest_mode, $user_posting_as_guest, $restricted_access, $stringent_rules, $protected_by_password, $deleted, $password, '$now', $sort_order, $access_duration, $access_message_count)";
         } else {
             $password_string = "password = $password,";
             if ($protected_by_password && $password_is_set && reqvar_empty("password")) {
@@ -19080,9 +19080,47 @@ abstract class ForumManager
                 $action_expires = "NULL";
             }
             
-            // if global ban is not allowed
-            // we collect the list of forums
-            if (!reqvar_empty("forum") || !$this->global_ban_allowed()) {
+            if (reqvar("forum") == -9 && $this->global_ban_allowed()) {
+                if (reqvar("reason") != "author_death" && reqvar("reason") != "account_loss" &&
+                    !empty($user_data["moderator"])) {
+                    MessageHandler::setError(text("ErrModeratorBlockNotAllowed"));
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+                
+                if (empty($period)) {
+                    $mail_job["email_template"] = "email_user_blocked{$anonym_appendix}.txt";
+                    $mail_job["event_code"] = "MsgEventUserBlocked{$anonym_appendix2}";
+                } else {
+                    $mail_job["email_template"] = "email_user_blocked_for_time{$anonym_appendix}.txt";
+                    $mail_job["event_code"] = "MsgEventUserBlockedTime{$anonym_appendix2}";
+                }
+                
+                $event_data["action"] = "block_user";
+                
+                $self_blocked = 0;
+                if (reqvar("reason") == "author_wish") {
+                    $self_blocked = 1;
+                } elseif (reqvar("reason") == "author_death") {
+                    $self_blocked = 2;
+                } elseif (reqvar("reason") == "account_loss") {
+                    $self_blocked = 3;
+                }
+                $comment = $dbw->escape($comment);
+                
+                if (!$dbw->execute_query("update {$prfx}_user set blocked = 1, self_blocked = $self_blocked, block_expires = $action_expires, block_reason = '$comment' where id = $uid")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+                
+                if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+                
+                $mail_jobs[] = $mail_job;
+            } else {
                 if (empty($period)) {
                     $mail_job["email_template"] = "email_user_forum_blocked{$anonym_appendix}.txt";
                     $mail_job["event_code"] = "MsgEventUserForumBlocked{$anonym_appendix2}";
@@ -19200,47 +19238,7 @@ abstract class ForumManager
                     
                     $mail_jobs[] = $mail_job;
                 } // foreach forum
-            } else {
-                if (reqvar("reason") != "author_death" && reqvar("reason") != "account_loss" &&
-                    !empty($user_data["moderator"])) {
-                    MessageHandler::setError(text("ErrModeratorBlockNotAllowed"));
-                    $dbw->rollback_transaction();
-                    return false;
-                }
-                
-                if (empty($period)) {
-                    $mail_job["email_template"] = "email_user_blocked{$anonym_appendix}.txt";
-                    $mail_job["event_code"] = "MsgEventUserBlocked{$anonym_appendix2}";
-                } else {
-                    $mail_job["email_template"] = "email_user_blocked_for_time{$anonym_appendix}.txt";
-                    $mail_job["event_code"] = "MsgEventUserBlockedTime{$anonym_appendix2}";
-                }
-                
-                $event_data["action"] = "block_user";
-                
-                $self_blocked = 0;
-                if (reqvar("reason") == "author_wish") {
-                    $self_blocked = 1;
-                } elseif (reqvar("reason") == "author_death") {
-                    $self_blocked = 2;
-                } elseif (reqvar("reason") == "account_loss") {
-                    $self_blocked = 3;
-                }
-                $comment = $dbw->escape($comment);
-                
-                if (!$dbw->execute_query("update {$prfx}_user set blocked = 1, self_blocked = $self_blocked, block_expires = $action_expires, block_reason = '$comment' where id = $uid")) {
-                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                    $dbw->rollback_transaction();
-                    return false;
-                }
-                
-                if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
-                    $dbw->rollback_transaction();
-                    return false;
-                }
-                
-                $mail_jobs[] = $mail_job;
-            }
+            } 
             
             $messages[text("MsgUserBlocked")] = text("MsgUserBlocked");
         }
@@ -29429,6 +29427,22 @@ abstract class ForumManager
     } // check_skin
     
     //-----------------------------------------------------------------
+    function switch_skin($skin)
+    {
+        if ($skin == "mobile") {
+            $device = "mobile";
+        } elseif ($skin == "tablet") {
+            $device = "tablet";
+        } else {
+            $device = "desktop";
+        }
+        
+        set_cookie("q_device", $device, time() + 90 * 24 * 3600);
+        
+        return true;
+    } // switch_skin
+
+    //-----------------------------------------------------------------
     function define_view_path(&$skin, &$view_path, &$view_mode, &$skin_version)
     {
         $skin = "";
@@ -29441,22 +29455,14 @@ abstract class ForumManager
         
         $device = get_cookie("q_device");
         
-        if (!reqvar_empty("mobile")) {
-            $device = "mobile";
-        }
-        if (!reqvar_empty("tablet")) {
-            $device = "tablet";
-        }
-        if (!reqvar_empty("desktop")) {
-            $device = "desktop";
-        }
-        
         // first time, cookie is not set yet
         // and it is a smartphone
         if (empty($device) && detect_device(val_or_empty($_SERVER["HTTP_USER_AGENT"])) == "smartphone") {
             $device = "mobile";
         } elseif (empty($device) && detect_device(val_or_empty($_SERVER["HTTP_USER_AGENT"])) == "tablet") {
             $device = "tablet";
+        } elseif (empty($device)) {
+            $device = "desktop";
         }
         
         set_cookie("q_device", $device, time() + 90 * 24 * 3600);
@@ -34898,7 +34904,7 @@ abstract class ForumManager
         // We append it extra and the page has +1 message if the post 
         // should not have been shown but will be shown.
         //
-        // For that, we have to add the clause OR (v1_post.id = $pid),
+        // For that, we have to add the clause OR (post.id = $pid),
         // but only in the case if the post is not present in the selection.
         // It can only be if the post is deleted and the user is not moderator
         // or is moderator but not in the deleted-mode.
@@ -37821,7 +37827,7 @@ abstract class ForumManager
             //-------------------------------------------------------------------
             if (!reqvar_empty("thematic_only")) {
                 $hints["post"]["{$prfx}_post_creation_date_idx"] = "{$prfx}_post_creation_date_idx";
-                $hints["post"]["{$prfx}v1_post_is_comment_idx"] = "{$prfx}_post_has_code_idx";
+                $hints["post"]["{$prfx}_post_is_comment_idx"] = "{$prfx}_post_has_code_idx";
                 $post_part_where .= " and {$prfx}_post.is_comment = 0";
                 $other_post_conditions_exist = true;
             }

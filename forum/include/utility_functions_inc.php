@@ -1033,7 +1033,7 @@ function array_to_dom(&$xmldoc, &$node, &$arr)
         if (is_array($val)) {
             array_to_dom($xmldoc, $child, $val);
         } else {
-            $txtnode = $xmldoc->createTextNode($val);
+            $txtnode = $xmldoc->createTextNode($val ?? "");
             $child->appendChild($txtnode);
         }
         

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description>
+<<<<<<< HEAD
   <version>23.05.14</version>
+=======
+  <version>23.07.11</version>
+>>>>>>> 9e7bde1c5e1c3c15bf9188a4c0044fb5c3c683ed
   
   <caption 
   ru="Синий минималистичеcкий"
