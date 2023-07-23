@@ -1800,6 +1800,8 @@ function get_allow_moderate_period()
 //------------------------------------------------------
 function detect_bot($user_agent)
 {
+    if (empty($user_agent)) $user_agent = "";
+    
     if (preg_match("/.*(SemrushBot|DotBot|HubSpot Crawler|Barkrowler|LightspeedSystemsCrawler|Twitterbot|MegaIndex|startmebot|Adsbot|MJ12bot|Slackbot|TestBot|AhrefsBot|BLEXBot|Mail\\.RU_Bot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Facebot Twitterbot|Exabot|SEOkicks|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|Applebot|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|SiteCheckerBot|tracemyfile|trendictionbot|Cliqzbot).*/i",
         $user_agent, $matches)) {
         return $matches[1];

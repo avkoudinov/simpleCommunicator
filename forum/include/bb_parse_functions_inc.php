@@ -359,9 +359,9 @@ function check_hot_linking(&$url, &$alternative_code)
         $no_hot_linking_list = file_get_contents(APPLICATION_ROOT . "user_data/config/no_hot_linking_list.txt");
         $no_hot_linking_list = preg_split("/[\n\r]+/", $no_hot_linking_list, -1, PREG_SPLIT_NO_EMPTY);
     }
-
+    
     foreach ($no_hot_linking_list as $pattern) {
-        if (stripos($host, $pattern) !== false) {
+        if (stripos($host ?? "", $pattern) !== false) {
             $alternative_code = "<div class='picture_wrapper'><img class='post_image' src='user_data/images/hotlinking.jpg' alt='{{picture}}'></div>";
             return false;
         }
@@ -370,7 +370,7 @@ function check_hot_linking(&$url, &$alternative_code)
     return true;
 } // check_hot_linking
 //------------------------------------------------------------------------------
-function replace_image_url(&$url, &$large_url)
+function check_image_url(&$url, &$large_url)
 {
     //return;
     
@@ -390,7 +390,7 @@ function replace_image_url(&$url, &$large_url)
     if (in_array($host, $img_black_list)) {
         $url = "user_data/images/ip_track_warning.png";
         $large_url = "user_data/images/ip_track_warning.png";
-        return;
+        return false;
     }
     
     $ctx = stream_context_create([
@@ -403,89 +403,107 @@ function replace_image_url(&$url, &$large_url)
         ]
     ]);
     
-    if ($headers = @get_headers($url, 1, $ctx)) {
-        foreach ($headers as $name => $value) {
-            $headers[strtolower($name)] = $value;
-        }
-        
-        $src_type = "";
-        $src_length = 0;
-        
-        if (!empty($headers["content-type"]))
-        {
-            if (is_array($headers["content-type"])) {
-                foreach ($headers["content-type"] as $i => $content_type) {
-                    if (strpos($content_type, "image") === 0) {
-                       $src_type = $content_type;
-                       $src_length = empty($headers["content-length"][$i]) ? 0 : $headers["content-length"][$i];
-                       break; 
-                    }                  
-                }
-                
-            } else {
-                $src_type = $headers["content-type"];
-                $src_length = empty($headers["content-length"]) ? 0 : $headers["content-length"];
+    $url_to_check = $url;
+    if (!preg_match("/^http/", $url_to_check)) {
+        $url_to_check = get_host_address() . get_url_path() . $url;   
+    }
+    
+    $headers = @get_headers($url_to_check, 1, $ctx);
+    if (empty($headers)) {
+        $headers = @get_headers($url_to_check, 1);
+    }
+    
+    if (empty($headers)) {
+      return true;
+    }
+    
+    foreach ($headers as $name => $value) {
+        $headers[strtolower($name)] = $value;
+    }
+    
+    $src_type = "";
+    $src_length = 0;
+    
+    if (!empty($headers["content-type"]))
+    {
+        if (is_array($headers["content-type"])) {
+            foreach ($headers["content-type"] as $i => $content_type) {
+                if (strpos($content_type, "image") === 0) {
+                   $src_type = $content_type;
+                   $src_length = empty($headers["content-length"][$i]) ? 0 : $headers["content-length"][$i];
+                   break; 
+                }                  
             }
+            
+        } else {
+            $src_type = $headers["content-type"];
+            $src_length = empty($headers["content-length"]) ? 0 : $headers["content-length"];
         }
-        
-        if (!empty($src_length) && $src_length > 10485760) {
-            $large_url = $url;
-            $url = "user_data/images/large_picture.png";
-            return;
-        }
-      
-        if (!empty($src_type) && strpos($src_type, "image") === 0) 
-        {
-          $info = @getimagesize($url);
-          if (preg_match('/width="(\d+)" height="(\d+)"/', val_or_empty($info["3"]), $matches) &&
-              ($matches[1] > 10000 || $matches[2] > 10000)) {
-              $large_url = $url;
-              $url = "user_data/images/large_picture.png";
-              return;
-          }
-        }
-        
-        if (!empty($headers["location"])) {
-            if (!is_array($headers["location"])) {
-                $host = parse_url($headers["location"], PHP_URL_HOST);
+    }
+    
+    if (!empty($src_length) && $src_length > 10485760) {
+        $large_url = $url;
+        $url = "user_data/images/large_picture.png";
+        return true;
+    }
+  
+    if (strpos($src_type, "image") === 0) 
+    {
+      $info = @getimagesize($url);
+      if (preg_match('/width="(\d+)" height="(\d+)"/', val_or_empty($info["3"]), $matches) &&
+          ($matches[1] > 10000 || $matches[2] > 10000)) {
+          $large_url = $url;
+          $url = "user_data/images/large_picture.png";
+          return true;
+      }
+    } else {
+          $url = "user_data/images/img_injection_warning.png";
+          $large_url = "user_data/images/img_injection_warning.png";
+          return false;
+    }
+    
+    if (!empty($headers["location"])) {
+        if (!is_array($headers["location"])) {
+            $host = parse_url($headers["location"], PHP_URL_HOST);
+            if (in_array($host, $img_black_list)) {
+                $url = "user_data/images/ip_track_warning.png";
+                $large_url = "user_data/images/ip_track_warning.png";
+                return false;
+            }
+        } else {
+            foreach ($headers["location"] as $location) {
+                $host = parse_url($location, PHP_URL_HOST);
                 if (in_array($host, $img_black_list)) {
                     $url = "user_data/images/ip_track_warning.png";
                     $large_url = "user_data/images/ip_track_warning.png";
-                    return;
-                }
-            } else {
-                foreach ($headers["location"] as $location) {
-                    $host = parse_url($location, PHP_URL_HOST);
-                    if (in_array($host, $img_black_list)) {
-                        $url = "user_data/images/ip_track_warning.png";
-                        $large_url = "user_data/images/ip_track_warning.png";
-                        return;
-                    }
-                }
-            }
-        }
-        
-        if (!empty($headers["referer"])) {
-            if (!is_array($headers["referer"])) {
-                $host = parse_url($url, PHP_URL_HOST);
-                if (in_array($host, $img_black_list)) {
-                    $url = "user_data/images/ip_track_warning.png";
-                    $large_url = "user_data/images/ip_track_warning.png";
-                    return;
-                }
-            } else {
-                foreach ($headers["referer"] as $location) {
-                    $host = parse_url($location, PHP_URL_HOST);
-                    if (in_array($host, $img_black_list)) {
-                        $url = "user_data/images/ip_track_warning.png";
-                        $large_url = "user_data/images/ip_track_warning.png";
-                        return;
-                    }
+                    return false;
                 }
             }
         }
     }
-} // replace_image_url
+    
+    if (!empty($headers["referer"])) {
+        if (!is_array($headers["referer"])) {
+            $host = parse_url($url, PHP_URL_HOST);
+            if (in_array($host, $img_black_list)) {
+                $url = "user_data/images/ip_track_warning.png";
+                $large_url = "user_data/images/ip_track_warning.png";
+                return false;
+            }
+        } else {
+            foreach ($headers["referer"] as $location) {
+                $host = parse_url($location, PHP_URL_HOST);
+                if (in_array($host, $img_black_list)) {
+                    $url = "user_data/images/ip_track_warning.png";
+                    $large_url = "user_data/images/ip_track_warning.png";
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+} // check_image_url
 //------------------------------------------------------------------------------
 function bb_process_hr($bbcode, $action, $name, $default, $params, $content)
 {
@@ -527,7 +545,7 @@ function bb_process_img($bbcode, $action, $name, $default, $params, $content)
         return $alternative_code;
     }
     
-    replace_image_url($src, $large_src);
+    check_image_url($src, $large_src);
     
     $src = check_relative_url($src);
     $src = str_replace("&amp;", "&", $src);
@@ -579,6 +597,8 @@ function bb_process_anim($bbcode, $action, $name, $default, $params, $content)
         return $alternative_code;
     }
 
+    check_image_url($src, $src);
+
     $encoded_src = check_relative_url($src);
     // this url is to be passed as parameter and does not need to have entities
     $encoded_src = str_replace("&amp;", "&", $encoded_src);
@@ -590,6 +610,10 @@ function bb_process_anim($bbcode, $action, $name, $default, $params, $content)
     
     if (empty($src)) {
         return "<p>[anim][/anim]</p>";
+    }
+    
+    if (strlen($src) > 700) {
+        return "[anim]url too long[/anim]<br/><br/>";
     }
     
     $wrapper_begin = "";
@@ -618,6 +642,10 @@ function bb_process_anim($bbcode, $action, $name, $default, $params, $content)
         
         $att_pict_appendix = "attachment_picture_{$att}_{$idx}";
     } else {
+        if (!check_url_validity($src)) {
+            return "[anim]" . escape_html(urldecode($src)) . "[/anim]<br/><br/>";
+        }
+
         $wrapper_begin = "<div class='picture_wrapper'>";
         $wrapper_end = "</div>";
     }
@@ -637,6 +665,10 @@ function bb_process_smile($bbcode, $action, $name, $default, $params, $content)
         $src = trim($content);
     }
     
+    check_image_url($src, $src);
+
+    $src = check_relative_url($src);
+
     if (strlen($src) > 700) {
         return "[smile]url too long[/smile]";
     }
