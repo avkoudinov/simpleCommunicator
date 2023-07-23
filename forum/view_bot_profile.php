@@ -9,6 +9,15 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "" && !empty($settin
   echo "no data";
   exit;
 }
+
+if(!$fmanager->is_logged_in())
+{
+  MessageHandler::setWarning(text("MsgTryLogin"));
+
+  $_SESSION["last_url_asklogin"] = val_or_empty($_SERVER["REQUEST_URI"]);
+  header("Location: login.php");
+  exit;
+}
 //------------------------------------------------------------------
 $title = text("BotProfile");
 //------------------------------------------------------------------
