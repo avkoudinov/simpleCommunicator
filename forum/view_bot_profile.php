@@ -18,6 +18,14 @@ if(!$fmanager->is_logged_in())
   header("Location: login.php");
   exit;
 }
+
+if ($fmanager->check_blocked("")) {
+  MessageHandler::setWarning(text("ErrActionNotAllowed"));
+
+  header("Location: forums.php");
+  exit;
+}
+
 //------------------------------------------------------------------
 $title = text("BotProfile");
 //------------------------------------------------------------------
