@@ -387,7 +387,16 @@ function check_image_url(&$url, &$large_url)
     
     $ctx = stream_context_create([
         'http' => [
-            'timeout' => 5.0
+            'method' => "GET",
+            'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\r\n" .
+                        "Cache-Control: no-cache\r\n" .
+                        "Content-Type: text/xml; charset=utf-8\r\n" .
+                        "Accept: */*\r\n" .
+                        "Host: $host\r\n" .
+                        "Upgrade-Insecure-Requests: 1\r\n" .
+                        "Access-Control-Allow-Headers: X-Quic\r\n" .
+                        "Accept-Encoding:	gzip, deflate, br\r\n" .
+                        "Connection: keep-alive"
         ],
         'ssl' => [
             'verify_peer' => false,
@@ -401,9 +410,6 @@ function check_image_url(&$url, &$large_url)
     }
     
     $headers = @get_headers($url_to_check, 1, $ctx);
-    if (empty($headers)) {
-        $headers = @get_headers($url_to_check, 1);
-    }
     
     if (empty($headers)) {
       return true;
