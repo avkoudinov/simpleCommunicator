@@ -21,11 +21,6 @@ $browser_stat = array();
 $os_stat = array();
 $bot_stat = array();
 
-if(!$fmanager->is_logged_in() || $fmanager->check_blocked(""))
-{
-    exit;
-}
-
 if(!$fmanager->get_browser_stat($browser_stat, $os_stat, $bot_stat))
 {
     exit;

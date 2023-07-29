@@ -96,6 +96,15 @@ ip ASC
 ';
 
 $sql_cmds[] = '
+create table v1_browser_statistics_cache (
+   tm                   datetime             null,
+   tp                   varchar(100)         null,
+   name                 varchar(250)         null,
+   cnt                  int                  null
+)
+';
+
+$sql_cmds[] = '
 create table v1_cache_invalidation (
    new_dt               datetime             null
 )
@@ -426,6 +435,12 @@ guest_name ASC
 $sql_cmds[] = '
 create index v1_forum_hits_ip_idx on v1_forum_hits (
 ip ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_forum_hits_bot_idx on v1_forum_hits (
+bot ASC
 )
 ';
 
