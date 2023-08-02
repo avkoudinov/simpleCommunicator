@@ -113,6 +113,16 @@ create index v1_banned_ips_idx on v1_banned_ips
 ';
 
 $sql_cmds[] = '
+create table v1_browser_statistics_cache
+(
+   tm                   datetime,
+   tp                   varchar(100),
+   name                 varchar(250),
+   cnt                  int
+)
+';
+
+$sql_cmds[] = '
 create table v1_cache_invalidation
 (
    new_dt               datetime
@@ -488,6 +498,13 @@ $sql_cmds[] = '
 create index v1_forum_hits_ip_idx on v1_forum_hits
 (
    ip
+)
+';
+
+$sql_cmds[] = '
+create index v1_forum_hits_bot_idx on v1_forum_hits
+(
+   bot
 )
 ';
 

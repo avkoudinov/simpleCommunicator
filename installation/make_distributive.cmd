@@ -105,6 +105,9 @@ rem zipping
 "%ZIP_PATH%\7z.exe" a database.zip .\database\*
 "%ZIP_PATH%\7z.exe" a smileys.zip ..\forum\user_data\smileys\*
 
+rmdir /S /Q application
+rmdir /S /Q database
+
 @echo Done
 
 pause

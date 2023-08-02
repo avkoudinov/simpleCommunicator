@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     26.06.2023 22:31:40                          */
+/* Created on:     30.07.2023 00:21:09                          */
 /*==============================================================*/
 
 
@@ -126,6 +126,17 @@ create table v1_banned_ips
 create index v1_banned_ips_idx on v1_banned_ips
 (
    ip
+);
+
+/*==============================================================*/
+/* Table: v1_browser_statistics_cache                           */
+/*==============================================================*/
+create table v1_browser_statistics_cache
+(
+   tm                   datetime,
+   tp                   varchar(100),
+   name                 varchar(250),
+   cnt                  int
 );
 
 /*==============================================================*/
@@ -550,6 +561,14 @@ create index v1_forum_hits_guest_name_idx on v1_forum_hits
 create index v1_forum_hits_ip_idx on v1_forum_hits
 (
    ip
+);
+
+/*==============================================================*/
+/* Index: v1_forum_hits_bot_idx                                 */
+/*==============================================================*/
+create index v1_forum_hits_bot_idx on v1_forum_hits
+(
+   bot
 );
 
 /*==============================================================*/
