@@ -1294,9 +1294,6 @@ class MSSQL_ForumManager extends ForumManager
             case "last_week":
                 $start_date = xstrtotime("-7 days", $now_rounded);
                 break;
-            case "last_month":
-                $start_date = xstrtotime("-1 month", $now_rounded);
-                break;
             default:
                 $start_date = xstrtotime("-10 minutes", $now_rounded);
                 break;

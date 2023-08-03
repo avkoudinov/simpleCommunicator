@@ -9255,14 +9255,83 @@ abstract class ForumManager
         }
         
         $prfx = $rodbw->escape(System::getDBPrefix());
+        $now = $rodbw->format_datetime(time());
+
+        $start = $rodbw->format_datetime(time() - 30*60);
         
-        $query = "select browser, count(*) cnt from
-                    (select read_marker, browser
-                    from {$prfx}_forum_hits
-                    where browser is not NULL
-                    group by read_marker, browser) stat
-                    group by browser
-                    order by count(*) desc";
+        $query = "delete from {$prfx}_browser_statistics_cache where tm < '$start'";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+
+        $query = "select count(*) cnt from
+                    {$prfx}_browser_statistics_cache
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $exist = 0;
+        if ($rodbw->fetch_row()) {
+            $exist = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        debug_message("Exists: " . $exist);
+
+        if (!$exist) {
+            $query = "insert into {$prfx}_browser_statistics_cache
+                      (tm, tp, name, cnt)
+                      select '$now', 'browser', browser, count(*) cnt from
+                        (select read_marker, browser
+                        from {$prfx}_forum_hits
+                        where browser is not NULL
+                        group by read_marker, browser) stat
+                        group by browser";
+            
+            if (!$rodbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+                return false;
+            }
+            
+            $query = "insert into {$prfx}_browser_statistics_cache
+                      (tm, tp, name, cnt)
+                      select '$now', 'os', os, count(*) cnt from
+                        (select read_marker, os
+                        from {$prfx}_forum_hits
+                        where os is not NULL
+                        group by read_marker, os) stat
+                        group by os";
+            
+            if (!$rodbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+                return false;
+            }
+            
+            $query = "insert into {$prfx}_browser_statistics_cache
+                      (tm, tp, name, cnt)
+                      select '$now', 'bot', bot, count(*) cnt from
+                        (select read_marker, bot
+                        from {$prfx}_forum_hits
+                        where bot is not NULL
+                        group by read_marker, bot) stat
+                        group by bot";
+            
+            if (!$rodbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+                return false;
+            }
+        }
+
+        $query = "select name, cnt from
+                    {$prfx}_browser_statistics_cache
+                    where tp = 'browser'
+                    order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
@@ -9272,7 +9341,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $browser_stat[$rodbw->field_by_name("browser")] = $rodbw->field_by_name("cnt");
+            $browser_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
@@ -9281,13 +9350,10 @@ abstract class ForumManager
             $browser_stat[$browser] = 100 * $val / $total;
         }
         
-        $query = "select os, count(*) cnt from
-                    (select read_marker, os
-                    from {$prfx}_forum_hits
-                    where os is not NULL
-                    group by read_marker, os) stat
-                    group by os
-                    order by count(*) desc";
+        $query = "select name, cnt from
+                    {$prfx}_browser_statistics_cache
+                    where tp = 'os'
+                    order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
@@ -9297,7 +9363,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $os_stat[$rodbw->field_by_name("os")] = $rodbw->field_by_name("cnt");
+            $os_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
@@ -9306,11 +9372,10 @@ abstract class ForumManager
             $os_stat[$os] = 100 * $val / $total;
         }
         
-        $query = "select bot, count(*) cnt
-                    from {$prfx}_forum_hits
-                    where bot is not NULL
-                    group by bot
-                    order by count(*) desc";
+        $query = "select name, cnt from
+                    {$prfx}_browser_statistics_cache
+                    where tp = 'bot'
+                    order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
@@ -9320,7 +9385,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $bot_stat[$rodbw->field_by_name("bot")] = $rodbw->field_by_name("cnt");
+            $bot_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();

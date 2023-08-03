@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     26.06.2023 22:31:08                          */
+/* Created on:     30.07.2023 00:21:59                          */
 /*==============================================================*/
 
 
@@ -122,6 +122,17 @@ go
 /*==============================================================*/
 create index v1_banned_ips_idx on v1_banned_ips (
 ip ASC
+)
+go
+
+/*==============================================================*/
+/* Table: v1_browser_statistics_cache                           */
+/*==============================================================*/
+create table v1_browser_statistics_cache (
+   tm                   datetime             null,
+   tp                   varchar(100)         null,
+   name                 varchar(250)         null,
+   cnt                  int                  null
 )
 go
 
@@ -546,6 +557,14 @@ go
 /*==============================================================*/
 create index v1_forum_hits_ip_idx on v1_forum_hits (
 ip ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_forum_hits_bot_idx                                 */
+/*==============================================================*/
+create index v1_forum_hits_bot_idx on v1_forum_hits (
+bot ASC
 )
 go
 

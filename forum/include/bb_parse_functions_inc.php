@@ -455,6 +455,10 @@ function check_image_url(&$url, &$large_url)
           return true;
       }
     } else {
+          if (strpos($host, "userapi.com")) {
+              return true;
+          }
+          
           $url = "user_data/images/img_injection_warning.png";
           $large_url = "user_data/images/img_injection_warning.png";
           return false;
