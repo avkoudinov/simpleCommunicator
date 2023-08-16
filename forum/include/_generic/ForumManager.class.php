@@ -9288,10 +9288,10 @@ abstract class ForumManager
             $query = "insert into {$prfx}_browser_statistics_cache
                       (tm, tp, name, cnt)
                       select '$now', 'browser', browser, count(*) cnt from
-                    (select read_marker, browser
-                    from {$prfx}_forum_hits
-                    where browser is not NULL
-                    group by read_marker, browser) stat
+                        (select read_marker, browser
+                        from {$prfx}_forum_hits
+                        where browser is not NULL
+                        group by read_marker, browser) stat
                         group by browser";
             
             if (!$rodbw->execute_query($query)) {
@@ -16787,7 +16787,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date && !$this->is_moderator()) {
+        if ($min_creation_date <= $target_creation_date) {
             MessageHandler::setError(text("ErrTopicsMergeStartDate"));
             return false;
         }
@@ -17564,7 +17564,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date && !$this->is_moderator()) {
+        if ($min_creation_date <= $target_creation_date) {
             MessageHandler::setError(text("ErrPostsMoveStartDate"));
             $dbw->rollback_transaction();
             return false;
@@ -19108,7 +19108,7 @@ abstract class ForumManager
             }
             
             if ((reqvar("reason") == "author_death" || reqvar("reason") == "account_loss") &&
-                (!reqvar_empty("forum") || !empty($period))) {
+                (reqvar("forum") != -9 || !empty($period))) {
                 MessageHandler::setError(text("ErrBlockOnlyGlobal"));
                 MessageHandler::setErrorElement("reason");
                 $dbw->rollback_transaction();
