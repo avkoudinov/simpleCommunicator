@@ -19108,7 +19108,7 @@ abstract class ForumManager
             }
             
             if ((reqvar("reason") == "author_death" || reqvar("reason") == "account_loss") &&
-                (!reqvar_empty("forum") || !empty($period))) {
+                (reqvar("forum") != -9 || !empty($period))) {
                 MessageHandler::setError(text("ErrBlockOnlyGlobal"));
                 MessageHandler::setErrorElement("reason");
                 $dbw->rollback_transaction();
