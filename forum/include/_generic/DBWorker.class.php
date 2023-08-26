@@ -101,6 +101,12 @@ abstract class DBWorker
     }
     
     //--------------------------------------------------------------------
+    function quotes_or_null($str)
+    {
+        return (string)$str === "" ? "NULL" : "'" . $this->escape($str) . "'";
+    }
+    
+    //--------------------------------------------------------------------
     function get_last_query()
     {
         if ($this->last_query === null) return null;
