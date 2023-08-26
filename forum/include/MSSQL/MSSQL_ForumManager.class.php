@@ -155,8 +155,8 @@ class MSSQL_ForumManager extends ForumManager
         }
         
         $topic_search_key_clause = $this->get_topic_search_clause($dbw, $prfx, $search, true);
-        $search = $dbw->escape($search);
-        $where .= " $topic_search_key_clause or name like '%$search%'";
+        $search = $dbw->quotes_or_null("%" . $search . "%");
+        $where .= " $topic_search_key_clause or name like $search";
         
         $forum_list = array();
         if (!$this->get_forum_list($forum_list)) {
@@ -406,7 +406,7 @@ class MSSQL_ForumManager extends ForumManager
             from {$prfx}_topic
             inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-            $where and ({$prfx}_topic.pinned <> 1 and {$prfx}_topic.publish_delay <> 1 $user_pinned_topic_appendix)
+            $where and ({$prfx}_topic.pinned + {$prfx}_topic.publish_delay = 0 $user_pinned_topic_appendix)
             ) topics
             left join {$prfx}_user on (topics.user_id = {$prfx}_user.id)
             where nr between $begin and $end
@@ -975,7 +975,7 @@ class MSSQL_ForumManager extends ForumManager
             
             $search_clause = trim($search_clause, "|& ");
             
-            $where_clause .= "contains({$prfx}_topic.name, '" . $search_clause . "')";
+            $where_clause .= "contains({$prfx}_topic.name, N'" . $search_clause . "')";
         } // search_keys
         
         return $where_clause;
@@ -1058,7 +1058,7 @@ class MSSQL_ForumManager extends ForumManager
             
             $search_clause = trim($search_clause, "|& ");
             
-            $where_clause .= "contains(searchable_content, '" . $search_clause . "')";
+            $where_clause .= "contains(searchable_content, N'" . $search_clause . "')";
         } // search_keys
         
         return $where_clause;
@@ -1169,14 +1169,14 @@ class MSSQL_ForumManager extends ForumManager
     function get_query_post_count($prfx, $where)
     {
         return "select
-                user_name, {$prfx}_post.user_id, isnull({$prfx}_post.user_id, {$prfx}_post.read_marker) uid, {$prfx}_user.registration_date,
+                user_name, {$prfx}_post.user_id, isnull(convert(varchar(max), {$prfx}_post.user_id), {$prfx}_post.read_marker) uid, {$prfx}_user.registration_date,
                 count(*) cnt
                 from {$prfx}_post
                 inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
                 left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
                 $where
                 group by
-                user_name, {$prfx}_post.user_id, isnull({$prfx}_post.user_id, {$prfx}_post.read_marker), {$prfx}_user.registration_date
+                user_name, {$prfx}_post.user_id, isnull(convert(varchar(max), {$prfx}_post.user_id), {$prfx}_post.read_marker), {$prfx}_user.registration_date
                 order by count(*) desc
                 ";
     } // get_query_post_count
@@ -1503,7 +1503,7 @@ class MSSQL_ForumManager extends ForumManager
                 continue;
             } // we do not take the last minute
             
-            $_SESSION["load_hits"][$time] = $rodbw->field_by_name("HITS_COUNT");
+            $_SESSION["load_hits"][$time] = $rodbw->field_by_name("hits_count");
         }
         
         $rodbw->free_result();

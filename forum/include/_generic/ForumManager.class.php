@@ -1754,6 +1754,10 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function find_users($search, &$found_users, $master_admin = "")
     {
+        if (empty($search)) {
+            return true;
+        }
+        
         $rodbw = System::getRODBWorker();
         if (!$rodbw) {
             return false;
@@ -1766,13 +1770,13 @@ abstract class ForumManager
             $current_uid = 0;
         }
         
-        $search_ru = $rodbw->escape(switcher_ru($search));
-        $search_en = $rodbw->escape(switcher_en($search));
-        $translit = $rodbw->escape(translit($search));
-        $untranslit = $rodbw->escape(untranslit($search));
-        $search = $rodbw->escape($search);
+        $search_ru = $rodbw->quotes_or_null($rodbw->escape(switcher_ru($search)) . "%");
+        $search_en = $rodbw->quotes_or_null($rodbw->escape(switcher_en($search)) . "%");
+        $translit = $rodbw->quotes_or_null($rodbw->escape(translit($search)) . "%");
+        $untranslit = $rodbw->quotes_or_null($rodbw->escape(untranslit($search)) . "%");
+        $search = $rodbw->quotes_or_null($rodbw->escape($search) . "%");
         
-        $where = "where (user_name like '$search%' or user_name like '$search_ru%' or user_name like '$search_en%' or user_name like '$translit%' or user_name like '$untranslit%')";
+        $where = "where (user_name like $search or user_name like $search_ru or user_name like $search_en or user_name like $translit or user_name like $untranslit)";
         
         $find_ignored_users = false;
         foreach ($GLOBALS['LANGUAGES'] as $lng) {
@@ -1813,9 +1817,9 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        $user = $dbw->escape($user);
+        $user = $dbw->quotes_or_null($user);
         
-        if (!$dbw->execute_query("select id from {$prfx}_user where user_name = '$user'")) {
+        if (!$dbw->execute_query("select id from {$prfx}_user where user_name = $user")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return "";
         }
@@ -1898,6 +1902,10 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function find_topics($search, &$found_topics)
     {
+        if (empty($search)) {
+            return true;
+        }
+        
         $dbw = System::getDBWorker();
         if (!$dbw) {
             return false;
@@ -3792,9 +3800,9 @@ abstract class ForumManager
         
         $fid = $dbw->escape($fid);
         
-        $count_field = "TOPIC_COUNT";
+        $count_field = "topic_count";
         if (!empty($_SESSION["show_deleted"]) && ($this->is_forum_moderator($fid) || $this->is_admin())) {
-            $count_field = "TOPIC_COUNT_TOTAL";
+            $count_field = "topic_count_total";
         }
         
         if (!$dbw->execute_query("select
@@ -4053,7 +4061,7 @@ abstract class ForumManager
             return false;
         }
         
-        $forum_name = quotes_or_null($dbw->escape(reqvar("forum_name")));
+        $forum_name = $dbw->quotes_or_null(reqvar("forum_name"));
         
         if (!$is_new) {
             $query = "select name from {$prfx}_forum where name = $forum_name and id <> $fid";
@@ -4097,8 +4105,8 @@ abstract class ForumManager
             $sort_order = 0;
         }
         
-        $forum_description = quotes_or_null($dbw->escape(reqvar("forum_description")));
-        $password = quotes_or_null($dbw->escape(reqvar("password")));
+        $forum_description = $dbw->quotes_or_null(reqvar("forum_description"));
+        $password = $dbw->quotes_or_null(reqvar("password"));
         
         $hide_from_robots = reqvar_empty("hide_from_robots") ? "0" : "1";
         
@@ -4703,16 +4711,16 @@ abstract class ForumManager
             return false;
         }
         
-        $default_sender = quotes_or_null($dbw->escape(reqvar("default_sender")));
-        $receiver = quotes_or_null($dbw->escape(reqvar("receiver")));
-        $whois_server = quotes_or_null($dbw->escape(reqvar("whois_server")));
-        $skin = quotes_or_null($dbw->escape(reqvar("skin")));
+        $default_sender = $dbw->quotes_or_null(reqvar("default_sender"));
+        $receiver = $dbw->quotes_or_null(reqvar("receiver"));
+        $whois_server = $dbw->quotes_or_null(reqvar("whois_server"));
+        $skin = $dbw->quotes_or_null(reqvar("skin"));
         
         $moderator_log = $dbw->escape(reqvar("moderator_log"));
         if (!in_array($moderator_log, array("moderators", "admins", "all", "all_names_hidden"))) {
             $moderator_log = "moderators";
         }
-        $moderator_log = quotes_or_null($moderator_log);
+        $moderator_log = $dbw->quotes_or_null($moderator_log);
         
         $max_topic_name_symbols = $dbw->escape(reqvar("max_topic_name_symbols"));
         if (!is_numeric($max_topic_name_symbols)) {
@@ -4912,13 +4920,13 @@ abstract class ForumManager
                     continue;
                 }
                 
-                $guest = $dbw->escape($guest);
-                $guest_hash = $dbw->escape($this->hash_user_name($guest));
+                $guest = $dbw->quotes_or_null($guest);
+                $guest_hash = $dbw->quotes_or_null($this->hash_user_name($guest));
                 
                 $query = "insert into {$prfx}_protected_guests
                  (guest_name, guest_name_hash)
-                 select '$guest', '$guest_hash' from {$prfx}_dual
-                 where '$guest' not in (select guest_name from {$prfx}_protected_guests)
+                 select $guest, $guest_hash from {$prfx}_dual
+                 where $guest not in (select guest_name from {$prfx}_protected_guests)
                  ";
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -5337,9 +5345,9 @@ abstract class ForumManager
         
         // check duplicates
         
-        $user_login = quotes_or_null($dbw->escape(reqvar("user_login")));
-        $user_name = quotes_or_null($dbw->escape(reqvar("user_name")));
-        $user_name_hash = quotes_or_null($dbw->escape($this->hash_user_name(reqvar("user_name"))));
+        $user_login = $dbw->quotes_or_null(reqvar("user_login"));
+        $user_name = $dbw->quotes_or_null(reqvar("user_name"));
+        $user_name_hash = $dbw->quotes_or_null($this->hash_user_name(reqvar("user_name")));
         
         $query = "select 1 from {$prfx}_user where login = $user_login";
         if (!$dbw->execute_query($query)) {
@@ -5385,7 +5393,7 @@ abstract class ForumManager
             return false;
         }
         
-        $user_email_hash = quotes_or_null($dbw->escape($this->hash_email(reqvar("user_email"))));
+        $user_email_hash = $dbw->quotes_or_null($this->hash_email(reqvar("user_email")));
 
         $query = "select 1 from {$prfx}_user where email_hash = $user_email_hash";
         if (!$dbw->execute_query($query)) {
@@ -5417,7 +5425,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         $activation_hash = System::generateHash(reqvar("user_login") . rand(100000, 900000), SALT_KEY);
-        $activation_hash_db = quotes_or_null($dbw->escape($activation_hash));
+        $activation_hash_db = $dbw->quotes_or_null($activation_hash);
         $activation_expire = $dbw->format_datetime(time() + 3600);
         
         $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
@@ -5433,7 +5441,7 @@ abstract class ForumManager
         
         $rm = $dbw->escape($READ_MARKER);
         
-        $password_hash = quotes_or_null($dbw->escape(System::generateHash(reqvar("password"), SALT_KEY)));
+        $password_hash = $dbw->quotes_or_null(System::generateHash(reqvar("password"), SALT_KEY));
         
         $approved = empty($settings["approval_required"]) ? "1" : "0";
         
@@ -5444,7 +5452,7 @@ abstract class ForumManager
             return false;
         }
         
-        $user_email = quotes_or_null($dbw->escape(reqvar("user_email")));
+        $user_email = $dbw->quotes_or_null(reqvar("user_email"));
 
         $query = "insert into {$prfx}_user (login, user_name, user_name_hash, email, email_hash, hide_email, password_hash, registration_date, last_visit_date, activation_hash, activation_expire, send_notifications, approved, ip, last_ip, read_marker, interface_language)
               values ($user_login, $user_name, $user_name_hash, $user_email, $user_email_hash, $hide_email, $password_hash, '$now', '$now', $activation_hash_db, '$activation_expire', 1, $approved, '$ip', '$ip', '$rm', '$lang')";
@@ -5479,7 +5487,7 @@ abstract class ForumManager
             return false;
         }
         
-        $agent = quotes_or_null($dbw->escape(val_or_empty($_SERVER["HTTP_USER_AGENT"])));
+        $agent = $dbw->quotes_or_null(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
         
         $query = "insert into {$prfx}_read_marker_activity
              (read_marker, ip, last_activity, first_activity, current_name_start, author, user_agent, hits, current_name_hits)
@@ -5643,7 +5651,7 @@ abstract class ForumManager
         $prfx = $dbw->escape(System::getDBPrefix());
         
         $now = $dbw->format_datetime(time());
-        $code = quotes_or_null($dbw->escape(reqvar("code")));
+        $code = $dbw->quotes_or_null(reqvar("code"));
         
         $query = "select id, user_name from {$prfx}_user where activation_hash = $code and activation_expire > '$now'";
         if (!$dbw->execute_query($query)) {
@@ -6937,7 +6945,7 @@ abstract class ForumManager
         $dbw->free_result();
         
         $pwd_reset_hash = System::generateHash(reqvar("user_email") . rand(100000, 900000), SALT_KEY);
-        $pwd_reset_hash_db = quotes_or_null($dbw->escape($pwd_reset_hash));
+        $pwd_reset_hash_db = $dbw->quotes_or_null($pwd_reset_hash);
         $pwd_reset_hash_expire = $dbw->format_datetime(time() + 3600);
         
         if (!$dbw->execute_query("update {$prfx}_user set pwd_reset_hash = $pwd_reset_hash_db, pwd_reset_expire = '$pwd_reset_hash_expire'
@@ -6979,7 +6987,7 @@ abstract class ForumManager
         $prfx = $dbw->escape(System::getDBPrefix());
         
         $now = $dbw->format_datetime(time());
-        $code = quotes_or_null($dbw->escape(reqvar("code")));
+        $code = $dbw->quotes_or_null(reqvar("code"));
         
         $query = "select id, login, user_name from {$prfx}_user where pwd_reset_hash = $code and pwd_reset_expire > '$now'";
         if (!$dbw->execute_query($query)) {
@@ -7031,7 +7039,7 @@ abstract class ForumManager
         $prfx = $dbw->escape(System::getDBPrefix());
         
         $uid = $dbw->escape($_SESSION["user_for_pwd_reset"]);
-        $password_hash = quotes_or_null($dbw->escape(System::generateHash(reqvar("password"), SALT_KEY)));
+        $password_hash = $dbw->quotes_or_null(System::generateHash(reqvar("password"), SALT_KEY));
         
         unset($_SESSION["user_for_pwd_reset"]);
         
@@ -9288,10 +9296,10 @@ abstract class ForumManager
             $query = "insert into {$prfx}_browser_statistics_cache
                       (tm, tp, name, cnt)
                       select '$now', 'browser', browser, count(*) cnt from
-                    (select read_marker, browser
-                    from {$prfx}_forum_hits
-                    where browser is not NULL
-                    group by read_marker, browser) stat
+                        (select read_marker, browser
+                        from {$prfx}_forum_hits
+                        where browser is not NULL
+                        group by read_marker, browser) stat
                         group by browser";
             
             if (!$rodbw->execute_query($query)) {
@@ -9527,7 +9535,7 @@ abstract class ForumManager
         $dbw->free_result();
         
         // check unique
-        $user_email_hash = quotes_or_null($dbw->escape($this->hash_email(reqvar("user_email"))));
+        $user_email_hash = $dbw->quotes_or_null($this->hash_email(reqvar("user_email")));
 
         $query = "select 1 from {$prfx}_user where email_hash = $user_email_hash and id <> $uid";
         if (!$dbw->execute_query($query)) {
@@ -9589,20 +9597,20 @@ abstract class ForumManager
         
         $words_to_notify = implode("\n", $words_array);
         
-        $user_email = quotes_or_null($dbw->escape(reqvar("user_email")));
-        $location = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("location"))));
-        $homepage = quotes_or_null($dbw->escape(reqvar("homepage")));
-        $message = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("message"))));
-        $signature = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("signature"))));
-        $info = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("info"))));
-        $skin = quotes_or_null($dbw->escape(reqvar("skin")));
-        $custom_css = quotes_or_null($dbw->escape(reqvar("custom_css")));
-        $interface_language = quotes_or_null($dbw->escape(reqvar("interface_language")));
-        $time_zone = quotes_or_null($dbw->escape(reqvar("time_zone")));
+        $user_email = $dbw->quotes_or_null(reqvar("user_email"));
+        $location = $dbw->quotes_or_null(Emoji::Encode(reqvar("location")));
+        $homepage = $dbw->quotes_or_null(reqvar("homepage"));
+        $message = $dbw->quotes_or_null(Emoji::Encode(reqvar("message")));
+        $signature = $dbw->quotes_or_null(Emoji::Encode(reqvar("signature")));
+        $info = $dbw->quotes_or_null(Emoji::Encode(reqvar("info")));
+        $skin = $dbw->quotes_or_null(reqvar("skin"));
+        $custom_css = $dbw->quotes_or_null(reqvar("custom_css"));
+        $interface_language = $dbw->quotes_or_null(reqvar("interface_language"));
+        $time_zone = $dbw->quotes_or_null(reqvar("time_zone"));
         
         $custom_smiles = reqvar("custom_smiles");
         $this->handle_custom_smiles($custom_smiles, $uid);
-        $custom_smiles = quotes_or_null($custom_smiles);
+        $custom_smiles = $dbw->quotes_or_null($custom_smiles);
         
         $hide_email = reqvar_empty("hide_email") ? "0" : "1";
         $hide_ignored = reqvar_empty("hide_ignored") ? "0" : "1";
@@ -9621,7 +9629,7 @@ abstract class ForumManager
         $notify_citation = reqvar_empty("notify_citation") ? "0" : "1";
         
         $notify_on_words = reqvar_empty("notify_on_words") ? "0" : "1";
-        $words_to_notify = quotes_or_null($dbw->escape($words_to_notify));
+        $words_to_notify = $dbw->quotes_or_null($words_to_notify);
         
         $ignore_new_guests = reqvar_empty("ignore_new_guests") ? "0" : "1";
         $ignore_guests_blacklist = reqvar_empty("ignore_guests_blacklist") ? "0" : "1";
@@ -9629,7 +9637,7 @@ abstract class ForumManager
         
         if ($old_email_hash != $this->hash_email(reqvar("user_email"))) {
             $activation_hash = System::generateHash(reqvar("user_login") . rand(100000, 900000), SALT_KEY);
-            $activation_hash_db = quotes_or_null($dbw->escape($activation_hash));
+            $activation_hash_db = $dbw->quotes_or_null($activation_hash);
             $activation_expire = $dbw->format_datetime(time() + 3600);
             
             $additional_updates .= "ACTIVATED = 0,
@@ -9655,20 +9663,20 @@ abstract class ForumManager
             $skin_properties = $dbw->escape(array_to_json($skin_properties_input));
         }
         
-        $skin_properties = quotes_or_null($skin_properties);
+        $skin_properties = $dbw->quotes_or_null($skin_properties);
         
         $now = $dbw->format_datetime(time());
         
         $autologin_hash_was_active = "";
         if (!reqvar_empty("password")) {
             $password_hash = System::generateHash(reqvar("password"), SALT_KEY);
-            $password_hash_db = quotes_or_null($dbw->escape($password_hash));
+            $password_hash_db = $dbw->quotes_or_null($password_hash);
             
             if (get_cookie("autologin") != "") {
                 $autologin_hash_was_active = System::generateHash(val_or_empty($_SESSION["user_login"]) . reqvar("password") . time() . rand(100000, 900000), SALT_KEY);
             }
             
-            $autologin_hash_db = quotes_or_null($dbw->escape($autologin_hash_was_active));
+            $autologin_hash_db = $dbw->quotes_or_null($autologin_hash_was_active);
             
             $additional_updates .= "password_hash = $password_hash_db,
                                     autologin_hash = $autologin_hash_db,
@@ -9782,12 +9790,12 @@ abstract class ForumManager
                     continue;
                 }
                 
-                $guest = $dbw->escape($guest);
+                $guest = $quotes_or_null($dbw->escape($guest));
                 
                 $query = "insert into {$prfx}_ignored_guests
                  (user_id, guest_name, whitelist)
-                 select $uid, '$guest', 1 from {$prfx}_dual
-                 where '$guest' not in (select guest_name from {$prfx}_ignored_guests where user_id = $uid and whitelist = 1)
+                 select $uid, $guest, 1 from {$prfx}_dual
+                 where $guest not in (select guest_name from {$prfx}_ignored_guests where user_id = $uid and whitelist = 1)
                  ";
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -9884,9 +9892,9 @@ abstract class ForumManager
                 return false;
             }
             
-            $block_reason = $dbw->escape($block_reason);
+            $block_reason = $dbw->quotes_or_null($block_reason);
             $action_expires = "'" . $dbw->format_datetime(time() + $period) . "'";
-            if (!$dbw->execute_query("update {$prfx}_user set blocked = 1, self_blocked = 1, block_expires = $action_expires, block_reason = '$block_reason' where id = $uid")) {
+            if (!$dbw->execute_query("update {$prfx}_user set blocked = 1, self_blocked = 1, block_expires = $action_expires, block_reason = $block_reason where id = $uid")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
                 return false;
@@ -10005,7 +10013,7 @@ abstract class ForumManager
         $uid = $dbw->escape($this->get_user_id());
         
         $activation_hash = System::generateHash(reqvar("user_login") . rand(100000, 900000), SALT_KEY);
-        $activation_hash_db = quotes_or_null($dbw->escape($activation_hash));
+        $activation_hash_db = $dbw->quotes_or_null($activation_hash);
         $activation_expire = $dbw->format_datetime(time() + 3600);
         
         $query = "update {$prfx}_user set
@@ -10179,7 +10187,7 @@ abstract class ForumManager
         
         $additional_updates = "";
         
-        $user_login = quotes_or_null($dbw->escape(reqvar("user_login")));
+        $user_login = $dbw->quotes_or_null(reqvar("user_login"));
         
         // check unique
         
@@ -10217,7 +10225,7 @@ abstract class ForumManager
         
         // check the email
         
-        $user_email_hash = quotes_or_null($dbw->escape($this->hash_email(reqvar("user_email"))));
+        $user_email_hash = $dbw->quotes_or_null($this->hash_email(reqvar("user_email")));
 
         $query = "select 1 from {$prfx}_user where email_hash = $user_email_hash and id <> $uid";
         if (!$dbw->execute_query($query)) {
@@ -10271,16 +10279,16 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        $user_name = quotes_or_null($dbw->escape(reqvar("user_name")));
-        $user_name_hash = quotes_or_null($dbw->escape($this->hash_user_name(reqvar("user_name"))));
+        $user_name = $dbw->quotes_or_null(reqvar("user_name"));
+        $user_name_hash = $dbw->quotes_or_null($this->hash_user_name(reqvar("user_name")));
         
-        $user_email = quotes_or_null($dbw->escape(reqvar("user_email")));
+        $user_email = $dbw->quotes_or_null(reqvar("user_email"));
 
-        $location = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("location"))));
-        $homepage = quotes_or_null($dbw->escape(reqvar("homepage")));
-        $message = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("message"))));
-        $signature = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("signature"))));
-        $info = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("info"))));
+        $location = $dbw->quotes_or_null(Emoji::Encode(reqvar("location")));
+        $homepage = $dbw->quotes_or_null(reqvar("homepage"));
+        $message = $dbw->quotes_or_null(Emoji::Encode(reqvar("message")));
+        $signature = $dbw->quotes_or_null(Emoji::Encode(reqvar("signature")));
+        $info = $dbw->quotes_or_null(Emoji::Encode(reqvar("info")));
         
         $activated = reqvar_empty("activated") ? "0" : "1";
         $approved = reqvar_empty("approved") ? "0" : "1";
@@ -10288,7 +10296,7 @@ abstract class ForumManager
         $now = $dbw->format_datetime(time());
         
         if (!reqvar_empty("password")) {
-            $password_hash = quotes_or_null($dbw->escape(System::generateHash(reqvar("password"), SALT_KEY)));
+            $password_hash = $dbw->quotes_or_null(System::generateHash(reqvar("password"), SALT_KEY));
             
             $additional_updates .= "password_hash = $password_hash,
                                     autologin_hash = NULL,
@@ -10438,7 +10446,7 @@ abstract class ForumManager
             $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), "email_user_approved.txt", $params, $lng);
         }
         
-        if ($old_user_name != reqvar("user_name")) {
+        if ($old_user_name != reqvar("user_name") && $uid != $this->get_user_id()) {
             $params["{administrator_name}"] = $this->get_user_name();
             $params["{old_user_name}"] = $old_user_name;
             $params["{new_user_name}"] = reqvar("user_name");
@@ -12106,7 +12114,7 @@ abstract class ForumManager
             return false;
         }
         
-        $moderator_name = quotes_or_null($dbw->escape($this->get_user_name()));
+        $moderator_name = $dbw->quotes_or_null($this->get_user_name());
         // text("MsgAuthorRequestedModeration")
         $message = $dbw->escape("MSG(MsgAuthorRequestedModeration)");
         
@@ -13605,7 +13613,7 @@ abstract class ForumManager
         
         if ($dbw->fetch_row()) {
             $author_id = $dbw->field_by_name("user_id");
-            $author_rm = quotes_or_null($dbw->field_by_name("read_marker"));
+            $author_rm = $dbw->quotes_or_null($dbw->field_by_name("read_marker"));
             
             $topic_id = $dbw->field_by_name("topic_id");
             $forum_id = $dbw->field_by_name("forum_id");
@@ -14197,34 +14205,34 @@ abstract class ForumManager
             $moderator_name = $event_data["author_name"];
         }   
         
-        $moderator_name = quotes_or_null($dbw->escape($moderator_name));
+        $moderator_name = $dbw->quotes_or_null($moderator_name);
 
         if (empty($moderator_id)) {
             $moderator_id = "NULL";
         }
         
-        $action = quotes_or_null($dbw->escape(val_or_empty($event_data["action"])));
+        $action = $dbw->quotes_or_null(val_or_empty($event_data["action"]));
         if (empty($event_data["action_expires"])) {
             $action_expires = "NULL";
         } else {
             $action_expires = "'" . $dbw->format_datetime($event_data["action_expires"]) . "'";
         }
         
-        $ip = quotes_or_null($dbw->escape(val_or_empty($event_data["ip"])));
+        $ip = $dbw->quotes_or_null(val_or_empty($event_data["ip"]));
         
-        $author_name = quotes_or_null($dbw->escape(val_or_empty($event_data["author_name"])));
+        $author_name = $dbw->quotes_or_null(val_or_empty($event_data["author_name"]));
         $author_id = val_or_empty($event_data["author_id"]);
         if (empty($author_id) || !is_numeric($author_id)) {
             $author_id = "NULL";
         }
         
-        $topic_name = quotes_or_null($dbw->escape(val_or_empty($event_data["topic_name"])));
+        $topic_name = $dbw->quotes_or_null(val_or_empty($event_data["topic_name"]));
         $topic_id = val_or_empty($event_data["topic_id"]);
         if (empty($topic_id) || !is_numeric($topic_id)) {
             $topic_id = "NULL";
         }
         
-        $source_topic_name = quotes_or_null($dbw->escape(val_or_empty($event_data["source_topic_name"])));
+        $source_topic_name = $dbw->quotes_or_null(val_or_empty($event_data["source_topic_name"]));
         $source_topic_id = val_or_empty($event_data["source_topic_id"]);
         if (empty($source_topic_id) || !is_numeric($source_topic_id)) {
             $source_topic_id = "NULL";
@@ -14235,13 +14243,13 @@ abstract class ForumManager
             $post_id = "NULL";
         }
         
-        $forum_name = quotes_or_null($dbw->escape(val_or_empty($event_data["forum_name"])));
+        $forum_name = $dbw->quotes_or_null(val_or_empty($event_data["forum_name"]));
         $forum_id = val_or_empty($event_data["forum_id"]);
         if (empty($forum_id) || !is_numeric($forum_id)) {
             $forum_id = "NULL";
         }
         
-        $comment = quotes_or_null($dbw->escape(Emoji::Encode(val_or_empty($event_data["comment"]))));
+        $comment = $dbw->quotes_or_null(Emoji::Encode(val_or_empty($event_data["comment"])));
         
         // if the same event repeats, delete the previous
         if ($post_id != "NULL") {
@@ -16787,7 +16795,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date && !$this->is_moderator()) {
+        if ($min_creation_date <= $target_creation_date) {
             MessageHandler::setError(text("ErrTopicsMergeStartDate"));
             return false;
         }
@@ -17564,7 +17572,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date && !$this->is_moderator()) {
+        if ($min_creation_date <= $target_creation_date) {
             MessageHandler::setError(text("ErrPostsMoveStartDate"));
             $dbw->rollback_transaction();
             return false;
@@ -18260,7 +18268,7 @@ abstract class ForumManager
         if (empty($uid)) {
             $uid = "NULL";
         }
-        $user_name = quotes_or_null($dbw->escape($user_name));
+        $user_name = $dbw->quotes_or_null($user_name);
         
         $where = "where user_id = $current_uid";
         
@@ -18449,7 +18457,7 @@ abstract class ForumManager
         
         if ($action == "put_to_ignore_list") {
             $event_data["action"] = "ignore_user";
-            $comment = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("comment"))));
+            $comment = $dbw->quotes_or_null(Emoji::Encode(reqvar("comment")));
             
             if (!$dbw->execute_query("insert into {$prfx}_ignored_users
                                (user_id, ignored_user_id, comment)
@@ -19108,7 +19116,7 @@ abstract class ForumManager
             }
             
             if ((reqvar("reason") == "author_death" || reqvar("reason") == "account_loss") &&
-                (!reqvar_empty("forum") || !empty($period))) {
+                (reqvar("forum") != -9 || !empty($period))) {
                 MessageHandler::setError(text("ErrBlockOnlyGlobal"));
                 MessageHandler::setErrorElement("reason");
                 $dbw->rollback_transaction();
@@ -19171,9 +19179,9 @@ abstract class ForumManager
                 } elseif (reqvar("reason") == "account_loss") {
                     $self_blocked = 3;
                 }
-                $comment = $dbw->escape($comment);
+                $comment = $dbw->quotes_or_null($comment);
                 
-                if (!$dbw->execute_query("update {$prfx}_user set blocked = 1, self_blocked = $self_blocked, block_expires = $action_expires, block_reason = '$comment' where id = $uid")) {
+                if (!$dbw->execute_query("update {$prfx}_user set blocked = 1, self_blocked = $self_blocked, block_expires = $action_expires, block_reason = $comment where id = $uid")) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     $dbw->rollback_transaction();
                     return false;
@@ -19658,10 +19666,10 @@ abstract class ForumManager
                 return false;
             }
             
-            $comment = $dbw->escape($comment);
+            $comment = $dbw->quotes_or_null($comment);
             
             if (!$dbw->execute_query("insert into {$prfx}_ip_blocked (ip, block_expires, tp, block_reason)
-                               values ('$ip', $action_expires, '$type', '$comment')")) {
+                               values ('$ip', $action_expires, '$type', $comment)")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
                 return false;
@@ -20630,8 +20638,8 @@ abstract class ForumManager
                 
                 $message = str_ireplace("[attachment$idx]", "[attachment$idx=$edited_post]", $message);
                 
-                $attachment_name = $dbw->escape($attachment_name);
-                $attachment_origin_name = $dbw->escape(Emoji::Encode($attachment_origin_name));
+                $attachment_name = $dbw->quotes_or_null($attachment_name);
+                $attachment_origin_name = $dbw->quotes_or_null(Emoji::Encode($attachment_origin_name));
                 $attachment_type = $dbw->escape($attachment_type);
                 
                 $body_changed = true;
@@ -20644,7 +20652,7 @@ abstract class ForumManager
                 }
                 
                 $query = "insert into {$prfx}_attachment (post_id, nr, name, origin_name, type, user_id, last_post_id)
-                  values ($edited_post, $i, '$attachment_name', '$attachment_origin_name', '$attachment_type', $post_user_id_db, $edited_post)";
+                  values ($edited_post, $i, $attachment_name, $attachment_origin_name, '$attachment_type', $post_user_id_db, $edited_post)";
                 
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -20738,11 +20746,11 @@ abstract class ForumManager
             $short_message = $message;
             $post_data["short_message"] = $short_message;
             
-            $message = quotes_or_null($dbw->escape($message));
-            $html_message = quotes_or_null($dbw->escape($html_message));
+            $message = $dbw->quotes_or_null($message);
+            $html_message = $dbw->quotes_or_null($html_message);
             
             $last_updated = $dbw->format_datetime($last_updated);
-            $last_updated_by = quotes_or_null($dbw->escape($last_updated_by));
+            $last_updated_by = $dbw->quotes_or_null($last_updated_by);
             
             $query = "insert into {$prfx}_post_history
               (post_id, dt, author, self_edited, text_content, html_content)
@@ -20757,19 +20765,21 @@ abstract class ForumManager
                 return false;
             }
             
-            $updated_by = $dbw->escape($this->get_last_posted_user_name());
+            $updated_by = $this->get_last_posted_user_name();
             if (empty($updated_by)) {
                 $updated_by = $old_post_author;
             }
             
-            $plain_text = $dbw->escape($plain_text);
+            $updated_by = $dbw->quotes_or_null($updated_by);
+            
+            $plain_text = $dbw->quotes_or_null($plain_text);
 
             $query = "update {$prfx}_post set
               text_content = $message,
               html_content = $html_message,
-              searchable_content = '$plain_text',
+              searchable_content = $plain_text,
               last_updated = '$now',
-              last_updated_by = '$updated_by',
+              last_updated_by = $updated_by,
               has_picture = $has_picture,
               has_video = $has_video,
               has_audio = $has_audio,
@@ -20845,9 +20855,9 @@ abstract class ForumManager
         if ($subject_changed) {
             $post_data["new_topic_name"] = $subject;
             
-            $subject_db = $dbw->escape($subject);
+            $subject_db = $dbw->quotes_or_null($subject);
             $query = "update {$prfx}_topic set
-                name = '$subject_db'
+                name = $subject_db
                 where id = $tid";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -20878,10 +20888,10 @@ abstract class ForumManager
                 return false;
             }
             
-            $author = $dbw->escape(reqvar("author"));
+            $author = $dbw->quotes_or_null(reqvar("author"));
             $query = "update {$prfx}_post set
-                author = '$author',
-                last_updated_by = '$author'
+                author = $author,
+                last_updated_by = $author
                 where id = $edited_post";
             
             if (!$dbw->execute_query($query)) {
@@ -21789,7 +21799,7 @@ abstract class ForumManager
         $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
         
         $prfx = $dbw->escape(System::getDBPrefix());
-        $author = $dbw->escape($this->get_status_user_name());
+        $author = $dbw->quotes_or_null($this->get_status_user_name());
         $uid = $dbw->escape($this->get_user_id());
         if (empty($uid)) {
             $uid = "NULL";
@@ -21800,7 +21810,7 @@ abstract class ForumManager
         // we use readmarker because it is a cookie and remains longer
         $rm = $dbw->escape($READ_MARKER);
         
-        $user_marker = quotes_or_null($dbw->escape(reqvar("user_marker")));
+        $user_marker = $dbw->quotes_or_null(reqvar("user_marker"));
         
         $ip = $dbw->escape($ip);
         $tid = $dbw->escape($tid);
@@ -21822,17 +21832,17 @@ abstract class ForumManager
         $dbw->free_result();
         
         $fid = $dbw->escape($fid);
-        $agent = quotes_or_null($dbw->escape(val_or_empty($_SERVER["HTTP_USER_AGENT"])));
+        $agent = $dbw->quotes_or_null(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
         $moder_msg = $msg;
         if (!reqvar_empty("comment")) {
             $moder_msg .= "\n\n" . reqvar("comment");
         }
         
-        $moder_msg = $dbw->escape(Emoji::Encode($moder_msg));
+        $moder_msg = $dbw->quotes_or_null(Emoji::Encode($moder_msg));
         // will be parsed by reading
         
         $query = "insert into {$prfx}_post (topic_id, user_id, author, creation_date, read_marker, user_marker, ip, pinned, is_comment, self_edited, user_agent, last_warned_by, last_warning, is_system, bb_parser_version)
-              values ($tid, $uid, '$author', '$now', '$rm', $user_marker, '$ip', 0, 0, 1, $agent, '$author', '$moder_msg', 1, $BB_PARSER_VERSION)";
+              values ($tid, $uid, $author, '$now', '$rm', $user_marker, '$ip', 0, 0, 1, $agent, $author, $moder_msg, 1, $BB_PARSER_VERSION)";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -21856,14 +21866,14 @@ abstract class ForumManager
         $plain_text = preg_replace("/[ \t]+/", " ", trim(strip_tags($html_message)));
         $plain_text = preg_replace("/[\n\r]+/", "\r\n", $plain_text);
         
-        $msg = $dbw->escape($msg);
-        $html_message = $dbw->escape($html_message);
-        $plain_text = $dbw->escape($plain_text);
+        $msg = $dbw->quotes_or_null($msg);
+        $html_message = $dbw->quotes_or_null($html_message);
+        $plain_text = $dbw->quotes_or_null($plain_text);
         
         $query = "update {$prfx}_post set
-              text_content = '$msg',
-              html_content = '$html_message',
-              searchable_content = '$plain_text',
+              text_content = $msg,
+              html_content = $html_message,
+              searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
               has_audio = '$has_audio',
@@ -22096,7 +22106,7 @@ abstract class ForumManager
             
             if (reqvar("user_login") == "admin") {
                 $_REQUEST["author"] = $this->get_status_user_name();
-                $author = quotes_or_null($dbw->escape(reqvar("author")));
+                $author = $dbw->quotes_or_null(reqvar("author"));
             }
             
             $response["login_performed"] = 1;
@@ -22206,7 +22216,7 @@ abstract class ForumManager
             $_REQUEST["author"] = $this->get_user_name();
         } 
 
-        $author = quotes_or_null($dbw->escape(reqvar("author")));
+        $author = $dbw->quotes_or_null(reqvar("author"));
 
         $tor_check = $this->check_tor_ip($ip);
         if (!$this->is_logged_in() && ($tor_check == "tor_block_write" || $tor_check == "tor_block_read")) {
@@ -22328,7 +22338,7 @@ abstract class ForumManager
         // we use readmarker because it is a cookie and remains longer
         $rm = $dbw->escape($READ_MARKER);
         
-        $user_marker = quotes_or_null($dbw->escape(reqvar("user_marker")));
+        $user_marker = $dbw->quotes_or_null(reqvar("user_marker"));
         
         $ip = $dbw->escape($ip);
         
@@ -22397,8 +22407,8 @@ abstract class ForumManager
             }
             
             $search_words_appendix .= " " . $subject . " " . $poll_comment . " ";
-            $subject = $dbw->escape($subject);
-            $poll_comment = quotes_or_null($dbw->escape($poll_comment));
+            $subject = $dbw->quotes_or_null($subject);
+            $poll_comment = $dbw->quotes_or_null($poll_comment);
             
             $publish_delay = reqvar_empty("publish_delay") ? "0" : "1";
             $request_moderation = reqvar_empty("request_moderation") ? "0" : "1";
@@ -22412,7 +22422,7 @@ abstract class ForumManager
             }
 
             $query = "insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker, user_marker, is_private, is_poll, poll_comment, poll_results_delayed, has_pinned_post, publish_delay, request_moderation, no_guests)
-                values ($fid, $uid, $author, '$subject', '$now', '$rm', $user_marker, $is_private, $is_poll, $poll_comment, $poll_results_delayed, $is_pinned, $publish_delay, $request_moderation, $no_guests)";
+                values ($fid, $uid, $author, $subject, '$now', '$rm', $user_marker, $is_private, $is_poll, $poll_comment, $poll_results_delayed, $is_pinned, $publish_delay, $request_moderation, $no_guests)";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
@@ -22584,7 +22594,7 @@ abstract class ForumManager
             return false;
         }
         
-        $agent = quotes_or_null($dbw->escape(val_or_empty($_SERVER["HTTP_USER_AGENT"])));
+        $agent = $dbw->quotes_or_null(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
         
         $is_comment = 0;
         if ($profiled_topic && reqvar_empty("is_thematic")) {
@@ -22640,8 +22650,8 @@ abstract class ForumManager
                 
                 $message = str_ireplace("[attachment$idx]", "[attachment$idx=$post_id]", $message);
                 
-                $attachment_name = $dbw->escape($attachment_name);
-                $attachment_origin_name = $dbw->escape(Emoji::Encode($attachment_origin_name));
+                $attachment_name = $dbw->quotes_or_null($attachment_name);
+                $attachment_origin_name = $dbw->quotes_or_null(Emoji::Encode($attachment_origin_name));
                 $attachment_type = $dbw->escape($attachment_type);
                 
                 $idx_db = $dbw->escape($idx);
@@ -22650,7 +22660,7 @@ abstract class ForumManager
                 }
                 
                 $query = "insert into {$prfx}_attachment (post_id, nr, name, origin_name, type, user_id, last_post_id)
-                  values ($post_id, $idx_db, '$attachment_name', '$attachment_origin_name', '$attachment_type', $uid, $post_id)";
+                  values ($post_id, $idx_db, $attachment_name, $attachment_origin_name, '$attachment_type', $uid, $post_id)";
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     $dbw->rollback_transaction();
@@ -22738,14 +22748,14 @@ abstract class ForumManager
         
         $short_message = $message;
         
-        $message = quotes_or_null($dbw->escape($message));
-        $html_message = quotes_or_null($dbw->escape($html_message));
-        $plain_text = $dbw->escape($plain_text);
+        $message = $dbw->quotes_or_null($message);
+        $html_message = $dbw->quotes_or_null($html_message);
+        $plain_text = $dbw->quotes_or_null($plain_text);
 
         $query = "update {$prfx}_post set
               text_content = $message,
               html_content = $html_message,
-              searchable_content = '$plain_text',
+              searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
               has_audio = '$has_audio',
@@ -22960,7 +22970,7 @@ abstract class ForumManager
         }
         
         if ($no_guests) {
-            $author = quotes_or_null($dbw->escape($this->get_status_user_name()));
+            $author = $dbw->quotes_or_null($this->get_status_user_name());
             $query = "update {$prfx}_post set
                   last_warned_by = $author,
                   last_warning = 'MSG(MsgGuestsDisallowed)'
@@ -24160,8 +24170,8 @@ abstract class ForumManager
             return false;
         }
         
-        $moderator_name = quotes_or_null($dbw->escape($this->get_user_name()));
-        $warning = quotes_or_null($dbw->escape(Emoji::Encode(reqvar("post_comment"))));
+        $moderator_name = $dbw->quotes_or_null($this->get_user_name());
+        $warning = $dbw->quotes_or_null(Emoji::Encode(reqvar("post_comment")));
         // it will be parsed by reading
         
         if (reqvar("post_comment") == "-") {
@@ -26868,8 +26878,8 @@ abstract class ForumManager
         $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
         $ip = $dbw->escape($ip);
         
-        $author = quotes_or_null($dbw->escape($this->get_user_name()));
-        $agent = quotes_or_null($dbw->escape(val_or_empty($_SERVER["HTTP_USER_AGENT"])));
+        $author = $dbw->quotes_or_null($this->get_user_name());
+        $agent = $dbw->quotes_or_null(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
         
         if (!$dbw->execute_query("update {$prfx}_read_marker_activity
                              set current_name_hits = 0, current_name_start = '$now'
@@ -26943,7 +26953,7 @@ abstract class ForumManager
             }
         }
         
-        $guest_name = quotes_or_null($dbw->escape($guest_name));
+        $guest_name = $dbw->quotes_or_null($guest_name);
         
         $agent = val_or_empty($_SERVER["HTTP_USER_AGENT"]);
         
@@ -26957,12 +26967,12 @@ abstract class ForumManager
             $os = $browser_data["os"];
         }
         
-        $agent = quotes_or_null($dbw->escape($agent));
-        $ip = quotes_or_null($dbw->escape(val_or_empty($_SERVER["REMOTE_ADDR"])));
+        $agent = $dbw->quotes_or_null($agent);
+        $ip = $dbw->quotes_or_null(val_or_empty($_SERVER["REMOTE_ADDR"]));
         
         $uri = val_or_empty($_SERVER["REQUEST_URI"]);
         $uri = str_replace(get_url_path(), "", substr($uri, 0, 1800));
-        $uri = quotes_or_null($dbw->escape($uri));
+        $uri = $dbw->quotes_or_null($uri);
         
         $now = $dbw->format_datetime(time());
         
@@ -26980,9 +26990,9 @@ abstract class ForumManager
         
         $rm = $dbw->escape($READ_MARKER);
         
-        $browser = quotes_or_null($dbw->escape($browser));
-        $os = quotes_or_null($dbw->escape($os));
-        $bot_name = quotes_or_null($dbw->escape($bot));
+        $browser = $dbw->quotes_or_null($browser);
+        $os = $dbw->quotes_or_null($os);
+        $bot_name = $dbw->quotes_or_null($bot);
         
         $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, uri, ip, read_marker, browser, os, bot)
               values
@@ -26992,7 +27002,7 @@ abstract class ForumManager
             return false;
         }
         
-        $author = quotes_or_null($dbw->escape($this->get_user_name()));
+        $author = $dbw->quotes_or_null($this->get_user_name());
         
         if (!$dbw->execute_query("update {$prfx}_read_marker_activity
                              set current_name_hits = 0, current_name_start = '$now'
@@ -27032,7 +27042,7 @@ abstract class ForumManager
             }
             
             if (!empty($bot)) {
-                $guest_name = quotes_or_null($dbw->escape("#bot#" . $bot));
+                $guest_name = $dbw->quotes_or_null("#bot#" . $bot);
             }
             
             if ($uid != "NULL") {
@@ -27194,8 +27204,8 @@ abstract class ForumManager
         $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
         $ip = $dbw->escape($ip);
         
-        $author = quotes_or_null($dbw->escape($this->get_user_name()));
-        $agent = quotes_or_null($dbw->escape(val_or_empty($_SERVER["HTTP_USER_AGENT"])));
+        $author = $dbw->quotes_or_null($this->get_user_name());
+        $agent = $dbw->quotes_or_null(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
         
         if (!$dbw->start_transaction()) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -27537,12 +27547,12 @@ abstract class ForumManager
         
         if (empty($show_deleted)) {
             // exclude deleted if not desired
-            $deleted_where = " and {$prfx}_topic.deleted <> 1 and {$prfx}_forum.deleted <> 1 $post_appendix" . "\n";
+            $deleted_where = " and {$prfx}_topic.deleted + {$prfx}_forum.deleted = 0 $post_appendix" . "\n";
         } elseif (empty($uid) && !$this->is_master_admin()) {
             // exclude deleted if not allowed
-            $deleted_where = " and {$prfx}_topic.deleted <> 1 and {$prfx}_forum.deleted <> 1 $post_appendix" . "\n";
+            $deleted_where = " and {$prfx}_topic.deleted + {$prfx}_forum.deleted = 0 $post_appendix" . "\n";
         } elseif (!$this->is_admin()) {
-            $deleted_where = " and (({$prfx}_topic.deleted <> 1 and {$prfx}_forum.deleted <> 1 $post_appendix)" . "\n";
+            $deleted_where = " and (({$prfx}_topic.deleted + {$prfx}_forum.deleted = 0 $post_appendix)" . "\n";
             
             if (!empty($_SESSION["forum_moderator"])) {
                 $in_list = implode(", ", $_SESSION["forum_moderator"]);
@@ -29756,35 +29766,35 @@ abstract class ForumManager
         
         $event_code = $dbw->escape($event_code);
         
-        $author_name = $dbw->escape($author_name);
+        $author_name = $dbw->quotes_or_null($author_name);
         $author_id = $dbw->escape($author_id);
         if (empty($author_id)) {
             $author_id = "NULL";
         }
         
-        $topic_name = quotes_or_null($dbw->escape(val_or_empty($params["{topic_name}"])));
+        $topic_name = $dbw->quotes_or_null(val_or_empty($params["{topic_name}"]));
         $topic_id = val_or_empty($params["{topic_id}"]);
         if (empty($topic_id) || !is_numeric($topic_id)) {
             $topic_id = "NULL";
         }
         
-        $source_topic_name = quotes_or_null($dbw->escape(val_or_empty($params["{source_topic_name}"])));
+        $source_topic_name = $dbw->quotes_or_null(val_or_empty($params["{source_topic_name}"]));
         $source_topic_id = val_or_empty($params["{source_topic_id}"]);
         if (empty($source_topic_id) || !is_numeric($source_topic_id)) {
             $source_topic_id = "NULL";
         }
         
-        $forum_name = quotes_or_null($dbw->escape(val_or_empty($params["{forum_name}"])));
+        $forum_name = $dbw->quotes_or_null(val_or_empty($params["{forum_name}"]));
         $forum_id = val_or_empty($params["{forum_id}"]);
         if (empty($forum_id) || !is_numeric($forum_id)) {
             $forum_id = "NULL";
         }
         
-        $comment = quotes_or_null($dbw->escape(Emoji::Encode(val_or_empty($params["{comment}"]))));
+        $comment = $dbw->quotes_or_null(Emoji::Encode(val_or_empty($params["{comment}"])));
         
         $params_str = "";
         serialize_array($params, $params_str);
-        $params_str = quotes_or_null($dbw->escape(Emoji::Encode($params_str)));
+        $params_str = $dbw->quotes_or_null(Emoji::Encode($params_str));
         
         if (empty($post_id) || !is_numeric($post_id)) {
             $post_id = "NULL";
@@ -29806,7 +29816,7 @@ abstract class ForumManager
             if ($author_id != "NULL") {
                 $author_appendix = " and author_id = $author_id";
             } else {
-                $author_appendix = " and author_name = '$author_name'";
+                $author_appendix = " and author_name = $author_name";
             }
             
             if (!$dbw->execute_query("update {$prfx}_events set redundant = 1
@@ -29831,7 +29841,7 @@ abstract class ForumManager
                              comment
                              )
                              values
-                             ('$now', $user_id, '$event_code', $params_str, '$author_name', $author_id, $post_id, $todo, $is_new,
+                             ('$now', $user_id, '$event_code', $params_str, $author_name, $author_id, $post_id, $todo, $is_new,
                              $topic_name,
                              $topic_id,
                              $source_topic_name,
@@ -31038,7 +31048,7 @@ abstract class ForumManager
         }
         
         $message = Emoji::Encode(reqvar("message"));
-        $message = quotes_or_null($dbw->escape($message));
+        $message = $dbw->quotes_or_null($message);
         
         $query = "insert into {$prfx}_auto_saved
               (topic_id, read_marker, dt, text_content)
@@ -31138,9 +31148,9 @@ abstract class ForumManager
             $rm = $dbw->field_by_name("read_marker");
             
             if (empty($guests[$rm])) {
-                $guests[$rm] = $dbw->field_by_name("author");
+                $guests[$rm] = $this->get_display_name($dbw->field_by_name("author"));
             } else {
-                $guests[$rm] .= " / " . $dbw->field_by_name("author");
+                $guests[$rm] .= " / " . $this->get_display_name($dbw->field_by_name("author"));
             }
         }
         
@@ -32398,7 +32408,7 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        $user_name = quotes_or_null($dbw->escape($this->get_user_name()));
+        $user_name = $dbw->quotes_or_null($this->get_user_name());
         $uid = $dbw->escape($this->get_user_id());
         if (empty($uid)) {
             $uid = "NULL";
@@ -32428,7 +32438,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         
-        $ip = quotes_or_null($dbw->escape(val_or_empty($_SERVER["REMOTE_ADDR"])));
+        $ip = $dbw->quotes_or_null(val_or_empty($_SERVER["REMOTE_ADDR"]));
         
         $query = "insert into {$prfx}_load_statistics (dt, url, user_id, user_name, ip, exec_time, topic_rm_count, forum_rm_count)
               values
@@ -32576,11 +32586,11 @@ abstract class ForumManager
         }
         
         $pid = $dbw->escape($pid);
-        $new_tag_db = $dbw->escape($new_tag);
+        $new_tag_db = $dbw->quotes_or_null($new_tag);
         
         $query = "select id
               from {$prfx}_user_tags
-              where user_id = $uid and name = '$new_tag_db'";
+              where user_id = $uid and name = $new_tag_db";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -32637,7 +32647,7 @@ abstract class ForumManager
             $query = "insert into {$prfx}_user_tags
                 (user_id, name)
                 values
-                ($uid, '$new_tag')";
+                ($uid, $new_tag_db)";
             
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -32799,11 +32809,11 @@ abstract class ForumManager
             return true;
         }
         
-        $new_tag_db = $dbw->escape($new_tag);
+        $new_tag_db = $dbw->quotes_or_null($new_tag);
         
         $query = "select id
               from {$prfx}_user_tags
-              where user_id = $uid and name = '$new_tag_db'";
+              where user_id = $uid and name = $new_tag_db";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -32823,7 +32833,7 @@ abstract class ForumManager
         $query = "insert into {$prfx}_user_tags
               (user_id, name)
               values
-              ($uid, '$new_tag')";
+              ($uid, $new_tag_db)";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -32896,11 +32906,11 @@ abstract class ForumManager
         
         $tgid = $dbw->escape($tgid);
         
-        $tag_name_db = $dbw->escape($tag_name);
+        $tag_name_db = $dbw->quotes_or_null($tag_name);
         
         $query = "select id
               from {$prfx}_user_tags
-              where user_id = $uid and name = '$tag_name_db' and id <> $tgid";
+              where user_id = $uid and name = $tag_name_db and id <> $tgid";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -32918,7 +32928,7 @@ abstract class ForumManager
         $dbw->free_result();
         
         $query = "update {$prfx}_user_tags
-              set name = '$tag_name_db'
+              set name = $tag_name_db
               where id = $tgid and user_id = $uid";
         
         if (!$dbw->execute_query($query)) {
@@ -32996,14 +33006,14 @@ abstract class ForumManager
         
         $tgid = $dbw->escape($tgid);
         
-        $tag_name_db = $dbw->escape($tag_name);
+        $tag_name_db = $dbw->quotes_or_null($tag_name);
         
         // if an existing tag entered,
         // use it as target
         
         $query = "select id
               from {$prfx}_user_tags
-              where user_id = $uid and name = '$tag_name_db' and id <> $tgid";
+              where user_id = $uid and name = $tag_name_db and id <> $tgid";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -33026,7 +33036,7 @@ abstract class ForumManager
         }
         
         $query = "update {$prfx}_user_tags
-              set name = '$tag_name_db'
+              set name = $tag_name_db
               where id = $tgid and user_id = $uid";
         
         if (!$dbw->execute_query($query)) {
@@ -34203,13 +34213,11 @@ abstract class ForumManager
         
         $where .= $this->get_deleted_where_appendix($rodbw, $prfx, !empty($_SESSION["show_deleted"]), false);
         
-        if (empty($_SESSION["pinned_topics"])) {
-            $pinned_in_list = -1;
-        } else {
+        $user_pinned_topic_appendix = "";
+        if (!empty($_SESSION["pinned_topics"])) {
             $pinned_in_list = $rodbw->escape(implode(",", $_SESSION["pinned_topics"]));
+            $user_pinned_topic_appendix = "or {$prfx}_topic.id in ($pinned_in_list)";
         }
-        
-        $user_pinned_topic_appendix = "or {$prfx}_topic.id in ($pinned_in_list)";
         
         $user_delayed_topic_appendix = "";
         if (!empty($uid)) {
@@ -34317,7 +34325,10 @@ abstract class ForumManager
         }
         
         $pagination_info["pinned_count"] = $pinned_count;
-        $user_pinned_topic_appendix = "and {$prfx}_topic.id not in ($pinned_in_list)";
+        if (!empty($_SESSION["pinned_topics"])) {
+            $pinned_in_list = $rodbw->escape(implode(",", $_SESSION["pinned_topics"]));
+            $user_pinned_topic_appendix = "and {$prfx}_topic.id not in ($pinned_in_list)";
+        }
         
         if (!$rodbw->execute_query($this->get_query_forum_topics($prfx, $uid, $user_pinned_topic_appendix, $where, $pagination_info))) {
             MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
@@ -35043,9 +35054,9 @@ abstract class ForumManager
 
             $position = ($pagination_info["page"] - 1) * $pagination_info["posts_per_page"];
             
-            $deleted_appendix = " and {$prfx}_post.deleted <> 1";
+            $pinned_deleted_appendix = " and {$prfx}_post.pinned + {$prfx}_post.deleted = 0";
             if (!empty($show_deleted)) {
-                $deleted_appendix = "";
+                $pinned_deleted_appendix = " and {$prfx}_post.pinned = 0";
             }
             
             $query = "select nr, id from
@@ -35055,7 +35066,7 @@ abstract class ForumManager
                           from {$prfx}_post 
                           inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
                           inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                          where {$prfx}_post.topic_id = $tid and {$prfx}_post.pinned = 0 $deleted_appendix) posts
+                          where {$prfx}_post.topic_id = $tid $pinned_deleted_appendix) posts
                       where nr = $position";
 
             if (!$rodbw->execute_query($query)) {
@@ -36055,7 +36066,7 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        $guest = quotes_or_null($dbw->escape($guest));
+        $guest = $dbw->quotes_or_null($guest);
         
         // restricted and protected forums
         $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
@@ -38538,7 +38549,7 @@ abstract class ForumManager
         $prfx = $dbw->escape(System::getDBPrefix());
         
         $uid = $dbw->escape($uid);
-        $notes_db = quotes_or_null($dbw->escape(Emoji::Encode($notes)));
+        $notes_db = $dbw->quotes_or_null(Emoji::Encode($notes));
         
         $current_uid = $dbw->escape($this->get_user_id());
         if (empty($current_uid)) {
