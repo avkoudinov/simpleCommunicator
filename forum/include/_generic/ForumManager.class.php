@@ -7476,6 +7476,9 @@ abstract class ForumManager
             return false;
         }
         
+        $anonyms_total_stat = [];
+        $anonyms_forum_stat = [];
+        
         while ($dbw->fetch_row()) {
             $uid = $dbw->field_by_name("id");
             $fid = $dbw->field_by_name("forum_id");
@@ -7520,28 +7523,34 @@ abstract class ForumManager
                 );
             }
             
+            $anonym_id = $dbw->field_by_name("ip") . $dbw->field_by_name("user_agent");
+            
             if (!$dbw->field_by_name("logout")) {
                 if (empty($online_users[$idx])) {
                     $online_users[$idx] = $user;
-                } elseif ($idx == "g_#anonyms#") {
-                    $online_users[$idx]["count"]++;
-                    $online_users[$idx]["name"] = text("Anonyms") . " (" . $online_users[$idx]["count"] . ")";
+                } 
+                
+                if ($idx == "g_#anonyms#") {
+                    $anonyms_total_stat[$anonym_id] = 1;
                 }
             }
             
             if (!empty($current_fid) && !empty($fid) && $current_fid == $fid) {
                 if (empty($forum_readers[$idx])) {
                     $forum_readers[$idx] = $user;
-                } elseif ($idx == "g_#anonyms#") {
-                    $forum_readers[$idx]["count"]++;
-                    $forum_readers[$idx]["name"] = text("Anonyms") . " (" . $forum_readers[$idx]["count"] . ")";
+                } 
+                
+                if ($idx == "g_#anonyms#") {
+                    $anonyms_forum_stat[$anonym_id] = 1;
                 }
             }
             
             if (!empty($current_tid) && !empty($tid) && $current_tid == $tid) {
                 if (empty($topic_readers[$idx])) {
                     $topic_readers[$idx] = $user;
-                } elseif ($idx == "g_#anonyms#") {
+                } 
+                
+                if ($idx == "g_#anonyms#") {
                     $topic_readers[$idx]["count"]++;
                     $topic_readers[$idx]["name"] = text("Anonyms") . " (" . $topic_readers[$idx]["count"] . ")";
                 }
@@ -7550,6 +7559,16 @@ abstract class ForumManager
         
         $dbw->free_result();
         
+        if (!empty($anonyms_total_stat)) {
+            $online_users["g_#anonyms#"]["count"] = count($anonyms_total_stat);
+            $online_users["g_#anonyms#"]["name"] = text("Anonyms") . " (" . $online_users["g_#anonyms#"]["count"] . ")";
+        }
+        
+        if (!empty($anonyms_forum_stat)) {
+            $forum_readers["g_#anonyms#"]["count"] = count($anonyms_forum_stat);
+            $forum_readers["g_#anonyms#"]["name"] = text("Anonyms") . " (" . $forum_readers["g_#anonyms#"]["count"] . ")";
+        }
+
         if(!empty($current_tid))
         {
             $current_tid = $dbw->escape($current_tid);
