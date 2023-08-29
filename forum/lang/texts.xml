@@ -1123,10 +1123,10 @@
         </text>
         
         <text id="DateTimeFormat">
-            <en>Y-m-d, H:i:s</en>
-            <de>d.m.Y, H:i:s</de>
-            <ru>d.m.Y, H:i:s</ru>
-            <ua>d.m.Y, H:i:s</ua>
+            <en>Y-m-d, H:i</en>
+            <de>d.m.Y, H:i</de>
+            <ru>d.m.Y, H:i</ru>
+            <ua>d.m.Y, H:i</ua>
         </text>
 
         <text id="DateFormat">
