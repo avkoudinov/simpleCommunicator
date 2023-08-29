@@ -199,7 +199,6 @@ if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) &
     <div onclick="insert_tag('[reddit]','[/reddit]', 0)">REDDIT</div>
     <div onclick="insert_tag('[tiktok]','[/tiktok]', 0)">TIKTOK</div>
     <div onclick="insert_tag('[anim]','[/anim]', 0)">ANIM</div>
-    <div onclick="insert_tag('[ascii-art]','[/ascii-art]', 0)">ASCII ART</div>
     <div onclick="insert_tag('[gallery]','[/gallery]', 0)">GALLERY</div>
     <div onclick="insert_tag('[video]','[/video]', 0)">VIDEO</div>
     <div onclick="insert_tag('[audio]','[/audio]', 0)">AUDIO</div>

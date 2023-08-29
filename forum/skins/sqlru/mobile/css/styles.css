@@ -7074,20 +7074,6 @@ label.rules_agreemnt
 
 /* END: Coub */
 
-.ascii_art 
-{ 
-  font-family: "Ubuntu Mono", "Courier New";
-  display: inline-block; 
-  border-radius: 4px; 
-  padding: 10px; 
-  font-weight: normal;
-  text-rendering: optimizeSpeed;
-}
-
-span.kroleg_pipe { background-color: #343434; border-radius: 15px; padding: 0px 7px 1px 7px; font: normal 1em Arial; display: inline-block; }
-
-.post_table .avatar_container img.kroleg_pipe { border-radius: 4px; }
-
 #drag_drop_zone 
 {
   border: 2px solid gray; 
