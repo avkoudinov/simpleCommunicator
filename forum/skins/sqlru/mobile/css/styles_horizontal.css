@@ -3352,6 +3352,16 @@
 
   /* END: progress indicator */ 
   
+  .ascii_art 
+  { 
+    border-radius: 2px; 
+    padding: 5px; 
+  }
+  
+span.kroleg_pipe { background-color: #343434; border-radius: 15px; padding: 0px 7px 1px 7px; font: normal 1em Arial; display: inline-block; }
+
+.post_table .avatar_container img.kroleg_pipe { border-radius: 2px; }
+
   #drag_drop_zone 
   {
     border-width: 1px; 
