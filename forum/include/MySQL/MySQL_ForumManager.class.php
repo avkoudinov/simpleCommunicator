@@ -159,8 +159,8 @@ class MySQL_ForumManager extends ForumManager
         }
         
         $topic_search_key_clause = $this->get_topic_search_clause($dbw, $prfx, $search, true);
-        $search = $dbw->escape($search);
-        $where .= " $topic_search_key_clause or name like '%$search%'";
+        $search = $dbw->quotes_or_null("%" . $search . "%");
+        $where .= " $topic_search_key_clause or name like $search";
         
         $forum_list = array();
         if (!$this->get_forum_list($forum_list)) {
@@ -388,7 +388,7 @@ class MySQL_ForumManager extends ForumManager
            from {$prfx}_topic 
            inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
            inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-           $where and {$prfx}_topic.pinned <> 1 and {$prfx}_topic.publish_delay <> 1 $user_pinned_topic_appendix
+           $where and {$prfx}_topic.pinned + {$prfx}_topic.publish_delay = 0 $user_pinned_topic_appendix
            order by {$prfx}_topic_statistics.last_message_id desc
            limit $begin, $limit
            ) topics

@@ -1209,6 +1209,7 @@ class BBCode
 	var $allow_ampsersand;
 	var $lexer;
 	var $stack;
+    var $smiley_info;
     
     var $has_link;
     var $has_code;

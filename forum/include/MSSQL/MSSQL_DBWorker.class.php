@@ -160,7 +160,7 @@ class MSSQL_DBWorker extends DBWorker
             $config = array(
                 "UID" => $this->db_user,
                 "PWD" => $this->db_password,
-                //"CharacterSet" => "UTF-8",
+                "CharacterSet" => "UTF-8",
                 "ReturnDatesAsStrings" => true
             );
             
@@ -226,6 +226,8 @@ class MSSQL_DBWorker extends DBWorker
     //--------------------------------------------------------------------
     function execute_query($query_string)
     {
+        $tmp = microtime(true);
+
         $this->last_query = $query_string;
         
         if (!$this->connection) {
@@ -260,6 +262,25 @@ class MSSQL_DBWorker extends DBWorker
             
             trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_ERROR);
             return false;
+        }
+        
+        $tmp = round(1000 * (microtime(true) - $tmp));
+        
+        if (!empty($_SESSION["trace_sql"]) &&
+            ($_SESSION["trace_sql"] == 1 || $tmp >= $_SESSION["trace_sql"])
+        ) {
+            $dtrace = debug_backtrace();
+            
+            $txt = $query_string;
+            $txt .= "\n";
+            $txt .= "\n";
+            $txt .= extract_call_stack($dtrace) . "\n";
+            $txt .= "\n";
+            $txt .= "Elapsed: " . $tmp . "ms" . "\n";
+            $txt .= "----------------------------------------------------------------------";
+            $txt .= "\n";
+            
+            $_SESSION["trace_sql_log"] .= $txt;
         }
         
         return true;
@@ -758,6 +779,12 @@ class MSSQL_DBWorker extends DBWorker
     {
         return str_replace("'", "''", "$str");
     } // escape
+    
+    //--------------------------------------------------------------------
+    function quotes_or_null($str)
+    {
+        return (string)$str === "" ? "NULL" : "N'" . $this->escape($str) . "'";
+    } // quotes_or_null
     
     //--------------------------------------------------------------------
     function format_date($date)
