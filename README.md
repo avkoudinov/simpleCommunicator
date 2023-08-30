@@ -11,7 +11,7 @@
 Техническая поддержка — <a href="https://anton.koudinov.ru/">Антон</a>
 <br>
 <br>
-Демонстрация работы — <a href="https://nosql.itwrks.org/forum/forums.php">Дедофорум NoSQL.ru</a>
+Демонстрация работы — <a href="https://nosql.itwrks.org/forum/forums.php">Дедофорум NoSQL.ru</a>, <a href="https://resql.ru/forum/forums.php">SQL.ru | ReSQL.ru</a>
 </p>
 
 <h2>Лицензия</h2>
@@ -44,10 +44,10 @@
 <p>Форум может быть установлен практически на любом хостинге. Программное обеспечение форума предъявляет минимальные требования к конфигурации сервера и настройкам прикладного программного обеспечения.</p>
 
 <ul>
-<li>Работает на версии PHP 7.2.x или выше.</li>
+<li>Работает на версии PHP 8.x или выше.</li>
 <li>Поддерживает системы управления базами данных:
     <ul>
-    <li>MariaDB 10.2.x / MySQL 8.0.x или выше,</li>
+    <li>MySQL 8.0.x или выше,</li>
     <li>Microsoft SQL Server 2005 или выше.</li>
     </ul>
 </li>
