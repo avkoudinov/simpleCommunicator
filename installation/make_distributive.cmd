@@ -2,7 +2,6 @@
 
 set PHP_PATH="C:\web\php\php"
 set ZIP_PATH=%ProgramFiles%\7-Zip
-if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set ZIP_PATH=%ProgramFiles(x86)%\7-Zip
 
 rem generate langs and sqls
 
@@ -96,6 +95,7 @@ xcopy ..\database database /S /E /R /Y /exclude:xcopy_exclude.cfg
 rmdir /S /Q database\MySQL\maintenance
 rmdir /S /Q database\MySQL\scripts
 rmdir /S /Q database\MySQL\update
+del "database\Power Designer Notes.docx"
 
 rem zipping
 

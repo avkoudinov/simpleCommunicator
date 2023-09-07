@@ -149,10 +149,6 @@ if (!empty($gotomsg)) {
 }
 
 //------------------------------------------------------------------
-$title = text("Topic");
-$topic_title = text("Topic");
-$forum_title = text("Forum");
-
 $max_att_size = $settings["max_att_size"];
 if ($max_att_size > 1024) {
     $max_att_size = number_format($max_att_size / 1024, 1, ",", "");
@@ -169,11 +165,6 @@ if ($max_att_size_audiovideo > 1024) {
     $max_att_size_audiovideo .= " " . text("KB");
 }
 //------------------------------------------------------------------
-if (!empty($topic_data["topic_name"])) {
-    $title = postprocess_message($topic_data["topic_name"]);
-    $topic_title = postprocess_message($topic_data["topic_name"]);
-}
-
 $forum_data = array();
 
 if (!empty($topic_data["is_private"])) {
@@ -186,6 +177,21 @@ if (!empty($topic_data["is_private"])) {
         header("location: " . $target_url);
         exit;
     }
+}
+
+$title = get_site_name(current_language()) . " - " . text("Topic");
+$ogtitle = get_site_name(current_language()) . " - " . text("Topic");
+$topic_title = text("Topic");
+$forum_title = text("Forum");
+
+if (!empty($topic_data["topic_name"])) {
+    $title = postprocess_message($topic_data["topic_name"]) . " - " . get_site_name(current_language());
+    $ogtitle = postprocess_message($topic_data["topic_name"]) . " - " . get_site_name(current_language());
+    $topic_title = postprocess_message($topic_data["topic_name"]);
+}
+
+if (!empty($forum_data["forum_description"])) {
+    $ogdescription = $forum_data["forum_description"];
 }
 
 // do cleaning jobs

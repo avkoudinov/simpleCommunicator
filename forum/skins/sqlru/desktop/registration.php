@@ -91,18 +91,14 @@ function register()
 
         Forum.handle_response_messages(response);
 
-        if(form.elements["captcha_field"] &&
-           response.ERROR_ELEMENT == "captcha_field")
-        {
-          form.elements["captcha_field"].value = "";
-          show_hide_captcha(true);
-        }
-
         if(response.success)
         {
           delay_redirect('profile.php');
           return;
         }
+
+        form.elements["captcha_field"].value = "";
+        show_hide_captcha(true);
       }
       catch(err)
       {

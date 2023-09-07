@@ -19,7 +19,8 @@ if($fmanager->is_master_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("Profile");
+$title = text("Profile") . " - " . get_site_name(current_language());
+$ogtitle = text("Profile") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $skin_list = array();
 $property_list = array();

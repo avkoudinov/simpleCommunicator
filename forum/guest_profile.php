@@ -9,7 +9,9 @@ if ($fmanager->is_logged_in() && !$fmanager->is_master_admin()) {
     exit;
 }
 //------------------------------------------------------------------
-$title = text("Profile");
+$title = text("Profile") . " - " . get_site_name(current_language());
+$ogtitle = text("Profile") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("user_name");
 //------------------------------------------------------------------
 $skin_list = array();

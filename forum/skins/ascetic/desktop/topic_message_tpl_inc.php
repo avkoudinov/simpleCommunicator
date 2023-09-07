@@ -97,6 +97,10 @@ if (!reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only") ||
     $post_ignored = 0;
 }
 
+if (!empty($forum_data["disable_ignore"])) {
+    $post_ignored = 0;
+}
+
 if (!empty($settings["archive_mode"]))
 {
     $may_write = false;

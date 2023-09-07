@@ -17,7 +17,8 @@ if ($fmanager->is_master_admin()) {
 }
 
 //------------------------------------------------------------------
-$title = text("Subscription");
+$title = text("Subscription") . " - " . get_site_name(current_language());
+$ogtitle = text("Subscription") . " - " . get_site_name(current_language());
 $forum_title = text("Subscription");
 //------------------------------------------------------------------
 $fmanager->check_new_events($new_events_count, $new_mod_events_count);

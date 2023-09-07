@@ -11,7 +11,8 @@ if(!$fmanager->is_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("EditUser");
+$title = text("EditUser") . " - " . get_site_name(current_language());
+$ogtitle = text("EditUser") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $user_data = array();
 if(!$fmanager->get_user_data(reqvar("uid"), $user_data))

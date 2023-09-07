@@ -24,7 +24,8 @@ $tor_ips = array();
 $fmanager->get_tor_ip_list($tor_ips);
 
 //------------------------------------------------------------------
-$title = text("TorIPs");
+$title = text("TorIPs") . " - " . get_site_name(current_language());
+$ogtitle = text("TorIPs") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $_SESSION["last_url"] = val_or_empty($_SERVER["REQUEST_URI"]);
 //------------------------------------------------------------------

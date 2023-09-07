@@ -12,7 +12,8 @@ if(!$fmanager->is_moderator())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("ModerateRates");
+$title = text("ModerateRates") . " - " . get_site_name(current_language());
+$ogtitle = text("ModerateRates") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $user_data = array();
 if(!$fmanager->get_user_data(reqvar("uid"), $user_data))

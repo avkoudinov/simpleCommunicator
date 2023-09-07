@@ -12,7 +12,8 @@ if(!$fmanager->is_logged_in() && $fmanager->check_tor_ip(val_or_empty($_SERVER["
     exit;
 }
 //------------------------------------------------------------------
-$title = text("Forums");
+$title = get_site_name(current_language()) . " - " . text("Forums");
+$ogtitle = get_site_name(current_language()) . " - " . text("Forums");
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");
 

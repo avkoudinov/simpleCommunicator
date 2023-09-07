@@ -540,4 +540,5 @@ your
 yours
 yourself
 yourselves
-zero
+zeroесть
+для

@@ -145,6 +145,7 @@ $GLOBALS['DEF_TEXTS']['en']['UserPostingAsGuest'] = 'Users may post as guests';
 $GLOBALS['DEF_TEXTS']['en']['GuestPostingModeOn'] = 'Guest posting on';
 $GLOBALS['DEF_TEXTS']['en']['GuestPostingModeOff'] = 'Guest posting off';
 $GLOBALS['DEF_TEXTS']['en']['StringentRules'] = 'Stringent rules';
+$GLOBALS['DEF_TEXTS']['en']['DisableIgnore'] = 'Disable ignore';
 $GLOBALS['DEF_TEXTS']['en']['StringentRulesWarning'] = 'ATTENTION! There are stringent rules in this forum. Make sure your message complies with them!';
 $GLOBALS['DEF_TEXTS']['en']['MessagesCount'] = 'Message count';
 $GLOBALS['DEF_TEXTS']['en']['Messages'] = 'Messages';
@@ -1264,6 +1265,7 @@ $GLOBALS['DEF_TEXTS']['en']['MsgOperationSuccessful'] = 'The operation successfu
 $GLOBALS['DEF_TEXTS']['en']['MsgBulkDeleteConfirm'] = 'Are you sure to perform this operation?';
 $GLOBALS['DEF_TEXTS']['en']['UserAgreement'] = 'User agreement';
 $GLOBALS['DEF_TEXTS']['en']['Maintenance'] = 'Maintenance';
+$GLOBALS['DEF_TEXTS']['en']['MaintenanceLink'] = 'More';
 $GLOBALS['DEF_TEXTS']['en']['MaintenanceComment'] = 'The forum is currently under maintenance presumably until %s (time zone: %s).';
 $GLOBALS['DEF_TEXTS']['en']['MaintenanceNotification'] = 'The forum will be on maintenance presumably 
             

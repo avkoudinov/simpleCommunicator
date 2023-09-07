@@ -17,7 +17,8 @@ if ($fmanager->is_master_admin()) {
 }
 
 //------------------------------------------------------------------
-$title = text("Events");
+$title = text("Events") . " - " . get_site_name(current_language());
+$ogtitle = text("Events") . " - " . get_site_name(current_language());
 $forum_title = text("Events");
 //------------------------------------------------------------------
 if ($fmanager->check_hash()) {

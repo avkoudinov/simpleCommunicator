@@ -55,7 +55,7 @@ if(!empty($_SESSION["custom_css"]))
 ?>
 </style>
 
-<link rel="icon" type="image/png" href="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-default-icon="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-signal-icon="<?php echo($view_path); ?>images/favicon_new.png<?php echo($cache_appendix); ?>" id="fav_icon"/>
+<?php require_once $view_path . "seo_inc.php"; ?>
 
 <script type='text/JavaScript'>
 Forum = {};
@@ -541,7 +541,7 @@ if(file_exists($view_path . "lang/" . current_language() . "/title.html"))
 
 if(!empty($_SESSION["skin_properties"][$skin]["show_df_logotype"]))
 {
-  $ftitle = "<img src='{$view_path}images/dedoforum.png' srcset='{$view_path}images/dedoforum.svg' title='" . escape_html($ftitle) . "' alt='" . escape_html($ftitle) . "'>";
+  $ftitle = "<img src='{$view_path}images/forum_logo.png' srcset='{$view_path}images/forum_logo.svg' title='" . escape_html($ftitle) . "' alt='" . escape_html($ftitle) . "'>";
 }
 ?>
 <a href="../"><?php echo($ftitle); ?></a></div>

@@ -145,6 +145,7 @@ $GLOBALS['DEF_TEXTS']['ru']['UserPostingAsGuest'] = 'Пользователи м
 $GLOBALS['DEF_TEXTS']['ru']['GuestPostingModeOn'] = 'Гостевой постинг вкл.';
 $GLOBALS['DEF_TEXTS']['ru']['GuestPostingModeOff'] = 'Гостевой постинг выкл.';
 $GLOBALS['DEF_TEXTS']['ru']['StringentRules'] = 'Cтрогие правила';
+$GLOBALS['DEF_TEXTS']['ru']['DisableIgnore'] = 'Отключить игнор';
 $GLOBALS['DEF_TEXTS']['ru']['StringentRulesWarning'] = 'ВНИМАНИЕ! На данном подфоруме действуют строгие правила. Удостоверьтесь, что ваше сообщение соответствует им!';
 $GLOBALS['DEF_TEXTS']['ru']['MessagesCount'] = 'Количество сообщений';
 $GLOBALS['DEF_TEXTS']['ru']['Messages'] = 'Сообщения';
@@ -1269,6 +1270,7 @@ $GLOBALS['DEF_TEXTS']['ru']['MsgOperationSuccessful'] = 'Операция вып
 $GLOBALS['DEF_TEXTS']['ru']['MsgBulkDeleteConfirm'] = 'Вы уверены, что хотите выполнить данную операцию?';
 $GLOBALS['DEF_TEXTS']['ru']['UserAgreement'] = 'Польз. соглашение';
 $GLOBALS['DEF_TEXTS']['ru']['Maintenance'] = 'Техническое обслуживание';
+$GLOBALS['DEF_TEXTS']['ru']['MaintenanceLink'] = 'Подробнее';
 $GLOBALS['DEF_TEXTS']['ru']['MaintenanceComment'] = 'Форум на обслуживании предположительно до %s (временная зона: %s).';
 $GLOBALS['DEF_TEXTS']['ru']['MaintenanceNotification'] = 'Форум будет на техническом обслуживании предположительно 
             

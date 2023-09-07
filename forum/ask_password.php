@@ -16,7 +16,8 @@ if (!empty($forum_data["hide_from_robots"]) && detect_bot(val_or_empty($_SERVER[
     exit;
 }
 //------------------------------------------------------------------
-$title = text("Password");
+$title = text("Password") . " - " . get_site_name(current_language());
+$ogtitle = text("Password") . " - " . get_site_name(current_language());
 $subtitle = text("Password");
 $entrance_warning = sprintf(text("EntranceWarning"), $forum_data["forum_name"]);
 MessageHandler::setFocusElement("password");

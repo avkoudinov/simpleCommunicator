@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="<?php echo(current_language()); ?>">
 <head>
-<title><?php echo_html(text("Maintenance")); ?></title>
+<title><?php echo_html($title); ?></title>
         
 <?php
 $cache_appendix = "?v=" . $skin_version;
@@ -12,7 +12,7 @@ $cache_appendix = "?v=" . $skin_version;
 
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css"/>
 
-<link rel="icon" type="image/png" href="<?php echo($view_path); ?>images/favicon.png" />
+<?php require_once $view_path . "seo_inc.php"; ?>
 
 </head>
 
@@ -21,13 +21,19 @@ $cache_appendix = "?v=" . $skin_version;
 <div class="maintenance">
 <?php echo_html(sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name)); ?>
 
+    <?php if (!empty($maintenance_comment) && !empty($maintenance_link)): ?>
     <div class="maintenance_comment">
     <?php
-    if (!empty($maintenance_comment_lang[current_language()])) $maintenance_comment = $maintenance_comment_lang[current_language()];
-    
-    echo(nl2br(escape_html($maintenance_comment)));
+    if (!empty($maintenance_comment)) echo(nl2br(escape_html($maintenance_comment)));
     ?>
+    
+    <?php if(!empty($maintenance_link)): ?>
+    <br><br>
+    <?php echo_html(text("MaintenanceLink")); ?>: <a href="<?php echo($maintenance_link); ?>"><?php echo_html($maintenance_link); ?></a>
+    <?php endif; ?>
     </div>
+    <?php endif; ?>
+    
 </div>
 
 <img class="maintenance" alt="<?php echo_html(text("Maintenance")); ?>" src="<?php echo($view_path); ?>images/maintenance.jpg<?php echo($cache_appendix); ?>">
