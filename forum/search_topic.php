@@ -188,6 +188,9 @@ if (!empty($tid)) {
     }
 }
 
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
 //------------------------------------------------------------------
 $user_data = array();
 $post_list = array();

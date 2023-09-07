@@ -10,6 +10,12 @@ if(!is_maintenance())
   exit;
 }
 //------------------------------------------------------------------
+if (!empty($maintenance_comment_lang[current_language()])) $maintenance_comment = $maintenance_comment_lang[current_language()];
+if (!empty($maintenance_link[current_language()])) $maintenance_link = $maintenance_link[current_language()];
+//------------------------------------------------------------------
+$title = text("Maintenance") . " - " . get_site_name(current_language());
+$ogtitle = text("Maintenance") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 require_once "include/final_inc.php";
 //------------------------------------------------------------------
 require_once $view_path . "maintenance.php";

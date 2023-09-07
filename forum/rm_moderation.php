@@ -12,7 +12,9 @@ if(!$fmanager->is_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("ReadmarkerModeration");
+$title = text("ReadmarkerModeration") . " - " . get_site_name(current_language());
+$ogtitle = text("ReadmarkerModeration") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("search_key");
 //------------------------------------------------------------------
 if(!reqvar_empty("sort"))

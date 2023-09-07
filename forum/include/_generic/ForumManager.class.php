@@ -3762,6 +3762,7 @@ abstract class ForumManager
         $forum_data["user_posting_as_guest"] = "";
         $forum_data["restricted_access"] = "";
         $forum_data["stringent_rules"] = "";
+        $forum_data["disable_ignore"] = "";
         $forum_data["protected_by_password"] = "";
         $forum_data["deleted"] = "";
         $forum_data["closed"] = "";
@@ -3807,7 +3808,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select
                              id, name, description, no_guests, restricted_guest_mode, user_posting_as_guest, stringent_rules, allow_edit, restricted_access, hide_from_robots, sort_order,
-                             access_duration, access_message_count,
+                             access_duration, access_message_count, disable_ignore,
                              protected_by_password, deleted, closed, $count_field topic_count
                              from {$prfx}_forum
                              inner join {$prfx}_forum_statistics on ({$prfx}_forum.id = {$prfx}_forum_statistics.forum_id)
@@ -3842,6 +3843,7 @@ abstract class ForumManager
             }
             
             $forum_data["stringent_rules"] = $dbw->field_by_name("stringent_rules");
+            $forum_data["disable_ignore"] = $dbw->field_by_name("disable_ignore");
             
             $forum_data["protected_by_password"] = $dbw->field_by_name("protected_by_password");
             $forum_data["deleted"] = $dbw->field_by_name("deleted");
@@ -4111,6 +4113,7 @@ abstract class ForumManager
         $hide_from_robots = reqvar_empty("hide_from_robots") ? "0" : "1";
         
         $stringent_rules = reqvar_empty("stringent_rules") ? "0" : "1";
+        $disable_ignore = reqvar_empty("disable_ignore") ? "0" : "1";
         
         $allow_edit = reqvar_empty("allow_edit") ? "0" : "1";
         $no_guests = reqvar_empty("no_guests") ? "0" : "1";
@@ -4154,9 +4157,9 @@ abstract class ForumManager
             $now = $dbw->format_datetime(time());
             
             $query = "insert into {$prfx}_forum
-               (name, description, allow_edit, hide_from_robots, no_guests, restricted_guest_mode, user_posting_as_guest, restricted_access, stringent_rules, protected_by_password, deleted, password, creation_date, sort_order, access_duration, access_message_count)
+               (name, description, allow_edit, hide_from_robots, no_guests, restricted_guest_mode, user_posting_as_guest, restricted_access, stringent_rules, disable_ignore, protected_by_password, deleted, password, creation_date, sort_order, access_duration, access_message_count)
                 values
-               ($forum_name, $forum_description, $allow_edit, $hide_from_robots, $no_guests, $restricted_guest_mode, $user_posting_as_guest, $restricted_access, $stringent_rules, $protected_by_password, $deleted, $password, '$now', $sort_order, $access_duration, $access_message_count)";
+               ($forum_name, $forum_description, $allow_edit, $hide_from_robots, $no_guests, $restricted_guest_mode, $user_posting_as_guest, $restricted_access, $stringent_rules, $disable_ignore, $protected_by_password, $deleted, $password, '$now', $sort_order, $access_duration, $access_message_count)";
         } else {
             $password_string = "password = $password,";
             if ($protected_by_password && $password_is_set && reqvar_empty("password")) {
@@ -4174,6 +4177,7 @@ abstract class ForumManager
                 hide_from_robots = $hide_from_robots,
                 restricted_access = $restricted_access,
                 stringent_rules = $stringent_rules,
+                disable_ignore = $disable_ignore,
                 access_duration = $access_duration,
                 access_message_count = $access_message_count,
                 protected_by_password = $protected_by_password,
@@ -5107,6 +5111,7 @@ abstract class ForumManager
             "с" => "c",
             "е" => "e",
             "у" => "y",
+            "т" => "t",
             "о" => "o",
             "р" => "p",
             "к" => "k",
@@ -9309,8 +9314,6 @@ abstract class ForumManager
         
         $rodbw->free_result();
         
-        debug_message("Exists: " . $exist);
-
         if (!$exist) {
             $query = "insert into {$prfx}_browser_statistics_cache
                       (tm, tp, name, cnt)
@@ -27693,6 +27696,8 @@ abstract class ForumManager
         
         $where = " and ({$prfx}_topic.id not in ($in_list)";
         
+        $where .= "\n" . "      or {$prfx}_topic.forum_id in (select id from {$prfx}_forum where disable_ignore = 1)" . "\n";
+
         // The moderators must see what happens in the topics where they are responsible.
         // Such topics are not left out, but just colored in grey.
         
@@ -27825,6 +27830,8 @@ abstract class ForumManager
             $or_appendix = "    or {$prfx}_post.is_system = 1 or {$prfx}_post.pinned = 1";
         }
         
+        $or_appendix .= "\n" . "    or exists (select 1 from {$prfx}_topic where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_topic.forum_id in (select id from {$prfx}_forum where disable_ignore = 1))";
+
         if ($force_exclusion_of_ignored <> 2) {
             if (!empty($_SESSION["forum_moderator"])) {
                 $in_list = implode(", ", $_SESSION["forum_moderator"]);

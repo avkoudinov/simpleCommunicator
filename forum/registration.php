@@ -4,7 +4,8 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
-$title = text("Registration");
+$title = text("Registration") . " - " . get_site_name(current_language());
+$ogtitle = text("Registration") . " - " . get_site_name(current_language());
 
 if($fmanager->is_logged_in()) {
     MessageHandler::setWarning(text("ErrLogoutForRegistration"));

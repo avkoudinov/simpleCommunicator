@@ -4,7 +4,8 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
-$title = text("FAQ");
+$title = text("FAQ") . " - " . get_site_name(current_language());
+$ogtitle = text("FAQ") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");
 //------------------------------------------------------------------

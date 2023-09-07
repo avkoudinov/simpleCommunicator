@@ -40,6 +40,10 @@ if ($fmanager->is_moderator()) {
 if (!empty($user_data["user_name"])) {
     $title .= ": " . $user_data["user_name"];
 }
+
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
 //------------------------------------------------------------------
 $event_list = array();
 $pagination_info = array();

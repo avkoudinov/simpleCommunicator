@@ -76,12 +76,18 @@ if (!$fmanager->has_access_to_forum($fid, $forum_name, true)) {
     exit;
 }
 //------------------------------------------------------------------
-$title = text("Forum");
+$title = get_site_name(current_language()) . " - " . text("Forum");
+$ogtitle = get_site_name(current_language()) . " - " . text("Forum");
 $forum_title = text("Forum");
 //------------------------------------------------------------------
 if (!empty($forum_data["forum_name"])) {
-    $title = $forum_data["forum_name"];
+    $title = $forum_data["forum_name"] . " - " . get_site_name(current_language());
+    $ogtitle = $forum_data["forum_name"] . " - " . get_site_name(current_language());
     $forum_title = $forum_data["forum_name"];
+}
+
+if (!empty($forum_data["forum_description"])) {
+    $ogdescription = $forum_data["forum_description"];
 }
 
 $topic_list = array();

@@ -208,7 +208,7 @@ function trace_error($msg)
 
         if (!empty($_POST)) {
             file_put_contents($file, "POST:" . "\r\n", FILE_APPEND);
-            file_put_contents($file, print_r($_POST, true) . "\r\n", FILE_APPEND);
+            file_put_contents($file, print_r(array_diff_key($_POST, ["password" => "", "password2" => ""]), true) . "\r\n", FILE_APPEND);
         }
 
         file_put_contents($file, $msg . "\r\n", FILE_APPEND);
@@ -269,14 +269,14 @@ function dump_session()
     
     $msg .= "HEADERS\n\n";
     foreach (getallheaders() as $name => $value) {
-        $msg .= "$name: $value\n";
+      $msg .= "$name: $value\n";
     }
     
     $msg .= "\nGET\n\n";
     $msg .= print_r($_GET, true) . "\n";
     
     $msg .= "POST\n\n";
-    $msg .= print_r($_POST, true) . "\n";
+    $msg .= print_r(array_diff_key($_POST, ["password" => "", "password2" => ""]), true) . "\n";
     
     $msg .= "COOKIE\n\n";
     
@@ -341,7 +341,7 @@ function dump_request($report_id)
     $msg .= print_r($_GET, true) . "\n";
     
     $msg .= "POST\n\n";
-    $msg .= print_r($_POST, true) . "\n";
+    $msg .= print_r(array_diff_key($_POST, ["password" => "", "password2" => ""]), true) . "\n";
     
     $msg .= "COOKIE\n\n";
     

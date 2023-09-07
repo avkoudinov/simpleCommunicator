@@ -12,7 +12,8 @@ if(!$fmanager->is_master_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("PasswordChange");
+$title = text("PasswordChange") . " - " . get_site_name(current_language());
+$ogtitle = text("PasswordChange") . " - " . get_site_name(current_language());
 $view = "password_change.php";
 MessageHandler::setFocusElement("current_password");
 //------------------------------------------------------------------

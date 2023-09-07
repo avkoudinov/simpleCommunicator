@@ -178,6 +178,8 @@ $view_mode = "desktop";
 $view_path = "skins/default/desktop/";
 $skin_version = "1.0.0";
 
+$ogdescription = get_site_description(current_language());
+
 $forum_list = array();
 
 if (!$installed) {
@@ -222,7 +224,21 @@ if (!$installed) {
         ) {
             $maintenance_start = adjust_and_format_timezone(xstrtotime($maintenance_start), text("DateTimeFormat"));
             $maintenance_end = adjust_and_format_timezone(xstrtotime($maintenance_end), text("DateTimeFormat"));
-            MessageHandler::setWarning(sprintf(text("MaintenanceNotification"), $maintenance_start, $maintenance_end, $time_zone_name));
+            
+            $message = sprintf(text("MaintenanceNotification"), $maintenance_start, $maintenance_end, $time_zone_name);
+            
+            if (!empty($maintenance_comment_lang[current_language()])) $maintenance_comment = $maintenance_comment_lang[current_language()];
+            if (!empty($maintenance_link[current_language()])) $maintenance_link = $maintenance_link[current_language()];
+            
+            if (!empty($maintenance_comment)) {
+                $message .= "\n\n" . $maintenance_comment;
+            }
+
+            if (!empty($maintenance_link)) {
+                $message .= "\n\n" . text("MaintenanceLink") . ": [html]<a href='$maintenance_link' target='_blank'>" . escape_html($maintenance_link) . "</a>[/html]";
+            }
+
+            MessageHandler::setWarning($message);
         
             $_SESSION["maintenance_notified"] = true;
         }

@@ -25,7 +25,8 @@ $ips = "";
 $fmanager->get_guest_ip_list($guest_ips, $ips);
 
 //------------------------------------------------------------------
-$title = text("GuestIPs");
+$title = text("GuestIPs") . " - " . get_site_name(current_language());
+$ogtitle = text("GuestIPs") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");
 

@@ -335,6 +335,9 @@ if (!empty($tid)) {
     }
 }
 
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
 $forum_data['topics_with_new_count'] = 0;
 if (!empty($fid)) {
     if (!empty($_SESSION["new_messages_info_cache"]["data"]["forums"][$fid])) {

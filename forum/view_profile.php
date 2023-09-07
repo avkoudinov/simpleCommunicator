@@ -26,6 +26,9 @@ if (!empty($user_data["user_name"])) {
   $title .= ": " . $user_data["user_name"];
 }
 
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
 $ignores = array();
 $ignored = array();
 if(!$fmanager->get_user_ignore_info(reqvar("uid"), $ignores, $ignored))

@@ -1024,6 +1024,13 @@
             <ua>Суворі правила</ua>
         </text>
 
+        <text id="DisableIgnore">
+            <en>Disable ignore</en>
+            <de>Ignorieren abschalten</de>
+            <ru>Отключить игнор</ru>
+            <ua>Відключити ігнор</ua>
+        </text>
+
         <text id="StringentRulesWarning">
             <en>ATTENTION! There are stringent rules in this forum. Make sure your message complies with them!</en>
             <de>ACHTUNG! In diesem Forum gelten strenge Regeln. Vergewissern Sie sich, dass Ihre Nachricht mit ihnen übereinstimmt!</de>
@@ -8791,6 +8798,13 @@
             <de>Wartung</de>
             <ru>Техническое обслуживание</ru>
             <ua>Технічне обслуговування</ua>
+        </text>
+
+        <text id="MaintenanceLink">
+            <en>More</en>
+            <de>Mehr Info</de>
+            <ru>Подробнее</ru>
+            <ua>Детальніше</ua>
         </text>
 
         <text id="MaintenanceComment">

@@ -12,7 +12,8 @@ if(!$fmanager->is_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("IPActivity");
+$title = text("IPActivity") . " - " . get_site_name(current_language());
+$ogtitle = text("IPActivity") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $ip_activity_list = array();
 $fmanager->get_ip_activity(reqvar("ip"), $ip_activity_list);

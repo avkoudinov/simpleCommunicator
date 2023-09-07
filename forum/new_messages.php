@@ -16,7 +16,8 @@ if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
     exit;
 }
 //------------------------------------------------------------------
-$title = text("TopicsWithNew");
+$title = text("TopicsWithNew") . " - " . get_site_name(current_language());
+$ogtitle = text("TopicsWithNew") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $fid = reqvar("fid");
 $fid_for_url = $fid;

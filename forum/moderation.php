@@ -11,7 +11,9 @@ if(!$fmanager->is_moderator())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("Moderation");
+$title = text("Moderation") . " - " . get_site_name(current_language());
+$ogtitle = text("Moderation") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("ip");
 //------------------------------------------------------------------
 $moderated_forum_list = array();

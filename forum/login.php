@@ -4,7 +4,8 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
-$title = text("Authorization");
+$title = text("Authorization") . " - " . get_site_name(current_language());
+$ogtitle = text("Authorization") . " - " . get_site_name(current_language());
 MessageHandler::setFocusElement("user_login");
 //------------------------------------------------------------------
 $failed_login_count = 0;

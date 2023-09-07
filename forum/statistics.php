@@ -10,7 +10,8 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
   exit;
 }
 //------------------------------------------------------------------
-$title = text("Statistics");
+$title = text("Statistics") . " - " . get_site_name(current_language());
+$ogtitle = text("Statistics") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 
 if(!reqvar_empty("period"))

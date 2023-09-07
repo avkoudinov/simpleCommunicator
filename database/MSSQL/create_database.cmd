@@ -2,13 +2,13 @@
 
 rem set the path to sqlcmd.exe
 
-set OSQL_PATH="c:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\"
+set OSQL_PATH="c:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\"
 
 rem set the instance name
 
 set HOST="(local)"
 
-set DB_NAME=simple_communicator
+set DB_NAME=forum
 
 rem Due to the restriction that the SQL driver sticks to the encoding
 rem of the Windows and ignores the database and server collation, the 

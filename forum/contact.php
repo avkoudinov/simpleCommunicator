@@ -4,7 +4,9 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
-$title = text("Contact");
+$title = text("Contact") . " - " . get_site_name(current_language());
+$ogtitle = text("Contact") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("email");
 //------------------------------------------------------------------
 $sender_email = "";

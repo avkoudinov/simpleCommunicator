@@ -10,7 +10,9 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "" && !empty($settin
   exit;
 }
 //------------------------------------------------------------------
-$title = text("Users");
+$title = text("Users") . " - " . get_site_name(current_language());
+$ogtitle = text("Users") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("user_name");
 //------------------------------------------------------------------
 if(!reqvar_empty("sort"))

@@ -145,6 +145,7 @@ $GLOBALS['DEF_TEXTS']['ua']['UserPostingAsGuest'] = 'Користувачі мо
 $GLOBALS['DEF_TEXTS']['ua']['GuestPostingModeOn'] = 'Гостьовий постінг вкл.';
 $GLOBALS['DEF_TEXTS']['ua']['GuestPostingModeOff'] = 'Гостьовий постінг вимк.';
 $GLOBALS['DEF_TEXTS']['ua']['StringentRules'] = 'Суворі правила';
+$GLOBALS['DEF_TEXTS']['ua']['DisableIgnore'] = 'Відключити ігнор';
 $GLOBALS['DEF_TEXTS']['ua']['StringentRulesWarning'] = 'УВАГА! На даному подфоруму діє строгі правила. Переконайтеся, що ваше повідомлення відповідає їм!';
 $GLOBALS['DEF_TEXTS']['ua']['MessagesCount'] = 'Кількість повідомлень';
 $GLOBALS['DEF_TEXTS']['ua']['Messages'] = 'Повідомлення';
@@ -1269,6 +1270,7 @@ $GLOBALS['DEF_TEXTS']['ua']['MsgOperationSuccessful'] = 'Операція вик
 $GLOBALS['DEF_TEXTS']['ua']['MsgBulkDeleteConfirm'] = 'Ви упевнені, що бажаєте виконати цю операцію?';
 $GLOBALS['DEF_TEXTS']['ua']['UserAgreement'] = 'Угода з користувачем';
 $GLOBALS['DEF_TEXTS']['ua']['Maintenance'] = 'Технічне обслуговування';
+$GLOBALS['DEF_TEXTS']['ua']['MaintenanceLink'] = 'Детальніше';
 $GLOBALS['DEF_TEXTS']['ua']['MaintenanceComment'] = 'Форум на обслуговуванні імовірно до %s (часова зона: %s).';
 $GLOBALS['DEF_TEXTS']['ua']['MaintenanceNotification'] = 'Форум буде на технічному обслуговуванні імовірно 
             

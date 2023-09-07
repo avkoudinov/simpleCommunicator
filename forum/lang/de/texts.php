@@ -145,6 +145,7 @@ $GLOBALS['DEF_TEXTS']['de']['UserPostingAsGuest'] = 'Benutzer können als Gäste
 $GLOBALS['DEF_TEXTS']['de']['GuestPostingModeOn'] = 'Gastposting ein';
 $GLOBALS['DEF_TEXTS']['de']['GuestPostingModeOff'] = 'Gastposting aus';
 $GLOBALS['DEF_TEXTS']['de']['StringentRules'] = 'Strenge Regeln';
+$GLOBALS['DEF_TEXTS']['de']['DisableIgnore'] = 'Ignorieren abschalten';
 $GLOBALS['DEF_TEXTS']['de']['StringentRulesWarning'] = 'ACHTUNG! In diesem Forum gelten strenge Regeln. Vergewissern Sie sich, dass Ihre Nachricht mit ihnen übereinstimmt!';
 $GLOBALS['DEF_TEXTS']['de']['MessagesCount'] = 'Nachrichtenanzahl';
 $GLOBALS['DEF_TEXTS']['de']['Messages'] = 'Nachrichten';
@@ -1264,6 +1265,7 @@ $GLOBALS['DEF_TEXTS']['de']['MsgOperationSuccessful'] = 'Die Operation wurde erf
 $GLOBALS['DEF_TEXTS']['de']['MsgBulkDeleteConfirm'] = 'Sind Sie sicher, dass Sie dies Operation ausführen möchten?';
 $GLOBALS['DEF_TEXTS']['de']['UserAgreement'] = 'Benutzervereinbarung';
 $GLOBALS['DEF_TEXTS']['de']['Maintenance'] = 'Wartung';
+$GLOBALS['DEF_TEXTS']['de']['MaintenanceLink'] = 'Mehr Info';
 $GLOBALS['DEF_TEXTS']['de']['MaintenanceComment'] = 'Der Forum wird momentan gewartet, voraussichtlich bis %s (Zeitzone: %s).';
 $GLOBALS['DEF_TEXTS']['de']['MaintenanceNotification'] = 'Das Forum wird voraussichtlich 
             
