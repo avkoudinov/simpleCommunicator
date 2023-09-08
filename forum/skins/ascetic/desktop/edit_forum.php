@@ -441,6 +441,14 @@ Forum.addXEvent(window, 'load', function () { enable_disable(); });
    </tr>
    <tr>
      <td>
+     <input type="checkbox" id="disable_ignore" name="disable_ignore" <?php echo_html(checked(val_or_empty($forum_data["disable_ignore"]))); ?>> 
+     </td>
+     <td>
+     <label for="disable_ignore"><?php echo_html(text("DisableIgnore")); ?></label>
+     </td>
+   </tr>
+   <tr>
+     <td>
      <input type="checkbox" id="registered_access" name="registered_access" <?php echo_html(checked(val_or_empty($forum_data["registered_access"]))); ?> onchange="Forum.invert_pair_checkbox(this, 'restricted_access'); enable_disable();"> 
      </td>
      <td>

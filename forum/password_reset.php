@@ -11,7 +11,9 @@ if(!$fmanager->verify_reset_link($user_data))
   exit;
 }
 //------------------------------------------------------------------
-$title = text("PasswordReset");
+$title = text("PasswordReset") . " - " . get_site_name(current_language());
+$ogtitle = text("PasswordReset") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("password");
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");

@@ -123,6 +123,9 @@ elseif($is_private == 1)
   $title = text("SendPersonalMessage");
 }
 
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
 $max_att_size = $settings["max_att_size"];
 if($max_att_size > 1024)
 {

@@ -92,21 +92,14 @@ function send_message()
 
         Forum.handle_response_messages(response);
 
-        if(form.elements["captcha_field"] &&
-           response.ERROR_ELEMENT == "captcha_field")
-        {
-          form.elements["captcha_field"].value = "";
-          show_hide_captcha(true);
-        }
+        form.elements["captcha_field"].value = "";
+        show_hide_captcha(true);
 
         if(response.success)
         {
           form.elements["subject"].value = "";
           form.elements["message"].value = "";
-          form.elements["captcha_field"].value = "";
           form.elements["rules_agreemnt"].checked = false;
-          
-          show_hide_captcha(true);
         }
       }
       catch(err)

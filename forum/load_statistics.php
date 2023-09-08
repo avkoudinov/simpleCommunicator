@@ -10,7 +10,8 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
   exit;
 }
 //------------------------------------------------------------------
-$title = text("LoadStatistics");
+$title = text("LoadStatistics") . " - " . get_site_name(current_language());
+$ogtitle = text("LoadStatistics") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $query_string = "";
 $fmanager->apply_load_statistics_filter($query_string);

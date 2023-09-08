@@ -22,7 +22,8 @@ if (!$fmanager->is_moderator_log_visible()) {
     exit;
 }
 //------------------------------------------------------------------
-$title = text("ModeratorLog");
+$title = text("ModeratorLog") . " - " . get_site_name(current_language());
+$ogtitle = text("ModeratorLog") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $event_list = array();
 $pagination_info = array();

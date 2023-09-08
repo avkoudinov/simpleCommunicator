@@ -51,9 +51,12 @@ if (!reqvar_empty("user")) {
     }
 }
 //------------------------------------------------------------------
-$ip_blocked = 1;
-$title = text("ModerateIP");
+$title = text("ModerateIP") . " - " . get_site_name(current_language());
+$ogtitle = text("ModerateIP") . " - " . get_site_name(current_language());
 $subtitle = text("ModerateIP");
+//------------------------------------------------------------------
+$ip_blocked = 1;
+
 switch (reqvar("type")) {
     case "user_ips":
         $title = text("ShowAuthorIPs");

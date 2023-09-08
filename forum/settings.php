@@ -12,7 +12,8 @@ if(!$fmanager->is_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("Settings");
+$title = text("Settings") . " - " . get_site_name(current_language());
+$ogtitle = text("Settings") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $settings = array();
 $fmanager->get_settings($settings, true);

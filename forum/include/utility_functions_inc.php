@@ -724,6 +724,17 @@ function get_site_name($lang)
     return $site_name;
 } // get_site_name
 //------------------------------------------------------------------------------
+function get_site_description($lang)
+{
+    $site_description = "";
+    
+    if (file_exists(APPLICATION_ROOT . "lang/" . $lang . "/site_description.txt")) {
+        $site_description = trim(file_get_contents(APPLICATION_ROOT . "lang/" . $lang . "/site_description.txt"));
+    }
+    
+    return $site_description;
+} // get_site_description
+//------------------------------------------------------------------------------
 function get_host_address($use_host = "")
 {
     if (!empty($use_host)) {

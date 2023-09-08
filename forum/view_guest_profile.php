@@ -10,7 +10,8 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "" && !empty($settin
   exit;
 }
 //------------------------------------------------------------------
-$title = text("GuestProfile");
+$title = text("GuestProfile") . " - " . get_site_name(current_language());
+$ogtitle = text("GuestProfile") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 
 $aname = reqvar("aname");

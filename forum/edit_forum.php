@@ -16,6 +16,9 @@ if(reqvar_empty("fid"))
 else
   $title = text("EditForum");
 
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
 MessageHandler::setFocusElement("forum_name");
 //------------------------------------------------------------------
 $forum_data = array();

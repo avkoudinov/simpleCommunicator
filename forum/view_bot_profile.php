@@ -10,7 +10,8 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "" && !empty($settin
   exit;
 }
 //------------------------------------------------------------------
-$title = text("BotProfile");
+$title = text("BotProfile") . " - " . get_site_name(current_language());
+$ogtitle = text("BotProfile") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 
 $bot_data = array();

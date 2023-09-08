@@ -12,7 +12,9 @@ if(!$fmanager->is_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("UserAgents");
+$title = text("UserAgents") . " - " . get_site_name(current_language());
+$ogtitle = text("UserAgents") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("search_key");
 //------------------------------------------------------------------
 
