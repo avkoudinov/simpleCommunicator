@@ -41,8 +41,17 @@ if (!empty($user_data["user_name"])) {
     $title .= ": " . $user_data["user_name"];
 }
 
+$ogtype = "profile";
 $title .= " - " . get_site_name(current_language());
 $ogtitle = $title;
+
+if (!empty($user_data["photo"])) {
+  $ogimage = $user_data["photo"];
+}  
+elseif (!empty($user_data["avatar"])) {
+  $ogimage = $user_data["avatar"];
+}  
+
 
 //------------------------------------------------------------------
 $event_list = array();

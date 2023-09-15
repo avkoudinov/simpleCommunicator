@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function confirm_reset()
 {
   var form = document.getElementById("main_form");
@@ -17,7 +17,6 @@ function confirm_reset()
         Forum.hide_user_msgbox();
 
         form.reset();
-        update_form_check_boxes(form);
       }
     },
     {
@@ -163,7 +162,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <td><?php echo_html(text("UserName")); ?>*:</td>
 </tr>
 <tr>
-<td><input type="text" id="user_name" name="user_name" value=""/>
+<td><input type="text" id="user_name" name="user_name" value="">
 <div class="field_comment"><?php echo_html(text("UserNameComment")); ?></div>
 </td>
 </tr>
@@ -172,7 +171,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <td><?php echo_html(text("Email")); ?>*:</td>
 </tr>
 <tr>
-<td><input type="email" id="user_email" name="user_email" value=""/>
+<td><input type="email" id="user_email" name="user_email" value="">
 <div class="field_comment"><?php echo_html(text("UserEmailComment")); ?></div>
 </td>
 </tr>
@@ -188,7 +187,7 @@ if(!empty($topics_with_new_count)) $display = "";
 </tr>
 <tr>
 <td>
-<input type="text" id="user_login" name="user_login" value=""/>
+<input type="text" id="user_login" name="user_login" value="">
 <div class="field_comment"><?php echo_html(text("UserLoginComment")); ?></div>
 </td>
 </tr>
@@ -217,12 +216,12 @@ if(!empty($topics_with_new_count)) $display = "";
    <table class="captcha_table">
    <tr>
      <td>
-     <img class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'/>
+     <img class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'>
      </td>
      <td>
      </td>
      <td>
-     <input type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off"/>
+     <input type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off">
      </td>
    </tr>
    </table>
@@ -264,10 +263,10 @@ if(!empty($topics_with_new_count)) $display = "";
 <tr>
 <td class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Register")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Register")); ?>">
 </div>
 <div class="clear_both">
 </div>

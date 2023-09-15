@@ -1269,7 +1269,7 @@ function build_page_navigator($base_url, &$pagination_info, $all_entry_post = nu
     $navigator .= "</tr></table>";
     
     if (!empty($js_code)) {
-        $navigator .= "\r\n<script type='text/JavaScript'>\r\n";
+        $navigator .= "\r\n<script>\r\n";
         $navigator .= $js_code;
         $navigator .= "\r\n</script>\r\n";
     }
@@ -1443,7 +1443,7 @@ function build_post_page_navigator($base_url, &$pagination_info, $all_entry_post
     $navigator .= "</tr></table>";
     
     if (!empty($js_code)) {
-        $navigator .= "\r\n<script type='text/JavaScript'>\r\n";
+        $navigator .= "\r\n<script>\r\n";
         $navigator .= $js_code;
         $navigator .= "\r\n</script>\r\n";
     }
@@ -1813,20 +1813,32 @@ function detect_bot($user_agent)
 {
     if (empty($user_agent)) $user_agent = "";
     
-    if (preg_match("/.*(SemrushBot|DotBot|HubSpot Crawler|Barkrowler|LightspeedSystemsCrawler|Twitterbot|MegaIndex|startmebot|Adsbot|MJ12bot|Slackbot|TestBot|AhrefsBot|BLEXBot|Mail\\.RU_Bot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Facebot Twitterbot|Exabot|SEOkicks|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|Applebot|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|SiteCheckerBot|tracemyfile|trendictionbot|Cliqzbot).*/i",
+    // allow TelegramBot, Twitterbot, Slackbot, Mail.RU_Bot, Facebot Twitterbot, SEOkicks, Applebot, SiteCheckerBot to load links
+
+    // "/.*(SemrushBot|DotBot|HubSpot Crawler|Barkrowler|LightspeedSystemsCrawler|Twitterbot|MegaIndex|startmebot|Adsbot|MJ12bot|Slackbot|TestBot|AhrefsBot|BLEXBot|Mail\\.RU_Bot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Facebot Twitterbot|Exabot|SEOkicks|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|Applebot|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|SiteCheckerBot|tracemyfile|trendictionbot|Cliqzbot).*/i"
+    if (preg_match("/.*(SemrushBot|DotBot|HubSpot Crawler|Barkrowler|LightspeedSystemsCrawler|MegaIndex|startmebot|Adsbot|MJ12bot|TestBot|AhrefsBot|BLEXBot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Exabot|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|tracemyfile|trendictionbot|Cliqzbot).*/i",
         $user_agent, $matches)) {
         return $matches[1];
     }
     
-    if (preg_match("/.*(Googlebot|Mediapartners-Google|Google Favicon).*/i", $user_agent)) {
+    // allow Google Favicon to load links
+    // "/.*(Googlebot|Mediapartners-Google|Google Favicon).*/i"
+
+    if (preg_match("/.*(Googlebot|Mediapartners-Google).*/i", $user_agent)) {
         return "Google Bot";
     }
     
-    if (preg_match("/.*Yandex(Antivirus|Search|Bot|Images|Video|Media|Blogs|Addurl|Favicons|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot|SEOdiver).*/i", $user_agent)) {
+    // allow Favicons, SEOdiver to load links
+    // "/.*Yandex(Antivirus|Search|Bot|Images|Video|Media|Blogs|Addurl|Favicons|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot|SEOdiver).*/i"
+
+    if (preg_match("/.*Yandex(Antivirus|Search|Bot|Images|Video|Media|Blogs|Addurl|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot).*/i", $user_agent)) {
         return "Yandex Bot";
     }
     
-    if (preg_match("/.*(bingbot|BingPreview).*/i", $user_agent)) {
+    // allow BingPreview to load links
+    // "/.*(bingbot|BingPreview).*/i"
+
+    if (preg_match("/.*(bingbot).*/i", $user_agent)) {
         return "Bing Bot";
     }
     
@@ -1843,7 +1855,8 @@ function detect_bot($user_agent)
     }
     
     if (preg_match("/.*(facebookexternalhit).*/i", $user_agent)) {
-        return "Facebook Bot";
+        // allow it to load links
+        //return "Facebook Bot";
     }
     
     if (preg_match("/.*(petalbot).*/i", $user_agent)) {

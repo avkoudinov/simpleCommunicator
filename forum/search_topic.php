@@ -84,16 +84,16 @@ if (!$cache_exists) {
 //------------------------------------------------------------------
 //debug_message("Cache valid, showing results");
 
-$title = text("Search");
+$search_title = text("Search");
 
 $search_title_appendix = $fmanager->build_search_title();
 if (!empty($search_title_appendix)) {
-    $title .= ": " . $search_title_appendix;
+    $search_title .= ": " . $search_title_appendix;
 }
 
 // special case: search in the virtual topic "favourite posts"
 if (!reqvar_empty("favourite_posts_only")) {
-    $title = text("FavouriteMessages") . ", " . $title;
+    $search_title = text("FavouriteMessages") . ", " . $search_title;
 }
 //------------------------------------------------------------------
 $fid = reqvar("fid");
@@ -152,7 +152,7 @@ if (!empty($tid)) {
     }
     
     // search in a single topic, prepend its name to the titles
-    $title = $topic_data["topic_name"] . ", " . $title;
+    $search_title = $topic_data["topic_name"] . ", " . $search_title;
 } elseif (!empty($fid)) {
     $fid_for_url = $fid;
     
@@ -188,7 +188,7 @@ if (!empty($tid)) {
     }
 }
 
-$title .= " - " . get_site_name(current_language());
+$title = $search_title . " - " . get_site_name(current_language());
 $ogtitle = $title;
 
 //------------------------------------------------------------------

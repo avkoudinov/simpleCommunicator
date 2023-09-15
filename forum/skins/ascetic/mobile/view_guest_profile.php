@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function confirm_action(msg, params)
 {
   var mbuttons = [

@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function reload_statistics()
 {
   var form = document.getElementById("statistics_filter_form");
@@ -60,7 +60,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <h3 class="profile_caption"><?php echo_html(text("LoadStatistics")); ?></h2>
 
 <div class="forum_activity_image_wrapper">
-<img id="forum_activity_image" class="forum_activity_image" title="<?php echo_text("LoadStatistics"); ?>" alt="&nbsp;" src="ajax/load_diagram.php?rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';"/>
+<img id="forum_activity_image" class="forum_activity_image" title="<?php echo_text("LoadStatistics"); ?>" alt="&nbsp;" src="ajax/load_diagram.php?rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(text("Members")); ?></h2>

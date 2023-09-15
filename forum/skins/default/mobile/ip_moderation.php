@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 
 <?php if(!empty($_SESSION["jump_to_log"])): 
 unset($_SESSION["jump_to_log"]);
@@ -975,11 +975,11 @@ else
 <td class="button_area">
 
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')">
 </div>
 <div class="right_buttons">
 <?php if(reqvar("type") == "moderation" || reqvar("type") == "um_moderation" || reqvar("type") == "ip_users"): ?>
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>">
 <?php endif; ?>
 </div>
 <div class="clear_both">
@@ -1355,7 +1355,7 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
   <div class="inner_label"><?php echo_html(text("LinkToEvent")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="evid_link_<?php echo_html($evid); ?>" value="<?php echo_html(get_host_address() . get_url_path() . "moderation_log.php?event=$evid"); ?>" onfocus="select_text_in_field('evid_link_<?php echo_html($evid); ?>')"/></td>
+    <td><input type="text" id="evid_link_<?php echo_html($evid); ?>" value="<?php echo_html(get_host_address() . get_url_path() . "moderation_log.php?event=$evid"); ?>" onfocus="select_text_in_field('evid_link_<?php echo_html($evid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('evid_link_<?php echo_html($evid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>

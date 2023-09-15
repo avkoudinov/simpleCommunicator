@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var selected_authors = {};
 
 function hide_author_actions_menu()

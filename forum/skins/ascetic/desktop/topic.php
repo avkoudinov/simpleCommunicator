@@ -1,19 +1,19 @@
-<script type='text/JavaScript'>
+<script>
 var topic_id = '<?php echo_js(val_or_empty($tid)); ?>';
 var final_url = '<?php echo_js($final_url); ?>';
 var ensure_anchor_visible = '<?php echo_js(val_or_empty($_SESSION["ensure_anchor_visible"])); ?>';
 </script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/bbutils.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='<?php echo($view_path); ?>topic.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_gallery.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/bbutils.js<?php echo($cache_appendix); ?>'></script>
+<script src='<?php echo($view_path); ?>topic.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_gallery.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <!--
-<script defer type='text/JavaScript' src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 -->
 
 <?php
@@ -29,7 +29,7 @@ else
 }
 ?>
 
-<script type='text/JavaScript'>
+<script>
 var in_search = 0;
 var last_author = "<?php echo_js($fmanager->get_display_name($fmanager->get_user_name())); ?>";
 var first_message = "<?php echo($first_message); ?>";
@@ -712,7 +712,7 @@ $all_entry_post = $first_message;
 
 <?php if($may_write_to_topic): ?>
 <td>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("first_post_container", first_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'/>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("first_post_container", first_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
 </td>
 <?php endif; ?>
 
@@ -807,7 +807,7 @@ $all_entry_post = $last_message;
 
 <?php if($may_write_to_topic): ?>
 <td id='bottom_new_message'>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", last_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'/>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", last_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
 </td>
 <?php endif; ?>
 
@@ -930,9 +930,9 @@ require_once "topic_post_objects_inc.php";
 
    <table class="aux_table search_member_area_table" style="width:100%">
    <tr>
-   <td ><input type="text" name="user_to_search" autocomplete="off" value="" placeholder="<?php echo_html(text("SearchUser")); ?>" onkeypress="return search_on_enter(this.form, event)"/></td>
+   <td ><input type="text" name="user_to_search" autocomplete="off" value="" placeholder="<?php echo_html(text("SearchUser")); ?>" onkeypress="return search_on_enter(this.form, event)"></td>
    <td style="text-align: right; width: 1%;">
-   <input type="button" name="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_user(this.form)"/>
+   <input type="button" name="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_user(this.form)">
    </td>
    </tr>
    </table>
@@ -977,9 +977,9 @@ require_once "topic_post_objects_inc.php";
    ?>
    <table class="aux_table search_member_area_table" style="width:100%">
    <tr>
-   <td ><input type="text" name="user_to_search" autocomplete="off" value="" placeholder="<?php echo_html(text("SearchUser")); ?>" onkeypress="return search_on_enter(this.form, event)"/></td>
+   <td ><input type="text" name="user_to_search" autocomplete="off" value="" placeholder="<?php echo_html(text("SearchUser")); ?>" onkeypress="return search_on_enter(this.form, event)"></td>
    <td style="text-align: right; width: 1%;">
-   <input type="button" name="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_user(this.form)"/>
+   <input type="button" name="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_user(this.form)">
    </td>
    </tr>
    </table>
@@ -1132,7 +1132,7 @@ if($rcnt > 0)
 
 </div>
 
-<script type='text/JavaScript'>
+<script>
 
 function startup_action()
 {

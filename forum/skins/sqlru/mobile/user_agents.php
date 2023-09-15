@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function confirm_action(msg, params)
 {
   var mbuttons = [
@@ -96,10 +96,10 @@ function do_action(params)
 <table class="aux_table" style="width:100%">
 <tr>
 <td>
-  <input type="text" class="search_field" id="search_key" name="search_key" autocomplete="off" placeholder="<?php echo_html(text("SearchUserAgent")); ?>" value="<?php echo_html(reqvar("search_key")); ?>"/>
+  <input type="text" class="search_field" id="search_key" name="search_key" autocomplete="off" placeholder="<?php echo_html(text("SearchUserAgent")); ?>" value="<?php echo_html(reqvar("search_key")); ?>">
 </td>
 <td style="width:1%; white-space: nowrap">
-<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"/><?php if(!reqvar_empty("search_key")): ?><input type="submit" class="standard_button search_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['search_key'].value=''"/><?php endif; ?>
+<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"><?php if(!reqvar_empty("search_key")): ?><input type="submit" class="standard_button search_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['search_key'].value=''"><?php endif; ?>
 </td>
 </tr>
 </table>
@@ -128,7 +128,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 / <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
 
-/ <span class="topic_title_main"><?php echo_html($title); ?></span>
+/ <span class="topic_title_main"><?php echo_html(text("UserAgents")); ?></span>
 </div>
 
 <!-- END: forum_bar -->
@@ -251,7 +251,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 / <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
 
-/ <span class="topic_title_main"><?php echo_html($title); ?></span>
+/ <span class="topic_title_main"><?php echo_html(text("UserAgents")); ?></span>
 </div>
 
 <!-- END: forum_bar -->

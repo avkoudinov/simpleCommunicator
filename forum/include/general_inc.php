@@ -178,8 +178,6 @@ $view_mode = "desktop";
 $view_path = "skins/default/desktop/";
 $skin_version = "1.0.0";
 
-$ogdescription = get_site_description(current_language());
-
 $forum_list = array();
 
 if (!$installed) {
@@ -254,5 +252,13 @@ if (!$installed) {
             $_SESSION["backup_notified"] = true;
         }
     }
+}
+
+$ogtype = "website";
+$ogdescription = get_site_description(current_language());
+$ogimage = "";
+if(file_exists($view_path . "images/forum_picture.png"))
+{
+  $ogimage = $view_path . "images/forum_picture.png";
 }
 ?>

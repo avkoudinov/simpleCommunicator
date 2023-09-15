@@ -76,8 +76,8 @@ if (!$fmanager->has_access_to_forum($fid, $forum_name, true)) {
     exit;
 }
 //------------------------------------------------------------------
-$title = get_site_name(current_language()) . " - " . text("Forum");
-$ogtitle = get_site_name(current_language()) . " - " . text("Forum");
+$title = text("Forum") . " - " . get_site_name(current_language());
+$ogtitle = text("Forum") . " - " . get_site_name(current_language());
 $forum_title = text("Forum");
 //------------------------------------------------------------------
 if (!empty($forum_data["forum_name"])) {

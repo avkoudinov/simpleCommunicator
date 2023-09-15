@@ -29568,6 +29568,18 @@ abstract class ForumManager
         
         set_cookie("q_device", $device, time() + 90 * 24 * 3600);
         
+        // fource only in this request
+        
+        if (!reqvar_empty("mobile")) {
+            $device = "mobile";
+        }
+        if (!reqvar_empty("tablet")) {
+            $device = "tablet";
+        }
+        if (!reqvar_empty("desktop")) {
+            $device = "desktop";
+        }
+        
         $view_mode = "desktop";
         $view_mode_path = "desktop";
         if ($device == "mobile") {

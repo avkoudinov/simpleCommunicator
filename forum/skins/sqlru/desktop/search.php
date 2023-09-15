@@ -1,6 +1,6 @@
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript'>
+<script>
   var config = {
     format: "<?php echo_js(text("DateFormat")); ?>",
     start_year: 2000,
@@ -427,7 +427,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
 
     <?php endif; ?>
 
-    / <span class="topic_title_main"><?php echo_html($title); ?></span>
+    / <span class="topic_title_main"><?php echo_html($search_title); ?></span>
 
   </div>
 
@@ -462,7 +462,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
         
         <?php if ($in_search): ?>
           <td>
-            <input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')"/>
+            <input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')">
           </td>
         <?php endif; ?>
 
@@ -777,7 +777,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
             
             <?php if ($in_search): ?>
               <td>
-                <input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')"/>
+                <input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')">
               </td>
             <?php endif; ?>
 
@@ -824,7 +824,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
 
         <?php endif; ?>
 
-        / <span class="topic_title_main"><?php echo_html($title); ?></span>
+        / <span class="topic_title_main"><?php echo_html($search_title); ?></span>
 
       </div>
 
@@ -850,7 +850,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
     <tr>
       <td>
         <div class="field_caption"><?php echo_html(text("SearchKeys")); ?>:</div>
-        <input type="text" id="search_keys" autocomplete="off" name="search_keys" maxlength="500" value="<?php echo_html(reqvar("search_keys")); ?>"/>
+        <input type="text" id="search_keys" autocomplete="off" name="search_keys" maxlength="500" value="<?php echo_html(reqvar("search_keys")); ?>">
         <div class="field_comment"><?php echo_html(text("SearchComment")); ?></div>
 
         <br>
@@ -1122,7 +1122,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
         
         <table class="aux_table">
         <tr>
-        <td><input type="text" id="author" name="author" maxlength="250" value="<?php echo_html(reqvar("author")); ?>" autocomplete="off" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide('author')"/></td>
+        <td><input type="text" id="author" name="author" maxlength="250" value="<?php echo_html(reqvar("author")); ?>" autocomplete="off" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide('author')"></td>
         <td><button class="me_button" onclick="set_to_me();" type="button"><?php echo_html(text("Me")); ?></button></td>
         </tr>
         </table>
@@ -1144,16 +1144,16 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
         <div class="field_caption"><?php echo_html(text("DateRange")); ?>:</div>
         <table class="date_block">
           <tr>
-            <td><input type="text" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html(reqvar("start_date")); ?>"/></td>
+            <td><input type="text" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html(reqvar("start_date")); ?>"></td>
             <td></td>
-            <td><input type="text" autocomplete="off" id="end_date" name="end_date" value="<?php echo_html(reqvar("end_date")); ?>"/></td>
+            <td><input type="text" autocomplete="off" id="end_date" name="end_date" value="<?php echo_html(reqvar("end_date")); ?>"></td>
           </tr>
         </table>
         <br>
         
         <?php if ($fmanager->is_moderator()): ?>
           <div class="field_caption"><?php echo_html(text("IPAddressOrFingerprint")); ?>:</div>
-          <input type="text" id="ip" name="ip" maxlength="250" value="<?php echo_html(reqvar("ip")); ?>"/>
+          <input type="text" id="ip" name="ip" maxlength="250" value="<?php echo_html(reqvar("ip")); ?>">
           <br><br>
         <?php endif; ?>
 
@@ -1172,8 +1172,8 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
       <td class="search_forum_area">
         
         <div class="field_caption"><?php echo_html(text("Topic")); ?>:</div>
-        <input type="hidden" id="tid" name="tid" value="<?php echo_html(reqvar("tid")); ?>"/>
-        <input type="text" id="topic_name" value="<?php echo_html(val_or_empty($topic_name)); ?>" autocomplete="off" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="reset_topic_on_search(); return lookup_entries('search_topics', this, event);" onblur="reset_topic_if_not_found(); lookup_delayed_hide('topic_name');"/>
+        <input type="hidden" id="tid" name="tid" value="<?php echo_html(reqvar("tid")); ?>">
+        <input type="text" id="topic_name" value="<?php echo_html(val_or_empty($topic_name)); ?>" autocomplete="off" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="reset_topic_on_search(); return lookup_entries('search_topics', this, event);" onblur="reset_topic_if_not_found(); lookup_delayed_hide('topic_name');">
 
         <div class="field_lookup_area topic_lookup_area" style="display:none">
           <select id="topic_name_lookup" size="10"
@@ -1233,12 +1233,12 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
 
     <tr>
       <td colspan="2" class="button_area">
-        <input type="hidden" name="do_search" value="1"/>
+        <input type="hidden" name="do_search" value="1">
         <div class="left_buttons">
-          <input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="reset_search_form(this.form);"/>
+          <input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="reset_search_form(this.form);">
         </div>
         <div class="right_buttons">
-          <input type="submit" class="standard_button send_button" value="<?php echo_html(text("DoSearch")); ?>"/>
+          <input type="submit" class="standard_button send_button" value="<?php echo_html(text("DoSearch")); ?>">
         </div>
         <div class="clear_both">
         </div>

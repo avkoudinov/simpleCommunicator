@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function do_delete_avatar()
 {
   var f = document.getElementById("delete_avatar");
@@ -106,7 +106,6 @@ function confirm_reset()
         form.reset();
         handle_avatar_display();
         handle_photo_display();
-        update_form_check_boxes(form);
       }
     },
     {
@@ -434,13 +433,13 @@ if($fmanager->demo_mode()) $user_data["user_email"] = text("hidden");
 <td><?php echo_html(text("Email")); ?>*:</td>
 </tr>
 <tr>
-<td><input type="email" id="user_email" name="user_email" value="<?php echo_html($user_data["user_email"]); ?>"/>
+<td><input type="email" id="user_email" name="user_email" value="<?php echo_html($user_data["user_email"]); ?>">
 
 <?php if(!empty($user_data["activated"])): ?>
 <div class="field_comment"><?php echo_html(text("UserEmailComment2")); ?></div>
 <?php else: ?>
 <div class="field_comment error_text" style="margin-bottom: 3px"><?php echo_html(text("WarningAccountNotActivated")); ?></div>
-<input type="button" class="standard_button" value="<?php echo_html(text("RequestActivationLink")); ?>" onclick="request_activation()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("RequestActivationLink")); ?>" onclick="request_activation()">
 <?php endif; ?>
 
 </td>
@@ -522,7 +521,7 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 
 <tr>
 <td>
-<a href="logout.php?hash=" + get_protection_hash() + "&all_sessions=1" class="moderator_link" onclick="return confirm_general_logout()"><?php echo_html(text("LogoutOnAll")); ?></a>
+<a href="logout.php?hash=<?php echo_html($_SESSION["hash"]); ?>&all_sessions=1" class="moderator_link" onclick="return confirm_general_logout()"><?php echo_html(text("LogoutOnAll")); ?></a>
 </td>
 </tr>
 
@@ -565,7 +564,7 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 <td><?php echo_html(text("Avatar")); ?>:</td>
 </tr>
 <tr>
-<td><input type="file" placeholder="<?php echo_html(text("SelectFile")); ?>" id="avatar" name="avatar"/>
+<td><input type="file" id="avatar" name="avatar">
 
 <div class="inner_label"><?php echo_html(text("AvatarComment")); ?></div>
 
@@ -604,14 +603,14 @@ if(!empty($user_data["avatar"]))
 <td><?php echo_html(text("Location")); ?>:</td>
 </tr>
 <tr>
-<td><input type="text" id="location" name="location" value="<?php echo_html($user_data["location"]); ?>"/></td>
+<td><input type="text" id="location" name="location" value="<?php echo_html($user_data["location"]); ?>"></td>
 </tr>
 
 <tr>
 <td><?php echo_html(text("Homepage")); ?>:</td>
 </tr>
 <tr>
-<td><input type="text" id="homepage" name="homepage" value="<?php echo_html($user_data["homepage"]); ?>"/></td>
+<td><input type="text" id="homepage" name="homepage" value="<?php echo_html($user_data["homepage"]); ?>"></td>
 </tr>
 
 <tr>
@@ -841,14 +840,15 @@ foreach($time_zones as $time_zone => $time_zone_name)
      <label for="turnoff_events"><?php echo_html(text("TurnOffEvents")); ?></label>
      </td>
    </tr>
-   <tr>
+   <?php if(!empty($settings["rates_active"])): ?>
+   <tr style="display:none">
      <td>
-     <input type="checkbox" id="donot_notify_on_rates" name="donot_notify_on_rates" <?php echo_html(checked($user_data["donot_notify_on_rates"])); ?>> 
+     <input type="hidden" id="donot_notify_on_rates" name="donot_notify_on_rates" value="1"> 
      </td>
      <td>
-     <label for="donot_notify_on_rates"><?php echo_html(text("NoNotificationsOnRates")); ?></label>
      </td>
    </tr>
+   <?php endif; ?>
    </table>
 
    <table class="checkbox_table">
@@ -923,7 +923,7 @@ foreach($time_zones as $time_zone => $time_zone_name)
 </tr>
 
 <tr>
-<td><input type="file" placeholder="<?php echo_html(text("UploadCustomSmiles")); ?>" multiple="multiple" id="add_custom_smiles" name="add_custom_smiles[]"/></textarea>
+<td><input type="file" data-placeholder="<?php echo_html(text("UploadCustomSmiles")); ?>" id="add_custom_smiles" name="add_custom_smiles[]"></textarea>
 </td>
 </tr>
 
@@ -1058,7 +1058,7 @@ foreach($time_zones as $time_zone => $time_zone_name)
 </tr>
 
 <tr>
-<td><input type="file" placeholder="<?php echo_html(text("SelectFile")); ?>" id="photo" name="photo"/></td>
+<td><input type="file" id="photo" name="photo"></td>
 </tr>
 
 <tr>
@@ -1068,11 +1068,11 @@ foreach($time_zones as $time_zone => $time_zone_name)
 <tr>
 <td class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>">
 </div>
 <div class="clear_both">
 </div>

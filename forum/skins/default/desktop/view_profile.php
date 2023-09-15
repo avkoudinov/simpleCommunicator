@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var load_user_rates_ajax = null;
 
 function load_user_rates(load_user_rates_button)
@@ -460,7 +460,7 @@ if(!empty($user_data["avatar"]))
 <?php elseif(!empty($user_data["hide_email"])): ?>
 <?php echo_html(text("hidden")); ?>
 <?php else: ?>
-<input type="button" id="show_email_button" class="standard_button member_search_button" value="<?php echo_html(text("Show")); ?>" onclick="show_user_email()"/>
+<input type="button" id="show_email_button" class="standard_button member_search_button" value="<?php echo_html(text("Show")); ?>" onclick="show_user_email()">
 <?php endif; ?>
 </div>
 </td>
@@ -1285,13 +1285,13 @@ $width .= "px";
 </select>
 
 <div class="user_activity_image_wrapper">
-<img id="user_daily_activity_image" class="user_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=daily&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';"/>
+<img id="user_daily_activity_image" class="user_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=daily&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(text("WeekdayActivity")); ?></h2>
 
 <div class="user_activity_image_wrapper">
-<img id="user_weekday_activity_image" class="user_activity_image" title="<?php echo_text("WeekdayActivity"); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=weekday&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';"/>
+<img id="user_weekday_activity_image" class="user_activity_image" title="<?php echo_text("WeekdayActivity"); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=weekday&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(sprintf(text("HourlyActivity"), 30)); ?></h2>
@@ -1304,7 +1304,7 @@ $width .= "px";
 </select>
 
 <div class="user_activity_image_wrapper">
-<img id="user_hourly_activity_image" class="user_activity_image" title="<?php echo_html(sprintf(text("HourlyActivity"), 30)); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=hourly&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';"/>
+<img id="user_hourly_activity_image" class="user_activity_image" title="<?php echo_html(sprintf(text("HourlyActivity"), 30)); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=hourly&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <?php 
@@ -1454,7 +1454,7 @@ $row_class = "statistics_row_hidden";
 
 <h3 class="profile_caption"><?php echo_html(text("RateStatistics")); ?></h2>
 
-<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_user_rates(this)"/>
+<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_user_rates(this)">
 
 <?php endif; // rates active ?>
 
