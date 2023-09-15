@@ -5,9 +5,9 @@
 }
 </style>
 
-<script type='text/JavaScript' src='<?php echo($view_path); ?>topic.js'></script>
+<script src='<?php echo($view_path); ?>topic.js'></script>
 
-<script type='text/JavaScript'>
+<script>
 
 var user_tags = {};
 

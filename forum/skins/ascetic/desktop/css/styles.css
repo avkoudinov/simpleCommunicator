@@ -540,9 +540,43 @@ a.member_nick:hover
   line-height: 21px;
 }
 
-input[type=checkbox]
-{
+input[type="checkbox"],
+input[type="radio"] {
+    background-color: white;
+    appearance: none;
+    width: 16px;
+    height: 16px;
   border: 1px solid gray;
+    margin: 0;
+    display: inline-block;
+}
+
+input[type="radio"] {
+    border-radius: 8px;
+}
+
+input[type="checkbox"]:checked {
+    background-image: url('../images/ok.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+}
+
+input[type="radio"]:checked {
+    background-image: url('../images/ok.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+}
+
+input[type="checkbox"]:disabled,
+input[type="radio"]:disabled {
+    opacity: 0.7;
+}
+
+input[type="checkbox"]:checked:disabled,
+input[type="radio"]:checked:disabled {
+    opacity: 0.7;
 }
 
 button,
@@ -1992,7 +2026,7 @@ a.new_topic_disabled:hover
 .checkbox_table td:nth-child(2),
 .checkbox_table td:nth-child(4)
 {
-  padding-top: 4px;
+  padding-top: 5px;
   padding-left: 4px;
 }
 
@@ -3579,7 +3613,8 @@ td.post_footer
   margin: 0px 3px 3px 3px;
 }
 
-.add_manage_tags input
+.add_manage_tags input,
+.add_manage_tags button
 {
   display: block;
   float: left;
@@ -3593,7 +3628,7 @@ td.post_footer
   font-size: 11px;
 }
 
-.add_manage_tags input[type=button]
+.add_manage_tags button
 {
   min-width: 20px;
   width: 20px;

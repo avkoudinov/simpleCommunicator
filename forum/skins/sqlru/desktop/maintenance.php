@@ -7,10 +7,10 @@
 $cache_appendix = "?v=" . $skin_version;
 ?>
 
-<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-<meta name="viewport" content="width=1024"/>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=1024">
 
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css">
 
 <?php require_once $view_path . "seo_inc.php"; ?>
 

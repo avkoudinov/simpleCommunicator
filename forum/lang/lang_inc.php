@@ -115,7 +115,6 @@ function set_language($lang)
 // text("de")
 // text("ru")
 // text("ua")
-// text("neru")
 //-----------------------------------------------------------------
 if(isset($_GET["lang"]))
 {

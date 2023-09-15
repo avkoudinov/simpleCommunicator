@@ -17,7 +17,7 @@ function refreshFileInputControl(file_input)
   if(file_input.value == '')
   {
     file_input.previousSibling.style.color = 'gray';
-    file_input.previousSibling.innerHTML = '&nbsp;' + file_input.getAttribute('placeholder');
+    file_input.previousSibling.innerHTML = '&nbsp;' + file_input.getAttribute('data-placeholder');
   }
   else
   {

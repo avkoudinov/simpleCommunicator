@@ -32,6 +32,8 @@ $fmanager->build_action_list($action_list);
 $user_data = array();
 
 if (!reqvar_empty("user")) {
+    $ogtype = "profile";
+    
     $uid = $fmanager->user_name_to_id(reqvar("user"));
     if (!empty($uid)) {
         if (!$fmanager->get_user_data($uid, $user_data)) {
@@ -51,8 +53,7 @@ if (!reqvar_empty("user")) {
     }
 }
 //------------------------------------------------------------------
-$title = text("ModerateIP") . " - " . get_site_name(current_language());
-$ogtitle = text("ModerateIP") . " - " . get_site_name(current_language());
+$title = text("ModerateIP");
 $subtitle = text("ModerateIP");
 //------------------------------------------------------------------
 $ip_blocked = 1;
@@ -129,6 +130,16 @@ switch (reqvar("type")) {
         $fmanager->get_moderator_events($event_list, $pagination_info);
         break;
 }
+
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
+if (!empty($user_data["photo"])) {
+  $ogimage = $user_data["photo"];
+}  
+elseif (!empty($user_data["avatar"])) {
+  $ogimage = $user_data["avatar"];
+}  
 
 //------------------------------------------------------------------
 $reason_list = array();

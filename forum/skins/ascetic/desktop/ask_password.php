@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 var verify_password_ajax = null;
 
 function verify_password()
@@ -95,10 +95,10 @@ function verify_password()
 <tr>
 <td colspan="2" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="history.back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="history.back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button" value="<?php echo_html(text("Enter")); ?>"/>
+<input type="submit" class="standard_button" value="<?php echo_html(text("Enter")); ?>">
 </div>
 </td>
 </tr>

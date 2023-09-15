@@ -140,7 +140,7 @@ class MySQL_ForumManager extends ForumManager
                  max({$prfx}_post.creation_date) last_message,
                  count({$prfx}_post.ip) cnt
                  from {$prfx}_tor_ips
-                 left join {$prfx}_post on ({$prfx}_tor_ips.ip = {$prfx}_post.ip)
+                 inner join {$prfx}_post on ({$prfx}_tor_ips.ip = {$prfx}_post.ip)
                  $where 
                  group by {$prfx}_tor_ips.ip, {$prfx}_tor_ips.block_level
                  order by last_message desc
@@ -373,12 +373,17 @@ class MySQL_ForumManager extends ForumManager
            {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker, {$prfx}_user.user_name,
                {$prfx}_user.last_visit_date, {$prfx}_user.logout,
            forum_id, {$prfx}_forum.name forum_name, is_poll, {$prfx}_topic.no_guests
-           from {$prfx}_topic 
-           inner join {$prfx}_topic_statistics use index ({$prfx}_topic_statistics_lmdate_idx) on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
+            from
+              (select 
+               topic_id, last_message_date, post_count, post_count_total, hits_count, bot_hits_count 
+               from {$prfx}_topic_statistics) {$prfx}_topic_statistics
+           inner join {$prfx}_topic  
+            on ({$prfx}_topic.id = v1_topic_statistics.topic_id)
+
            inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
            left join {$prfx}_user on ({$prfx}_topic.user_id = {$prfx}_user.id)
            $where and {$prfx}_topic.pinned + {$prfx}_topic.publish_delay = 0 $user_pinned_topic_appendix
-           order by {$prfx}_topic_statistics.last_message_date desc
+           order by last_message_date desc
            limit $begin, $limit
            ";
     } // get_query_forum_topics
@@ -825,8 +830,10 @@ class MySQL_ForumManager extends ForumManager
             {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker,
             forum_id, {$prfx}_forum.name forum_name,
             is_poll, publish_delay, {$prfx}_topic.no_guests
+            
             from {$prfx}_topic
             inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
+            
             inner join {$prfx}_found_topic_cache on ({$prfx}_topic.id = {$prfx}_found_topic_cache.topic_id)
             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
             where

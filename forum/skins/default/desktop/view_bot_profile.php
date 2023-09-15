@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function expand_statistics_list(elm)
 {
   var parent_table = elm.parentNode;
@@ -34,7 +34,7 @@ if(!empty($topics_with_new_count)) $display = "";
 ?>
 <span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span> 
 
-/ <?php echo_html(text("GuestProfile")); ?>
+/ <?php echo_html(text("BotProfile")); ?>
 </div>
 
 <div class="forum_action_bar">

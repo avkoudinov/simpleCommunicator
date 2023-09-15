@@ -309,6 +309,7 @@ create table v1_forum (
    access_duration      int                  null,
    access_message_count int                  null,
    stringent_rules      tinyint              not null default 0,
+   disable_ignore       tinyint              not null default 0,
    constraint v1_forum_pk primary key nonclustered (id)
 )
 ';
@@ -373,7 +374,7 @@ create table v1_forum_hits (
    hits_count           int                  not null default 0,
    duration             int                  not null default 0,
    guest_name           nvarchar(250)        null,
-   user_agent           nvarchar(250)        null,
+   user_agent           nvarchar(700)        null,
    uri                  nvarchar(2000)       null,
    ip                   nvarchar(250)        null,
    browser              nvarchar(250)        null,
@@ -1021,7 +1022,7 @@ create table v1_post (
    bb_parser_version    int                  not null default 1,
    topic_id             int                  not null,
    user_marker          varchar(255)         null,
-   user_agent           nvarchar(500)        null,
+   user_agent           nvarchar(700)        null,
    is_comment           tinyint              not null default 0,
    is_adult             tinyint              not null default 0,
    is_system            tinyint              not null default 0,

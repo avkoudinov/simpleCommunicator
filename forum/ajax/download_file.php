@@ -69,7 +69,7 @@ header("Content-type: text/html; charset=utf-8");
 <title>Download Error</title>
 </head>
 <body>
-<script type="text/javascript">
+<script>
 if(typeof top.show_download_error == 'function')
 {
   top.show_download_error("<?php echo_js($error); ?>");

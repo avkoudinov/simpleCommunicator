@@ -1,4 +1,4 @@
-<script type='text/JavaScript'> 
+<script> 
 function get_selected_tags()
 {
   var tags = {};

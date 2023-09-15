@@ -136,7 +136,7 @@ class MSSQL_ForumManager extends ForumManager
                  max({$prfx}_post.creation_date) last_message,
                  count({$prfx}_post.ip) cnt
                  from {$prfx}_tor_ips
-                 left join {$prfx}_post on ({$prfx}_tor_ips.ip = {$prfx}_post.ip)
+                 inner join {$prfx}_post on ({$prfx}_tor_ips.ip = {$prfx}_post.ip)
                  $where
                  group by {$prfx}_tor_ips.ip, {$prfx}_tor_ips.block_level
                  order by last_message desc
@@ -377,7 +377,20 @@ class MSSQL_ForumManager extends ForumManager
         }
         
         return "select
-            row_number() over (order by {$prfx}_topic_statistics.last_message_id desc) nr,
+            id, name, creation_date,
+            last_message_date, 
+            post_count, 
+            post_count_total,
+            hits_count,
+            bot_hits_count,
+            profiled_topic,
+            deleted, closed, pinned, publish_delay, has_pinned_post,
+            forum_deleted,
+            user_id, author, read_marker, user_name,
+            last_visit_date, logout,
+            forum_id, forum_name, is_poll, no_guests
+            from
+            (select row_number() over (order by {$prfx}_topic_statistics.last_message_id desc) nr,
             {$prfx}_topic.id, {$prfx}_topic.name, {$prfx}_topic.creation_date,
             {$prfx}_topic_statistics.last_message_date, 
             {$prfx}_topic_statistics.post_count, 
@@ -393,10 +406,10 @@ class MSSQL_ForumManager extends ForumManager
             from {$prfx}_topic
             inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-            left join {$prfx}_user on (topics.user_id = {$prfx}_user.id)
+            left join {$prfx}_user on ({$prfx}_topic.user_id = {$prfx}_user.id)
             $where and ({$prfx}_topic.pinned + {$prfx}_topic.publish_delay = 0 $user_pinned_topic_appendix)
-            and nr between $begin and $end
-            order by nr
+            ) topics
+            where nr between $begin and $end
            ";
     } // get_query_forum_topics
     

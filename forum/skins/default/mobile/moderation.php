@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var config = {
   format: "<?php echo_js(text("DateFormat")); ?>",
   start_year: 2000,
@@ -184,7 +184,6 @@ function confirm_reset()
         }
         
         form.reset();
-        update_form_check_boxes(form);
 
         Forum.fireEvent(selected_users, 'change');
       }
@@ -423,7 +422,7 @@ if(!empty($topics_with_new_count)) $display = "";
 / <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
 <?php endif; ?>
 
-/ <span class="topic_title_main"><?php echo_html($title); ?></span>
+/ <span class="topic_title_main"><?php echo_html(text("Moderation")); ?></span>
 
 </div>
 
@@ -481,10 +480,10 @@ if(!empty($topics_with_new_count)) $display = "";
 <td class="button_area">
 
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("ModerateIP")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("ModerateIP")); ?>">
 </div>
 <div class="clear_both">
 </div>
@@ -528,7 +527,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 <table class="aux_table">
 <tr>
-<td><input type="text" class="filter_field" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html($start_date); ?>"/></td>
+<td><input type="text" class="filter_field" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html($start_date); ?>"></td>
 <td>&nbsp;&nbsp;&nbsp;</td>
 <td><select name="hour" class="filter_field">
   <?php for($i = 0; $i <= 23; $i++): ?>
@@ -542,7 +541,7 @@ if(!empty($topics_with_new_count)) $display = "";
   <?php endfor; ?>
   </select>  </td>
 <td style="width:100%; text-align:right">
-<input type="button" id="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_users()"/>
+<input type="button" id="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_users()">
 </td>
 </tr>
 </table>
@@ -607,11 +606,11 @@ if(!empty($topics_with_new_count)) $display = "";
 <td class="button_area">
 
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>">
 </div>
 <div class="clear_both">
 </div>

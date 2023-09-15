@@ -7,8 +7,10 @@
 <title><?php echo_html($title); ?></title>
 
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/Google.Analytics.php') ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/Meta.Tags_nosql_forum.php') ?>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/fonts_googleapis.css<?php echo($cache_appendix); ?>" type="text/css">
 
-<script type="text/JavaScript">
+<script>
 var timerStart = Date.now();
 var NEW_CHECK_FREQUENCY = "<?php echo_js(defined('NEW_CHECK_FREQUENCY') ? NEW_CHECK_FREQUENCY*1000 : 30*1000); ?>";
 var ATTACHMENTS_PER_POST = "<?php echo_js(defined('ATTACHMENTS_PER_POST') ? ATTACHMENTS_PER_POST : 3); ?>";
@@ -26,28 +28,24 @@ var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"]
 $cache_appendix = "?v=" . $skin_version;
 ?>
 
-<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-<meta name="viewport" content="width=1024"/> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=1024"> 
 
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Meta.Tags_nosql_forum.php') ?>
+<link rel="stylesheet" href="calendar/calendar.css<?php echo($cache_appendix); ?>" type="text/css">
 
-<link rel="stylesheet" href="calendar/calendar.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="highlight.old/styles/vs.css<?php echo($cache_appendix); ?>" type="text/css">
 
-<link rel="stylesheet" href="highlight.old/styles/vs.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/multiselect.css<?php echo($cache_appendix); ?>" type="text/css">
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/file_input.css<?php echo($cache_appendix); ?>" type="text/css">
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css">
 
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/fonts_googleapis.css<?php echo($cache_appendix); ?>" type="text/css"/>
-
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/multiselect.css<?php echo($cache_appendix); ?>" type="text/css"/>
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/file_input.css<?php echo($cache_appendix); ?>" type="text/css"/>
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css"/>
-
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/debug_console.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/debug_console.css<?php echo($cache_appendix); ?>" type="text/css">
 
 <?php if($view_mode == "tablet"): ?>
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles_horizontal.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles_horizontal.css<?php echo($cache_appendix); ?>" type="text/css">
 <?php endif; ?>
 
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/adjustments.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/adjustments.css<?php echo($cache_appendix); ?>" type="text/css">
 <style>
 .dummy
 {
@@ -63,137 +61,34 @@ if(!empty($_SESSION["custom_css"]))
 
 <?php require_once $view_path . "seo_inc.php"; ?>
 
-<script type='text/JavaScript'>
+<script>
 Forum = {};
 </script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/css_device_selector.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/css_browser_selector.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/swipe-events.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/css_device_selector.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/css_browser_selector.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/swipe-events.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/debug_console.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/xevent.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/utils.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/md5.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/ajax.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/multiselect.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/file_input.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/debug_console.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/xevent.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/utils.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/md5.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/ajax.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/multiselect.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/file_input.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/snow.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/snow.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='<?php echo($view_path); ?>common.js<?php echo($cache_appendix); ?>'></script>
+<script src='<?php echo($view_path); ?>common.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='calendar/calendar.js<?php echo($cache_appendix); ?>'></script>
+<script src='calendar/calendar.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='highlight.old/highlight.pack.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript'>
+<script src='highlight.old/highlight.pack.js<?php echo($cache_appendix); ?>'></script>
+<script>
 hljs.initHighlightingOnLoad();
 </script>
 
-<script type='text/JavaScript'>
-Forum.addXEvent(window, 'load', function() {
-  var elements = document.getElementsByTagName("input");
-  
-  var checkbox, radio;
-  
-  for(var i = 0; i < elements.length; i++)
-  {
-    if(elements[i].type == "checkbox")
-    {
-      checkbox = elements[i];
-      
-      checkbox.setAttribute("data-is-checked", checkbox.checked ? 1 : 0);
-      
-      checkbox.img = document.createElement("img");
-      checkbox.img.src = "<?php echo($view_path); ?>/images/checkbox.png";
-      checkbox.img.className = "large_checkbox";
-      checkbox.img.style.display = "none";
-      checkbox.img.checkbox = checkbox;
-      
-      checkbox.parentNode.insertBefore(checkbox.img, elements[i]);
-
-      checkbox.img_checked = document.createElement("img");
-      checkbox.img_checked.src = "<?php echo($view_path); ?>/images/checkbox_checked.png";
-      checkbox.img_checked.className = "large_checkbox";
-      checkbox.img_checked.style.display = "none";
-      checkbox.img_checked.checkbox = checkbox;
-
-      checkbox.parentNode.insertBefore(checkbox.img_checked, elements[i]);
-      
-      checkbox.img_disabled = document.createElement("img");
-      checkbox.img_disabled.src = "<?php echo($view_path); ?>/images/checkbox_disabled.png";
-      checkbox.img_disabled.className = "large_checkbox";
-      checkbox.img_disabled.style.display = "none";
-      checkbox.img_disabled.checkbox = checkbox;
-
-      checkbox.parentNode.insertBefore(checkbox.img_disabled, elements[i]);
-
-      checkbox.img_disabled_checked = document.createElement("img");
-      checkbox.img_disabled_checked.src = "<?php echo($view_path); ?>/images/checkbox_disabled_checked.png";
-      checkbox.img_disabled_checked.className = "large_checkbox";
-      checkbox.img_disabled_checked.style.display = "none";
-      checkbox.img_disabled_checked.checkbox = checkbox;
-
-      checkbox.parentNode.insertBefore(checkbox.img_disabled_checked, elements[i]);
-
-      checkbox.style.display = "none";
-
-      checkbox.img.onclick = function () { this.checkbox.checked = true; Forum.fireEvent(this.checkbox, "change"); };
-      checkbox.img_checked.onclick = function () { this.checkbox.checked = false; Forum.fireEvent(this.checkbox, "change"); };
-      
-      update_checkbox_view(checkbox);  
-
-      Forum.addXEvent(checkbox, 'update_view', function() {
-        update_checkbox_view(this);  
-      });
-      
-      Forum.addXEvent(checkbox, 'change', function() {
-        this.setAttribute("data-is-checked", this.checked ? 1 : 0);
-        
-        update_checkbox_view(this);  
-      });
-    }
-    
-    if(elements[i].type == "radio")
-    {
-      radio = elements[i];
-      
-      radio.setAttribute("data-is-checked", radio.checked ? 1 : 0);
-
-      radio.img = document.createElement("img");
-      radio.img.src = "<?php echo($view_path); ?>/images/radio.png";
-      radio.img.className = "large_checkbox";
-      radio.img.style.display = (radio.getAttribute("data-is-checked") == 1) ? "none" : "inline";
-      radio.img.radio = radio;
-
-      radio.parentNode.insertBefore(radio.img, elements[i]);
-
-      radio.img_checked = document.createElement("img");
-      radio.img_checked.src = "<?php echo($view_path); ?>/images/radio_selected.png";
-      radio.img_checked.className = "large_checkbox";
-      radio.img_checked.style.display = (radio.getAttribute("data-is-checked") == 1) ? "inline" : "none";
-      radio.img_checked.radio = radio;
-
-      radio.parentNode.insertBefore(radio.img_checked, elements[i]);
-      
-      radio.style.display = "none";
-
-      radio.img.onclick = function () { this.radio.checked = true; Forum.fireEvent(radio, "change"); };
-      radio.img_checked.onclick = function () { this.radio.checked = true; Forum.fireEvent(radio, "change"); };
-
-      Forum.addXEvent(radio, 'update_view', function() {
-        update_radio_view(this);  
-      });
-
-      Forum.addXEvent(radio, 'change', function() {
-        this.setAttribute("data-is-checked", this.checked ? 1 : 0);
-        
-        update_radio_view(this);
-      });
-    }
-  }  
-});
-
+<script>
 <?php if($view_mode == "tablet"): ?>
 zoom_preview_factor = 1.2;
 <?php else: ?>
@@ -570,14 +465,22 @@ if(preg_match("/.*(#.*)$/", $url, $matches))
   $url = str_replace($anchor, "", $url);
 }
 
-$target_action = "return switch_skin('desktop')";
+$target = "desktop=1";
 $target_caption = text("DesktopVersion");
+$target_action = "return switch_skin('desktop')";
 if($view_mode == "mobile") 
 {
-  $target_action = "return switch_skin('tablet')";
+  $target = "tablet=1";
   $target_caption = text("TabletVersion");
+  $target_action = "return switch_skin('tablet')";
 }
 
+$url = str_replace("mobile=1", "", $url);
+$url = str_replace("desktop=1", "", $url);
+$url = str_replace("tablet=1", "", $url);
+$url = rtrim($url, "&?");
+if(strpos($url, "?") === false) $url .= "?$target" . $anchor;
+else                            $url .= "&$target" . $anchor;
 ?>
 <a href="<?php echo($url); ?>" onclick="<?php echo($target_action); ?>"><?php echo_html($target_caption); ?></a>&nbsp;&nbsp;&nbsp;
 
@@ -679,39 +582,39 @@ $main_menu_id = "main_menu";
 <div class="header2">
 
 <form action="search.php" method="get" onsubmit="Forum.show_sys_progress_indicator(true);">
-<input type="hidden" name="do_search" value="1"/>
-<input type="hidden" name="quick_search" value="1"/>
+<input type="hidden" name="do_search" value="1">
+<input type="hidden" name="quick_search" value="1">
 
 <?php if(!empty($is_private)): ?>
-<input type="hidden" name="forums[]" value="private"/>
+<input type="hidden" name="forums[]" value="private">
 <?php elseif(basename($_SERVER["PHP_SELF"]) == "favourites.php" || !reqvar_empty("favourites_only")): ?>
-<input type="hidden" name="favourites_only" value="1"/>
+<input type="hidden" name="favourites_only" value="1">
 <?php elseif(!reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only")): ?>
-<input type="hidden" name="favourite_posts_only" value="1"/>
+<input type="hidden" name="favourite_posts_only" value="1">
 <?php elseif(reqvar("fid") == "my_topics" || 
        ($fmanager->is_logged_in() && reqvar("author") == $fmanager->get_user_name() && reqvar("author_mode") == "created_topic")): ?>
-<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>"/>
-<input type="hidden" name="author_mode" value="created_topic"/>
+<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>">
+<input type="hidden" name="author_mode" value="created_topic">
 <?php elseif(reqvar("fid") == "my_part_topics" || 
        ($fmanager->is_logged_in() && reqvar("author") == $fmanager->get_user_name() && reqvar("author_mode") == "participating")): ?>
-<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>"/>
-<input type="hidden" name="author_mode" value="participating"/>
+<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>">
+<input type="hidden" name="author_mode" value="participating">
 <?php elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_SELF"]) == "new_topic.php" || basename($_SERVER["PHP_SELF"]) == "topic.php") && !reqvar_empty("fid")): ?>
-<input type="hidden" name="forums[]" value="<?php echo_html(reqvar("fid")); ?>"/>
+<input type="hidden" name="forums[]" value="<?php echo_html(reqvar("fid")); ?>">
 <?php endif; ?>
 
 <?php if(!reqvar_empty("tid")): ?>
-<input type="hidden" name="tid" value="<?php echo_html(reqvar("tid")); ?>"/>
+<input type="hidden" name="tid" value="<?php echo_html(reqvar("tid")); ?>">
 <?php endif; ?>
 
 <table style="width:100%" class="aux_table">
 <tr>
 <td>
-<input type="text" class="search_field" name="search_keys" autocomplete="off"/>
-<input type="hidden" name="with_morphology" value="1"/>
+<input type="text" class="search_field" name="search_keys" autocomplete="off">
+<input type="hidden" name="with_morphology" value="1">
 </td>
 <td style="width:1%; white-space: nowrap">
-<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"/>
+<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>">
 </td>
 </tr>
 </table>
@@ -730,7 +633,7 @@ $main_menu_id = "main_menu";
 
 <?php if(defined('REVOLVERMAPS_KEY') && !empty(REVOLVERMAPS_KEY)): ?>
 <div style="display:none">
-<img src="//ra.revolvermaps.com/h/m/a/0/ff0000/128/0/<?php echo(REVOLVERMAPS_KEY); ?>.png?t=<?php echo(time()); ?>"alt="Map">
+<img src="//ra.revolvermaps.com/h/m/a/0/ff0000/128/0/<?php echo(REVOLVERMAPS_KEY); ?>.png?t=<?php echo(time()); ?>" alt="Map">
 </div>
 <?php endif; ?>
 
@@ -840,7 +743,7 @@ $main_menu_id = "main_menu_bottom";
 
 <!-- END: user_msgbox -->
 
-<script type="text/javascript">
+<script>
 // preload message box images
 var img_error = new Image();
 img_error.src = VIEW_PATH + "images/icon-error.gif";
@@ -924,7 +827,7 @@ img_loading_bar.src = VIEW_PATH + "images/loading-bar.gif";
 
 <!-- END: sys_progress_indicator -->
       
-<script type="text/javascript">
+<script>
 var messages = {};
 
 messages.INFO_MESSAGE = "<?php echo_js($MSG_INFO_MESSAGE); ?>";

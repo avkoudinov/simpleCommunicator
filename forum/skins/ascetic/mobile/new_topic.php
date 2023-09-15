@@ -1,12 +1,12 @@
-<script type='text/JavaScript' src='<?php echo($view_path); ?>topic.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_gallery.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
+<script src='<?php echo($view_path); ?>topic.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_gallery.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <!--
-<script defer type='text/JavaScript' src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 -->
 
 <?php
@@ -20,7 +20,7 @@ else
 }
 ?>
 
-<script type='text/JavaScript'>
+<script>
 var in_search = 0;
 var topic_id = '';
 var final_url = '<?php echo_js($final_url); ?>';
@@ -62,7 +62,6 @@ function confirm_reset(form)
     form.reset();
     reset_attachment_fields_and_slots();
     show_hide_poll(form['poll']);
-     update_form_check_boxes(form);
 
     elm = document.getElementById('subject');
     if(!elm) return;
@@ -82,7 +81,6 @@ function confirm_reset(form)
         form.reset();
         reset_attachment_fields_and_slots();
         show_hide_poll(form['poll']);
-        update_form_check_boxes(form);
 
         elm = document.getElementById('message');
         if(!elm) return;
@@ -470,7 +468,7 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 <input type="hidden" name="profiled_topic" value="">
 <input type="hidden" name="stringent_rules" value="<?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>">
 <input type="hidden" name="is_thematic" value="">
-<input type="hidden" id="login_active" name="login_active" value=""/>
+<input type="hidden" id="login_active" name="login_active" value="">
 
 <table class="form_table post_message_table new_topic_table">
 
@@ -492,7 +490,7 @@ if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) &
   $read_only = ' class="read_only_field" readonly';
 }
 ?>
-<input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)"/>
+<input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)">
 </td>
 </tr>
 
@@ -525,7 +523,7 @@ else
 
 <tr id="login_row2" style="display:none">
 <td>
-<input type="text" id="user_login" name="user_login" value="" autocomplete="off" onkeypress="return handle_enter(event)"/>
+<input type="text" id="user_login" name="user_login" value="" autocomplete="off" onkeypress="return handle_enter(event)">
 </td>
 </tr>
 
@@ -535,7 +533,7 @@ else
 </td>
 </tr>
 <tr id="password_row2" style="display:none">
-<td><input type="password" id="user_password" name="user_password" value="" autocomplete="off"/></td>
+<td><input type="password" id="user_password" name="user_password" value="" autocomplete="off"></td>
 </tr>
 <?php endif; ?>
 
@@ -545,7 +543,7 @@ else
 </tr>
 <tr>
 <td>
-<input type="text" name="receiver_name" value="<?php echo_html($user_data["user_name"]); ?>" class="read_only_field" readonly autocomplete="off"/>
+<input type="text" name="receiver_name" value="<?php echo_html($user_data["user_name"]); ?>" class="read_only_field" readonly autocomplete="off">
 <input type="hidden" name="receiver" value="<?php echo_html(reqvar("receiver")); ?>">
 </td>
 </tr>
@@ -557,9 +555,9 @@ else
 <tr>
 <td>
 <?php if($is_private > 0): ?>
-<input type="text" id="subject" name="subject" value="" autocomplete="off" onkeypress="return handle_enter(event)"/>
+<input type="text" id="subject" name="subject" value="" autocomplete="off" onkeypress="return handle_enter(event)">
 <?php else: ?>
-<input type="text" id="subject" name="subject" value="" autocomplete="off" onkeypress="return handle_enter(event)" onkeyup="return lookup_existing_topics(this, event, '<?php echo_html($fid); ?>');" onblur="lookup_delayed_hide('subject');"/>
+<input type="text" id="subject" name="subject" value="" autocomplete="off" onkeypress="return handle_enter(event)" onkeyup="return lookup_existing_topics(this, event, '<?php echo_html($fid); ?>');" onblur="lookup_delayed_hide('subject');">
 
 <div style="position: relative">
 <div class="field_lookup_area topic_lookup_area" style="display:none">
@@ -757,7 +755,7 @@ else
 <button class="toolbar_button" type="button" style="background: transparent url('<?php echo($view_path); ?>images/color.png') no-repeat center center;background-size: 70% 70%;" onclick="return toggle_color_selection_area()" tabindex="-1">&nbsp;</button>
   <div id="color_selection_area" class="color_selection_area" style="display:none">
 
-  <script type='text/JavaScript'>
+  <script>
   document.write(render_color_picker());
   </script>
 
@@ -894,7 +892,7 @@ if($fmanager->has_auto_saved_message('')) $visiblty = "visible";
 <table class="aux_table" style="width:100%;">
 <tr>
 <td>
-<input type="file" style="display: block" multiple="1" placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment" name="attachment" onchange="resizeFileInputControl(this);"/> 
+<input type="file" style="display: block" multiple="" data-placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment" name="attachment" onchange="resizeFileInputControl(this);"> 
 </td>
 <td>
 <div class="del_attachment_button" id="del_attachment_button" title="<?php echo_html(text("Delete")); ?>" onclick="delete_attachment_file('');"></div>
@@ -913,7 +911,7 @@ if($fmanager->has_auto_saved_message('')) $visiblty = "visible";
   <table class="aux_table" style="width:100%">
   <tr>
   <td>
-  <input type="file" style="display: block" multiple="1" placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment<?php echo $i; ?>" name="attachment<?php echo $i; ?>" onchange="resizeFileInputControl(this);"/> 
+  <input type="file" style="display: block" multiple="" data-placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment<?php echo $i; ?>" name="attachment<?php echo $i; ?>" onchange="resizeFileInputControl(this);"> 
   </td>
   <td>
   <div class="del_attachment_button" id="del_attachment_button<?php echo $i; ?>" title="<?php echo_html(text("Delete")); ?>" onclick="delete_attachment_file('<?php echo $i; ?>');"></div>
@@ -967,12 +965,12 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
    <table class="captcha_table">
    <tr>
      <td>
-   <img style="display: block; float: left" class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'/>
+   <img style="display: block; float: left" class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'>
      </td>
      <td>
      </td>
      <td>
-   <input style="" type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off" onkeypress="return handle_enter(event)"/>
+   <input style="" type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off" onkeypress="return handle_enter(event)">
      </td>
    </tr>
    </table>
@@ -990,12 +988,12 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
 <tr>
 <td class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Cancel")); ?>" onclick="window.history.back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Cancel")); ?>" onclick="window.history.back()">
 </div>
 <div class="right_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Preview")); ?>" onclick="post_message('preview_message')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Preview")); ?>" onclick="post_message('preview_message')">
 
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>">
 </div>
 <div class="clear_both">
 </div>

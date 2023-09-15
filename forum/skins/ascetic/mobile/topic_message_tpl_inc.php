@@ -282,7 +282,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("Link")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_link_<?php echo_html($pid); ?>" value="<?php echo_html(get_host_address() . get_url_path() . $message_url); ?>" onfocus="select_text_in_field('pid_link_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_link_<?php echo_html($pid); ?>" value="<?php echo_html(get_host_address() . get_url_path() . $message_url); ?>" onfocus="select_text_in_field('pid_link_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_link_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -291,7 +291,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("LinkToMessage")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_lmsg_<?php echo_html($pid); ?>" value="[mid=<?php echo_html($pid); ?>]" onfocus="select_text_in_field('pid_lmsg_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_lmsg_<?php echo_html($pid); ?>" value="[mid=<?php echo_html($pid); ?>]" onfocus="select_text_in_field('pid_lmsg_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_lmsg_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -300,7 +300,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("LinkWithTopicName")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_linktn_<?php echo_html($pid); ?>" value="[url=<?php echo_html(get_host_address() . get_url_path() . $message_url); ?>]<?php echo_html(postprocess_message($pinfo["topic_name"])); ?>[/url]" onfocus="select_text_in_field('pid_linktn_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_linktn_<?php echo_html($pid); ?>" value="[url=<?php echo_html(get_host_address() . get_url_path() . $message_url); ?>]<?php echo_html(postprocess_message($pinfo["topic_name"])); ?>[/url]" onfocus="select_text_in_field('pid_linktn_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_linktn_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -309,7 +309,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("LinkToMessage")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_lmsg_<?php echo_html($pid); ?>" value="[mid=<?php echo_html($pid); ?>]" onfocus="select_text_in_field('pid_lmsg_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_lmsg_<?php echo_html($pid); ?>" value="[mid=<?php echo_html($pid); ?>]" onfocus="select_text_in_field('pid_lmsg_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_lmsg_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -320,7 +320,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("UserProfileLink")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_linkusr_<?php echo_html($pid); ?>" value="[uid=<?php echo_html($pinfo["user_id"]); ?>]" onfocus="select_text_in_field('pid_linkusr_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_linkusr_<?php echo_html($pid); ?>" value="[uid=<?php echo_html($pinfo["user_id"]); ?>]" onfocus="select_text_in_field('pid_linkusr_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_linkusr_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -346,7 +346,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("AttachmentLink") . $appendix); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_linkatt<?php echo($idx); ?>_<?php echo_html($pid); ?>" value="[attachment<?php echo($idx); ?>=<?php echo_html($pid); ?>]" onfocus="select_text_in_field('pid_linkatt<?php echo($idx); ?>_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_linkatt<?php echo($idx); ?>_<?php echo_html($pid); ?>" value="[attachment<?php echo($idx); ?>=<?php echo_html($pid); ?>]" onfocus="select_text_in_field('pid_linkatt<?php echo($idx); ?>_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_linkatt<?php echo($idx); ?>_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -358,7 +358,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("ReadMarker")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_readmarker_<?php echo_html($pid); ?>" value="<?php echo_html($pinfo["read_marker"]); ?>" onfocus="select_text_in_field('pid_readmarker_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_readmarker_<?php echo_html($pid); ?>" value="<?php echo_html($pinfo["read_marker"]); ?>" onfocus="select_text_in_field('pid_readmarker_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_readmarker_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -367,7 +367,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("FingerPrint")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_usermarker_<?php echo_html($pid); ?>" value="<?php echo_html($pinfo["user_marker"]); ?>" onfocus="select_text_in_field('pid_usermarker_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_usermarker_<?php echo_html($pid); ?>" value="<?php echo_html($pinfo["user_marker"]); ?>" onfocus="select_text_in_field('pid_usermarker_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_usermarker_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -376,7 +376,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <div class="inner_label"><?php echo_html(text("UserAgent")); ?>:</div>
     <table class="aux_table">
     <tr>
-    <td><input type="text" id="pid_useragent_<?php echo_html($pid); ?>" value="<?php echo_html($pinfo["user_agent"]); ?>" onfocus="select_text_in_field('pid_useragent_<?php echo_html($pid); ?>')"/></td>
+    <td><input type="text" id="pid_useragent_<?php echo_html($pid); ?>" value="<?php echo_html($pinfo["user_agent"]); ?>" onfocus="select_text_in_field('pid_useragent_<?php echo_html($pid); ?>')"></td>
     <td>&nbsp;</td>
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('pid_useragent_<?php echo_html($pid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
@@ -662,7 +662,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
   
   <?php if(!empty($user_data[$pinfo["user_id"]]["message"])): ?>
   <tr>
-  <td colspan="2">
+  <td colspan="3">
   <div class="user_message">
   <div class="smart_break"><?php echo(nl2br(escape_html(postprocess_message($user_data[$pinfo["user_id"]]["message"])))); ?></div>
   </div>
@@ -741,8 +741,8 @@ if(!reqvar_empty("search_keys"))
   <div class="clear_both insert_marker"></div>
     <div class="add_manage_tags">
     <input type="text" placeholder="<?php echo_html(text("NewTag")); ?>" id="new_tag_<?php echo_html($pid); ?>" autocomplete="off" onkeypress="return handle_new_tag_enter(event, '<?php echo_html($pid); ?>')">
-    <input type="button" class="new_tag" id="add_new_tag_<?php echo_html($pid); ?>" onclick="add_new_tag('<?php echo_html($pid); ?>')">
-    <input type="button" class="manage_tags" onclick="show_tag_manager()" title="<?php echo_html(text("ManageTags")); ?>">
+    <button type="button" class="new_tag" id="add_new_tag_<?php echo_html($pid); ?>" onclick="add_new_tag('<?php echo_html($pid); ?>')"></button>
+    <button type="button" class="manage_tags" onclick="show_tag_manager()" title="<?php echo_html(text("ManageTags")); ?>"></button>
     <div class="clear_both"></div>
     </div>
 </div>
@@ -903,7 +903,7 @@ $poll_rendered = true;
     <?php elseif(val_or_empty($topic_data["poll_results_delayed"]) == 2 || val_or_empty($topic_data["poll_results_delayed"]) == 3): ?>
     <?php echo_html(text("MsgPollCompleted")); ?>
     <?php elseif(empty($topic_data["i_have_voted"])): ?>
-    <input type="submit" class="standard_button" value="<?php echo_html(text("Vote")); ?>"/>
+    <input type="submit" class="standard_button" value="<?php echo_html(text("Vote")); ?>">
     <?php else: ?>
 
     <table class="aux_table">
@@ -912,7 +912,7 @@ $poll_rendered = true;
     <td>&nbsp;
     <?php if($fmanager->is_logged_in() && !$fmanager->is_master_admin() && 
              !empty($topic_data["i_have_voted"]) && !empty($topic_data["may_cancel_vote"]) && val_or_empty($topic_data["poll_results_delayed"]) != 2): ?>
-    <input type="button" class="standard_button" value="<?php echo_html(text("Cancel")); ?>" onclick="vote('cancel_vote')"/>
+    <input type="button" class="standard_button" value="<?php echo_html(text("Cancel")); ?>" onclick="vote('cancel_vote')">
     <?php endif; ?>
     </td>
     </tr>
@@ -929,12 +929,12 @@ $poll_rendered = true;
     $button_caption = (val_or_empty($topic_data["poll_results_delayed"]) == 1) ? text("Publish") : text("Close");
     ?>
     <td>
-    <input type="button" class="standard_button" value="<?php echo_html($button_caption); ?>" onclick='return confirm_poll_action("<?php echo_js(text("MsgPollCompleteConfirm")); ?>", "close_poll");'/>
+    <input type="button" class="standard_button" value="<?php echo_html($button_caption); ?>" onclick='return confirm_poll_action("<?php echo_js(text("MsgPollCompleteConfirm")); ?>", "close_poll");'>
     </td>
     <?php elseif((val_or_empty($topic_data["poll_results_delayed"]) == 2 || val_or_empty($topic_data["poll_results_delayed"]) == 3) &&
              ($topic_data["read_marker"] == $READ_MARKER || $fmanager->is_admin() || $fmanager->is_forum_moderator($pinfo["forum_id"]) || $fmanager->is_topic_moderator($pinfo["topic_id"]))): ?>
     <td>
-    <input type="button" class="standard_button" value="<?php echo_html(text("Open")); ?>" onclick='return confirm_poll_action("<?php echo_js(text("MsgPollOpenConfirm")); ?>", "open_poll");'/>
+    <input type="button" class="standard_button" value="<?php echo_html(text("Open")); ?>" onclick='return confirm_poll_action("<?php echo_js(text("MsgPollOpenConfirm")); ?>", "open_poll");'>
     </td>
     <?php endif; ?>
     

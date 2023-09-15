@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var selected_topics = {};
 
 function select_all()
@@ -427,7 +427,7 @@ elseif(!empty($fid))
 }
 ?>
 
-/ <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($title); ?></a>
+/ <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
 
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
@@ -757,7 +757,7 @@ elseif(!empty($fid))
 }
 ?>
 
-/ <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($title); ?></a>
+/ <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
 
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>

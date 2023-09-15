@@ -33,15 +33,15 @@
 
 <form action="topic.php" id="post_form" method="post" enctype="multipart/form-data" onsubmit="return post_message('post_message');">
 
-<input autocomplete="off" type="hidden" id="tid" name="tid" value="<?php echo_html($tid); ?>">
-<input autocomplete="off" type="hidden" id="edit_mode" name="edit_mode" value="0">
-<input autocomplete="off" type="hidden" id="citated_post" name="citated_post" value=""/>
-<input autocomplete="off" type="hidden" id="return_post" name="return_post" value=""/>
-<input autocomplete="off" type="hidden" id="edited_post" name="edited_post" value=""/>
-<input autocomplete="off" type="hidden" id="special_case" name="special_case" value=""/>
-<input autocomplete="off" type="hidden" id="profiled_topic" name="profiled_topic" value=""/>
-<input autocomplete="off" type="hidden" id="stringent_rules" name="stringent_rules" value=""/>
-<input autocomplete="off" type="hidden" id="login_active" name="login_active" value=""/>
+<input type="hidden" id="tid" name="tid" value="<?php echo_html($tid); ?>">
+<input type="hidden" id="edit_mode" name="edit_mode" value="0">
+<input type="hidden" id="citated_post" name="citated_post" value="">
+<input type="hidden" id="return_post" name="return_post" value="">
+<input type="hidden" id="edited_post" name="edited_post" value="">
+<input type="hidden" id="special_case" name="special_case" value="">
+<input type="hidden" id="profiled_topic" name="profiled_topic" value="">
+<input type="hidden" id="stringent_rules" name="stringent_rules" value="">
+<input type="hidden" id="login_active" name="login_active" value="">
 
 <table id="post_message_table" class="form_table post_message_table">
 
@@ -63,7 +63,7 @@ if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) &
   $read_only = ' class="read_only_field" readonly';
 }
 ?>
-<input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)"/>
+<input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)">
 </td>
 </tr>
 
@@ -82,7 +82,7 @@ if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) &
 
 <tr id="login_row2" style="display:none">
 <td>
-<input type="text" id="user_login" name="user_login" value="" autocomplete="off" onkeypress="return handle_enter(event)"/>
+<input type="text" id="user_login" name="user_login" value="" autocomplete="off" onkeypress="return handle_enter(event)">
 </td>
 </tr>
 
@@ -92,7 +92,7 @@ if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) &
 </td>
 </tr>
 <tr id="password_row2" style="display:none">
-<td><input type="password" id="user_password" name="user_password" value="" autocomplete="off"/></td>
+<td><input type="password" id="user_password" name="user_password" value="" autocomplete="off"></td>
 </tr>
 <?php endif; ?>
 
@@ -100,7 +100,7 @@ if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) &
 <td><?php echo_html(text("Subject")); ?>*:</td>
 </tr>
 <tr>
-<td><input type="text" id="subject" name="subject" value="" class="read_only_field" readonly autocomplete="off" onkeypress="return handle_enter(event)"/></td>
+<td><input type="text" id="subject" name="subject" value="" class="read_only_field" readonly autocomplete="off" onkeypress="return handle_enter(event)"></td>
 </tr>
 
 <tr>
@@ -146,7 +146,7 @@ if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) &
 <button class="toolbar_button" type="button" style="background: transparent url('<?php echo($view_path); ?>images/color.png') no-repeat center center;background-size: 70% 70%;" onclick="return toggle_color_selection_area()" tabindex="-1">&nbsp;</button>
   <div id="color_selection_area" class="color_selection_area" style="display:none">
 
-  <script type='text/JavaScript'>
+  <script>
   document.write(render_color_picker());
   </script>
 
@@ -319,7 +319,7 @@ if(!empty($forum_data["stringent_rules"]))
 <table class="aux_table" style="width:100%">
 <tr>
 <td>
-<input type="file" style="display: block" multiple="1" placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment" name="attachment" onchange="resizeFileInputControl(this);"/> 
+<input type="file" style="display: block" multiple="" data-placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment" name="attachment" onchange="resizeFileInputControl(this);"> 
 </td>
 <td style="width:0%">
 <div class="del_attachment_button" id="del_attachment_button" title="<?php echo_html(text("Delete")); ?>" onclick="delete_attachment_file('');"></div>
@@ -338,7 +338,7 @@ if(!empty($forum_data["stringent_rules"]))
 <table class="aux_table" style="width:100%">
 <tr>
 <td>
-<input type="file" style="display: block" multiple="1" placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment<?php echo $i; ?>" name="attachment<?php echo $i; ?>" onchange="resizeFileInputControl(this);"/> 
+<input type="file" style="display: block" multiple="" data-placeholder="<?php echo_html(text("AddAttachment")); ?>" id="attachment<?php echo $i; ?>" name="attachment<?php echo $i; ?>" onchange="resizeFileInputControl(this);"> 
 </td>
 <td style="width:0%">
 <div class="del_attachment_button" id="del_attachment_button<?php echo $i; ?>" title="<?php echo_html(text("Delete")); ?>" onclick="delete_attachment_file('<?php echo $i; ?>');"></div>
@@ -393,12 +393,12 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
    <table class="captcha_table">
    <tr>
      <td>
-   <img style="display: block; float: left" class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'/>
+   <img style="display: block; float: left" class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'>
      </td>
      <td>
      </td>
      <td>
-   <input style="" type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off" onkeypress="return handle_enter(event)"/>
+   <input style="" type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off" onkeypress="return handle_enter(event)">
      </td>
    </tr>
    </table>
@@ -419,12 +419,12 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
 <tr>
 <td class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Cancel")); ?>" onclick="window.history.back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Cancel")); ?>" onclick="window.history.back()">
 </div>
 <div class="right_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Preview")); ?>" onclick="post_message('preview_message')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Preview")); ?>" onclick="post_message('preview_message')">
 
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>">
 </div>
 <div class="clear_both">
 </div>

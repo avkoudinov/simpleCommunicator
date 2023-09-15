@@ -1,6 +1,6 @@
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript'>
+<script>
 var config = {
   format: "<?php echo_js(text("DateFormat")); ?>",
   start_year: 2000,
@@ -193,7 +193,7 @@ else                        $base_url = "events.php?epage=";
 <?php echo_html(text("Author")); ?>:
 </td>
 <td>
-  <input type="text" class="filter_field" id="author_name" name="author_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["author_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)"/>
+  <input type="text" class="filter_field" id="author_name" name="author_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["author_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)">
   <div style="position: relative">
   <div class="field_lookup_area" style="display:none">
   <select id="author_name_lookup" size="10" 
@@ -227,7 +227,7 @@ $selected = (val_or_empty($_SESSION["event_log_filter"]["event_type"]) == $eid) 
 <?php echo_html(text("Topic")); ?>:
 </td>
 <td>
-<input type="text" class="filter_field" id="topic_name" name="topic_name" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["topic_name"])); ?>"/>
+<input type="text" class="filter_field" id="topic_name" name="topic_name" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["topic_name"])); ?>">
 </td>
 </tr>
 <tr>
@@ -259,17 +259,17 @@ $selected = (val_or_empty($_SESSION["event_log_filter"]["forum"]) == "private") 
 <td>
   <table class="date_block">
       <tr>
-      <td><input type="text" class="filter_field" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["start_date"])); ?>"/></td>
+      <td><input type="text" class="filter_field" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["start_date"])); ?>"></td>
       <td style="text-align:center; width: 10px"></td>
-      <td><input type="text" class="filter_field" autocomplete="off" id="end_date" name="end_date" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["end_date"])); ?>"/></td>
+      <td><input type="text" class="filter_field" autocomplete="off" id="end_date" name="end_date" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["end_date"])); ?>"></td>
       </tr>
   </table>
 </td>
 </tr>
 <tr>
 <td colspan="2" style="text-align: center">
-<input type="submit" class="standard_button" value="<?php echo_html(text("Search")); ?>"/>
-<input type="submit" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['apply_filter'].value='-1'"/>
+<input type="submit" class="standard_button" value="<?php echo_html(text("Search")); ?>">
+<input type="submit" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['apply_filter'].value='-1'">
 </td>
 </tr>
 </table>

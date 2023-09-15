@@ -277,7 +277,7 @@ function bb_process_url_simple($bbcode, $action, $name, $default, $params, $cont
         $content = urldecode(trim($content));
     }
     
-    if (strlen($href) > 700) {
+    if (strlen($href) > 2000) {
         return htmlspecialchars($params['_tag']) . "url too long" . htmlspecialchars($params['_endtag']);
     }
   
@@ -332,7 +332,7 @@ function bb_process_url($bbcode, $action, $name, $default, $params, $content)
         $content = rawurldecode(trim($content));
     }
     
-    if (strlen($href) > 700) {
+    if (strlen($href) > 2000) {
         return htmlspecialchars($params['_tag']) . "url too long" . htmlspecialchars($params['_endtag']);
     }
   
@@ -542,7 +542,7 @@ function bb_process_img($bbcode, $action, $name, $default, $params, $content)
     
     $large_src = $src;
     
-    if (strlen($large_src) > 700) {
+    if (strlen($large_src) > 2000) {
         return "[img]url too long[/img]<br/><br/>";
     }
   
@@ -622,7 +622,7 @@ function bb_process_anim($bbcode, $action, $name, $default, $params, $content)
         return "<p>[anim][/anim]</p>";
     }
     
-    if (strlen($src) > 700) {
+    if (strlen($src) > 2000) {
         return "[anim]url too long[/anim]<br/><br/>";
     }
     
@@ -679,7 +679,7 @@ function bb_process_smile($bbcode, $action, $name, $default, $params, $content)
 
     $src = check_relative_url($src);
 
-    if (strlen($src) > 700) {
+    if (strlen($src) > 2000) {
         return "[smile]url too long[/smile]";
     }
   
@@ -1166,7 +1166,7 @@ function bb_process_youtube($bbcode, $action, $name, $default, $params, $content
     
     $appendix = "";
     
-    if (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/shorts\\/([A-z0-9=\-]+)$/i', $content, $matches)) {
+    if (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/shorts\\/([A-z0-9=\-]+)(\\?.+)?/i', $content, $matches)) {
         $code = $matches[1];
     } elseif (preg_match('/v=([A-z0-9=\-]+?)(&.*)?$/i', $content, $matches)) {
         $code = $matches[1];
@@ -1199,7 +1199,7 @@ function check_youtube_url($url, &$content, $message_mode)
         $apikey = YOUTUBE_API_KEY;
     }
     
-    if (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/shorts\\/([A-z0-9=\-]+)$/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/shorts\\/([A-z0-9=\-]+)(\\?.+)?/i', $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;

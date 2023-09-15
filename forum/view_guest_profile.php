@@ -9,9 +9,11 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "" && !empty($settin
   echo "no data";
   exit;
 }
+
 //------------------------------------------------------------------
-$title = text("GuestProfile") . " - " . get_site_name(current_language());
-$ogtitle = text("GuestProfile") . " - " . get_site_name(current_language());
+$ogtype = "profile";
+$title = text("GuestProfile");
+$ogtitle = text("GuestProfile");
 //------------------------------------------------------------------
 
 $aname = reqvar("aname");
@@ -30,8 +32,16 @@ if(!$fmanager->get_guest_data_for_view(reqvar("guest"), $aname, $guest_data))
 }
 
 if (!empty($guest_data["user_name"])) {
-  $title .= ": " . $fmanager->get_display_name($guest_data["user_name"]);
+  $title = text("GuestProfile") . ": " . $fmanager->get_display_name($guest_data["user_name"]);
 }
+
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
+$ogtype = "profile";
+if (!empty($guest_data["avatar"])) {
+  $ogimage = $guest_data["avatar"];
+}  
 
 $online_users = array();
 $forum_readers = array();

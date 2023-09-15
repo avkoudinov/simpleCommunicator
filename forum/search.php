@@ -263,11 +263,11 @@ if (!reqvar_empty("news_digest")) {
     exit;
 }
 //------------------------------------------------------------------
-$title = text("Search");
+$search_title = text("Search");
 
 $search_title_appendix = $fmanager->build_search_title();
 if (!empty($search_title_appendix)) {
-    $title .= ": " . $search_title_appendix;
+    $search_title .= ": " . $search_title_appendix;
 }
 //------------------------------------------------------------------
 $tid = reqvar("tid");
@@ -284,7 +284,7 @@ $clear_topic_name = "";
 $forum_data = array();
 
 if (!reqvar_empty("favourite_posts_only")) {
-    $title = text("FavouriteMessages") . ", " . $title;
+    $search_title = text("FavouriteMessages") . ", " . $search_title;
 }
 
 if (!empty($tid)) {
@@ -303,7 +303,7 @@ if (!empty($tid)) {
     }
     
     // search in a single topic, prepend its name to the titles
-    $title = $clear_topic_name . ", " . $title;
+    $search_title = $clear_topic_name . ", " . $search_title;
 } elseif (!empty($fid)) {
     $fid_for_url = $fid;
     
@@ -335,7 +335,7 @@ if (!empty($tid)) {
     }
 }
 
-$title .= " - " . get_site_name(current_language());
+$title = $search_title . " - " . get_site_name(current_language());
 $ogtitle = $title;
 
 $forum_data['topics_with_new_count'] = 0;

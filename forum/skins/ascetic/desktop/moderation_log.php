@@ -1,6 +1,6 @@
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript'>
+<script>
 var config = {
   format: "<?php echo_js(text("DateFormat")); ?>",
   start_year: 2000,
@@ -111,7 +111,7 @@ if(!empty($param_string)) $param_string .= "&";
 <?php echo_html(text("Moderator")); ?> / <?php echo_html(text("Author")); ?>:
 </td>
 <td>
-  <input type="text" class="filter_field" id="moderator_name" name="moderator_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["moderator_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)"/>
+  <input type="text" class="filter_field" id="moderator_name" name="moderator_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["moderator_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)">
   <div class="field_lookup_area" style="display:none">
   <select id="moderator_name_lookup" size="10" 
            onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('moderator_name') }" 
@@ -141,7 +141,7 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
 <?php echo_html(text("Author") . " / " . text("IPAddress")); ?>:
 </td>
 <td>
-  <input type="text" class="filter_field" id="user_name" name="user_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["user_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)"/>
+  <input type="text" class="filter_field" id="user_name" name="user_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["user_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)">
   <div class="field_lookup_area" style="display:none">
   <select id="user_name_lookup" size="10" 
            onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('user_name') }" 
@@ -154,8 +154,8 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
 </td>
 
 <td>
-<input type="submit" class="standard_button" value="<?php echo_html(text("Search")); ?>"/>
-<input type="submit" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['apply_filter'].value='-1'"/>
+<input type="submit" class="standard_button" value="<?php echo_html(text("Search")); ?>">
+<input type="submit" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['apply_filter'].value='-1'">
 </td>
 
 </tr>
@@ -165,7 +165,7 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
 <?php echo_html(text("Topic")); ?>:
 </td>
 <td>
-<input type="text" class="filter_field" id="topic_name" name="topic_name" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["topic_name"])); ?>"/>
+<input type="text" class="filter_field" id="topic_name" name="topic_name" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["topic_name"])); ?>">
 </td>
 <td>
 <?php echo_html(text("Forum")); ?>:
@@ -191,9 +191,9 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["forum"]) == "privat
 <td>
   <table class="date_block">
       <tr>
-      <td><input type="text" class="filter_field" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["start_date"])); ?>"/></td>
+      <td><input type="text" class="filter_field" autocomplete="off" id="start_date" name="start_date" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["start_date"])); ?>"></td>
       <td></td>
-      <td><input type="text" class="filter_field" autocomplete="off" id="end_date" name="end_date" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["end_date"])); ?>"/></td>
+      <td><input type="text" class="filter_field" autocomplete="off" id="end_date" name="end_date" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["end_date"])); ?>"></td>
       </tr>
   </table>
 </td>
@@ -434,7 +434,7 @@ echo($forum);
       <div class="inner_label"><?php echo_html(text("Link")); ?>:</div>
         <table class="aux_table">
         <tr>
-        <td><input type="text" id="evid_link_<?php echo_html($evid); ?>" value="<?php echo_html(get_host_address() . get_url_path() . "moderation_log.php?event=$evid"); ?>" onfocus="select_text_in_field('evid_link_<?php echo_html($evid); ?>')"/></td>
+        <td><input type="text" id="evid_link_<?php echo_html($evid); ?>" value="<?php echo_html(get_host_address() . get_url_path() . "moderation_log.php?event=$evid"); ?>" onfocus="select_text_in_field('evid_link_<?php echo_html($evid); ?>')"></td>
         <td>&nbsp;</td>
         <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('evid_link_<?php echo_html($evid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
         </tr>
@@ -443,7 +443,7 @@ echo($forum);
       <div class="inner_label"><?php echo_html(text("LinkToEvent")); ?>:</div>
         <table class="aux_table">
         <tr>
-        <td><input type="text" id="evid_levt_<?php echo_html($evid); ?>" value="[mevt=<?php echo_html($evid); ?>]" onfocus="select_text_in_field('evid_levt_<?php echo_html($evid); ?>')"/></td>
+        <td><input type="text" id="evid_levt_<?php echo_html($evid); ?>" value="[mevt=<?php echo_html($evid); ?>]" onfocus="select_text_in_field('evid_levt_<?php echo_html($evid); ?>')"></td>
         <td>&nbsp;</td>
         <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('evid_levt_<?php echo_html($evid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
         </tr>

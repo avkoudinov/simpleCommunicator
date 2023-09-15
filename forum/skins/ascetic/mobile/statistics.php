@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var load_browser_stats_ajax = null;
 
 function load_browser_stats(load_browser_stat_button)
@@ -295,13 +295,13 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 <h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h2>
 
 <div class="forum_activity_image_wrapper">
-<img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=daily&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';"/>
+<img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=daily&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(text("MonthlyActivity")); ?></h2>
 
 <div class="forum_activity_image_wrapper">
-<img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=monthly&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';"/>
+<img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=monthly&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <?php if(defined('REVOLVERMAPS_KEY') && !empty(REVOLVERMAPS_KEY)): ?>
@@ -326,7 +326,7 @@ frameborder="0"></iframe>
 <h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h2>
 
 <div class="browser_stat_wrapper">
-<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_browser_stats(this)"/>
+<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_browser_stats(this)">
 </div>
 
 </div>

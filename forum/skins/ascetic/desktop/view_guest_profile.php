@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function confirm_action(msg, params)
 {
   var mbuttons = [
@@ -221,7 +221,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <table class="form_table profile_table" style="margin-bottom: 0px">
 
 <tr>
-<th colspan="2"><?php echo_html(text("GuestProfile")); ?></th>
+<th colspan="2"><?php echo_html(text("BotProfile")); ?></th>
 </tr>
 
 <tr>

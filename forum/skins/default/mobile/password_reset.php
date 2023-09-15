@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 var save_data_ajax = null;
 
 function save_data()
@@ -138,10 +138,10 @@ if(!empty($topics_with_new_count)) $display = "";
 <td class="button_area">
 
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.reset(); this.form.elements['password'].focus();"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.reset(); this.form.elements['password'].focus();">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>">
 </div>
 <div class="clear_both">
 </div>

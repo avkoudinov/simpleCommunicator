@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var post_comment_action = null;
 function show_post_comment(title, author, pid, mode)
 {
@@ -964,7 +964,6 @@ function confirm_reset(form)
 
     form.reset();
     reset_attachment_buffer();
-    update_form_check_boxes(form);
 
     // For new posts, this flag has no effect.
     // For editing post, resetting means also delete the existing attachments.
@@ -990,7 +989,6 @@ function confirm_reset(form)
         
         form.reset();
         reset_attachment_buffer();
-        update_form_check_boxes(form);
         
         // For new posts, this flag has no effect.
         // For editing post, resetting means also delete the existing attachments.
@@ -1113,7 +1111,6 @@ function post_message(action)
 
             form.reset();
             reset_attachment_fields_and_slots();
-            update_form_check_boxes(form);
 
             check_new_messages();
             
@@ -1182,7 +1179,6 @@ function post_message(action)
 
             form.reset();
             reset_attachment_fields_and_slots();
-            update_form_check_boxes(form);
 
             if(response.login_performed)
             {

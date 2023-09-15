@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 var send_request_ajax = null;
 
 function send_request()
@@ -128,11 +128,11 @@ if(!empty($topics_with_new_count)) $display = "";
 <td colspan="2" class="button_area">
 
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.reset(); this.form.elements['user_email'].focus();"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="Forum.show_sys_progress_indicator(true); window.history.back();"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.reset(); this.form.elements['user_email'].focus();">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="Forum.show_sys_progress_indicator(true); window.history.back();">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>">
 </div>
 <div class="clear_both">
 </div>

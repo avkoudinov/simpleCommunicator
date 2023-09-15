@@ -12,8 +12,7 @@ if(!$fmanager->is_logged_in() && $fmanager->check_tor_ip(val_or_empty($_SERVER["
     exit;
 }
 //------------------------------------------------------------------
-$title = text("Favourites") . " - " . get_site_name(current_language());
-$ogtitle = text("Favourites") . " - " . get_site_name(current_language());
+$title = text("Favourites");
 $forum_title = text("Favourites");
 //------------------------------------------------------------------
 $forum_data = array();
@@ -24,6 +23,9 @@ if(!empty($forum_data["forum_name"]))
   $title = $forum_data["forum_name"];
   $forum_title = $forum_data["forum_name"];
 }
+
+$title = $forum_title . " - " . get_site_name(current_language());
+$ogtitle = $title;
 
 $topic_list = array();
 $pagination_info = array();
