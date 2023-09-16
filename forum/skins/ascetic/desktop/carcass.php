@@ -3,6 +3,10 @@
 <head>
 <title><?php echo_html($title); ?></title>
 
+<?php
+$cache_appendix = "?v=" . $skin_version;
+?>
+
 <meta name="format-detection" content="telephone=no">
 
 <script>
@@ -19,10 +23,6 @@ var no_confirmation_of_any_actions = <?php echo(!empty($_SESSION["skin_propertie
 var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"][$skin]["no_confirmation_of_dislikes"]) ? 1 : 0); ?>;
 </script>
         
-<?php
-$cache_appendix = "?v=" . $skin_version;
-?>
-
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=1200">
 

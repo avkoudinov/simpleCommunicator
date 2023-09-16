@@ -26,7 +26,7 @@ if ($is_private && !$fmanager->is_logged_in()) {
     MessageHandler::setWarning(text("MsgTryLogin"));
 
     $_SESSION["last_url_asklogin"] = val_or_empty($_SERVER["REQUEST_URI"]);
-    header("Location: login.php");
+    header("Location: login.php?fid=private");
     exit;
 }
 
@@ -69,7 +69,7 @@ if (!$fmanager->has_access_to_forum($fid, $forum_name, true)) {
         MessageHandler::setWarning(text("MsgTryLogin"));
         
         $_SESSION["last_url_asklogin"] = val_or_empty($_SERVER["REQUEST_URI"]);
-        $target_url = "login.php";
+        $target_url = "login.php?fid=$fid";
     }
 
     header("location: " . $target_url);

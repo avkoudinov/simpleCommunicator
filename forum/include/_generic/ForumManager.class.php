@@ -3742,6 +3742,10 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_forum_data($fid, &$forum_data)
     {
+        if ($fid == "private") {
+            return $this->get_private_forum_data($forum_data);
+        }
+        
         start_action_time_measure();
         
         $forum_data["id"] = "";
@@ -32393,6 +32397,62 @@ abstract class ForumManager
         
         return $date;
     } // get_post_date
+    
+    //-----------------------------------------------------------------
+    function get_post_seo($gotomsg, &$message, &$image)
+    {
+        if (empty($gotomsg)) {
+            return false;
+        }
+        
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+
+        $prfx = $dbw->escape(System::getDBPrefix());
+        $pid = $dbw->escape($gotomsg);
+
+        $query = "select text_content
+                  from {$prfx}_post
+                  where id = $pid";
+        
+        debug_message($query);
+        
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        if ($dbw->fetch_row()) {
+            $message = $dbw->field_by_name("text_content");
+
+            $this->format_manager->format_email_message($dbw, $prfx, $message, current_language(), get_host_address() . get_url_path());
+        }
+        
+        $dbw->free_result();
+
+        $query = "select nr, post_id
+                  from {$prfx}_attachment
+                  inner join {$prfx}_post on ({$prfx}_attachment.post_id = {$prfx}_post.id)
+                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                  where post_id = $pid and
+                  {$prfx}_post.deleted = 0 and {$prfx}_topic.deleted = 0 and {$prfx}_forum.deleted = 0 and is_private = 0 and
+                  protected_by_password = 0 and restricted_access = 0
+                  order by nr";
+        
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        if ($dbw->fetch_row()) {
+            $image = "ajax/attachment.php?aid=" . xrawurlencode($dbw->field_by_name("post_id")) . "&nr=" . xrawurlencode($dbw->field_by_name("nr")) . "&picture=1";
+        }
+        
+        $dbw->free_result();
+    }
     
     //-----------------------------------------------------------------
     function get_post_data($pid, &$fid, &$tid, &$post_list, &$user_data)

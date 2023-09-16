@@ -95,6 +95,7 @@ $GLOBALS['DEF_TEXTS']['en']['ParticipatedTopics'] = 'Participated topics';
 $GLOBALS['DEF_TEXTS']['en']['ParticipatedTopicsMiddle'] = 'Participated';
 $GLOBALS['DEF_TEXTS']['en']['ParticipatedTopicsShort'] = 'Partic.';
 $GLOBALS['DEF_TEXTS']['en']['Password'] = 'Password';
+$GLOBALS['DEF_TEXTS']['en']['ForumPassword'] = 'Password for entering forum';
 $GLOBALS['DEF_TEXTS']['en']['Reset'] = 'Reset';
 $GLOBALS['DEF_TEXTS']['en']['ClearData'] = 'Clear';
 $GLOBALS['DEF_TEXTS']['en']['MsgConfirmClearData'] = 'Are you sure to clear all saved profile data?';
@@ -1476,4 +1477,6 @@ $GLOBALS['DEF_TEXTS']['en']['MsgDoublePost'] = 'This message has already been se
 $GLOBALS['DEF_TEXTS']['en']['ErrNoValidCommand'] = 'No valid command found!';
 $GLOBALS['DEF_TEXTS']['en']['ErrLogoutForRegistration'] = 'You are already logged in as a registered user! To register a new user, log out.';
 $GLOBALS['DEF_TEXTS']['en']['MsgIPClauseIgnored'] = 'IP address criterion has been ignored. You can search by IP address only for youк own messages!';
+$GLOBALS['DEF_TEXTS']['en']['AccessByPassword'] = 'Access by password';
+$GLOBALS['DEF_TEXTS']['en']['AccessByAuthorization'] = 'Access by authorization';
 ?>

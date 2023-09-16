@@ -309,29 +309,6 @@ class System
     } // getSessionCookiePath
     
     //-----------------------------------------------------------------
-    static function getHostAddress()
-    {
-        $protocol = "http";
-        if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
-            $protocol = "https";
-        }
-        
-        $server = $_SERVER["SERVER_ADDR"];
-        
-        if (!empty($_SERVER["SERVER_NAME"])) {
-            $server = $_SERVER["SERVER_NAME"];
-        }
-        
-        $port = "";
-        
-        if (!empty($_SERVER["SERVER_PORT"]) && $_SERVER["SERVER_PORT"] != "80") {
-            $port = ":" . $_SERVER["SERVER_PORT"];
-        }
-        
-        return $protocol . "://" . $server . $port;
-    } // getHostAddress
-    
-    //-----------------------------------------------------------------
     static function sendJSON(&$response)
     {
         echo array_to_json($response);

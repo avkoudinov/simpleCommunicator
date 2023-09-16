@@ -1,5 +1,5 @@
-<?php if(defined("CANONICAL_DOMAIN") && !empty(CANONICAL_DOMAIN)): ?>
-<link rel="canonical" href="<?php echo((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://") . CANONICAL_DOMAIN . $_SERVER["REQUEST_URI"]); ?>">
+<?php if(defined("CANONICAL_DOMAIN") && !empty(CANONICAL_DOMAIN) && CANONICAL_DOMAIN != get_host_name()): ?>
+<link rel="canonical" href="<?php echo((is_https() ? "https://" : "http://") . CANONICAL_DOMAIN . $_SERVER["REQUEST_URI"]); ?>">
 <?php endif; ?>
 
 <link rel="icon" type="image/png" href="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-default-icon="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-signal-icon="<?php echo($view_path); ?>images/favicon_new.png<?php echo($cache_appendix); ?>" id="fav_icon">
@@ -72,7 +72,7 @@
 <?php if(!empty($ogimage)): ?>
 <meta property="og:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 
-<?php if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'): ?>
+<?php if(is_https()): ?>
 <meta property="og:image:secure_url" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 <?php endif; ?>
 

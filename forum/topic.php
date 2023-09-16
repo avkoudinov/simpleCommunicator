@@ -81,7 +81,7 @@ if ($fid == $private_fid) {
     
     if (!$fmanager->is_logged_in()) {
         $_SESSION["last_url"] = val_or_empty($_SERVER["REQUEST_URI"]);
-        header("Location: login.php");
+        header("Location: login.php?fid=private");
         exit;
     }
     
@@ -107,7 +107,7 @@ if (!$fmanager->has_access_to_topic($tid, true)) {
         MessageHandler::setWarning(text("MsgTryLogin"));
         
         $_SESSION["last_url_asklogin"] = val_or_empty($_SERVER["REQUEST_URI"]);
-        $target_url = "login.php";
+        $target_url = "login.php?fid=$fid";
     }
     
     header("location: " . $target_url);
@@ -194,6 +194,29 @@ if (!empty($forum_data["forum_name"])) {
 
 if (!empty($forum_data["forum_description"])) {
     $ogdescription = $forum_data["forum_description"];
+}
+
+debug_message(print_r($topic_data, true));
+
+$seo_post = $gotomsg;
+if (empty($seo_post)) 
+{
+    $seo_post = $topic_data["first_topic_message"];
+}
+
+if (!empty($seo_post))
+{
+    $message = "";
+    $image = "";
+    $fmanager->get_post_seo($seo_post, $message, $image);
+    
+    if (!empty($message)) {
+        $ogdescription = $message;
+    }
+    
+    if (!empty($image)) {
+        $ogimage = $image;
+    }
 }
 
 $title .= " - " . get_site_name(current_language());
