@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 function confirm_reset()
 {
   var form = document.getElementById("main_form");
@@ -374,7 +374,7 @@ Forum.addXEvent(window, 'load', function () { enable_disable(); });
 
 <tr>
 <td><?php echo_html(text("Name")); ?>*:</td>
-<td><input type="text" id="forum_name" name="forum_name" value="<?php echo_html(val_or_empty($forum_data["forum_name"])); ?>" autocomplete="off"/></td>
+<td><input type="text" id="forum_name" name="forum_name" value="<?php echo_html(val_or_empty($forum_data["forum_name"])); ?>" autocomplete="off"></td>
 </tr>
 
 <tr>
@@ -384,7 +384,7 @@ Forum.addXEvent(window, 'load', function () { enable_disable(); });
 
 <tr>
 <td><?php echo_html(text("Sorting")); ?>:</td>
-<td><input type="text" id="sort_order" name="sort_order" class="small_field" value="<?php echo_html(val_or_empty($forum_data["sort_order"])); ?>" autocomplete="off"/></td>
+<td><input type="text" id="sort_order" name="sort_order" class="small_field" value="<?php echo_html(val_or_empty($forum_data["sort_order"])); ?>" autocomplete="off"></td>
 </tr>
 
 <tr>
@@ -488,9 +488,9 @@ Forum.addXEvent(window, 'load', function () { enable_disable(); });
 <td style="vertical-align: top"><?php echo_html(text("Restrictions")); ?>:</td>
 <td>
 <div class="inner_label"><?php echo_html(text("MinDurationComment")); ?>:</div>
-<input type="text" id="access_duration" name="access_duration" class="small_field" style="text-align: right" value="<?php echo_html(val_or_empty($forum_data["access_duration"])); ?>"/>
+<input type="text" id="access_duration" name="access_duration" class="small_field" style="text-align: right" value="<?php echo_html(val_or_empty($forum_data["access_duration"])); ?>">
 <div class="inner_label"><?php echo_html(text("MinMessageCountComment")); ?>:</div>
-<input type="text" id="access_message_count" name="access_message_count" class="small_field" style="text-align: right" value="<?php echo_html(val_or_empty($forum_data["access_message_count"])); ?>"/>
+<input type="text" id="access_message_count" name="access_message_count" class="small_field" style="text-align: right" value="<?php echo_html(val_or_empty($forum_data["access_message_count"])); ?>">
 </td>
 </tr>
 
@@ -507,9 +507,9 @@ Forum.addXEvent(window, 'load', function () { enable_disable(); });
 
    <table class="aux_table search_member_area_table" style="width:100%">
    <tr>
-   <td ><input type="text" id="user_to_search" name="user_to_search" autocomplete="off" value="" placeholder="<?php echo_html(text("SearchUser")); ?>" onkeypress="return search_on_enter(event)"/></td>
+   <td ><input type="text" id="user_to_search" name="user_to_search" autocomplete="off" value="" placeholder="<?php echo_html(text("SearchUser")); ?>" onkeypress="return search_on_enter(event)"></td>
    <td style="text-align: right; width: 1%">
-   <input type="button" id="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_user()"/>
+   <input type="button" id="search_user_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_user()">
    </td>
    </tr>
    </table>
@@ -549,11 +549,11 @@ Forum.addXEvent(window, 'load', function () { enable_disable(); });
 <tr>
 <td colspan="2" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>">
 </div>
 <div class="clear_both">
 </div>

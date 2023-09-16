@@ -5,7 +5,7 @@
 
 <meta name="format-detection" content="telephone=no">
 
-<script type="text/JavaScript">
+<script>
 var timerStart = Date.now();
 var NEW_CHECK_FREQUENCY = "<?php echo_js(defined('NEW_CHECK_FREQUENCY') ? NEW_CHECK_FREQUENCY*1000 : 30*1000); ?>";
 var ATTACHMENTS_PER_POST = "<?php echo_js(defined('ATTACHMENTS_PER_POST') ? ATTACHMENTS_PER_POST : 3); ?>";
@@ -23,17 +23,17 @@ var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"]
 $cache_appendix = "?v=" . $skin_version;
 ?>
 
-<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-<meta name="viewport" content="width=1200"/>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=1200">
 
-<link rel="stylesheet" href="calendar/calendar.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="calendar/calendar.css<?php echo($cache_appendix); ?>" type="text/css">
 
-<link rel="stylesheet" href="highlight.old/styles/vs.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="highlight.old/styles/vs.css<?php echo($cache_appendix); ?>" type="text/css">
 
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/multiselect.css<?php echo($cache_appendix); ?>" type="text/css"/>
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/file_input.css<?php echo($cache_appendix); ?>" type="text/css"/>
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css"/>
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/debug_console.css<?php echo($cache_appendix); ?>" type="text/css"/>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/multiselect.css<?php echo($cache_appendix); ?>" type="text/css">
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/file_input.css<?php echo($cache_appendix); ?>" type="text/css">
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css">
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/debug_console.css<?php echo($cache_appendix); ?>" type="text/css">
 
 <style>
 .dummy
@@ -50,34 +50,34 @@ if(!empty($_SESSION["custom_css"]))
 
 <?php require_once $view_path . "seo_inc.php"; ?>
 
-<script type='text/JavaScript'>
+<script>
 Forum = {};
 </script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/css_device_selector.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/css_browser_selector.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/swipe-events.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/css_device_selector.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/css_browser_selector.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/swipe-events.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/debug_console.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/xevent.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/utils.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/md5.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/ajax.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/multiselect.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/file_input.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/debug_console.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/xevent.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/utils.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/md5.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/ajax.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/multiselect.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/file_input.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/snow.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/snow.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='<?php echo($view_path); ?>common.js<?php echo($cache_appendix); ?>'></script>
+<script src='<?php echo($view_path); ?>common.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='calendar/calendar.js<?php echo($cache_appendix); ?>'></script>
+<script src='calendar/calendar.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript' src='highlight.old/highlight.pack.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript'>
+<script src='highlight.old/highlight.pack.js<?php echo($cache_appendix); ?>'></script>
+<script>
 hljs.initHighlightingOnLoad();
 </script>
 
-<script type='text/JavaScript'>
+<script>
 var protection_hash = "";
 set_protection_hash('<?php echo_js(val_or_empty($_SESSION["hash"])); ?>');
 var user_logged = "<?php echo_js(val_or_empty($_SESSION["logged_in"])); ?>";
@@ -264,6 +264,12 @@ if(preg_match("/.*(#.*)$/", $url, $matches))
   $anchor = $matches[1];
   $url = str_replace($anchor, "", $url);
 }
+
+$url = str_replace("mobile=1", "", $url);
+$url = str_replace("desktop=1", "", $url);
+$url = rtrim($url, "&?");
+if(strpos($url, "?") === false) $url .= "?mobile=1" . $anchor;
+else                            $url .= "&mobile=1" . $anchor;
 ?>
 <a href="<?php echo($url); ?>" onclick="return switch_skin('mobile')"><?php echo_html(text("MobileVersion")); ?></a>&nbsp;&nbsp;&nbsp;
 
@@ -404,7 +410,7 @@ $main_menu_id = "main_menu_bottom";
 
 <!-- END: user_msgbox -->
 
-<script type="text/javascript">
+<script>
 // preload message box images
 var img_error = new Image();
 img_error.src = VIEW_PATH + "images/icon-error.gif";
@@ -488,7 +494,7 @@ img_loading_bar.src = VIEW_PATH + "images/loading-bar.gif";
 
 <!-- END: sys_progress_indicator -->
 
-<script type="text/javascript">
+<script>
 var messages = {};
 
 messages.INFO_MESSAGE = "<?php echo_js($MSG_INFO_MESSAGE); ?>";

@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 function confirm_reset()
 {
   var form = document.getElementById("main_form");
@@ -265,9 +265,9 @@ if($fmanager->demo_mode())
 <td style="vertical-align: top"><?php echo_html(text("Notifications")); ?>*:</td>
 <td>
 <div class="inner_label"><?php echo_html(text("AddressOfTheDefaultSender")); ?>:</div>
-<input type="email" id="default_sender" name="default_sender" value="<?php echo_html($settings["default_sender"]); ?>"/><br>
+<input type="email" id="default_sender" name="default_sender" value="<?php echo_html($settings["default_sender"]); ?>"><br>
 <div class="inner_label"><?php echo_html(text("AddressOfTheContactReceiver")); ?>:</div>
-<input type="email" id="receiver" name="receiver" value="<?php echo_html($settings["receiver"]); ?>"/>
+<input type="email" id="receiver" name="receiver" value="<?php echo_html($settings["receiver"]); ?>">
 </td>
 </tr>
 
@@ -278,7 +278,7 @@ if($fmanager->demo_mode())
 <tr>
 <td><?php echo_html(text("WhoisServer")); ?>:</td>
 <td>
-<input type="text" id="whois_server" name="whois_server" value="<?php echo_html($settings["whois_server"]); ?>"/>
+<input type="text" id="whois_server" name="whois_server" value="<?php echo_html($settings["whois_server"]); ?>">
 </td>
 </tr>
 
@@ -428,33 +428,33 @@ if($fmanager->demo_mode())
 <td style="vertical-align: top"><?php echo_html(text("Restrictions")); ?>:</td>
 <td>
 <div class="inner_label"><?php echo_html(text("MaxAttachmentSize")); ?>:</div>
-<input type="text" id="max_att_size" name="max_att_size" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_att_size"]); ?>"/> <?php echo_html(text("KB")); ?>
+<input type="text" id="max_att_size" name="max_att_size" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_att_size"]); ?>"> <?php echo_html(text("KB")); ?>
 <div class="inner_label"><?php echo_html(text("MaxAttachmentSizeAudioVideo")); ?>:</div>
-<input type="text" id="max_att_size_audiovideo" name="max_att_size_audiovideo" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_att_size_audiovideo"]); ?>"/> <?php echo_html(text("KB")); ?>
+<input type="text" id="max_att_size_audiovideo" name="max_att_size_audiovideo" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_att_size_audiovideo"]); ?>"> <?php echo_html(text("KB")); ?>
 <div class="inner_label"><?php echo_html(text("MaxMessagesPerMinute")); ?>:</div>
-<input type="text" id="max_messages_minute" name="max_messages_minute" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_messages_minute"]); ?>"/>
+<input type="text" id="max_messages_minute" name="max_messages_minute" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_messages_minute"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxMessagesPerHour")); ?>:</div>
-<input type="text" id="max_messages_hour" name="max_messages_hour" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_messages_hour"]); ?>"/>
+<input type="text" id="max_messages_hour" name="max_messages_hour" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_messages_hour"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxMessagesPerDay")); ?>:</div>
-<input type="text" id="max_messages_day" name="max_messages_day" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_messages_day"]); ?>"/>
+<input type="text" id="max_messages_day" name="max_messages_day" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_messages_day"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxTopicsPerDay")); ?>:</div>
-<input type="text" id="max_topics_day" name="max_topics_day" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_topics_day"]); ?>"/>
+<input type="text" id="max_topics_day" name="max_topics_day" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_topics_day"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxPinnedTopics")); ?>:</div>
-<input type="text" id="max_pinned_topics" name="max_pinned_topics" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_pinned_topics"]); ?>"/>
+<input type="text" id="max_pinned_topics" name="max_pinned_topics" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_pinned_topics"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxMembersInPrivateTopic")); ?>:</div>
-<input type="text" id="max_private_members" name="max_private_members" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_private_members"]); ?>"/>
+<input type="text" id="max_private_members" name="max_private_members" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_private_members"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxRatesPerHour")); ?>:</div>
-<input type="text" id="max_rates_hour" name="max_rates_hour" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_rates_hour"]); ?>"/>
+<input type="text" id="max_rates_hour" name="max_rates_hour" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_rates_hour"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxPollOptions")); ?>:</div>
-<input type="text" id="max_poll_options" name="max_poll_options" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_poll_options"]); ?>"/>
+<input type="text" id="max_poll_options" name="max_poll_options" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_poll_options"]); ?>">
 <div class="inner_label"><?php echo_html(text("MinSearchInterval")); ?>:</div>
-<input type="text" id="min_search_interval" name="min_search_interval" class="small_field" style="text-align: right" value="<?php echo_html($settings["min_search_interval"]); ?>"/>
+<input type="text" id="min_search_interval" name="min_search_interval" class="small_field" style="text-align: right" value="<?php echo_html($settings["min_search_interval"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxSymbolsUserName")); ?>:</div>
-<input type="text" id="max_user_name_symbols" name="max_user_name_symbols" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_user_name_symbols"]); ?>"/>
+<input type="text" id="max_user_name_symbols" name="max_user_name_symbols" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_user_name_symbols"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxSymbolsTopicName")); ?>:</div>
-<input type="text" id="max_topic_name_symbols" name="max_topic_name_symbols" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_topic_name_symbols"]); ?>"/>
+<input type="text" id="max_topic_name_symbols" name="max_topic_name_symbols" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_topic_name_symbols"]); ?>">
 <div class="inner_label"><?php echo_html(text("MaxMessageLengh")); ?>:</div>
-<input type="text" id="max_message_length" name="max_message_length" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_message_length"]); ?>"/> <?php echo_html(text("KB")); ?>
+<input type="text" id="max_message_length" name="max_message_length" class="small_field" style="text-align: right" value="<?php echo_html($settings["max_message_length"]); ?>"> <?php echo_html(text("KB")); ?>
 </td>
 </tr>
 
@@ -473,11 +473,11 @@ if($fmanager->demo_mode())
 <tr>
 <td colspan="2" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>">
 </div>
 <div class="clear_both">
 </div>

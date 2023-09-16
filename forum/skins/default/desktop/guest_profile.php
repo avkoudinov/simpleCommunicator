@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function show_download_error(error)
 {
   var mbuttons = [
@@ -462,7 +462,7 @@ if(!empty($user_data["aname"]))
 
 <tr>
 <td><?php echo_html(text("Avatar")); ?>:</td>
-<td><input type="file" placeholder="<?php echo_html(text("SelectFile")); ?>" id="avatar" name="avatar"/>
+<td><input type="file" data-placeholder="<?php echo_html(text("SelectFile")); ?>" id="avatar" name="avatar">
 
 <div class="inner_label"><?php echo_html(text("AvatarComment")); ?></div>
 
@@ -768,11 +768,11 @@ foreach($time_zones as $time_zone => $time_zone_name)
 <tr>
 <td colspan="2" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Save")); ?>">
 </div>
 <div class="clear_both">
 </div>
@@ -791,7 +791,7 @@ foreach($time_zones as $time_zone => $time_zone_name)
 
 <tr>
 <td><?php echo_html(text("File")); ?></td>
-<td><input type="file" placeholder="<?php echo_html(text("SelectFile")); ?>" id="profile_file" name="profile_file"/></td>
+<td><input type="file" data-placeholder="<?php echo_html(text("SelectFile")); ?>" id="profile_file" name="profile_file"></td>
 </tr>
 
 <tr>
@@ -803,8 +803,8 @@ foreach($time_zones as $time_zone => $time_zone_name)
 <div class="left_buttons">
 </div>
 <div class="right_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Export")); ?>" onclick="return export_import('export');"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Import")); ?>" onclick="return export_import('import');"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Export")); ?>" onclick="return export_import('export');">
+<input type="button" class="standard_button" value="<?php echo_html(text("Import")); ?>" onclick="return export_import('import');">
 </div>
 <div class="clear_both">
 </div>

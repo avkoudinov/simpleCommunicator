@@ -1,4 +1,4 @@
-﻿<script type='text/JavaScript'>
+﻿<script>
 function confirm_reset()
 {
   var form = document.getElementById("main_form");
@@ -188,7 +188,7 @@ function install()
 <tr>
 <td style="vertical-align: top"><?php echo_html(text("ForumName")); ?>*:</td>
 <td>
-<input type="text" id="forum_name" name="forum_name" value=""/>
+<input type="text" id="forum_name" name="forum_name" value="">
 </td>
 </tr>
 
@@ -202,7 +202,7 @@ function install()
 <tr>
 <td style="vertical-align: top"><?php echo_html(text("Email")); ?>*:</td>
 <td>
-<input type="email" id="email" name="email" value=""/>
+<input type="email" id="email" name="email" value="">
 </td>
 </tr>
 
@@ -237,14 +237,14 @@ function install()
 <tr>
 <td style="vertical-align: top"><?php echo_html(text("DatabaseServer")); ?>*:</td>
 <td>
-<input type="text" id="db_server" name="db_server" value="localhost"/>
+<input type="text" id="db_server" name="db_server" value="localhost">
 </td>
 </tr>
 
 <tr>
 <td style="vertical-align: top"><?php echo_html(text("DatabaseName")); ?>*:</td>
 <td>
-<input type="text" id="db_name" name="db_name" value=""/>
+<input type="text" id="db_name" name="db_name" value="">
 <div class="field_comment"><?php echo_html(text("DBCreationComment")); ?></div>
 </td>
 </tr>
@@ -252,7 +252,7 @@ function install()
 <tr>
 <td style="vertical-align: top"><?php echo_html(text("DatabaseUser")); ?>*:</td>
 <td>
-<input type="text" id="db_user" name="db_user" value=""/>
+<input type="text" id="db_user" name="db_user" value="">
 <div class="field_comment"><?php echo_html(text("DBUserComment")); ?></div>
 </td>
 </tr>
@@ -265,7 +265,7 @@ function install()
 <tr>
 <td style="vertical-align: top"><?php echo_html(text("DatabaseTablePrefix")); ?>*:</td>
 <td>
-<input type="text" id="db_prefix" name="db_prefix" value="v1"/>
+<input type="text" id="db_prefix" name="db_prefix" value="v1">
 <div class="field_comment"><?php echo_html(text("DBPrefixComment")); ?></div>
 </td>
 </tr>
@@ -277,11 +277,11 @@ function install()
 <tr>
 <td colspan="2" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Install")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Install")); ?>">
 </div>
 <div class="clear_both">
 </div>

@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var post_comment_action = null;
 function show_post_comment(title, author, pid, mode)
 {

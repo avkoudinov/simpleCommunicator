@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 var password_change_ajax = null;
 
 function password_change()
@@ -133,7 +133,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 
 <tr>
-<td class="button_area"><input type="submit" class="standard_button" value="<?php echo_html(text("Apply")); ?>"/></td>
+<td class="button_area"><input type="submit" class="standard_button" value="<?php echo_html(text("Apply")); ?>"></td>
 </tr>
 
 </table>

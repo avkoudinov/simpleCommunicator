@@ -198,39 +198,39 @@ if(!empty($favourites_with_new_count)) $display = "";
 <div class="search_bar">
 
 <form action="search.php" method="get" onsubmit="Forum.show_sys_progress_indicator(true);">
-<input type="hidden" name="do_search" value="1"/>
-<input type="hidden" name="quick_search" value="1"/>
+<input type="hidden" name="do_search" value="1">
+<input type="hidden" name="quick_search" value="1">
 
 <?php if(!empty($is_private)): ?>
-<input type="hidden" name="forums[]" value="private"/>
+<input type="hidden" name="forums[]" value="private">
 <?php elseif(basename($_SERVER["PHP_SELF"]) == "favourites.php" || !reqvar_empty("favourites_only")): ?>
-<input type="hidden" name="favourites_only" value="1"/>
+<input type="hidden" name="favourites_only" value="1">
 <?php elseif(!reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only")): ?>
-<input type="hidden" name="favourite_posts_only" value="1"/>
+<input type="hidden" name="favourite_posts_only" value="1">
 <?php elseif(reqvar("fid") == "my_topics" || 
        ($fmanager->is_logged_in() && reqvar("author") == $fmanager->get_user_name() && reqvar("author_mode") == "created_topic")): ?>
-<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>"/>
-<input type="hidden" name="author_mode" value="created_topic"/>
+<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>">
+<input type="hidden" name="author_mode" value="created_topic">
 <?php elseif(reqvar("fid") == "my_part_topics" || 
        ($fmanager->is_logged_in() && reqvar("author") == $fmanager->get_user_name() && reqvar("author_mode") == "participating")): ?>
-<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>"/>
-<input type="hidden" name="author_mode" value="participating"/>
+<input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>">
+<input type="hidden" name="author_mode" value="participating">
 <?php elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_SELF"]) == "new_topic.php" || basename($_SERVER["PHP_SELF"]) == "topic.php") && !reqvar_empty("fid")): ?>
-<input type="hidden" name="forums[]" value="<?php echo_html(reqvar("fid")); ?>"/>
+<input type="hidden" name="forums[]" value="<?php echo_html(reqvar("fid")); ?>">
 <?php endif; ?>
 
 <?php if(!reqvar_empty("tid")): ?>
-<input type="hidden" name="tid" value="<?php echo_html(reqvar("tid")); ?>"/>
+<input type="hidden" name="tid" value="<?php echo_html(reqvar("tid")); ?>">
 <?php endif; ?>
 
 <table class="aux_table">
 <tr>
 <td>
-<input type="text" class="search_field" name="search_keys"/>
-<input type="hidden" name="with_morphology" value="1"/>
+<input type="text" class="search_field" name="search_keys">
+<input type="hidden" name="with_morphology" value="1">
 </td>
 <td>
-<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"/>
+<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>">
 </td>
 </tr>
 </table>

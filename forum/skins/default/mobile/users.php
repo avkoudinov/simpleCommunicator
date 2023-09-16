@@ -1,6 +1,6 @@
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
-<script type='text/JavaScript'>
+<script>
 function user_esc_handler()
 {
   var elm = document.getElementById("user_name_lookup");
@@ -24,7 +24,7 @@ function user_esc_handler()
 <table class="aux_table" style="width:100%">
 <tr>
 <td style="position: relative">
-  <input type="text" class="search_field" id="user_name" name="user_name" autocomplete="off" placeholder="<?php echo_html(text("SearchUser")); ?>" value="<?php echo_html(reqvar("user_name")); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_users', this, event)" onblur="lookup_delayed_hide(this.id)"/>
+  <input type="text" class="search_field" id="user_name" name="user_name" autocomplete="off" placeholder="<?php echo_html(text("SearchUser")); ?>" value="<?php echo_html(reqvar("user_name")); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_users', this, event)" onblur="lookup_delayed_hide(this.id)">
 
   <div class="field_lookup_area" style="display:none">
   <select id="user_name_lookup" size="10" 
@@ -37,7 +37,7 @@ function user_esc_handler()
   </div>
 </td>
 <td style="width:1%; white-space: nowrap">
-<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"/><?php if(!reqvar_empty("user_name")): ?><input type="submit" class="standard_button search_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['user_name'].value=''"/><?php endif; ?>
+<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"><?php if(!reqvar_empty("user_name")): ?><input type="submit" class="standard_button search_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['user_name'].value=''"><?php endif; ?>
 </td>
 </tr>
 </table>

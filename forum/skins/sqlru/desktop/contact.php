@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 function confirm_reset()
 {
   var form = document.getElementById("main_form");
@@ -190,12 +190,12 @@ if(!empty($topics_with_new_count)) $display = "";
 
 <tr>
 <td><?php echo_html(text("Email")); ?>*:</td>
-<td><input type="email" id="email" name="email" value="<?php echo_html($sender_email); ?>"/></td>
+<td><input type="email" id="email" name="email" value="<?php echo_html($sender_email); ?>"></td>
 </tr>
 
 <tr>
 <td><?php echo_html(text("Subject")); ?>*:</td>
-<td><input type="text" id="subject" name="subject" value=""/></td>
+<td><input type="text" id="subject" name="subject" value=""></td>
 </tr>
 
 <tr>
@@ -211,12 +211,12 @@ if(!empty($topics_with_new_count)) $display = "";
    <table class="captcha_table">
    <tr>
      <td>
-   <img class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'/>
+   <img class='captcha_picture' src='captcha/captcha.php?rnd=<?php echo(rand(1000, 9999)); ?>&session_var=captcha' id='captcha_picture' alt='Captcha' onclick='Forum.reload_captcha("captcha_picture", "captcha", "captcha_field")'>
      </td>
      <td>
      </td>
      <td>
-   <input type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off" onkeypress="return handle_enter(event)"/>
+   <input type="text" id="captcha_field" name="captcha_field" class="captcha_field" value="" autocomplete="off" onkeypress="return handle_enter(event)">
      </td>
    </tr>
    </table>
@@ -249,11 +249,11 @@ if(!empty($topics_with_new_count)) $display = "";
 <tr>
 <td colspan="2" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()"/>
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="confirm_back()">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>">
 </div>
 <div class="clear_both">
 </div>

@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function show_ip_users(link)
 {
   var elm = document.getElementById("ip");
@@ -149,10 +149,10 @@ if(!empty($topics_with_new_count)) $display = "";
 <td colspan="2" class="button_area">
 
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>">
 </div>
 <div class="clear_both">
 </div>

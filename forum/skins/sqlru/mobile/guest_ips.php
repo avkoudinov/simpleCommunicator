@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function save_ips()
 {
   var elm = document.getElementById("white_ips");
@@ -109,10 +109,10 @@ function do_action(elm, params)
 <table class="aux_table" style="width:100%">
 <tr>
 <td>
-  <input type="text" class="search_field" id="search_key" name="search_key" autocomplete="off" placeholder="<?php echo_html(text("SearchIPAddress")); ?>" value="<?php echo_html(reqvar("search_key")); ?>"/>
+  <input type="text" class="search_field" id="search_key" name="search_key" autocomplete="off" placeholder="<?php echo_html(text("SearchIPAddress")); ?>" value="<?php echo_html(reqvar("search_key")); ?>">
 </td>
 <td style="width:1%; white-space: nowrap">
-<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"/><?php if(!reqvar_empty("search_key")): ?><input type="submit" class="standard_button search_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['search_key'].value=''"/><?php endif; ?>
+<input type="submit" class="standard_button search_button" value="<?php echo_html(text("DoSearch")); ?>"><?php if(!reqvar_empty("search_key")): ?><input type="submit" class="standard_button search_button" value="<?php echo_html(text("Reset")); ?>" onclick="this.form.elements['search_key'].value=''"><?php endif; ?>
 </td>
 </tr>
 </table>
@@ -141,7 +141,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 / <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
 
-/ <span class="topic_title_main"><?php echo_html($title); ?></span>
+/ <span class="topic_title_main"><?php echo_html(text("GuestIPs")); ?></span>
 </div>
 
 <!-- END: forum_bar -->
@@ -169,7 +169,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <td class="button_area">
 
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>">
 </div>
 <div class="clear_both">
 </div>
@@ -282,7 +282,7 @@ echo($ip);
   <table class="checkbox_table">
    <tr>
      <td>
-  <input type="checkbox" name="block_unblock" <?php echo($checked); ?> onchange='do_action(this, { whitelist_ip: 1, ip: "<?php echo_js($ipfno["matched_rule"]); ?>", state: this.checked ? 1 : 0 })'>
+  <input id="<?php echo_html(md5($ipfno["ip"])); ?>" type="checkbox" name="block_unblock" <?php echo($checked); ?> onchange='do_action(this, { whitelist_ip: 1, ip: "<?php echo_js($ipfno["matched_rule"]); ?>", state: this.checked ? 1 : 0 })'>
      </td>
      <td>
   <label for="<?php echo_html(md5($ipfno["ip"])); ?>"><?php echo_html(text("PermissionAllow")); ?></label>
@@ -325,7 +325,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 / <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
 
-/ <span class="topic_title_main"><?php echo_html($title); ?></span>
+/ <span class="topic_title_main"><?php echo_html(text("GuestIPs")); ?></span>
 </div>
 
 <!-- END: forum_bar -->

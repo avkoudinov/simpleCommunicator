@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function confirm_action(msg, fname, params)
 {
   if(no_confirmation_of_any_actions == 1 || (no_confirmation_of_uncritical_actions == 1 && params.uncritical)) 
@@ -150,7 +150,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 <?php if($fmanager->is_admin()): ?>
 <div class="forum_action_bar">
-<input type="button" class="standard_button" value="<?php echo_html(text("CreateForum")); ?>" onclick="delay_redirect('edit_forum.php')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("CreateForum")); ?>" onclick="delay_redirect('edit_forum.php')">
 </div>
 <?php endif; ?>
 

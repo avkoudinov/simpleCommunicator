@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 function search_topic_on_enter(event)
 {
   if(event.keyCode != 13) return true;
@@ -114,9 +114,9 @@ function search_topic()
    <td style="width: 1%; white-space: nowrap">
    <?php echo_html(text("TargetTopic")); ?>:
    </td>
-   <td ><input type="text" id="topic_to_search" name="topic_to_search" value="" placeholder="<?php echo_html(text("EnterTopicKeyword")); ?>" autocomplete="off" onkeypress="return search_topic_on_enter(event)"/></td>
+   <td ><input type="text" id="topic_to_search" name="topic_to_search" value="" placeholder="<?php echo_html(text("EnterTopicKeyword")); ?>" autocomplete="off" onkeypress="return search_topic_on_enter(event)"></td>
    <td style="text-align: right; width: 1%; padding-left: 0px">
-   <input type="button" id="search_topic_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_topic()"/>
+   <input type="button" id="search_topic_button" class="standard_button member_search_button" value="<?php echo_html(text("Search")); ?>" onclick="search_topic()">
    </td>
    </tr>
    </table>
@@ -138,7 +138,7 @@ function search_topic()
    </tr>
    <tr>
    <td style="padding-top:0px;">
-   <input type="text" id="new_topic" name="new_topic" value="" placeholder="<?php echo_html(text("EnterNewTopicName")); ?>"/>
+   <input type="text" id="new_topic" name="new_topic" value="" placeholder="<?php echo_html(text("EnterNewTopicName")); ?>">
    </td>
    </tr>
    </table>

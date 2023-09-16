@@ -179,20 +179,25 @@ if (!empty($topic_data["is_private"])) {
     }
 }
 
-$title = get_site_name(current_language()) . " - " . text("Topic");
-$ogtitle = get_site_name(current_language()) . " - " . text("Topic");
+$title = text("Topic");
 $topic_title = text("Topic");
 $forum_title = text("Forum");
 
 if (!empty($topic_data["topic_name"])) {
-    $title = postprocess_message($topic_data["topic_name"]) . " - " . get_site_name(current_language());
-    $ogtitle = postprocess_message($topic_data["topic_name"]) . " - " . get_site_name(current_language());
+    $title = postprocess_message($topic_data["topic_name"]);
     $topic_title = postprocess_message($topic_data["topic_name"]);
+}
+
+if (!empty($forum_data["forum_name"])) {
+    $title .= " / " . $forum_data["forum_name"];
 }
 
 if (!empty($forum_data["forum_description"])) {
     $ogdescription = $forum_data["forum_description"];
 }
+
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
 
 // do cleaning jobs
 

@@ -19,8 +19,7 @@ if($fmanager->is_master_admin())
   exit;
 }
 //------------------------------------------------------------------
-$title = text("Profile") . " - " . get_site_name(current_language());
-$ogtitle = text("Profile") . " - " . get_site_name(current_language());
+$title = text("Profile");
 //------------------------------------------------------------------
 $skin_list = array();
 $property_list = array();
@@ -35,6 +34,21 @@ if(!$fmanager->get_user_data($fmanager->get_user_id(), $user_data))
   header("location: " . $target_url);
   exit;
 }
+
+if (!empty($user_data["user_name"])) {
+  $title .= ": " . $user_data["user_name"];
+}
+
+$ogtype = "profile";
+$title .= " - " . get_site_name(current_language());
+$ogtitle = $title;
+
+if (!empty($user_data["photo"])) {
+  $ogimage = $user_data["photo"];
+}  
+elseif (!empty($user_data["avatar"])) {
+  $ogimage = $user_data["avatar"];
+}  
 
 $ignores = array();
 $ignored = array();

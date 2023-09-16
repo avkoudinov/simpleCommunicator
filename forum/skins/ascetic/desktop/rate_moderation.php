@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var action_ajax = null;
 
 function do_action()
@@ -518,7 +518,7 @@ if(!empty($moderator_caption))
 <tr>
 <td colspan="2" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')">
 </div>
 <div class="clear_both">
 </div>
@@ -530,6 +530,8 @@ if(!empty($moderator_caption))
 
 <a id="moderation"></a>
 <table class="rate_table">
+
+
 <tr>
 <th><?php echo_html(text("Member")); ?></th>
 <th colspan="2"><?php echo_html(text("Likes")); ?></th>
@@ -570,10 +572,10 @@ if(!empty($udata["dislikes"])) $dislikes = $udata["dislikes"];
 <tr>
 <td colspan="5" class="button_area">
 <div class="left_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("Back")); ?>" onclick="delay_redirect('<?php echo_html($target_url); ?>')">
 </div>
 <div class="right_buttons">
-<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>"/>
+<input type="submit" class="standard_button send_button" value="<?php echo_html(text("Apply")); ?>">
 </div>
 <div class="clear_both">
 </div>

@@ -1,5 +1,5 @@
 
-<script type='text/JavaScript'>
+<script>
 var login_ajax = null;
 
 function do_login()
@@ -154,7 +154,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 
 <tr>
-<td colspan="2" class="button_area"><input type="submit" class="standard_button" value="<?php echo_html(text("Login")); ?>"/></td>
+<td colspan="2" class="button_area"><input type="submit" class="standard_button" value="<?php echo_html(text("Login")); ?>"></td>
 </tr>
 
 </table>

@@ -1,4 +1,8 @@
-<link rel="icon" type="image/png" href="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-default-icon="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-signal-icon="<?php echo($view_path); ?>images/favicon_new.png<?php echo($cache_appendix); ?>" id="fav_icon"/>
+<?php if(defined("CANONICAL_DOMAIN") && !empty(CANONICAL_DOMAIN)): ?>
+<link rel="canonical" href="<?php echo((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://") . CANONICAL_DOMAIN . $_SERVER["REQUEST_URI"]); ?>">
+<?php endif; ?>
+
+<link rel="icon" type="image/png" href="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-default-icon="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-signal-icon="<?php echo($view_path); ?>images/favicon_new.png<?php echo($cache_appendix); ?>" id="fav_icon">
 
 <?php if(file_exists($view_path . "images/favicon-57x57.png")): ?>
 <link rel="apple-touch-icon" sizes="57x57" href="<?php echo($view_path); ?>images/favicon-57x57.png">
@@ -40,25 +44,37 @@
 <link rel="icon" type="image/png" sizes="16x16" href="<?php echo($view_path); ?>images/favicon-16x16.png">
 <?php endif; ?>
 <?php if(file_exists($view_path . "images/favicon-144x144.png")): ?>
-<meta name="msapplication-TileImage" content="/favicon-144x144.png">
+<meta name="msapplication-TileImage" content="<?php echo($view_path); ?>images/favicon-144x144.png">
 <?php endif; ?>
+
+<?php if(file_exists($view_path . "images/favicon.svg")): ?>
+<link rel="mask-icon" href="<?php echo($view_path); ?>images/favicon.svg">
+<?php endif; ?>
+
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="theme-color" content="#ffffff">
 
-
-
-<meta property="og:type" content="website"/>
+<meta property="og:type" content="<?php echo_html($ogtype); ?>">
+<meta property="og:site_name" content="<?php echo_html(get_site_name(current_language())); ?>">
 
 <?php if (!empty($ogtitle)): ?>
-<meta property="og:title" content="<?php echo_html($ogtitle); ?>"/>
+<meta property="og:title" content="<?php echo_html($ogtitle); ?>">
+<meta name="twitter:title" content="<?php echo_html($ogtitle); ?>">
+<meta name="title" content="<?php echo_html($ogtitle); ?>">
 <?php endif; ?>
 
 <?php if (!empty($ogdescription)): ?>
-<meta property="og:description" content="<?php echo_html($ogdescription); ?>"/>
+<meta name="description" content="<?php echo_html($ogdescription); ?>">
+<meta property="og:description" content="<?php echo_html($ogdescription); ?>">
+<meta name="twitter:description" content="<?php echo_html($ogdescription); ?>">
 <?php endif; ?>
 
-<?php if(file_exists($view_path . "images/forum_picture.png")): ?>
-<meta property="og:image" content="<?php echo(get_host_address() . get_url_path() . $view_path); ?>images/forum_picture.png"/>
-<meta property="og:image:secure_url" content="<?php echo(get_host_address() . get_url_path() . $view_path); ?>images/forum_picture.png"/>
-<meta property="og:image:type" content="image/png"/>
+<?php if(!empty($ogimage)): ?>
+<meta property="og:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
+
+<?php if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'): ?>
+<meta property="og:image:secure_url" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
+<?php endif; ?>
+
+<meta name="twitter:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 <?php endif; ?>

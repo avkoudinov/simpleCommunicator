@@ -1,18 +1,18 @@
-<script type='text/JavaScript'>
+<script>
 var final_url = '<?php echo_js($final_url); ?>';
 var ensure_anchor_visible = '<?php echo_js(val_or_empty($_SESSION["ensure_anchor_visible"])); ?>';
 </script>
 
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/bbutils.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='<?php echo($view_path); ?>topic.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_gallery.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
-<script type='text/JavaScript' src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/bbutils.js<?php echo($cache_appendix); ?>'></script>
+<script src='<?php echo($view_path); ?>topic.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_gallery.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <!--
-<script defer type='text/JavaScript' src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 -->
 
 <?php
@@ -26,7 +26,7 @@ else
 }
 ?>
 
-<script type='text/JavaScript'>
+<script>
 var in_search = 1;
 var last_author = "<?php echo_js($fmanager->get_user_name()); ?>";
 var first_message = "<?php echo($first_message); ?>";
@@ -213,7 +213,7 @@ if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["pre
 
 <?php endif; ?>
 
-/ <span class="topic_title_main"><?php echo_html($title); ?></span>
+/ <span class="topic_title_main"><?php echo_html($search_title); ?></span>
 
 <?php if(reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")): ?>
 <?php
@@ -286,7 +286,7 @@ $all_entry_post = $first_message;
 
 <?php if(reqvar_empty("news_digest") && reqvar_empty("favourite_posts") && reqvar_empty("rate_statistics") && reqvar_empty("replies_to")): ?>
 <td>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')">
 </td>
 <?php endif; ?>
 
@@ -385,7 +385,7 @@ $all_entry_post = $last_message;
 
 <?php if(reqvar_empty("news_digest") && reqvar_empty("favourite_posts") && reqvar_empty("rate_statistics") && reqvar_empty("replies_to")): ?>
 <td>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')"/>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewSearch")); ?>" onclick="delay_redirect('<?php echo(empty($search_params) ? 'search.php' : 'search.php?' . $search_params . '&new_search=1'); ?>')">
 </td>
 <?php endif; ?>
 
@@ -479,7 +479,7 @@ if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["pre
 
 <?php endif; ?>
 
-/ <span class="topic_title_main"><?php echo_html($title); ?></span>
+/ <span class="topic_title_main"><?php echo_html($search_title); ?></span>
 
 <?php if(reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")): ?>
 <a href="<?php echo_html($sort_url); ?>" title="<?php echo_html($sort_title); ?>" class="sorter <?php echo($desc); ?>">&nbsp;</a>

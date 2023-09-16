@@ -3655,8 +3655,6 @@ function check_thematic()
     editor.classList.add("comment_post");
     editor.classList.remove("thematic_post");
   }  
-
-  update_form_check_boxes(elm.form);
 } // check_thematic
 
 function prepare_post_for_navigation(link)

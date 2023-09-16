@@ -1675,6 +1675,17 @@
     padding-left: 32px;
   }
   
+  input[type="checkbox"],
+  input[type="radio"] {
+      width: 24px;
+      height: 24px;
+      border: 1px solid gray;
+  }
+
+  input[type="radio"] {
+      border-radius: 12px;
+  }
+
   .checkbox_table td
   {
     width: auto !important;
@@ -1703,7 +1714,7 @@
   .checkbox_table td:nth-child(2),
   .checkbox_table td:nth-child(4)
   {
-    padding-top: 10px !important;
+    padding-top: 12px !important;
     padding-left: 8px !important;
   }
 
@@ -2088,7 +2099,7 @@
     background-size: 33px;
   }
 
-  .add_manage_tags input[type=button]
+  .add_manage_tags button
   {
     min-width: 32px;
     width: 32px;

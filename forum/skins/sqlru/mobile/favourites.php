@@ -1,4 +1,4 @@
-<script type='text/JavaScript'>
+<script>
 var selected_topics = {};
 
 function select_all()
