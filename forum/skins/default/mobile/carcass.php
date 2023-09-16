@@ -6,6 +6,10 @@
 
 <title><?php echo_html($title); ?></title>
 
+<?php
+$cache_appendix = "?v=" . $skin_version;
+?>
+
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/Google.Analytics.php') ?>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/Meta.Tags_nosql_forum.php') ?>
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/fonts_googleapis.css<?php echo($cache_appendix); ?>" type="text/css">
@@ -23,10 +27,6 @@ var no_confirmation_of_uncritical_actions = <?php echo(!empty($_SESSION["skin_pr
 var no_confirmation_of_any_actions = <?php echo(!empty($_SESSION["skin_properties"][$skin]["no_confirmation_of_any_actions"]) ? 1 : 0); ?>;
 var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"][$skin]["no_confirmation_of_dislikes"]) ? 1 : 0); ?>;
 </script>
-
-<?php
-$cache_appendix = "?v=" . $skin_version;
-?>
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=1024"> 
