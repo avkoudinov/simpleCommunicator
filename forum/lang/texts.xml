@@ -685,6 +685,13 @@
             <ua>Пароль</ua>
         </text>
 
+        <text id="ForumPassword">
+            <en>Password for entering forum</en>
+            <de>Kennwort für den Forumzugang</de>
+            <ru>Пароль для входа на форум</ru>
+            <ua>Пароль для входа на форум</ua>
+        </text>
+
         <text id="Reset">
             <en>Reset</en>
             <de>Zurücksetzen</de>
@@ -10232,6 +10239,20 @@
             <de>Das Kriterium IP-Adresse wurde ignoriert. Sie können nur für Ihre eigenen Nachrichten nach der IP-Adresse suchen!</de>
             <ru>Критерий IP адрес был проигнорирован. Поиск по IP-адресу возможен только для собственных сообщений!</ru>
             <ua>Критерій IP адреси проігноровано. За IP-адресою можна шукати тільки власні повідомлення!</ua>
+        </text>
+
+    <text id="AccessByPassword">
+            <en>Access by password</en>
+            <de>Zugang durch Passwort</de>
+            <ru>Доступ по паролю</ru>
+            <ua>Доступ по паролю</ua>
+        </text>
+
+        <text id="AccessByAuthorization">
+            <en>Access by authorization</en>
+            <de>Zugang durch Autorisierung</de>
+            <ru>Доступ по авторизации</ru>
+            <ua>Доступ по авторизації</ua>
         </text>
 
     </texts>

@@ -46,14 +46,6 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             return "{$nl}[{{spoiler}}]{$nl2}";
             break;
         
-        case "ascii-art":
-            return "{$nl}[ascii-art]{$nl2}";
-            break;
-
-        case "kroleg-pipe":
-            return "{$nl}[kroleg-pipe]{$nl2}";
-            break;
-
         case "audio":
             return "{$nl}[{{audio}}]{$nl2}";
             break;
@@ -709,37 +701,6 @@ function bb_process_bold_simple($bbcode, $action, $name, $default, $params, $con
     return preg_replace("/#\d+$/", "", $content);
 } // bb_process_bold_simple
 //------------------------------------------------------------------------------
-function bb_process_ascii_art($bbcode, $action, $name, $default, $params, $content)
-{
-    if ($action == BBCODE_CHECK) {
-        return true;
-    }
-    
-    $bg = "transparent";
-    if (!empty($params["bg"])) {
-        $bg = $params["bg"];
-    }
-    
-    $fsize = "9";
-    if (!empty($params["fsize"]) && is_numeric($params["fsize"]) && $params["fsize"] >= 1 && $params["fsize"] <= 29) {
-        $fsize = $params["fsize"];
-    }
-    
-    parse_ascii_art($content);
-    
-    $content = preg_replace("/(@|%)([^%@\r\n\t]+?)\\1/iu", "$1<span class='dummy'>$2</span>$1", $content);
-    
-    return "<pre class='ascii_art' data-fsize='{$fsize}' data-bg='{$bg}' style=\"background-color: {$bg}; font-size: {$fsize}px; line-height: {$fsize}px;\">{$content}</pre>\n\n";
-} // bb_process_ascii_art
-//------------------------------------------------------------------------------
-function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $content) {
- if($action == BBCODE_CHECK) return true;
- $color = $params['color'] ?? '#fff';
- $uid = $params['uid'] ?? '0';
- $ext = $params['ext'] ?? 'jpg';
- return "<span class='kroleg_pipe' style='color: {$color};' data-uid='{$uid}' data-ext='{$ext}'>{$content}</span>\n\n";
-} // bb_process_kroleg_pipe
-//------------------------------------------------------------------------------
 function bb_process_fixed($bbcode, $action, $name, $default, $params, $content)
 {
     if ($action == BBCODE_CHECK) {
@@ -1180,6 +1141,10 @@ function bb_process_youtube($bbcode, $action, $name, $default, $params, $content
         $code = $matches[1];
         
         $appendix = val_or_empty($matches["2"]);
+    } elseif (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/embed\\/([A-z0-9=\-]+?)\?(start=\\d+).*/i', $content, $matches)) {
+        $code = $matches[1];
+        
+        $appendix = val_or_empty($matches["2"]);
     }
     
     $apikey = "";
@@ -1259,6 +1224,16 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
     
+    if (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/embed\\/([A-z0-9=\-]+?)\?(start=\\d+).*/i', $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: YouTube]\n\n";
+            return true;
+        }
+        
+        $content = gen_youtube_html($matches[1], $apikey, val_or_empty($matches["2"]), $url);
+        return true;
+    }
+
     return false;
 } // check_youtube_url
 //------------------------------------------------------------------------------
@@ -2454,6 +2429,12 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
         }
     }
     
+    if (preg_match("/start=(\\d+)/", $appendix, $matches)) {
+        if (!empty($matches[1])) {
+            $start += $matches[1];
+        }
+    }
+
     try {
         $url = "https://www.googleapis.com/youtube/v3/videos";
         $client = new Zend_Http_Client($url, array(
@@ -2508,7 +2489,7 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
     $html .= "<div class='youtube_container detailed_video'><div class='youtube_wrapper' style='background-image:url($picture)'>";
     $html .= "<div class='youtube_header'>" . escape_html($title) . "</div>";
     $html .= "<div class='youtube_play_embedded' onclick='embed_youtube(this, \"$code\", $start)'></div>";
-    $html .= "<a class='youtube_play_youtube' href='https://youtu.be/" . escape_html($code . $appendix) . "' target='blank'></a>";
+    $html .= "<a class='youtube_play_youtube' href='https://youtu.be/" . escape_html($code . "?t=" . $start) . "' target='blank'></a>";
     $html .= "</div></div></div>";
     
     return $html;
@@ -3100,30 +3081,6 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
     );
     $bbcode->AddRule('mono', $new_rule);
     //----------------------------------------------
-    $bbcode->AddRule('ascii-art',
-        array(
-            'mode' => BBCODE_MODE_CALLBACK,
-            'content' => BBCODE_VERBATIM,
-            'before_tag' => '',
-            'after_endtag' => '',
-            'after_tag' => 'n',
-            'before_endtag' => 'a',
-            'method' => 'bb_process_ascii_art',
-            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
-        ));
-    //----------------------------------------------
-    $bbcode->AddRule('kroleg-pipe',
-        array(
-            'mode' => BBCODE_MODE_CALLBACK,
-            'content' => BBCODE_VERBATIM,
-            'before_tag' => '',
-            'after_endtag' => '',
-            'after_tag' => 'n',
-            'before_endtag' => 'a',
-            'method' => 'bb_process_kroleg_pipe',
-            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
-        ));
-    //----------------------------------------------
     $bbcode->AddRule('fixed',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
@@ -3626,26 +3583,6 @@ function parse_bb_code_simple(&$text, $mode = "email")
     // BB blocks are replaced with a word
     //----------------------------------------------
     $bbcode->AddRule('gallery',
-        array(
-            'mode' => BBCODE_MODE_CALLBACK,
-            'content' => BBCODE_VERBATIM,
-            'before_tag' => 'a',
-            'after_endtag' => 'a',
-            'method' => 'bb_word',
-            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
-        ));
-    //----------------------------------------------
-    $bbcode->AddRule('ascii-art',
-        array(
-            'mode' => BBCODE_MODE_CALLBACK,
-            'content' => BBCODE_VERBATIM,
-            'before_tag' => 'a',
-            'after_endtag' => 'a',
-            'method' => 'bb_word',
-            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
-        ));
-    //----------------------------------------------
-    $bbcode->AddRule('kroleg-pipe',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
             'content' => BBCODE_VERBATIM,

@@ -735,18 +735,25 @@ function get_site_description($lang)
     return $site_description;
 } // get_site_description
 //------------------------------------------------------------------------------
-function get_host_address($use_host = "")
+function is_https()
 {
-    if (!empty($use_host)) {
-        return $use_host;
-    }
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+        return true;
+    } elseif ($_SERVER['SERVER_PORT'] == 443) {
+        return true;
+    } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+        return true;
+    } 
     
-    $protocol = "http://";
-    if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
-        $protocol = "https://";
+    return false;
+}
+//------------------------------------------------------------------------------
+function get_host_name()
+{
+    $host = val_or_empty($_SERVER["HTTP_HOST"]);
+    if (empty($host)) {
+        $host = val_or_empty($_SERVER["SERVER_NAME"]);
     }
-    
-    $host = val_or_empty($_SERVER["SERVER_NAME"]);
     if (empty($host)) {
         $host = val_or_empty($_SERVER["SERVER_ADDR"]);
     }
@@ -755,7 +762,21 @@ function get_host_address($use_host = "")
         $host = "undefined";
     }
     
-    $host = rtrim($host, "/");
+    return $host;
+}
+//------------------------------------------------------------------------------
+function get_host_address($use_host = "")
+{
+    if (!empty($use_host)) {
+        return $use_host;
+    }
+    
+    $protocol = "http://";
+    if (is_https()) {
+        $protocol = "https://";
+    }
+    
+    $host = rtrim(get_host_name(), "/");
     
     $port = val_or_empty($_SERVER["SERVER_PORT"]);
     if ($port == "80" || $port == "443") {
