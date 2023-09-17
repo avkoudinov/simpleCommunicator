@@ -95,6 +95,7 @@ $GLOBALS['DEF_TEXTS']['ru']['ParticipatedTopics'] = 'Темы с моим уча
 $GLOBALS['DEF_TEXTS']['ru']['ParticipatedTopicsMiddle'] = 'С моим уч.';
 $GLOBALS['DEF_TEXTS']['ru']['ParticipatedTopicsShort'] = 'Участ.';
 $GLOBALS['DEF_TEXTS']['ru']['Password'] = 'Пароль';
+$GLOBALS['DEF_TEXTS']['ru']['ForumPassword'] = 'Пароль для входа на форум';
 $GLOBALS['DEF_TEXTS']['ru']['Reset'] = 'Очистить';
 $GLOBALS['DEF_TEXTS']['ru']['ClearData'] = 'Очистить';
 $GLOBALS['DEF_TEXTS']['ru']['MsgConfirmClearData'] = 'Вы уверены, что хотите удалить все сохраненные данные профиля?';
@@ -1481,4 +1482,6 @@ $GLOBALS['DEF_TEXTS']['ru']['MsgDoublePost'] = 'Данное сообщение 
 $GLOBALS['DEF_TEXTS']['ru']['ErrNoValidCommand'] = 'Не найдена допустимая команда!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrLogoutForRegistration'] = 'Вы уже авторизованы как зарегистрированный пользователь! Для регистрации нового пользователя выйдите из системы.';
 $GLOBALS['DEF_TEXTS']['ru']['MsgIPClauseIgnored'] = 'Критерий IP адрес был проигнорирован. Поиск по IP-адресу возможен только для собственных сообщений!';
+$GLOBALS['DEF_TEXTS']['ru']['AccessByPassword'] = 'Доступ по паролю';
+$GLOBALS['DEF_TEXTS']['ru']['AccessByAuthorization'] = 'Доступ по авторизации';
 ?>

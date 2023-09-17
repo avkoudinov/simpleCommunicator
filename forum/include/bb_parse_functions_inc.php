@@ -1141,6 +1141,10 @@ function bb_process_youtube($bbcode, $action, $name, $default, $params, $content
         $code = $matches[1];
         
         $appendix = val_or_empty($matches["2"]);
+    } elseif (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/embed\\/([A-z0-9=\-]+?)\?(start=\\d+).*/i', $content, $matches)) {
+        $code = $matches[1];
+        
+        $appendix = val_or_empty($matches["2"]);
     }
     
     $apikey = "";
@@ -1220,6 +1224,16 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
     
+    if (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/embed\\/([A-z0-9=\-]+?)\?(start=\\d+).*/i', $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: YouTube]\n\n";
+            return true;
+        }
+        
+        $content = gen_youtube_html($matches[1], $apikey, val_or_empty($matches["2"]), $url);
+        return true;
+    }
+
     return false;
 } // check_youtube_url
 //------------------------------------------------------------------------------
@@ -2415,6 +2429,12 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
         }
     }
     
+    if (preg_match("/start=(\\d+)/", $appendix, $matches)) {
+        if (!empty($matches[1])) {
+            $start += $matches[1];
+        }
+    }
+
     try {
         $url = "https://www.googleapis.com/youtube/v3/videos";
         $client = new Zend_Http_Client($url, array(
@@ -2469,7 +2489,7 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
     $html .= "<div class='youtube_container detailed_video'><div class='youtube_wrapper' style='background-image:url($picture)'>";
     $html .= "<div class='youtube_header'>" . escape_html($title) . "</div>";
     $html .= "<div class='youtube_play_embedded' onclick='embed_youtube(this, \"$code\", $start)'></div>";
-    $html .= "<a class='youtube_play_youtube' href='https://youtu.be/" . escape_html($code . $appendix) . "' target='blank'></a>";
+    $html .= "<a class='youtube_play_youtube' href='https://youtu.be/" . escape_html($code . "?t=" . $start) . "' target='blank'></a>";
     $html .= "</div></div></div>";
     
     return $html;

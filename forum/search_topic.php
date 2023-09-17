@@ -130,7 +130,7 @@ if (!empty($tid)) {
             MessageHandler::setWarning(text("MsgTryLogin"));
             
             $_SESSION["last_url_asklogin"] = val_or_empty($_SERVER["REQUEST_URI"]);
-            $target_url = "login.php";
+            $target_url = "login.php?fid=" . val_or_empty($topic_data["forum_id"]);
         }
         
         header("location: " . $target_url);

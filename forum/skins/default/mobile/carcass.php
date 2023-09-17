@@ -6,6 +6,10 @@
 
 <title><?php echo_html($title); ?></title>
 
+<?php
+$cache_appendix = "?v=" . $skin_version;
+?>
+
 <script>
 var timerStart = Date.now();
 var NEW_CHECK_FREQUENCY = "<?php echo_js(defined('NEW_CHECK_FREQUENCY') ? NEW_CHECK_FREQUENCY*1000 : 30*1000); ?>";
@@ -19,10 +23,6 @@ var no_confirmation_of_uncritical_actions = <?php echo(!empty($_SESSION["skin_pr
 var no_confirmation_of_any_actions = <?php echo(!empty($_SESSION["skin_properties"][$skin]["no_confirmation_of_any_actions"]) ? 1 : 0); ?>;
 var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"][$skin]["no_confirmation_of_dislikes"]) ? 1 : 0); ?>;
 </script>
-
-<?php
-$cache_appendix = "?v=" . $skin_version;
-?>
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=1024"> 

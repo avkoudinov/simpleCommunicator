@@ -4,8 +4,22 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
+$forum_data = array();
+if(!reqvar_empty("fid") && !$fmanager->get_forum_data(reqvar("fid"), $forum_data))
+{
+  header("location: forums.php");
+  exit;
+}
+//------------------------------------------------------------------
 $title = text("Authorization") . " - " . get_site_name(current_language());
 $ogtitle = text("Authorization") . " - " . get_site_name(current_language());
+//------------------------------------------------------------------
+if (!empty($forum_data["forum_name"])) {
+    $title = $forum_data["forum_name"] . " - " . get_site_name(current_language());
+    $ogtitle = $forum_data["forum_name"] . " - " . get_site_name(current_language());
+    $ogdescription = text("AccessByAuthorization");
+}
+//------------------------------------------------------------------
 MessageHandler::setFocusElement("user_login");
 //------------------------------------------------------------------
 $failed_login_count = 0;

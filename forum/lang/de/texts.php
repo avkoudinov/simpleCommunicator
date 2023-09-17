@@ -95,6 +95,7 @@ $GLOBALS['DEF_TEXTS']['de']['ParticipatedTopics'] = 'Themen teilgenommen';
 $GLOBALS['DEF_TEXTS']['de']['ParticipatedTopicsMiddle'] = 'Teilgenommen';
 $GLOBALS['DEF_TEXTS']['de']['ParticipatedTopicsShort'] = 'Teilgen.';
 $GLOBALS['DEF_TEXTS']['de']['Password'] = 'Kennwort';
+$GLOBALS['DEF_TEXTS']['de']['ForumPassword'] = 'Kennwort für den Forumzugang';
 $GLOBALS['DEF_TEXTS']['de']['Reset'] = 'Zurücksetzen';
 $GLOBALS['DEF_TEXTS']['de']['ClearData'] = 'Löschen';
 $GLOBALS['DEF_TEXTS']['de']['MsgConfirmClearData'] = 'Sind Sie sicher, dass Sie alle gespeicherten Profildaten löschen möchten?';
@@ -1476,4 +1477,6 @@ $GLOBALS['DEF_TEXTS']['de']['MsgDoublePost'] = 'Diese Nachricht wurde bereits ge
 $GLOBALS['DEF_TEXTS']['de']['ErrNoValidCommand'] = 'Kein gültiger Befehl gefunden!';
 $GLOBALS['DEF_TEXTS']['de']['ErrLogoutForRegistration'] = 'Sie sind bereits als registrierter Benutzer eingeloggt! Um einen neuen Benutzer zu registrieren, melden Sie sich ab.';
 $GLOBALS['DEF_TEXTS']['de']['MsgIPClauseIgnored'] = 'Das Kriterium IP-Adresse wurde ignoriert. Sie können nur für Ihre eigenen Nachrichten nach der IP-Adresse suchen!';
+$GLOBALS['DEF_TEXTS']['de']['AccessByPassword'] = 'Zugang durch Passwort';
+$GLOBALS['DEF_TEXTS']['de']['AccessByAuthorization'] = 'Zugang durch Autorisierung';
 ?>
