@@ -86,6 +86,7 @@ function do_action(params)
 
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
 
   action_ajax.request("ajax/process.php");
 
@@ -221,7 +222,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <table class="form_table profile_table" style="margin-bottom: 0px">
 
 <tr>
-<th colspan="2"><?php echo_html(text("BotProfile")); ?></th>
+<th colspan="2"><?php echo_html(text("GuestProfile")); ?></th>
 </tr>
 
 <tr>

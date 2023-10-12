@@ -196,8 +196,6 @@ if (!empty($forum_data["forum_description"])) {
     $ogdescription = $forum_data["forum_description"];
 }
 
-debug_message(print_r($topic_data, true));
-
 $seo_post = $gotomsg;
 if (empty($seo_post)) 
 {

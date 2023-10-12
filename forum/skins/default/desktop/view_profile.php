@@ -60,6 +60,7 @@ function load_user_rates(load_user_rates_button)
 
   load_user_rates_ajax.setPOST('hash', get_protection_hash());
   load_user_rates_ajax.setPOST('user_logged', user_logged);
+  load_user_rates_ajax.setPOST('trace_sql', trace_sql);
 
   load_user_rates_ajax.request("ajax/load_user_rates.php");
 
@@ -148,6 +149,7 @@ function show_user_email()
   show_user_email_ajax.setPOST('uid', "<?php echo_js(reqvar("uid")); ?>");
   show_user_email_ajax.setPOST('hash', get_protection_hash());
   show_user_email_ajax.setPOST('user_logged', user_logged);
+  show_user_email_ajax.setPOST('trace_sql', trace_sql);
 
   show_user_email_ajax.request("ajax/process.php");
 
@@ -268,6 +270,7 @@ function do_action(params)
 
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
 
   action_ajax.request("ajax/process.php");
 

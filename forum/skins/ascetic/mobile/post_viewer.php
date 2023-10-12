@@ -154,6 +154,7 @@ function load_post_by_id()
 
   reload_post_ajax.setPOST('hash', get_protection_hash());
   reload_post_ajax.setPOST('user_logged', user_logged);
+  reload_post_ajax.setPOST('trace_sql', trace_sql);
 
   reload_post_ajax.request("ajax/load_post.php");
 

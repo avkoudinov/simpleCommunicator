@@ -92,11 +92,6 @@ function user_esc_handler()
 }
 </script>
 
-<?php
-$param_string = $fmanager->build_mlog_paramter_string();
-if(!empty($param_string)) $param_string .= "&";
-?>
-
 <!-- BEGIN: header3 -->
 
 <div class="header3" style="padding-top: 0px">
@@ -234,7 +229,7 @@ if(!empty($topics_with_new_count)) $display = "";
 </div>
 
 <?php if($pagination_info["page_count"] > 1): ?>
-<div class="navigator_bar"><?php echo(build_page_navigator("moderation_log.php?{$param_string}mpage=$", $pagination_info)); ?></div>
+<div class="navigator_bar"><?php echo(build_page_navigator($pagination_info["base_url_pagination"], $pagination_info)); ?></div>
 <?php endif; ?>
 
 <div class="forum_action_bar">
@@ -485,7 +480,7 @@ if(!empty($topics_with_new_count)) $display = "";
 </div>
 
 <?php if($pagination_info["page_count"] > 1): ?>
-<div class="navigator_bar"><?php echo(build_page_navigator("moderation_log.php?{$param_string}mpage=$", $pagination_info)); ?></div>
+<div class="navigator_bar"><?php echo(build_page_navigator($pagination_info["base_url_pagination"], $pagination_info)); ?></div>
 <?php endif; ?>
 
 <div class="forum_action_bar">

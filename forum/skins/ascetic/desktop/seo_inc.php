@@ -78,3 +78,90 @@
 
 <meta name="twitter:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 <?php endif; ?>
+
+<?php if (!empty($pagination_info["page_count"]) && $pagination_info["page_count"] > 1): ?>
+
+    <?php if ($pagination_info["page"] > 1): ?>
+    <link rel="first" href="<?php echo($pagination_info["base_url"]); ?>">
+
+      <?php if ($pagination_info["page"] == 2): ?>
+      <link rel="prev" href="<?php echo($pagination_info["base_url"]); ?>">
+      <?php else: ?>
+      <link rel="prev" href="<?php echo(str_replace("$", $pagination_info["page"] - 1, $pagination_info["base_url_pagination"])); ?>">
+      <?php endif; ?>
+    <?php endif; ?>
+
+    <?php if ($pagination_info["page"] < $pagination_info["page_count"]): ?>
+    <link rel="next" href="<?php echo(str_replace("$", $pagination_info["page"] + 1, $pagination_info["base_url_pagination"])); ?>">
+
+    <link rel="last" href="<?php echo(str_replace("$", $pagination_info["page_count"], $pagination_info["base_url_pagination"])); ?>">
+    <?php endif; ?>
+
+<?php endif; ?>
+
+<?php if (!empty($pagination_info["mode"])): ?>
+
+<?php
+$is_first_page = false;
+if (($pagination_info["first_page_message"] == $pagination_info["first_topic_message"] ||
+        $pagination_info["first_page_message"] == $pagination_info["first_topic_pinned_message"]) &&
+    $pagination_info["mode"] != "all" && $pagination_info["mode"] != "download"
+) {
+    $is_first_page = true;
+}
+
+
+$is_last_page = false;
+if ($pagination_info["last_page_message"] == $pagination_info["last_topic_message"] &&
+    $pagination_info["mode"] != "all" 
+) {
+    $is_last_page = true;
+}
+?>
+
+  <?php if(!($is_first_page && $is_last_page)): ?>
+
+      <?php if(!$is_first_page): ?>
+      
+      <link rel="first" href="<?php echo($pagination_info["base_url"]); ?>">
+      
+      <?php
+      if ($pagination_info["mode"] == "all" || $pagination_info["mode"] == "download") {
+        if (empty($pagination_info["startmsg"])) {
+            $url = $pagination_info["base_url"];
+        } else {
+            $url = $pagination_info["base_url"] . "&startmsg=" . $pagination_info["startmsg"] . "&offset=-1";
+        }
+      } else {
+          $url = $pagination_info["base_url"] . "&startmsg=" . $pagination_info["first_page_message"] . "&offset=-1";
+      }
+      ?>
+      <link rel="prev" href="<?php echo($url); ?>">
+      
+      <?php endif; ?>
+
+      <?php if(!$is_last_page): ?>
+      
+      <?php
+      if ($pagination_info["mode"] == "all") {
+          $url = $pagination_info["base_url"] . "&startmsg=last&offset=-1";
+      } else {
+          $url = $pagination_info["base_url"] . "&startmsg=" . $pagination_info["last_page_message"] . "&offset=1";
+      }
+      ?>
+      <link rel="next" href="<?php echo($url); ?>">
+      
+      <?php
+      if (!empty($pagination_info["page_before_last"])) {
+          $url = $pagination_info["base_url"] . "&startmsg=" . $pagination_info["last_page_message"] . "&offset=1";
+      } else {
+          $url = $pagination_info["base_url"] . "&startmsg=last&offset=-1";
+      }
+      ?>
+      <link rel="last" href="<?php echo($url); ?>">
+      
+      <?php endif; ?>
+
+  <?php endif; ?>
+
+<?php endif; ?>

@@ -876,14 +876,6 @@ if(!empty($moderator_caption))
 
 <?php endif; // user data ?>
 
-<?php
-$author_appendix = "";
-if(!reqvar_empty("author"))
-{
-  $author_appendix = "&author=" . xrawurlencode(reqvar("author"));
-}
-?>
-
 <?php if(reqvar("type") == "moderation" || reqvar("type") == "ip_users" ||
          reqvar("type") == "um_moderation" || reqvar("type") == "um_users"): 
 ?>

@@ -54,15 +54,6 @@ user_tags['#<?php echo_js($tgid); ?>'] = '<?php echo_js($tgname); ?>';
 <?php endforeach; ?> 
 
 <?php
-$fpage_appendix = "";
-if(!reqvar_empty("fpage")) $fpage_appendix .= "&fpage=" . reqvar("fpage");
-
-if(!reqvar_empty("search_keys")) $fpage_appendix .= "&search_keys=" . xrawurlencode(reqvar("search_keys"));
-if(!reqvar_empty("with_morphology")) $fpage_appendix .= "&with_morphology=1";
-if(!reqvar_empty("from_search")) $fpage_appendix .= "&from_search=1";
-
-$base_url = "topic.php?fid=" . $fid_for_url . "&tid=" . $tid . $fpage_appendix;
-
 $gotomsg_appendix = "";
 if ($pagination_info["first_page_message"] != $pagination_info["first_topic_message"]) {
   $gotomsg_appendix = "&msg=" . $pagination_info["first_page_message"];
@@ -209,6 +200,7 @@ function search_user(form)
   search_user_ajax.setPOST('search_users', "1");
   search_user_ajax.setPOST('hash', get_protection_hash());
   search_user_ajax.setPOST('user_logged', user_logged);
+  search_user_ajax.setPOST('trace_sql', trace_sql);
   search_user_ajax.setPOST('lookup_string', form.elements['user_to_search'].value);
 
   search_user_ajax.request("ajax/process.php");
@@ -990,7 +982,7 @@ if(!empty($topic_data["is_private"]))
         $online_status = "&nbsp;<span class='online_text'>✓</span>";
       }
 
-      $treaders .= "<a href='view_profile.php?uid=$pid' >" . escape_html($pdata["user"]) . "</a>$online_status$appendix, ";
+      $treaders .= "<span class='user_name'><a href='view_profile.php?uid=$pid' >" . escape_html($pdata["user"]) . "</a>$online_status$appendix</span>, ";
     }
 
     $treaders = trim($treaders, ", ");
@@ -1010,15 +1002,15 @@ else
       $appendix = "<span class='last_visit_info'>&nbsp;" . escape_html($uinfo["time_ago"]) . "</span>";
 
     if(!empty($uinfo["id"]))
-      $treaders .= "<span style='white-space: nowrap'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $treaders .= "<span class='user_name'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif(!empty($uinfo["bot"]))
-      $treaders .= "<span style='white-space: nowrap'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $treaders .= "<span class='user_name'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif($ouid == "g_#anonyms#")
-      $treaders .= "<span style='white-space: nowrap'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
+      $treaders .= "<span class='user_name'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
     elseif($uinfo["name"] == "admin")
-      $treaders .= "<span style='white-space: nowrap'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
+      $treaders .= "<span class='user_name'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
     else
-      $treaders .= "<span style='white-space: nowrap'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $treaders .= "<span class='user_name'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
   }
 
   $treaders = trim($treaders, ", ");
@@ -1035,15 +1027,15 @@ else
       $appendix = "<span class='last_visit_info'>&nbsp;" . escape_html($uinfo["time_ago"]) . "</span>";
 
     if(!empty($uinfo["id"]))
-      $freaders .= "<span style='white-space: nowrap'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif(!empty($uinfo["bot"]))
-      $freaders .= "<span style='white-space: nowrap'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif($ouid == "g_#anonyms#")
-      $freaders .= "<span style='white-space: nowrap'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
     elseif($uinfo["name"] == "admin")
-      $freaders .= "<span style='white-space: nowrap'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
     else
-      $freaders .= "<span style='white-space: nowrap'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
   }
 
   $freaders = trim($freaders, ", ");

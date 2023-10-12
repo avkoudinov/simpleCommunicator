@@ -270,6 +270,7 @@ function request_activation()
   request_activation_ajax.setPOST('request_activation', "1");
   request_activation_ajax.setPOST('hash', get_protection_hash());
   request_activation_ajax.setPOST('user_logged', user_logged);
+  request_activation_ajax.setPOST('trace_sql', trace_sql);
 
   request_activation_ajax.request("ajax/process.php");
 

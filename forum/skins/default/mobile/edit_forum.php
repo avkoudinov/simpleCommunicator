@@ -175,6 +175,7 @@ function search_user()
   search_user_ajax.setPOST('search_users', "1");
   search_user_ajax.setPOST('hash', get_protection_hash());
   search_user_ajax.setPOST('user_logged', user_logged);
+  search_user_ajax.setPOST('trace_sql', trace_sql);
   search_user_ajax.setPOST('lookup_string', form.elements['user_to_search'].value);
 
   search_user_ajax.request("ajax/process.php");

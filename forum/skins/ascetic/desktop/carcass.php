@@ -103,6 +103,7 @@ hljs.initHighlightingOnLoad();
 var protection_hash = "";
 set_protection_hash('<?php echo_js(val_or_empty($_SESSION["hash"])); ?>');
 var user_logged = "<?php echo_js(val_or_empty($_SESSION["logged_in"])); ?>";
+var trace_sql = "<?php echo_js(val_or_empty($_REQUEST["trace_sql"])); ?>";
 var current_url = "<?php echo_js(val_or_empty($_SERVER["REQUEST_URI"])); ?>";
 var user_marker = get_agent_hash();
 

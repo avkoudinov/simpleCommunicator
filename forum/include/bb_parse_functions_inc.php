@@ -46,6 +46,14 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             return "{$nl}[{{spoiler}}]{$nl2}";
             break;
         
+        case "ascii-art":
+            return "{$nl}[ascii-art]{$nl2}";
+            break;
+
+        case "kroleg-pipe":
+            return "{$nl}[kroleg-pipe]{$nl2}";
+            break;
+
         case "audio":
             return "{$nl}[{{audio}}]{$nl2}";
             break;
@@ -455,7 +463,8 @@ function check_image_url(&$url, &$large_url)
           return true;
       }
     } else {
-          if (strpos($host, "userapi.com")) {
+          if (strpos($host, "userapi.com") !== false ||
+              strpos($host, "webpulse.imgsmail.ru") !== false) {
               return true;
           }
           
@@ -700,6 +709,37 @@ function bb_process_bold_simple($bbcode, $action, $name, $default, $params, $con
     // cut post reference at the author's name
     return preg_replace("/#\d+$/", "", $content);
 } // bb_process_bold_simple
+//------------------------------------------------------------------------------
+function bb_process_ascii_art($bbcode, $action, $name, $default, $params, $content)
+{
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
+    $bg = "transparent";
+    if (!empty($params["bg"])) {
+        $bg = $params["bg"];
+    }
+    
+    $fsize = "9";
+    if (!empty($params["fsize"]) && is_numeric($params["fsize"]) && $params["fsize"] >= 1 && $params["fsize"] <= 29) {
+        $fsize = $params["fsize"];
+    }
+    
+    parse_ascii_art($content);
+    
+    $content = preg_replace("/(@|%)([^%@\r\n\t]+?)\\1/iu", "$1<span class='dummy'>$2</span>$1", $content);
+    
+    return "<pre class='ascii_art' data-fsize='{$fsize}' data-bg='{$bg}' style=\"background-color: {$bg}; font-size: {$fsize}px; line-height: {$fsize}px;\">{$content}</pre>\n\n";
+} // bb_process_ascii_art
+//------------------------------------------------------------------------------
+function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $content) {
+ if($action == BBCODE_CHECK) return true;
+ $color = $params['color'] ?? '#fff';
+ $uid = $params['uid'] ?? '0';
+ $ext = $params['ext'] ?? 'jpg';
+ return "<span class='kroleg_pipe' style='color: {$color};' data-uid='{$uid}' data-ext='{$ext}'>{$content}</span>\n\n";
+} // bb_process_kroleg_pipe
 //------------------------------------------------------------------------------
 function bb_process_fixed($bbcode, $action, $name, $default, $params, $content)
 {
@@ -1127,24 +1167,28 @@ function bb_process_youtube($bbcode, $action, $name, $default, $params, $content
     
     $appendix = "";
     
-    if (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/shorts\\/([A-z0-9=\-]+)(\\?.+)?/i', $content, $matches)) {
+    $content = str_replace("&amp;", "&", $content);
+
+    if (preg_match("~https?://youtu.be/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $content, $matches)) {
         $code = $matches[1];
-    } elseif (preg_match('/v=([A-z0-9=\-]+?)(&.*)?$/i', $content, $matches)) {
+        $appendix = val_or_empty($matches[3]);
+    } elseif (preg_match("~https?://youtu.be/([^&?]+).*~", $content, $matches)) {
         $code = $matches[1];
-    } elseif (preg_match('/https:\\/\\/[^\\/]*youtu\\.be\\/([A-z0-9=\-]+?)\\?list=/i', $content, $matches)) {
+    } elseif (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*?~", $content, $matches)) {
         $code = $matches[1];
-    } elseif (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/shorts\\/([A-z0-9=\-]+?)\?feature=share/i', $content, $matches)) {
+        $appendix = val_or_empty($matches[3]);
+    } elseif (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*~", $content, $matches)) {
         $code = $matches[1];
-    } elseif (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/watch\\?(time_continue=\\d+)&v=([A-z0-9=\-]+)(&.*)?/i', $content, $matches)) {
+    } elseif (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $content, $matches)) {
+        $code = $matches[2];
+    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $content, $matches)) {
         $code = $matches[1];
-    } elseif (preg_match('/https:\\/\\/[^\\/]*youtu\\.be\\/([A-z0-9=\-]+?)(\\?t=(.*))?$/i', $content, $matches)) {
+        $appendix = val_or_empty($matches[3]);
+    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*~", $content, $matches)) {
         $code = $matches[1];
-        
-        $appendix = val_or_empty($matches["2"]);
-    } elseif (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/embed\\/([A-z0-9=\-]+?)\?(start=\\d+).*/i', $content, $matches)) {
-        $code = $matches[1];
-        
-        $appendix = val_or_empty($matches["2"]);
+    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?((?:t|start|time_continue)=[^&]+).*?&v=([^&?]+).*~", $content, $matches)) {
+        $code = $matches[2];
+        $appendix = val_or_empty($matches[1]);
     }
     
     $apikey = "";
@@ -1164,7 +1208,17 @@ function check_youtube_url($url, &$content, $message_mode)
         $apikey = YOUTUBE_API_KEY;
     }
     
-    if (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/shorts\\/([A-z0-9=\-]+)(\\?.+)?/i', $url, $matches)) {
+    if (preg_match("~https?://youtu.be/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: YouTube]\n\n";
+            return true;
+        }
+        
+        $content = gen_youtube_html($matches[1], $apikey, $matches[3], $url);
+        return true;
+    }
+    
+    if (preg_match("~https?://youtu.be/([^&?]+).*~", $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1173,8 +1227,18 @@ function check_youtube_url($url, &$content, $message_mode)
         $content = gen_youtube_html($matches[1], $apikey, "", $url);
         return true;
     }
-    
-    if (preg_match('/https:\\/\\/[^=]+youtu[^=]+v=([A-z0-9=\-]+?)(&.*)?$/i', $url, $matches)) {
+
+    if (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*?~", $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: YouTube]\n\n";
+            return true;
+        }
+        
+        $content = gen_youtube_html($matches[1], $apikey, $matches[3], $url);
+        return true;
+    }
+
+    if (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*~", $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1183,8 +1247,28 @@ function check_youtube_url($url, &$content, $message_mode)
         $content = gen_youtube_html($matches[1], $apikey, "", $url);
         return true;
     }
+
+    if (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: YouTube]\n\n";
+            return true;
+        }
+        
+        $content = gen_youtube_html($matches[2], $apikey, "", $url);
+        return true;
+    }
+
+    if (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: YouTube]\n\n";
+        return true;
+    }
     
-    if (preg_match('/https:\\/\\/[^\\/]*youtu\\.be\\/([A-z0-9=\-]+?)\\?list=/i', $url, $matches)) {
+        $content = gen_youtube_html($matches[1], $apikey, $matches[3], $url);
+        return true;
+    }
+
+    if (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*~", $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1193,44 +1277,14 @@ function check_youtube_url($url, &$content, $message_mode)
         $content = gen_youtube_html($matches[1], $apikey, "", $url);
         return true;
     }
-    
-    if (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/shorts\\/([A-z0-9=\-]+?)\?feature=share/i', $url, $matches)) {
+
+    if (preg_match("~https?://[^/]*youtube.com/watch\?((?:t|start|time_continue)=[^&]+).*?&v=([^&?]+).*~", $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
-            return true;
-        }
-        
-        $content = gen_youtube_html($matches[1], $apikey, "", $url);
         return true;
     }
     
-    if (preg_match('/https:\\/\\/[^\\/]*youtu\\.be\\/([A-z0-9=\-]+?)(\\?t=(.*))?$/i', $url, $matches)) {
-        if ($message_mode != "message") {
-            $content = "\n[{{video}}: YouTube]\n\n";
-            return true;
-        }
-        
-        $content = gen_youtube_html($matches[1], $apikey, val_or_empty($matches["2"]), $url);
-        return true;
-    }
-    
-    if (preg_match('/https:\\/\\/[^\\/]*youtube.com\\/watch\\?(time_continue=\\d+)&v=([A-z0-9=\-]+)(&.*)?/i', $url, $matches)) {
-        if ($message_mode != "message") {
-            $content = "\n[{{video}}: YouTube]\n\n";
-            return true;
-        }
-        
-        $content = gen_youtube_html($matches[2], $apikey, val_or_empty($matches["1"]), $url);
-        return true;
-    }
-    
-    if (preg_match('/https:\\/\\/[^\\/]*youtube\\.com\\/embed\\/([A-z0-9=\-]+?)\?(start=\\d+).*/i', $url, $matches)) {
-        if ($message_mode != "message") {
-            $content = "\n[{{video}}: YouTube]\n\n";
-            return true;
-        }
-        
-        $content = gen_youtube_html($matches[1], $apikey, val_or_empty($matches["2"]), $url);
+        $content = gen_youtube_html($matches[2], $apikey, $matches[1], $url);
         return true;
     }
 
@@ -1323,7 +1377,9 @@ function bb_process_reddit($bbcode, $action, $name, $default, $params, $content)
         return $content;
     }
     
-    if (preg_match('/https:\\/\\/www\\.reddit\\.com\\/.*comments\\/([^\\/]+)\\/.*/i', $content, $matches)) {
+    // https://www.reddit.com/r/OnePunchMan/comments/tge72l/how_to_kill_mosquitoes_serious_edition/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+    
+    if (preg_match('/(https:\\/\\/www\\.reddit\\.com\\/.*\\/).*/i', $content, $matches)) {
         $code = $matches[1];
     }
     
@@ -1334,13 +1390,16 @@ function bb_process_reddit($bbcode, $action, $name, $default, $params, $content)
 //------------------------------------------------------------------------------
 function check_reddit_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\\/\\/www\\.reddit\\.com\\/.*comments\\/([^\\/]+)\\/.*/i', $url, $matches)) {
+    // https://www.reddit.com/r/OnePunchMan/comments/tge72l/how_to_kill_mosquitoes_serious_edition/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+    
+    if (preg_match('/(https:\\/\\/www\\.reddit\\.com\\/.*\\/).*/i', $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Reddit]\n\n";
             return true;
         }
         
         $content = gen_reddit_html($matches[1], $url);
+        
         return true;
     }
     
@@ -1833,11 +1892,9 @@ function check_special_url($url, &$content, $message_mode)
         return true;
     }
     
-    /*
     if (check_reddit_url($url, $content, $message_mode)) {
         return true;
     }
-    */
     
     if (check_tiktok_url($url, $content, $message_mode)) {
         return true;
@@ -2405,7 +2462,7 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
     $picture = "";
     $start = 0;
     
-    if (preg_match("/\\?t=((\\d+)h)?((\\d+)m)?((\\d+)s)?/", $appendix, $matches)) {
+    if (preg_match("/t=((\\d+)h)?((\\d+)m)?((\\d+)s)?/", $appendix, $matches)) {
         if (!empty($matches[2])) {
             $start += 3600 * $matches[2];
         }
@@ -2417,7 +2474,7 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
         }
     }
     
-    if (preg_match("/\\?t=(\\d+)/", $appendix, $matches)) {
+    if (preg_match("/t=(\\d+)/", $appendix, $matches)) {
         if (!empty($matches[1])) {
             $start += $matches[1];
         }
@@ -2542,12 +2599,21 @@ function gen_radikal_html($code, $bbcode)
 //------------------------------------------------------
 function gen_reddit_html($code, $bbcode)
 {
+    global $skin;
+
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
     $html .= "<div class='short_video'><a class='reddit_short_container' href='https://www.reddit.com/$code' target='blank'>Reddit</a></div>";
     $html .= "<div class='reddit detailed_video'>";
-    $html .= "<iframe width='640' height='360' src='https://old.reddit.com/mediaembed/$code' frameborder='0' scrolling='no' allowfullscreen></iframe>";
+    $html .= "<blockquote class='reddit-embed-bq' style='height:500px' data-embed-height='500'>";
+    $html .= "<a href='$code'></a>";
+    $html .= "</blockquote>";
+
+    $block_id = str_ireplace("/", "-", $code) . "-" . time() . "-" . rand(1000000, 9999999);
+
+    $html .= '<script async src="skins/' . $skin . '/js/reddit-widget.js" data-reddit-post="' . escape_html($code) . '" data-block-id="' . $block_id . '" charset="UTF-8"></script>';
+
     $html .= "</div>
-              <a class='attachment_link' href='https://www.reddit.com/$code' target='_blank'>{{link}}</a>
+              <a class='attachment_link' href='$code' target='_blank'>{{link}}</a>
               </div>";
     
     return $html;
@@ -3081,6 +3147,30 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
     );
     $bbcode->AddRule('mono', $new_rule);
     //----------------------------------------------
+    $bbcode->AddRule('ascii-art',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => '',
+            'after_endtag' => '',
+            'after_tag' => 'n',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_ascii_art',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('kroleg-pipe',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => '',
+            'after_endtag' => '',
+            'after_tag' => 'n',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_kroleg_pipe',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
     $bbcode->AddRule('fixed',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
@@ -3583,6 +3673,26 @@ function parse_bb_code_simple(&$text, $mode = "email")
     // BB blocks are replaced with a word
     //----------------------------------------------
     $bbcode->AddRule('gallery',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'method' => 'bb_word',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('ascii-art',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'method' => 'bb_word',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('kroleg-pipe',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
             'content' => BBCODE_VERBATIM,

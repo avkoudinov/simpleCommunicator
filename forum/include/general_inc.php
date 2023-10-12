@@ -153,6 +153,23 @@ if (empty($ajax_processing)) {
             unset($_SESSION["redirection_start_time"]);
         }
     }
+} else {
+    if (!empty($_REQUEST["trace_sql"])) {
+        $_SESSION["ajax_trace_sql"] = $_REQUEST["trace_sql"];
+        $_SESSION["ajax_trace_time_start"] = microtime(true);
+        $_SESSION["ajax_execution_profiles"] = array();
+        $_SESSION["ajax_execution_profiles"][] = array("action" => "Start - " . $_SERVER['REQUEST_URI'], "time" => 0);
+        $_SESSION["ajax_trace_sql_log"] = "";
+        
+        $_SESSION["ajax_trace_sql_log"] .= "----------------------------------------------------------------------" . "\n";
+        $_SESSION["ajax_trace_sql_log"] .= "Started (AJAX): " . $_SERVER['REQUEST_URI'] . "\n";;
+        $_SESSION["ajax_trace_sql_log"] .= "----------------------------------------------------------------------" . "\n";
+    } elseif (empty($_SESSION["ajax_trace_time_start"])) {
+        $_SESSION["ajax_trace_time_start"] = microtime(true);
+        $_SESSION["ajax_execution_profiles"] = array();
+        $_SESSION["ajax_execution_profiles"][] = array("action" => "Start [" . val_or_empty($_SERVER['REQUEST_URI']) . "]", "time" => 0);
+        //debug_message("setting trace_time_start:" . round(1000*$_SESSION["trace_time_start"]));
+    }
 }
 
 $new_check_time = 0;

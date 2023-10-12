@@ -154,6 +154,7 @@ function do_action(params)
 
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
 
   action_ajax.request("ajax/process.php");
 
@@ -174,11 +175,6 @@ function user_esc_handler()
   }
 }
 </script>
-
-<?php
-if(!reqvar_empty("filter")) $base_url = "events.php?filter=" . xrawurlencode(reqvar("filter")) . "&epage=";
-else                        $base_url = "events.php?epage=";
-?>
 
 <!-- BEGIN: header2 -->
 
@@ -323,7 +319,7 @@ if(!empty($topics_with_new_count)) $display = "";
 
 <?php if($pagination_info["page_count"] > 1): ?>
 <div class="forum_bar">
-<div class="navigator_bar"><?php echo(build_page_navigator($base_url . "$", $pagination_info)); ?></div>
+<div class="navigator_bar"><?php echo(build_page_navigator($pagination_info["base_url_pagination"], $pagination_info)); ?></div>
 <div class="clear_both">
 </div>
 </div>
@@ -397,7 +393,7 @@ if(empty($settings["hide_online_status"]) && !empty($evinfo["author"]) && (!empt
 
 <?php if($pagination_info["page_count"] > 1): ?>
 <div class="forum_bar">
-<div class="navigator_bar"><?php echo(build_page_navigator($base_url . "$", $pagination_info)); ?></div>
+<div class="navigator_bar"><?php echo(build_page_navigator($pagination_info["base_url_pagination"], $pagination_info)); ?></div>
 <div class="clear_both">
 </div>
 </div>

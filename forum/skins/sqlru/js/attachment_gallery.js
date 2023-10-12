@@ -237,6 +237,7 @@ function load_next_gallery_attachments(add_favourite_text, remove_favourite_text
 
   load_next_gallery_attachments_ajax.setPOST('hash', get_protection_hash());
   load_next_gallery_attachments_ajax.setPOST('user_logged', user_logged);
+  load_next_gallery_attachments_ajax.setPOST('trace_sql', trace_sql);
   load_next_gallery_attachments_ajax.setPOST('last_att_post_id', last_att_post_id);
   load_next_gallery_attachments_ajax.setPOST('last_att_id', last_att_id);
 

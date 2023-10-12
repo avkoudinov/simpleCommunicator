@@ -359,6 +359,11 @@ class MySQL_ForumManager extends ForumManager
             $limit = $pagination_info["rows_per_page"];
         }
         
+        $index_hint = "";
+        if ($pagination_info["total_count"] > 1000) {
+            $index_hint = "use index ({$prfx}_topic_statistics_lmdate_idx)";
+        }
+        
         return "
           select 
            {$prfx}_topic.id, {$prfx}_topic.name, {$prfx}_topic.creation_date,
@@ -373,15 +378,14 @@ class MySQL_ForumManager extends ForumManager
            {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker, {$prfx}_user.user_name,
                {$prfx}_user.last_visit_date, {$prfx}_user.logout,
            forum_id, {$prfx}_forum.name forum_name, is_poll, {$prfx}_topic.no_guests
-            from
-              (select 
-               topic_id, last_message_date, post_count, post_count_total, hits_count, bot_hits_count 
-               from {$prfx}_topic_statistics) {$prfx}_topic_statistics
-           inner join {$prfx}_topic  
-            on ({$prfx}_topic.id = v1_topic_statistics.topic_id)
+
+           from {$prfx}_topic
+           inner join {$prfx}_topic_statistics {$index_hint}
+           on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
 
            inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
            left join {$prfx}_user on ({$prfx}_topic.user_id = {$prfx}_user.id)
+
            $where and {$prfx}_topic.pinned + {$prfx}_topic.publish_delay = 0 $user_pinned_topic_appendix
            order by last_message_date desc
            limit $begin, $limit

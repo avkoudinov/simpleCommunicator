@@ -48,6 +48,7 @@ function load_browser_stats(load_browser_stat_button)
 
   load_browser_stats_ajax.setPOST('hash', get_protection_hash());
   load_browser_stats_ajax.setPOST('user_logged', user_logged);
+  load_browser_stats_ajax.setPOST('trace_sql', trace_sql);
 
   load_browser_stats_ajax.request("ajax/load_browser_stats.php");
 
@@ -116,6 +117,7 @@ function load_total_rates(load_total_rates_button)
 
   load_total_rates_ajax.setPOST('hash', get_protection_hash());
   load_total_rates_ajax.setPOST('user_logged', user_logged);
+  load_total_rates_ajax.setPOST('trace_sql', trace_sql);
   
   load_total_rates_ajax.request("ajax/load_total_rates.php<?php echo($query_string); ?>");
 
