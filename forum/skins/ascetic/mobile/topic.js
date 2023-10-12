@@ -181,12 +181,12 @@ function embed_youtube(elm, code, start)
       iframe.style.height = parent.clientHeight + "px";
       iframe.style.border = "0";
       iframe.src = "https://www.youtube.com/embed/" + code + "?autoplay=1" + "&start=" + start + "&enablejsapi=1";
-	  
       iframe.setAttribute("allowfullscreen", "1");
+      iframe.addEventListener('load', () => iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'), true);
 
       parent.appendChild(iframe);
 
-      setTimeout(() => { iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'); }, 1000);
+      //setTimeout(() => { iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'); }, 1000);
 
       break;
     }
@@ -1096,6 +1096,7 @@ function reload_post(post)
 
   reload_post_ajax.setPOST('hash', get_protection_hash());
   reload_post_ajax.setPOST('user_logged', user_logged);
+  reload_post_ajax.setPOST('trace_sql', trace_sql);
 
   reload_post_ajax.setPOST('fpage', fpage);
 
@@ -1155,6 +1156,7 @@ function reload_nav_control(params)
 
   reload_nav_control_ajax.setPOST('hash', get_protection_hash());
   reload_nav_control_ajax.setPOST('user_logged', user_logged);
+  reload_nav_control_ajax.setPOST('trace_sql', trace_sql);
 
   reload_nav_control_ajax.setPOST('fpage', fpage);
 
@@ -1215,6 +1217,7 @@ function reload_online_users(topic, forum)
 
   reload_online_users_ajax.setPOST('hash', get_protection_hash());
   reload_online_users_ajax.setPOST('user_logged', user_logged);
+  reload_online_users_ajax.setPOST('trace_sql', trace_sql);
 
   reload_online_users_ajax.request("ajax/reload_online_users.php");
 
@@ -1426,6 +1429,7 @@ function load_new_posts(topic, forum,  highlight_message, target_url)
 
   load_new_posts_ajax.setPOST('hash', get_protection_hash());
   load_new_posts_ajax.setPOST('user_logged', user_logged);
+  load_new_posts_ajax.setPOST('trace_sql', trace_sql);
 
   load_new_posts_ajax.setPOST('fpage', fpage);
 
@@ -1711,6 +1715,7 @@ function do_action(params)
 
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
   action_ajax.setPOST('current_url', current_url);
 
   action_ajax.setPOST('user_marker', user_marker);
@@ -3185,6 +3190,7 @@ function do_auto_save()
   auto_save_ajax.setPOST('auto_save', "1");
   auto_save_ajax.setPOST('hash', get_protection_hash());
   auto_save_ajax.setPOST('user_logged', user_logged);
+  auto_save_ajax.setPOST('trace_sql', trace_sql);
   auto_save_ajax.setPOST('topic', topic_id);
 
   auto_save_ajax.setPOST('fpage', fpage);

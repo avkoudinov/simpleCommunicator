@@ -33,6 +33,8 @@ $pagination_info["total_count"] = val_or_empty($forum_data["topic_count"]);
 $pagination_info["ignored_count"] = val_or_empty($forum_data["ignored_topic_count"]);
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("fpage") ? 1 : reqvar("fpage");
+$pagination_info["base_url"] = "favourites.php";
+$pagination_info["base_url_pagination"] = "favourites.php?fpage=$";
 
 $fmanager->get_forum_topics("favourites", -1, $topic_list, $pagination_info);
 

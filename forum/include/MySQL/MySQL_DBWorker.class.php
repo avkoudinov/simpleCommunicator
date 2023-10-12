@@ -245,6 +245,23 @@ class MySQL_DBWorker extends DBWorker
             $_SESSION["trace_sql_log"] .= $txt;
         }
         
+        if (!empty($_SESSION["ajax_trace_sql"]) &&
+            ($_SESSION["ajax_trace_sql"] == 1 || $tmp >= $_SESSION["ajax_trace_sql"])
+        ) {
+            $dtrace = debug_backtrace();
+            
+            $txt = $query_string;
+            $txt .= "\n";
+            $txt .= "\n";
+            $txt .= extract_call_stack($dtrace) . "\n";
+            $txt .= "\n";
+            $txt .= "Elapsed: " . $tmp . "ms" . "\n";
+            $txt .= "----------------------------------------------------------------------";
+            $txt .= "\n";
+            
+            $_SESSION["ajax_trace_sql_log"] .= $txt;
+        }
+
         if (empty($_SESSION["no_db_trace"]) && $tmp > 2000 && !(date("G") == 3 && date("i") >= 0 && date("i") <= 10)) {
             $dtrace = debug_backtrace();
             

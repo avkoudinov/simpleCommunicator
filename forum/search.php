@@ -131,6 +131,10 @@ $pagination_info = array();
 $pagination_info["total_count"] = 0;
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("spage") ? 1 : reqvar("spage");
+
+$pagination_info["base_url"] = "search.php?" . $search_params;
+$pagination_info["base_url_pagination"] = "search.php?" . $search_params . "&spage=$";
+
 //------------------------------------------------------------------
 do {
     //-------------------------------------------------

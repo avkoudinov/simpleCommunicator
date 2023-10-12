@@ -39,6 +39,26 @@ if (empty($ajax_processing)) {
     $MSG_ACTIVE_TAB = MessageHandler::getActiveTab();
     $MSG_FOCUS_ELEMENT = MessageHandler::getFocusElement();
     $MSG_ERROR_ELEMENT = MessageHandler::getErrorElement();
+} else {
+    $exec_time = round(1000 * (microtime(true) - $_SESSION["ajax_trace_time_start"]));
+
+    $execution_profiles = array();
+    if (!empty($_SESSION["ajax_execution_profiles"])) {
+        $execution_profiles = $_SESSION["ajax_execution_profiles"];
+    }
+    
+    unset($_SESSION["ajax_trace_time_start"]);
+    unset($_SESSION["ajax_execution_profiles"]);
+
+    if (!empty($_SESSION["ajax_trace_sql"])) {
+        $_SESSION["ajax_trace_sql_log"] .= "Total execution time (AJAX): " . $exec_time . "ms" . "\n";
+        $_SESSION["ajax_trace_sql_log"] .= "----------------------------------------------------------------------" . "\n";
+        
+        trace_message_to_file($_SESSION["ajax_trace_sql_log"], "trace_sql.log");
+        
+        unset($_SESSION["ajax_trace_sql"]);
+        unset($_SESSION["ajax_trace_sql_log"]);
+    }
 }
 ?>
 

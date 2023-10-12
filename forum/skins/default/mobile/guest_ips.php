@@ -94,6 +94,7 @@ function do_action(elm, params)
 
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
 
   action_ajax.request("ajax/process.php");
 

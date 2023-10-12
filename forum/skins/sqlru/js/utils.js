@@ -1514,6 +1514,7 @@ function save_notes(uid, elm_id, notes)
   save_notes_ajax.setPOST('save_notes', "1");
   save_notes_ajax.setPOST('hash', get_protection_hash());
   save_notes_ajax.setPOST('user_logged', user_logged);
+  save_notes_ajax.setPOST('trace_sql', trace_sql);
   save_notes_ajax.setPOST('uid', uid);
   save_notes_ajax.setPOST('notes', notes);
 
@@ -1854,8 +1855,25 @@ function init_telegram_widgets()
     script.setAttribute("src", widgets[i].getAttribute("src"));
     script.setAttribute("data-block-id", widgets[i].getAttribute("data-block-id"));
     script.setAttribute("data-telegram-post", widgets[i].getAttribute("data-telegram-post"));
-    script.setAttribute("data-block-id", widgets[i].getAttribute("data-block-id"));
     script.setAttribute("data-width", widgets[i].getAttribute("data-width"));
+    
+    widgets[i].parentNode.replaceChild(script, widgets[i]);    
+  }
+}
+// --------------------------------------------------------
+function init_reddit_widgets()
+{
+  var widgets = document.querySelectorAll('script[data-reddit-post]');
+  var script = null;
+  
+  for (var i = 0; i < widgets.length; i++) {
+    if(!widgets[i].getAttribute("data-block-id")) continue;
+    
+    script = document.createElement("script");
+
+    script.setAttribute("src", widgets[i].getAttribute("src"));
+    script.setAttribute("data-block-id", widgets[i].getAttribute("data-block-id"));
+    script.setAttribute("data-reddit-post", widgets[i].getAttribute("data-reddit-post"));
     
     widgets[i].parentNode.replaceChild(script, widgets[i]);    
   }
@@ -1878,6 +1896,7 @@ function init_embedded_widgets()
   init_twitter_widgets();
   init_fb_widgets();
   init_telegram_widgets();
+  init_reddit_widgets();
 } // init_embedded_widgets
 // --------------------------------------------------------
 function init_lightbox_images()
@@ -2566,6 +2585,7 @@ function check_new_messages()
 
   check_new_messages_ajax.setPOST('hash', get_protection_hash());
   check_new_messages_ajax.setPOST('user_logged', user_logged);
+  check_new_messages_ajax.setPOST('trace_sql', trace_sql);
   if(typeof topic_id != 'undefined') check_new_messages_ajax.setPOST('tid', topic_id);
 
   check_new_messages_ajax.setPOST('fpage', fpage);
@@ -2624,6 +2644,7 @@ function clear_profile_data()
   clear_profile_data_ajax.setPOST('clear_profile_data', "1");
   clear_profile_data_ajax.setPOST('hash', get_protection_hash());
   clear_profile_data_ajax.setPOST('user_logged', user_logged);
+  clear_profile_data_ajax.setPOST('trace_sql', trace_sql);
 
   clear_profile_data_ajax.request("ajax/process.php");
 

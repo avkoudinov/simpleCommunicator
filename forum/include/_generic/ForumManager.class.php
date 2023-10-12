@@ -2582,7 +2582,7 @@ abstract class ForumManager
     } // cascade_delete_forum
     
     //-----------------------------------------------------------------
-    function cascade_delete_topic($dbw, $topic_clause)
+    function cascade_delete_topic($dbw, $topic_clause, $post_date_clause)
     {
         $prfx = $dbw->escape(System::getDBPrefix());
 
@@ -2647,11 +2647,11 @@ abstract class ForumManager
         }
         
         // $tmp_id_collector_table is not allowed because it is also used for cascade_delete_post
-        if (!$this->cascade_delete_post($dbw, "topic_id in (select id from {$prfx}_topic where $topic_clause)")) {
+        if (!$this->cascade_delete_post($dbw, "topic_id in (select id from {$prfx}_topic where $topic_clause)", $post_date_clause)) {
             return false;
         }
         
-        if (!$dbw->execute_query("delete from {$prfx}_topic where $topic_clause")) {
+        if (!$dbw->execute_query("delete from {$prfx}_topic where $post_date_clause $topic_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -2660,7 +2660,7 @@ abstract class ForumManager
     } // cascade_delete_topic
     
     //-----------------------------------------------------------------
-    function cascade_delete_post($dbw, $post_clause)
+    function cascade_delete_post($dbw, $post_clause, $post_date_clause = "")
     {
         $prfx = $dbw->escape(System::getDBPrefix());
 
@@ -2707,7 +2707,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$dbw->execute_query("delete from {$prfx}_post where $post_clause")) {
+        if (!$dbw->execute_query("delete from {$prfx}_post where $post_date_clause $post_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -2716,7 +2716,7 @@ abstract class ForumManager
     } // cascade_delete_post
     
     //-----------------------------------------------------------------
-    function cascade_delete_user($dbw, $user_clause)
+    function cascade_delete_user($dbw, $user_clause, $uid)
     {
         $prfx = $dbw->escape(System::getDBPrefix());
         
@@ -2755,11 +2755,17 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$dbw->execute_query("delete from {$prfx}_events where user_id in (select id from {$prfx}_user where $user_clause)")) {
+        if (!$dbw->execute_query("delete from {$prfx}_events where event_time >= (select registration_date from {$prfx}_user where id = $uid) and user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        $now = $dbw->format_datetime(time() - 24*3600);
+        if (!$dbw->execute_query("delete from {$prfx}_forum_hits where dt > '$now' and user_id in (select id from {$prfx}_user where $user_clause)")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
         if (!$dbw->execute_query("delete from {$prfx}_user_tags where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -2830,11 +2836,11 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->cascade_delete_post($dbw, "user_id in (select id from {$prfx}_user where $user_clause)")) {
+        if (!$this->cascade_delete_post($dbw, "user_id in (select id from {$prfx}_user where $user_clause)", "creation_date >= (select registration_date from {$prfx}_user where id = $uid) and")) {
             return false;
         }
         
-        if (!$this->cascade_delete_topic($dbw, "user_id in (select id from {$prfx}_user where $user_clause)")) {
+        if (!$this->cascade_delete_topic($dbw, "user_id in (select id from {$prfx}_user where $user_clause)", "creation_date >= (select registration_date from {$prfx}_user where id = $uid) and")) {
             return false;
         }
         
@@ -4559,8 +4565,8 @@ abstract class ForumManager
             }
             
             $settings["max_user_name_symbols"] = $dbw->field_by_name("max_user_name_symbols");
-            if (!is_numeric($settings["max_user_name_symbols"]) || $settings["max_user_name_symbols"] < 1 || $settings["max_user_name_symbols"] > 50) {
-                $settings["max_user_name_symbols"] = "50";
+            if (!is_numeric($settings["max_user_name_symbols"]) || $settings["max_user_name_symbols"] < 1 || $settings["max_user_name_symbols"] > 70) {
+                $settings["max_user_name_symbols"] = "70";
             }
             
             $settings["max_att_size"] = $dbw->field_by_name("max_att_size");
@@ -4744,8 +4750,8 @@ abstract class ForumManager
             $max_user_name_symbols = 0;
         }
         $max_user_name_symbols = round($max_user_name_symbols);
-        if ($max_user_name_symbols < 1 || $max_user_name_symbols > 50) {
-            $max_user_name_symbols = "50";
+        if ($max_user_name_symbols < 1 || $max_user_name_symbols > 70) {
+            $max_user_name_symbols = "70";
         }
         
         $max_att_size = $dbw->escape(reqvar("max_att_size"));
@@ -7474,12 +7480,12 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time() - KEEP_ONLINE_PERIOD);
         
-        if (!$dbw->execute_query("select {$prfx}_user.id, {$prfx}_user.user_name, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout,
+        if (!$dbw->execute_query("select {$prfx}_user.id, {$prfx}_user.user_name, activated, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout,
                              max(dt) last_time
                              from {$prfx}_forum_hits
                              left join {$prfx}_user on ({$prfx}_forum_hits.user_id = {$prfx}_user.id)
                              where dt >= '$now'
-                             group by {$prfx}_user.id, {$prfx}_user.user_name, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout
+                             group by {$prfx}_user.id, {$prfx}_user.user_name, activated, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout
                              order by max(dt) desc")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -7495,7 +7501,14 @@ abstract class ForumManager
             
             $time_ago = smart_date2(xstrtotime($dbw->field_by_name("last_time")));
             
-            if (!empty($uid)) {
+            if (!empty($uid) && !$dbw->field_by_name("activated")) {
+                $idx = "g_#anonyms#";
+                $user = array(
+                    "name" => text("Anonyms") . " (1)",
+                    "count" => 1,
+                    "time_ago" => $time_ago
+                );
+            } elseif (!empty($uid)) {
                 if (!empty($_SESSION["hide_ignored"]) && $this->is_user_ignored($uid)) {
                     continue;
                 }
@@ -7582,13 +7595,17 @@ abstract class ForumManager
         {
             $current_tid = $dbw->escape($current_tid);
             
+            $activity_limit = $dbw->format_datetime(time() - 180*24*3600);
+
             $query = "select {$prfx}_user.id, {$prfx}_user.user_name, last_visit_date, logout, auto_ignored
                       from {$prfx}_user
                       inner join {$prfx}_ignored_topics on ({$prfx}_ignored_topics.user_id = {$prfx}_user.id and {$prfx}_ignored_topics.topic_id = $current_tid)
+                      where blocked = 0 and activated = 1 and last_visit_date > '$activity_limit'
                       union
                       select {$prfx}_user.id, {$prfx}_user.user_name, last_visit_date, logout, auto_ignored
                       from {$prfx}_user
                       inner join {$prfx}_ignored_topics_archive on ({$prfx}_ignored_topics_archive.user_id = {$prfx}_user.id and {$prfx}_ignored_topics_archive.topic_id = $current_tid)
+                      where blocked = 0 and activated = 1 and last_visit_date > '$activity_limit'
                       order by last_visit_date desc";
             
             if (!$dbw->execute_query($query)) {
@@ -10642,7 +10659,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->cascade_delete_user($dbw, "id = $uid")) {
+        if (!$this->cascade_delete_user($dbw, "id = $uid", $uid)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             $dbw->rollback_transaction();
             return false;
@@ -32416,8 +32433,6 @@ abstract class ForumManager
         $query = "select text_content
                   from {$prfx}_post
                   where id = $pid";
-        
-        debug_message($query);
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());

@@ -58,6 +58,9 @@ $event_list = array();
 $pagination_info = array();
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("mpage") ? 1 : reqvar("mpage");
+$pagination_info["page_param_name"] = "mpage";
+$pagination_info["base_url"] = "user_moderation.php?uid=$user_data[id]#log";
+$pagination_info["base_url_pagination"] = "user_moderation.php?uid=$user_data[id]&mpage=$#log";
 
 $fmanager->get_moderator_events($event_list, $pagination_info);
 

@@ -125,6 +125,7 @@ function search_users()
   search_users_ajax.setPOST('search_moderated_users', "1");
   search_users_ajax.setPOST('hash', get_protection_hash());
   search_users_ajax.setPOST('user_logged', user_logged);
+  search_users_ajax.setPOST('trace_sql', trace_sql);
   search_users_ajax.setPOST('forum', form.elements['forum'].value);
   search_users_ajax.setPOST('start_date', form.elements['start_date'].value);
   search_users_ajax.setPOST('hour', form.elements['hour'].value);

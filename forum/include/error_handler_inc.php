@@ -230,8 +230,24 @@ function debug_message($msg)
     $path = str_replace("include/$basename", "log/", $path);
     $file = $path . "debug.log";
     
+    $backfiles = debug_backtrace();
+
+    $callfile = "";
+    
+    if (basename($backfiles[0]['file']) == "error_handler_inc.php" && $backfiles[0]['function'] == "debug_message") {
+        $callfile = empty($backfiles[1]['file']) ? "" : $backfiles[1]['file'];
+        $callfile .= ", " . (empty($backfiles[1]['line']) ? "" : $backfiles[1]['line']);
+    } else {
+        $callfile = empty($backfiles[0]['file']) ? "" : $backfiles[0]['file'];
+        $callfile .= ", " . (empty($backfiles[0]['line']) ? "" : $backfiles[0]['line']);
+    }
+    
+    if (!empty($callfile)) {
+        $callfile .= ":\n\n";
+    }
+    
     if ((!file_exists($file) && is_writable($path)) || is_writable($file)) {
-        file_put_contents($file, $msg . "\r\n", FILE_APPEND);
+        file_put_contents($file, $callfile . $msg . "\r\n", FILE_APPEND);
     }
 } // debug_message
 //------------------------------------------------------------------------------

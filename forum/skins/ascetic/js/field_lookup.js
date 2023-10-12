@@ -97,6 +97,7 @@ function lookup_entries(action, fld, ev)
   lookup_entries_ajax.setPOST(action, "1");
   lookup_entries_ajax.setPOST('hash', get_protection_hash());
   lookup_entries_ajax.setPOST('user_logged', user_logged);
+  lookup_entries_ajax.setPOST('trace_sql', trace_sql);
   lookup_entries_ajax.setPOST('lookup_string', fld.value);
 
   lookup_entries_ajax.request("ajax/process.php");
@@ -201,6 +202,7 @@ function lookup_existing_topics(fld, ev, fid)
   lookup_entries_ajax.setPOST("check_existing_topics", "1");
   lookup_entries_ajax.setPOST('hash', get_protection_hash());
   lookup_entries_ajax.setPOST('user_logged', user_logged);
+  lookup_entries_ajax.setPOST('trace_sql', trace_sql);
   lookup_entries_ajax.setPOST('lookup_string', fld.value);
   lookup_entries_ajax.setPOST('forum', fid);
 
@@ -397,6 +399,7 @@ function lookup_appeal_authors(message, str)
   lookup_entries_ajax.setPOST("search_users", "1");
   lookup_entries_ajax.setPOST('hash', get_protection_hash());
   lookup_entries_ajax.setPOST('user_logged', user_logged);
+  lookup_entries_ajax.setPOST('trace_sql', trace_sql);
   lookup_entries_ajax.setPOST('lookup_string', author);
 
   lookup_entries_ajax.request("ajax/process.php");
