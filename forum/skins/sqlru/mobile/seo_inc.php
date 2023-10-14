@@ -70,6 +70,8 @@
 <?php endif; ?>
 
 <?php if(!empty($ogimage)): ?>
+<meta name="robots" content="max-image-preview:large">
+<link rel="image_src" href="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 <meta property="og:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 
 <?php if(is_https()): ?>
@@ -77,6 +79,9 @@
 <?php endif; ?>
 
 <meta name="twitter:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
+<meta name="twitter:card" content="summary_large_image"/>
+
+<meta name="vk:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 <?php endif; ?>
 
 <?php if (!empty($pagination_info["page_count"]) && $pagination_info["page_count"] > 1): ?>
