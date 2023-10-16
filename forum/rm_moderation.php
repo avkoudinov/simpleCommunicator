@@ -32,6 +32,10 @@ $pagination_info = array();
 $pagination_info["total_count"] = 0;
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("rmpage") ? 1 : reqvar("rmpage");
+$pagination_info["base_url"] = "rm_moderation.php";
+$pagination_info["base_url_pagination"] = "rm_moderation.php?rmpage=$";
+
+
 $fmanager->get_read_marker_list($read_marker_list, $pagination_info);
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");

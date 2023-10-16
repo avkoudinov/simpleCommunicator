@@ -21,6 +21,9 @@ if (!$fmanager->is_moderator_log_visible()) {
     header("Location: " . $target_url);
     exit;
 }
+
+$param_string = $fmanager->build_mlog_paramter_string();
+if(!empty($param_string)) $param_string = "?" . $param_string;
 //------------------------------------------------------------------
 $title = text("ModeratorLog") . " - " . get_site_name(current_language());
 $ogtitle = text("ModeratorLog") . " - " . get_site_name(current_language());
@@ -29,6 +32,8 @@ $event_list = array();
 $pagination_info = array();
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("mpage") ? 1 : reqvar("mpage");
+$pagination_info["base_url"] = "moderation_log.php{$param_string}";
+$pagination_info["base_url_pagination"] = empty($param_string) ? "moderation_log.php?mpage=$" : "moderation_log.php{$param_string}&mpage=$";
 
 $fmanager->get_moderator_events($event_list, $pagination_info);
 

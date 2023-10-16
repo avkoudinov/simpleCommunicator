@@ -75,6 +75,8 @@ if (!$fmanager->has_access_to_forum($fid, $forum_name, true)) {
     header("location: " . $target_url);
     exit;
 }
+
+$base_url = "forum.php?fid=" . $fid_for_url;
 //------------------------------------------------------------------
 $title = text("Forum") . " - " . get_site_name(current_language());
 $ogtitle = text("Forum") . " - " . get_site_name(current_language());
@@ -95,6 +97,9 @@ $pagination_info = array();
 $pagination_info["ignored_count"] = val_or_empty($forum_data["ignored_topic_count"]);
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("fpage") ? 1 : reqvar("fpage");
+$pagination_info["base_url"] = $base_url;
+$pagination_info["base_url_pagination"] = $base_url . "&fpage=$";
+
 
 $fmanager->update_forum_read_status($fid);
 

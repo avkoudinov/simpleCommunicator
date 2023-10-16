@@ -52,6 +52,12 @@ if (!reqvar_empty("user")) {
         }
     }
 }
+
+$author_appendix = "";
+if(!reqvar_empty("author"))
+{
+  $author_appendix = "&author=" . xrawurlencode(reqvar("author"));
+}
 //------------------------------------------------------------------
 $title = text("ModerateIP");
 $subtitle = text("ModerateIP");
@@ -110,6 +116,8 @@ switch (reqvar("type")) {
         $pagination_info = array();
         $pagination_info["page_count"] = 1;
         $pagination_info["page"] = reqvar_empty("mpage") ? 1 : reqvar("mpage");
+        $pagination_info["base_url"] = "ip_moderation.php?type=moderation&ip=" . xrawurlencode(reqvar("ip")) . $author_appendix . "#log";
+        $pagination_info["base_url_pagination"] = "ip_moderation.php?type=moderation&ip=" . xrawurlencode(reqvar("ip")) . $author_appendix . "&mpage=$#log";
         
         $ip_blocked = $fmanager->is_ip_blocked(reqvar("ip"));
         
@@ -124,6 +132,8 @@ switch (reqvar("type")) {
         $pagination_info = array();
         $pagination_info["page_count"] = 1;
         $pagination_info["page"] = reqvar_empty("mpage") ? 1 : reqvar("mpage");
+        $pagination_info["base_url"] = "ip_moderation.php?type=moderation&ip=" . xrawurlencode(reqvar("ip")) . $author_appendix . "#log";
+        $pagination_info["base_url_pagination"] = "ip_moderation.php?type=moderation&ip=" . xrawurlencode(reqvar("ip")) . $author_appendix . "&mpage=$#log";
         
         $ip_blocked = $fmanager->is_um_blocked(reqvar("ip"));
         

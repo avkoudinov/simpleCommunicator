@@ -49,11 +49,19 @@ if (!reqvar_empty("apply_filter")) {
     header("Location: events.php" . $query_string);
     exit;
 }
+
+$param_string = "";
+if(!reqvar_empty("filter")) $param_string = "filter=" . xrawurlencode(reqvar("filter"));
+if(!empty($param_string)) $param_string = "?" . $param_string;
+
+$base_url = "events.php{$param_string}";
 //------------------------------------------------------------------
 $pagination_info = array();
 $pagination_info["total_count"] = 0;
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("epage") ? 1 : reqvar("epage");
+$pagination_info["base_url"] = "events.php{$param_string}";
+$pagination_info["base_url_pagination"] = empty($param_string) ? "events.php?epage=$" : "events.php{$param_string}&epage=$";
 
 $event_list = array();
 $fmanager->get_event_list($event_list, $pagination_info);

@@ -30,6 +30,9 @@ $pagination_info = array();
 $pagination_info["total_count"] = 0;
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("upage") ? 1 : reqvar("upage");
+$pagination_info["base_url"] = "users.php";
+$pagination_info["base_url_pagination"] = "users.php?upage=$";
+
 $fmanager->get_user_list($user_list, $pagination_info);
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");

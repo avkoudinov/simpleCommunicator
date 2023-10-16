@@ -191,6 +191,24 @@ if (!empty($tid)) {
 $title = $search_title . " - " . get_site_name(current_language());
 $ogtitle = $title;
 
+$base_url = "search_topic.php?" . $search_params;
+if(!reqvar_empty("favourite_posts"))
+{
+  $base_url = "search_topic.php?favourite_posts=1";
+} 
+elseif(!reqvar_empty("news_digest"))
+{
+  $base_url = "search_topic.php?news_digest=1";
+  if(!empty($fid_for_url)) {
+    $base_url .= "&fid=" . $fid_for_url;
+  }
+}
+
+if(!reqvar_empty("post_sort")) 
+{
+  $base_url .= "&post_sort=" . xrawurlencode(reqvar("post_sort"));
+}
+
 //------------------------------------------------------------------
 $user_data = array();
 $post_list = array();
@@ -209,6 +227,8 @@ $pagination_info["loaded_message_count"] = 0;
 $pagination_info["pinned_message_count"] = 0;
 $pagination_info["first_page_message"] = 0;
 $pagination_info["last_page_message"] = 0;
+
+$pagination_info["base_url"] = $base_url;
 
 /*
 Modes:
@@ -273,6 +293,9 @@ if (!reqvar_empty("news_digest")) { // News digest
            $pagination_info["page"] = 1;
         }
     }
+
+    $pagination_info["base_url"] = $base_url;
+    $pagination_info["base_url_pagination"] = $base_url . "&tpage=$";
 
     if (!$fmanager->get_paginated_found_posts($search_hash, $post_list, $user_data, $pagination_info, $sort)) {
         header("location: new_messages.php" . (empty($fid_for_url) ? "" : "?fid=" . $fid_for_url));

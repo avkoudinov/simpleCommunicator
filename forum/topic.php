@@ -220,6 +220,15 @@ if (!empty($seo_post))
 $title .= " - " . get_site_name(current_language());
 $ogtitle = $title;
 
+$fpage_appendix = "";
+if(!reqvar_empty("fpage")) $fpage_appendix .= "&fpage=" . reqvar("fpage");
+
+if(!reqvar_empty("search_keys")) $fpage_appendix .= "&search_keys=" . xrawurlencode(reqvar("search_keys"));
+if(!reqvar_empty("with_morphology")) $fpage_appendix .= "&with_morphology=1";
+if(!reqvar_empty("from_search")) $fpage_appendix .= "&from_search=1";
+
+$base_url = "topic.php?fid=" . $fid_for_url . "&tid=" . $tid . $fpage_appendix;
+
 // do cleaning jobs
 
 $fmanager->execute_forum_jobs(true);
@@ -251,6 +260,8 @@ $pagination_info["loaded_message_count"] = 0;
 $pagination_info["pinned_message_count"] = 0;
 $pagination_info["first_page_message"] = 0;
 $pagination_info["last_page_message"] = 0;
+
+$pagination_info["base_url"] = $base_url;
 
 /*
 Modes:
