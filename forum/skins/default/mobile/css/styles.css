@@ -347,6 +347,7 @@ a.member_nick:hover
 {
   color: black;
   font-weight: bold;
+  word-break: break-word;
 }
 
 .member_area
@@ -355,7 +356,6 @@ a.member_nick:hover
   padding-top: 6px;
   padding-left: 10px;
   text-align: right;
-  word-wrap: break-word; 
 }
 
 .guest_nick
@@ -5800,6 +5800,19 @@ td.preferred_forums
 .forum_table
 {
   margin-bottom: 7px;
+}
+
+.user_name
+{
+  word-break: break-all;
+}
+
+.user_name a:link,
+.user_name a:active,
+.user_name a:visited,
+.user_name a:hover
+{
+  word-break: break-all;
 }
 
 /* BEGIN: calender */

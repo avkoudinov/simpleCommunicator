@@ -78,6 +78,32 @@ $title = $forum_title . " - " . get_site_name(current_language());
 $ogtitle = $title;
 
 //------------------------------------------------------------------
+
+$base_url = "";
+$base_url_concat = "?";
+$base_url_complete = "";
+
+if(!empty($fid_for_url))
+{
+  $base_url .= "?fid=" . $fid_for_url;
+  $base_url_complete .= "?fid=" . $fid_for_url;
+  $base_url_concat = "&";
+}
+
+$fpage_appendix = "";
+if(!reqvar_empty("fpage"))
+{
+  if(empty($base_url_complete)) $base_url_complete .= "?fpage=" . reqvar("fpage");
+  else                          $base_url_complete .= "&fpage=" . reqvar("fpage");
+  
+  $fpage_appendix = "&fpage=" . reqvar("fpage");
+}
+
+$base_url = "new_messages.php" . $base_url;
+$base_url_complete = "new_messages.php" . $base_url_complete;
+$base_url_concat = $base_url . $base_url_concat;
+
+//------------------------------------------------------------------
 $fmanager->check_new_events($new_events_count, $new_mod_events_count);
 $fmanager->calculate_new_messages(true /* no cache */);
 
@@ -130,6 +156,8 @@ if ($fid == -1 || $fid == "favourites") {
 
 $pagination_info["page_count"] = 1;
 $pagination_info["page"] = reqvar_empty("fpage") ? 1 : reqvar("fpage");
+$pagination_info["base_url"] = $base_url;
+$pagination_info["base_url_pagination"] = $base_url_concat . "fpage=$";
 
 $topic_list = array();
 $fmanager->get_forum_topics("new_messages", $fid, $topic_list, $pagination_info);

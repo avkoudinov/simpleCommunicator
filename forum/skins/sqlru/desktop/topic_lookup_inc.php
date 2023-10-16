@@ -94,6 +94,7 @@ function search_topic()
   search_topic_ajax.setPOST('search_moderated_topics', "1");
   search_topic_ajax.setPOST('hash', get_protection_hash());
   search_topic_ajax.setPOST('user_logged', user_logged);
+  search_topic_ajax.setPOST('trace_sql', trace_sql);
   search_topic_ajax.setPOST('forum', "<?php echo_html(reqvar("fid")); ?>");
   search_topic_ajax.setPOST('merge_modus', form.elements['merge_modus'].value);
   search_topic_ajax.setPOST('topic_to_search', form.elements['topic_to_search'].value);

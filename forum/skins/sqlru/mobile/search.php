@@ -360,6 +360,7 @@ function do_action(params)
   
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
   action_ajax.setPOST('current_url', current_url);
   action_ajax.setPOST('fpage', fpage);
 

@@ -56,26 +56,6 @@ var user_tags = {};
 user_tags['#<?php echo_js($tgid); ?>'] = '<?php echo_js($tgname); ?>';
 <?php endforeach; ?> 
 
-<?php
-$base_url = "search_topic.php?" . $search_params;
-if(!reqvar_empty("favourite_posts"))
-{
-  $base_url = "search_topic.php?favourite_posts=1";
-} 
-elseif(!reqvar_empty("news_digest"))
-{
-  $base_url = "search_topic.php?news_digest=1";
-  if(!empty($fid_for_url)) {
-    $base_url .= "&fid=" . $fid_for_url;
-  }
-}
-
-if(!reqvar_empty("post_sort")) 
-{
-  $base_url .= "&post_sort=" . xrawurlencode(reqvar("post_sort"));
-}
-?>
-
 function exec_load_new_posts(highlight_message, target_url)
 {
   // no implementation in search mode

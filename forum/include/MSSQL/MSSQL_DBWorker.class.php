@@ -283,6 +283,23 @@ class MSSQL_DBWorker extends DBWorker
             $_SESSION["trace_sql_log"] .= $txt;
         }
         
+        if (!empty($_SESSION["ajax_trace_sql"]) &&
+            ($_SESSION["ajax_trace_sql"] == 1 || $tmp >= $_SESSION["ajax_trace_sql"])
+        ) {
+            $dtrace = debug_backtrace();
+            
+            $txt = $query_string;
+            $txt .= "\n";
+            $txt .= "\n";
+            $txt .= extract_call_stack($dtrace) . "\n";
+            $txt .= "\n";
+            $txt .= "Elapsed: " . $tmp . "ms" . "\n";
+            $txt .= "----------------------------------------------------------------------";
+            $txt .= "\n";
+            
+            $_SESSION["ajax_trace_sql_log"] .= $txt;
+        }
+
         return true;
     } // execute_query
     

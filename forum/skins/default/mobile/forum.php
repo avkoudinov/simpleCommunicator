@@ -399,6 +399,7 @@ function do_action(params)
 
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
   action_ajax.setPOST('current_url', current_url);
   action_ajax.setPOST('fpage', fpage);
   action_ajax.setPOST('return_forum', '<?php echo_js($fid_for_url); ?>');
@@ -412,8 +413,6 @@ function do_action(params)
 <?php
 $fpage_appendix = "";
 if(!reqvar_empty("fpage")) $fpage_appendix = "&fpage=" . reqvar("fpage");
-
-$base_url = "forum.php?fid=" . $fid_for_url;
 ?>
 
 <!-- BEGIN: header2 -->
@@ -967,15 +966,15 @@ if(empty($is_private))
       $appendix = "<span class='last_visit_info'>&nbsp;" . escape_html($uinfo["time_ago"]) . "</span>";
 
     if(!empty($uinfo["id"]))
-      $freaders .= "<span style='white-space: nowrap'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif(!empty($uinfo["bot"]))
-      $freaders .= "<span style='white-space: nowrap'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif($ouid == "g_#anonyms#")
-      $freaders .= "<span style='white-space: nowrap'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
     elseif($uinfo["name"] == "admin")
-      $freaders .= "<span style='white-space: nowrap'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
     else
-      $freaders .= "<span style='white-space: nowrap'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+      $freaders .= "<span class='user_name'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
   }
 
   $freaders = trim($freaders, ", ");

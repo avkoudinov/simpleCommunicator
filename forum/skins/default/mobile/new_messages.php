@@ -267,6 +267,7 @@ function do_action(params)
   
   action_ajax.setPOST('hash', get_protection_hash());
   action_ajax.setPOST('user_logged', user_logged);
+  action_ajax.setPOST('trace_sql', trace_sql);
   action_ajax.setPOST('current_url', current_url);
   action_ajax.setPOST('fpage', fpage);
   action_ajax.setPOST('fid', '<?php echo($fid); ?>');
@@ -276,31 +277,6 @@ function do_action(params)
   return false;
 }
 </script>
-
-<?php
-$base_url = "";
-$base_url_concat = "?";
-$base_url_complete = "";
-if(!empty($fid_for_url))
-{
-  $base_url .= "?fid=" . $fid_for_url;
-  $base_url_complete .= "?fid=" . $fid_for_url;
-  $base_url_concat = "&";
-}
-
-$fpage_appendix = "";
-if(!reqvar_empty("fpage"))
-{
-  if(empty($base_url_complete)) $base_url_complete .= "?fpage=" . reqvar("fpage");
-  else                          $base_url_complete .= "&fpage=" . reqvar("fpage");
-  
-  $fpage_appendix = "&fpage=" . reqvar("fpage");
-}
-
-$base_url = "new_messages.php" . $base_url;
-$base_url_complete = "new_messages.php" . $base_url_complete;
-$base_url_concat = $base_url . $base_url_concat;
-?>
 
 <!-- BEGIN: header2 -->
 
