@@ -574,6 +574,10 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 ?>
 / <a href="forum.php?fid=<?php echo_html($fid_for_url); ?><?php echo($fpage_appendix); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($forum_title); ?></a>
 
+<?php if(!empty($forum_data["disable_ignore"])): ?>
+<span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
+<?php endif; ?>
+
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
 <?php endif; ?>
@@ -794,6 +798,10 @@ $not_preferred = "";
 if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid]) && empty($topic_data["is_private"])) $not_preferred = "not_preferred";
 ?>
 / <a href="forum.php?fid=<?php echo_html($fid_for_url); ?><?php echo($fpage_appendix); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($forum_title); ?></a>
+
+<?php if(!empty($forum_data["disable_ignore"])): ?>
+<span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
+<?php endif; ?>
 
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>

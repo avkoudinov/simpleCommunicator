@@ -372,6 +372,7 @@ if (!reqvar_empty("news_digest")) { // News digest
     $subscription_authors_new_topics_count = empty($_SESSION["new_messages_info_cache"]["data"]["subscription_authors_new_topics_count"]) ? 0 : $_SESSION["new_messages_info_cache"]["data"]["subscription_authors_new_topics_count"];
     
     $title = text("NewMessageDigest");
+    $search_title = text("NewMessageDigest");
     
     $forum_title = text("TopicsWithNew");
     $forum_url = "new_messages.php";
