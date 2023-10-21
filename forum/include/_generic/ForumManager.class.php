@@ -12043,6 +12043,7 @@ abstract class ForumManager
             }
 
             $sys_post_id = "";
+            // text("MsgSysTopicPublished")
             if (!$this->post_sys_message($dbw, $tid, "MSG(MsgSysTopicPublished)", $sys_post_id)) {
                 $dbw->rollback_transaction();
                 return false;

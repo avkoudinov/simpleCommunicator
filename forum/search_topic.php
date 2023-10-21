@@ -374,7 +374,7 @@ if (!reqvar_empty("news_digest")) { // News digest
     $title = text("NewMessageDigest");
     $search_title = text("NewMessageDigest");
     
-    $forum_title = text("TopicsWithNew");
+    $forum_title = text("NewMessages");
     $forum_url = "new_messages.php";
     if ($fid == "private" || $fid == $private_fid) {
         $forum_url = "new_messages.php?fid=private";

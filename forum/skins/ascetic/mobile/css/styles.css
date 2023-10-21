@@ -1321,6 +1321,12 @@ td.button_area
   font-weight: normal;
 }
 
+.ignore_off
+{
+  color: #258292;
+  font-weight: normal;
+}
+
 .topic_table .new_messages_indicator,
 .topic_table .closed
 {
