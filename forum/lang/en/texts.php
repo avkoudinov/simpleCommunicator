@@ -535,6 +535,7 @@ $GLOBALS['DEF_TEXTS']['en']['UnpinTopic'] = 'Unpin topic';
 $GLOBALS['DEF_TEXTS']['en']['ErrSystemForumEdit'] = 'The system forum cannot be edited!';
 $GLOBALS['DEF_TEXTS']['en']['MsgTopicTooLarge'] = 'The topic is too large for displaying all messages at once!';
 $GLOBALS['DEF_TEXTS']['en']['deleted'] = 'deleted';
+$GLOBALS['DEF_TEXTS']['en']['ignore_off'] = 'ignore off';
 $GLOBALS['DEF_TEXTS']['en']['TopicModerator'] = 'Topic moderator';
 $GLOBALS['DEF_TEXTS']['en']['ForumModerator'] = 'Forum moderator';
 $GLOBALS['DEF_TEXTS']['en']['ForumModerators'] = 'Forum moderators';

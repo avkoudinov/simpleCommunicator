@@ -3717,6 +3717,13 @@
             <ua>видалено</ua>
         </text>
 
+        <text id="ignore_off">
+            <en>ignore off</en>
+            <de>Ignor aus</de>
+            <ru>игнор отключен</ru>
+            <ua>ігнор відключений</ua>
+        </text>
+
         <text id="TopicModerator">
             <en>Topic moderator</en>
             <de>Moderator des Themas</de>

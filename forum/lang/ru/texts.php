@@ -535,6 +535,7 @@ $GLOBALS['DEF_TEXTS']['ru']['UnpinTopic'] = 'Открепить тему';
 $GLOBALS['DEF_TEXTS']['ru']['ErrSystemForumEdit'] = 'Системный форум недоступен для редактирования!';
 $GLOBALS['DEF_TEXTS']['ru']['MsgTopicTooLarge'] = 'Тема слишком большая, чтобы показать все сообщения!';
 $GLOBALS['DEF_TEXTS']['ru']['deleted'] = 'удалено';
+$GLOBALS['DEF_TEXTS']['ru']['ignore_off'] = 'игнор отключен';
 $GLOBALS['DEF_TEXTS']['ru']['TopicModerator'] = 'Модератор темы';
 $GLOBALS['DEF_TEXTS']['ru']['ForumModerator'] = 'Модератор форума';
 $GLOBALS['DEF_TEXTS']['ru']['ForumModerators'] = 'Модераторы форума';
