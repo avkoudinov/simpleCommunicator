@@ -535,6 +535,7 @@ $GLOBALS['DEF_TEXTS']['de']['UnpinTopic'] = 'Thema abheften';
 $GLOBALS['DEF_TEXTS']['de']['ErrSystemForumEdit'] = 'Das Systemforum kann nicht bearbeitet werden!';
 $GLOBALS['DEF_TEXTS']['de']['MsgTopicTooLarge'] = 'Das Thema ist zu groß, um alle Nachrichten auf einmal anzuzeigen!';
 $GLOBALS['DEF_TEXTS']['de']['deleted'] = 'gelöscht';
+$GLOBALS['DEF_TEXTS']['de']['ignore_off'] = 'Ignor aus';
 $GLOBALS['DEF_TEXTS']['de']['TopicModerator'] = 'Moderator des Themas';
 $GLOBALS['DEF_TEXTS']['de']['ForumModerator'] = 'Moderator des Forums';
 $GLOBALS['DEF_TEXTS']['de']['ForumModerators'] = 'Moderatoren des Forums';
