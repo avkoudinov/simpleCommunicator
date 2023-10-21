@@ -1630,6 +1630,12 @@ td.button_area
   font-weight: normal;
 }
 
+.ignore_off
+{
+  color: #258292;
+  font-weight: normal;
+}
+
 .admin_actions
 {
   width: 220px;

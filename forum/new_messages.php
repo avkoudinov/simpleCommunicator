@@ -17,7 +17,7 @@ if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
 }
 
 //------------------------------------------------------------------
-$forum_title = text("TopicsWithNew");
+$forum_title = text("NewMessages");
 //------------------------------------------------------------------
 $fid = reqvar("fid");
 $fid_for_url = $fid;
