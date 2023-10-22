@@ -2364,7 +2364,7 @@ abstract class ForumManager
                              user_posting_as_guest,
                              topic_count, topic_count_total,
                              last_message_date, 
-                             {$prfx}_forum.deleted, closed,
+                             {$prfx}_forum.deleted, closed, disable_ignore,
                              {$prfx}_post.user_id, {$prfx}_post.author, {$prfx}_user.user_name, {$prfx}_post.read_marker,
                              last_visit_date, logout
                              from {$prfx}_forum
@@ -2419,6 +2419,7 @@ abstract class ForumManager
                 "last_author_online" => $last_author_online,
                 "last_author_ignored" => $last_author_ignored,
                 "closed" => $rodbw->field_by_name("closed"),
+                "disable_ignore" => $rodbw->field_by_name("disable_ignore"),
                 "deleted" => $deleted,
                 "not_preferred" => !empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid]),
                 "topics_with_new_count" => 0
@@ -12042,6 +12043,7 @@ abstract class ForumManager
             }
 
             $sys_post_id = "";
+            // text("MsgSysTopicPublished")
             if (!$this->post_sys_message($dbw, $tid, "MSG(MsgSysTopicPublished)", $sys_post_id)) {
                 $dbw->rollback_transaction();
                 return false;

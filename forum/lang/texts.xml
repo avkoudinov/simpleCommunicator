@@ -37,13 +37,6 @@
             <ua>Українська</ua>
         </text>
 
-        <text id="neru">
-            <en>Language of the tribes Neru (with seconds)</en>
-            <de>Sprache der Stämme Neru (mit Sekunden)</de>
-            <ru>Язык племён Неру (с секундами)</ru>
-            <ua>Мова племен Неру (з секундами)</ua>
-        </text>
-
         <text id="ErrFilesMissingOrHaveErrors">
             <en>Some application files seem to be absent or contain programming errors!</en>
             <de>Einige Anwendungsdateien scheinen abwesend zu sein oder sie beinhalten Programmierfehler!</de>
@@ -536,13 +529,6 @@
             <de>Fav.</de>
             <ru>Избр.</ru>
             <ua>Обране</ua>
-        </text>
-        
-        <text id="TopicsWithNew">
-            <en>Topics with new messages</en>
-            <de>Themen mit neuen Nachrichten</de>
-            <ru>Темы с новыми сообщениями</ru>
-            <ua>Теми з новими повідомленнями</ua>
         </text>
         
         <text id="MsgWarnNewTrackingPeriod">
@@ -3715,6 +3701,13 @@
             <de>gelöscht</de>
             <ru>удалено</ru>
             <ua>видалено</ua>
+        </text>
+
+        <text id="ignore_off">
+            <en>ignore off</en>
+            <de>Ignor aus</de>
+            <ru>игнор отключен</ru>
+            <ua>ігнор відключений</ua>
         </text>
 
         <text id="TopicModerator">

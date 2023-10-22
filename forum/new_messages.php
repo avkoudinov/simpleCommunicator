@@ -17,7 +17,7 @@ if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
 }
 
 //------------------------------------------------------------------
-$forum_title = text("TopicsWithNew");
+$forum_title = text("NewMessages");
 //------------------------------------------------------------------
 $fid = reqvar("fid");
 $fid_for_url = $fid;
@@ -29,7 +29,7 @@ if ($fid == "private" || $fid == $private_fid) {
     $is_private = true;
     $fid = $private_fid;
     $fid_for_url = "private";
-    $forum_title = text("PrivateTopics") . " - " . text("NewMessages");
+    $forum_title = text("PrivateTopics") . ": " . text("NewMessages");
 
     if (!$fmanager->get_forum_data($private_fid, $forum_data)) {
         header("location: " . $target_url);
@@ -38,15 +38,15 @@ if ($fid == "private" || $fid == $private_fid) {
 } elseif ($fid == "favourites" || $fid == -1) {
     $fid = -1;
     $fid_for_url = "favourites";
-    $forum_title = text("Favourites") . " - " . text("NewMessages");
+    $forum_title = text("Favourites") . ": " . text("NewMessages");
 } elseif ($fid == "my_topics" || $fid == -2) {
     $fid = -2;
     $fid_for_url = "my_topics";
-    $forum_title = text("MyTopics") . " - " . text("NewMessages");
+    $forum_title = text("MyTopics") . ": " . text("NewMessages");
 } elseif ($fid == "my_part_topics" || $fid == -3) {
     $fid = -3;
     $fid_for_url = "my_part_topics";
-    $forum_title = text("ParticipatedTopics") . " - " . text("NewMessages");
+    $forum_title = text("ParticipatedTopics") . ": " . text("NewMessages");
 } elseif (!empty($fid)) {
     if ($fmanager->need_forum_password("", $fid)) {
         $_SESSION["last_url_askpwd"] = val_or_empty($_SERVER["REQUEST_URI"]);
@@ -71,7 +71,7 @@ if ($fid == "private" || $fid == $private_fid) {
         exit;
     }
 
-    $forum_title = $forum_name . " - " . text("NewMessages");
+    $forum_title = $forum_name . ": " . text("NewMessages");
 }
 
 $title = $forum_title . " - " . get_site_name(current_language());

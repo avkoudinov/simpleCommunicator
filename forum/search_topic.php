@@ -189,7 +189,6 @@ if (!empty($tid)) {
 }
 
 $title = $search_title . " - " . get_site_name(current_language());
-$ogtitle = $title;
 
 $base_url = "search_topic.php?" . $search_params;
 if(!reqvar_empty("favourite_posts"))
@@ -373,29 +372,30 @@ if (!reqvar_empty("news_digest")) { // News digest
     $subscription_authors_new_topics_count = empty($_SESSION["new_messages_info_cache"]["data"]["subscription_authors_new_topics_count"]) ? 0 : $_SESSION["new_messages_info_cache"]["data"]["subscription_authors_new_topics_count"];
     
     $title = text("NewMessageDigest");
+    $search_title = text("NewMessageDigest");
     
-    $forum_title = text("TopicsWithNew");
+    $forum_title = text("NewMessages");
     $forum_url = "new_messages.php";
     if ($fid == "private" || $fid == $private_fid) {
         $forum_url = "new_messages.php?fid=private";
-        $forum_title = text("PrivateTopics") . " - " . text("NewMessages");
-        $title = text("PrivateTopics") . " - " . text("NewMessageDigest");
+        $forum_title = text("PrivateTopics") . ": " . text("NewMessages");
+        $title = text("PrivateTopics") . ": " . text("NewMessageDigest");
     } elseif ($fid == "favourites" || $fid == -1) {
         $forum_url = "new_messages.php?fid=favourites";
-        $forum_title = text("Favourites") . " - " . text("NewMessages");
-        $title = text("Favourites") . " - " . text("NewMessageDigest");
+        $forum_title = text("Favourites") . ": " . text("NewMessages");
+        $title = text("Favourites") . ": " . text("NewMessageDigest");
     } elseif ($fid == "my_topics" || $fid == -2) {
         $forum_url = "new_messages.php?fid=my_topics";
-        $forum_title = text("MyTopics") . " - " . text("NewMessages");
-        $title = text("MyTopics") . " - " . text("NewMessageDigest");
+        $forum_title = text("MyTopics") . ": " . text("NewMessages");
+        $title = text("MyTopics") . ": " . text("NewMessageDigest");
     } elseif ($fid == "my_part_topics" || $fid == -3) {
         $forum_url = "new_messages.php?fid=my_part_topics";
-        $forum_title = text("ParticipatedTopics") . " - " . text("NewMessages");
-        $title = text("ParticipatedTopics") . " - " . text("NewMessageDigest");
+        $forum_title = text("ParticipatedTopics") . ": " . text("NewMessages");
+        $title = text("ParticipatedTopics") . ": " . text("NewMessageDigest");
     } elseif (!empty($fid)) {
         $forum_url = "new_messages.php?fid=" . $fid_for_url;
-        $forum_title = $forum_data["forum_name"] . " - " . text("NewMessages");
-        $title = $forum_data["forum_name"] . " - " . text("NewMessageDigest");
+        $forum_title = $forum_data["forum_name"] . ": " . text("NewMessages");
+        $title = $forum_data["forum_name"] . ": " . text("NewMessageDigest");
     }
     
     $final_url = "search_topic.php?" . $search_params;
@@ -549,6 +549,9 @@ if (!reqvar_empty("news_digest")) { // News digest
         $_SESSION["ensure_anchor_visible"] = $pagination_info["msg"];
     }
 }
+//------------------------------------------------------------------
+$title = $title . " - " . get_site_name(current_language());;
+$ogtitle = $title;
 //------------------------------------------------------------------
 $forum_data['topics_with_new_count'] = 0;
 if (!empty($fid)) {

@@ -365,7 +365,24 @@ class MySQL_ForumManager extends ForumManager
         }
         
         return "
-          select 
+          select
+          
+           {$prfx}_topic.id, {$prfx}_topic.name, {$prfx}_topic.creation_date,
+           {$prfx}_topic.last_message_date, 
+           {$prfx}_topic.post_count, 
+           {$prfx}_topic.post_count_total,
+           {$prfx}_topic.hits_count,
+           {$prfx}_topic.bot_hits_count,
+           {$prfx}_topic.profiled_topic,
+           {$prfx}_topic.deleted, {$prfx}_topic.closed, {$prfx}_topic.pinned, {$prfx}_topic.publish_delay, has_pinned_post,
+           forum_deleted,
+           {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker, {$prfx}_user.user_name,
+               {$prfx}_user.last_visit_date, {$prfx}_user.logout,
+           forum_id, forum_name, is_poll, {$prfx}_topic.no_guests
+           
+           from
+          
+          (select 
            {$prfx}_topic.id, {$prfx}_topic.name, {$prfx}_topic.creation_date,
            {$prfx}_topic_statistics.last_message_date, 
            {$prfx}_topic_statistics.post_count, 
@@ -375,8 +392,7 @@ class MySQL_ForumManager extends ForumManager
            {$prfx}_topic.profiled_topic,
            {$prfx}_topic.deleted, {$prfx}_topic.closed, {$prfx}_topic.pinned, {$prfx}_topic.publish_delay, has_pinned_post,
            {$prfx}_forum.deleted forum_deleted,
-           {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker, {$prfx}_user.user_name,
-               {$prfx}_user.last_visit_date, {$prfx}_user.logout,
+           {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker, 
            forum_id, {$prfx}_forum.name forum_name, is_poll, {$prfx}_topic.no_guests
 
            from {$prfx}_topic
@@ -384,11 +400,11 @@ class MySQL_ForumManager extends ForumManager
            on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
 
            inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-           left join {$prfx}_user on ({$prfx}_topic.user_id = {$prfx}_user.id)
 
            $where and {$prfx}_topic.pinned + {$prfx}_topic.publish_delay = 0 $user_pinned_topic_appendix
            order by last_message_date desc
-           limit $begin, $limit
+           limit $begin, $limit) {$prfx}_topic
+           left join {$prfx}_user on ({$prfx}_topic.user_id = {$prfx}_user.id)
            ";
     } // get_query_forum_topics
     
