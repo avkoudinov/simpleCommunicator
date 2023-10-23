@@ -385,7 +385,7 @@ class MSSQL_ForumManager extends ForumManager
             bot_hits_count,
             profiled_topic,
             deleted, closed, pinned, publish_delay, has_pinned_post,
-            forum_deleted,
+            forum_deleted, disable_ignore,
             user_id, author, read_marker, user_name,
             last_visit_date, logout,
             forum_id, forum_name, is_poll, no_guests

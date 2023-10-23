@@ -201,10 +201,6 @@ if(!empty($finfo["not_preferred"]))
 
 <a href="forum.php?fid=<?php echo_html($fid); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($finfo["name"]); ?></a>
 
-<?php if(!empty($finfo["disable_ignore"])): ?>
-<span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
-<?php endif; ?>
-
 <?php if(!empty($finfo["closed"])): ?>
 <span class="closed">[<?php echo_html(text("closed")); ?>]</span>
 <?php endif; ?>
