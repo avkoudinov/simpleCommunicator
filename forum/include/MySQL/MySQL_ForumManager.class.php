@@ -375,7 +375,7 @@ class MySQL_ForumManager extends ForumManager
            {$prfx}_topic.bot_hits_count,
            {$prfx}_topic.profiled_topic,
            {$prfx}_topic.deleted, {$prfx}_topic.closed, {$prfx}_topic.pinned, {$prfx}_topic.publish_delay, has_pinned_post,
-           forum_deleted,
+           forum_deleted, disable_ignore,
            {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker, {$prfx}_user.user_name,
                {$prfx}_user.last_visit_date, {$prfx}_user.logout,
            forum_id, forum_name, is_poll, {$prfx}_topic.no_guests
@@ -391,7 +391,7 @@ class MySQL_ForumManager extends ForumManager
            {$prfx}_topic_statistics.bot_hits_count,
            {$prfx}_topic.profiled_topic,
            {$prfx}_topic.deleted, {$prfx}_topic.closed, {$prfx}_topic.pinned, {$prfx}_topic.publish_delay, has_pinned_post,
-           {$prfx}_forum.deleted forum_deleted,
+           {$prfx}_forum.deleted forum_deleted, disable_ignore,
            {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker, 
            forum_id, {$prfx}_forum.name forum_name, is_poll, {$prfx}_topic.no_guests
 
