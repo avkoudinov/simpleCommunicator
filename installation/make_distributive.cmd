@@ -51,8 +51,6 @@ del application\user_data\config\img_black_list.txt
 del application\user_data\config\email_black_list.txt
 del application\user_data\config\protected_guests.txt
 
-rmdir /S /Q application\lang\neru
-
 rem skins handling
 
 rmdir /S /Q application\skins\debug
@@ -62,19 +60,7 @@ del application\skins\copy_langs.cmd
 del application\skins\default\desktop\test.php
 del application\skins\default\mobile\test.php
 
-del application\skins\sqlru\desktop\test.php
-del application\skins\sqlru\mobile\test.php
-
-del application\skins\ascetic\desktop\test.php
-del application\skins\ascetic\mobile\test.php
-
 "%ZIP_PATH%\7z.exe" a skins.zip .\application\skins\*
-
-rmdir /S /Q application\skins\sqlru
-rmdir /S /Q application\skins\ascetic
-
-rmdir /S /Q application\skins\default\desktop\lang\neru
-rmdir /S /Q application\skins\default\mobile\lang\neru
 
 rem remove old stuff and apply defaults
 
@@ -83,6 +69,8 @@ rmdir /S /Q application\log
 rmdir /S /Q application\tmp
 
 rmdir /S /Q application\user_data
+
+@echo Creating patch
 
 xcopy defaults application /S /E /R /Y
 
@@ -104,6 +92,14 @@ rem zipping
 "%ZIP_PATH%\7z.exe" a simple_communicator.zip .\application\*
 "%ZIP_PATH%\7z.exe" a database.zip .\database\*
 "%ZIP_PATH%\7z.exe" a smileys.zip ..\forum\user_data\smileys\*
+
+rmdir /S /Q application\skins\default
+
+del application\include\admin_config_inc.php
+del application\include\config_inc.php
+del application\include\maintenance_inc.php
+
+"%ZIP_PATH%\7z.exe" a simple_communicator_update.zip .\application\*
 
 rmdir /S /Q application
 rmdir /S /Q database

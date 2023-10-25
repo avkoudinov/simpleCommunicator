@@ -426,7 +426,7 @@ class MySQL_ForumManager extends ForumManager
             {$prfx}_topic.forum_id,
             {$prfx}_post.topic_id, {$prfx}_topic.user_id topic_author_id,
             is_private, profiled_topic, stringent_rules, publish_delay,
-            {$prfx}_topic.name topic_name, {$prfx}_forum.name forum_name,
+            {$prfx}_topic.name topic_name, {$prfx}_forum.name forum_name, disable_ignore,
             {$prfx}_topic.creation_date topic_creation_date, {$prfx}_topic.author topic_author, {$prfx}_topic.read_marker topic_author_read_marker,
             has_attachment,
             {$prfx}_post_rating.post_id, {$prfx}_post_rating.dt rating_dt,
@@ -455,7 +455,7 @@ class MySQL_ForumManager extends ForumManager
         return "select
             {$prfx}_post.id, {$prfx}_post.creation_date, html_content,
             {$prfx}_post.deleted, {$prfx}_post.pinned, {$prfx}_post.is_comment, {$prfx}_post.is_adult,
-            {$prfx}_post.topic_id, {$prfx}_topic.forum_id, {$prfx}_topic.name topic_name, {$prfx}_forum.name forum_name,
+            {$prfx}_post.topic_id, {$prfx}_topic.forum_id, {$prfx}_topic.name topic_name, {$prfx}_forum.name forum_name, disable_ignore,
             {$prfx}_topic.creation_date topic_creation_date, {$prfx}_topic.author topic_author, {$prfx}_topic.read_marker topic_author_read_marker, is_private,
             profiled_topic, stringent_rules,
             {$prfx}_topic.user_id topic_author_id, {$prfx}_topic.publish_delay,

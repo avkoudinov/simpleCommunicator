@@ -28998,11 +28998,11 @@ abstract class ForumManager
         }
         
         foreach ($reserved_names as $name) {
-            $name_hash = $dbw->escape($this->hash_user_name($name));
-            $name = $dbw->escape($name);
+            $name_hash = $dbw->quotes_or_null($this->hash_user_name($name));
+            $name = $dbw->quotes_or_null($name);
             
             $cmd = "insert into {$prfx}_reserved_names (user_name, user_name_hash)
-                    values ('$name', '$name_hash')";
+                    values ($name, $name_hash)";
             if (!$dbw->execute_query($cmd)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 return false;
@@ -34907,6 +34907,7 @@ abstract class ForumManager
                 "forum_id_for_url" => $is_private ? "private" : $dbw->field_by_name("forum_id"),
                 "forum_name" => $dbw->field_by_name("is_private") ? text("PrivateTopics") : $dbw->field_by_name("forum_name"),
                 "topic_id" => $dbw->field_by_name("topic_id"),
+                "disable_ignore" => $dbw->field_by_name("disable_ignore"),
                 "topic_name" => $dbw->field_by_name("topic_name"),
                 "topic_private" => $is_private,
                 "profiled_topic" => $dbw->field_by_name("profiled_topic"),

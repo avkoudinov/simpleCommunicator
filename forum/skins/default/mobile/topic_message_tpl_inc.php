@@ -168,6 +168,7 @@ if(!empty($remaining_new)) $display = "";
 $current_topic_name = $pinfo["topic_name"];
 $current_topic_id = $pinfo["topic_id"];
 $current_forum_id = $pinfo["forum_id"];
+$current_forum_disable_ignore = $pinfo["disable_ignore"];
 
 $fid_for_url = $current_forum_id;
 if(!empty($pinfo["topic_private"])) $fid_for_url = "private";
@@ -183,7 +184,7 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 
 / <span class="topic_title_main"><?php echo_html(postprocess_message($current_topic_name)); ?></span>
 <?php if(!empty($_SESSION["ignored_topics"][$current_topic_id])): ?>
- <span class="closed">[<?php echo_html(text("ignored")); ?>]</span>
+ <span class="<?php echo(empty($current_forum_disable_ignore) ? "closed" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
 <?php endif; ?>
 </div>
 <div class="clear_both"></div>
@@ -562,17 +563,17 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <?php endif; ?>
 
     <?php if(!empty($user_data[$pinfo["user_id"]]["ignored"])): ?>
-    <br><span class="error_text">[<?php echo_html(text("ignored")); ?>]</span>
+    <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
     <?php endif; ?>
 
     <?php if((!$fmanager->is_logged_in() || $fmanager->is_master_admin()) && !empty($user_data[$pinfo["user_id"]]["ignores_all_guests"])): ?>
-    <br><span class="error_text">[<?php echo_html(text("ignoring_guests")); ?>]</span>
+    <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignoring_guests")); ?>]</span>
     <?php elseif(val_or_empty($user_data[$pinfo["user_id"]]["ignoring_me"]) == 1): ?>
-    <br><span class="error_text">[<?php echo_html(text("ignoring_me")); ?>]</span>
+    <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignoring_me")); ?>]</span>
     <?php elseif(val_or_empty($user_data[$pinfo["user_id"]]["ignoring_me"]) == 2): ?>
-    <br><span class="error_text">[<?php echo_html(text("ignoring_guests_except")); ?>]</span>
+    <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignoring_guests_except")); ?>]</span>
     <?php elseif(val_or_empty($user_data[$pinfo["user_id"]]["ignoring_me"]) == 3): ?>
-    <br><span class="error_text">[<?php echo_html(text("ignoring_new_guests")); ?>]</span>
+    <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignoring_new_guests")); ?>]</span>
     <?php endif; ?>
 
     <?php if(empty($user_data[$pinfo["user_id"]]["activated"])): ?>
