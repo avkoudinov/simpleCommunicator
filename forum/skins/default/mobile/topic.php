@@ -616,16 +616,16 @@ $all_entry_post = $first_message;
 <?php require "message_info_bar_inc.php"; ?>
 </span>
 
+<?php if(!empty($topic_data["in_ignored"])): ?>
+<span class="<?php echo(empty($forum_data["disable_ignore"]) ? "closed" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
+<?php endif; ?>
+
 <?php if(!empty($topic_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
 <?php endif; ?>
 
 <?php if(!empty($topic_data["closed"])): ?>
 <span class="closed">[<?php echo_html(text("closed")); ?>]</span>
-<?php endif; ?>
-
-<?php if(!empty($topic_data["in_ignored"])): ?>
-<span class="closed">[<?php echo_html(text("ignored")); ?>]</span>
 <?php endif; ?>
 
 <?php if(!empty($topic_data["publish_delay"])): ?>
@@ -835,6 +835,10 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <?php require "message_info_bar_inc.php"; ?>
 </span>
 
+<?php if(!empty($topic_data["in_ignored"])): ?>
+<span class="<?php echo(empty($forum_data["disable_ignore"]) ? "closed" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
+<?php endif; ?>
+
 <?php if(!empty($topic_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
 <?php endif; ?>
@@ -845,10 +849,6 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 
 <?php if(!empty($topic_data["publish_delay"])): ?>
 <span class="closed not_published">[<?php echo_html(text("not_published")); ?>]</span>
-<?php endif; ?>
-
-<?php if(!empty($topic_data["in_ignored"])): ?>
-<span class="closed">[<?php echo_html(text("ignored")); ?>]</span>
 <?php endif; ?>
 
 <?php if(!empty($topic_data["blocked"])): ?>

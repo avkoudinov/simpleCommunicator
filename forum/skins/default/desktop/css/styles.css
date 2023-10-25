@@ -497,6 +497,7 @@ a.member_nick:hover
 }
 
 .member_status .error_text,
+.member_status .ignore_off,
 .member_status .online_text
 {
   font-size: 11px;

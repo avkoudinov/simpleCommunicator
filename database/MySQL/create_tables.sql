@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     24.08.2023 13:52:24                          */
+/* Created on:     09.09.2023 22:03:21                          */
 /*==============================================================*/
 
 
@@ -399,6 +399,7 @@ create table v1_forum
    access_duration      int,
    access_message_count int,
    stringent_rules      tinyint not null default 0,
+   disable_ignore       tinyint not null default 0,
    primary key (id)
 );
 
@@ -481,7 +482,7 @@ create table v1_forum_hits
    hits_count           int not null default 0,
    duration             int not null default 0,
    guest_name           varchar(250),
-   user_agent           varchar(250),
+   user_agent           varchar(700),
    uri                  varchar(2000),
    ip                   varchar(250),
    browser              varchar(250),
@@ -1309,7 +1310,7 @@ create table v1_post
    bb_parser_version    int not null default 1,
    topic_id             int not null,
    user_marker          varchar(255),
-   user_agent           varchar(500),
+   user_agent           varchar(700),
    is_comment           tinyint not null default 0,
    is_adult             tinyint not null default 0,
    is_system            tinyint not null default 0,

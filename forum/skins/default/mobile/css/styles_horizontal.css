@@ -1571,6 +1571,7 @@
   }
   
   .member_status,
+  .member_status .ignore_off,
   .member_status .error_text
   {
     font-size: 16px;

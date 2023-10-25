@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description>
-  <version>23.10.21</version>
+  <version>23.10.25</version>
   
   <caption 
   ru="Синий минималистичеcкий"
   ua="Синій мінімалістічеcкій"
-  neru="Синий минималистичеcкий"
   en="Blue minimalistic"
   de="Blau minimalistisch"
   />
@@ -19,7 +18,6 @@
     
     ru="Прикреплять меню при скроллинге"
     ua="Прикріплювати меню при скролінгу"
-    neru="Прикреплять меню при скроллинге"
     en="Pin menu by scrolling"
     de="Menü beim Scrollen anheften"
     />
@@ -31,7 +29,6 @@
     
     ru="Показывать картинку-логотип"
     ua="Показывать картинку-логотип"
-    neru="Показывать картинку-логотип"
     en="Show logo picture"
     de="Logo-Bild anzeigen"
     />
@@ -44,7 +41,6 @@
     
     ru="Показывать опцию меню 'С моим участием'"
     ua="Показувати опцію меню 'З моєю участю'"
-    neru="Показывать опцию меню 'С моим участием'"
     en="Show the menu option 'Participated'"
     de="Die Menü-Option 'Teilgenommen' anzeigen"
     />
@@ -56,11 +52,21 @@
     
     ru="Не показывать всплывающие сообщения об успешной операции"
     ua="Не показувати спливаючі повідомлення про успішну операцію"
-    neru="Не показывать всплывающие сообщения об успешной операции"
     en="Do not show pop-up success messages"
     de="Popup-Erfolgsmeldungen nicht anzeigen"
     />
     
+    <property
+    name="no_online_users" 
+    type="checkbox"
+    default="0"
+    
+    ru="Не показывать пользователей онлайн"
+    ua="Не показувати користувачів онлайн"
+    en="Do not show online users"
+    de="Online-Benutzer nicht anzeigen"
+    />
+
     <property
     name="no_confirmation_of_uncritical_actions" 
     type="checkbox"
@@ -68,7 +74,6 @@
     
     ru="Не запрашивать подтверждения некритичных действий"
     ua="Не запрошувати підтвердження некритичних дій"
-    neru="Не запрашивать подтверждения некритичных действий"
     en="Do not ask for confirmation of non-critical actions"
     de="Nach der Bestätigung unkritischer Aktionen nicht fragen"
     />
@@ -82,7 +87,6 @@
     
     ru="Не запрашивать подтверждения дизлайков"
     ua="Не запитувати підтвердження дізлайков"
-    neru="Не запрашивать подтверждения дизлайков"
     en="Do not ask for confirmation of dislikes"
     de="Nach der Bestätigung der Dislikes nicht fragen"
     />
@@ -94,7 +98,6 @@
     
     ru="Не запрашивать подтверждения любых действий"
     ua="Не запрошувати підтвердження будь-яких дій"
-    neru="Не запрашивать подтверждения любых действий"
     en="Do not ask for confirmation of any actions"
     de="Nach der Bestätigung jeglicher Aktionen nicht fragen"
     />
