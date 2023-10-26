@@ -55,12 +55,16 @@
 <tr id="author_row2">
 <td>
 <?php
-$author = $fmanager->get_last_posted_user_name();
+$author = $fmanager->get_user_name();
 $read_only = '';
 if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"])))
 {
-  $author = $fmanager->get_user_name();
   $read_only = ' class="read_only_field" readonly';
+}
+
+if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]))
+{
+  $author = $fmanager->get_last_posted_user_name();
 }
 ?>
 <input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)">
