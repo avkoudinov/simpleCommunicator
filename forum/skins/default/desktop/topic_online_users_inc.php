@@ -1,4 +1,4 @@
-<?php if(empty($settings["hide_online_status"]) || !empty($topic_data["is_private"])): ?>
+<?php if((empty($settings["hide_online_status"]) && empty($_SESSION["skin_properties"][$skin]["no_online_users"])) || !empty($topic_data["is_private"])): ?>
 
 <div class="header3 topic_readers">
 <?php echo($treaders); ?>
@@ -6,7 +6,7 @@
 
 <?php endif; ?>
 
-<?php if(!empty($tignorers)): ?>
+<?php if(!empty($tignorers) && empty($_SESSION["skin_properties"][$skin]["no_online_users"])): ?>
 
 <div class="header3 topic_ignorers">
 <?php echo($tignorers); ?>
@@ -14,7 +14,7 @@
 
 <?php endif; ?>
 
-<?php if(empty($settings["hide_online_status"]) && empty($topic_data["is_private"])): ?>
+<?php if(empty($settings["hide_online_status"]) && empty($_SESSION["skin_properties"][$skin]["no_online_users"]) && empty($topic_data["is_private"])): ?>
 
 <div class="header3 forum_readers">
 <?php echo($freaders); ?>
