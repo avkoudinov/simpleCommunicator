@@ -1,5 +1,6 @@
 <?php
 ini_set("output_buffering", "off");
+ob_start();
 
 @date_default_timezone_set('Universal');
 

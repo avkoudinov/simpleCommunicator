@@ -1,4 +1,4 @@
-<?php if(empty($settings["hide_online_status"])): ?>
+<?php if(empty($settings["hide_online_status"]) && empty($_SESSION["skin_properties"][$skin]["no_online_users"])): ?>
 
 <?php 
 $ucnt = count($online_users);

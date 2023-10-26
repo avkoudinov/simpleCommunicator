@@ -1028,7 +1028,7 @@ if(empty($is_private))
 }
 ?>
 
-<?php if(empty($settings["hide_online_status"]) && empty($is_private)): ?>
+<?php if(empty($settings["hide_online_status"]) && empty($_SESSION["skin_properties"][$skin]["no_online_users"]) && empty($is_private)): ?>
 
 <div class="header3 forum_readers">
 <?php echo($freaders); ?>
