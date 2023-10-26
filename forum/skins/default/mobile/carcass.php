@@ -513,47 +513,65 @@ if(!empty($settings["mourning_active"])) $mourning_active = " mourning_active";
 
 <!-- BEGIN: header2 -->
 
-<div class="header2" id="second_menu">
-  <div style="float:left"><button class="standard_button" onclick="show_hide_menu()"><?php echo_html(text("Menu")); ?></button></div>
-  <div class="member_area">
+<div class="header2" id="second_menu" style="display: flex; flex-direction: row; flex-wrap: nowrap;justify-content: space-between;">
+    <div style="">
+   <button class="standard_button" onclick="show_hide_menu()"><?php echo_html(text("Menu")); ?></button>
+   </div>
   
   <?php if($fmanager->is_logged_in()): ?>
   
+  <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-end;">
+
+  <div class="member_area">
   <?php
   if($fmanager->get_user_name() == "admin")
-    $member_link = "<a class='member_nick' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_user_name()) . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>,";
+    $member_link = "<a class='member_nick' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_user_name()) . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>";
   else
-    $member_link = "<a class='member_nick' href='view_profile.php?uid=" . $fmanager->get_user_id() . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>,";
+    $member_link = "<a class='member_nick' href='view_profile.php?uid=" . $fmanager->get_user_id() . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>";
 
   echo($member_link); 
   ?>
+
+  </div>
+
+
+  <div class="member_area">
   <a href="logout.php?hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="return confirm_logout()"><?php echo_html(text("Logout")); ?></a> |
   <a href="profile.php"><?php echo_html(text("Profile")); ?></a> 
+  </div>
   
+  </div>
+
   <?php else: ?>
+
+  <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-end;">
   
+  <div class="member_area">
   <?php
   if($fmanager->get_user_name() != "")
   {
-    $guest_name = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_user_name()) . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>,";
+    $guest_name = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_user_name()) . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>";
   }
   else
   {
-    $guest_name = "<span class='guest_nick'>" . escape_html($fmanager->get_status_user_name()) . "</span>,";
+    $guest_name = "<span class='guest_nick'>" . escape_html($fmanager->get_status_user_name()) . "</span>";
   }
 
   echo($guest_name); 
   ?>
-
+  </div>
+  
+  <div class="member_area">
   <a href="login.php"><?php echo_html(text("Login")); ?></a> |
   <a href="guest_profile.php"><?php echo_html(text("Profile")); ?></a> |
-  <a href="#" onclick="return confirm_clear_profile_data()"><?php echo_html(text("ClearData")); ?>
-  
-  <?php endif; ?>
-  
+  <a href="#" onclick="return confirm_clear_profile_data()"><?php echo_html(text("ClearData")); ?></a>
+  </div>
   
   </div>
-  <div class="clear_both"></div>
+
+  <?php endif; ?>
+
+
 </div>
 
 <!-- END: header2 -->

@@ -345,7 +345,7 @@ a.member_nick:active,
 a.member_nick:visited,
 a.member_nick:hover
 {
-  color: black;
+  color: #333;
   font-weight: bold;
   word-break: break-word;
 }
