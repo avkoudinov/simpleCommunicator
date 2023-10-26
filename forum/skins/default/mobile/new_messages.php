@@ -405,6 +405,10 @@ elseif(!empty($fid))
 
 / <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
 
+<?php if(!empty($forum_data["disable_ignore"])): ?>
+<span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
+<?php endif; ?>
+
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
 <?php endif; ?>
@@ -734,6 +738,10 @@ elseif(!empty($fid))
 ?>
 
 / <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
+
+<?php if(!empty($forum_data["disable_ignore"])): ?>
+<span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
+<?php endif; ?>
 
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
