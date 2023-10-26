@@ -164,6 +164,8 @@ function convert_table_to_bbcode(table, quote_level)
   
   result += "]";
   
+  if (delimiter == "tab") delimiter = "\t";
+  
   var no_header = true;
   
   for(var i = 0; i < rows.length; i++)
@@ -190,7 +192,8 @@ function convert_table_to_bbcode(table, quote_level)
         cell = '"' + cell + '"';
       }
       
-      row += cell + delimiter + " ";
+      if (delimiter != "\t") row += cell + delimiter + " ";
+      else                   row += cell + delimiter;
     }
     
     if(row != "")
@@ -200,8 +203,10 @@ function convert_table_to_bbcode(table, quote_level)
         result += "-\n";
       }
       
-      // remove last comma
-      row = row.substring(0, row.length-2) + "\n";
+      // remove last delimiter
+      if (delimiter != "\t") row = row.substring(0, row.length-2) + "\n";
+      else                   row = row.substring(0, row.length-1) + "\n";
+      
       result += row;
     }
   }
