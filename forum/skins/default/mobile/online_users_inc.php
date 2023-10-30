@@ -1,10 +1,12 @@
 <?php if(empty($settings["hide_online_status"]) && empty($_SESSION["skin_properties"][$skin]["no_online_users"])): ?>
 
 <?php 
+$add_class = pathinfo($_SERVER["PHP_SELF"], PATHINFO_FILENAME);
+
 $ucnt = count($online_users);
 if(!empty($online_users["g_#anonyms#"]["count"])) $ucnt += ($online_users["g_#anonyms#"]["count"] - 1);
 ?>
-<div class="header2 all_online_users">
+<div class="header2 <?php echo($add_class); ?> all_online_users">
 <?php echo_html(text("OnlineMembers")); ?> (<?php echo_html($ucnt); ?>):
 
 <?php if($ucnt > 0)

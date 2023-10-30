@@ -408,6 +408,10 @@ elseif(!empty($fid))
 
 / <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
 
+<?php if(!empty($forum_data["disable_ignore"])): ?>
+<span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
+<?php endif; ?>
+
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
 <?php endif; ?>
@@ -722,6 +726,10 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
 
 / <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
+
+<?php if(!empty($forum_data["disable_ignore"])): ?>
+<span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
+<?php endif; ?>
 
 <?php if(!empty($forum_data["deleted"])): ?>
 <span class="closed">[<?php echo_html(text("deleted")); ?>]</span>
