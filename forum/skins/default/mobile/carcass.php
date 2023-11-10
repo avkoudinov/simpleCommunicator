@@ -544,7 +544,12 @@ if(!empty($settings["mourning_active"])) $mourning_active = " mourning_active";
   <?php
   if($fmanager->get_user_name() != "")
   {
-    $guest_name = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_user_name()) . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>";
+    $aname_appendix = "";
+    if (!$fmanager->is_master_admin()) {
+        $aname_appendix = "&aname=" . System::generateHash($READ_MARKER . $fmanager->get_user_name(), SALT_KEY);
+    }
+
+    $guest_name = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_user_name()) . $aname_appendix . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>";
   }
   else
   {
