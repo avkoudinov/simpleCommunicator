@@ -408,7 +408,11 @@ if(!empty($topics_with_new_count)) $display = "";
 <td><?php echo_html(text("UserName")); ?>:</td>
 </tr>
 <tr>
-<td><input type="text" id="user_name" name="user_name" value="<?php echo_html($user_data["user_name"]); ?>">
+<td>
+<?php
+$readolny = $fmanager->is_master_admin() ? "class='read_only_field' readonly=''" : "";
+?>
+<input type="text" id="user_name" name="user_name" value="<?php echo_html($user_data["user_name"]); ?>" <?php echo($readolny); ?>>
 <div class="field_comment"><?php echo_html(text("UserNameComment2")); ?></div>
 </td>
 </tr>

@@ -3097,9 +3097,11 @@ abstract class ForumManager
         
         if (!empty($topic_data["is_poll"])) {
             if (!$dbw->execute_query("select
-                               {$prfx}_poll_options.id, name, {$prfx}_poll_user_answers.tm,
+                               {$prfx}_poll_options.id, {$prfx}_poll_options.name, {$prfx}_poll_user_answers.tm, disable_ignore,
                                {$prfx}_user.id user_id, {$prfx}_user.user_name, {$prfx}_user.read_marker
                                from {$prfx}_poll_options
+                               inner join {$prfx}_topic on ({$prfx}_poll_options.topic_id = {$prfx}_topic.id)
+                               inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                                left join {$prfx}_poll_user_answers on ({$prfx}_poll_options.id = {$prfx}_poll_user_answers.option_id)
                                left join {$prfx}_user on ({$prfx}_poll_user_answers.user_id = {$prfx}_user.id)
                                where topic_id = $tid
@@ -3128,7 +3130,9 @@ abstract class ForumManager
                 $user_readmarker = $dbw->field_by_name("read_marker");
                 $user_online = false;
                 $user_ignored = false;
-                $this->clear_if_ignored($user_id, $user, $user_readmarker, $user_online, $user_ignored, $topic_data["forum_id"], $tid);
+                if (!$dbw->field_by_name("disable_ignore")) {
+                    $this->clear_if_ignored($user_id, $user, $user_readmarker, $user_online, $user_ignored, $topic_data["forum_id"], $tid);
+                }
                 
                 $topic_data["poll_options"][$id]["users"][] = array(
                     "user_id" => $user_id,
@@ -6664,7 +6668,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function clear_profile_data()
     {
-        $_SESSION = array();
+        $_SESSION["user_name"] = "";
+        $_SESSION["last_posted_user"] = "";
         
         $this->update_user_cookies();
         
@@ -30595,6 +30600,11 @@ abstract class ForumManager
         global $READ_MARKER;
         
         $user_data["user_name"] = val_or_empty($_SESSION["user_name"]);
+        
+        if ($this->is_master_admin()) {
+            $user_data["user_name"] = text("MasterAdministrator");
+        }
+        
         $user_data["hide_ignored"] = val_or_empty($_SESSION["hide_ignored"]);
         $user_data["hide_pictures"] = val_or_empty($_SESSION["hide_pictures"]);
         $user_data["donot_hide_adult_pictures"] = val_or_empty($_SESSION["donot_hide_adult_pictures"]);
@@ -30678,7 +30688,7 @@ abstract class ForumManager
         global $READ_MARKER;
         global $settings;
         
-        if ($this->is_logged_in()) {
+        if ($this->is_logged_in() && !$this->is_master_admin()) {
             return true;
         }
 
@@ -30725,7 +30735,9 @@ abstract class ForumManager
             return false;
         }
         
-        $_SESSION["user_name"] = reqvar("user_name");
+        if (!$this->is_master_admin()) {
+            $_SESSION["user_name"] = reqvar("user_name");
+        }
         
         // user wants to clear his name and presence
         if (empty($_SESSION["user_name"])) {
@@ -34279,9 +34291,11 @@ abstract class ForumManager
             $rodbw->free_result();
             
             if ($fav_count > 0 && $pagination_info["page"] == 1) {
-                $query = "select {$prfx}_post.id, author, user_id, user_name, {$prfx}_post.read_marker,
-                  last_visit_date, logout
+                $query = "select {$prfx}_post.id, {$prfx}_post.author, {$prfx}_post.user_id, user_name, {$prfx}_post.read_marker,
+                  last_visit_date, logout, disable_ignore
                   from {$prfx}_post
+                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                   left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
                   where {$prfx}_post.id = $last_post_id";
                 
@@ -34305,7 +34319,9 @@ abstract class ForumManager
                 $rodbw->free_result();
                 
                 $last_author_ignored = false;
-                $this->clear_if_ignored($last_author_id, $last_author, $last_author_readmarker, $last_author_online, $last_author_ignored, "", "");
+                if (!$rodbw->field_by_name("disable_ignore")) {
+                    $this->clear_if_ignored($last_author_id, $last_author, $last_author_readmarker, $last_author_online, $last_author_ignored, "", "");
+                }
                 
                 $topic_list[-1] = array(
                     "name" => text("FavouriteMessages"),
@@ -36409,9 +36425,11 @@ abstract class ForumManager
                 
                 $srdbw->free_result();
                 
-                $query = "select author, user_id, user_name, {$prfx}_post.read_marker,
-                  last_visit_date, logout
+                $query = "select {$prfx}_post.author, }_post.user_id, user_name, {$prfx}_post.read_marker,
+                  last_visit_date, logout, disable_ignore
                   from {$prfx}_post
+                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                   left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
                   where {$prfx}_post.id = $last_post_id";
                 
@@ -36424,18 +36442,22 @@ abstract class ForumManager
                 $last_author = "";
                 $last_author_readmarker = "";
                 $last_author_online = 0;
+                $disable_ignore = 0;
                 
                 if ($srdbw->fetch_row()) {
                     $last_author_id = $srdbw->field_by_name("user_id");
                     $last_author = $srdbw->field_by_name("user_name") ? $srdbw->field_by_name("user_name") : $srdbw->field_by_name("author");
                     $last_author_readmarker = $srdbw->field_by_name("read_marker");
                     $last_author_online = (xstrtotime($srdbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $srdbw->field_by_name("logout") == 0);
+                    $disable_ignore = $srdbw->field_by_name("disable_ignore");
                 }
                 
                 $srdbw->free_result();
                 
                 $last_author_ignored = false;
-                $this->clear_if_ignored($last_author_id, $last_author, $last_author_readmarker, $last_author_online, $last_author_ignored, "", "");
+                if (!$disable_ignore) {
+                    $this->clear_if_ignored($last_author_id, $last_author, $last_author_readmarker, $last_author_online, $last_author_ignored, "", "");
+                }
                 
                 $topic_list[-1] = array(
                     "name" => text("FavouriteMessages"),
@@ -36515,7 +36537,9 @@ abstract class ForumManager
             $online = (xstrtotime($srdbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $srdbw->field_by_name("logout") == 0);
             
             $author_ignored = false;
-            $this->clear_if_ignored($user_id, $author, $author_readmarker, $online, $author_ignored, $forum_id, $tid);
+            if (!$srdbw->field_by_name("disable_ignore")) {
+                $this->clear_if_ignored($user_id, $author, $author_readmarker, $online, $author_ignored, $forum_id, $tid);
+            }
             
             $topic_list[$tid] = array(
                 "name" => $srdbw->field_by_name("name"),
@@ -36557,11 +36581,12 @@ abstract class ForumManager
         
         // last authors
         
-        $query = "select {$prfx}_topic.id, forum_id,
+        $query = "select {$prfx}_topic.id, {$prfx}_topic.forum_id, disable_ignore,
             {$prfx}_post.user_id last_author_id, {$prfx}_post.author last_author, {$prfx}_post.read_marker last_author_readmarker,
             last_user.last_visit_date last_user_last_visit_date, last_user.logout last_user_logout
             from
             {$prfx}_topic 
+            inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
             inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
             left join {$prfx}_post on ({$prfx}_topic_statistics.last_message_id = {$prfx}_post.id)
             left join {$prfx}_user last_user on ({$prfx}_post.user_id = last_user.id)
@@ -36583,7 +36608,9 @@ abstract class ForumManager
             $topic_list[$tid]["last_author_online"] = (xstrtotime($srdbw->field_by_name("last_user_last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $srdbw->field_by_name("last_user_logout") == 0);
             
             $last_author_ignored = false;
-            $this->clear_if_ignored($topic_list[$tid]["last_author_id"], $topic_list[$tid]["last_author"], $topic_list[$tid]["last_author_readmarker"], $topic_list[$tid]["last_author_online"], $last_author_ignored, $fid, $tid);
+            if (!$srdbw->field_by_name("disable_ignore")) {
+                $this->clear_if_ignored($topic_list[$tid]["last_author_id"], $topic_list[$tid]["last_author"], $topic_list[$tid]["last_author_readmarker"], $topic_list[$tid]["last_author_online"], $last_author_ignored, $fid, $tid);
+            }
             
             $topic_list[$tid]["last_author_ignored"] = $last_author_ignored;
         }

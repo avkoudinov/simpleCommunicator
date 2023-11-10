@@ -41,6 +41,13 @@ $maintenance_comment_lang["ua"] = "";
 $maintenance_comment_lang["en"] = "";
 $maintenance_comment_lang["de"] = "";
 
+// Link to the infromation about the maintenance.
+$maintenance_link = "";
+$maintenance_link_lang["ru"] = "";
+$maintenance_link_lang["ua"] = "";
+$maintenance_link_lang["en"] = "";
+$maintenance_link_lang["de"] = "";
+
 // If a password is set, the admin will be able to 
 // view and test the forum in the normal modus,
 // whereas for all other users, the maintenance
