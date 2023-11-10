@@ -46,6 +46,9 @@ $SUPPORTED_CODES = array(
     "rust" => "Rust",
     "sql" => "SQL",
     "pgsql" => "PL/pgSQL",
+    "vb" => "VB.Net",
+    "vba" => "VBA",
+    "vbs" => "VBScript",
     "xml" => "XML",
     "yaml" => "YAML"
 );
