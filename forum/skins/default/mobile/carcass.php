@@ -287,7 +287,7 @@ elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_
      $display = "style='display:none'";
      if(!empty($new_events_count)) $display = "";
     ?>
-    <a href="events.php"><?php echo_html(text("Events")); ?></a><span class="new new_events_indicator" <?php echo($display); ?>>&nbsp;[<a href="events.php"><?php echo_html(text("new")); ?>:<span class='new_events_count'><?php echo($new_events_count); ?></span></a>]</span><br>
+    <a href="events.php"><?php echo_html(text("Events")); ?></a><span class="new new_events_indicator" <?php echo($display); ?>>&nbsp;[<a href="events.php?event_type=new_events"><?php echo_html(text("new")); ?>:<span class='new_events_count'><?php echo($new_events_count); ?></span></a>]</span><br>
     <?php endif; ?>
     
   <?php else: ?>

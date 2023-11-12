@@ -224,6 +224,7 @@ $GLOBALS['DEF_TEXTS']['ua']['IgnoredTopics'] = 'Ігноровані теми';
 $GLOBALS['DEF_TEXTS']['ua']['ModeratedTopics'] = 'Теми, де автор є модератором';
 $GLOBALS['DEF_TEXTS']['ua']['Never'] = 'Ніколи';
 $GLOBALS['DEF_TEXTS']['ua']['AllEvents'] = 'Всі події';
+$GLOBALS['DEF_TEXTS']['ua']['NewEvents'] = 'Нові події';
 $GLOBALS['DEF_TEXTS']['ua']['ModerationEvents'] = 'Модераторські події';
 $GLOBALS['DEF_TEXTS']['ua']['AttentionEvents'] = 'Персональні звернення';
 $GLOBALS['DEF_TEXTS']['ua']['UnprocessedEvents'] = 'Невідпрацьовані події';
