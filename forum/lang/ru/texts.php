@@ -224,6 +224,7 @@ $GLOBALS['DEF_TEXTS']['ru']['IgnoredTopics'] = 'Игнорируемые тем�
 $GLOBALS['DEF_TEXTS']['ru']['ModeratedTopics'] = 'Модерируемые темы';
 $GLOBALS['DEF_TEXTS']['ru']['Never'] = 'Никогда';
 $GLOBALS['DEF_TEXTS']['ru']['AllEvents'] = 'Все события';
+$GLOBALS['DEF_TEXTS']['ru']['NewEvents'] = 'Новые события';
 $GLOBALS['DEF_TEXTS']['ru']['ModerationEvents'] = 'Модераторские события';
 $GLOBALS['DEF_TEXTS']['ru']['AttentionEvents'] = 'Персональные обращения';
 $GLOBALS['DEF_TEXTS']['ru']['UnprocessedEvents'] = 'Неотработанные события';

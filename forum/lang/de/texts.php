@@ -224,6 +224,7 @@ $GLOBALS['DEF_TEXTS']['de']['IgnoredTopics'] = 'Ignorierte Themen';
 $GLOBALS['DEF_TEXTS']['de']['ModeratedTopics'] = 'Moderierte Themen';
 $GLOBALS['DEF_TEXTS']['de']['Never'] = 'Nie';
 $GLOBALS['DEF_TEXTS']['de']['AllEvents'] = 'Alle Ereignisse';
+$GLOBALS['DEF_TEXTS']['de']['NewEvents'] = 'Neue Ereignisse';
 $GLOBALS['DEF_TEXTS']['de']['ModerationEvents'] = 'Moderation-Ereignisse';
 $GLOBALS['DEF_TEXTS']['de']['AttentionEvents'] = 'Persönliche Ansprachen';
 $GLOBALS['DEF_TEXTS']['de']['UnprocessedEvents'] = 'Nicht erledigte Ereignisse';
