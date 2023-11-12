@@ -72,6 +72,12 @@ function image_load($path)
                 $im = @imagecreatefromgif($path);
             }
             break;
+            
+        case 'webp' :
+            {
+                $im = @imagecreatefromwebp($path);
+            }
+            break;
         
         case 'png' :
             {
@@ -92,13 +98,7 @@ function image_load($path)
 //-------------------------------------------------------------------
 function image_save($img, $path)
 {
-    if (!function_exists("imagecreatefromjpeg") ||
-        !function_exists("imagecreatefromgif") ||
-        !function_exists("imagecreatefrompng") ||
-        !function_exists("imagejpeg") ||
-        !function_exists("imagegif") ||
-        !function_exists("imagepng")
-    ) {
+    if (!function_exists("imagecreatefromjpeg")) {
         return false;
     }
     
@@ -124,13 +124,7 @@ function image_save($img, $path)
 //-------------------------------------------------------------------
 function image_out($img, $ext)
 {
-    if (!function_exists("imagecreatefromjpeg") ||
-        !function_exists("imagecreatefromgif") ||
-        !function_exists("imagecreatefrompng") ||
-        !function_exists("imagejpeg") ||
-        !function_exists("imagegif") ||
-        !function_exists("imagepng")
-    ) {
+    if (!function_exists("imagecreatefromjpeg")) {
         return false;
     }
     
@@ -157,13 +151,7 @@ function image_out($img, $ext)
 //-------------------------------------------------------------------
 function compress_image($src, $target, $quality)
 {
-    if (!function_exists("imagecreatefromjpeg") ||
-        !function_exists("imagecreatefromgif") ||
-        !function_exists("imagecreatefrompng") ||
-        !function_exists("imagejpeg") ||
-        !function_exists("imagegif") ||
-        !function_exists("imagepng")
-    ) {
+    if (!function_exists("imagecreatefromjpeg")) {
         return false;
     }
     
@@ -230,13 +218,7 @@ function check_image_rotation($src, $target)
 //-------------------------------------------------------------------
 function scale_image($src, $target, $max_x = false, $max_y = false)
 {
-    if (!function_exists("imagecreatefromjpeg") ||
-        !function_exists("imagecreatefromgif") ||
-        !function_exists("imagecreatefrompng") ||
-        !function_exists("imagejpeg") ||
-        !function_exists("imagegif") ||
-        !function_exists("imagepng")
-    ) {
+    if (!function_exists("imagecreatefromjpeg")) {
         return false;
     }
     
@@ -269,9 +251,9 @@ function scale_image($src, $target, $max_x = false, $max_y = false)
         }
         
         if (($max_x / $max_y) < ($x / $y)) {
-            $target_img = imagecreatetruecolor($x / ($x / $max_x), $y / ($x / $max_x));
+            $target_img = imagecreatetruecolor((int)($x / ($x / $max_x)), (int)($y / ($x / $max_x)));
         } else {
-            $target_img = imagecreatetruecolor($x / ($y / $max_y), $y / ($y / $max_y));
+            $target_img = imagecreatetruecolor((int)($x / ($y / $max_y)), (int)($y / ($y / $max_y)));
         }
         
         $target_x = imagesx($target_img);
@@ -306,13 +288,7 @@ function scale_image($src, $target, $max_x = false, $max_y = false)
 //-------------------------------------------------------------------
 function rotate_image($src, $target, $degree)
 {
-    if (!function_exists("imagecreatefromjpeg") ||
-        !function_exists("imagecreatefromgif") ||
-        !function_exists("imagecreatefrompng") ||
-        !function_exists("imagejpeg") ||
-        !function_exists("imagegif") ||
-        !function_exists("imagepng")
-    ) {
+    if (!function_exists("imagecreatefromjpeg")) {
         return false;
     }
     
@@ -380,13 +356,7 @@ function rotate_image($src, $target, $degree)
 //-------------------------------------------------------------------
 function get_image_info($img_path, &$img_info)
 {
-    if (!function_exists("imagecreatefromjpeg") ||
-        !function_exists("imagecreatefromgif") ||
-        !function_exists("imagecreatefrompng") ||
-        !function_exists("imagejpeg") ||
-        !function_exists("imagegif") ||
-        !function_exists("imagepng")
-    ) {
+    if (!function_exists("imagecreatefromjpeg")) {
         return false;
     }
     
@@ -410,13 +380,7 @@ function get_image_info($img_path, &$img_info)
 //-------------------------------------------------------------------
 function resize_image($src, $target, $new_x, $new_y)
 {
-    if (!function_exists("imagecreatefromjpeg") ||
-        !function_exists("imagecreatefromgif") ||
-        !function_exists("imagecreatefrompng") ||
-        !function_exists("imagejpeg") ||
-        !function_exists("imagegif") ||
-        !function_exists("imagepng")
-    ) {
+    if (!function_exists("imagecreatefromjpeg")) {
         return false;
     }
     

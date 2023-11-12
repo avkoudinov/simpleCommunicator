@@ -46,6 +46,9 @@ $SUPPORTED_CODES = array(
     "rust" => "Rust",
     "sql" => "SQL",
     "pgsql" => "PL/pgSQL",
+    "vb" => "VB.Net",
+    "vba" => "VBA",
+    "vbs" => "VBScript",
     "xml" => "XML",
     "yaml" => "YAML"
 );
@@ -101,6 +104,8 @@ define('TIMEOUT', 60000); // milliseconds
 define('SALT_KEY', '59000');
 
 define('HOME_DIRECTORY', '/');
+
+define('CANONICAL_DOMAIN', '');
 
 // special property to disallow new guests
 // new guests may write only after this amount of time

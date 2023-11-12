@@ -869,7 +869,7 @@ class MSSQL_ForumManager extends ForumManager
         return "select
             topics.id, name, creation_date,
             last_message_date, post_count, post_count_total,
-            hits_count, bot_hits_count, profiled_topic, deleted, forum_deleted, closed, pinned, has_pinned_post, {$prfx}_pinned_topics.topic_id user_pinned,
+            hits_count, bot_hits_count, profiled_topic, deleted, forum_deleted, disable_ignore, closed, pinned, has_pinned_post, {$prfx}_pinned_topics.topic_id user_pinned,
             topics.user_id, author, topics.read_marker, {$prfx}_user.user_name,
             {$prfx}_user.last_visit_date, {$prfx}_user.logout,
             forum_id, forum_name,
@@ -880,7 +880,7 @@ class MSSQL_ForumManager extends ForumManager
             {$prfx}_topic.id, {$prfx}_topic.name, {$prfx}_topic.creation_date,
             {$prfx}_topic_statistics.last_message_date, post_count, post_count_total,
             hits_count, bot_hits_count, {$prfx}_topic.profiled_topic, {$prfx}_topic.deleted, {$prfx}_topic.closed, {$prfx}_topic.pinned, has_pinned_post,
-            {$prfx}_forum.deleted forum_deleted,
+            {$prfx}_forum.deleted forum_deleted, disable_ignore, 
             {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_topic.read_marker,
             forum_id, {$prfx}_forum.name forum_name,
             is_poll, publish_delay, {$prfx}_topic.no_guests
