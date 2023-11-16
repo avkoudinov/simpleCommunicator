@@ -2543,7 +2543,7 @@ abstract class ForumManager
     } // open_close_forum
     
     //-----------------------------------------------------------------
-    function cascade_delete_forum($dbw, $forum_clause)
+    function cascade_delete_forum($dbw, $forum_clause, $post_date_clause = "")
     {
         $prfx = $dbw->escape(System::getDBPrefix());
         
@@ -2572,7 +2572,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->cascade_delete_topic($dbw, "forum_id in (select id from {$prfx}_forum where $forum_clause)")) {
+        if (!$this->cascade_delete_topic($dbw, "forum_id in (select id from {$prfx}_forum where $forum_clause)", $post_date_clause)) {
             return false;
         }
         
@@ -2585,7 +2585,7 @@ abstract class ForumManager
     } // cascade_delete_forum
     
     //-----------------------------------------------------------------
-    function cascade_delete_topic($dbw, $topic_clause, $post_date_clause)
+    function cascade_delete_topic($dbw, $topic_clause, $post_date_clause = "")
     {
         $prfx = $dbw->escape(System::getDBPrefix());
 
@@ -2654,7 +2654,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$dbw->execute_query("delete from {$prfx}_topic where $post_date_clause $topic_clause")) {
+        if (!$dbw->execute_query("delete from {$prfx}_topic where $topic_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -2920,7 +2920,7 @@ abstract class ForumManager
             $dbw->free_result();
             
             if ($cnt == 0) {
-                if (!$this->cascade_delete_forum($dbw, "id = $fid")) {
+                if (!$this->cascade_delete_forum($dbw, "id = $fid", "creation_date >= (select creation_date from {$prfx}_forum where id = $fid) and")) {
                     $dbw->rollback_transaction();
                     return false;
                 }
@@ -4514,6 +4514,7 @@ abstract class ForumManager
         $settings["skin"] = "";
         $settings["protected_guests"] = "";
         $settings["protected_guest_list"] = array();
+        $settings["blocked_email_domains"] = "";
         $settings["celebration_active"] = "";
         $settings["mourning_active"] = "";
         $settings["archive_mode"] = "";
@@ -4682,6 +4683,11 @@ abstract class ForumManager
         
         $settings["protected_guests"] = trim($settings["protected_guests"]);
         
+        $settings["blocked_email_domains"] = "";
+        if (file_exists(APPLICATION_ROOT . "user_data/config/email_black_list.txt")) {
+            $settings["blocked_email_domains"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt"));
+        }
+
         measure_action_time("get settings");
         
         return true;
@@ -4957,6 +4963,12 @@ abstract class ForumManager
             }
         }
         
+        if (!file_put_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt", reqvar("blocked_email_domains"))) {
+            MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/email_black_list.txt"), sys_get_last_error());
+            $dbw->rollback_transaction();
+            return false;
+        }
+
         if (!$dbw->commit_transaction()) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -20473,7 +20485,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (Emoji::HasEmoji($subject)) {
+        if (!$this->check_subject($subject)) {
             MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
             MessageHandler::setErrorElement("subject");
             return false;
@@ -21859,12 +21871,22 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function check_author($author)
     {
-        if (Emoji::HasEmoji($author) || preg_match("/[\[\]<>\{\}%@,;:~`\|\/\\\\]+/", $author)) {
+        if (Emoji::HasEmoji($author) || !preg_match("/^[\p{L} _\-\.\(\)0-9]+$/u", $author)) {
             return false;
         }
         
         return true;
     } // check_author
+    
+    //-----------------------------------------------------------------
+    function check_subject($subject)
+    {
+        if (Emoji::HasEmoji($subject) || !preg_match("/^[\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>#\"\'0-9]+$/u", $subject)) {
+            return false;
+        }
+        
+        return true;
+    } // check_subject
     
     //-----------------------------------------------------------------
     function strip_subject($subject)
@@ -22125,7 +22147,7 @@ abstract class ForumManager
                 return false;
             }
             
-            if (Emoji::HasEmoji($subject)) {
+            if (!$this->check_subject($subject)) {
                 MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
                 MessageHandler::setErrorElement("subject");
                 return false;
@@ -30382,7 +30404,7 @@ abstract class ForumManager
             $_SESSION["user_name"] = get_cookie("q_last_guest_name");
             
             if (!$this->check_author($_SESSION["user_name"])) {
-                $_SESSION["user_name"] = text("Guest");
+                $_SESSION["user_name"] = "";
             }
             
             if (!empty($settings["max_user_name_symbols"])) {
@@ -31282,13 +31304,15 @@ abstract class ForumManager
                 $uid = $dbw->field_by_name("uid");
                 
                 $uname = val_or_empty($guests[$uid]);
+                $uname_short = $uname;
                 
-                $ln = 35;
-                if (utf8_strlen($uname) > ($ln + 4)) {
-                    $uname = utf8_trim(utf8_substr($uname, 0, $ln), "/. ") . " ...";
+                $ln = 65;
+                if (utf8_strlen($uname_short) > ($ln + 4)) {
+                    $uname_short = utf8_trim(utf8_substr($uname_short, 0, $ln), "/. ") . " ...";
                 }
                 
-                $uname = $uname . " [" . $dbw->field_by_name("cnt") . " / " . text("Guest") . "]";
+                $uname_short = $uname_short . " [" . $dbw->field_by_name("cnt") . " / " . text("Guest") . "]";
+
                 $uid = "g:" . $uid;
             } else {
                 $uid = "u:" . $dbw->field_by_name("uid");
@@ -31300,16 +31324,20 @@ abstract class ForumManager
                 }
                 
                 $uname = $dbw->field_by_name("user_name");
+                $uname_short = $uname;
                 
-                $ln = 35;
-                if (utf8_strlen($uname) > ($ln + 4)) {
-                    $uname = utf8_trim(utf8_substr($uname, 0, $ln), "/. ") . " ...";
+                $ln = 65;
+                if (utf8_strlen($uname_short) > ($ln + 4)) {
+                    $uname_short = utf8_trim(utf8_substr($uname_short, 0, $ln), "/. ") . " ...";
                 }
                 
-                $uname = $uname . " [" . $dbw->field_by_name("cnt") . " / " . format_duration($duration) . "]";
+                $uname_short = $uname_short . " [" . $dbw->field_by_name("cnt") . " / " . format_duration($duration) . "]";
             }
             
-            $found_users[$uid] = $uname;
+            $found_users[$uid] = [
+               "uname" => $uname,
+               "uname_short" => $uname_short
+            ];
         }
         
         $dbw->free_result();
@@ -33385,7 +33413,7 @@ abstract class ForumManager
             $_SESSION["user_name"] = $data["user_name"];
             
             if (!$this->check_author($_SESSION["user_name"])) {
-                $_SESSION["user_name"] = text("Guest");
+                $_SESSION["user_name"] = "";
             }
             
             if (!empty($settings["max_user_name_symbols"])) {

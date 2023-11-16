@@ -1479,4 +1479,6 @@ $GLOBALS['DEF_TEXTS']['en']['ErrLogoutForRegistration'] = 'You are already logge
 $GLOBALS['DEF_TEXTS']['en']['MsgIPClauseIgnored'] = 'IP address criterion has been ignored. You can search by IP address only for youк own messages!';
 $GLOBALS['DEF_TEXTS']['en']['AccessByPassword'] = 'Access by password';
 $GLOBALS['DEF_TEXTS']['en']['AccessByAuthorization'] = 'Access by authorization';
+$GLOBALS['DEF_TEXTS']['en']['BlockedEmailDomains'] = 'Blocked email domains';
+$GLOBALS['DEF_TEXTS']['en']['BlockedEmailDomainsComment'] = 'Enter the email domains - one per line.';
 ?>

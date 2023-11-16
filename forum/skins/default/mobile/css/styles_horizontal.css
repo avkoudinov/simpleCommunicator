@@ -1236,6 +1236,12 @@
     width: 770px;
   }
   
+  .settings_table #protected_guestsб
+  .settings_table #blocked_email_domains
+  {
+    height: 500px;
+  }
+
   .forum_edit_table,
   .settings_table
   {

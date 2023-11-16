@@ -501,6 +501,7 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 <td>
 <?php
 $author = $fmanager->get_user_name();
+
 $read_only = '';
 if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"])))
 {
