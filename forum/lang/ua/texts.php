@@ -1484,4 +1484,6 @@ $GLOBALS['DEF_TEXTS']['ua']['ErrLogoutForRegistration'] = 'Ви вже авто�
 $GLOBALS['DEF_TEXTS']['ua']['MsgIPClauseIgnored'] = 'Критерій IP адреси проігноровано. За IP-адресою можна шукати тільки власні повідомлення!';
 $GLOBALS['DEF_TEXTS']['ua']['AccessByPassword'] = 'Доступ по паролю';
 $GLOBALS['DEF_TEXTS']['ua']['AccessByAuthorization'] = 'Доступ по авторизації';
+$GLOBALS['DEF_TEXTS']['ua']['BlockedEmailDomains'] = 'Заблоковані домени ел. пошти';
+$GLOBALS['DEF_TEXTS']['ua']['BlockedEmailDomainsComment'] = 'Введіть домени ел. пошти - кожне ім\'я з нового рядка.';
 ?>

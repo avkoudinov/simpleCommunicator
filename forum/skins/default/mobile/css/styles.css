@@ -1352,7 +1352,8 @@ td.admin_actions
   width: 870px;
 }
 
-.settings_table #protected_guests
+.settings_table #protected_guestsб
+.settings_table #blocked_email_domains
 {
   height: 300px;
 }
@@ -5989,6 +5990,7 @@ td.preferred_forums
   overflow: auto;
   max-height: 500px;
   font-size: 32px;
+  word-break: break-word;
 }
 
 ._user_msgbox_buttons

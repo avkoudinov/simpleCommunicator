@@ -93,10 +93,12 @@ function search_users()
         {
           for(var t in response.found_users)
           {
-            var option = new Option(response.found_users[t],
+            var option = new Option(response.found_users[t]["uname_short"],
                                     t,
                                     true, false
                                    );
+            option.title = response.found_users[t]["uname"];
+            
             selected_users.options[selected_users.options.length] = option;
           }
         }

@@ -10255,5 +10255,19 @@
             <ua>Доступ по авторизації</ua>
         </text>
 
+        <text id="BlockedEmailDomains">
+            <en>Blocked email domains</en>
+            <de>Blockierte E-Mail-Domänen</de>
+            <ru>Заблокированные домены эл. почты</ru>
+            <ua>Заблоковані домени ел. пошти</ua>
+        </text>
+
+        <text id="BlockedEmailDomainsComment">
+            <en>Enter the email domains - one per line.</en>
+            <de>Geben Sie die E-Mail-Domänen ein - einen Namen pro Zeile.</de>
+            <ru>Введите домены эл. почты - каждое имя с новой строки.</ru>
+            <ua>Введіть домени ел. пошти - кожне ім'я з нового рядка.</ua>
+        </text>
+
     </texts>
 </document>

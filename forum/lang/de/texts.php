@@ -1479,4 +1479,6 @@ $GLOBALS['DEF_TEXTS']['de']['ErrLogoutForRegistration'] = 'Sie sind bereits als 
 $GLOBALS['DEF_TEXTS']['de']['MsgIPClauseIgnored'] = 'Das Kriterium IP-Adresse wurde ignoriert. Sie können nur für Ihre eigenen Nachrichten nach der IP-Adresse suchen!';
 $GLOBALS['DEF_TEXTS']['de']['AccessByPassword'] = 'Zugang durch Passwort';
 $GLOBALS['DEF_TEXTS']['de']['AccessByAuthorization'] = 'Zugang durch Autorisierung';
+$GLOBALS['DEF_TEXTS']['de']['BlockedEmailDomains'] = 'Blockierte E-Mail-Domänen';
+$GLOBALS['DEF_TEXTS']['de']['BlockedEmailDomainsComment'] = 'Geben Sie die E-Mail-Domänen ein - einen Namen pro Zeile.';
 ?>

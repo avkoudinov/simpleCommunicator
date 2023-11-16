@@ -467,6 +467,14 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
+<td style="vertical-align: top"><?php echo_html(text("BlockedEmailDomains")); ?>:</td>
+<td>
+<textarea id="blocked_email_domains" name="blocked_email_domains" spellcheck="false"><?php echo_html($settings["blocked_email_domains"]); ?></textarea>
+<div class="field_comment"><?php echo_html(text("BlockedEmailDomainsComment")); ?></div>
+</td>
+</tr>
+
+<tr>
 <td colspan="2"></td>
 </tr>
 
