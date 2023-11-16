@@ -1576,6 +1576,13 @@
             <ua>Всі події</ua>
         </text>
 
+        <text id="NewEvents">
+            <en>New events</en>
+            <de>Neue Ereignisse</de>
+            <ru>Новые события</ru>
+            <ua>Нові події</ua>
+        </text>
+
         <text id="ModerationEvents">
             <en>Moderation events</en>
             <de>Moderation-Ereignisse</de>

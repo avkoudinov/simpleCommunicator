@@ -36040,6 +36040,14 @@ abstract class ForumManager
                              )
                         )";
                 break;
+
+            case "new_events":
+                $where .= " and (is_new <> 0 and
+                              ((select last_events_view_date from {$prfx}_user where id = $uid) is NULL or
+                               event_time > (select last_events_view_date from {$prfx}_user where id = $uid)
+                              )
+                           )";
+                break;
         }
         
         // last event read date

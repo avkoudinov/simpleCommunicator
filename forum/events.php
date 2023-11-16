@@ -79,6 +79,7 @@ if ((reqvar_empty("event_type") || reqvar("event_type") == "all_events") &&
 $filter_list = array();
 
 $filter_list["all_events"] = text("AllEvents");
+$filter_list["new_events"] = text("NewEvents");
 $filter_list["unprocessed_events"] = text("UnprocessedEvents");
 $filter_list["mod_events"] = text("ModerationEvents");
 $filter_list["unprocessed_mod_events"] = text("UnprocessedModerationEvents");
