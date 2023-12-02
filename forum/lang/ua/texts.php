@@ -1485,5 +1485,7 @@ $GLOBALS['DEF_TEXTS']['ua']['MsgIPClauseIgnored'] = 'Критерій IP адр�
 $GLOBALS['DEF_TEXTS']['ua']['AccessByPassword'] = 'Доступ по паролю';
 $GLOBALS['DEF_TEXTS']['ua']['AccessByAuthorization'] = 'Доступ по авторизації';
 $GLOBALS['DEF_TEXTS']['ua']['BlockedEmailDomains'] = 'Заблоковані домени ел. пошти';
-$GLOBALS['DEF_TEXTS']['ua']['BlockedEmailDomainsComment'] = 'Введіть домени ел. пошти - кожне ім\'я з нового рядка.';
+$GLOBALS['DEF_TEXTS']['ua']['DomainListComment'] = 'Введіть домени - кожне ім\'я з нового рядка.';
+$GLOBALS['DEF_TEXTS']['ua']['ImageUrlBlackList'] = 'Чорний список доменів зображень';
+$GLOBALS['DEF_TEXTS']['ua']['ImageUrlWhiteList'] = 'Білий список доменів зображень';
 ?>

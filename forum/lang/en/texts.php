@@ -1480,5 +1480,7 @@ $GLOBALS['DEF_TEXTS']['en']['MsgIPClauseIgnored'] = 'IP address criterion has be
 $GLOBALS['DEF_TEXTS']['en']['AccessByPassword'] = 'Access by password';
 $GLOBALS['DEF_TEXTS']['en']['AccessByAuthorization'] = 'Access by authorization';
 $GLOBALS['DEF_TEXTS']['en']['BlockedEmailDomains'] = 'Blocked email domains';
-$GLOBALS['DEF_TEXTS']['en']['BlockedEmailDomainsComment'] = 'Enter the email domains - one per line.';
+$GLOBALS['DEF_TEXTS']['en']['DomainListComment'] = 'Enter the email domains - one per line.';
+$GLOBALS['DEF_TEXTS']['en']['ImageUrlBlackList'] = 'Image domain black list';
+$GLOBALS['DEF_TEXTS']['en']['ImageUrlWhiteList'] = 'Image domain white list';
 ?>

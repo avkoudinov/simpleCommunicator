@@ -4515,6 +4515,8 @@ abstract class ForumManager
         $settings["protected_guests"] = "";
         $settings["protected_guest_list"] = array();
         $settings["blocked_email_domains"] = "";
+        $settings["img_domain_blacklist"] = "";
+        $settings["img_domain_whitelist"] = "";
         $settings["celebration_active"] = "";
         $settings["mourning_active"] = "";
         $settings["archive_mode"] = "";
@@ -4686,6 +4688,16 @@ abstract class ForumManager
         $settings["blocked_email_domains"] = "";
         if (file_exists(APPLICATION_ROOT . "user_data/config/email_black_list.txt")) {
             $settings["blocked_email_domains"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt"));
+        }
+
+        $settings["img_domain_blacklist"] = "";
+        if (file_exists(APPLICATION_ROOT . "user_data/config/img_black_list.txt")) {
+            $settings["img_domain_blacklist"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/img_black_list.txt"));
+        }
+
+        $settings["img_domain_whitelist"] = "";
+        if (file_exists(APPLICATION_ROOT . "user_data/config/img_white_list.txt")) {
+            $settings["img_domain_whitelist"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/img_white_list.txt"));
         }
 
         measure_action_time("get settings");
@@ -4965,6 +4977,18 @@ abstract class ForumManager
         
         if (!file_put_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt", reqvar("blocked_email_domains"))) {
             MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/email_black_list.txt"), sys_get_last_error());
+            $dbw->rollback_transaction();
+            return false;
+        }
+
+        if (!file_put_contents(APPLICATION_ROOT . "user_data/config/img_black_list.txt", reqvar("img_domain_blacklist"))) {
+            MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/img_black_list.txt"), sys_get_last_error());
+            $dbw->rollback_transaction();
+            return false;
+        }
+
+        if (!file_put_contents(APPLICATION_ROOT . "user_data/config/img_white_list.txt", reqvar("img_domain_whitelist"))) {
+            MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/img_white_list.txt"), sys_get_last_error());
             $dbw->rollback_transaction();
             return false;
         }
