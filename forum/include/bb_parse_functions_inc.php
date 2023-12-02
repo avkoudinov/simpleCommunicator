@@ -372,18 +372,18 @@ function check_hot_linking(&$url, &$alternative_code)
 //------------------------------------------------------------------------------
 function check_image_url(&$url, &$large_url)
 {
-    //return;
-    
-    // yip.su
-    // grabify.link
-    // fintank.ru
-    // fortnight.space
-    
     $img_black_list = array();
     
     if (file_exists(APPLICATION_ROOT . "user_data/config/img_black_list.txt")) {
         $img_black_list = file_get_contents(APPLICATION_ROOT . "user_data/config/img_black_list.txt");
         $img_black_list = preg_split("/[\n\r]+/", $img_black_list, -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    $img_white_list = array();
+    
+    if (file_exists(APPLICATION_ROOT . "user_data/config/img_white_list.txt")) {
+        $img_white_list = file_get_contents(APPLICATION_ROOT . "user_data/config/img_white_list.txt");
+        $img_white_list = preg_split("/[\n\r]+/", $img_white_list, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     $host = parse_url($url, PHP_URL_HOST);
@@ -463,8 +463,7 @@ function check_image_url(&$url, &$large_url)
           return true;
       }
     } else {
-          if (strpos($host, "userapi.com") !== false ||
-              strpos($host, "webpulse.imgsmail.ru") !== false) {
+          if (in_array($host, $img_white_list)) {
               return true;
           }
           
