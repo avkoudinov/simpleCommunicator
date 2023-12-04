@@ -6459,6 +6459,7 @@ a.not_preferred:hover
   padding: 7px 7px 7px 7px;
   overflow: auto;
   max-height: 300px;
+  word-break: break-word;
 }
 
 ._sys_user_input,

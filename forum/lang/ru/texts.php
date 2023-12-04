@@ -1484,4 +1484,8 @@ $GLOBALS['DEF_TEXTS']['ru']['ErrLogoutForRegistration'] = 'Вы уже авто�
 $GLOBALS['DEF_TEXTS']['ru']['MsgIPClauseIgnored'] = 'Критерий IP адрес был проигнорирован. Поиск по IP-адресу возможен только для собственных сообщений!';
 $GLOBALS['DEF_TEXTS']['ru']['AccessByPassword'] = 'Доступ по паролю';
 $GLOBALS['DEF_TEXTS']['ru']['AccessByAuthorization'] = 'Доступ по авторизации';
+$GLOBALS['DEF_TEXTS']['ru']['BlockedEmailDomains'] = 'Заблокированные домены эл. почты';
+$GLOBALS['DEF_TEXTS']['ru']['DomainListComment'] = 'Введите домены - каждое имя с новой строки.';
+$GLOBALS['DEF_TEXTS']['ru']['ImageUrlBlackList'] = 'Черный список доменов изображений';
+$GLOBALS['DEF_TEXTS']['ru']['ImageUrlWhiteList'] = 'Белый список доменов изображений';
 ?>

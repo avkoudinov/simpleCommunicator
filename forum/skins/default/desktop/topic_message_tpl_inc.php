@@ -461,10 +461,10 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
     <?php elseif ($pinfo["guest_ignored"] != 2): ?>
     <a class="ignore_user_a_<?php echo_html(md5($pinfo["author"])); ?>" href="<?php echo($message_url); ?>" title="<?php echo_html(text("RemoveFromIgnoreList")); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmUserUnignore"), true); ?>".replace(/%s/, "<?php echo_js($fmanager->get_display_name($pinfo["author"]), true); ?>"), { ignore_action: "remove_guest_from_ignore_list", guest_name: "<?php echo_js($pinfo["author"]); ?>", display_guest_name: "<?php echo_js($fmanager->get_display_name($pinfo["author"])); ?>", guest_id: "<?php echo_html(md5($pinfo["author"])); ?>" });'><img class="ignore_user_img_<?php echo_html(md5($pinfo["author"])); ?>" src="<?php echo($view_path); ?>images/unignore_user.png" alt="<?php echo_html(text("RemoveFromIgnoreList")); ?>"></a>
     <?php endif; ?>
+  <?php endif; ?>
 
-    <?php if(empty($in_search)): ?>
-    <a href="search.php?do_search=1&tid=<?php echo_html($pinfo["topic_id"]); ?>&author_mode=wrote_post&author=<?php echo(xrawurlencode($pinfo["author"])); ?>&start_from=<?php echo($pid); ?>" title="<?php echo_html(text("AuthorMessagesInTopic")); ?>" ><img src="<?php echo($view_path); ?>images/filter.png" alt="<?php echo_html(text("AuthorMessagesInTopic")); ?>"></a>
-    <?php endif; ?>
+  <?php if(empty($in_search)): ?>
+  <a href="search.php?do_search=1&tid=<?php echo_html($pinfo["topic_id"]); ?>&author_mode=wrote_post&author=<?php echo(xrawurlencode($pinfo["author"])); ?>&start_from=<?php echo($pid); ?>" title="<?php echo_html(text("AuthorMessagesInTopic")); ?>" ><img src="<?php echo($view_path); ?>images/filter.png" alt="<?php echo_html(text("AuthorMessagesInTopic")); ?>"></a>
   <?php endif; ?>
   </td>
   </tr>

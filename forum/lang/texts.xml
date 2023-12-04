@@ -10255,5 +10255,33 @@
             <ua>Доступ по авторизації</ua>
         </text>
 
+        <text id="BlockedEmailDomains">
+            <en>Blocked email domains</en>
+            <de>Blockierte E-Mail-Domänen</de>
+            <ru>Заблокированные домены эл. почты</ru>
+            <ua>Заблоковані домени ел. пошти</ua>
+        </text>
+
+        <text id="DomainListComment">
+            <en>Enter the email domains - one per line.</en>
+            <de>Geben Sie die Domänen ein - einen Namen pro Zeile.</de>
+            <ru>Введите домены - каждое имя с новой строки.</ru>
+            <ua>Введіть домени - кожне ім'я з нового рядка.</ua>
+        </text>
+
+        <text id="ImageUrlBlackList">
+            <en>Image domain black list</en>
+            <de>Schwarze Liste der Bilddomäne</de>
+            <ru>Черный список доменов изображений</ru>
+            <ua>Чорний список доменів зображень</ua>
+        </text>
+
+        <text id="ImageUrlWhiteList">
+            <en>Image domain white list</en>
+            <de>Weiße Liste der Bilddomäne</de>
+            <ru>Белый список доменов изображений</ru>
+            <ua>Білий список доменів зображень</ua>
+        </text>
+
     </texts>
 </document>
