@@ -6637,6 +6637,28 @@ a.reddit_short_container
 
 /* END: Reddit */
 
+/* BEGIN: Dzen */
+
+a.dzen_short_container
+{
+  font-size: 25px;
+  display: table-cell;
+  width:563px;
+  height:66px;
+  color:white; 
+  font-weight: bold; 
+  padding: 5px 5px 5px 80px;
+  background-color: black;
+  background-image: url(../images/dzen_short.png);
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 52px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+/* END: Dzen */
+
 /* BEGIN: TikTok */
 
 a.tiktok_short_container

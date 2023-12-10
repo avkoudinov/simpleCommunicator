@@ -4975,19 +4975,19 @@ abstract class ForumManager
             }
         }
         
-        if (!file_put_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt", reqvar("blocked_email_domains"))) {
+        if (file_put_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt", reqvar("blocked_email_domains")) === false) {
             MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/email_black_list.txt"), sys_get_last_error());
             $dbw->rollback_transaction();
             return false;
         }
 
-        if (!file_put_contents(APPLICATION_ROOT . "user_data/config/img_black_list.txt", reqvar("img_domain_blacklist"))) {
+        if (file_put_contents(APPLICATION_ROOT . "user_data/config/img_black_list.txt", reqvar("img_domain_blacklist")) === false) {
             MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/img_black_list.txt"), sys_get_last_error());
             $dbw->rollback_transaction();
             return false;
         }
 
-        if (!file_put_contents(APPLICATION_ROOT . "user_data/config/img_white_list.txt", reqvar("img_domain_whitelist"))) {
+        if (file_put_contents(APPLICATION_ROOT . "user_data/config/img_white_list.txt", reqvar("img_domain_whitelist")) === false) {
             MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/img_white_list.txt"), sys_get_last_error());
             $dbw->rollback_transaction();
             return false;
@@ -5357,8 +5357,12 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->check_author(reqvar("user_name"))) {
-            MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
+        $symbols = "";
+        if (!$this->check_author(reqvar("user_name"), $symbols)) {
+            $error = text("ErrStringContainsInvalidSymbols");
+            if (!empty($symbols)) $error .= "\n\n" . $symbols;
+            
+            MessageHandler::setError($error);
             MessageHandler::setErrorElement("user_name");
             return false;
         }
@@ -20509,8 +20513,12 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->check_subject($subject)) {
-            MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
+        $symbols = "";
+        if (!$this->check_subject($subject, $symbols)) {
+            $error = text("ErrStringContainsInvalidSymbols");
+            if (!empty($symbols)) $error .= "\n\n" . $symbols;
+            
+            MessageHandler::setError($error);
             MessageHandler::setErrorElement("subject");
             return false;
         }
@@ -21009,8 +21017,12 @@ abstract class ForumManager
                 return false;
             }
             
-            if (!$this->check_author(reqvar("author"))) {
-                MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
+            $symbols = "";
+            if (!$this->check_author(reqvar("author"), $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+
+                MessageHandler::setError(text("ErrStringContainsInvalidSymbols"), $symbols);
                 MessageHandler::setErrorElement("author");
                 return false;
             }
@@ -21893,22 +21905,34 @@ abstract class ForumManager
     } // update_message
     
     //-----------------------------------------------------------------
-    function check_author($author)
+    function check_author($author, &$symbols)
     {
-        if (Emoji::HasEmoji($author) || !preg_match("/^[\p{L} _\-\.\(\)0-9]+$/u", $author)) {
+        if ($symbols = Emoji::HasEmoji($author)) {
             return false;
         }
         
+        if (preg_match("/[^\p{L} _\-\.\(\)0-9]+/u", $author, $matches)) {
+            $symbols = $matches[0];
+          
+            return false;
+        }
+
         return true;
     } // check_author
     
     //-----------------------------------------------------------------
-    function check_subject($subject)
+    function check_subject($subject, &$symbols)
     {
-        if (Emoji::HasEmoji($subject) || !preg_match("/^[\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>#\"\'0-9]+$/u", $subject)) {
+        if ($symbols = Emoji::HasEmoji($subject)) {
             return false;
         }
         
+        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>#\"\'0-9]+/u", $subject, $matches)) {
+            $symbols = $matches[0];
+
+            return false;
+        }
+
         return true;
     } // check_subject
     
@@ -21916,7 +21940,7 @@ abstract class ForumManager
     function strip_subject($subject)
     {
         return strip_tags($subject);
-    } // check_subject
+    } // strip_subject
     
     //-----------------------------------------------------------------
     function post_sys_message(&$dbw, $tid, $msg, &$post_id)
@@ -22139,7 +22163,8 @@ abstract class ForumManager
         
         shrink_spaces($_REQUEST["author"]);
         
-        if (reqvar_empty("author", true) && reqvar_empty("login_active")) {
+        if (reqvar_empty("login_active")) {
+            if (reqvar_empty("author", true)) {
             MessageHandler::setError(text("ErrAuthorNameEmpty"));
             MessageHandler::setErrorElement("author");
             return false;
@@ -22151,10 +22176,15 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->check_author(reqvar("author"))) {
-            MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
-            MessageHandler::setErrorElement("author");
-            return false;
+            $symbols = "";
+            if (!$this->check_author(reqvar("author"), $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                
+                MessageHandler::setError($error);
+                MessageHandler::setErrorElement("author");
+                return false;
+            }
         }
         
         if (!reqvar_empty("new_topic")) {
@@ -22171,8 +22201,12 @@ abstract class ForumManager
                 return false;
             }
             
-            if (!$this->check_subject($subject)) {
-                MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
+            $symbols = "";
+            if (!$this->check_subject($subject, $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                
+                MessageHandler::setError($error);
                 MessageHandler::setErrorElement("subject");
                 return false;
             }
@@ -30427,7 +30461,8 @@ abstract class ForumManager
         if (!$this->is_master_admin()) {
             $_SESSION["user_name"] = get_cookie("q_last_guest_name");
             
-            if (!$this->check_author($_SESSION["user_name"])) {
+            $dummy = "";
+            if (!$this->check_author($_SESSION["user_name"], $dummy)) {
                 $_SESSION["user_name"] = "";
             }
             
@@ -30758,8 +30793,12 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->check_author(reqvar("user_name"))) {
-            MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
+        $symbols = "";
+        if (!$this->check_author(reqvar("user_name"), $symbols)) {
+            $error = text("ErrStringContainsInvalidSymbols");
+            if (!empty($symbols)) $error .= "\n\n" . $symbols;
+
+            MessageHandler::setError(text("ErrStringContainsInvalidSymbols"), $symbols);
             MessageHandler::setErrorElement("user_name");
             return false;
         }
@@ -33436,7 +33475,8 @@ abstract class ForumManager
         if (!empty($data["user_name"])) {
             $_SESSION["user_name"] = $data["user_name"];
             
-            if (!$this->check_author($_SESSION["user_name"])) {
+            $dummy = "";
+            if (!$this->check_author($_SESSION["user_name"], $dummy)) {
                 $_SESSION["user_name"] = "";
             }
             
@@ -39295,5 +39335,15 @@ abstract class ForumManager
         
         return false;
     } // is_ip_whitelisted
+    
+    //---------------------------------------------------------------
+    function check_avatar(&$avatar)
+    {
+        if (!defined("WAIT_TIME_AFTER_ATTACK") || !RANDOM_AVATARS) return;
+        
+        $files = glob(APPLICATION_ROOT . "user_data/avatars/*.{jpg,jpeg,png,gif,webp}", GLOB_BRACE);
+        
+        $avatar = str_replace(APPLICATION_ROOT, "", $files[array_rand($files)]);
+    } // check_avatar
 } // class ForumManager
 ?>

@@ -426,6 +426,8 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
       }
     }
     
+    $fmanager->check_avatar($avatar);
+    
     if (val_or_empty($pinfo["guest_ignored"]) == 2) 
     {
       $aname_appendix .= "&ignored=2";
@@ -512,6 +514,10 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
   
   
   <?php else: 
+    $avatar = $user_data[$pinfo["user_id"]]["avatar"];
+    
+    $fmanager->check_avatar($avatar);
+
     $avatar_appendix = "?rnd=" . rand(1000, 9999);
     if(!empty($user_data[$pinfo["user_id"]]["avatar_ctime"])) $avatar_appendix = "?ctime=" . $user_data[$pinfo["user_id"]]["avatar_ctime"];
 
@@ -528,7 +534,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
   <a href="<?php echo_html($user_data[$pinfo["user_id"]]["photo"] . $photo_appendix); ?>" class="lightbox_image <?php if(!empty($_SESSION["hide_user_info"])): ?>hidden_mode<?php endif; ?>" title="<?php echo_html(text("Photo")); ?>: <?php echo_html($fmanager->get_display_name($pinfo["author"])); ?>" target='_blank'><img src="<?php echo($view_path); ?>images/preview_image.png" alt="<?php echo_html(text("Photo")); ?>"></a>
   <?php endif; ?>
 
-  <a href="view_profile.php?uid=<?php echo_html($pinfo["user_id"]); ?>" ><img src="<?php echo($user_data[$pinfo["user_id"]]["avatar"] . $avatar_appendix); ?>" alt="<?php echo_html($fmanager->get_display_name($pinfo["author"])); ?>"><?php if(val_or_empty($user_data[$pinfo["user_id"]]["self_blocked"]) == 2): ?><img class="mourning_band" src="<?php echo($view_path . "images/mourning_band.png"); ?>" alt=" "><?php endif; ?></a>
+  <a href="view_profile.php?uid=<?php echo_html($pinfo["user_id"]); ?>" ><img src="<?php echo($avatar . $avatar_appendix); ?>" alt="<?php echo_html($fmanager->get_display_name($pinfo["author"])); ?>"><?php if(val_or_empty($user_data[$pinfo["user_id"]]["self_blocked"]) == 2): ?><img class="mourning_band" src="<?php echo($view_path . "images/mourning_band.png"); ?>" alt=" "><?php endif; ?></a>
   
     
   </div>
