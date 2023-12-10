@@ -1784,6 +1784,24 @@ function bb_process_twitter($bbcode, $action, $name, $default, $params, $content
     return gen_twitter_html($code, $bbcode_text);
 } // bb_process_twitter
 //------------------------------------------------------------------------------
+function bb_process_dzen($bbcode, $action, $name, $default, $params, $content)
+{
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
+    $content = trim($content);
+    $code = $content;
+    
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+        return $content;
+    }
+    
+    $bbcode_text = "[" . $name . "]" . $content . "[/" . $name . "]";
+    
+    return gen_dzen_html($code, $bbcode_text);
+} // bb_process_dzen
+//------------------------------------------------------------------------------
 function check_video_url($url, &$content, $message_mode)
 {
     if (preg_match('/.*\\.mp4$/i', $url, $matches)) {
@@ -2541,7 +2559,7 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
         $GLOBALS["youtube_error"] = $ex->getMessage();
     }
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='youtube_short_container' href='https://youtu.be/" . escape_html($code . $appendix) . "' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='youtube_short_container' href='https://youtu.be/" . escape_html($code . $appendix) . "' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='youtube_container detailed_video'><div class='youtube_wrapper' style='background-image:url($picture)'>";
     $html .= "<div class='youtube_header'>" . escape_html($title) . "</div>";
     $html .= "<div class='youtube_play_embedded' onclick='embed_youtube(this, \"$code\", $start)'></div>";
@@ -2575,7 +2593,7 @@ function gen_instagram_html($code, $bbcode)
     }
     
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
-    $html .= "<div class='short_video'><a class='instagram_short_container' href='https://www.instagram.com/p/$code/' target='blank'>Instagram</a></div>";
+    $html .= "<div class='short_video'><a class='instagram_short_container' href='https://www.instagram.com/p/$code/' target='blank' onclick='return show_embedded_video(this)'>Instagram</a></div>";
     $html .= "<div class='instagram detailed_video'>";
     $html .= "<iframe src='https://www.instagram.com/p/$code/embed/?cr=1&v=12&wp=540' allowtransparency='true' allowfullscreen='true' scrolling='no' style='background: white none repeat scroll 0% 0%; max-width: 540px; width: calc(100% - 2px); border-radius: 3px; border: 1px solid rgb(219, 219, 219); box-shadow: none; display: block; margin: 0px 0px 12px; min-width: 326px; padding: 0px; height: {$height}px' frameborder='0'></iframe>";
     $html .= "</div></div>";
@@ -2586,7 +2604,7 @@ function gen_instagram_html($code, $bbcode)
 function gen_radikal_html($code, $bbcode)
 {
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
-    $html .= "<div class='short_video'><a class='radikal_short_container' href='https://radikal.ru/video/$code' target='blank'>Radikal</a></div>";
+    $html .= "<div class='short_video'><a class='radikal_short_container' href='https://radikal.ru/video/$code' target='blank' onclick='return show_embedded_video(this)'>Radikal</a></div>";
     $html .= "<div class='radikal detailed_video'>";
     $html .= "<iframe width='640' height='360' src='https://radikal.ru/vf/$code' frameborder='0' scrolling='no' allowfullscreen></iframe>";
     $html .= "</div>
@@ -2596,12 +2614,24 @@ function gen_radikal_html($code, $bbcode)
     return $html;
 } // gen_radikal_html
 //------------------------------------------------------
+function gen_dzen_html($code, $bbcode)
+{
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
+    $html .= "<div class='short_video'><a class='dzen_short_container' href='#' onclick='return show_embedded_video(this)'>Yandex Dzen</a></div>";
+    $html .= "<div class='dzen detailed_video'>";
+    $html .= "<iframe width='640' height='360' src='https://dzen.ru/embed/$code?from_block=partner&from=zen&mute=0&autoplay=0&tv=0' allow='autoplay; fullscreen; accelerometer; gyroscope; picture-in-picture; encrypted-media' frameborder='0' scrolling='no' allowfullscreen></iframe>";
+    $html .= "</div>
+              </div>";
+    
+    return $html;
+} // gen_dzen_html
+//------------------------------------------------------
 function gen_reddit_html($code, $bbcode)
 {
     global $skin;
 
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
-    $html .= "<div class='short_video'><a class='reddit_short_container' href='https://www.reddit.com/$code' target='blank'>Reddit</a></div>";
+    $html .= "<div class='short_video'><a class='reddit_short_container' href='https://www.reddit.com/$code' target='blank' onclick='return show_embedded_video(this)'>Reddit</a></div>";
     $html .= "<div class='reddit detailed_video'>";
     $html .= "<blockquote class='reddit-embed-bq' style='height:500px' data-embed-height='500'>";
     $html .= "<a href='$code'></a>";
@@ -2621,7 +2651,7 @@ function gen_reddit_html($code, $bbcode)
 function gen_tiktok_html($code, $bbcode)
 {
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
-    $html .= "<div class='short_video'><a class='tiktok_short_container' href='https://www.tiktok.com/@author/video/$code' target='blank'>TikTok</a></div>";
+    $html .= "<div class='short_video'><a class='tiktok_short_container' href='https://www.tiktok.com/@author/video/$code' target='blank' onclick='return show_embedded_video(this)'>TikTok</a></div>";
     $html .= "<div class='tiktok detailed_video'>";
     $html .= "<iframe width='500' height='660' src='https://www.tiktok.com/embed/v2/$code?lang=" . current_language() . "' frameborder='0' scrolling='no' allowfullscreen></iframe>";
     $html .= "</div>
@@ -2670,7 +2700,7 @@ function gen_vimeo_html($code, $start, $bbcode)
         //$result = $ex->getMessage();
     }
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vimeo_short_container' href='https://vimeo.com/$code$appendix' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vimeo_short_container' href='https://vimeo.com/$code$appendix' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='vimeo_container detailed_video'><div class='vimeo_wrapper' style='background-image:url($picture)'>";
     $html .= "<div class='vimeo_header'>" . escape_html($title) . "</div>";
     $html .= "<div class='vimeo_play_embedded' onclick='embed_vimeo(this, \"$code\", \"$start\")'></div>";
@@ -2737,7 +2767,7 @@ function gen_vkvideo_html($code, $bbcode)
     }
     
     if ($has_error) {
-        $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank'>" . escape_html($title) . "</a></div>";
+        $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
         $html .= "<div class='detailed_video'>";
         $html .= "<img class='post_image' src='user_data/images/video_unaccessible.png' alt='" . escape_html($title) . "'>";
         $html .= "</div>";
@@ -2755,7 +2785,7 @@ function gen_vkvideo_html($code, $bbcode)
     $html .= "</div></div></div>";
     */
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='vkvideo_container detailed_video'>";
     $html .= "<iframe src='$player' width='100%' height='100%' frameborder='0' allowfullscreen></iframe>";
     $html .= "</div>";
@@ -2798,7 +2828,7 @@ function gen_rutube_html($code, $start, $bbcode)
         //$result = $ex->getMessage();
     }
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='rutube_short_container' href='https://rutube.ru/video/$code/$appendix' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='rutube_short_container' href='https://rutube.ru/video/$code/$appendix' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='rutube_container detailed_video'><div class='rutube_wrapper' style='background-image:url($picture)'>";
     $html .= "<div class='rutube_header'>" . escape_html($title) . "</div>";
     $html .= "<div class='rutube_play_embedded' onclick='embed_rutube(this, \"$code\", \"$start\")'></div>";
@@ -2836,7 +2866,7 @@ function gen_coub_html($code, $bbcode)
         //$result = $ex->getMessage();
     }
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='coub_short_container' href='https://coub.com/view/$code' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='coub_short_container' href='https://coub.com/view/$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='coub_container detailed_video'><div class='coub_wrapper' style='background-image:url($picture)'>";
     $html .= "<div class='coub_header'>" . escape_html($title) . "</div>";
     $html .= "<div class='coub_play_embedded' onclick='embed_coub(this, \"$code\")'></div>";
@@ -2907,7 +2937,7 @@ function gen_fbvideo_html($code, $bbcode)
     $html .= "</div></div>";
     */
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='fbvideo_short_container' href='$video_url' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='fbvideo_short_container' href='$video_url' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='fbvideo_container detailed_video'>";
     
     $html .= "<div class='fb-video' data-href='https://www.facebook.com/facebook/videos/$code/' data-width='$width' data-show-text='false'>";
@@ -2919,13 +2949,6 @@ function gen_fbvideo_html($code, $bbcode)
     
     $html .= "</div></div>";
     
-    
-    /*if(!empty($real_html)) {
-       $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='fbvideo_short_container' href='$video_url' target='blank'>" . escape_html($title) . "</a></div>";
-       $html .= "<div class='fbvideo_container detailed_video' style='color:transparent'>";
-       $html .= $real_html;
-       $html .= "</div></div>";
-    }*/
     
     return $html;
 } // gen_fbvideo_html
@@ -2960,7 +2983,7 @@ function gen_twitter_html($code, $bbcode)
         //$result = $ex->getMessage();
     }
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='twitter_short_container' href='$video_url' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='twitter_short_container' href='$video_url' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='twitter_container detailed_video'>";
     
     //$html .= "<iframe src='https://twitter.com/i/videos/tweet/" . escape_html($code) . "' width='$width' height='$height' frameborder='0' style='visibility: visible; display: block'></iframe>";
@@ -2986,7 +3009,7 @@ function gen_telegram_html($code, $bbcode)
     
     $video_url = "https://t.me/$code";
     
-    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='telegram_short_container' href='$video_url' target='blank'>" . escape_html($title) . "</a></div>";
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='telegram_short_container' href='$video_url' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='telegram_container detailed_video'>";
     
     $block_id = str_ireplace("/", "-", $code) . "-" . time() . "-" . rand(1000000, 9999999);
@@ -3466,6 +3489,18 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
             'after_tag' => 'a',
             'before_endtag' => 'a',
             'method' => 'bb_process_twitter',
+            'allow_in' => array('block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('dzen',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'after_tag' => 'a',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_dzen',
             'allow_in' => array('block', 'columns', 'inline', 'link')
         ));
     //----------------------------------------------
