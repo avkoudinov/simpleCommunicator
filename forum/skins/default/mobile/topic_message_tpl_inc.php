@@ -411,6 +411,8 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
       }
     }
 
+    $fmanager->check_avatar($avatar);
+
     if (val_or_empty($pinfo["guest_ignored"]) == 2) 
     {
       $aname_appendix .= "&ignored=2";
@@ -506,6 +508,10 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
   </table>
 
   <?php else: 
+    $avatar = $user_data[$pinfo["user_id"]]["avatar"];
+    
+    $fmanager->check_avatar($avatar);
+
     $avatar_appendix = "?rnd=" . rand(1000, 9999);
     if(!empty($user_data[$pinfo["user_id"]]["avatar_ctime"])) $avatar_appendix = "?ctime=" . $user_data[$pinfo["user_id"]]["avatar_ctime"];
   ?>
@@ -514,7 +520,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
   <tr>
   <td>
   <div class="avatar_container">
-  <a href="view_profile.php?uid=<?php echo_html($pinfo["user_id"]); ?>"><img src="<?php echo($user_data[$pinfo["user_id"]]["avatar"] . $avatar_appendix); ?>" alt="<?php echo_html($pinfo["author"]); ?>"><?php if(val_or_empty($user_data[$pinfo["user_id"]]["self_blocked"]) == 2): ?><img class="mourning_band" src="<?php echo($view_path . "images/mourning_band.png"); ?>" alt="<?php echo_html($pinfo["author"]); ?>"><?php endif; ?></a>
+  <a href="view_profile.php?uid=<?php echo_html($pinfo["user_id"]); ?>"><img src="<?php echo($avatar . $avatar_appendix); ?>" alt="<?php echo_html($pinfo["author"]); ?>"><?php if(val_or_empty($user_data[$pinfo["user_id"]]["self_blocked"]) == 2): ?><img class="mourning_band" src="<?php echo($view_path . "images/mourning_band.png"); ?>" alt="<?php echo_html($pinfo["author"]); ?>"><?php endif; ?></a>
   </div>
 
   <div class="clear_both"></div>
