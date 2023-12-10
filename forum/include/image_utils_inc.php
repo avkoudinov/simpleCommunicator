@@ -112,6 +112,9 @@ function image_save($img, $path)
         case 'gif' :
             $res = imagegif($img, $path);
             break;
+        case 'webp' :
+            $res = imagewebp($img, $path, 100);
+            break;
         case 'png' :
             $res = imagepng($img, $path, 0, PNG_ALL_FILTERS);
             break;
@@ -260,7 +263,8 @@ function scale_image($src, $target, $max_x = false, $max_y = false)
         $target_y = imagesy($target_img);
         
         $path_parts = pathinfo($target);
-        if (strtolower($path_parts['extension']) == "png") {
+        if (strtolower($path_parts['extension']) == "png" ||
+            strtolower($path_parts['extension']) == "webp") {
             imagealphablending($target_img, false);
             imagesavealpha($target_img, true);
             $transparent = imagecolorallocatealpha($target_img, 255, 255, 255, 127);
