@@ -39339,7 +39339,7 @@ abstract class ForumManager
     //---------------------------------------------------------------
     function check_avatar(&$avatar)
     {
-        if (!defined("WAIT_TIME_AFTER_ATTACK") || !RANDOM_AVATARS) return;
+        if (!defined("RANDOM_AVATARS") || !RANDOM_AVATARS) return;
         
         $files = glob(APPLICATION_ROOT . "user_data/avatars/*.{jpg,jpeg,png,gif,webp}", GLOB_BRACE);
         
