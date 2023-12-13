@@ -21927,7 +21927,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>—&#–§№\$€₽¥¥£Ұ₴°\"\'0-9，]+/u", $subject, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>—~&#–§№\$€₽¥¥£Ұ₴°\"\'“”0-9，]+/u", $subject, $matches)) {
             $symbols = $matches[0];
 
             return false;
