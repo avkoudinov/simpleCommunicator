@@ -2661,6 +2661,11 @@ a.carma_both
   height: 400px;
 }
 
+.user_option
+{
+  color: blue;
+}
+
 .rm_table
 {
   width: 100%;
@@ -6658,6 +6663,39 @@ a.dzen_short_container
 }
 
 /* END: Dzen */
+
+/* BEGIN: Rambler */
+
+a.rambler_short_container
+{
+  font-size: 25px;
+  display: table-cell;
+  width:563px;
+  height:66px;
+  color:white; 
+  font-weight: bold; 
+  padding: 5px 5px 5px 80px;
+  background-color: black;
+  background-image: url(../images/rambler_short.jpg);
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 52px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.rambler.detailed_video
+{
+  background-color:#666666;
+  background-image: url(../images/loading-white.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width:573px;
+  min-height:200px;
+  margin: 15px 0px 15px 0px;
+}
+
+/* END: Rambler */
 
 /* BEGIN: TikTok */
 

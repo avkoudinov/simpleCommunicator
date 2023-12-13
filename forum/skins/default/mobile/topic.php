@@ -13,8 +13,15 @@ var ensure_anchor_visible = '<?php echo_js(val_or_empty($_SESSION["ensure_anchor
 <script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <!--
+<div id="fb-root"></div>
+<script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
+-->
+
+<!--
 <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 -->
+
+<script async src="https://vp.rambler.ru/player/sdk.js"></script>
 
 <?php
 unset($_SESSION["ensure_anchor_visible"]);
