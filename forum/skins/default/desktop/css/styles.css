@@ -4485,6 +4485,11 @@ a.more_users:link
   height: 300px;
 }
 
+.user_option
+{
+  color: blue;
+}
+
 input[type="button"].member_search_button {
     padding-left: 21px;
     padding-right: 21px;
@@ -7132,6 +7137,37 @@ a.dzen_short_container
 }
 
 /* END: Dzen */
+
+/* BEGIN: Rambler */
+
+a.rambler_short_container
+{
+  display: table-cell;
+  width:600px;
+  height:40px;
+  color:white; 
+  font-weight: bold; 
+  padding: 5px 5px 5px 60px;
+  background-color: black;
+  background-image: url(../images/rambler_short.jpg);
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 34px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.rambler.detailed_video
+{
+  background-color:#666666;
+  background-image: url(../images/loading-white.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width:600px;
+  min-height:100px;
+}
+
+/* END: Rambler */
 
 /* BEGIN: TikTok */
 

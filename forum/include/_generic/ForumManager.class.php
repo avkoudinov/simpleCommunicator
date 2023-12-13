@@ -21911,7 +21911,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\)0-9]+/u", $author, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\)0-9!%:\$€₽&¥¥£Ұ₴，]+/u", $author, $matches)) {
             $symbols = $matches[0];
           
             return false;
@@ -21927,7 +21927,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>#\"\'0-9]+/u", $subject, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>—&#–§№\$€₽¥¥£Ұ₴°\"\'0-9，]+/u", $subject, $matches)) {
             $symbols = $matches[0];
 
             return false;
@@ -31346,10 +31346,21 @@ abstract class ForumManager
         while ($dbw->fetch_row()) {
             $rm = $dbw->field_by_name("read_marker");
             
-            if (empty($guests[$rm])) {
-                $guests[$rm] = $this->get_display_name($dbw->field_by_name("author"));
+            if (empty($guests[$rm]["full_name"])) {
+                $guests[$rm]["full_name"] = $this->get_display_name($dbw->field_by_name("author")) . " {#stat#}";
+                
+                $guests[$rm]["cut_name"] = $this->get_display_name($dbw->field_by_name("author"));
+
+                $ln = 22;
+                if (utf8_strlen($guests[$rm]["cut_name"]) > ($ln + 4)) {
+                    $guests[$rm]["cut_name"] = utf8_trim(utf8_substr($guests[$rm]["cut_name"], 0, $ln), "/. ") . " ...";
+                }
+
+                $guests[$rm]["cut_name"] .= " {#stat#}";
             } else {
-                $guests[$rm] .= " / " . $this->get_display_name($dbw->field_by_name("author"));
+                $guests[$rm]["has_appendix"] = 1;
+                $guests[$rm]["full_name"] .= " / " . $this->get_display_name($dbw->field_by_name("author"));
+                $guests[$rm]["cut_name"] .= " / " . $this->get_display_name($dbw->field_by_name("author"));
             }
         }
         
@@ -31366,16 +31377,17 @@ abstract class ForumManager
             if ($dbw->field_by_name("user_id") == "") {
                 $uid = $dbw->field_by_name("uid");
                 
-                $uname = val_or_empty($guests[$uid]);
-                $uname_short = $uname;
+                $stat = "[" . $dbw->field_by_name("cnt") . " / " . text("Guest") . "]";
+                
+                $is_user = 0;
+                $uname = str_replace("{#stat#}", $stat, val_or_empty($guests[$uid]["full_name"]));
+                $uname_short = str_replace("{#stat#}", $stat, val_or_empty($guests[$uid]["cut_name"]));
                 
                 $ln = 65;
                 if (utf8_strlen($uname_short) > ($ln + 4)) {
                     $uname_short = utf8_trim(utf8_substr($uname_short, 0, $ln), "/. ") . " ...";
                 }
                 
-                $uname_short = $uname_short . " [" . $dbw->field_by_name("cnt") . " / " . text("Guest") . "]";
-
                 $uid = "g:" . $uid;
             } else {
                 $uid = "u:" . $dbw->field_by_name("uid");
@@ -31386,10 +31398,11 @@ abstract class ForumManager
                     $duration = floor($duration / (24 * 3600)) * 24 * 3600;
                 }
                 
+                $is_user = 1;
                 $uname = $dbw->field_by_name("user_name");
                 $uname_short = $uname;
-                
-                $ln = 65;
+
+                $ln = 22;
                 if (utf8_strlen($uname_short) > ($ln + 4)) {
                     $uname_short = utf8_trim(utf8_substr($uname_short, 0, $ln), "/. ") . " ...";
                 }
@@ -31399,6 +31412,7 @@ abstract class ForumManager
             
             $found_users[$uid] = [
                "uname" => $uname,
+               "is_user" => $is_user,
                "uname_short" => $uname_short
             ];
         }

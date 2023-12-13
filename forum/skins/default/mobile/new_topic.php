@@ -818,6 +818,7 @@ else
     <div onclick="insert_tag('[instagram]','[/instagram]', 0)">INSTAGRAM</div>
     <div onclick="insert_tag('[reddit]','[/reddit]', 0)">REDDIT</div>
     <div onclick="insert_tag('[dzen]','[/dzen]', 0)">YANDEX DZEN</div>
+    <div onclick="insert_tag('[rambler]','[/rambler]', 0)">RAMBLER</div>
     <div onclick="insert_tag('[tiktok]','[/tiktok]', 0)">TIKTOK</div>
     <div onclick="insert_tag('[anim]','[/anim]', 0)">ANIM</div>
     <div onclick="insert_tag('[ascii-art]','[/ascii-art]', 0)">ASCII ART</div>

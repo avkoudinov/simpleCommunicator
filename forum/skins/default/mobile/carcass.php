@@ -230,11 +230,6 @@ if(empty($_SESSION["donot_hide_adult_pictures"])) $body_class .= " hide_adult_pi
 
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/Yandex.Metrica.php') ?>
 
-<!--
-<div id="fb-root"></div>
-<script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
--->
-
 <div class="container">
 
 <div class="content_wrap">
