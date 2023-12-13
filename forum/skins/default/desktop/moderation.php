@@ -99,6 +99,10 @@ function search_users()
                                    );
             option.title = response.found_users[t]["uname"];
             
+            if (response.found_users[t]["is_user"]) {
+                option.classList.add("user_option");
+            }
+            
             selected_users.options[selected_users.options.length] = option;
           }
         }

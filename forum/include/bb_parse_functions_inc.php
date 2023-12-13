@@ -1763,6 +1763,24 @@ function bb_process_dzen($bbcode, $action, $name, $default, $params, $content)
     return gen_dzen_html($code, $bbcode_text);
 } // bb_process_dzen
 //------------------------------------------------------------------------------
+function bb_process_rambler($bbcode, $action, $name, $default, $params, $content)
+{
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
+    $content = trim($content);
+    $code = $content;
+    
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+        return $content;
+    }
+    
+    $bbcode_text = "[" . $name . "]" . $content . "[/" . $name . "]";
+    
+    return gen_rambler_html($code, $bbcode_text);
+} // bb_process_rambler
+//------------------------------------------------------------------------------
 function check_video_url($url, &$content, $message_mode)
 {
     if (preg_match('/.*\\.mp4$/i', $url, $matches)) {
@@ -2586,6 +2604,18 @@ function gen_dzen_html($code, $bbcode)
     
     return $html;
 } // gen_dzen_html
+//------------------------------------------------------
+function gen_rambler_html($code, $bbcode)
+{
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
+    $html .= "<div class='short_video'><a class='rambler_short_container' href='#' onclick='return show_embedded_video(this)'>Rambler Video</a></div>";
+    $html .= "<div class='rambler detailed_video'>";
+    $html .= "<div data-widget='Player' data-id='$code' data-player-template-id='11350' data-multiplayer-filter-id='47714' data-ad-template-id='6521'></div>";
+    $html .= "</div>
+              </div>";
+    
+    return $html;
+} // gen_rambler_html
 //------------------------------------------------------
 function gen_reddit_html($code, $bbcode)
 {
@@ -3438,6 +3468,18 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
             'after_tag' => 'a',
             'before_endtag' => 'a',
             'method' => 'bb_process_dzen',
+            'allow_in' => array('block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('rambler',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'after_tag' => 'a',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_rambler',
             'allow_in' => array('block', 'columns', 'inline', 'link')
         ));
     //----------------------------------------------

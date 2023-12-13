@@ -201,6 +201,7 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
     <div onclick="insert_tag('[instagram]','[/instagram]', 0)">INSTAGRAM</div>
     <div onclick="insert_tag('[reddit]','[/reddit]', 0)">REDDIT</div>
     <div onclick="insert_tag('[dzen]','[/dzen]', 0)">YANDEX DZEN</div>
+    <div onclick="insert_tag('[rambler]','[/rambler]', 0)">RAMBLER</div>
     <div onclick="insert_tag('[tiktok]','[/tiktok]', 0)">TIKTOK</div>
     <div onclick="insert_tag('[anim]','[/anim]', 0)">ANIM</div>
     <div onclick="insert_tag('[gallery]','[/gallery]', 0)">GALLERY</div>
