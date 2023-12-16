@@ -564,7 +564,7 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <?php echo(build_page_info($pagination_info, text("pages"))); ?>
 
 <?php if(!empty($pagination_info["ignored_count"])): ?>
-<?php if($fmanager->is_logged_in()): ?>
+<?php if($fmanager->is_logged_in() || $fmanager->get_user_name() != ""): ?>
 <a class="not_preferred" href="search.php?do_search=1&author=<?php echo(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=ignoring&forums<?php echo(xrawurlencode("[]")); ?>=<?php echo($fid_for_url); ?>"><?php echo_html(text("ignored")); ?>: <?php echo_html(format_number($pagination_info["ignored_count"])); ?></a>
 <?php else: ?>
 <span class="not_preferred"><?php echo_html(text("ignored")); ?>: <?php echo_html(format_number($pagination_info["ignored_count"])); ?></span>
@@ -894,7 +894,7 @@ if(!empty($tinfo["deleted"])) $deleted .= " deleted_row";
 <?php echo(build_page_info($pagination_info, text("pages"))); ?>
 
 <?php if(!empty($pagination_info["ignored_count"])): ?>
-<?php if($fmanager->is_logged_in()): ?>
+<?php if($fmanager->is_logged_in() || $fmanager->get_user_name() != ""): ?>
 <a class="not_preferred" href="search.php?do_search=1&author=<?php echo(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=ignoring&forums<?php echo(xrawurlencode("[]")); ?>=<?php echo($fid_for_url); ?>"><?php echo_html(text("ignored")); ?>: <?php echo_html(format_number($pagination_info["ignored_count"])); ?></a>
 <?php else: ?>
 <span class="not_preferred"><?php echo_html(text("ignored")); ?>: <?php echo_html(format_number($pagination_info["ignored_count"])); ?></span>
