@@ -38026,8 +38026,17 @@ abstract class ForumManager
         //---------------------------------------------------------------
         // author ignores the topic
         //---------------------------------------------------------------
-        if (!empty($author_id) && reqvar("author_mode") == "ignoring") {
-            $topic_part_where .= " and exists (select 1 from {$prfx}_ignored_topics where {$prfx}_ignored_topics.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics.topic_id union select 1 from {$prfx}_ignored_topics_archive where {$prfx}_ignored_topics_archive.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics_archive.topic_id)" . "\n";
+        if (reqvar("author_mode") == "ignoring") {
+            if (!empty($author_id)) {
+                $topic_part_where .= " and exists (select 1 from {$prfx}_ignored_topics where {$prfx}_ignored_topics.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics.topic_id union select 1 from {$prfx}_ignored_topics_archive where {$prfx}_ignored_topics_archive.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics_archive.topic_id)" . "\n";
+            } else {
+                if ($this->get_user_name() == reqvar("author") && !empty($_SESSION["ignored_topics"])) {
+                    $in_list = $srdbw->escape(implode(", ", $_SESSION["ignored_topics"]));
+                    $topic_part_where .= " and {$prfx}_topic.id in ($in_list)" . "\n";
+                } else {
+                    $topic_part_where .= " and {$prfx}_topic.id in (NULL)" . "\n";
+                }
+            }
             
             if (!empty($start_date)) {
                 $topic_part_where .= " and {$prfx}_topic.creation_date >= '" . $srdbw->format_datetime($start_date) . "'";
