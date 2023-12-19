@@ -1407,10 +1407,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
           exec_reload_online_users();
         }, 200);
 
-        if(messages) {
-          Forum.handle_response_messages(messages);
-          changeChatAvatar();
-        }
+        if(messages) Forum.handle_response_messages(messages);
       }
       catch(err)
       {
@@ -1876,47 +1873,11 @@ function focus_message_field()
   }
 }
 
-// for kroleg-pipe
-function getChatAuthor(pid, author) {
- var
-  msgObj = document.querySelector('#message_text_' + pid),
-  userNick = msgObj.querySelector('.kroleg_pipe');
-
- return (userNick)
-  ? { author: userNick.innerText.replace(/:$/, ''), krolegPipe: true }
-  : { author: author, krolegPipe: false };
-}//func
-
-
-function changeChatAvatar() {
- var
-  img,
-  chatArray = document.querySelectorAll('.kroleg_pipe');
-
-  chatArray.forEach((v) => {
-   if(!v.dataset.uid || !v.dataset.ext) return true;
-   img = document.createElement('img');
-   img.src = /^a_/.test(v.dataset.uid)
-    ? 'https://news.kroleg.tk/pic/avatars/' + v.dataset.uid
-    : 'https://chat.kroleg.tk/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
-   img.onload = function() {
-    var
-     img = v.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.avatar_container').querySelector('img');
-
-    img.src = this.src;
-    img.className = 'kroleg_pipe';
-   }
-  });
-}//func
-
 function answer_to_author(pid, author, tid, subject, profiled_topic, stringent_rules)
 {
   var elm = document.getElementById("post_table_" + pid);
   
   var cid = 'post_container_' + pid;
-
-  // for kroleg-pipe
-  author = getChatAuthor(pid, author);
 
   elm = document.getElementById("load_last_version");
   if(elm) elm.style.visibility = has_auto_saved_message ? "visible" : "hidden";
@@ -1926,11 +1887,11 @@ function answer_to_author(pid, author, tid, subject, profiled_topic, stringent_r
 
   if(elm.value != "") elm.value += "\n\n";
 
-  if(author.author != '') {
-    elm.value += "[b]" + author.author;
-    if(!archive_mode && !author.krolegPipe) elm.value += "#" + pid;
-    elm.value += "[/b]";
-    if(author.krolegPipe) elm.value += ", "; else elm.value += "\n\n";
+  if(author != '') 
+  {
+    elm.value += "[b]" + author;
+    if(!archive_mode) elm.value += "#" + pid;
+    elm.value += "[/b]\n\n";
   }
 
   elm.defaultValue = elm.value;
@@ -2366,19 +2327,14 @@ function citate_post(pid, tid, subject, profiled_topic, stringent_rules)
     citation_text = citation_text.replace(new RegExp("[\r\n]{2,}", "g"), "\n\n");
   }
   
-// for kroleg-pipe
-  author_found = getChatAuthor(pid, author_found);
-  if(author_found.krolegPipe) citation_text = citation_text.replace(/\[color=#[0-9a-z]+\][^"]+:\[\/color\]/i, ''); 
-//
-
   if(citation_text == '')
   {
-    return answer_to_author(pid, author_found.author, tid, subject, profiled_topic, stringent_rules);
+    return answer_to_author(pid, author_found, tid, subject, profiled_topic, stringent_rules);
   }
   
-  if(parent_pid == '' || pid_found == '' || author_found.author === false) return false;
+  if(parent_pid == '' || pid_found == '' || author_found === false) return false;
 
-  return citate_text(parent_pid, pid_found, author_found.author, tid, subject, profiled_topic, stringent_rules, citation_text);
+  return citate_text(parent_pid, pid_found, author_found, tid, subject, profiled_topic, stringent_rules, citation_text);
 }
 
 function citate_text(parent_pid, pid, author, tid, subject, profiled_topic, stringent_rules, text)
@@ -3874,7 +3830,6 @@ Forum.addXEvent(window, 'DOMContentLoaded', function () {
   init_lightbox_images();
   init_more_buttons();
   init_citations();
-  changeChatAvatar();
 
   debug_line("Topic history intialization", 'history');
   window.history.scrollRestoration = 'manual';

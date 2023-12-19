@@ -7,10 +7,6 @@
 $cache_appendix = "?v=" . $skin_version;
 ?>
 
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Google.Analytics.php') ?>
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Meta.Tags_nosql_forum.php') ?>
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/fonts_googleapis.css<?php echo($cache_appendix); ?>" type="text/css">
-
 <meta name="format-detection" content="telephone=no">
 
 <script>
@@ -38,6 +34,8 @@ var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"]
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/file_input.css<?php echo($cache_appendix); ?>" type="text/css">
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css">
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/debug_console.css<?php echo($cache_appendix); ?>" type="text/css">
+
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/custom.css<?php echo($cache_appendix); ?>" type="text/css"/>
 
 <style>
 .dummy
@@ -203,6 +201,10 @@ function confirm_clear_profile_data()
 
 </script>
 
+<?php
+require_once "custom_head.php";
+?>
+
 </head>
 
 <?php
@@ -214,8 +216,6 @@ if(!empty($_SESSION["hide_pictures"])) $body_class .= " hide_picture_mode";
 if(empty($_SESSION["donot_hide_adult_pictures"])) $body_class .= " hide_adult_picture_mode";
 ?>
 <body class="desktop <?php echo($body_class); ?>">
-
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Yandex.Metrica.php') ?>
 
 <div class="container">
 
@@ -529,6 +529,10 @@ if(load_time)
 <textarea id="debug_console_output"></textarea>
 </div>
 </div>
+
+<?php
+require_once "custom_body.php";
+?>
 
 </body>
 

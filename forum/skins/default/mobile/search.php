@@ -784,7 +784,7 @@ if (!empty($topics_with_new_count)) {
 
   <?php if(!empty($pagination_info["ignored_count"])): ?>
   <?php if($fmanager->is_logged_in()): ?>
-  <a class="not_preferred" href="search.php?do_search=1&author=<?php echo(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=ignoring"><?php echo_html(text("ignored")); ?>: <?php echo_html(format_number($pagination_info["ignored_count"])); ?></a>
+  <?php $search_url = str_replace("/&(author|author_mode)=[^&]+/", "", $_SERVER["REQUEST_URI"]) . "&author=" . xrawurlencode($fmanager->get_user_name()) . "&author_mode=ignoring"; ?>
   <?php else: ?>
   <span class="not_preferred"><?php echo_html(text("ignored")); ?>: <?php echo_html(format_number($pagination_info["ignored_count"])); ?></span>
   <?php endif; ?>
