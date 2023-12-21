@@ -35,6 +35,8 @@ var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"]
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/styles.css<?php echo($cache_appendix); ?>" type="text/css">
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/debug_console.css<?php echo($cache_appendix); ?>" type="text/css">
 
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/custom.css<?php echo($cache_appendix); ?>" type="text/css"/>
+
 <style>
 .dummy
 {
@@ -198,6 +200,10 @@ function confirm_clear_profile_data()
 }
 
 </script>
+
+<?php
+require_once "custom_head.php";
+?>
 
 </head>
 
@@ -523,6 +529,10 @@ if(load_time)
 <textarea id="debug_console_output"></textarea>
 </div>
 </div>
+
+<?php
+require_once "custom_body.php";
+?>
 
 </body>
 
