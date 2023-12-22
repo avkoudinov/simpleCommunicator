@@ -70,7 +70,11 @@
 <?php endif; ?>
 
 <?php if(!empty($ogimage)): ?>
+<?php if($ogtype == "profile" || !empty($seo_post_with_attachment)): ?>
 <meta name="robots" content="max-image-preview:large">
+<meta name="twitter:card" content="summary_large_image"/>
+<?php endif; ?>
+
 <link rel="image_src" href="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 <meta property="og:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 
@@ -79,7 +83,7 @@
 <?php endif; ?>
 
 <meta name="twitter:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
-<meta name="twitter:card" content="summary_large_image"/>
+
 
 <meta name="vk:image" content="<?php echo(get_host_address() . get_url_path() . $ogimage); ?>">
 <?php endif; ?>

@@ -196,6 +196,7 @@ if (!empty($forum_data["forum_description"])) {
     $ogdescription = $forum_data["forum_description"];
 }
 
+$seo_post_with_attachment = false;
 $seo_post = $gotomsg;
 if (empty($seo_post)) 
 {
@@ -213,6 +214,7 @@ if (!empty($seo_post))
     }
     
     if (!empty($image)) {
+        $seo_post_with_attachment = false;
         $ogimage = $image;
     }
 }
