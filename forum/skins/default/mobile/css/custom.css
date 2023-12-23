@@ -1,5 +1,11 @@
 /* write yout adjustments here */
 
-.ascii_art { 
-  float: left; 
+.ascii_art 
+{ 
+  font-family: "Ubuntu Mono", "Courier New";
+  display: inline-block; 
+  border-radius: 2px; 
+  padding: 5px; 
+  font-weight: normal;
+  text-rendering: optimizeSpeed;
 }
