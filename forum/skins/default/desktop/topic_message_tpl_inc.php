@@ -449,7 +449,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
     <?php endif; ?>
   <?php endif; ?>
 
-  <?php if($pinfo["read_marker"] != $READ_MARKER && !($fmanager->is_master_admin() && $pinfo["author"] == "admin") && empty($_SESSION["hide_user_info"])): ?>  
+  <?php if($pinfo["read_marker"] != $READ_MARKER && !($fmanager->is_master_admin() && $pinfo["author"] == "admin")): ?>  
     <?php if(empty($pinfo["hidden_by_me"])): ?>
       <a class="hide_profile_a_<?php echo_html($pinfo["aname"]); ?>" href="<?php echo($message_url); ?>" title="<?php echo_html(text("HideProfile")); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmProfileHide"), true); ?>".replace(/%s/, "<?php echo_js($fmanager->get_display_name($pinfo["author"]), true); ?>"), { profile_hide_action: "hide_guest_profile", guest_name: "<?php echo_js($pinfo["author"]); ?>", display_guest_name: "<?php echo_js($fmanager->get_display_name($pinfo["author"])); ?>", guest_id: "<?php echo_js($pinfo["aname"]); ?>" });'><img class="hide_profile_img_<?php echo_html($pinfo["aname"]); ?>" src="<?php echo($view_path); ?>images/hide_profile.png" alt="<?php echo_html(text("HideProfile")); ?>"></a>
     <?php else: ?>
@@ -551,7 +551,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
     <?php endif; ?>
   <?php endif; ?>
 
-  <?php if($fmanager->get_user_id() != $pinfo["user_id"] && empty($user_data[$pinfo["user_id"]]["hidden"]) && empty($_SESSION["hide_user_info"])): ?>
+  <?php if($fmanager->get_user_id() != $pinfo["user_id"] && empty($user_data[$pinfo["user_id"]]["hidden"])): ?>
     <?php if(empty($user_data[$pinfo["user_id"]]["hidden_by_me"])): ?>
       <a class="hide_profile_a_<?php echo_html($pinfo["user_id"]); ?>" href="<?php echo($message_url); ?>" title="<?php echo_html(text("HideProfile")); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmProfileHide"), true); ?>".replace(/%s/, "<?php echo_js($fmanager->get_display_name($pinfo["author"]), true); ?>"), { profile_hide_action: "hide_user_profile", author_name: "<?php echo_js($pinfo["author"]); ?>", display_author_name: "<?php echo_js($fmanager->get_display_name($pinfo["author"])); ?>", uid: "<?php echo_js($pinfo["user_id"]); ?>" });'><img class="hide_profile_img_<?php echo_html($pinfo["user_id"]); ?>" src="<?php echo($view_path); ?>images/hide_profile.png" alt="<?php echo_html(text("HideProfile")); ?>"></a>
     <?php else: ?>

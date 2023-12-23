@@ -1,14 +1,11 @@
 // override default implementation
 Forum.invert_pair_checkbox = function(src_chbk, trg_id)
 {
-  src_chbk.setAttribute("data-is-checked", src_chbk.checked ? 1 : 0);
-  
   var elm = document.getElementById(trg_id);
 
-  if(!elm || src_chbk.getAttribute("data-is-checked") != 1 || elm.getAttribute("data-is-checked") != 1) return;
+  if(!elm) return;
 
   elm.checked = false;
-  elm.setAttribute("data-is-checked", 0);
   
   Forum.fireEvent(elm, 'change');
 }; // invert_pair_checkbox

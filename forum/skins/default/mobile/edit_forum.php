@@ -278,35 +278,28 @@ function enable_disable()
   if(registered_access.checked || restricted_access.checked)
   {
     no_guests.checked = true;
-    no_guests.setAttribute("data-is-checked", 1);
     no_guests.disabled = true;
     
     restricted_guest_mode.checked = false;
-    restricted_guest_mode.setAttribute("data-is-checked", 0);
     restricted_guest_mode.disabled = true;
   }
 
   if(restricted_access.checked)
   {
     no_guests.checked = true;
-    no_guests.setAttribute("data-is-checked", 1);
     no_guests.disabled = true;
 
     restricted_guest_mode.checked = false;
-    restricted_guest_mode.setAttribute("data-is-checked", 0);
     restricted_guest_mode.disabled = true;
 
     protected_by_password.checked = false;
-    protected_by_password.setAttribute("data-is-checked", 0);
     protected_by_password.disabled = true;
   }
 
   if(no_guests.checked)
   {
     restricted_guest_mode.checked = false;
-    restricted_guest_mode.setAttribute("data-is-checked", 0);
     restricted_guest_mode.disabled = true;
-    
   }
   else
   {
