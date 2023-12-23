@@ -214,7 +214,7 @@ if (!empty($seo_post))
     }
     
     if (!empty($image)) {
-        $seo_post_with_attachment = false;
+        $seo_post_with_attachment = true;
         $ogimage = $image;
     }
 }
