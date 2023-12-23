@@ -1679,7 +1679,7 @@ function postprocess_message(&$content, $lang = "", $html = true, $for_email = f
         global $fmanager;
         
         $ignored_class = "";
-        if ($fmanager->is_guest_ignored($matches[1], $matches[3])) {
+        if ($fmanager->is_guest_ignored($matches[1], val_or_empty($matches[3]))) {
             $ignored_class = "ignored_author";
         }
         
