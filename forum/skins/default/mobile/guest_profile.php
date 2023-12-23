@@ -312,7 +312,6 @@ function handle_adult_checkbox()
   if(hide_pictures.checked)
   {
     donot_hide_adult_pictures.checked = false;
-    donot_hide_adult_pictures.setAttribute("data-is-checked", 0);
     donot_hide_adult_pictures.disabled = true;
   }
   else

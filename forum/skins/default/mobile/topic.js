@@ -182,11 +182,11 @@ function embed_youtube(elm, code, start)
       iframe.style.border = "0";
       iframe.src = "https://www.youtube.com/embed/" + code + "?autoplay=1" + "&start=" + start + "&enablejsapi=1";
       iframe.setAttribute("allowfullscreen", "1");
-      iframe.addEventListener('load', () => iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'), true);
+      //iframe.addEventListener('load', () => iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'), true);
 
       parent.appendChild(iframe);
 
-      //setTimeout(() => { iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'); }, 1000);
+      setTimeout(() => { iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'); }, 1000);
 
       break;
     }
@@ -1028,7 +1028,7 @@ function reload_post(post)
           if(elm) elm.parentNode.removeChild(elm);
           
           post_node.innerHTML = text;
-
+          
           setTimeout(function () {
             init_lightbox_images();
             init_embedded_widgets();
@@ -1044,7 +1044,7 @@ function reload_post(post)
 
             elm = document.getElementById('ajax_data');
             if(elm) extract_and_handle_attributes(elm);
-          
+
             // reload images
             var imgs = post_node.getElementsByClassName('post_image');
             for(var i = 0; i < imgs.length; i++)
@@ -1057,7 +1057,7 @@ function reload_post(post)
             // calcualtion of the heights
             setTimeout(init_more_buttons, 1000);
             setTimeout(init_more_buttons, 2500);
-          
+
             exec_reload_nav_control('message_info_bar', first_new_message);
             exec_reload_nav_control('navigator_bar', first_new_message);
             exec_reload_online_users();
@@ -1299,7 +1299,7 @@ function load_new_posts(topic, forum,  highlight_message, target_url)
   }
   
   debug_line("We may load new posts", "posting");
-
+  
   var params = { tid: topic, fid: forum, last_read_message: last_message, limit: posts_until_end, posts_per_page: posts_per_page, loaded_message_count: loaded_message_count, post_count: posts_count, highlight_message: highlight_message };
 
   if(!load_new_posts_ajax)
@@ -1322,7 +1322,7 @@ function load_new_posts(topic, forum,  highlight_message, target_url)
         // remove old possible transfer file
         elm = document.getElementById('ajax_data');
         if(elm) elm.parentNode.removeChild(elm);
-        
+
         if(text != '')
         {
           elm = document.getElementById("no_posts_message");
@@ -1358,7 +1358,7 @@ function load_new_posts(topic, forum,  highlight_message, target_url)
               }
             }
           }
-
+          
           init_lightbox_images();
           init_embedded_widgets();
           
@@ -1563,7 +1563,7 @@ function do_action(params)
           }
 
           if(response.convert_action_link) convert_action_link(response.convert_action_link, this.params);
-
+          
           if(this.params.subscribe_action == "subscribe_to_user" || this.params.subscribe_action == "unsubscribe_from_user") 
             invert_user_subscribe_action(this.params);
 
@@ -1586,10 +1586,11 @@ function do_action(params)
           if(response.rating) set_new_post_rating(this.params.post, response.rating);
 
           if(this.params.topic_action == "edit_message") edit_message(this.params, response);
+          
           if(this.params.topic_action == "comment_message" ||
              this.params.topic_action == "add_remove_private_members" ||
              this.params.topic_action == "block_unblock_topic_users") Forum.hide_sys_lightbox();
-
+             
           if(this.params.topic_action == "load_version") set_version_loaded(this.params.post, this.params.version, response.version_content, this.params.version_list);
 
           if(this.params.topic_action == "toggle_post_tag") 
@@ -2117,7 +2118,7 @@ function process_selection()
   }  
   
   if(pid_found == "" || parent_pid == "" || author_found === false || author_ignored) return false;
-
+  
   var selection_container = document.createElement("div");
 
   // just single quote is selected, do not wrap it in the post author quote
@@ -2191,7 +2192,7 @@ function process_selection()
   {
     var tmp = document.createElement('div');
     tmp.classList.add('code_wrapper');
-    tmp.setAttribute('data-code',parent_tag_container.getAttribute('data-code'));
+    tmp.setAttribute('data-code', parent_tag_container.getAttribute('data-code'));
     tmp.appendChild(range.cloneContents());
 
     selection_container.appendChild(tmp);
@@ -2329,9 +2330,9 @@ function citate_post(pid, tid, subject, profiled_topic, stringent_rules)
 function citate_text(parent_pid, pid, author, tid, subject, profiled_topic, stringent_rules, text)
 {
   hide_all_popups();
-
+  
   if(!parent_pid || !pid || text == '') return false;
-
+  
   var elm = document.getElementById("load_last_version");
   if(elm) elm.style.visibility = has_auto_saved_message ? "visible" : "hidden";
 
@@ -2878,7 +2879,7 @@ function restore_unposted_message()
 
     if(form.elements['user_login']) form.elements['user_login'].value = unposted_user_login;
     if(form.elements['user_password']) form.elements['user_password'].value = unposted_user_password;
-    
+
     form.elements['is_thematic'].checked = unposted_is_thematic == 1 ? true : false;
     form.elements['is_adult'].checked = unposted_is_adult == 1 ? true : false;
     
@@ -2896,15 +2897,15 @@ function set_current_post(pid)
   {
     debug_line("No current post to set");
     return false;
-  }  
-
+  }
+  
   var anchor = document.getElementById('post_anchor_' + pid);
   if(!anchor) 
   {
     debug_line("Post: " + pid + " not found");
     return false;
   }
-
+  
   if (pid == "top_new_message") 
   {
     anchor.scrollIntoView({block: "start", behavior: "auto"});
@@ -3651,13 +3652,11 @@ function check_thematic()
   
   if(elm.checked) 
   {
-    elm.setAttribute("data-is-checked", 1);
     editor.classList.add("thematic_post");
     editor.classList.remove("comment_post");
   }
   else
   {
-    elm.setAttribute("data-is-checked", 0);
     editor.classList.add("comment_post");
     editor.classList.remove("thematic_post");
   }  
@@ -3809,7 +3808,7 @@ Forum.addXEvent(window, 'DOMContentLoaded', function () {
   {
     debug_line("Refresh or history back, reusing state", 'history');
     refresh_or_history_navigation = true;
-
+    
     // we deactivate the current step if refresh was done while writing or previewing of the image
     if(window.history.state.work_stage)
     {
@@ -3857,7 +3856,7 @@ Forum.addXEvent(window, 'load', function () {
     if(!form || !writing_message || !Forum.formDirty(form) || form.elements['message'].value == '' || cancel_confirmed || unposted_message_stored) return undefined;
 
     Forum.show_sys_progress_indicator(false);
-
+    
     var confirmationMessage = msg_MsgConfirmPostCancel;
 
     (e || window.event).returnValue = confirmationMessage; //Gecko + IE
@@ -3903,7 +3902,7 @@ function handle_writing_cancel()
     form.elements['stringent_rules'].defaultValue = '';
     form.elements['login_active'].value = '';
     form.elements['login_active'].defaultValue = '';
-
+    
     if(form.elements['user_login']) 
     {
       form.elements['user_login'].value = '';

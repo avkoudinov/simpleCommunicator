@@ -76,7 +76,6 @@ function handle_special_mode_checkboxes()
   else
   {
     snow_effect.checked = false;
-    snow_effect.setAttribute("data-is-checked", 0);
     snow_effect.disabled = true;
   }
 
@@ -100,9 +99,7 @@ function handle_likes_checkboxes()
   else
   {
     dislikes_active.checked = false;
-    dislikes_active.setAttribute("data-is-checked", 0);
     dislikes_anonym.checked = false;
-    dislikes_anonym.setAttribute("data-is-checked", 0);
     dislikes_active.disabled = true;
     dislikes_anonym.disabled = true;
   }
@@ -114,7 +111,6 @@ function handle_likes_checkboxes()
   else
   {
     dislikes_anonym.checked = false;
-    dislikes_anonym.setAttribute("data-is-checked", 0);
     dislikes_anonym.disabled = true;
   }
   

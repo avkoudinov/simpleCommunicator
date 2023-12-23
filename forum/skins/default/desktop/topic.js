@@ -182,11 +182,11 @@ function embed_youtube(elm, code, start)
       iframe.style.border = "0";
       iframe.src = "https://www.youtube.com/embed/" + code + "?autoplay=1" + "&start=" + start + "&enablejsapi=1";
       iframe.setAttribute("allowfullscreen", "1");
-      iframe.addEventListener('load', () => iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'), true);
+      //iframe.addEventListener('load', () => iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'), true);
 
       parent.appendChild(iframe);
 
-      //setTimeout(() => { iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'); }, 1000);
+      setTimeout(() => { iframe.contentWindow.postMessage('{ "event": "command", "func": "playVideo", "args": ""}', '*'); }, 1000);
 
       break;
     }
