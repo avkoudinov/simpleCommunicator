@@ -1164,7 +1164,7 @@ a.post_subscribe_loading:focus
 
 .topic_status
 {
-  color: black;
+  color: #333;
 }
 
 .hot_topic
@@ -2200,6 +2200,11 @@ tr.selected_row td.checkbox_selector
   margin: 20px 0px 20px 0px;
 }
 
+.message_container_with_offset
+{
+  margin-left: 40px;
+}
+
 .message_table td .emb_wrapper,
 .message_table td .picture_wrapper,
 .message_table td .attachment_wrapper
@@ -3083,11 +3088,21 @@ a.sorter.desc:hover
   margin: 0px 0px 3px 0px;
 }
 
-.post_table.comment_post td.message_cell,
-.post_table.comment_post td.message_action_cell,
-.post_table.comment_post .post_rating td,
-.post_table.comment_post .message_text_more
+.post_table .thematic_indicator td
 {
+  border-bottom-width: 0;
+  height: 0;
+  padding: 0;
+}
+
+.post_table td.message_cell
+{
+  border-top-width: 0;
+}
+
+.post_table.comment_post .thematic_indicator td
+{
+  height: 10px;
   background-color: #CAE2FA;
 }
 
@@ -3096,11 +3111,9 @@ a.sorter.desc:hover
   background-color: #CAE2FA;
 }
 
-.post_table.thematic_post td.message_cell,
-.post_table.thematic_post td.message_action_cell,
-.post_table.thematic_post .post_rating td,
-.post_table.thematic_post .message_text_more
+.post_table.thematic_post .thematic_indicator td
 {
+  height: 10px;
   background-color: #F6F3C3;
 }
 
@@ -3411,6 +3424,12 @@ td.post_footer
   min-width: 85%;
   max-width: 85%;
   padding-left: 4px;
+}
+
+.topic_type_indicator
+{
+  color: gray;
+  font-weight: bold;
 }
 
 .topic_title_main

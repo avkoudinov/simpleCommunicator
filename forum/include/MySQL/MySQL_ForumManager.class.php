@@ -715,6 +715,8 @@ class MySQL_ForumManager extends ForumManager
         
         $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx, 1);
         
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
+
         $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
         if (!empty($forum_restriction_appendix)) {
             $forum_restriction_appendix = " and " . $forum_restriction_appendix;
@@ -776,6 +778,8 @@ class MySQL_ForumManager extends ForumManager
                                   $ignore_topic_where_appendix
                             
                                   $ignore_post_where_appendix
+                                  
+                                  $ignore_comment_where_appendix
                               ) srch
                               where nr <= 5 $topic_appendix
                               order by last_message_id desc
@@ -1220,6 +1224,17 @@ class MySQL_ForumManager extends ForumManager
     } // get_query_ignored_posts_list
 
     //-----------------------------------------------------------------
+    function get_query_ignored_comments_list($prfx, $where)
+    {
+        return "select 1
+               from 
+               {$prfx}_post use index (primary, {$prfx}_post_topic_id_idx, {$prfx}_post_author_idx, {$prfx}_post_rm_idx)
+               inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+               $where
+               limit 1";
+    } // get_query_ignored_comments_list
+
+    //-----------------------------------------------------------------
     function get_query_post_count($prfx, $where)
     {
         return "select
@@ -1661,5 +1676,26 @@ class MySQL_ForumManager extends ForumManager
         
         return $where;        
     } // get_hot_topic_clause
+    
+    //-----------------------------------------------------------------
+    function get_query_next_post($prfx, $tid, $last_post)
+    {
+        return "select {$prfx}_post.id
+                       from {$prfx}_post
+                       where {$prfx}_post.topic_id = $tid and {$prfx}_post.id > $last_post
+                       order by {$prfx}_post.id
+                       limit 1
+                       ";
+    } // get_query_next_post
+
+    //-----------------------------------------------------------------
+    function get_query_check_comments($prfx, $tid, $first_post, $last_post)
+    {
+        return "select {$prfx}_post.id, is_comment,
+                       ifnull(lead(is_comment) over (order by {$prfx}_post.id), 0) as has_comments
+                       from {$prfx}_post
+                       where {$prfx}_post.topic_id = $tid and {$prfx}_post.id between $first_post and $last_post
+                       ";
+    }    
 } // class MySQL_ForumManager
 ?>

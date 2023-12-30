@@ -232,17 +232,10 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 
 <tr id="profiled_topic_row" class="message_area" style="display:none">
 <td colspan="2" style="padding-top: 0px">
-  <?php
-  $checked = "";
-  if(!empty($_SESSION["thematic_per_default"]))
-  {
-    $checked = "checked";
-  }
-  ?>
    <table class="checkbox_table">
    <tr>
      <td>
-      <input type="checkbox" id="is_thematic" name="is_thematic" tabindex="-1" <?php echo($checked); ?> onchange="check_thematic();"> 
+      <input type="checkbox" id="is_thematic" name="is_thematic" tabindex="-1" onchange="check_thematic();"> 
      </td>
      <td>
       <label for="is_thematic"><?php echo_html(text("MessageIsThematic")); ?></label>

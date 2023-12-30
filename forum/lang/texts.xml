@@ -4956,6 +4956,20 @@
             <ua>Профільний режим для теми вимкнений</ua>
         </text>
 
+        <text id="ActionTopicBlogModeTurnedOn">
+            <en>The blog mode for the topic has been turned on</en>
+            <de>Der Blog-Modus für das Thema wurde eingeschaltet</de>
+            <ru>Блог-режим для темы включен</ru>
+            <ua>Блог-режим для теми включений</ua>
+        </text>
+
+        <text id="ActionTopicBlogModeTurnedOff">
+            <en>The blog mode for the topic has been turned off</en>
+            <de>Der Blog-Modus für das Thema wurde ausgeschaltet</de>
+            <ru>Блог-режим для темы выключен</ru>
+            <ua>Блог-режим для теми вимкнений</ua>
+        </text>
+
         <text id="ActionTopicMoved">
             <en>Topic has been moved</en>
             <de>Thema wurde verschoben</de>
@@ -9553,20 +9567,6 @@
           <ua>Сортувати по спадаючій</ua>
         </text>
         
-        <text id="HideComments">
-            <en>Hide comments in dedicated topics</en>
-            <de>Die Kommentare in dedizierten Themen nich anzeigen</de>
-            <ru>Не показывать комментарии в профильных темах</ru>
-            <ua>не показувати коментарі в профільних темах</ua>
-        </text>
-
-        <text id="ThematicPostPerDefault">
-            <en>My messages in the dedicated topics are thematic per default</en>
-            <de>Meine Nachrichten in dedizierten Themen sind thematisch per Default</de>
-            <ru>Мои сообщения в профильных темах по умолчанию тематические</ru>
-            <ua>Мої повідомлення в профільних темах за замовчуванням тематичні</ua>
-        </text>
-
         <text id="Filter">
             <en>Filter</en>
             <de>Filter</de>
@@ -9595,6 +9595,20 @@
             <ua>Фільтр подій збережений.</ua>
         </text>
 
+        <text id="CreateBlog">
+            <en>Create a blog</en>
+            <de>Blog erstellen</de>
+            <ru>Создать блог</ru>
+            <ua>Створити блог</ua>
+        </text>
+
+        <text id="Blog">
+            <en>Blog</en>
+            <de>Blog</de>
+            <ru>Блог</ru>
+            <ua>Блог</ua>
+        </text>
+
         <text id="Dedicated">
             <en>Dedicated</en>
             <de>Dediziert</de>
@@ -9602,6 +9616,13 @@
             <ua>Профільний</ua>
         </text>
         
+        <text id="ShowAllMessages">
+            <en>All messages</en>
+            <de>Alle Nachrichten</de>
+            <ru>Все сообщения</ru>
+            <ua>Всі повідомлення</ua>
+        </text>
+
         <text id="ThematicOnly">
             <en>Thematic only</en>
             <de>Nur Thematische</de>
@@ -9625,7 +9646,7 @@
 
         <text id="MsgConfirmTurnProfiledModeOn">
             <en>Are you sure to turn on the dedicated mode for this topic?</en>
-            <de>Sind Sie sicher, dass Sie dan dedizierten Modus für dieses Thema einschalten möchten?</de>
+            <de>Sind Sie sicher, dass Sie den dedizierten Modus für dieses Thema einschalten möchten?</de>
             <ru>Вы уверены, что хотите включить профильный режим для данной темы?</ru>
             <ua>Ви упевнені, що бажаєте включити профільний режим для даної теми?</ua>
         </text>
@@ -9649,6 +9670,48 @@
             <de>Der dedizierte Modus für das Thema wurde ausgeschaltet.</de>
             <ru>Профильный режим для темы выключен.</ru>
             <ua>Профільний режим для теми вимкнений.</ua>
+        </text>
+
+        <text id="TurnBlogModeOn">
+            <en>Blog mode on</en>
+            <de>Blog-Modus ein</de>
+            <ru>Вкл. блог-режим</ru>
+            <ua>Вкл. блог-ежим</ua>
+        </text>
+
+        <text id="MsgConfirmTurnBlogModeOn">
+            <en>Are you sure to turn on the blog mode for this topic?</en>
+            <de>Sind Sie sicher, dass Sie den Blog-Modus für dieses Thema einschalten möchten?</de>
+            <ru>Вы уверены, что хотите включить блог-режим для данной темы?</ru>
+            <ua>Ви упевнені, що бажаєте включити блог-режим для даної теми?</ua>
+        </text>
+        
+        <text id="TurnBlogModeOff">
+            <en>Blog mode off</en>
+            <de>Blog-Modus aus</de>
+            <ru>Выкл. блог-режим</ru>
+            <ua>Вимкю блог-режим</ua>
+        </text>
+
+        <text id="MsgBlogModeTurnedOn">
+            <en>The blog mode for the topic has been turned on.</en>
+            <de>Der Blog-Modus für das Thema wurde eingeschaltet.</de>
+            <ru>Блог-режим для темы включен.</ru>
+            <ua>Блог-режим для теми включений.</ua>
+        </text>
+
+        <text id="MsgBlogModeTurnedOff">
+            <en>The blog mode for the topic has been turned off.</en>
+            <de>Der Blog-Modus für das Thema wurde ausgeschaltet.</de>
+            <ru>Блог-режим для темы выключен.</ru>
+            <ua>Блог-режим для теми вимкнений.</ua>
+        </text>
+
+        <text id="hidden_comments">
+            <en>hidden comments</en>
+            <de>versteckte Kommentare</de>
+            <ru>скрытые комментарии</ru>
+            <ua>приховані коментарі</ua>
         </text>
 
         <text id="MakePostsThematic">
@@ -10281,6 +10344,20 @@
             <de>Weiße Liste der Bilddomäne</de>
             <ru>Белый список доменов изображений</ru>
             <ua>Білий список доменів зображень</ua>
+        </text>
+
+        <text id="Comments">
+            <en>Comments</en>
+            <de>Kommentare</de>
+            <ru>Комментарии</ru>
+            <ua>Коментарі</ua>
+        </text>
+
+        <text id="HashIPAddresses">
+            <en>Hash IP addresses</en>
+            <de>IP-Adressen haschen</de>
+            <ru>Хэшировать IP-адреса</ru>
+            <ua>Хешувати IP-адреси</ua>
         </text>
 
     </texts>

@@ -353,7 +353,7 @@ if($evinfo["action"] == "block_ip" || $evinfo["action"] == "unblock_ip")
 {
   if(!empty($author)) $author .= ", ";
 
-  if(($fmanager->is_moderator() && $fmanager->may_see_ip()) || $evinfo["ip"] == val_or_empty($_SERVER["REMOTE_ADDR"]))
+  if(($fmanager->is_moderator() && $fmanager->may_see_ip()) || $evinfo["ip"] == System::getIPAddress())
   {
     if(!empty($settings["whois_server"]))
     {

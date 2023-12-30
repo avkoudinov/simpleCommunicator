@@ -409,6 +409,8 @@ elseif (!reqvar_empty("topic_action")) {
         case "disallow_guests":
         case "profiled_topic_on":
         case "profiled_topic_off":
+        case "blog_topic_on":
+        case "blog_topic_off":
             $response['success'] = $fmanager->do_topic_action(reqvar("topic"), reqvar("topic_action"));
             
             if ($response['success']) {

@@ -928,7 +928,7 @@ function set_version_loaded(pid, vid, version_content, version_list)
   init_lightbox_images();
 }
 
-function extract_and_handle_attributes(elm)
+function extract_attributes(elm)
 {
   var result;
   var att;
@@ -1054,7 +1054,7 @@ function reload_post(post)
             set_current_post(reload_post_ajax.post);
 
             elm = document.getElementById('ajax_data');
-            if(elm) extract_and_handle_attributes(elm);
+            if(elm) extract_attributes(elm);
 
             // reload images
             var imgs = post_node.getElementsByClassName('post_image');
@@ -1235,6 +1235,134 @@ function reload_online_users(topic, forum)
   return false;
 }
 
+var load_created_post_ajax = null;
+
+function load_created_post(created_post, original_post)
+{
+  hide_all_popups();
+
+  Forum.show_sys_progress_indicator(true);
+
+  debug_line("Loading just created post: " + created_post, "posting");
+
+  var params = { post: created_post, in_search: in_search };
+
+  if(!load_created_post_ajax)
+  {
+    load_created_post_ajax = new Forum.AJAX();
+
+    load_created_post_ajax.timeout = TIMEOUT;
+
+    load_created_post_ajax.beforestart = function() { break_check_new_messages(); };
+    load_created_post_ajax.aftercomplete = function(error) { activate_check_new_messages(); };
+
+    load_created_post_ajax.onload = function(text, xml)
+    {
+      try
+      {
+        debug_line("We have loaded created post successfully", "posting");
+
+        // remove old possible transfer file
+        var elm = document.getElementById('ajax_data');
+        if(elm) elm.parentNode.removeChild(elm);
+
+        if(text != '')
+        {
+          elm = document.getElementById("no_posts_message");
+          if(elm) elm.style.display = "none";
+        }
+
+        elm = document.getElementById("post_" + load_created_post_ajax.original_post);
+        if(elm) 
+        {
+          var message_container = document.createElement("div");
+          message_container.id = "post_" + load_created_post_ajax.created_post;
+          message_container.classList.add("message_container");
+          message_container.classList.add("message_container_with_offset");
+
+          elm.parentNode.insertBefore(message_container, elm.nextSibling);
+          
+          message_container.insertAdjacentHTML('beforeend', text);
+        }
+
+        setTimeout(function () {
+          init_citations();
+          init_lightbox_images();
+          init_embedded_widgets();
+
+          elm = document.getElementById('ajax_data');
+          if(elm) 
+          {
+            // check for possible warning and errors
+            extract_attributes(elm);
+          }
+          
+          init_lightbox_images();
+          init_embedded_widgets();
+        
+          // highlichting code if not highlighted yet
+          var codes = post_area.getElementsByTagName('code');
+          for(var i = 0; i < codes.length; i++)
+          {
+            if(!codes[i].classList.contains("hljs")) hljs.highlightBlock(codes[i]);
+          }
+
+          debug_line("Highlighting the message: " + load_created_post_ajax.created_post, "posting");
+          set_current_post(load_created_post_ajax.created_post);
+
+          // by using insertAdjacentHTML for a content with images
+          // they are loaded not immediately, we need a timeout before
+          // calcualtion of the heights
+          setTimeout(init_more_buttons, 1000);
+          setTimeout(init_more_buttons, 2500);
+
+          exec_reload_nav_control('message_info_bar', load_created_post_ajax.created_post);
+          exec_reload_nav_control('navigator_bar', load_created_post_ajax.created_post);
+          exec_reload_online_users();
+        }, 200);
+
+        if(messages) Forum.handle_response_messages(messages);
+      }
+      catch(err)
+      {
+        Forum.handle_ajax_error(this, err.message, this.last_url, {});
+      }
+
+      Forum.show_sys_progress_indicator(false);
+    };
+
+    load_created_post_ajax.onerror = function(error, url, info)
+    {
+      Forum.show_sys_progress_indicator(false);
+
+      Forum.handle_ajax_error(this, error, url, info);
+    };
+  } // init ajax
+
+  load_created_post_ajax.abort();
+  load_created_post_ajax.resetParams();
+
+  load_created_post_ajax.created_post = created_post;
+  load_created_post_ajax.original_post = original_post;
+
+  for(var p in params)
+  {
+    if(!Object.prototype.hasOwnProperty.call(params, p)) continue;
+
+    load_created_post_ajax.setPOST(p, params[p]);
+  }
+
+  load_created_post_ajax.setPOST('hash', get_protection_hash());
+  load_created_post_ajax.setPOST('user_logged', user_logged);
+  load_created_post_ajax.setPOST('trace_sql', trace_sql);
+
+  load_created_post_ajax.setPOST('fpage', fpage);
+
+  load_created_post_ajax.request("ajax/load_post.php");
+
+  return false;
+}
+
 var load_new_posts_ajax = null;
 
 function load_new_posts(topic, forum, highlight_message, target_url)
@@ -1267,7 +1395,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
     posts_until_end = '';
   }
   
-  debug_line("Trying to load new posts", "posting");
+  debug_line("Trying to load new posts, message to be highlighted: " + highlight_message + ", target_url: " + target_url, "posting");
   
   if(!may_load_new_posts)
   {
@@ -1326,12 +1454,12 @@ function load_new_posts(topic, forum, highlight_message, target_url)
     {
       try
       {
-        debug_line("We loaded new posts successfully", "posting");
+        debug_line("We have loaded new posts successfully", "posting");
 
         unset_topic_new_markers();
 
         // remove old possible transfer file
-        elm = document.getElementById('ajax_data');
+        var elm = document.getElementById('ajax_data');
         if(elm) elm.parentNode.removeChild(elm);
 
         if(text != '')
@@ -1351,7 +1479,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
           if(elm) 
           {
             // returns true if redirection required, because no new non-ignored posts loaded
-            if(extract_and_handle_attributes(elm))
+            if(extract_attributes(elm))
             {
               // we do redirection only if desired gotonew, that is load_new_posts_ajax.highlight_message == -1
               if(parseInt(load_new_posts_ajax.highlight_message) == -1)
@@ -1875,11 +2003,9 @@ function focus_message_field()
 
 function answer_to_author(pid, author, tid, subject, profiled_topic, stringent_rules)
 {
-  var elm = document.getElementById("post_table_" + pid);
-  
   var cid = 'post_container_' + pid;
 
-  elm = document.getElementById("load_last_version");
+  var elm = document.getElementById("load_last_version");
   if(elm) elm.style.visibility = has_auto_saved_message ? "visible" : "hidden";
 
   elm = document.getElementById('message');
@@ -3663,8 +3789,8 @@ function check_thematic()
   var editor = document.getElementById('post_message_table');
   if(!editor) return;  
 
-  var elm = document.getElementById('profiled_topic_row');
-  if(!elm || elm.style.display == 'none') 
+  var elm = elm = document.getElementById('profiled_topic');
+  if(!elm || elm.value == 0) 
   {
     editor.classList.remove("thematic_post");
     editor.classList.remove("comment_post");
@@ -3944,8 +4070,8 @@ function handle_writing_cancel()
       form.elements['user_password'].defaultValue = '';
     }
     
-    form.elements['is_thematic'].checked = thematic_per_default;
-    form.elements['is_thematic'].defaultChecked = thematic_per_default;
+    form.elements['is_thematic'].checked = false;
+    form.elements['is_thematic'].defaultChecked = false;
     form.elements['is_adult'].checked = false;
     form.elements['is_adult'].defaultChecked = false;
 

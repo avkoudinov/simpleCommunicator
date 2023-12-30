@@ -262,12 +262,6 @@ function export_import(export_import_action)
   return false;
 } // save_data
 
-function set_thematic_per_default_checked(cb)
-{
-  var elm = document.getElementById("thematic_per_default");
-  if(elm && cb.checked) elm.checked = true;
-}
-
 function handle_adult_checkbox()
 {
   var hide_pictures = document.getElementById('hide_pictures');
@@ -608,22 +602,6 @@ foreach($time_zones as $time_zone => $time_zone_name)
      </td>
      <td>
      <label for="donot_hide_adult_pictures"><?php echo_html(text("DontHideAdult")); ?></label>
-     </td>
-   </tr>
-   <tr>
-     <td>
-     <input type="checkbox" id="hide_comments" name="hide_comments" <?php echo_html(checked($user_data["hide_comments"])); ?> onchange="set_thematic_per_default_checked(this)"> 
-     </td>
-     <td>
-     <label for="hide_comments"><?php echo_html(text("HideComments")); ?></label>
-     </td>
-   </tr>
-   <tr>
-     <td>
-     <input type="checkbox" id="thematic_per_default" name="thematic_per_default" <?php echo_html(checked($user_data["thematic_per_default"])); ?>> 
-     </td>
-     <td>
-     <label for="thematic_per_default"><?php echo_html(text("ThematicPostPerDefault")); ?></label>
      </td>
    </tr>
    <tr>

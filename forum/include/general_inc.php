@@ -54,7 +54,7 @@ function is_maintenance() {
 
 if($installed && !is_maintenance())
 {
-  $fmanager->check_ip(val_or_empty($_SERVER["REMOTE_ADDR"]), val_or_empty($_SERVER["HTTP_USER_AGENT"]));
+  $fmanager->check_ip(System::getIPAddress(), val_or_empty($_SERVER["HTTP_USER_AGENT"]));
 }
 
 // Generate a random hash to protect against unwanted actions
@@ -95,6 +95,8 @@ if ($fmanager->check_hash()) {
     $uri = preg_replace("/hide_deleted=\\d&?/", "", $uri);
     $uri = preg_replace("/guest_posting_on=\\d&?/", "", $uri);
     $uri = preg_replace("/guest_posting_off=\\d&?/", "", $uri);
+    $uri = preg_replace("/show_all_messages=\\d&?/", "", $uri);
+    $uri = preg_replace("/show_thematic_messages=\\d&?/", "", $uri);
     $uri = preg_replace("/hash=.+&?/", "", $uri);
     $uri = rtrim($uri, "&?");
     
@@ -118,11 +120,26 @@ if ($fmanager->check_hash()) {
         header("Location: " . $uri);
         exit;
     }
+    if (!reqvar_empty("show_all_messages")) {
+        unset($_SESSION["filtered_topics"][reqvar("tid")]);
+        header("Location: " . $uri);
+        exit;
+    }
+    if (!reqvar_empty("show_thematic_messages")) {
+        $_SESSION["filtered_topics"][reqvar("tid")] = reqvar("tid");
+        header("Location: " . $uri);
+        exit;
+    }
 }
 
 if (!reqvar_empty("admdebug") && reqvar("admdebug") == val_or_empty($adm_debug_password)) {
     $_SESSION["admdebug"] = 1;
 }
+
+if (!reqvar_empty("debug_context")) {
+    $_SESSION["debug_context"] = reqvar("debug_context");
+}
+
 if (empty($maintenance_until)) {
     unset($_SESSION["admdebug"]);
 }

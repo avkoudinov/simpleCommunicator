@@ -899,6 +899,7 @@ input[type="button"].load_user_rates
   background-color: #EEEEEE;
   text-align: center;
   margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 td.table_message
@@ -1734,7 +1735,7 @@ a.post_subscribe_loading
 
 .topic_status
 {
-  color: black;
+  color: #333;
 }
 
 .hot_topic
@@ -2153,6 +2154,11 @@ img.mourning_band
   display:table;
   position:relative;
   margin: 40px 0px 40px 0px;
+}
+
+.message_container_with_offset
+{
+  margin-left: 120px;
 }
 
 .message_table td .emb_wrapper,
@@ -2916,11 +2922,21 @@ a.last_button:hover
   margin: 0px 0px 8px 0px;
 }
 
-.post_table.comment_post td.message_cell,
-.post_table.comment_post td.message_action_cell,
-.post_table.comment_post .post_rating td,
-.post_table.comment_post .message_text_more
+.post_table .thematic_indicator td
 {
+  border-bottom-width: 0;
+  height: 0;
+  padding: 0;
+}
+
+.post_table td.message_cell
+{
+  border-top-width: 0;
+}
+
+.post_table.comment_post .thematic_indicator td
+{
+  height: 30px;
   background-color: #CAE2FA;
 }
 
@@ -2929,11 +2945,9 @@ a.last_button:hover
   background-color: #CAE2FA;
 }
 
-.post_table.thematic_post td.message_cell,
-.post_table.thematic_post td.message_action_cell,
-.post_table.thematic_post .post_rating td,
-.post_table.thematic_post .message_text_more
+.post_table.thematic_post .thematic_indicator td
 {
+  height: 30px;
   background-color: #F6F3C3;
 }
 
@@ -3490,6 +3504,12 @@ a.user_appeal:hover
 {
   height: 34px;
   min-height: 34px;
+}
+
+.topic_type_indicator
+{
+  color: gray;
+  font-weight: bold;
 }
 
 .topic_title_main
