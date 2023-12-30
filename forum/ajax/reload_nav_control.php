@@ -81,6 +81,7 @@ $pagination_info["posts_per_page"] = $fmanager->get_posts_per_page();
 $pagination_info["total_count"] = val_or_empty($topic_data["post_count"]);
 $pagination_info["ignored_hidden"] = (!empty($_SESSION["hide_ignored"]) && !$fmanager->is_forum_moderator($fid) && !$fmanager->is_topic_moderator($tid));
 $pagination_info["ignored_count"] = val_or_empty($topic_data["ignored_post_count"]);
+$pagination_info["ignored_comment_count"] = val_or_empty($topic_data["ignored_comment_count"]);
 $pagination_info["first_topic_message"] = val_or_empty($topic_data["first_topic_message"]);
 $pagination_info["first_topic_pinned_message"] = val_or_empty($topic_data["first_topic_pinned_message"]);
 $pagination_info["last_topic_message"] = val_or_empty($topic_data["last_topic_message"]);

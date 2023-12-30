@@ -276,9 +276,21 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td><?php echo_html(text("WhoisServer")); ?>:</td>
+<td style="vertical-align: top"><?php echo_html(text("WhoisServer")); ?>:</td>
 <td>
-<input type="text" id="whois_server" name="whois_server" value="<?php echo_html($settings["whois_server"]); ?>">
+<input type="text" id="whois_server" name="whois_server" value="<?php echo_html($settings["whois_server"]); ?>"><br>
+
+   <table class="checkbox_table">
+   <tr>
+     <td>
+     <input type="checkbox" id="hash_ip_addresses" name="hash_ip_addresses" <?php echo_html(checked($settings["hash_ip_addresses"])); ?>> 
+     </td>
+     <td>
+     <label for="hash_ip_addresses"><?php echo_html(text("HashIPAddresses")); ?></label>
+     </td>
+   </tr>
+   </table>
+
 </td>
 </tr>
 

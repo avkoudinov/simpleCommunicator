@@ -1669,6 +1669,8 @@ Forum.handle_sys_msgbox_esc = function(ev)
     {
       elms[i].style.display = "none";
     }
+    
+    show_debug_console(false);
   }
 }; // handle_sys_msgbox_esc
 // --------------------------------------------------------
@@ -1796,9 +1798,21 @@ Forum.handle_response_messages = function(response)
     else
     {
       if(no_success_report == 0) Forum.show_sys_bubblebox(msg_Information, msg, response.AUTO_HIDE_INFO);
+      
+      Forum.handle_response_messages(response);
+      return;
     }
   }
 
+  if(response.DEBUG_MESSAGE)
+  {
+    msg = response.DEBUG_MESSAGE;
+    response.DEBUG_MESSAGE = null;
+
+    debug_line(msg);
+    show_debug_console(true);
+  }
+  
   window.setTimeout(focus_element, 200);
 }; // handle_response_messages
 // --------------------------------------------------------
@@ -2676,7 +2690,9 @@ function switch_skin(skin)
 
         if(response.success)
         {
-          delay_reload();
+          var url = window.location.href.replace(/(\?|&)(mobile|tablet|desktop)=[^&]*/, "");
+          
+          delay_redirect(url);
           return;
         }
       }

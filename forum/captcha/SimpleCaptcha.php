@@ -32,7 +32,7 @@ class SimpleCaptcha {
      * Used for dictionary words indicating the word-length
      * for font-size modification purposes
      */
-    public $maxWordLength = 8;
+    public $maxWordLength = 7;
 
     /** Sessionname to store the original text */
     public $session_var = 'captcha';
@@ -80,11 +80,11 @@ class SimpleCaptcha {
     /** Wave configuracion in X and Y axes */
     public $Yperiod    = 12;
     public $Yamplitude = 14;
-    public $Xperiod    = 11;
-    public $Xamplitude = 5;
+    public $Xperiod    = 14;
+    public $Xamplitude = 8;
 
     /** letter rotation clockwise */
-    public $maxRotation = 8;
+    public $maxRotation = 12;
 
     /**
      * Internal image size factor (for better image quality)

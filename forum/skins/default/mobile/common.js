@@ -1,64 +1,3 @@
-// override default implementation
-Forum.invert_pair_checkbox = function(src_chbk, trg_id)
-{
-  var elm = document.getElementById(trg_id);
-
-  if(!elm) return;
-
-  elm.checked = false;
-  
-  Forum.fireEvent(elm, 'change');
-}; // invert_pair_checkbox
-
-function show_hide_menu()
-{
-  var elm = document.getElementById("menu_panel");
-  if(!elm) return;
-  
-  if(elm.style.display == "none") elm.style.display = "block";
-  else                            elm.style.display = "none";
-}
-
-function hide_actions()
-{
-  var elm = document.getElementById('actions');
-  if(!elm) return;
-  
-  elm.classList.remove('actions_opened');
-
-  elm = document.getElementById('actions_area');
-  if(!elm) return;
-  
-  elm.classList.remove('actions_area_opened');
-}
-
-function toggle_actions()
-{
-  var elm = document.getElementById('actions');
-  if(!elm) return;
-  
-  if(elm.classList.contains('actions_opened'))
-  {
-    elm.classList.remove('actions_opened');
-  }
-  else
-  {
-    elm.classList.add('actions_opened');
-  }
-  
-  elm = document.getElementById('actions_area');
-  if(!elm) return;
-  
-  if(elm.classList.contains('actions_area_opened'))
-  {
-    elm.classList.remove('actions_area_opened');
-  }
-  else
-  {
-    elm.classList.add('actions_area_opened');
-  }
-}
-
 Forum.addXEvent(window, 'load', function () { 
   Forum.addXEvent(window, 'beforeunload', function (e) {
     if(typeof check_new_messages_ajax != 'undefined' && check_new_messages_ajax !== null) check_new_messages_ajax.abort();
@@ -108,11 +47,51 @@ if(pin_the_menu)
   });
 }
 
-/*
-Constant adjustment to screen is not desirable,
-because it does not allow zooming.
-Forum.addXEvent(window, 'resize', function () { 
-  var img = document.getElementById("sys_preview_image");
-  if(img) Forum.scale_preview_image(img);
-});
-*/
+function show_hide_menu()
+{
+  var elm = document.getElementById("menu_panel");
+  if(!elm) return;
+  
+  if(elm.style.display == "none") elm.style.display = "block";
+  else                            elm.style.display = "none";
+}
+
+function hide_actions()
+{
+  var elm = document.getElementById('actions');
+  if(!elm) return;
+  
+  elm.classList.remove('actions_opened');
+
+  elm = document.getElementById('actions_area');
+  if(!elm) return;
+  
+  elm.classList.remove('actions_area_opened');
+}
+
+function toggle_actions()
+{
+  var elm = document.getElementById('actions');
+  if(!elm) return;
+  
+  if(elm.classList.contains('actions_opened'))
+  {
+    elm.classList.remove('actions_opened');
+  }
+  else
+  {
+    elm.classList.add('actions_opened');
+  }
+  
+  elm = document.getElementById('actions_area');
+  if(!elm) return;
+  
+  if(elm.classList.contains('actions_area_opened'))
+  {
+    elm.classList.remove('actions_area_opened');
+  }
+  else
+  {
+    elm.classList.add('actions_area_opened');
+  }
+}

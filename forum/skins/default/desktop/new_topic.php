@@ -675,6 +675,22 @@ else
   </tr>
   <?php endif; ?>
 
+  <tr>
+  <td style="vertical-align: top"></td>
+  <td>
+   <table class="checkbox_table">
+   <tr>
+     <td>
+     <input type="checkbox" id="blog" name="blog" tabindex="-1"> 
+     </td>
+     <td>
+     <label for="blog"><?php echo_html(text("CreateBlog")); ?></label>
+     </td>
+   </tr>
+   </table>
+  </td>
+  </tr>
+
 <tr>
 <td style="vertical-align: top"></td>
 <td>

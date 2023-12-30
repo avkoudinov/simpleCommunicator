@@ -15,7 +15,7 @@ var timerStart = Date.now();
 var NEW_CHECK_FREQUENCY = "<?php echo_js(defined('NEW_CHECK_FREQUENCY') ? NEW_CHECK_FREQUENCY*1000 : 30*1000); ?>";
 var ATTACHMENTS_PER_POST = "<?php echo_js(defined('ATTACHMENTS_PER_POST') ? ATTACHMENTS_PER_POST : 3); ?>";
 var DEBUG_MODE = <?php echo_js(defined('DEVELOPER_MODE') && DEVELOPER_MODE ? "true" : "false"); ?>;
-var DEBUG_CONTEXT = 'none';
+var DEBUG_CONTEXT = '<?php echo_js(!empty($_SESSION["debug_context"]) ? $_SESSION["debug_context"] : "none"); ?>';
 
 var pin_the_menu = <?php echo(!empty($_SESSION["skin_properties"][$skin]["pin_the_menu"]) ? 1 : 0); ?>;
 var no_success_report = <?php echo(!empty($_SESSION["skin_properties"][$skin]["no_success_report"]) ? 1 : 0); ?>;
@@ -443,7 +443,7 @@ if(!empty($_SESSION["skin_properties"][$skin]["show_df_logotype"]))
 }
 ?>
 <a href="../"><?php echo($ftitle); ?></a></div>
-<div class="title_appendix"><span class="title_appendix_text" title="Debug Console" onclick='show_debug_console(true)'>&nbsp; <?php if(!empty($_SESSION["admdebug"])) echo "[debug]"; else echo "&nbsp;&nbsp;&nbsp;"; ?></span></div>
+<div class="title_appendix"><span class="title_appendix_text" title="Debug Console" onclick='show_debug_console(true)'>&nbsp; <?php if(!empty($_SESSION["admdebug"]) || !empty($_SESSION["debug_context"])) echo "[debug]"; else echo "&nbsp;&nbsp;&nbsp;"; ?></span></div>
 
 <div class="title_separator"></div>
 

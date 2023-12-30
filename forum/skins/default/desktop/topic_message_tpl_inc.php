@@ -84,10 +84,6 @@ if (!empty($user_data[$pinfo["user_id"]]["ignored"]) || !empty($pinfo["guest_ign
     $post_ignored = 1;
 }
 
-if (!empty($pinfo["comment_ignored"])) {
-    $post_ignored = 1;
-}
-
 if (!reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only") || !reqvar_empty("include_ignored") ||
     (in_array(reqvar("author_mode"), array("author_liked", "author_disliked", "last_posts", "wrote_post")) && !reqvar_empty("author")) ||
     (!reqvar_empty("replies_to") && !empty($pinfo["profiled_topic"]))
@@ -211,7 +207,7 @@ else
 $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
 ?>
 
-<table id="post_table_<?php echo_html($pid); ?>" class="post_table forum_<?php echo($pinfo["forum_id"]); ?> topic_<?php echo($pinfo["topic_id"]); ?> <?php echo($user_identifier_class); ?> <?php echo_html($pinned); ?> <?php echo_html($attachment_editable_class); ?> <?php if($post_ignored) echo "ignored_post"; ?> <?php if(!empty($pinfo["editable"]) && !empty($pinfo["profiled_topic"])) echo(empty($pinfo["is_comment"]) ? "thematic_post" : "comment_post"); ?> <?php if(!empty($pinfo["is_adult"])) echo "adult_post"; ?>">
+<table id="post_table_<?php echo_html($pid); ?>" class="post_table forum_<?php echo($pinfo["forum_id"]); ?> topic_<?php echo($pinfo["topic_id"]); ?> <?php echo($user_identifier_class); ?> <?php echo_html($pinned); ?> <?php echo_html($attachment_editable_class); ?> <?php if($post_ignored) echo "ignored_post"; ?> <?php if(!empty($pinfo["profiled_topic"])) echo(empty($pinfo["is_comment"]) ? "thematic_post" : "comment_post"); ?> <?php if(!empty($pinfo["is_adult"])) echo "adult_post"; ?>">
 <tr>
 
 <?php 
@@ -238,7 +234,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
     <a href="<?php echo($message_url); ?>" class="moderator_link" onclick='return select_all()'><?php echo_html(text("SelectAll")); ?></a>
     <a href="<?php echo($message_url); ?>" class="moderator_link" onclick='return unselect_all()'><?php echo_html(text("ResetSelection")); ?></a>
 
-    <?php if(!empty($pinfo["profiled_topic"])): ?>
+    <?php if(val_or_empty($pinfo["profiled_topic"]) == 1): ?>
     <a href="<?php echo($message_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmToThematic"), true); ?>", { topic_action: "convert_to_thematic", topic: "<?php echo_js($pinfo["topic_id"]); ?>", forum: "<?php echo_js($pinfo["forum_id"]); ?>" });'><?php echo_html(text("MakePostsThematic")); ?></a>
     <a href="<?php echo($message_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmToComment"), true); ?>", { topic_action: "convert_to_comment", topic: "<?php echo_js($pinfo["topic_id"]); ?>", forum: "<?php echo_js($pinfo["forum_id"]); ?>" });'><?php echo_html(text("MakePostsToComments")); ?></a>
     <?php endif; ?>
@@ -407,7 +403,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
 </th>
 </tr>
 <tr>
-<td rowspan="2" class="author_cell">
+<td rowspan="4" class="author_cell">
 
   <div class="author_wrapper">
   <?php
@@ -684,6 +680,13 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
   </div> 
 
 </td>
+</tr>
+
+<tr class="thematic_indicator">
+<td></td>
+</tr>
+
+<tr>
 <td class="message_cell" data-author="<?php echo_html($pinfo["author"]); ?>" data-pid="<?php echo_html($pid); ?>" data-tid="<?php echo_html($pinfo["topic_id"]); ?>" data-subject="<?php echo_html(postprocess_message($pinfo["topic_name"])); ?>" data-profiled_topic="<?php echo_html($pinfo["profiled_topic"]); ?>" data-stringent_rules="<?php echo_html($pinfo["stringent_rules"]); ?>">
 
 <div id="tags_list_<?php echo_html($pid); ?>" class="tags_list">
@@ -1175,18 +1178,18 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
   <div class="user_post_actions">
 
   <?php if($may_write && $may_answer): ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_answer=" . $pid . "&answer_author=" . xrawurlencode($pinfo["author"])); ?>" class="answer" onclick='return answer_to_author("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["author"], true); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", <?php echo(!empty($pinfo["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("Answer")); ?></a>
+  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_answer=" . $pid . "&answer_author=" . xrawurlencode($pinfo["author"])); ?>" class="answer" onclick='return answer_to_author("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["author"], true); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("Answer")); ?></a>
   <?php endif; ?>
 
   <?php if($may_answer):  
   $citate_caption = text("Citate");
   if(empty($may_write)) $citate_caption = text("CitateForCopy");
   ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_citate=" . $pid); ?>" onclick='return citate_post("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", <?php echo(!empty($pinfo["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html($citate_caption); ?></a>
+  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_citate=" . $pid); ?>" onclick='return citate_post("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html($citate_caption); ?></a>
   <?php endif; // may_answer ?>
   
   <?php if($may_write): ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_write=" . $pid); ?>" onclick='return new_message("", "<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", <?php echo(!empty($pinfo["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("NewMessage")); ?></a> 
+  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_write=" . $pid); ?>" onclick='return new_message("", "<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("NewMessage")); ?></a> 
   <?php endif; // may write ?>
 
   <?php
@@ -1309,7 +1312,7 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
 
       <span class='separator'>|</span> <a href="<?php echo($message_url); ?>" class="moderator_link" onclick="return start_editing({ topic_action: 'edit_message', post: '<?php echo_html($pid); ?>', user_id: '<?php echo_html($pinfo["user_id"]); ?>', subject_editable: '<?php echo_js($subject_editable); ?>', profiled_topic: '<?php echo_js($pinfo["profiled_topic"]); ?>', stringent_rules: '<?php echo_js($pinfo["stringent_rules"]); ?>' });"><?php echo_html(text("Edit")); ?></a>
 
-      <?php if(!empty($pinfo["profiled_topic"]) && empty($pinfo["pinned"])): ?>
+      <?php if(val_or_empty($pinfo["profiled_topic"]) == 1 && empty($pinfo["pinned"])): ?>
       <?php if(empty($pinfo["is_comment"])): ?>
       <span class='separator'>|</span> <a href="<?php echo($message_url); ?>" id="convert_link_<?php echo_html($pid); ?>" data-pid="<?php echo_html($pid); ?>" class="moderator_link" onclick='return select_and_do(this, { topic_action: "convert_to_comment", topic: "<?php echo_html($pinfo["topic_id"]); ?>", forum: "<?php echo_html($pinfo["forum_id"]); ?>" })'><?php echo_html(text("MakePostToComment")); ?></a> 
       <?php else: ?>
@@ -1468,6 +1471,13 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
   <div class="scroll_up" onclick="window.scrollTo(0, 0);"></div>
   <div class="scroll_down" onclick="window.scrollTo(0, 1000000);"></div>
   </div>
+
+<?php if(!empty($topic_data["thematic_only"]) && !empty($pinfo["has_comments"])): ?>
+<div class="other_new_messages_alertbox">
+<a href="<?php echo($base_url . "&force_comments=1&startmsg=" . $pid); ?>" rel="nofollow"><?php echo_html(text("Comments")); ?></a>
+</div>
+<div class="clear_both"></div>
+<?php endif; ?>
 
 <a id="anchor_post_container_<?php echo_html($pid); ?>"></a>
 <div id="post_container_<?php echo_html($pid); ?>" class="post_container" data-has-attachment="<?php echo($pinfo["has_attachment"]); ?>"></div>

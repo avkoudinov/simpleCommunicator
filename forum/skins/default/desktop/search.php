@@ -550,8 +550,10 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
                     $topic_status = "";
                     if(!empty($tinfo["pinned"]) && empty($tinfo["is_poll"]) && empty($tinfo["profiled_topic"])) 
                       $topic_status .= text("Important") . ": ";
-                    if(!empty($tinfo["profiled_topic"]) && empty($tinfo["is_poll"]))
+                    if(!empty($tinfo["profiled_topic"]) && $tinfo["profiled_topic"] == 1)
                       $topic_status .= text("Dedicated") . ": ";
+                    if(!empty($tinfo["profiled_topic"]) && $tinfo["profiled_topic"] == 2)
+                      $topic_status .= text("Blog") . ": ";
                     if(!empty($tinfo["is_poll"]))
                       $topic_status .= text("Poll") . ": ";
                     if(!empty($tinfo["publish_delay"]))

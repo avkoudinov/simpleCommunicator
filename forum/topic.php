@@ -15,6 +15,8 @@ $final_url = preg_replace("/&startmsg=[^&]*/", "", $final_url);
 $_SESSION["ensure_anchor_visible"] = "";
 
 $gotomsg = reqvar("msg");
+
+// This is only for backward compatibility
 if (!reqvar_empty("gotomsg")) {
     $gotomsg = reqvar("gotomsg");
 }
@@ -123,10 +125,21 @@ if (!empty($_SESSION["skip_next_hit"])) {
     $fmanager->track_hit($tid, $fid);
 }
 
+if (!reqvar_empty("force_comments")) {
+    unset($_SESSION["filtered_topics"][$tid]);
+}
+
 $topic_data = array();
 if (!$fmanager->get_topic_data($tid, $topic_data)) {
     header("location: " . $target_url);
     exit;
+}
+
+if(!empty($topic_data["profiled_topic"])) {
+  $topic_data["thematic_only"] = 0;
+  if (!empty($_SESSION["filtered_topics"][$tid])) {
+      $topic_data["thematic_only"] = 1;
+  }
 }
 
 if (!empty($topic_data["merge_target_topic"])) {
@@ -251,6 +264,7 @@ $pagination_info["posts_per_page"] = $fmanager->get_posts_per_page();
 $pagination_info["total_count"] = val_or_empty($topic_data["post_count"]);
 $pagination_info["ignored_hidden"] = (!empty($_SESSION["hide_ignored"]) && !$fmanager->is_forum_moderator($fid) && !$fmanager->is_topic_moderator($tid));
 $pagination_info["ignored_count"] = val_or_empty($topic_data["ignored_post_count"]);
+$pagination_info["ignored_comment_count"] = val_or_empty($topic_data["ignored_comment_count"]);
 
 $pagination_info["first_topic_message"] = val_or_empty($topic_data["first_topic_message"]);
 $pagination_info["first_topic_pinned_message"] = val_or_empty($topic_data["first_topic_pinned_message"]);
