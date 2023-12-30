@@ -46,10 +46,10 @@ var posts_per_page = <?php echo($fmanager->get_posts_per_page() + $pagination_in
 var loaded_message_count = <?php echo($pagination_info["loaded_message_count"]); ?>;
 var is_last_page = <?php echo($pagination_info["last_page_message"] == $pagination_info["last_topic_message"] || $pagination_info["loaded_message_count"] == 0 ? "1" : "0") ?>;
 var all_page_mode = <?php echo($pagination_info["mode"] == "all" ? "1" : "0"); ?>;
+var filtered_comment_mode = <?php echo(!empty($topic_data["thematic_only"]) ? "1" : "0"); ?>;
 var has_auto_saved_message = <?php echo($fmanager->has_auto_saved_message($tid) ? 1 : 0); ?>;
 
 var archive_mode = <?php echo(!empty($settings["archive_mode"]) ? "1" : "0"); ?>;
-var thematic_per_default = <?php echo(!empty($_SESSION["thematic_per_default"]) ? "1" : "0"); ?>;
 
 <?php if(!reqvar_empty("leave_unread") || (!reqvar_empty("download") && $fmanager->is_logged_in())): ?>
 do_not_check_new = true;
@@ -62,8 +62,10 @@ user_tags['#<?php echo_js($tgid); ?>'] = '<?php echo_js($tgname); ?>';
 
 <?php
 $gotomsg_appendix = "";
+$startmsg_appendix = "";
 if ($pagination_info["first_page_message"] != $pagination_info["first_topic_message"]) {
   $gotomsg_appendix = "&msg=" . $pagination_info["first_page_message"];
+  $startmsg_appendix = "&startmsg=" . $pagination_info["first_page_message"];
 }
 ?>
 
@@ -469,8 +471,11 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 
   <?php if(empty($topic_data["profiled_topic"])): ?>
   <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmTurnProfiledModeOn"), true); ?>", { topic_action: "profiled_topic_on", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("TurnProfiledModeOn")); ?></a>
-  <?php else: ?>
+  <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmTurnBlogModeOn"), true); ?>", { topic_action: "blog_topic_on", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("TurnBlogModeOn")); ?></a>
+  <?php elseif($topic_data["profiled_topic"] == 1): ?>
   <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return do_action({ topic_action: "profiled_topic_off", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("TurnProfiledModeOff")); ?></a>
+  <?php elseif($topic_data["profiled_topic"] == 2): ?>
+  <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return do_action({ topic_action: "blog_topic_off", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("TurnBlogModeOff")); ?></a>
   <?php endif; ?>
 
   <?php if(empty($forum_data["no_guests"])): ?>
@@ -489,11 +494,20 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 
 <?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"])): ?>
 <?php if(empty($_SESSION["guest_posting_mode"])): ?>
-<span class="separator">|</span> <a href="<?php echo($base_url . $gotomsg_appendix); ?>&guest_posting_on=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a>
+<span class="separator">|</span> <a href="<?php echo($base_url . $gotomsg_appendix); ?>&guest_posting_on=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a>
 <?php else: ?>
-<span class="separator">|</span> <a href="<?php echo($base_url . $gotomsg_appendix); ?>&guest_posting_off=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOff")); ?></a>
+<span class="separator">|</span> <a href="<?php echo($base_url . $gotomsg_appendix); ?>&guest_posting_off=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOff")); ?></a>
 <?php endif; ?>
 <?php endif; ?>
+
+<?php if(!empty($topic_data["profiled_topic"])): ?>
+<?php if(empty($topic_data["thematic_only"])): ?>
+<span class="separator">|</span> <a href="<?php echo(preg_replace("/&force_comments=1/", "", $base_url) . $startmsg_appendix); ?>&show_thematic_messages=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("ThematicOnly")); ?></a>
+<?php else: ?>
+<span class="separator">|</span> <a href="<?php echo(preg_replace("/&force_comments=1/", "", $base_url) . $startmsg_appendix); ?>&show_all_messages=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("ShowAllMessages")); ?></a>
+<?php endif; ?>
+<?php endif; ?>
+
 
 </div>
 
@@ -531,12 +545,7 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 
 <a href="<?php echo($base_url); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmMarkRead"), true); ?>", { mark_read_action: "mark_topic_read", topic: "<?php echo_js($tid); ?>", uncritical: 1 })'><?php echo_html(text("MarkReadShort")); ?></a> / <a href="<?php echo($base_url); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmMarkUnread"), true); ?>", { mark_read_action: "mark_topic_unread", start_post: "<?php echo_js($first_message); ?>", uncritical: 1 })'><?php echo_html(text("MarkUnread")); ?></a> |
 
-<?php if($fmanager->is_logged_in()): 
-$startmsg_appendix = "";
-if ($pagination_info["first_page_message"] != $pagination_info["first_topic_message"]) {
-  $startmsg_appendix = "&startmsg=" . $pagination_info["first_page_message"];
-}
-?>
+<?php if($fmanager->is_logged_in()): ?>
 <a href="<?php echo($base_url . $startmsg_appendix . "&download=1"); ?>"><?php echo_html(text("Download")); ?></a> |
 <?php endif; ?>
 
@@ -566,10 +575,6 @@ if ($pagination_info["first_page_message"] != $pagination_info["first_topic_mess
     <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_audio=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAudioOnly")); ?></a> 
 
     <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_adult=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAdultOnly")); ?></a> 
-
-    <?php if(!empty($topic_data["profiled_topic"])): ?>
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&thematic_only=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("ThematicOnly")); ?></a>
-    <?php endif; ?>    
   </div>
 
 </div>
@@ -645,7 +650,15 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <span class="new forum_with_new_indicator" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 <?php endif; ?>
 
-/ <span class="topic_title_main"><?php echo_html($topic_title); ?></span>
+/ 
+
+<?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
+<?php elseif(val_or_empty($topic_data["profiled_topic"]) == 2): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Blog")); ?>:</span>
+<?php endif; ?>
+
+<span class="topic_title_main"><?php echo_html($topic_title); ?></span>
 
 <?php if(!empty($topic_data["in_ignored"])): ?>
 <span class="<?php echo(empty($forum_data["disable_ignore"]) ? "closed" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
@@ -715,7 +728,7 @@ $all_entry_post = $first_message;
 
 <?php if($may_write_to_topic): ?>
 <td>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("first_post_container", first_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("first_post_container", first_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
 </td>
 <?php endif; ?>
 
@@ -810,7 +823,7 @@ $all_entry_post = $last_message;
 
 <?php if($may_write_to_topic): ?>
 <td id='bottom_new_message'>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", last_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", last_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
 </td>
 <?php endif; ?>
 
@@ -878,7 +891,15 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <span class="new forum_with_new_indicator" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 <?php endif; ?>
 
-/ <span class="topic_title_main"><?php echo_html($topic_title); ?></span>
+/ 
+
+<?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
+<?php elseif(val_or_empty($topic_data["profiled_topic"]) == 2): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Blog")); ?>:</span>
+<?php endif; ?>
+
+<span class="topic_title_main"><?php echo_html($topic_title); ?></span>
 
 <?php if(!empty($topic_data["in_ignored"])): ?>
 <span class="<?php echo(empty($forum_data["disable_ignore"]) ? "closed" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
@@ -1147,7 +1168,7 @@ function startup_action()
   if(!empty($_SESSION["do_post"])):
   unset($_SESSION["do_post"]);
   ?>
-  new_message('first_post_container', first_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
+  new_message('first_post_container', first_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
   <?php endif; ?>
 
   <?php
@@ -1156,7 +1177,7 @@ function startup_action()
   $container = "";
   if($_SESSION["do_write"] == "first_message") $container = "first_post_container";
   ?>
-  new_message('<?php echo_js($container); ?>', <?php echo_js($_SESSION["do_write"]); ?>, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
+  new_message('<?php echo_js($container); ?>', <?php echo_js($_SESSION["do_write"]); ?>, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
   <?php
   unset($_SESSION["do_write"]);
   endif;
@@ -1165,7 +1186,7 @@ function startup_action()
   <?php
   if(!empty($_SESSION["do_answer"])):
   ?>
-  answer_to_author(<?php echo_js($_SESSION["do_answer"]); ?>, '<?php echo_js($_SESSION["answer_author"]); ?>', "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
+  answer_to_author(<?php echo_js($_SESSION["do_answer"]); ?>, '<?php echo_js($_SESSION["answer_author"]); ?>', "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
   <?php
   unset($_SESSION["do_answer"]);
   unset($_SESSION["answer_author"]);
@@ -1175,7 +1196,7 @@ function startup_action()
   <?php
   if(!empty($_SESSION["do_citate"])):
   ?>
-  citate_post(<?php echo_js($_SESSION["do_citate"]); ?>, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", <?php echo(!empty($topic_data["profiled_topic"]) ? 1 : 0); ?>, <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
+  citate_post(<?php echo_js($_SESSION["do_citate"]); ?>, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>);
   <?php
   unset($_SESSION["do_citate"]);
   endif;

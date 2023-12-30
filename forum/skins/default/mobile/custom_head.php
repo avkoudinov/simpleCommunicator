@@ -1,8 +1,5 @@
 <!-- write your adjustments here -->
 
-<!-- Google Fonts for Kroleg -->
-<link rel="stylesheet" href="<?php echo($view_path); ?>css/fonts_googleapis.css<?php echo($cache_appendix); ?>" type="text/css">
-
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EXAMPLE"></script>
 <script>

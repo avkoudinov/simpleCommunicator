@@ -11,7 +11,7 @@ function show_post_comment(title, author, pid, mode)
     if(!elm) return;
     do_action({ topic_action: 'comment_message', comment_mode: mode, pid: pid, post_comment: elm.value });
   };
-  
+
   Forum.on_lightbox_close = function () {
       writing_message = false; 
   };
@@ -841,7 +841,7 @@ function edit_message(params, response)
     elm.value = params.stringent_rules;
     elm.defaultValue = elm.value;
   }
-  
+
   elm = document.getElementById('is_thematic');
   if(elm)
   {
@@ -1052,6 +1052,8 @@ function post_message(action)
 
         if(response.success)
         {
+          debug_line("We have posted", "posting");
+          
           break_auto_save();
 
           // do not hide captcha upon preview
@@ -1062,6 +1064,8 @@ function post_message(action)
 
           if(response.double_post)
           {
+            debug_line("Double post detected", "posting");
+
             hide_post_form(form);
             debug_line('Previous action removed from the stack', 'history');
             history_undo_actions_stack.pop();
@@ -1092,7 +1096,7 @@ function post_message(action)
             form.elements['stringent_rules'].defaultValue = '';
             form.elements['login_active'].value = '';
             form.elements['login_active'].defaultValue = '';
-            
+
             if(form.elements['user_login']) 
             {
               form.elements['user_login'].value = '';
@@ -1104,8 +1108,8 @@ function post_message(action)
               form.elements['user_password'].defaultValue = '';
             }
             
-            form.elements['is_thematic'].checked = thematic_per_default;
-            form.elements['is_thematic'].defaultChecked = thematic_per_default;
+            form.elements['is_thematic'].checked = false;
+            form.elements['is_thematic'].defaultChecked = false;
             form.elements['is_adult'].checked = false;
             form.elements['is_adult'].defaultChecked = false;
 
@@ -1138,6 +1142,10 @@ function post_message(action)
             var was_edit_mode = (form.elements['edit_mode'].value == '1');
             var edited_post = form.elements['edited_post'].value;
             var original_post = form.elements['return_post'].value;
+            
+            var filtered_comment_posting = form.elements['profiled_topic'].value && filtered_comment_mode;
+
+            debug_line("Original post for this posting is: " + original_post, "posting");
 
             form.elements['author'].readOnly = false;
             form.elements['author'].classList.remove('read_only_field');
@@ -1172,8 +1180,8 @@ function post_message(action)
               form.elements['user_password'].defaultValue = '';
             }
 
-            form.elements['is_thematic'].checked = thematic_per_default;
-            form.elements['is_thematic'].defaultChecked = thematic_per_default;
+            form.elements['is_thematic'].checked = false;
+            form.elements['is_thematic'].defaultChecked = false;
             form.elements['is_adult'].checked = false;
             form.elements['is_adult'].defaultChecked = false;
 
@@ -1193,47 +1201,49 @@ function post_message(action)
             }
 
             var highlight_message = '';
-            if(response.return_post) highlight_message = response.return_post;
+            if(response.return_post) 
+            {
+              highlight_message = response.return_post;
+            }
             
             if(do_not_check_new)
             {
+              debug_line("New should not be checked", "posting");
+              
               if(original_post)
               {
+                debug_line("We set the original post as current", "posting");
+                
                 set_current_post(original_post);
               }
 
               Forum.show_sys_progress_indicator(false);
             }            
-            else if(!in_search && (is_last_page || all_page_mode))
+            else if(in_search)
             {
-              debug_line("We have posted", "posting");
-              debug_line("We are on the last page or all mode is active, load new posts", "posting");
+              debug_line("We are in the search mode, no loads", "posting");
+              
+              load_created_post(response.created_post, original_post);
+            }            
+            else if(filtered_comment_posting)
+            {
+              debug_line("We are in the filtered comment posting, load just created post", "posting");
+              load_created_post(response.created_post, original_post);
+            }
+            else if(is_last_page)
+            {
+              debug_line("We are on the last page, load new posts", "posting");
+              exec_load_new_posts(highlight_message, response.target_url);
+            }
+            else if(all_page_mode)
+            {
+              debug_line("We are in the all mode, load new posts", "posting");
               exec_load_new_posts(highlight_message, response.target_url);
             }
             else
             {
-              debug_line("We have posted", "posting");
-              debug_line("We are not on the last page, no loads", "posting");
-              
-              if(highlight_message)
-              {
-                debug_line("Message to highlight: " + highlight_message, "posting");
-                if (!document.getElementById('post_head_' + highlight_message))
-                {
-                  debug_line("It is not on this page, redirect", "posting");
-                  delay_redirect(response.target_url + "&startmsg=msg"); // ensure that the message is the first on the page
-                  return;
-                }
-                
-                debug_line("It is on this page, highlight it", "posting");
-                set_current_post(highlight_message);
-              }
-
-              exec_reload_nav_control('message_info_bar', highlight_message);
-              exec_reload_nav_control('navigator_bar', highlight_message);
-              exec_reload_online_users();
-
-              Forum.show_sys_progress_indicator(false);
+              debug_line("We are not on the last page, load just created post", "posting");
+              load_created_post(response.created_post, original_post);
             }
 
             return;

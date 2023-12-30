@@ -651,16 +651,31 @@ else
    <table class="checkbox_table">
    <tr>
      <td>
-     <input type="checkbox" id="publish_delay" name="publish_delay" tabindex="-1"> 
+     <input type="checkbox" id="blog" name="blog" tabindex="-1"> 
      </td>
      <td>
-     <label for="publish_delay"><?php echo_html(text("DelayPublishing")); ?></label>
+     <label for="blog"><?php echo_html(text("CreateBlog")); ?></label>
      </td>
    </tr>
    </table>
   </td>
   </tr>
   <?php endif; ?>
+
+<tr>
+<td>
+   <table class="checkbox_table">
+   <tr>
+     <td>
+   <input type="checkbox" id="publish_delay" name="publish_delay" tabindex="-1"> 
+   </td>
+   <td>
+   <label for="publish_delay"><?php echo_html(text("DelayPublishing")); ?></label>
+   </td>
+ </tr>
+ </table>
+</td>
+</tr>
 
 <tr>
 <td>

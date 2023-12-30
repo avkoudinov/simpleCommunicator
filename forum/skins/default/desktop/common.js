@@ -1,4 +1,8 @@
 Forum.addXEvent(window, 'load', function () { 
+  Forum.addXEvent(window, 'beforeunload', function (e) {
+    if(typeof check_new_messages_ajax != 'undefined' && check_new_messages_ajax !== null) check_new_messages_ajax.abort();
+  });
+
   Forum.addXEvent(document.body, 'keydown', function (event) { 
     if(typeof posting_active == 'function' && posting_active()) return;
 
@@ -15,10 +19,6 @@ Forum.addXEvent(window, 'load', function () {
       if(typeof store_unposted_message == 'function') store_unposted_message();
       if(typeof next_page_url != 'undefined'&& next_page_url) delay_redirect(next_page_url); 
     } 
-  });
-  
-  Forum.addXEvent(window, 'beforeunload', function (e) {
-    if(typeof check_new_messages_ajax != 'undefined' && check_new_messages_ajax !== null) check_new_messages_ajax.abort();
   });
 });
 
@@ -46,7 +46,8 @@ if(pin_the_menu)
     if(main_header)
     {
       rect = main_header.getBoundingClientRect();
-      header_height = rect.height;
+      
+      header_height += rect.height;
     }
     
     if(window.scrollY > header_height)

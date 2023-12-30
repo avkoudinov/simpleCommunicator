@@ -39,6 +39,12 @@ abstract class ForumManager
     
     abstract function get_query_ignored_posts_list($prfx, $where);
     
+    abstract function get_query_next_post($prfx, $tid, $last_post);
+
+    abstract function get_query_check_comments($prfx, $tid, $first_post, $last_post);
+
+    abstract function get_query_ignored_comments_list($prfx, $where);
+
     abstract function get_query_topic_first_post($prfx, $where, $order_by);
     
     abstract function get_query_subscribed_messages(&$dbw, $prfx, $uid, $mindate);
@@ -430,6 +436,10 @@ abstract class ForumManager
                 return text("ActionTopicProfiledModeTurnedOn");
             case "profiled_topic_off":
                 return text("ActionTopicProfiledModeTurnedOff");
+            case "blog_topic_on":
+                return text("ActionTopicBlogModeTurnedOn");
+            case "blog_topic_off":
+                return text("ActionTopicBlogModeTurnedOff");
             case "convert_to_thematic":
                 return text("ActionMessageConvertedToThematic");
             case "convert_to_comment":
@@ -2960,6 +2970,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_topic_data($tid, &$topic_data)
     {
+        global $READ_MARKER;
+        
         start_action_time_measure();
         
         $topic_data["id"] = "";
@@ -2987,6 +2999,7 @@ abstract class ForumManager
         $topic_data["poll_results_delayed"] = "";
         $topic_data["is_private"] = "";
         $topic_data["profiled_topic"] = "";
+        $topic_data["profiled_topic_final"] = "";
         $topic_data["read_marker"] = "";
         
         if ($tid == "new") {
@@ -3092,6 +3105,13 @@ abstract class ForumManager
         }
         
         $dbw->free_result();
+        
+        $topic_data["profiled_topic_final"] = $topic_data["profiled_topic"];
+        if ($topic_data["profiled_topic_final"] == 2 &&
+            ((!empty($uid) && $uid == $topic_data["user_id"]) || (empty($uid) && $READ_MARKER == $topic_data["read_marker"]) || $this->is_admin() || $this->is_forum_moderator($topic_data["forum_id"]) || $this->is_topic_moderator($topic_data["id"]))
+           ) {
+            $topic_data["profiled_topic_final"] = 1;  
+        }
         
         // if poll
         
@@ -3306,6 +3326,7 @@ abstract class ForumManager
         // get first unignored message
         
         $where .= $this->get_ignore_post_where_appendix($rodbw, $prfx);
+        $where .= $this->get_ignore_comment_where_appendix($rodbw, $prfx);
         
         $current_topic_message = 0;
         
@@ -3350,6 +3371,7 @@ abstract class ForumManager
         }        
 
         $where .= $this->get_ignore_post_where_appendix($rodbw, $prfx);
+        $where .= $this->get_ignore_comment_where_appendix($rodbw, $prfx);
         
         $should_break = false;
         $counter = 0;
@@ -3384,7 +3406,7 @@ abstract class ForumManager
         }
         
         $ignore_post_where_appendix = $this->get_calc_ignore_post_where_appendix($rodbw, $prfx);
-        
+
         if (!empty($ignore_post_where_appendix)) {
             start_action_time_measure();
             
@@ -3424,6 +3446,47 @@ abstract class ForumManager
             }
         }
         
+        $ignore_comment_where_appendix = $this->get_calc_ignore_comment_where_appendix($rodbw, $prfx);
+
+        if (!empty($ignore_comment_where_appendix)) {
+            start_action_time_measure();
+            
+            $where = "where topic_id = $tid
+                      $deleted_where_appendix
+                      $ignore_comment_where_appendix";
+            
+            if (!empty($start_post)) {
+                $where .= " and {$prfx}_post.id >= " . $start_post;
+            }
+            
+            if ($topic_data["post_count"] <= 1000) {
+                if (!$rodbw->execute_query("select count(*) cnt
+                               from {$prfx}_post
+                               inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                               $where")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+                    return false;
+                }
+                
+                if ($rodbw->fetch_row()) {
+                    $topic_data["ignored_comment_count"] = $rodbw->field_by_name("cnt");
+                }
+                
+                $rodbw->free_result();
+            } else {
+                if (!$rodbw->execute_query($this->get_query_ignored_comments_list($prfx, $where))) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+                    return false;
+                }
+                
+                if ($rodbw->fetch_row()) {
+                    $topic_data["ignored_comment_count"] = "1+";
+                }
+                
+                $rodbw->free_result();
+            }
+        }
+
         measure_action_time("get topic data");
         
         if (empty($topic_data["merge_target_topic"])) {
@@ -4520,6 +4583,7 @@ abstract class ForumManager
         $settings["celebration_active"] = "";
         $settings["mourning_active"] = "";
         $settings["archive_mode"] = "";
+        $settings["hash_ip_addresses"] = "";
         
         $dbw = System::getDBWorker();
         if (!$dbw) {
@@ -4535,7 +4599,7 @@ abstract class ForumManager
                              max_att_size, max_att_size_audiovideo, max_messages_minute, max_messages_hour, max_messages_day, 
                              max_topics_day, min_search_interval, max_rates_hour,
                              max_topic_name_symbols, max_user_name_symbols, hide_users_from_robots,
-                             celebration_active, mourning_active, snow_effect, archive_mode
+                             celebration_active, mourning_active, snow_effect, archive_mode, hash_ip_addresses
                              from {$prfx}_settings")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -4566,6 +4630,7 @@ abstract class ForumManager
             $settings["mourning_active"] = $dbw->field_by_name("mourning_active");
             $settings["snow_effect"] = $dbw->field_by_name("snow_effect");
             $settings["archive_mode"] = $dbw->field_by_name("archive_mode");
+            $settings["hash_ip_addresses"] = $dbw->field_by_name("hash_ip_addresses");
             
             $settings["skin"] = $dbw->field_by_name("skin");
             
@@ -4899,6 +4964,7 @@ abstract class ForumManager
         $mourning_active = reqvar_empty("mourning_active") ? "0" : "1";
         $snow_effect = reqvar_empty("snow_effect") ? "0" : "1";
         $archive_mode = reqvar_empty("archive_mode") ? "0" : "1";
+        $hash_ip_addresses = reqvar_empty("hash_ip_addresses") ? "0" : "1";
         
         if (!$dbw->start_transaction()) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -4934,7 +5000,8 @@ abstract class ForumManager
                              celebration_active = $celebration_active,
                              snow_effect = $snow_effect,
                              mourning_active = $mourning_active,
-                             archive_mode = $archive_mode
+                             archive_mode = $archive_mode,
+                             hash_ip_addresses = $hash_ip_addresses
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             $dbw->rollback_transaction();
@@ -5490,7 +5557,7 @@ abstract class ForumManager
         $activation_hash_db = $dbw->quotes_or_null($activation_hash);
         $activation_expire = $dbw->format_datetime(time() + 3600);
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         // By registration, the READ_MARKER changes. Pass the captcha verifiaction status to the new read marker
@@ -5820,7 +5887,7 @@ abstract class ForumManager
             $this->update_user_cookies();
 
             // guests and IP
-            $ip = $dbw->escape(val_or_empty($_SERVER["REMOTE_ADDR"]));
+            $ip = $dbw->escape(System::getIPAddress());
             
             if (!$dbw->execute_query("select block_expires, block_reason
                                  from {$prfx}_ip_blocked
@@ -5864,9 +5931,9 @@ abstract class ForumManager
                 if (empty($_SESSION["blocked_notified"])) {
                     $_SESSION["blocked_notified"] = true;
                     if (!empty($_SESSION["ip_block_expires"])) {
-                        MessageHandler::setError(sprintf(text("ErrIPIsBlockedUntil"), val_or_empty($_SERVER["REMOTE_ADDR"]), $_SESSION["ip_block_expires"], $_SESSION["ip_block_time_left"]), $ip_block_reason);
+                        MessageHandler::setError(sprintf(text("ErrIPIsBlockedUntil"), System::getIPAddress(), $_SESSION["ip_block_expires"], $_SESSION["ip_block_time_left"]), $ip_block_reason);
                     } else {
-                        MessageHandler::setError(sprintf(text("ErrIPIsBlocked"), val_or_empty($_SERVER["REMOTE_ADDR"])), $ip_block_reason);
+                        MessageHandler::setError(sprintf(text("ErrIPIsBlocked"), System::getIPAddress()), $ip_block_reason);
                     }
                 }
             } else {
@@ -5902,7 +5969,7 @@ abstract class ForumManager
         }
         
         if (!$dbw->execute_query("select login, user_name, email, turnoff_events, no_private_messages, send_notifications, donot_hide_adult_pictures,
-                             hide_comments, thematic_per_default, donot_notify_on_rates, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, skin, self_blocked,
+                             donot_notify_on_rates, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, skin, self_blocked,
                              custom_css, custom_smiles, skin_properties, time_zone, interface_language, read_marker, activated, approved, rating_blocked, is_admin, privileged, last_logout_date,
                              privileged_topic_moderator, global_ban_allowed, show_ip, ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist, blocked, block_expires, block_reason, password_hash
                              from {$prfx}_user
@@ -5994,8 +6061,6 @@ abstract class ForumManager
         $_SESSION["hide_user_info"] = $dbw->field_by_name("hide_user_info");
         $_SESSION["hide_user_avatars"] = $dbw->field_by_name("hide_user_avatars");
         $_SESSION["hide_ignored"] = $dbw->field_by_name("hide_ignored");
-        $_SESSION["hide_comments"] = $dbw->field_by_name("hide_comments");
-        $_SESSION["thematic_per_default"] = $dbw->field_by_name("thematic_per_default");
         $_SESSION["custom_css"] = $dbw->field_by_name("custom_css");
         $_SESSION["custom_smiles"] = preg_split("/[\r\n]+/", $dbw->field_by_name("custom_smiles") ?? "", -1, PREG_SPLIT_NO_EMPTY);
         
@@ -6462,7 +6527,7 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         // master admin just logged
@@ -6626,7 +6691,7 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         // master admin just logged
@@ -6806,7 +6871,7 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         // delete entries older than 1 hour
@@ -6845,7 +6910,7 @@ abstract class ForumManager
         $prfx = $dbw->escape(System::getDBPrefix());
         
         $now = $dbw->format_datetime(time());
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         $login_db = $dbw->escape($login);
         
@@ -6907,7 +6972,7 @@ abstract class ForumManager
             $dbw->free_result();
         }
         
-        trace_message_to_file(date("d.m.Y, H:i") . ": " . $login . " (IP:" . val_or_empty($_SERVER["REMOTE_ADDR"]) . ")", "failed_logins.log");
+        trace_message_to_file(date("d.m.Y, H:i") . ": " . $login . " (IP:" . System::getIPAddress() . ")", "failed_logins.log");
         
         // mail notification
         
@@ -7778,8 +7843,6 @@ abstract class ForumManager
         $user_data["hide_user_info"] = "";
         $user_data["hide_user_avatars"] = "";
         $user_data["no_private_messages"] = "";
-        $user_data["hide_comments"] = "";
-        $user_data["thematic_per_default"] = "";
         $user_data["ignore_new_guests"] = "";
         $user_data["ignore_guests_blacklist"] = "";
         $user_data["ignore_guests_whitelist"] = "";
@@ -7845,7 +7908,7 @@ abstract class ForumManager
         $uid = $dbw->escape($uid);
         
         if (!$dbw->execute_query("select
-                             id, login, user_name, email, hide_email, message, homepage, signature, activated, approved, hidden, hide_comments, thematic_per_default,
+                             id, login, user_name, email, hide_email, message, homepage, signature, activated, approved, hidden,
                              rating_blocked, is_admin, privileged_topic_moderator, privileged, global_ban_allowed, show_ip, location, info, skin, interface_language, notify_citation,
                              notify_about_new_users, notify_on_words, words_to_notify, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, no_private_messages,
                              ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist, 
@@ -7924,9 +7987,6 @@ abstract class ForumManager
             $user_data["hide_user_info"] = $dbw->field_by_name("hide_user_info");
             $user_data["hide_user_avatars"] = $dbw->field_by_name("hide_user_avatars");
             $user_data["no_private_messages"] = $dbw->field_by_name("no_private_messages");
-            
-            $user_data["hide_comments"] = $dbw->field_by_name("hide_comments");
-            $user_data["thematic_per_default"] = $dbw->field_by_name("thematic_per_default");
             
             $user_data["ignores_all_guests"] = $dbw->field_by_name("ignore_guests_whitelist"); // will be cleared if whitelist is not empty
             $user_data["ignore_new_guests"] = $dbw->field_by_name("ignore_new_guests");
@@ -9729,8 +9789,6 @@ abstract class ForumManager
         $hide_user_info = reqvar_empty("hide_user_info") ? "0" : "1";
         $hide_user_avatars = reqvar_empty("hide_user_avatars") ? "0" : "1";
         $no_private_messages = reqvar_empty("no_private_messages") ? "0" : "1";
-        $hide_comments = reqvar_empty("hide_comments") ? "0" : "1";
-        $thematic_per_default = reqvar_empty("thematic_per_default") ? "0" : "1";
         $turnoff_events = reqvar_empty("turnoff_events") ? "0" : "1";
         $turnoff_personal_appeals = reqvar_empty("turnoff_personal_appeals") ? "0" : "1";
         $send_notifications = reqvar_empty("send_notifications") ? "0" : "1";
@@ -9820,8 +9878,6 @@ abstract class ForumManager
               hide_user_info = $hide_user_info,
               hide_user_avatars = $hide_user_avatars,
               no_private_messages = $no_private_messages,
-              hide_comments = $hide_comments,
-              thematic_per_default = $thematic_per_default,
               ignore_new_guests = $ignore_new_guests,
               ignore_guests_blacklist = $ignore_guests_blacklist,
               ignore_guests_whitelist = $ignore_guests_whitelist,
@@ -11364,6 +11420,16 @@ abstract class ForumManager
                 $sys_msg = "MSG(MsgProfiledModeTurnedOff)";
                 $imsg = text("MsgProfiledModeTurnedOff");
                 break;
+            case "blog_topic_on":
+                $set_statement = "profiled_topic = 2";
+                $sys_msg = "MSG(MsgBlogModeTurnedOn)";
+                $imsg = text("MsgBlogModeTurnedOn");
+                break;
+            case "blog_topic_off":
+                $set_statement = "profiled_topic = 0";
+                $sys_msg = "MSG(MsgBlogModeTurnedOff)";
+                $imsg = text("MsgBlogModeTurnedOff");
+                break;
         }
         
         if ($action == "pin_topic") {
@@ -12452,7 +12518,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id,
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
@@ -12507,7 +12573,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post_subscription.user_id,
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
                                       inner join {$prfx}_post_subscription on ({$prfx}_post.id = {$prfx}_post_subscription.post_id)
@@ -12568,7 +12634,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_user.id user_id,
                                       email, user_name, last_host, send_notifications, interface_language, words_to_notify,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
                                       inner join {$prfx}_topic on ({$prfx}_topic.id = {$prfx}_post.topic_id)
@@ -20252,7 +20318,7 @@ abstract class ForumManager
         $topic_name = $dbw->field_by_name("name");
         $is_thematic = !$dbw->field_by_name("is_comment");
         $is_adult = $dbw->field_by_name("is_adult") == 1;
-        $profiled_topic = $dbw->field_by_name("profiled_topic") == 1;
+        $profiled_topic = $dbw->field_by_name("profiled_topic");
         $message = Emoji::Decode($dbw->field_by_name("text_content"));
         
         $dbw->free_result();
@@ -21136,9 +21202,9 @@ abstract class ForumManager
             
             $dbw->free_result();
             
-            if (!$dbw->execute_query("select {$prfx}_user.id as user_id,
+            if (!$dbw->execute_query("select {$prfx}_user.id as user_id, {$prfx}_post.topic_id,
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      {$prfx}_ignored_topics.topic_id topic_ignored, hide_comments, ignore_guests_whitelist
+                                      {$prfx}_ignored_topics.topic_id topic_ignored, ignore_guests_whitelist
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.user_name in ($in_list) and {$prfx}_user.turnoff_personal_appeals = 0)
                                       inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -21164,7 +21230,7 @@ abstract class ForumManager
                 }
                 
                 // It is a comment post, and the user does not want to see comments
-                if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+                if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("topic_id")]) && !empty($is_comment)) {
                     continue;
                 }
                 
@@ -21191,7 +21257,7 @@ abstract class ForumManager
         $matched_rule = "";
         $this->get_white_list_ips($ips, $ip_rules);
         if (count($appealed_users) > 0 && !$this->is_logged_in() &&
-            !$this->is_ip_whitelisted(val_or_empty($_SERVER["REMOTE_ADDR"]), $ip_rules, $matched_rule) &&
+            !$this->is_ip_whitelisted(System::getIPAddress(), $ip_rules, $matched_rule) &&
             $diff = $this->check_guest_read_marker($dbw, $READ_MARKER)) {
             MessageHandler::setWarning(sprintf(text("ErrMessageGuestAppealsRestricted"), format_duration($diff)));
             $dbw->rollback_transaction();
@@ -21400,7 +21466,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id,
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
@@ -21428,7 +21494,7 @@ abstract class ForumManager
                 }
                 
                 // It is a comment post, and the user does not want to see comments
-                if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+                if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("citated_topic_id")]) && !empty($is_comment)) {
                     continue;
                 }
                 
@@ -21455,7 +21521,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post_subscription.user_id,
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
                                       inner join {$prfx}_post_subscription on ({$prfx}_post.id = {$prfx}_post_subscription.post_id)
@@ -21484,7 +21550,7 @@ abstract class ForumManager
                 }
                 
                 // It is a comment post, and the user does not want to see comments
-                if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+                if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("citated_topic_id")]) && !empty($is_comment)) {
                     continue;
                 }
                 
@@ -21514,9 +21580,9 @@ abstract class ForumManager
         
         $word_subscribers = array();
         
-        if (!$dbw->execute_query("select {$prfx}_user.id user_id,
+        if (!$dbw->execute_query("select {$prfx}_user.id user_id, {$prfx}_post.topic_id,
                                       email, user_name, last_host, send_notifications, interface_language, words_to_notify,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
                                       inner join {$prfx}_topic on ({$prfx}_topic.id = {$prfx}_post.topic_id)
@@ -21548,7 +21614,7 @@ abstract class ForumManager
             }
             
             // It is a comment post, and the user does not want to see comments
-            if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+            if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("topic_id")]) && !empty($is_comment)) {
                 continue;
             }
             
@@ -21911,7 +21977,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\)0-9!%:\$€₽&¥¥£Ұ₴，]+/u", $author, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\),0-9!%:\$€₽&¥¥£Ұ₴，]+/u", $author, $matches)) {
             $symbols = $matches[0];
           
             return false;
@@ -21957,7 +22023,7 @@ abstract class ForumManager
             $BB_PARSER_VERSION = 1;
         }
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         
         $prfx = $dbw->escape(System::getDBPrefix());
         $author = $dbw->quotes_or_null($this->get_status_user_name());
@@ -22155,7 +22221,7 @@ abstract class ForumManager
             return false;
         }
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         
         if (!$this->check_post_ip($ip)) {
             return false;
@@ -22165,17 +22231,17 @@ abstract class ForumManager
         
         if (reqvar_empty("login_active")) {
             if (reqvar_empty("author", true)) {
-            MessageHandler::setError(text("ErrAuthorNameEmpty"));
-            MessageHandler::setErrorElement("author");
-            return false;
-        }
-        
-        if (utf8_strlen(reqvar("author")) > $settings["max_user_name_symbols"]) {
-            MessageHandler::setError(sprintf(text("ErrUserNameTooLong"), $settings["max_user_name_symbols"]));
-            MessageHandler::setErrorElement("author");
-            return false;
-        }
-        
+                MessageHandler::setError(text("ErrAuthorNameEmpty"));
+                MessageHandler::setErrorElement("author");
+                return false;
+            }
+            
+            if (utf8_strlen(reqvar("author")) > $settings["max_user_name_symbols"]) {
+                MessageHandler::setError(sprintf(text("ErrUserNameTooLong"), $settings["max_user_name_symbols"]));
+                MessageHandler::setErrorElement("author");
+                return false;
+            }
+            
             $symbols = "";
             if (!$this->check_author(reqvar("author"), $symbols)) {
                 $error = text("ErrStringContainsInvalidSymbols");
@@ -22443,7 +22509,7 @@ abstract class ForumManager
         $matched_rule = "";
         $this->get_white_list_ips($ips, $ip_rules);
         if ($restricted_guest_mode && !$this->is_logged_in()) {
-            if (!$this->is_ip_whitelisted(val_or_empty($_SERVER["REMOTE_ADDR"]), $ip_rules, $matched_rule) &&
+            if (!$this->is_ip_whitelisted(System::getIPAddress(), $ip_rules, $matched_rule) &&
                 $diff = $this->check_guest_read_marker($dbw, $READ_MARKER)) {
                 MessageHandler::setWarning(sprintf(text("ErrMessageGuestRestricted"), format_duration($diff)));
                 return false;
@@ -22581,6 +22647,8 @@ abstract class ForumManager
             $subject = $dbw->quotes_or_null($subject);
             $poll_comment = $dbw->quotes_or_null($poll_comment);
             
+            $is_blog = reqvar_empty("blog") ? "0" : "2";
+
             $publish_delay = reqvar_empty("publish_delay") ? "0" : "1";
             $request_moderation = reqvar_empty("request_moderation") ? "0" : "1";
             if (!$this->is_logged_in() || $this->is_admin() || $this->is_forum_moderator($fid)) {
@@ -22592,8 +22660,8 @@ abstract class ForumManager
                 $no_guests = 0;
             }
 
-            $query = "insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker, user_marker, is_private, is_poll, poll_comment, poll_results_delayed, has_pinned_post, publish_delay, request_moderation, no_guests)
-                values ($fid, $uid, $author, $subject, '$now', '$rm', $user_marker, $is_private, $is_poll, $poll_comment, $poll_results_delayed, $is_pinned, $publish_delay, $request_moderation, $no_guests)";
+            $query = "insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker, user_marker, is_private, is_poll, poll_comment, poll_results_delayed, has_pinned_post, publish_delay, request_moderation, no_guests, profiled_topic)
+                values ($fid, $uid, $author, $subject, '$now', '$rm', $user_marker, $is_private, $is_poll, $poll_comment, $poll_results_delayed, $is_pinned, $publish_delay, $request_moderation, $no_guests, $is_blog)";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
@@ -23071,9 +23139,9 @@ abstract class ForumManager
             
             $dbw->free_result();
             
-            if (!$dbw->execute_query("select {$prfx}_user.id as user_id,
+            if (!$dbw->execute_query("select {$prfx}_user.id as user_id, {$prfx}_post.topic_id,
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      {$prfx}_ignored_topics.topic_id topic_ignored, hide_comments, ignore_guests_whitelist
+                                      {$prfx}_ignored_topics.topic_id topic_ignored, ignore_guests_whitelist
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.user_name in ($in_list) and {$prfx}_user.turnoff_personal_appeals = 0)
                                       inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -23099,7 +23167,7 @@ abstract class ForumManager
                 }
                 
                 // It is a comment post, and the user does not want to see comments
-                if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+                if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("topic_id")]) && !empty($is_comment)) {
                     continue;
                 }
                 
@@ -23122,7 +23190,7 @@ abstract class ForumManager
         }
         
         if (count($appealed_users) > 0 && !$this->is_logged_in() &&
-            !$this->is_ip_whitelisted(val_or_empty($_SERVER["REMOTE_ADDR"]), $ip_rules, $matched_rule) &&
+            !$this->is_ip_whitelisted(System::getIPAddress(), $ip_rules, $matched_rule) &&
             $diff = $this->check_guest_read_marker($dbw, $READ_MARKER)) {
             MessageHandler::setWarning(sprintf(text("ErrMessageGuestAppealsRestricted"), format_duration($diff)));
             $dbw->rollback_transaction();
@@ -23224,6 +23292,7 @@ abstract class ForumManager
             $return_post = $this->get_next_message($tid, reqvar("return_post"));
         }
         
+        $response["created_post"] = $post_id;
         $response["return_post"] = $return_post;
         
         $response["target_url"] = "topic.php?fid=$fid";
@@ -23254,8 +23323,9 @@ abstract class ForumManager
         // get subscribed users
         // if a user ignores the current user or guests, do not notify him
         
-        if (!$dbw->execute_query("select {$prfx}_topic_subscription.user_id, email, user_name, last_host, send_notifications, interface_language,
-                             ignore_guests_whitelist, hide_comments, {$prfx}_ignored_topics.topic_id topic_ignored
+        if (!$dbw->execute_query("select {$prfx}_topic_subscription.user_id, 
+                             email, user_name, last_host, send_notifications, interface_language,
+                             ignore_guests_whitelist, {$prfx}_ignored_topics.topic_id topic_ignored
                              from {$prfx}_topic_subscription
                              inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
                              left join {$prfx}_ignored_topics on ({$prfx}_user.id = {$prfx}_ignored_topics.user_id and {$prfx}_ignored_topics.topic_id = $tid)
@@ -23274,7 +23344,7 @@ abstract class ForumManager
             }
             
             // It is a comment post, and the user does not want to see comments
-            if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+            if (!empty($_SESSION["filtered_topics"][$tid]) && !empty($is_comment)) {
                 continue;
             }
             
@@ -23303,9 +23373,9 @@ abstract class ForumManager
             
             // user subscribed to own messages
             
-            if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id,
+            if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id, 
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
@@ -23338,7 +23408,7 @@ abstract class ForumManager
                 }
                 
                 // It is a comment post, and the user does not want to see comments
-                if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+                if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("citated_topic_id")]) && !empty($is_comment)) {
                     continue;
                 }
                 
@@ -23366,7 +23436,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post_subscription.user_id,
                                       email, user_name, last_host, send_notifications, interface_language,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
                                       inner join {$prfx}_post_subscription on ({$prfx}_post.id = {$prfx}_post_subscription.post_id)
@@ -23395,7 +23465,7 @@ abstract class ForumManager
                 }
                 
                 // It is a comment post, and the user does not want to see comments
-                if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+                if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("citated_topic_id")]) && !empty($is_comment)) {
                     continue;
                 }
                 
@@ -23426,9 +23496,9 @@ abstract class ForumManager
         
         $word_subscribers = array();
         
-        if (!$dbw->execute_query("select {$prfx}_user.id user_id,
+        if (!$dbw->execute_query("select {$prfx}_user.id user_id, {$prfx}_post.topic_id,
                                       email, user_name, last_host, send_notifications, interface_language, words_to_notify,
-                                      hide_comments, ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
+                                      ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
                                       inner join {$prfx}_topic on ({$prfx}_topic.id = {$prfx}_post.topic_id)
@@ -23460,7 +23530,7 @@ abstract class ForumManager
             }
             
             // It is a comment post, and the user does not want to see comments
-            if ($dbw->field_by_name("hide_comments") && !empty($is_comment)) {
+            if (!empty($_SESSION["filtered_topics"][$dbw->field_by_name("topic_id")]) && !empty($is_comment)) {
                 continue;
             }
             
@@ -24765,7 +24835,7 @@ abstract class ForumManager
         } // if logged user
         
         // guests and IP
-        $ip = $dbw->escape(val_or_empty($_SERVER["REMOTE_ADDR"]));
+        $ip = $dbw->escape(System::getIPAddress());
         
         if (!$dbw->execute_query("select block_expires, block_reason
                              from {$prfx}_ip_blocked
@@ -24805,9 +24875,9 @@ abstract class ForumManager
         
         if ($blocked) {
             if (!empty($block_expires)) {
-                MessageHandler::setError(sprintf(text("ErrIPIsBlockedUntil"), val_or_empty($_SERVER["REMOTE_ADDR"]), $block_expires, $block_time_left), $block_reason);
+                MessageHandler::setError(sprintf(text("ErrIPIsBlockedUntil"), System::getIPAddress(), $block_expires, $block_time_left), $block_reason);
             } else {
-                MessageHandler::setError(sprintf(text("ErrIPIsBlocked"), val_or_empty($_SERVER["REMOTE_ADDR"])), $block_reason);
+                MessageHandler::setError(sprintf(text("ErrIPIsBlocked"), System::getIPAddress()), $block_reason);
             }
             return true;
         }
@@ -25333,12 +25403,6 @@ abstract class ForumManager
                 $strong_ignored = true;
             }
             
-            if ($dbw->field_by_name("profiled_topic") && $dbw->field_by_name("is_comment") &&
-                $dbw->field_by_name("read_marker") != $READ_MARKER && !empty($_SESSION["hide_comments"])
-            ) {
-                $strong_ignored = true;
-            }
-            
             if ($this->is_topic_moderator($tid) || $this->is_forum_moderator($fid) || empty($_SESSION["hide_ignored"])) {
                 $strong_ignored = false;
             }
@@ -25373,6 +25437,8 @@ abstract class ForumManager
             
             $deleted_where_appendix = $this->get_deleted_where_appendix($dbw, $prfx, $show_deleted, true);
             $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
+            // We do not use ignore_comment_where_appendix by direct going to the post,
+            // in that mode the comemnts are shown
             
             $where = "where topic_id = $tid and {$prfx}_post.id > $pid and {$prfx}_post.pinned <> 1
                            $ignore_post_where_appendix
@@ -25402,6 +25468,7 @@ abstract class ForumManager
 
             $where = "where topic_id = $tid and {$prfx}_post.id < $pid and {$prfx}_post.pinned <> 1
                            $ignore_post_where_appendix
+                           $ignore_comment_where_appendix
                            $deleted_where_appendix";
 
             if (!$dbw->execute_query($this->get_query_previous_valid_topic_post($prfx, $where))) {
@@ -25826,7 +25893,7 @@ abstract class ForumManager
             $new_in_list = trim($new_in_list, ", ");
             
             $now = $dbw->format_datetime(time() - 1);
-            $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+            $ip = System::getIPAddress();
             $ip = $dbw->escape($ip);
             
             $query = "insert into {$prfx}_topic_read_markers
@@ -27046,7 +27113,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         $author = $dbw->quotes_or_null($this->get_user_name());
@@ -27139,7 +27206,7 @@ abstract class ForumManager
         }
         
         $agent = $dbw->quotes_or_null($agent);
-        $ip = $dbw->quotes_or_null(val_or_empty($_SERVER["REMOTE_ADDR"]));
+        $ip = $dbw->quotes_or_null(System::getIPAddress());
         
         $uri = val_or_empty($_SERVER["REQUEST_URI"]);
         $uri = str_replace(get_url_path(), "", substr($uri, 0, 1800));
@@ -27372,7 +27439,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         $author = $dbw->quotes_or_null($this->get_user_name());
@@ -27511,7 +27578,7 @@ abstract class ForumManager
         
         // if the marker already exists, nothing to do, we have already updated it just now
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         // insert the new marker
@@ -27630,7 +27697,7 @@ abstract class ForumManager
         
         $last_post_read_date = $dbw->format_datetime($last_post_read_date);
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         if (!empty($topic_last_read_date)) {
@@ -27879,6 +27946,57 @@ abstract class ForumManager
     } // has_ignored
     
     //-----------------------------------------------------------------
+    function get_ignore_comment_where_appendix($dbw, $prfx, $force_display_comments = 0)
+    {
+        global $READ_MARKER;
+        
+        // if we search for replies to a message, we show also comments even if not desired in normal mode.
+        // if we want to see comments to the thematic posts, we show also comments event if not desired in normal mode.
+        if ($force_display_comments == 1) {
+            return ""; 
+        }  
+        
+        $filtered_topics = array();
+        if (!empty($_SESSION["filtered_topics"])) {
+            $filtered_topics = array_filter($_SESSION["filtered_topics"], function ($value) {
+                return $value != 0;
+            });
+        }
+        
+        if (empty($filtered_topics)) {
+            return "";
+        }
+
+        $in_list = implode(", ", array_keys($filtered_topics));
+        
+        return " and ({$prfx}_topic.profiled_topic = 0 or {$prfx}_topic.id not in ($in_list) or {$prfx}_post.is_comment <> 1)";
+    } // get_ignore_comment_where_appendix
+
+    //-----------------------------------------------------------------
+    function get_calc_ignore_comment_where_appendix($dbw, $prfx)
+    {
+        $filtered_topics = array();
+        if (!empty($_SESSION["filtered_topics"])) {
+            $filtered_topics = array_filter($_SESSION["filtered_topics"], function ($value) {
+                return $value != 0;
+            });
+        }
+
+        // The user does not ignore anything.
+        if (empty($filtered_topics)) {
+            return "";
+        }
+
+        if (!empty($filtered_topics)) {
+            $in_list = implode(", ", array_keys($filtered_topics));
+
+            $ignore_comment_where_appendix = " and ({$prfx}_topic.profiled_topic <> 0 and {$prfx}_topic.id in ($in_list) and {$prfx}_post.is_comment = 1)";
+        }
+
+        return $ignore_comment_where_appendix;        
+    } // get_calc_ignore_comment_where_appendix
+    
+    //-----------------------------------------------------------------
     function get_ignore_post_where_appendix($dbw, $prfx, $force_exclusion_of_ignored = 0)
     {
         global $READ_MARKER;
@@ -27887,8 +28005,7 @@ abstract class ForumManager
         if (empty($_SESSION["ignored_users"]) && 
             (empty($_SESSION["ignore_guests_blacklist"]) || empty($_SESSION["ignored_guests_blacklist"])) && 
             empty($_SESSION["ignore_guests_whitelist"]) && 
-            empty($_SESSION["ignore_new_guests"]) && 
-            (empty($_SESSION["hide_comments"]) || $force_exclusion_of_ignored == 3)
+            empty($_SESSION["ignore_new_guests"])
            ) {
             return "";
         }
@@ -27957,21 +28074,9 @@ abstract class ForumManager
                 $ignore_clause .= "({$prfx}_post.user_id is not NULL or {$prfx}_post.author in ($guest_in_list) or {$prfx}_post.read_marker = '$rm')";
             }
         }
-        
-        if (!empty($_SESSION["hide_comments"]) && $force_exclusion_of_ignored <> 3) {
-            if (!empty($ignore_clause)) {
-                $ignore_clause .= "\n and \n";
-            }
 
-            $ignore_clause .= "({$prfx}_topic.profiled_topic <> 1 or {$prfx}_post.is_comment <> 1 or {$prfx}_post.read_marker = '$rm')";
-        }
-        
-        // The moderators must see what happens in the topics where they are responsible.
-        // Such topics are not left out, but just colored in grey.
-
-        // force_exclusion_of_ignored = 1 - jump to the first new non-ignored post
-        // force_exclusion_of_ignored = 2 - filter out the ignored posts in the search also for the modeators
-        // force_exclusion_of_ignored = 3 - do not filter comments
+        // force_exclusion_of_ignored = 1 - in the search, we exclude the ignored event in the week ignore mode or if we need to jump to the first new non-ignored post
+        // force_exclusion_of_ignored = 2 - we want to see only non ignored in the search, hide the ignored even if the user is moderator
         
         $or_appendix = "";
         
@@ -27982,6 +28087,10 @@ abstract class ForumManager
         $or_appendix .= "\n" . "    or exists (select 1 from {$prfx}_topic where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_topic.forum_id in (select id from {$prfx}_forum where disable_ignore = 1))";
 
         if ($force_exclusion_of_ignored <> 2) {
+            // The moderators must see what happens in the topics where they are responsible.
+            // Such topics are not left out, but just colored in grey.
+            
+            // Exception: force_exclusion_of_ignored = 2 - we want to see only non ignored in the search, hide the ignored even if the user is moderator
             if (!empty($_SESSION["forum_moderator"])) {
                 $in_list = implode(", ", $_SESSION["forum_moderator"]);
                 $or_appendix .= "\n" . "    or exists (select 1 from {$prfx}_topic where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_topic.forum_id in ($in_list))";
@@ -28005,7 +28114,7 @@ abstract class ForumManager
         global $READ_MARKER;
         
         // The user does not ignore anything.
-        if (empty($_SESSION["ignored_users"]) && empty($_SESSION["ignore_guests_blacklist"]) && empty($_SESSION["ignore_guests_whitelist"]) && empty($_SESSION["ignore_new_guests"]) && empty($_SESSION["hide_comments"])) {
+        if (empty($_SESSION["ignored_users"]) && empty($_SESSION["ignore_guests_blacklist"]) && empty($_SESSION["ignore_guests_whitelist"]) && empty($_SESSION["ignore_new_guests"])) {
             return "";
         }
         
@@ -28065,14 +28174,6 @@ abstract class ForumManager
                 
                 $ignore_clause .= "({$prfx}_post.user_id is NULL and {$prfx}_post.author not in ($guest_in_list) and {$prfx}_post.read_marker <> '$rm')";
             }
-        }
-        
-        if (!empty($_SESSION["hide_comments"])) {
-            if (!empty($ignore_clause)) {
-                $ignore_clause .= "\n or \n";
-            }
-            
-            $ignore_clause .= "({$prfx}_topic.profiled_topic = 1 and {$prfx}_post.is_comment = 1 and {$prfx}_post.read_marker <> '$rm')";
         }
         
         if (empty($ignore_clause)) {
@@ -28152,6 +28253,7 @@ abstract class ForumManager
         }
         
         $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
         
         if (!$dbw->execute_query("select min({$prfx}_post.id) next_post_id
                              from {$prfx}_post
@@ -28159,6 +28261,7 @@ abstract class ForumManager
                              where topic_id = $tid $where_appendix
 
                              $ignore_post_where_appendix
+                             $ignore_comment_where_appendix
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return $next_pid;
@@ -28272,7 +28375,8 @@ abstract class ForumManager
         }
         
         $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx, 1);
-        
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
+
         $new_tracking_period = defined('NEW_TRACKING_PERIOD') ? NEW_TRACKING_PERIOD : 30;
         $mindate = $dbw->format_datetime(time() - $new_tracking_period * 24 * 3600);
         
@@ -28286,6 +28390,8 @@ abstract class ForumManager
                              $where_appendix
 
                              $ignore_post_where_appendix
+                             
+                             $ignore_comment_where_appendix
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -28313,6 +28419,8 @@ abstract class ForumManager
                              $where_appendix2
 
                              $ignore_post_where_appendix
+                             
+                             $ignore_comment_where_appendix
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -28397,7 +28505,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         $query = "update {$prfx}_forum_read_markers set
@@ -28466,7 +28574,7 @@ abstract class ForumManager
         
         // renew forum read marker
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         $query = "update {$prfx}_forum_read_markers
@@ -28654,7 +28762,7 @@ abstract class ForumManager
             return false;
         }
         
-        $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+        $ip = System::getIPAddress();
         $ip = $dbw->escape($ip);
         
         $query = "insert into {$prfx}_topic_read_markers
@@ -28772,7 +28880,7 @@ abstract class ForumManager
         if (!empty($topic_last_read_date)) {
             $topic_last_read_date_db = $dbw->format_datetime(max($topic_last_read_date, time() - $new_tracking_period * 24 * 3600));
             
-            $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
+            $ip = System::getIPAddress();
             $ip = $dbw->escape($ip);
             
             $query = "insert into {$prfx}_topic_read_markers (last_read_date, topic_id, read_marker, ip) values ('$topic_last_read_date_db', $tid, '$rm', '$ip')";
@@ -28795,6 +28903,7 @@ abstract class ForumManager
         $new_where_appendix = $this->get_new_where_appendix($prfx, $rm);
         
         $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
         
         $uid = $dbw->escape($this->get_user_id());
         if (empty($uid)) {
@@ -28822,6 +28931,8 @@ abstract class ForumManager
           $new_where_appendix
     
           $ignore_post_where_appendix
+          
+          $ignore_comment_where_appendix
         ";
         
         if (!$dbw->execute_query($query)) {
@@ -29839,6 +29950,8 @@ abstract class ForumManager
         $action_list["disallow_guests"] = text("ActionTopicGuestsDisallowed");
         $action_list["profiled_topic_on"] = text("ActionTopicProfiledModeTurnedOn");
         $action_list["profiled_topic_off"] = text("ActionTopicProfiledModeTurnedOff");
+        $action_list["blog_topic_on"] = text("ActionTopicBlogModeTurnedOn");
+        $action_list["blog_topic_off"] = text("ActionTopicBlogModeTurnedOff");
 
         $action_list["create_forum"] = text("ActionForumCreated");
         $action_list["delete_forum"] = text("ActionForumDeleted");
@@ -30366,8 +30479,6 @@ abstract class ForumManager
         set_cookie("q_hide_user_info", val_or_empty($_SESSION["hide_user_info"]), time() + 90 * 24 * 3600);
         set_cookie("q_hide_user_avatars", val_or_empty($_SESSION["hide_user_avatars"]), time() + 90 * 24 * 3600);
         set_cookie("q_hide_ignored", val_or_empty($_SESSION["hide_ignored"]), time() + 90 * 24 * 3600);
-        set_cookie("q_hide_comments", val_or_empty($_SESSION["hide_comments"]), time() + 90 * 24 * 3600);
-        set_cookie("q_thematic_per_default", val_or_empty($_SESSION["thematic_per_default"]), time() + 90 * 24 * 3600);
         set_cookie("q_skin", val_or_empty($_SESSION["skin"]), time() + 90 * 24 * 3600);
         set_cookie("q_custom_css", val_or_empty($_SESSION["custom_css"]), time() + 90 * 24 * 3600);
         set_cookie("q_interface_language", current_language(), time() + 90 * 24 * 3600);
@@ -30419,6 +30530,12 @@ abstract class ForumManager
         }
         set_cookie("q_ignored_topics", $ignored_topics, time() + 90 * 24 * 3600);
         
+        $filtered_topics = "";
+        if (!empty($_SESSION["filtered_topics"])) {
+            $filtered_topics = implode("\n", $_SESSION["filtered_topics"]);
+        }
+        set_cookie("q_filtered_topics", $filtered_topics, time() + 90 * 24 * 3600);
+
         $favourite_topics = "";
         if (!empty($_SESSION["favourite_topics"])) {
             $favourite_topics = implode("\n", $_SESSION["favourite_topics"]);
@@ -30484,8 +30601,6 @@ abstract class ForumManager
         $_SESSION["donot_hide_adult_pictures"] = get_cookie("q_donot_hide_adult_pictures");
         $_SESSION["hide_user_info"] = get_cookie("q_hide_user_info");
         $_SESSION["hide_user_avatars"] = get_cookie("q_hide_user_avatars");
-        $_SESSION["hide_comments"] = get_cookie("q_hide_comments");
-        $_SESSION["thematic_per_default"] = get_cookie("q_thematic_per_default");
         
         $_SESSION["skin"] = get_cookie("q_skin");
         $this->check_skin($_SESSION["skin"]);
@@ -30566,6 +30681,18 @@ abstract class ForumManager
             }
         }
         
+        $_SESSION["filtered_topics"] = array();
+        if (get_cookie("q_filtered_topics") != "") {
+            $filtered_topics = preg_split("/[\n\r]+/", get_cookie("q_filtered_topics"), -1, PREG_SPLIT_NO_EMPTY);
+            foreach ($filtered_topics as $tid) {
+                if (!is_numeric($tid)) {
+                    continue;
+                }
+                
+                $_SESSION["filtered_topics"][$tid] = $tid;
+            }
+        }
+
         $_SESSION["favourite_topics"] = array();
         if (get_cookie("q_favourite_topics") != "") {
             $favourite_topics = preg_split("/[\n\r]+/", get_cookie("q_favourite_topics"), -1, PREG_SPLIT_NO_EMPTY);
@@ -30691,9 +30818,6 @@ abstract class ForumManager
         $user_data["donot_hide_adult_pictures"] = val_or_empty($_SESSION["donot_hide_adult_pictures"]);
         $user_data["hide_user_info"] = val_or_empty($_SESSION["hide_user_info"]);
         $user_data["hide_user_avatars"] = val_or_empty($_SESSION["hide_user_avatars"]);
-        
-        $user_data["hide_comments"] = val_or_empty($_SESSION["hide_comments"]);
-        $user_data["thematic_per_default"] = val_or_empty($_SESSION["thematic_per_default"]);
         
         $user_data["custom_css"] = val_or_empty($_SESSION["custom_css"]);
         
@@ -30852,9 +30976,6 @@ abstract class ForumManager
         $_SESSION["donot_hide_adult_pictures"] = reqvar_empty("donot_hide_adult_pictures") ? "0" : "1";
         $_SESSION["hide_user_info"] = reqvar_empty("hide_user_info") ? "0" : "1";
         $_SESSION["hide_user_avatars"] = reqvar_empty("hide_user_avatars") ? "0" : "1";
-        
-        $_SESSION["hide_comments"] = reqvar_empty("hide_comments") ? "0" : "1";
-        $_SESSION["thematic_per_default"] = reqvar_empty("thematic_per_default") ? "0" : "1";
         
         $_SESSION["ignore_new_guests"] = reqvar_empty("ignore_new_guests") ? "0" : "1";
         $_SESSION["ignore_guests_blacklist"] = reqvar_empty("ignore_guests_blacklist") ? "0" : "1";
@@ -32031,26 +32152,67 @@ abstract class ForumManager
             $in_list = "NULL";
         }
         
-        $now = $dbw->format_datetime(time());
+        // next after last post
+
+        $first_post = min(array_keys($post_list));
+        if (empty($first_post)) {
+            $first_post = "NULL";
+        }
+
+        $last_post = max(array_keys($post_list));
+        if (empty($last_post)) {
+            $last_post = "NULL";
+        }
         
-        // my blocks
+        if (!$dbw->execute_query($this->get_query_next_post($prfx, $tid, $last_post))) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        if ($dbw->fetch_row()) {
+            $last_post = $dbw->field_by_name("id");
+        }
+
+        $dbw->free_result();
+
+        // next posts
+        
+        if (!$dbw->execute_query($this->get_query_check_comments($prfx, $tid, $first_post, $last_post))) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        while ($dbw->fetch_row()) {
+            $pid = $dbw->field_by_name("id");
+            if (empty($post_list[$pid]) || $dbw->field_by_name("is_comment")) {
+                continue;
+            }
+            
+            $post_list[$pid]["has_comments"] = $dbw->field_by_name("has_comments");
+        }
+
+        $dbw->free_result();
+        
+        $now = $dbw->format_datetime(time());
+
+        // additional data
         
         if (!$dbw->execute_query("select {$prfx}_post.id,
-                                         {$prfx}_post.is_system,
-                                        {$prfx}_forum.no_guests forum_no_guests,
-                                        {$prfx}_topic.no_guests topic_no_guests,
-                                        {$prfx}_topic.closed topic_closed,
-                                        {$prfx}_forum.closed forum_closed,
-                                        {$prfx}_forum_blocked.block_expires forum_block_expires,
-                                        {$prfx}_forum_blocked.user_id forum_blocked,
-                                        {$prfx}_topic_blocked.user_id topic_blocked
-                             from {$prfx}_post
-                                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
-                                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                                  left join {$prfx}_forum_blocked on ({$prfx}_forum_blocked.user_id = $current_uid and {$prfx}_forum_blocked.forum_id = {$prfx}_forum.id)
-                                  left join {$prfx}_topic_blocked on ({$prfx}_topic_blocked.user_id = $current_uid and {$prfx}_topic_blocked.topic_id = {$prfx}_topic.id)
-                             where {$prfx}_post.id in ($in_list)
-                             ")) {
+                                  {$prfx}_post.is_system,
+                                  {$prfx}_forum.no_guests forum_no_guests,
+                                  {$prfx}_topic.no_guests topic_no_guests,
+                                  {$prfx}_topic.closed topic_closed,
+                                  {$prfx}_forum.closed forum_closed,
+                                  {$prfx}_forum_blocked.block_expires forum_block_expires,
+                                  {$prfx}_forum_blocked.user_id forum_blocked,
+                                  {$prfx}_topic_blocked.user_id topic_blocked
+                       from {$prfx}_post
+                            inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                            inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                            left join {$prfx}_forum_blocked on ({$prfx}_forum_blocked.user_id = $current_uid and {$prfx}_forum_blocked.forum_id = {$prfx}_forum.id)
+                            left join {$prfx}_topic_blocked on ({$prfx}_topic_blocked.user_id = $current_uid and {$prfx}_topic_blocked.topic_id = {$prfx}_topic.id)
+                       where {$prfx}_post.id in ($in_list)
+                       ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -32277,7 +32439,8 @@ abstract class ForumManager
             $forum_restriction_appendix = " and $forum_restriction_appendix";
         }
         
-        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx, 3);
+        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
         
         $query = "select parent_post_id, count(*) cnt
               from {$prfx}_post_hierarchy
@@ -32289,6 +32452,7 @@ abstract class ForumManager
               and ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = $current_uid))
               $forum_restriction_appendix
               $ignore_post_where_appendix
+              $ignore_comment_where_appendix
               group by parent_post_id";
         
         if (!$dbw->execute_query($query)) {
@@ -32711,7 +32875,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         
-        $ip = $dbw->quotes_or_null(val_or_empty($_SERVER["REMOTE_ADDR"]));
+        $ip = $dbw->quotes_or_null(System::getIPAddress());
         
         $query = "insert into {$prfx}_load_statistics (dt, url, user_id, user_name, ip, exec_time, topic_rm_count, forum_rm_count)
               values
@@ -33388,8 +33552,6 @@ abstract class ForumManager
         $data["hide_user_info"] = val_or_empty($_SESSION["hide_user_info"]);
         $data["hide_user_avatars"] = val_or_empty($_SESSION["hide_user_avatars"]);
         $data["hide_ignored"] = val_or_empty($_SESSION["hide_ignored"]);
-        $data["hide_comments"] = val_or_empty($_SESSION["hide_comments"]);
-        $data["thematic_per_default"] = val_or_empty($_SESSION["thematic_per_default"]);
         $data["custom_css"] = val_or_empty($_SESSION["custom_css"]);
         $data["skin"] = val_or_empty($_SESSION["skin"]);
         
@@ -33424,6 +33586,10 @@ abstract class ForumManager
             $data["ignored_topics"] = $_SESSION["ignored_topics"];
         }
         
+        if (!empty($_SESSION["filtered_topics"])) {
+            $data["filtered_topics"] = $_SESSION["filtered_topics"];
+        }
+
         if (!empty($_SESSION["favourite_topics"])) {
             $data["favourite_topics"] = $_SESSION["favourite_topics"];
         }
@@ -33508,8 +33674,6 @@ abstract class ForumManager
         $_SESSION["hide_user_info"] = val_or_empty($data["hide_user_info"]);
         $_SESSION["hide_user_avatars"] = val_or_empty($data["hide_user_avatars"]);
         $_SESSION["hide_ignored"] = val_or_empty($data["hide_ignored"]);
-        $_SESSION["hide_comments"] = val_or_empty($data["hide_comments"]);
-        $_SESSION["thematic_per_default"] = val_or_empty($data["thematic_per_default"]);
         $_SESSION["ignore_new_guests"] = val_or_empty($data["ignore_new_guests"]);
         $_SESSION["ignore_guests_blacklist"] = val_or_empty($data["ignore_guests_blacklist"]);
         $_SESSION["ignore_guests_whitelist"] = val_or_empty($data["ignore_guests_whitelist"]);
@@ -33560,6 +33724,11 @@ abstract class ForumManager
             $_SESSION["ignored_topics"] = $data["ignored_topics"];
         }
         
+        $_SESSION["filtered_topics"] = array();
+        if (!empty($data["filtered_topics"])) {
+            $_SESSION["filtered_topics"] = $data["filtered_topics"];
+        }
+
         $_SESSION["favourite_topics"] = array();
         if (!empty($data["favourite_topics"])) {
             $_SESSION["favourite_topics"] = $data["favourite_topics"];
@@ -33701,7 +33870,7 @@ abstract class ForumManager
         $now = $dbw->format_datetime(time());
         
         foreach ($ips as $ip) {
-            $ip = $dbw->escape($ip);
+            $ip = $dbw->escape(System::hashIPAddress($ip));
             
             $query = "select 1 from {$prfx}_tor_ips where ip = '$ip'";
             if (!$dbw->execute_query($query)) {
@@ -34990,6 +35159,13 @@ abstract class ForumManager
                 $moderatable = true;
             }
             
+            $profiled_topic = $dbw->field_by_name("profiled_topic");
+            // If the topic is a blog (profiled_topic == 2) the type of the message can be chosen only by the author of the topic.
+            // In that case, we set it to 1.
+            if ($profiled_topic == 2 && (($dbw->field_by_name("topic_author_id") == $current_uid && !empty($uid)) || ($read_marker == $READ_MARKER && empty($uid)) || $moderatable)) {
+                $profiled_topic = 1;
+            }
+
             $ip = $dbw->field_by_name("ip");
             if (!$this->is_admin() && 
                 (!$this->is_forum_moderator($dbw->field_by_name("forum_id")) || !$this->may_see_ip()) &&
@@ -35032,7 +35208,7 @@ abstract class ForumManager
                 "disable_ignore" => $dbw->field_by_name("disable_ignore"),
                 "topic_name" => $dbw->field_by_name("topic_name"),
                 "topic_private" => $is_private,
-                "profiled_topic" => $dbw->field_by_name("profiled_topic"),
+                "profiled_topic" => $profiled_topic,
                 "stringent_rules" => $dbw->field_by_name("stringent_rules"),
                 "topic_creation_date_sec" => xstrtotime($dbw->field_by_name("topic_creation_date")),
                 "topic_author" => $dbw->field_by_name("topic_author"),
@@ -35040,7 +35216,6 @@ abstract class ForumManager
                 "topic_author_read_marker" => $dbw->field_by_name("topic_author_read_marker"),
                 "author" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                 "guest_ignored" => $guest_ignored,
-                "comment_ignored" => !empty($_SESSION["hide_comments"]) && $dbw->field_by_name("is_comment") && $read_marker != $READ_MARKER,
                 "last_updated" => adjust_and_format_timezone(xstrtotime($dbw->field_by_name("last_updated")), text("DateTimeFormat")),
                 "last_updated_by" => $dbw->field_by_name("last_updated_by"),
                 "self_edited" => $dbw->field_by_name("self_edited"),
@@ -35192,10 +35367,12 @@ abstract class ForumManager
         $deleted_where_appendix = $this->get_deleted_where_appendix($dbw, $prfx, $show_deleted, true);
         
         $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
         
         $where = "where {$prfx}_post.topic_id = $tid and {$prfx}_post.pinned <> 1
                         $deleted_where_appendix
-                        $ignore_post_where_appendix";
+                        $ignore_post_where_appendix
+                        $ignore_comment_where_appendix";
         
         $order_by = "order by {$prfx}_post.id";
         $where_appendix = " and {$prfx}_post.id > " . $dbw->escape($pagination_info["last_page_message"]);
@@ -35300,13 +35477,15 @@ abstract class ForumManager
         $deleted_where_appendix = $this->get_deleted_where_appendix($rodbw, $prfx, $show_deleted, true, $current_post_appendix);
         
         $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($rodbw, $prfx);
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($rodbw, $prfx);
         
         $pinned_post_list = array();
 
         if (!empty($pagination_info["topic_has_pinned_post"])) {
             $where = "where {$prfx}_post.topic_id = $tid and {$prfx}_post.pinned = 1
                       $deleted_where_appendix
-                      $ignore_post_where_appendix";
+                      $ignore_post_where_appendix
+                      $ignore_comment_where_appendix";
             
             $order_by = "order by {$prfx}_post.id asc";
             if (!$rodbw->execute_query($this->get_query_topic_posts($prfx, $current_uid, $where, "", $order_by))) {
@@ -35372,7 +35551,8 @@ abstract class ForumManager
         
         $where = "where {$prfx}_post.topic_id = $tid and {$prfx}_post.pinned <> 1
                         $deleted_where_appendix
-                        $ignore_post_where_appendix";
+                        $ignore_post_where_appendix
+                        $ignore_comment_where_appendix";
                         
         if (!empty($current_post_appendix)) {
             // see comment above
@@ -37560,9 +37740,15 @@ abstract class ForumManager
         
         $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
         
+        $ignore_comment_where_appendix = "";
+        if (!empty($_SESSION["filtered_topics"][$tid])) {
+            $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
+        }
+        
         $where = "where {$prfx}_post.topic_id = $tid and {$prfx}_post.pinned <> 1
                   $deleted_where_appendix
-                  $ignore_post_where_appendix";
+                  $ignore_post_where_appendix
+                  $ignore_comment_where_appendix";
         
         $where_appendix = "";
         if (!empty($last_pid)) {
@@ -38028,7 +38214,7 @@ abstract class ForumManager
         //---------------------------------------------------------------
         if (reqvar("author_mode") == "ignoring") {
             if (!empty($author_id)) {
-            $topic_part_where .= " and exists (select 1 from {$prfx}_ignored_topics where {$prfx}_ignored_topics.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics.topic_id union select 1 from {$prfx}_ignored_topics_archive where {$prfx}_ignored_topics_archive.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics_archive.topic_id)" . "\n";
+                $topic_part_where .= " and exists (select 1 from {$prfx}_ignored_topics where {$prfx}_ignored_topics.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics.topic_id union select 1 from {$prfx}_ignored_topics_archive where {$prfx}_ignored_topics_archive.user_id = $author_id and {$prfx}_topic.id = {$prfx}_ignored_topics_archive.topic_id)" . "\n";
             } else {
                 if ($this->get_user_name() == reqvar("author") && !empty($_SESSION["ignored_topics"])) {
                     $in_list = $srdbw->escape(implode(", ", $_SESSION["ignored_topics"]));
@@ -38150,20 +38336,18 @@ abstract class ForumManager
                 }
             }
             //-------------------------------------------------------------------
-            // In these modes, we do not exclude anything even if ignored
+            // There are some modes, where we do not exclude anything even if ignored
             if (reqvar_empty("include_ignored") && 
                 !(in_array(reqvar("author_mode"), array("ignoring", "moderating", "author_likes", "author_liked", "author_dislikes", "author_disliked", "last_posts", "wrote_post")) && !reqvar_empty("author")) &&
                 reqvar_empty("rate_statistics")                 
                ) {
-                $mode = 1;
+                $mode = 1; // in the search, we exclude the ignored event in the week ignore mode
                 if (!reqvar_empty("non_ignored_by_author")) {
-                    $mode = 2;
-                }
-                if (!reqvar_empty("replies_to")) {
-                    $mode = 3;
+                    $mode = 2; // we want to see only non ignored in the search, hide the ignored even if the user is moderator
                 }
                 
                 $post_part_where .= $this->get_ignore_post_where_appendix($srdbw, $prfx, $mode);
+                $post_part_where .= $this->get_ignore_comment_where_appendix($srdbw, $prfx, reqvar_empty("replies_to") ? 0 : 1); // if we search for replies to a message, we show also comments event if not desired in normal mode
             }
             //-------------------------------------------------------------------
             if (!reqvar_empty("has_attachment")) {

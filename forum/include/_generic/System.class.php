@@ -327,6 +327,28 @@ class System
     } // generateHash
     
     //-----------------------------------------------------------------
+    static function getIPAddress()
+    {
+        return self::hashIPAddress(val_or_empty($_SERVER["REMOTE_ADDR"]));
+    } // getIPAddress
+
+    //-----------------------------------------------------------------
+    static function hashIPAddress($ip)
+    {
+        global $settings;
+
+        if (!empty($settings["hash_ip_addresses"])) {
+            $hash = hash_hmac('sha256', $ip, SALT_KEY, true);
+            $hexHash = bin2hex($hash);
+            $hashedIPv6 = implode(':', str_split($hexHash, 4));
+            $groups = explode(':', $hashedIPv6, 9);
+            $ip = implode(':', array_slice($groups, 0, 8));
+        }
+        
+        return $ip;
+    } // hashIPAddress
+
+    //-----------------------------------------------------------------
     static function generateReadmarker()
     {
         return base64_encode(md5(time() . session_id()));

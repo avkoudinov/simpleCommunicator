@@ -34,12 +34,7 @@ function reset_debug_console()
   dco.value = "";
 }
 
-function start_debug_console()
-{
-  show_debug_console(true);
-}
-
-function debug_line(str, context)
+function debug_line(str, context = '')
 {
   if(!DEBUG_MODE) return;
   
@@ -75,14 +70,7 @@ function log_line(msg)
 
 function show_log()
 {
-  var dco = document.getElementById("debug_console_output");
-  if(!dco) return;
-
-  var cs = document.getElementById("debug_console_container");
-  if(!cs) return;
+  reset_debug_console();
+  debug_line(sessionStorage.getItem('log'));
   
-  cs.style.display = "block";
-
-  dco.value = sessionStorage.getItem('log');
-  dco.scrollTop = dco.scrollHeight;
 }

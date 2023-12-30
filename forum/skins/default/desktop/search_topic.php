@@ -49,10 +49,11 @@ var is_last_page = <?php echo($pagination_info["total_count"] - $pagination_info
 <?php endif; ?>
 
 var all_page_mode = <?php echo($pagination_info["mode"] == "all" ? "1" : "0"); ?>;
+var filtered_comment_mode = 0;
+
 var has_auto_saved_message = <?php echo($fmanager->has_auto_saved_message($tid) ? 1 : 0); ?>;
 
 var archive_mode = <?php echo(!empty($settings["archive_mode"]) ? "1" : "0"); ?>;
-var thematic_per_default = <?php echo(!empty($_SESSION["thematic_per_default"]) ? "1" : "0"); ?>;
 
 <?php if(!reqvar_empty("download") && $fmanager->is_logged_in()): ?>
 do_not_check_new = true;
@@ -200,7 +201,15 @@ if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["pre
 
 <?php endif; ?>
 
-/ <span class="topic_title_main"><?php echo_html($search_title); ?></span>
+/ 
+
+<?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
+<?php elseif(val_or_empty($topic_data["profiled_topic"]) == 2): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Blog")); ?>:</span>
+<?php endif; ?>
+
+<span class="topic_title_main"><?php echo_html($search_title); ?></span>
 
 <?php if(reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")): ?>
 <?php
@@ -466,7 +475,15 @@ if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["pre
 
 <?php endif; ?>
 
-/ <span class="topic_title_main"><?php echo_html($search_title); ?></span>
+/ 
+
+<?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
+<?php elseif(val_or_empty($topic_data["profiled_topic"]) == 2): ?>
+<span class="topic_type_indicator"><?php echo_html(text("Blog")); ?>:</span>
+<?php endif; ?>
+
+<span class="topic_title_main"><?php echo_html($search_title); ?></span>
 
 <?php if(reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")): ?>
 <a href="<?php echo_html($sort_url); ?>" title="<?php echo_html($sort_title); ?>" class="sorter <?php echo($desc); ?>">&nbsp;</a>

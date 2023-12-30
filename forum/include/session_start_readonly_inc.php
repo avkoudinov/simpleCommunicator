@@ -81,15 +81,4 @@ function session_start_readonly()
 }
 
 session_start_readonly();
-
-/*
-$remote_addr = "";
-if(!empty($_SERVER['REMOTE_ADDR'])) $remote_addr = $_SERVER['REMOTE_ADDR'];
-
-if (empty($_SESSION['ip']) || $_SESSION['ip'] != $remote_addr) {
-  session_destroy();
-  unset($_SESSION);
-} 
-*/
-
 ?>

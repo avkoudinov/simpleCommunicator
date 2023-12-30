@@ -43,11 +43,7 @@
     margin: 0 auto;
     text-align: center;
     margin-bottom: 18px; 
-  }
-
-  .other_new_messages_alertbox
-  {
-    margin-bottom: 18px; 
+    margin-top: 8px; 
   }
 
   .guest_warning
@@ -1576,6 +1572,16 @@
     padding: 7px;
   }
   
+  .post_table.comment_post .thematic_indicator td
+  {
+    height: 18px;
+  }
+
+  .post_table.thematic_post .thematic_indicator td
+  {
+    height: 18px;
+  }
+  
   .member_status,
   .member_status .ignore_off,
   .member_status .error_text
@@ -2352,6 +2358,11 @@
     display:table;
     position:relative;
     margin: 20px 0px 20px 0px;
+  }
+  
+  .message_container_with_offset
+  {
+    margin-left: 50px;
   }
   
   .message_table td .emb_wrapper,
