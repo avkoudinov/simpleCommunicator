@@ -32164,6 +32164,10 @@ abstract class ForumManager
             $last_post = "NULL";
         }
         
+        if (empty($tid)) {
+            $tid = -1;
+        }    
+
         if (!$dbw->execute_query($this->get_query_next_post($prfx, $tid, $last_post))) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
