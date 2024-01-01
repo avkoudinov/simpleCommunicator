@@ -57,6 +57,14 @@
     | <a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=participating"><?php echo_html(text("ParticipatedTopicsShort")); ?></a><span class="new my_part_topics_with_new_indicator" <?php echo($display); ?>>&nbsp;[<a rel="nofollow" href="new_messages.php?fid=my_part_topics"><span class='my_part_topics_with_new_count'><?php echo($my_part_topics_with_new_count); ?></span></a>]</span>
     <?php endif; ?>
   
+  <?php else: ?>
+
+    <?php if($fmanager->get_user_name() != ""): ?>
+    | <a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=created_topic"><?php echo_html(text("MyTopics")); ?></a>
+
+    / <a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=last_posts"><?php echo_html(text("MyMessagesShort")); ?></a>
+    <?php endif; ?>
+
   <?php endif; ?>
   
 </div>
