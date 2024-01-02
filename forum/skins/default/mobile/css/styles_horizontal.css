@@ -1761,6 +1761,11 @@
     padding-right: 30px;
   }
 
+  .new_topic_table #poll_comment
+  {
+    height: 140px;
+  }
+
   .new_topic_table #poll_options
   {
     height: 180px;
@@ -1771,11 +1776,18 @@
     margin-top: -1px;
   }
 
+  .poll_note
+  {
+    font-size: 16px;
+    margin-top: 12px;
+    padding: 8px;
+  }
+
   .poll_comment
   {
     font-size: 16px;
-    padding-top: 7px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+    padding: 8px;
   }
 
   .post_rating td
@@ -1978,7 +1990,7 @@
   {
     border-bottom-width: 1px;
     padding: 5px;
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .poll_footer
@@ -1994,26 +2006,26 @@
     border: 0px;
   }
   
-  .poll_table td:nth-child(1)
+  .poll_table > tbody > tr > td:nth-child(1)
   {
     padding: 7px 0px 0px 7px;
   }
 
-  .poll_table td:nth-child(2)
+  .poll_table > tbody > tr > td:nth-child(2)
   {
-    width: 4500px;
+    width: 450px;
   }
 
-  .poll_table td:nth-child(3)
+  .poll_table > tbody > tr > td:nth-child(3)
   {
     padding-left: 30px;
   }
   
-  .poll_table tr:last-child td
+  .poll_table > tbody > tr > td:nth-child(4)
   {
-    padding-bottom: 7px;
+    min-width: 200px;
   }
-  
+
   .poll_action_table input
   {
     font-size: 16px;

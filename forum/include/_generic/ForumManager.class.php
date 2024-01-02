@@ -3056,9 +3056,6 @@ abstract class ForumManager
             $topic_data["id"] = $dbw->field_by_name("id");
             $topic_data["topic_name"] = $dbw->field_by_name("name");
             $topic_data["poll_comment"] = $dbw->field_by_name("poll_comment");
-            if (empty($topic_data["poll_comment"])) {
-                $topic_data["poll_comment"] = $topic_data["topic_name"];
-            }
             
             $topic_data["user_id"] = $dbw->field_by_name("user_id");
             $topic_data["author"] = $dbw->field_by_name("author");

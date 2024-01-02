@@ -1648,6 +1648,11 @@ td.enter_password
   padding-right: 52px;
 }
 
+.new_topic_table #poll_comment
+{
+  height: 200px;
+}
+
 .new_topic_table #poll_options
 {
   height: 250px;
@@ -4992,6 +4997,7 @@ img.image_placeholder
 {
   border: 2px solid gray;
   float: left;
+  margin: 20px 0px 20px 0px;
 }
 
 .poll_area img
@@ -4999,12 +5005,19 @@ img.image_placeholder
   max-width: 260px;  
 }
 
+.poll_note
+{
+  font-size: 32px;
+  padding: 14px;
+  color: maroon;
+  margin-top: 20px;
+}
+
 .poll_comment
 {
   font-size: 32px;
-  color: maroon;
-  padding-top: 10px;
-  margin-bottom: 30px;
+  padding: 14px;
+  margin-bottom: 20px;
 }
 
 .poll_area .aux_table td
@@ -5022,7 +5035,7 @@ img.image_placeholder
 .poll_header
 {
   border-bottom: 2px solid gray;
-  font-size: 40px;
+  font-size: 36px;
 }
 
 .poll_footer
@@ -5045,6 +5058,7 @@ img.image_placeholder
 .poll_table
 {
   border-collapse: collapse;
+  width: 100%;
 }
 
 .poll_table td
@@ -5055,30 +5069,27 @@ img.image_placeholder
   font-size: 36px;
 }
 
-.poll_table tr:last-child td
-{
-  padding-bottom: 10px;
-}
-
-.poll_table td:nth-child(1)
+.poll_table > tbody > tr > td:nth-child(1)
 {
   padding: 12px 0px 0px 12px;
+  width: 1px;
 }
 
-.poll_table td:nth-child(2)
+.poll_table > tbody > tr >  td:nth-child(2)
 {
   width: 500px;
 }
 
-.poll_table td:nth-child(3)
+.poll_table > tbody > tr >  td:nth-child(3)
 {
   text-align: right;
   padding-left: 60px;
+  width: 1px;
 }
 
-.poll_table td:nth-child(4)
+.poll_table > tbody > tr > td:nth-child(4)
 {
-  min-width: 200px;
+  min-width: 160px;
 }
 
 .poll_table .aux_table td
