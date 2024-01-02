@@ -751,8 +751,14 @@ $poll_rendered = true;
 
 <div class="poll_area">
   <div class="poll_header">
-  <div class="smart_break"><?php echo_html($topic_data["poll_comment"]); ?></div>
+  <div class="smart_break"><?php echo_html($topic_data["topic_name"]); ?></div>
   </div>
+
+  <?php if(!empty($topic_data["poll_comment"])): ?>
+  <div class="poll_comment">
+  <?php echo(nl2br(escape_html($topic_data["poll_comment"]))); ?>
+  </div>
+  <?php endif; ?>
 
   <table class="poll_table">
 
@@ -876,6 +882,13 @@ $poll_rendered = true;
 
   </table>
 
+    <?php if($topic_data["is_poll"] & 4 || $topic_data["poll_results_delayed"] == 1): ?>
+    <div class="poll_note">
+    <?php if($topic_data["is_poll"] & 4): ?><div><?php echo_html(text("OpenPollComment")); ?></div><?php endif; ?>
+    <?php if($topic_data["poll_results_delayed"] == 1): ?><div><?php echo_html(text("DelayedPollComment")); ?></div><?php endif; ?>
+    </div>
+    <?php endif; ?>
+
   <div class="poll_footer">
 
     <table class="poll_action_table">
@@ -935,10 +948,6 @@ $poll_rendered = true;
 </div>
 
 <div class="clear_both"></div>
-<div class="poll_comment">
-<?php if($topic_data["is_poll"] & 4): ?><div><?php echo_html(text("OpenPollComment")); ?></div><?php endif; ?>
-<?php if($topic_data["poll_results_delayed"] == 1): ?><div><?php echo_html(text("DelayedPollComment")); ?></div><?php endif; ?>
-</div>
 
 </form>
 

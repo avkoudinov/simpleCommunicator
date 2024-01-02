@@ -1937,6 +1937,11 @@ a.new_topic_disabled:hover
   margin: 0 auto;
 }
 
+.new_topic_table #poll_comment
+{
+  height: 100px;
+}
+
 .new_topic_table #poll_options
 {
   height: 150px;
@@ -5580,6 +5585,7 @@ img.mourning_band
 {
   border: 1px solid gray;
   float: left;
+  margin-bottom: 10px;
 }
 
 .poll_area img
@@ -5587,12 +5593,19 @@ img.mourning_band
   max-width: 160px;  
 }
 
+.poll_note
+{
+  color: maroon;
+  font-size: 12px;
+  padding: 5px;
+  margin-top: 7px;
+}
+
 .poll_comment
 {
-  font-size: 11px;
-  color: maroon;
-  padding-top: 5px;
-  margin-bottom: 30px;
+  font-size: 12px;
+  padding: 5px;
+  margin-bottom: 7px;
 }
 
 .poll_area .aux_table td
@@ -5642,23 +5655,23 @@ img.mourning_band
   font-size: 12px;
 }
 
-.poll_table td:nth-child(1)
+.poll_table > td:nth-child(1)
 {
   padding: 4px 0px 0px 4px;
 }
 
-.poll_table td:nth-child(2)
+.poll_table > tbody > tr > td:nth-child(2)
 {
-  width: 450px;
+  min-width: 350px;
 }
 
-.poll_table td:nth-child(3)
+.poll_table > tbody > tr > td:nth-child(3)
 {
   text-align: right;
   padding-left: 60px;
 }
 
-.poll_table td:nth-child(4)
+.poll_table > tbody > tr > td:nth-child(4)
 {
   min-width: 100px;
 }

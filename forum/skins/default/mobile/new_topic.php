@@ -719,13 +719,14 @@ else
 
 <tr id="poll_area" style="display:none">
 <td>
-<?php echo_html(text("Comment")); ?>:<br>
-<input type="text" id="poll_comment" name="poll_comment">
-<br><br>
+<div style="color: maroon"><br><?php echo_html(text("PollComment2")); ?></div>
+<br>
 <?php echo_html(text("PollOptions")); ?>:<br>
 <textarea id="poll_options" name="poll_options"></textarea>
 <div class="field_comment"><?php echo_html(text("PollComment")); ?></div>
-<div class="field_comment" style="color: maroon"><br><?php echo_html(text("PollComment2")); ?></div>
+<br>
+<?php echo_html(text("Comment")); ?>:<br>
+<textarea id="poll_comment" name="poll_comment"></textarea>
 </td>
 </tr>
 
