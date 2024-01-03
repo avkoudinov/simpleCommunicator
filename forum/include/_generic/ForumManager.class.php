@@ -5888,7 +5888,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select block_expires, block_reason
                                  from {$prfx}_ip_blocked
-                                 where ip = '$ip' and tp = 'ip'")) {
+                                 where ip = '$ip' and tp = 'IP'")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 return false;
             }
@@ -5928,9 +5928,9 @@ abstract class ForumManager
                 if (empty($_SESSION["blocked_notified"])) {
                     $_SESSION["blocked_notified"] = true;
                     if (!empty($_SESSION["ip_block_expires"])) {
-                        MessageHandler::setError(sprintf(text("ErrIPIsBlockedUntil"), System::getIPAddress(), $_SESSION["ip_block_expires"], $_SESSION["ip_block_time_left"]), $ip_block_reason);
+                        MessageHandler::setWarning(sprintf(text("ErrIPIsBlockedUntil"), System::getIPAddress(), $_SESSION["ip_block_expires"], $_SESSION["ip_block_time_left"]), $ip_block_reason);
                     } else {
-                        MessageHandler::setError(sprintf(text("ErrIPIsBlocked"), System::getIPAddress()), $ip_block_reason);
+                        MessageHandler::setWarning(sprintf(text("ErrIPIsBlocked"), System::getIPAddress()), $ip_block_reason);
                     }
                 }
             } else {
@@ -24519,7 +24519,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select ip
                              from {$prfx}_ip_blocked
-                             where ip = '$ip' and tp = 'ip' and (block_expires is NULL or block_expires > '$now')")) {
+                             where ip = '$ip' and tp = 'IP' and (block_expires is NULL or block_expires > '$now')")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -24549,7 +24549,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select ip
                              from {$prfx}_ip_blocked
-                             where ip = '$um' and tp = 'um' and (block_expires is NULL or block_expires > '$now')")) {
+                             where ip = '$um' and tp = 'UM' and (block_expires is NULL or block_expires > '$now')")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -24836,7 +24836,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select block_expires, block_reason
                              from {$prfx}_ip_blocked
-                             where ip = '$ip' and tp = 'ip'")) {
+                             where ip = '$ip' and tp = 'IP'")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -24889,7 +24889,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select block_expires, block_reason
                              from {$prfx}_ip_blocked
-                             where ip = '$user_marker' and tp = 'um'")) {
+                             where ip = '$user_marker' and tp = 'UM'")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -39553,5 +39553,78 @@ abstract class ForumManager
         
         $avatar = str_replace(APPLICATION_ROOT, "", $files[array_rand($files)]);
     } // check_avatar
+    
+    //---------------------------------------------------------------
+    function selfban()
+    {
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        $uid = $dbw->escape($this->get_user_id());
+
+        if (!$dbw->start_transaction()) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
+        $event_data = array();
+
+        $block_reason = "Пашэрулетка";
+        $period = 60 * 30;
+ 
+        $event_data["action_expires"] = time() + $period;
+        $action_expires = "'" . $dbw->format_datetime(time() + $period) . "'";
+
+        $event_data["comment"] = $block_reason;
+        $block_reason = $dbw->quotes_or_null($block_reason);
+
+        if (!empty($uid)) {
+            $event_data["action"] = "block_user";
+
+            $event_data["author_id"] = $uid;
+            $event_data["author_name"] = $this->get_user_name();
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$dbw->execute_query("update {$prfx}_user set blocked = 1, self_blocked = 1, block_expires = $action_expires, block_reason = $block_reason where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+        } else {
+            $event_data["action"] = "block_ip";
+
+            $ip = System::getIPAddress();
+
+            $event_data["ip"] = $ip;
+            $ip = $dbw->escape($ip);
+            
+            if (!$dbw->execute_query("insert into {$prfx}_ip_blocked (ip, block_expires, tp, block_reason)
+                               values ('$ip', $action_expires, 'ip', $block_reason)")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+        }
+        
+        if (!$dbw->commit_transaction()) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
+        return true;
+    } // selfban
 } // class ForumManager
 ?>
