@@ -213,7 +213,7 @@ function confirm_clear_profile_data()
 </script>
 
 <?php
-require_once "custom_body.php";
+require_once "custom_head.php";
 ?>
 
 </head>
