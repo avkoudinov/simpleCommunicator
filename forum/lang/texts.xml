@@ -4466,6 +4466,20 @@
             <ua>Застосувати</ua>
         </text>
 
+        <text id="MsgTopicCreatedFromMerge">
+            <en>The topic was created by merging other topics.</en>
+            <de>Das Thema wurde durch die Verbindung von anderen Themen erstellt.</de>
+            <ru>Тема создана объединением других тем.</ru>
+            <ua>Тема створена об'єднанням інших тем.</ua>
+        </text>
+
+        <text id="MsgTopicCreatedFromPostMove">
+            <en>Topic created by moving messages from other topics.</en>
+            <de>Das Thema wurde durch die Verschiebung von Nachrichten aus anderen Themen erstellt.</de>
+            <ru>Тема создана переносом сообщений из других тем.</ru>
+            <ua>Тема була створена перенесенням повідомлень з інших тем.</ua>
+        </text>
+
         <text id="MsgTopicsMerged">
             <en>Topics have been successfully merged to the target topic.</en>
             <de>Themen wurden erfolgreich mit dem Zielthema verbunden.</de>
