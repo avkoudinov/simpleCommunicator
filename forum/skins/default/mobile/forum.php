@@ -185,10 +185,15 @@ function toggle_selection(td, tid)
 
 var topic_choose_apply_func = function()
 {
-  var elm = document.getElementById("found_topics");
+  var new_topic = "";
+
+  var elm = document.getElementById("new_topic");
+  if(elm) new_topic = elm.value;
+
+  elm = document.getElementById("found_topics");
   if(!elm) return false;
 
-  if(!elm.value)
+  if(!elm.value && !new_topic)
   {
     var mbuttons = [
       {
@@ -202,7 +207,7 @@ var topic_choose_apply_func = function()
     return false;
   }
 
-  return do_action({ topic_action: "merge_topics", target_topic: elm.value });
+  return do_action({ topic_action: "merge_topics", target_topic: elm.value, new_topic: new_topic });
 }
 
 function select_target_topic()

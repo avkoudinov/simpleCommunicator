@@ -16853,21 +16853,22 @@ abstract class ForumManager
     } // move_topics
     
     //-----------------------------------------------------------------
-    function merge_topics($target_topic, &$response)
+    function merge_topics($target_topic, $new_topic, &$response)
     {
         global $settings;
+        global $READ_MARKER;
         
         if ($this->demo_mode()) {
             MessageHandler::setWarning(text("MsgDemoMode"));
             return false;
         }
         
-        if (empty($target_topic)) {
-            MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), "-"));
+        if (empty($target_topic) && trim($new_topic) == "") {
+            MessageHandler::setError(text("ErrNoTopicSelected"));
             return false;
         }
-        
-        if (!is_numeric($target_topic)) {
+
+        if (!empty($target_topic) && !is_numeric($target_topic)) {
             MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), $target_topic));
             return false;
         }
@@ -16883,66 +16884,6 @@ abstract class ForumManager
         }
         
         $prfx = $dbw->escape(System::getDBPrefix());
-        $target_topic = $dbw->escape($target_topic);
-        
-        // get info about the target topic and forum
-        
-        $target_creation_date = 0;
-        $target_forum = "";
-        $target_forum_name = "";
-        $target_topic_name = "";
-        
-        $target_topic_valid = true;
-        
-        if (!$dbw->execute_query("select {$prfx}_topic.name topic_name, {$prfx}_topic.creation_date, forum_id, {$prfx}_forum.name forum_name,
-                             {$prfx}_topic.deleted, merged
-                             from {$prfx}_topic
-                             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                             where {$prfx}_topic.id = $target_topic")) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
-        }
-        
-        if ($dbw->fetch_row()) {
-            $target_forum = $dbw->field_by_name("forum_id");
-            $target_forum_name = $dbw->field_by_name("forum_name");
-            $target_topic_name = $dbw->field_by_name("topic_name");
-            
-            $target_creation_date = xstrtotime($dbw->field_by_name("creation_date"));
-            
-            $target_topic_valid = ($dbw->field_by_name("deleted") == "0" && $dbw->field_by_name("merged") == "");
-        } else {
-            MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), $target_topic));
-            $dbw->free_result();
-            return false;
-        }
-        
-        $dbw->free_result();
-        
-        if (!$target_topic_valid) {
-            MessageHandler::setError(text("ErrMergeDeletedOrTransferred"));
-            return false;
-        }
-        
-        $_REQUEST["topics"] = array_diff($_REQUEST["topics"], array($target_topic));
-        if (empty($_REQUEST["topics"])) {
-            MessageHandler::setError(text("ErrMergetoItself"));
-            return false;
-        }
-        
-        if (!$this->is_admin() && !$this->is_forum_moderator($target_forum)) {
-            MessageHandler::setError(text("ErrActionNotAllowed"));
-            return false;
-        }
-        
-        if ($this->is_blocked_in_topic($target_topic)) {
-            return false;
-        }
-        
-        $forum_name = "-";
-        if (!$this->has_access_to_forum($target_forum, $forum_name, true)) {
-            return false;
-        }
         
         $topic_first_posts = array();
         
@@ -16969,24 +16910,128 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date) {
-            MessageHandler::setError(text("ErrTopicsMergeStartDate"));
-            return false;
-        }
-        
         $first_post_id = min($topic_first_posts);
-        
-        if (!reqvar_empty("return_forum")) {
-            $response['target_url'] = "forum.php?fid=" . reqvar("return_forum");
-            if (!reqvar_empty("fpage")) {
-                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+
+        $target_forum = "";
+        $target_forum_name = "";
+        $target_topic_name = "";
+
+        $target_subscribers = array();
+
+        if (!empty($target_topic)) {
+            $target_topic = $dbw->escape($target_topic);
+            
+            // get info about the target topic and forum
+            
+            $target_creation_date = 0;
+            
+            $target_topic_valid = true;
+            
+            if (!$dbw->execute_query("select {$prfx}_topic.name topic_name, {$prfx}_topic.creation_date, forum_id, {$prfx}_forum.name forum_name,
+                                 {$prfx}_topic.deleted, merged
+                                 from {$prfx}_topic
+                                 inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                                 where {$prfx}_topic.id = $target_topic")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
             }
-        } else {
-            $response['target_url'] = "topic.php?fid=" . $target_forum;
-            if (!reqvar_empty("fpage")) {
-                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+            
+            if ($dbw->fetch_row()) {
+                $target_forum = $dbw->field_by_name("forum_id");
+                $target_forum_name = $dbw->field_by_name("forum_name");
+                $target_topic_name = $dbw->field_by_name("topic_name");
+                
+                $target_creation_date = xstrtotime($dbw->field_by_name("creation_date"));
+                
+                $target_topic_valid = ($dbw->field_by_name("deleted") == "0" && $dbw->field_by_name("merged") == "");
+            } else {
+                MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), $target_topic));
+                $dbw->free_result();
+                return false;
             }
-            $response['target_url'] .= "&tid=" . $target_topic . (empty($first_post_id) ? "&gotonew=1" : "&msg=" . $first_post_id);
+            
+            $dbw->free_result();
+            
+            if (!$target_topic_valid) {
+                MessageHandler::setError(text("ErrMergeDeletedOrTransferred"));
+                return false;
+            }
+            
+            $_REQUEST["topics"] = array_diff($_REQUEST["topics"], array($target_topic));
+            if (empty($_REQUEST["topics"])) {
+                MessageHandler::setError(text("ErrMergetoItself"));
+                return false;
+            }
+            
+            if (!$this->is_admin() && !$this->is_forum_moderator($target_forum)) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                return false;
+            }
+            
+            if ($this->is_blocked_in_topic($target_topic)) {
+                return false;
+            }
+            
+            if (!$this->has_access_to_forum($target_forum, $target_forum_name, true)) {
+                return false;
+            }
+            
+            if ($min_creation_date <= $target_creation_date) {
+                MessageHandler::setError(text("ErrTopicsMergeStartDate"));
+                return false;
+            }
+
+            // get list of the subscribers of the target topic            
+            
+            if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+                                 from {$prfx}_topic_subscription
+                                 inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
+                                 where topic_id = $target_topic")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            while ($dbw->fetch_row()) {
+                $target_subscribers[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
+                    "user_name" => $dbw->field_by_name("user_name"),
+                    "user_email" => $dbw->field_by_name("email"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "last_host" => $dbw->field_by_name("last_host"),
+                    "interface_language" => $dbw->field_by_name("interface_language")
+                );
+            }
+            
+            $dbw->free_result();            
+        } else { // if target topic
+            if (!$dbw->execute_query("select forum_id, {$prfx}_forum.name forum_name
+                                 from {$prfx}_topic
+                                 inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                                 where {$prfx}_topic.id in ($in_list)")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            if ($dbw->fetch_row()) {
+                $target_forum = $dbw->field_by_name("forum_id");
+                $target_forum_name = $dbw->field_by_name("forum_name");
+            } else {
+                MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), implode(",", $_REQUEST["topics"])));
+                $dbw->free_result();
+                return false;
+            }
+            
+            $dbw->free_result();
+            
+            $target_topic_name = trim($new_topic);
+
+            if (!$this->is_admin() && !$this->is_forum_moderator($target_forum)) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                return false;
+            }
+            
+            if (!$this->has_access_to_forum($target_forum, $target_forum_name, true)) {
+                return false;
+            }
         }
         
         // get list of the subscribers of the merged topics
@@ -17027,30 +17072,6 @@ abstract class ForumManager
         
         while ($dbw->fetch_row()) {
             $moderators[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
-                "user_name" => $dbw->field_by_name("user_name"),
-                "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
-                "last_host" => $dbw->field_by_name("last_host"),
-                "interface_language" => $dbw->field_by_name("interface_language")
-            );
-        }
-        
-        $dbw->free_result();
-        
-        // get list of the subscribers of the target topic
-        
-        $target_subscribers = array();
-        
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
-                             from {$prfx}_topic_subscription
-                             inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
-                             where topic_id = $target_topic")) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
-        }
-        
-        while ($dbw->fetch_row()) {
-            $target_subscribers[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
                 "send_notifications" => $dbw->field_by_name("send_notifications"),
@@ -17122,6 +17143,86 @@ abstract class ForumManager
             return false;
         }
         
+        if (empty($target_topic)) {
+            $symbols = "";
+            if (!$this->check_subject($new_topic, $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                
+                MessageHandler::setError($error);
+                return false;
+            }
+
+            if (utf8_strlen(trim($new_topic)) > $settings["max_topic_name_symbols"]) {
+                MessageHandler::setError(sprintf(text("ErrSubjectTooLong"), $settings["max_topic_name_symbols"]));
+                MessageHandler::setErrorElement("new_topic");
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            // make the topic author the actual moderator
+            
+            $tuid = $dbw->escape($this->get_user_id());
+            if (empty($tuid)) {
+                $tuid = "NULL";
+            }
+            $tauthor = $dbw->escape($this->get_user_name());
+            $tread_marker = $dbw->escape($READ_MARKER);
+            $tsubject = $dbw->escape(trim($new_topic));
+            
+            // -1 second to be able to inject the posts
+            $tdate = $dbw->format_datetime($min_creation_date - 1);
+            
+            $query = "insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker)
+                values ($target_forum, $tuid, '$tauthor', '$tsubject', '$tdate', '$tread_marker')";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $target_topic = $dbw->insert_id();
+            
+            $query = "insert into {$prfx}_topic_statistics (topic_id) values ($target_topic)";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $query = "update {$prfx}_forum_statistics set
+                topic_count = topic_count + 1,
+                topic_count_total = topic_count_total + 1
+                where forum_id = $target_forum";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if ($tuid != "NULL") {
+                $query = "update {$prfx}_user_statistics set
+                  topic_count = topic_count + 1
+                  where user_id = $tuid";
+                if (!$dbw->execute_query($query)) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+            }
+
+            // text("MsgTopicCreatedFromMerge")
+            $query = "update {$prfx}_post set
+              last_warned_by = '$tauthor', 
+              last_warning = 'MSG(MsgTopicCreatedFromMerge)'
+              where id = $first_post_id";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+        } // if target topic
+        
         if (!$dbw->execute_query("update {$prfx}_topic set
                              deleted = 1, pinned = 0, publish_delay = 0,
                              merged = $target_topic
@@ -17166,7 +17267,10 @@ abstract class ForumManager
             return false;
         }
         
-        foreach ($topics as $tid => $tdata) {
+        foreach ($topics as $tid => &$tdata) {
+            // if new topic, the $target_topic is known only now.
+            $tdata["topic_id"] = $target_topic;
+          
             if (!$this->log_moderator_event($dbw, $prfx, $tdata)) {
                 $dbw->rollback_transaction();
                 return false;
@@ -17209,6 +17313,19 @@ abstract class ForumManager
             return false;
         }
         
+        if (!reqvar_empty("return_forum")) {
+            $response['target_url'] = "forum.php?fid=" . reqvar("return_forum");
+            if (!reqvar_empty("fpage")) {
+                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+            }
+        } else {
+            $response['target_url'] = "topic.php?fid=" . $target_forum;
+            if (!reqvar_empty("fpage")) {
+                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+            }
+            $response['target_url'] .= "&tid=" . $target_topic . (empty($first_post_id) ? "&gotonew=1" : "&msg=" . $first_post_id);
+        }
+
         if (count($_REQUEST["topics"]) > 1) {
             MessageHandler::setInfo(text("MsgTopicsMerged"));
         } else {
@@ -17658,6 +17775,15 @@ abstract class ForumManager
                 return false;
             }
             
+            $symbols = "";
+            if (!$this->check_subject($new_topic, $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                
+                MessageHandler::setError($error);
+                return false;
+            }
+
             if (utf8_strlen(trim($new_topic)) > $settings["max_topic_name_symbols"]) {
                 MessageHandler::setError(sprintf(text("ErrSubjectTooLong"), $settings["max_topic_name_symbols"]));
                 MessageHandler::setErrorElement("new_topic");
@@ -17716,6 +17842,17 @@ abstract class ForumManager
                 }
             }
             
+            // text("MsgTopicCreatedFromPostMove")
+            $query = "update {$prfx}_post set
+              last_warned_by = '$tauthor', 
+              last_warning = 'MSG(MsgTopicCreatedFromPostMove)'
+              where id = $first_post";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+
             if (!$this->handle_topic_ignorance($dbw, $prfx, $target_topic, $this->get_user_id(), $this->get_user_name())) {
                 $dbw->rollback_transaction();
                 return false;
@@ -17956,6 +18093,9 @@ abstract class ForumManager
         }
         
         $dbw->free_result();
+        
+        if (empty($target_topic) && trim($new_topic) != "") {
+        }
         
         // set participation information
         

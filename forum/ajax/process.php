@@ -470,7 +470,7 @@ elseif (!reqvar_empty("topic_action")) {
             }
             
             // target_url is set in the function
-            $response['success'] = $fmanager->merge_topics(reqvar("target_topic"), $response);
+            $response['success'] = $fmanager->merge_topics(reqvar("target_topic"), reqvar("new_topic"), $response);
             
             if ($response['success']) {
                 $show_messages = false;
@@ -479,7 +479,7 @@ elseif (!reqvar_empty("topic_action")) {
         
         case "merge_topics":
             // target_url is set in the function
-            $response['success'] = $fmanager->merge_topics(reqvar("target_topic"), $response);
+            $response['success'] = $fmanager->merge_topics(reqvar("target_topic"), reqvar("new_topic"), $response);
             
             if ($response['success']) {
                 $show_messages = false;
