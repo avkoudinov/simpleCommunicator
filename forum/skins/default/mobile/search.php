@@ -31,8 +31,8 @@ weekday_names: [
 };
 
 Forum.addXEvent(window, 'load', function () {
-  SimpleCalendar.assign("start_date", config);
-  SimpleCalendar.assign("end_date", config);
+  SimpleCalendar.assign("#start_date", config);
+  SimpleCalendar.assign("#end_date", config);
 });
 
 function set_to_me() {

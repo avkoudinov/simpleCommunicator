@@ -31,8 +31,8 @@ var config = {
 };
 
 Forum.addXEvent(window, 'load', function () {
-  SimpleCalendar.assign("start_date", config);
-  SimpleCalendar.assign("end_date", config);
+  SimpleCalendar.assign("#start_date", config);
+  SimpleCalendar.assign("#end_date", config);
 });
 
 var current_displayed_event_id_info = null;

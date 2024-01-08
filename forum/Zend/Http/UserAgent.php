@@ -209,6 +209,50 @@ class Zend_Http_UserAgent implements Serializable
     }
 
     /**
+     * Serialized representation of the object
+     *
+     * @return string
+     */
+    public function __serialize()
+    {
+        $device = $this->getDevice();
+        $spec = array(
+            'browser_type' => $this->_browserType,
+            'config'       => $this->_config,
+            'device_class' => get_class($device),
+            'device'       => $device->serialize(),
+            'user_agent'   => $this->getServerValue('http_user_agent'),
+            'http_accept'  => $this->getServerValue('http_accept'),
+        );
+        return serialize($spec);
+    }
+
+    /**
+     * Unserialize a previous representation of the object
+     *
+     * @param  string $serialized
+     * @return void
+     */
+    public function __unserialize($serialized)
+    {
+        $spec = unserialize($serialized);
+
+        $this->setOptions($spec);
+
+        // Determine device class and ensure the class is loaded
+        $deviceClass          = $spec['device_class'];
+        if (!class_exists($deviceClass)) {
+            $this->_getUserAgentDevice($this->getBrowserType());
+        }
+
+        // Get device specification and instantiate
+        $deviceSpec            = unserialize($spec['device']);
+        $deviceSpec['_config'] = $this->getConfig();
+        $deviceSpec['_server'] = $this->getServer();
+        $this->_device = new $deviceClass($deviceSpec);
+    }
+
+    /**
      * Configure instance
      *
      * @param  array|Zend_Config|ArrayAccess $options

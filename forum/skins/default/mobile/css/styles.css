@@ -5859,53 +5859,6 @@ td.preferred_forums
   word-break: break-word;
 }
 
-/* BEGIN: calender */
-
-.calendar_container table
-{
-  border-spacing: 3px;
-}
-
-.calendar_container td
-{
-  width: 66px;
-  height: 60px;
-  font-size: 30px;
-}
-
-.calendar_container td.weekday
-{
-  height: 50px;
-}
-
-.calendar_container button.arrow_right,
-.calendar_container button.arrow_left
-{
-  width: 80px;
-  font-size: 30px;
-  height: 50px;
-}
-
-.calendar_container select
-{
-    font-size: 35px;
-}
-
-.calendar_container select.month_selector
-{
-  width: 190px;
-  margin-right: 15px;
-  height: 50px;
-}
-
-.calendar_container select.year_selector
-{
-  width: 110px;
-  height: 50px;
-}
-
-/* END: calender */
-
 /* BEGIN: user message box */
 
 ._user_msgbox

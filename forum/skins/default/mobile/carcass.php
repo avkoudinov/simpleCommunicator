@@ -138,8 +138,11 @@ def_js_message("ErrNoImagesInClipboard");
 ?>
 
 <?php
-$start_time = val_or_empty($_SESSION["session_start_time"]);
-if(!empty($start_time)) $start_time = date("d.m.Y H:i:s", $start_time);
+if(!empty($_SESSION["session_start_time"])) {
+  $start_time = $start_time = date("d.m.Y H:i:s", $_SESSION["session_start_time"]);
+} else {
+  $start_time = "";
+}
 ?>
 
 var user_name = "<?php echo_js($fmanager->get_user_name()); ?>";

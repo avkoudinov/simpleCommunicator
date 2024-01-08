@@ -150,6 +150,36 @@ abstract class Zend_Http_UserAgent_AbstractDevice
     }
 
     /**
+     * Serialize object
+     *
+     * @return string
+     */
+    public function __serialize()
+    {
+        $spec = array(
+            '_aFeatures'      => $this->_aFeatures,
+            '_aGroup'         => $this->_aGroup,
+            '_browser'        => $this->_browser,
+            '_browserVersion' => $this->_browserVersion,
+            '_userAgent'      => $this->_userAgent,
+            '_images'         => $this->_images,
+        );
+        return serialize($spec);
+    }
+
+    /**
+     * Unserialize
+     *
+     * @param  string $serialized
+     * @return void
+     */
+    public function __unserialize($serialized)
+    {
+        $spec = unserialize($serialized);
+        $this->_restoreFromArray($spec);
+    }
+
+    /**
      * Restore object state from array
      *
      * @param  array $spec
