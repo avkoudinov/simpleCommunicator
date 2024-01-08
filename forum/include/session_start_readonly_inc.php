@@ -63,18 +63,19 @@ function session_start_readonly()
   }
   
   $offset = 0;
-  
-  while ($offset < strlen($session_data)) 
-  {
-    if(!strstr(substr($session_data, $offset), "|")) break;
 
-    $pos = strpos($session_data, "|", $offset);
-    $num = $pos - $offset;
-    $varname = substr($session_data, $offset, $num);
-    $offset += $num + 1;
-    $data = unserialize(substr($session_data, $offset));
-    $_SESSION[$varname] = $data;
-    $offset += strlen(serialize($data));
+  while ($offset < strlen($session_data)) {
+      if (!strstr(substr($session_data, $offset), "|")) {
+          break;
+      }
+
+      $pos = strpos($session_data, "|", $offset);
+      $num = $pos - $offset;
+      $varname = substr($session_data, $offset, $num);
+      $offset += $num + 1;
+      $data = @unserialize(substr($session_data, $offset));
+      $_SESSION[$varname] = $data;
+      $offset += strlen(@serialize($data));
   }
   
   return true;

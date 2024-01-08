@@ -2943,56 +2943,47 @@
 
   /* BEGIN: calender */
 
-  .calendar_container table
-  {
-    border-spacing: 1px;
+  .calendar_container table {
+      width: 290px !important;
+      border-spacing: 2px !important;
   }
 
-  .calendar_container td
-  {
-    width: 36px;
-    height: 34px;
-    font-size: 20px;
+  body .calendar_container td {
+      font-size: 18px !important;
   }
 
-  .calendar_container td.weekday
-  {
-    height: 28px;
+  body .calendar_container td.day {
+      height: 36px !important;
   }
 
-  .calendar_container button.arrow_right,
-  .calendar_container button.arrow_left
-  {
-    width: 44px;
-    font-size: 20px;
+  body .calendar_container td.weekday {
+      height: 32px !important;
   }
 
-  .calendar_container select
-  {
-      font-size: 20px;
-      padding-left: 5px;
+  .calendar_container .calendar_head_area {
+      margin: 8px 0px 8px 0px !important;
   }
 
-  .calendar_container button.arrow_right,
-  .calendar_container button.arrow_left
-  {
-    width: 28px;
-    font-size: 20px;
-    height: 28px;
+  .calendar_container .arrow_right,
+  .calendar_container .arrow_left {
+      flex: 0 0 44px !important;
+      font-size: 20px !important;
+      line-height: 24px !important;
   }
 
-  .calendar_container select.month_selector
-  {
-    width: 120px;
-    margin-right: 5px;
-    height: 28px;
+  .calendar_container select.month_selector,
+  .calendar_container select.year_selector {
+      font-size: 18px !important;
+      line-height: 20px !important;
   }
 
-  .calendar_container select.year_selector
-  {
-    width: 70px;
-    margin-right: 5px;
-    height: 28px;
+  .calendar_container select.month_selector {
+      flex: 1 0 120px !important;
+      margin-right: 5px !important;
+  }
+
+  .calendar_container select.year_selector {
+      flex: 0 0 70px !important;
   }
 
   /* END: calender */

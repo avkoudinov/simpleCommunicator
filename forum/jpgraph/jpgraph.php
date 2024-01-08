@@ -19,7 +19,7 @@ require_once('jpgraph_theme.inc.php');
 require_once('gd_image.inc.php');
 
 // Version info
-define('JPG_VERSION','4.2.3');
+define('JPG_VERSION','4.4.2');
 
 // Minimum required PHP version
 define('MIN_PHPVERSION','5.1.0');
@@ -392,15 +392,15 @@ class DateLocale {
         }
 
         $this->iLocale = $aLocale;
-        for( $i = 0, $ofs = 0 - strftime('%w'); $i < 7; $i++, $ofs++ ) {
-            $day = strftime('%a', strtotime("$ofs day"));
+        for( $i = 0, $ofs = 0 - date('w'); $i < 7; $i++, $ofs++ ) {
+            $day = date('D', strtotime("$ofs day"));
             $day[0] = strtoupper($day[0]);
             $this->iDayAbb[$aLocale][]= $day[0];
             $this->iShortDay[$aLocale][]= $day;
         }
 
         for($i=1; $i<=12; ++$i) {
-            list($short ,$full) = explode('|', strftime("%b|%B",strtotime("2001-$i-01")));
+            list($short ,$full) = explode('|', date("M|F",strtotime("2001-$i-01")));
             $this->iShortMonth[$aLocale][] = ucfirst($short);
             $this->iMonthName [$aLocale][] = ucfirst($full);
         }
@@ -493,7 +493,7 @@ class Footer {
 // CLASS Graph
 // Description: Main class to handle graphs
 //===================================================
-class Graph {
+class Graph extends stdClass {
     public $cache=null;   // Cache object (singleton)
     public $img=null;   // Img object (singleton)
     public $plots=array();  // Array of all plot object in the graph (for Y 1 axis)
@@ -1285,9 +1285,11 @@ class Graph {
             }
         }
 
-        $n = count($this->iTables);
-        for( $i=0; $i < $n; ++$i ) {
-            $csim .= $this->iTables[$i]->GetCSIMareas();
+        if($this->iTables != null) {
+            $n = count($this->iTables);
+            for ($i = 0; $i < $n; ++$i) {
+                $csim .= $this->iTables[$i]->GetCSIMareas();
+            }
         }
 
         return $csim;
@@ -1567,8 +1569,10 @@ class Graph {
             foreach( $this->y2plots as $p ) {
                 list($xmin,$ymin) = $p->Min();
                 list($xmax,$ymax) = $p->Max();
-                $min = Min($xmin,$min);
-                $max = Max($xmax,$max);
+                if( $xmin !== null && $xmax !== null ) {
+                    $min = Min($xmin, $min);
+                    $max = Max($xmax, $max);
+                }
             }
         }
 
@@ -1578,8 +1582,10 @@ class Graph {
                 foreach( $this->ynplots[$i] as $p ) {
                     list($xmin,$ymin) = $p->Min();
                     list($xmax,$ymax) = $p->Max();
-                    $min = Min($xmin,$min);
-                    $max = Max($xmax,$max);
+                    if( $xmin !== null && $xmax !== null ) {
+                        $min = Min($xmin, $min);
+                        $max = Max($xmax, $max);
+                    }
                 }
             }
         }
@@ -3636,7 +3642,6 @@ class Grid {
             // assumption offset==0 so we might end up drawing one
             // to many gridlines
             $i=0;
-            $x=$aTicksPos[$i];
             while( $i<count($aTicksPos) && ($x=$aTicksPos[$i]) <= $limit ) {
                 if    ( $aType == 'solid' )      $this->img->Line($x,$yl,$x,$yu);
                 elseif( $aType == 'dotted' )     $this->img->DashedLineForGrid($x,$yl,$x,$yu,1,6);
@@ -4054,7 +4059,7 @@ class Axis extends AxisPrototype {
                 // that holds the labels set by the user. If the user hasn't
                 // specified any values we use whats in the automatically asigned
                 // labels in the maj_ticks_label
-                if( isset($this->ticks_label[$i*$m]) ) {
+                if( isset($this->ticks_label[$i *(int)$m]) ) {
                     $label=$this->ticks_label[$i*$m];
                 }
                 else {
@@ -4154,7 +4159,7 @@ class Axis extends AxisPrototype {
 // Description: Abstract base class for drawing linear and logarithmic
 // tick marks on axis
 //===================================================
-class Ticks {
+class Ticks extends stdClass {
     public $label_formatstr='';   // C-style format string to use for labels
     public $label_formfunc='';
     public $label_dateformatstr='';
@@ -5004,7 +5009,7 @@ class LinearScale {
             $this->off=$img->left_margin;
             $this->scale_factor = 0;
             if( $this->world_size > 0 ) {
-                $this->scale_factor=$this->world_abs_size/($this->world_size*1.0);
+                $this->scale_factor=$this->world_abs_size/($this->world_size*0.999999);
             }
         }
         else { // y scale
@@ -5012,7 +5017,7 @@ class LinearScale {
             $this->off=$img->top_margin+$this->world_abs_size;
             $this->scale_factor = 0;
             if( $this->world_size > 0 ) {
-                $this->scale_factor=-$this->world_abs_size/($this->world_size*1.0);
+                $this->scale_factor=-$this->world_abs_size/($this->world_size*0.999999);
             }
         }
         $size = $this->world_size * $this->scale_factor;
@@ -5366,7 +5371,7 @@ class DisplayValue {
 // CLASS Plot
 // Description: Abstract base class for all concrete plot classes
 //===================================================
-class Plot {
+class Plot extends stdClass {
     public $numpoints=0;
     public $value;
     public $legend='';
@@ -5564,7 +5569,7 @@ class Plot {
 
     function Clear() {
         $this->isRunningClear = true;
-        $this->__construct($this->inputValues['aDatay'], $this->inputValues['aDatax']);
+        Plot::__construct($this->inputValues['aDatay'], $this->inputValues['aDatax']);
         $this->isRunningClear = false;
     }
 
