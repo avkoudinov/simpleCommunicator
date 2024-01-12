@@ -1732,8 +1732,8 @@ a.post_subscribe_loading
 .blocked_in_topic
 {
   display: inline-block;
-  background: transparent url('../images/blocked.png') no-repeat center 13px;
-  width: 33px;
+  background: transparent url('../images/blocked.png') no-repeat center 17px;
+  width: 39px;
   background-size: 100%;
   cursor: pointer;
 }
@@ -5319,6 +5319,7 @@ td.install_langs
   font-size: 42px;
   float: left; 
   cursor: pointer;
+  word-wrap: anywhere;
 }
 
 .quote_header .qauthor_ignored

@@ -1156,8 +1156,8 @@ a.post_subscribe_loading:focus
 .blocked_in_topic
 {
   display: inline-block;
-  background: transparent url('../images/blocked.png') no-repeat center 4px;
-  width: 9px;
+  background: transparent url('../images/blocked.png') no-repeat center 3px;
+  width: 14px;
   background-size: 100%;
   cursor: pointer;
 }
@@ -5898,6 +5898,7 @@ td.install_langs
 {
   float: left; 
   cursor: pointer;
+  word-wrap: anywhere;
 }
 
 .quote_header .qauthor_ignored
