@@ -492,7 +492,7 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 
 <?php endif; ?>
 
-<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"])): ?>
+<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && !empty($forum_data["user_posting_as_guest"])): ?>
 <?php if(empty($_SESSION["guest_posting_mode"])): ?>
 <span class="separator">|</span> <a href="<?php echo($base_url . $gotomsg_appendix); ?>&guest_posting_on=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a>
 <?php else: ?>

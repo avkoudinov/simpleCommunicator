@@ -31,8 +31,8 @@ var config = {
 };
 
 Forum.addXEvent(window, 'load', function () {
-  SimpleCalendar.assign("start_date", config);
-  SimpleCalendar.assign("end_date", config);
+  SimpleCalendar.assign("#start_date", config);
+  SimpleCalendar.assign("#end_date", config);
 });
 
 var current_displayed_event_id_info = null;
@@ -174,10 +174,13 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["forum"]) == $fid) ?
 <option value="<?php echo_html($fid); ?>" <?php echo($selected); ?>><?php echo_html($fdata["name"]); ?></option>
 <?php endforeach; ?>
 
+<?php if($fmanager->is_logged_in() && !$fmanager->is_master_admin()): ?>
 <?php
 $selected = (val_or_empty($_SESSION["moderator_log_filter"]["forum"]) == "private") ? "selected" : "";
 ?>
 <option value="private" <?php echo($selected); ?>><?php echo_html(text("PrivateTopics")); ?></option>
+<?php endif; ?>
+
 </select>
 </td>
 </tr>

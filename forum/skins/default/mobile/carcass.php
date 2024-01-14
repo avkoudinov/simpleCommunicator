@@ -138,8 +138,11 @@ def_js_message("ErrNoImagesInClipboard");
 ?>
 
 <?php
-$start_time = val_or_empty($_SESSION["session_start_time"]);
-if(!empty($start_time)) $start_time = date("d.m.Y H:i:s", $start_time);
+if(!empty($_SESSION["session_start_time"])) {
+  $start_time = $start_time = date("d.m.Y H:i:s", $_SESSION["session_start_time"]);
+} else {
+  $start_time = "";
+}
 ?>
 
 var user_name = "<?php echo_js($fmanager->get_user_name()); ?>";
@@ -213,7 +216,7 @@ function confirm_clear_profile_data()
 </script>
 
 <?php
-require_once "custom_body.php";
+require_once "custom_head.php";
 ?>
 
 </head>
@@ -402,6 +405,12 @@ elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_
   if(!empty($favourites_with_new_count)) $display = "";
   ?>
   <a href="favourites.php"><?php echo_html(text("Favourites")); ?></a><span class="new favourites_with_new_indicator" <?php echo($display); ?>>&nbsp;[<a rel="nofollow" href="new_messages.php?fid=favourites"><?php echo_html(text("new")); ?>:<span class='favourites_with_new_count'><?php echo($favourites_with_new_count); ?></span></a>]</span><br>
+
+  <?php if($fmanager->get_user_name() != ""): ?>
+  <a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=created_topic"><?php echo_html(text("MyTopics")); ?></a>
+
+  / <a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=last_posts"><?php echo_html(text("MyMessagesShort")); ?></a>
+  <?php endif; ?>
 </p>
 
 <p>
@@ -525,6 +534,12 @@ if(!empty($settings["mourning_active"])) $mourning_active = " mourning_active";
     $member_link = "<a class='member_nick' href='view_profile.php?uid=" . $fmanager->get_user_id() . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>";
 
   echo($member_link); 
+
+  if ($fmanager->get_last_posted_user_name() != $fmanager->get_user_name()) {
+    $aname_appendix = "&aname=" . System::generateHash($READ_MARKER . $fmanager->get_last_posted_user_name(), SALT_KEY);
+    
+    echo " / <a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_last_posted_user_name()) . $aname_appendix . "'>" . escape_html($fmanager->get_last_posted_user_name()) . "</a>";
+  }
   ?>
 
   </div>

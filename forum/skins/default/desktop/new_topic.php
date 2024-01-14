@@ -503,12 +503,12 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 $author = $fmanager->get_user_name();
 
 $read_only = '';
-if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"])))
+if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]) && !$fmanager->is_master_admin()))
 {
   $read_only = ' class="read_only_field" readonly';
 }
 
-if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]))
+if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]) && !$fmanager->is_master_admin())
 {
   $author = $fmanager->get_last_posted_user_name();
 }
@@ -736,13 +736,14 @@ else
 <tr id="poll_area" style="display:none">
 <td></td>
 <td>
-<?php echo_html(text("Comment")); ?>:<br>
-<input type="text" id="poll_comment" name="poll_comment">
-<br><br>
-<?php echo_html(text("PollOptions")); ?>:<br>
+<div style="color: maroon"><br><?php echo_html(text("PollComment2")); ?></div>
+<br>
+<?php echo_html(text("PollOptions")); ?>*:<br>
 <textarea id="poll_options" name="poll_options"></textarea>
 <div class="field_comment"><?php echo_html(text("PollComment")); ?></div>
-<div class="field_comment" style="color: maroon"><br><?php echo_html(text("PollComment2")); ?></div>
+<br>
+<?php echo_html(text("Comment")); ?>:<br>
+<textarea id="poll_comment" name="poll_comment"></textarea>
 </td>
 </tr>
 

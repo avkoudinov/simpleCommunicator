@@ -29,7 +29,7 @@ var config = {
 };
 
 Forum.addXEvent(window, 'load', function () {
-  SimpleCalendar.assign("start_date", config);
+  SimpleCalendar.assign("#start_date", config);
 });
 
 var search_users_ajax = null;

@@ -3056,9 +3056,6 @@ abstract class ForumManager
             $topic_data["id"] = $dbw->field_by_name("id");
             $topic_data["topic_name"] = $dbw->field_by_name("name");
             $topic_data["poll_comment"] = $dbw->field_by_name("poll_comment");
-            if (empty($topic_data["poll_comment"])) {
-                $topic_data["poll_comment"] = $topic_data["topic_name"];
-            }
             
             $topic_data["user_id"] = $dbw->field_by_name("user_id");
             $topic_data["author"] = $dbw->field_by_name("author");
@@ -3851,8 +3848,6 @@ abstract class ForumManager
         $forum_data["access_message_count"] = "";
         
         if (empty($fid)) {
-            //debug_message(extract_call_stack(debug_backtrace()));
-            
             MessageHandler::setError(sprintf(text("ErrForumDoesNotExist"), "-"));
             return false;
         }
@@ -5891,7 +5886,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select block_expires, block_reason
                                  from {$prfx}_ip_blocked
-                                 where ip = '$ip' and tp = 'ip'")) {
+                                 where ip = '$ip' and tp = 'IP'")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 return false;
             }
@@ -5931,9 +5926,9 @@ abstract class ForumManager
                 if (empty($_SESSION["blocked_notified"])) {
                     $_SESSION["blocked_notified"] = true;
                     if (!empty($_SESSION["ip_block_expires"])) {
-                        MessageHandler::setError(sprintf(text("ErrIPIsBlockedUntil"), System::getIPAddress(), $_SESSION["ip_block_expires"], $_SESSION["ip_block_time_left"]), $ip_block_reason);
+                        MessageHandler::setWarning(sprintf(text("ErrIPIsBlockedUntil"), System::getIPAddress(), $_SESSION["ip_block_expires"], $_SESSION["ip_block_time_left"]), $ip_block_reason);
                     } else {
-                        MessageHandler::setError(sprintf(text("ErrIPIsBlocked"), System::getIPAddress()), $ip_block_reason);
+                        MessageHandler::setWarning(sprintf(text("ErrIPIsBlocked"), System::getIPAddress()), $ip_block_reason);
                     }
                 }
             } else {
@@ -6502,6 +6497,7 @@ abstract class ForumManager
             $_SESSION["logged_in"] = 1;
             $_SESSION["user_login"] = "admin";
             $_SESSION["user_name"] = "admin";
+            $_SESSION["last_posted_user"] = $_SESSION["user_name"];
             $_SESSION["user_email"] = "";
             $_SESSION["activated"] = true;
             $_SESSION["approved"] = true;
@@ -6614,6 +6610,7 @@ abstract class ForumManager
         }
         
         $result = $this->update_user_status();
+        $_SESSION["last_posted_user"] = $_SESSION["user_name"];
         
         // invalidate new info cache
         if (!$this->new_checker->invalidate_new_messages_cache()) {
@@ -6673,6 +6670,7 @@ abstract class ForumManager
             $_SESSION["logged_in"] = 1;
             $_SESSION["user_login"] = "admin";
             $_SESSION["user_name"] = "admin";
+            $_SESSION["last_posted_user"] = $_SESSION["user_name"];
             $_SESSION["user_email"] = "";
             $_SESSION["activated"] = true;
             $_SESSION["approved"] = true;
@@ -6758,6 +6756,7 @@ abstract class ForumManager
         }
         
         $result = $this->update_user_status();
+        $_SESSION["last_posted_user"] = $_SESSION["user_name"];
         
         // renew cookie, 30 days
         set_cookie("autologin", $autologin_hash, time() + 30 * 24 * 3600);
@@ -6825,6 +6824,8 @@ abstract class ForumManager
         unset($_SESSION["ip_block_time_left"]);
         unset($_SESSION["ip_block_expires"]);
         unset($_SESSION["ip_block_reason"]);
+        
+        unset($_SESSION["guest_posting_mode"]);
         
         set_cookie("q_last_guest_name", "", time());
         
@@ -7612,12 +7613,12 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time() - KEEP_ONLINE_PERIOD);
         
-        if (!$dbw->execute_query("select {$prfx}_user.id, {$prfx}_user.user_name, activated, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout,
+        if (!$dbw->execute_query("select {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout,
                              max(dt) last_time
                              from {$prfx}_forum_hits
                              left join {$prfx}_user on ({$prfx}_forum_hits.user_id = {$prfx}_user.id)
                              where dt >= '$now'
-                             group by {$prfx}_user.id, {$prfx}_user.user_name, activated, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout
+                             group by {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout
                              order by max(dt) desc")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -7625,6 +7626,8 @@ abstract class ForumManager
         
         $anonyms_total_stat = [];
         $anonyms_forum_stat = [];
+        
+        $same_guest_counts = [];
         
         while ($dbw->fetch_row()) {
             $uid = $dbw->field_by_name("id");
@@ -7663,6 +7666,15 @@ abstract class ForumManager
                     continue;
                 }
                 
+                $read_marker = $dbw->field_by_name("read_marker");
+
+                $same_guest_counts[$read_marker][$guest] = $guest;
+
+                // Protection from cluttering the online user list
+                if (count($same_guest_counts[$read_marker]) > 2) {
+                    continue;
+                }
+                
                 $idx = "g_" . $guest;
                 $user = array(
                     "name" => $guest,
@@ -7676,7 +7688,7 @@ abstract class ForumManager
                     "time_ago" => $time_ago
                 );
             }
-            
+
             $anonym_id = $dbw->field_by_name("ip") . $dbw->field_by_name("user_agent");
             
             if (!$dbw->field_by_name("logout")) {
@@ -16856,21 +16868,22 @@ abstract class ForumManager
     } // move_topics
     
     //-----------------------------------------------------------------
-    function merge_topics($target_topic, &$response)
+    function merge_topics($target_topic, $new_topic, &$response)
     {
         global $settings;
+        global $READ_MARKER;
         
         if ($this->demo_mode()) {
             MessageHandler::setWarning(text("MsgDemoMode"));
             return false;
         }
         
-        if (empty($target_topic)) {
-            MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), "-"));
+        if (empty($target_topic) && trim($new_topic) == "") {
+            MessageHandler::setError(text("ErrNoTopicSelected"));
             return false;
         }
-        
-        if (!is_numeric($target_topic)) {
+
+        if (!empty($target_topic) && !is_numeric($target_topic)) {
             MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), $target_topic));
             return false;
         }
@@ -16886,66 +16899,6 @@ abstract class ForumManager
         }
         
         $prfx = $dbw->escape(System::getDBPrefix());
-        $target_topic = $dbw->escape($target_topic);
-        
-        // get info about the target topic and forum
-        
-        $target_creation_date = 0;
-        $target_forum = "";
-        $target_forum_name = "";
-        $target_topic_name = "";
-        
-        $target_topic_valid = true;
-        
-        if (!$dbw->execute_query("select {$prfx}_topic.name topic_name, {$prfx}_topic.creation_date, forum_id, {$prfx}_forum.name forum_name,
-                             {$prfx}_topic.deleted, merged
-                             from {$prfx}_topic
-                             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                             where {$prfx}_topic.id = $target_topic")) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
-        }
-        
-        if ($dbw->fetch_row()) {
-            $target_forum = $dbw->field_by_name("forum_id");
-            $target_forum_name = $dbw->field_by_name("forum_name");
-            $target_topic_name = $dbw->field_by_name("topic_name");
-            
-            $target_creation_date = xstrtotime($dbw->field_by_name("creation_date"));
-            
-            $target_topic_valid = ($dbw->field_by_name("deleted") == "0" && $dbw->field_by_name("merged") == "");
-        } else {
-            MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), $target_topic));
-            $dbw->free_result();
-            return false;
-        }
-        
-        $dbw->free_result();
-        
-        if (!$target_topic_valid) {
-            MessageHandler::setError(text("ErrMergeDeletedOrTransferred"));
-            return false;
-        }
-        
-        $_REQUEST["topics"] = array_diff($_REQUEST["topics"], array($target_topic));
-        if (empty($_REQUEST["topics"])) {
-            MessageHandler::setError(text("ErrMergetoItself"));
-            return false;
-        }
-        
-        if (!$this->is_admin() && !$this->is_forum_moderator($target_forum)) {
-            MessageHandler::setError(text("ErrActionNotAllowed"));
-            return false;
-        }
-        
-        if ($this->is_blocked_in_topic($target_topic)) {
-            return false;
-        }
-        
-        $forum_name = "-";
-        if (!$this->has_access_to_forum($target_forum, $forum_name, true)) {
-            return false;
-        }
         
         $topic_first_posts = array();
         
@@ -16972,24 +16925,128 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($min_creation_date <= $target_creation_date) {
-            MessageHandler::setError(text("ErrTopicsMergeStartDate"));
-            return false;
-        }
-        
         $first_post_id = min($topic_first_posts);
-        
-        if (!reqvar_empty("return_forum")) {
-            $response['target_url'] = "forum.php?fid=" . reqvar("return_forum");
-            if (!reqvar_empty("fpage")) {
-                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+
+        $target_forum = "";
+        $target_forum_name = "";
+        $target_topic_name = "";
+
+        $target_subscribers = array();
+
+        if (!empty($target_topic)) {
+            $target_topic = $dbw->escape($target_topic);
+            
+            // get info about the target topic and forum
+            
+            $target_creation_date = 0;
+            
+            $target_topic_valid = true;
+            
+            if (!$dbw->execute_query("select {$prfx}_topic.name topic_name, {$prfx}_topic.creation_date, forum_id, {$prfx}_forum.name forum_name,
+                                 {$prfx}_topic.deleted, merged
+                                 from {$prfx}_topic
+                                 inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                                 where {$prfx}_topic.id = $target_topic")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
             }
-        } else {
-            $response['target_url'] = "topic.php?fid=" . $target_forum;
-            if (!reqvar_empty("fpage")) {
-                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+            
+            if ($dbw->fetch_row()) {
+                $target_forum = $dbw->field_by_name("forum_id");
+                $target_forum_name = $dbw->field_by_name("forum_name");
+                $target_topic_name = $dbw->field_by_name("topic_name");
+                
+                $target_creation_date = xstrtotime($dbw->field_by_name("creation_date"));
+                
+                $target_topic_valid = ($dbw->field_by_name("deleted") == "0" && $dbw->field_by_name("merged") == "");
+            } else {
+                MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), $target_topic));
+                $dbw->free_result();
+                return false;
             }
-            $response['target_url'] .= "&tid=" . $target_topic . (empty($first_post_id) ? "&gotonew=1" : "&msg=" . $first_post_id);
+            
+            $dbw->free_result();
+            
+            if (!$target_topic_valid) {
+                MessageHandler::setError(text("ErrMergeDeletedOrTransferred"));
+                return false;
+            }
+            
+            $_REQUEST["topics"] = array_diff($_REQUEST["topics"], array($target_topic));
+            if (empty($_REQUEST["topics"])) {
+                MessageHandler::setError(text("ErrMergetoItself"));
+                return false;
+            }
+            
+            if (!$this->is_admin() && !$this->is_forum_moderator($target_forum)) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                return false;
+            }
+            
+            if ($this->is_blocked_in_topic($target_topic)) {
+                return false;
+            }
+            
+            if (!$this->has_access_to_forum($target_forum, $target_forum_name, true)) {
+                return false;
+            }
+            
+            if ($min_creation_date <= $target_creation_date) {
+                MessageHandler::setError(text("ErrTopicsMergeStartDate"));
+                return false;
+            }
+
+            // get list of the subscribers of the target topic            
+            
+            if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+                                 from {$prfx}_topic_subscription
+                                 inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
+                                 where topic_id = $target_topic")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            while ($dbw->fetch_row()) {
+                $target_subscribers[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
+                    "user_name" => $dbw->field_by_name("user_name"),
+                    "user_email" => $dbw->field_by_name("email"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "last_host" => $dbw->field_by_name("last_host"),
+                    "interface_language" => $dbw->field_by_name("interface_language")
+                );
+            }
+            
+            $dbw->free_result();            
+        } else { // if target topic
+            if (!$dbw->execute_query("select forum_id, {$prfx}_forum.name forum_name
+                                 from {$prfx}_topic
+                                 inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                                 where {$prfx}_topic.id in ($in_list)")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            if ($dbw->fetch_row()) {
+                $target_forum = $dbw->field_by_name("forum_id");
+                $target_forum_name = $dbw->field_by_name("forum_name");
+            } else {
+                MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), implode(",", $_REQUEST["topics"])));
+                $dbw->free_result();
+                return false;
+            }
+            
+            $dbw->free_result();
+            
+            $target_topic_name = trim($new_topic);
+
+            if (!$this->is_admin() && !$this->is_forum_moderator($target_forum)) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                return false;
+            }
+            
+            if (!$this->has_access_to_forum($target_forum, $target_forum_name, true)) {
+                return false;
+            }
         }
         
         // get list of the subscribers of the merged topics
@@ -17030,30 +17087,6 @@ abstract class ForumManager
         
         while ($dbw->fetch_row()) {
             $moderators[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
-                "user_name" => $dbw->field_by_name("user_name"),
-                "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
-                "last_host" => $dbw->field_by_name("last_host"),
-                "interface_language" => $dbw->field_by_name("interface_language")
-            );
-        }
-        
-        $dbw->free_result();
-        
-        // get list of the subscribers of the target topic
-        
-        $target_subscribers = array();
-        
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
-                             from {$prfx}_topic_subscription
-                             inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
-                             where topic_id = $target_topic")) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
-        }
-        
-        while ($dbw->fetch_row()) {
-            $target_subscribers[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
                 "send_notifications" => $dbw->field_by_name("send_notifications"),
@@ -17125,6 +17158,86 @@ abstract class ForumManager
             return false;
         }
         
+        if (empty($target_topic)) {
+            $symbols = "";
+            if (!$this->check_subject($new_topic, $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                
+                MessageHandler::setError($error);
+                return false;
+            }
+
+            if (utf8_strlen(trim($new_topic)) > $settings["max_topic_name_symbols"]) {
+                MessageHandler::setError(sprintf(text("ErrSubjectTooLong"), $settings["max_topic_name_symbols"]));
+                MessageHandler::setErrorElement("new_topic");
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            // make the topic author the actual moderator
+            
+            $tuid = $dbw->escape($this->get_user_id());
+            if (empty($tuid)) {
+                $tuid = "NULL";
+            }
+            $tauthor = $dbw->escape($this->get_user_name());
+            $tread_marker = $dbw->escape($READ_MARKER);
+            $tsubject = $dbw->escape(trim($new_topic));
+            
+            // -1 second to be able to inject the posts
+            $tdate = $dbw->format_datetime($min_creation_date - 1);
+            
+            $query = "insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker)
+                values ($target_forum, $tuid, '$tauthor', '$tsubject', '$tdate', '$tread_marker')";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $target_topic = $dbw->insert_id();
+            
+            $query = "insert into {$prfx}_topic_statistics (topic_id) values ($target_topic)";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $query = "update {$prfx}_forum_statistics set
+                topic_count = topic_count + 1,
+                topic_count_total = topic_count_total + 1
+                where forum_id = $target_forum";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if ($tuid != "NULL") {
+                $query = "update {$prfx}_user_statistics set
+                  topic_count = topic_count + 1
+                  where user_id = $tuid";
+                if (!$dbw->execute_query($query)) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+            }
+
+            // text("MsgTopicCreatedFromMerge")
+            $query = "update {$prfx}_post set
+              last_warned_by = '$tauthor', 
+              last_warning = 'MSG(MsgTopicCreatedFromMerge)'
+              where id = $first_post_id";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+        } // if target topic
+        
         if (!$dbw->execute_query("update {$prfx}_topic set
                              deleted = 1, pinned = 0, publish_delay = 0,
                              merged = $target_topic
@@ -17169,7 +17282,10 @@ abstract class ForumManager
             return false;
         }
         
-        foreach ($topics as $tid => $tdata) {
+        foreach ($topics as $tid => &$tdata) {
+            // if new topic, the $target_topic is known only now.
+            $tdata["topic_id"] = $target_topic;
+          
             if (!$this->log_moderator_event($dbw, $prfx, $tdata)) {
                 $dbw->rollback_transaction();
                 return false;
@@ -17212,6 +17328,19 @@ abstract class ForumManager
             return false;
         }
         
+        if (!reqvar_empty("return_forum")) {
+            $response['target_url'] = "forum.php?fid=" . reqvar("return_forum");
+            if (!reqvar_empty("fpage")) {
+                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+            }
+        } else {
+            $response['target_url'] = "topic.php?fid=" . $target_forum;
+            if (!reqvar_empty("fpage")) {
+                $response["target_url"] .= "&fpage=" . reqvar("fpage");
+            }
+            $response['target_url'] .= "&tid=" . $target_topic . (empty($first_post_id) ? "&gotonew=1" : "&msg=" . $first_post_id);
+        }
+
         if (count($_REQUEST["topics"]) > 1) {
             MessageHandler::setInfo(text("MsgTopicsMerged"));
         } else {
@@ -17661,6 +17790,15 @@ abstract class ForumManager
                 return false;
             }
             
+            $symbols = "";
+            if (!$this->check_subject($new_topic, $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                
+                MessageHandler::setError($error);
+                return false;
+            }
+
             if (utf8_strlen(trim($new_topic)) > $settings["max_topic_name_symbols"]) {
                 MessageHandler::setError(sprintf(text("ErrSubjectTooLong"), $settings["max_topic_name_symbols"]));
                 MessageHandler::setErrorElement("new_topic");
@@ -17719,6 +17857,17 @@ abstract class ForumManager
                 }
             }
             
+            // text("MsgTopicCreatedFromPostMove")
+            $query = "update {$prfx}_post set
+              last_warned_by = '$tauthor', 
+              last_warning = 'MSG(MsgTopicCreatedFromPostMove)'
+              where id = $first_post";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+
             if (!$this->handle_topic_ignorance($dbw, $prfx, $target_topic, $this->get_user_id(), $this->get_user_name())) {
                 $dbw->rollback_transaction();
                 return false;
@@ -17959,6 +18108,9 @@ abstract class ForumManager
         }
         
         $dbw->free_result();
+        
+        if (empty($target_topic) && trim($new_topic) != "") {
+        }
         
         // set participation information
         
@@ -20280,6 +20432,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_message_for_edit($pid, &$response)
     {
+        global $READ_MARKER;
+        
         if (empty($pid) || !is_numeric($pid)) {
             return false;
         }
@@ -20300,9 +20454,10 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select topic_id, {$prfx}_post.author,
                              text_content, is_comment, is_adult,
-                             {$prfx}_topic.name, profiled_topic
+                             {$prfx}_topic.name, profiled_topic, user_posting_as_guest, {$prfx}_post.read_marker
                              from {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                              where {$prfx}_post.id = $pid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -20315,10 +20470,12 @@ abstract class ForumManager
         
         $topic_id = $dbw->field_by_name("topic_id");
         $author = $this->get_display_name($dbw->field_by_name("author"));
+        $read_marker = $dbw->field_by_name("read_marker");
         $topic_name = $dbw->field_by_name("name");
         $is_thematic = !$dbw->field_by_name("is_comment");
         $is_adult = $dbw->field_by_name("is_adult") == 1;
         $profiled_topic = $dbw->field_by_name("profiled_topic");
+        $user_posting_as_guest = $dbw->field_by_name("user_posting_as_guest");
         $message = Emoji::Decode($dbw->field_by_name("text_content"));
         
         $dbw->free_result();
@@ -20334,6 +20491,8 @@ abstract class ForumManager
         $response["is_thematic"] = $is_thematic;
         $response["is_adult"] = $is_adult;
         $response["profiled_topic"] = $profiled_topic;
+        
+        $response["may_edit_author"] = ($READ_MARKER == $read_marker) && (!$this->is_logged_in() || ($user_posting_as_guest && !empty($_SESSION["guest_posting_mode"]) && $author != $this->get_status_user_name()));
         
         $_SESSION["last_edit_hash"] = $message;
         $_SESSION["last_edit_post"] = $pid;
@@ -20735,15 +20894,15 @@ abstract class ForumManager
         
         $forced_guest_posting = false;
         if ($this->is_logged_in() && !empty($user_posting_as_guest) && 
-            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_user_name()
+            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_status_user_name()
         ) {
            $forced_guest_posting = true;
         }        
         
-        if ($forced_guest_posting) {
-            // let author as is
-        } elseif ($this->is_master_admin()) {
+        if ($this->is_master_admin()) {
             $_REQUEST["author"] = "admin";
+        } elseif ($forced_guest_posting) {
+            // let author as is
         } elseif ($this->is_logged_in()) {
             $_REQUEST["author"] = $this->get_user_name();
         } 
@@ -21069,7 +21228,7 @@ abstract class ForumManager
         
         // author update
         
-        if ($self_edited && (!$this->is_logged_in() || $forced_guest_posting) && $old_post_author != reqvar("author")) {
+        if ($self_edited && $old_post_author != reqvar("author")) {
             if (reqvar_empty("author", true)) {
                 MessageHandler::setError(text("ErrAuthorNameEmpty"));
                 MessageHandler::setErrorElement("author");
@@ -21093,12 +21252,29 @@ abstract class ForumManager
                 return false;
             }
             
+            $uid_appendix = "";
+            $current_uid = $this->get_user_id();
+            // The user converted his guest post to the own post
+            if (!empty($current_uid) && reqvar("author") == $this->get_user_name()) {
+                $uid_appendix = "user_id = $current_uid,";
+
+                $query = "update {$prfx}_user_statistics set
+                    post_count = post_count + 1
+                    where user_id = $current_uid";
+                if (!$dbw->execute_query($query)) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+            }
+            
             $author = $dbw->quotes_or_null(reqvar("author"));
             $query = "update {$prfx}_post set
+                $uid_appendix
                 author = $author,
                 last_updated_by = $author
                 where id = $edited_post";
-            
+                
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
@@ -21281,8 +21457,11 @@ abstract class ForumManager
 
         $response["self_edited"] = $self_edited;
         
-        $_SESSION["user_name"] = reqvar("author");
         $_SESSION["last_posted_user"] = reqvar("author");
+
+        if (empty($forced_guest_posting)) {
+            $_SESSION["user_name"] = reqvar("author");
+        }
         
         $response["target_url"] = "topic.php?fid=$post_data[forum_id]";
         if (!reqvar_empty("fpage")) {
@@ -21980,6 +22159,8 @@ abstract class ForumManager
         if (preg_match("/[^\p{L} _\-\.\(\),0-9!%:\$€₽&¥¥£Ұ₴，]+/u", $author, $matches)) {
             $symbols = $matches[0];
           
+            trace_message_to_file(date("d.m.Y, H:i") . ": the string [$author] contains the prohibited symbols [$symbols]", "symbols.log");
+
             return false;
         }
 
@@ -21995,6 +22176,8 @@ abstract class ForumManager
         
         if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>—~&#–§№\$€₽¥¥£Ұ₴°\"\'“”0-9，]+/u", $subject, $matches)) {
             $symbols = $matches[0];
+
+            trace_message_to_file(date("d.m.Y, H:i") . ": the string [$subject] contains the prohibited symbols [$symbols]", "symbols.log");
 
             return false;
         }
@@ -22440,15 +22623,15 @@ abstract class ForumManager
 
         $forced_guest_posting = false;
         if ($this->is_logged_in() && !empty($user_posting_as_guest) && 
-            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_user_name()
+            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_status_user_name()
         ) {
            $forced_guest_posting = true;
         }        
         
-        if ($forced_guest_posting) {
-            // let author as is
-        } elseif ($this->is_master_admin()) {
+        if ($this->is_master_admin()) {
             $_REQUEST["author"] = "admin";
+        } elseif ($forced_guest_posting) {
+            // let author as is
         } elseif ($this->is_logged_in()) {
             $_REQUEST["author"] = $this->get_user_name();
         } 
@@ -23038,7 +23221,7 @@ abstract class ForumManager
             return false;
         }
         
-        if ($uid != "NULL" && !$is_private) {
+        if ($uid != "NULL" && !$is_private && !$forced_guest_posting) {
             $query = "update {$prfx}_user_statistics set
                 post_count = post_count + 1
                 where user_id = $uid";
@@ -23267,8 +23450,11 @@ abstract class ForumManager
         }
         
         $_SESSION["last_post_hash"] = $last_post_hash;
-        $_SESSION["user_name"] = reqvar("author");
         $_SESSION["last_posted_user"] = reqvar("author");
+        
+        if (empty($forced_guest_posting)) {
+            $_SESSION["user_name"] = reqvar("author");
+        }
         
         if ($is_private) {
             $fid = "private";
@@ -24522,7 +24708,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select ip
                              from {$prfx}_ip_blocked
-                             where ip = '$ip' and tp = 'ip' and (block_expires is NULL or block_expires > '$now')")) {
+                             where ip = '$ip' and tp = 'IP' and (block_expires is NULL or block_expires > '$now')")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -24552,7 +24738,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select ip
                              from {$prfx}_ip_blocked
-                             where ip = '$um' and tp = 'um' and (block_expires is NULL or block_expires > '$now')")) {
+                             where ip = '$um' and tp = 'UM' and (block_expires is NULL or block_expires > '$now')")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -24839,7 +25025,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select block_expires, block_reason
                              from {$prfx}_ip_blocked
-                             where ip = '$ip' and tp = 'ip'")) {
+                             where ip = '$ip' and tp = 'IP'")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -24892,7 +25078,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select block_expires, block_reason
                              from {$prfx}_ip_blocked
-                             where ip = '$user_marker' and tp = 'um'")) {
+                             where ip = '$user_marker' and tp = 'UM'")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -25105,7 +25291,7 @@ abstract class ForumManager
         }
         
         // Protection against cluttering the guest list.
-        // The guest list is filled by the guest name who were active
+        // The guest list is filled by the guest names who were active
         // within the last KEEP_ONLINE_PERIOD minutes.
         // If a visitor, changes the guest name repeatedly, all new
         // names may clutter the guest list.
@@ -27151,6 +27337,12 @@ abstract class ForumManager
     {
         global $READ_MARKER;
         
+        if (!empty($_SESSION["skip_next_hit"])) {
+            unset($_SESSION["skip_next_hit"]);
+            
+            return true;
+        }
+
         if (!empty($fid) && !is_numeric($fid)) {
             return false;
         }
@@ -27177,11 +27369,33 @@ abstract class ForumManager
         if (empty($tid)) {
             $tid = "NULL";
         }
+
+        if (!$dbw->execute_query("select
+                             user_posting_as_guest
+                             from {$prfx}_forum
+                             where id = $fid")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        $user_posting_as_guest = true;
+        if ($dbw->fetch_row()) {
+            $user_posting_as_guest = $dbw->field_by_name("user_posting_as_guest");
+        }
+        
+        $dbw->free_result();
+
+        $forced_guest_posting = false;
+        if ($this->is_logged_in() && !empty($user_posting_as_guest) && 
+            !empty($_SESSION["guest_posting_mode"]) && $this->get_last_posted_user_name() != $this->get_user_name()
+        ) {
+           $forced_guest_posting = true;
+        }        
         
         $uid = $dbw->escape($this->get_user_id());
         $guest_name = $this->get_user_name();
         
-        if (empty($uid)) {
+        if (empty($uid) || $forced_guest_posting) {
             $uid = "NULL";
             
             if ($this->is_master_admin()) {
@@ -27240,7 +27454,7 @@ abstract class ForumManager
             return false;
         }
         
-        $author = $dbw->quotes_or_null($this->get_user_name());
+        $author = $guest_name;
         
         if (!$dbw->execute_query("update {$prfx}_read_marker_activity
                              set current_name_hits = 0, current_name_start = '$now'
@@ -27615,12 +27829,6 @@ abstract class ForumManager
         if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
             return true;
         }
-        
-        //debug_message("----------------------------------------------------------");
-        //debug_message("user: " . $this->get_user_name());
-        //debug_message($_SERVER["PHP_SELF"]);
-        
-        //debug_message("updating DB state for topic: " . $tid . ", last_post_read_date: " . date("Y-m-d H:i", $last_post_read_date));
         
         global $READ_MARKER;
         
@@ -30813,6 +31021,11 @@ abstract class ForumManager
             $user_data["user_name"] = text("MasterAdministrator");
         }
         
+        // Guest posting under logged in user
+        if ($this->is_logged_in() && $this->get_last_posted_user_name() != $this->get_user_name()) {
+            $user_data["user_name"] = $this->get_last_posted_user_name();
+        }
+        
         $user_data["hide_ignored"] = val_or_empty($_SESSION["hide_ignored"]);
         $user_data["hide_pictures"] = val_or_empty($_SESSION["hide_pictures"]);
         $user_data["donot_hide_adult_pictures"] = val_or_empty($_SESSION["donot_hide_adult_pictures"]);
@@ -30893,7 +31106,7 @@ abstract class ForumManager
         global $READ_MARKER;
         global $settings;
         
-        if ($this->is_logged_in() && !$this->is_master_admin()) {
+        if ($this->is_logged_in() && !$this->is_master_admin() && $this->get_last_posted_user_name() == $this->get_user_name()) {
             return true;
         }
 
@@ -30944,7 +31157,10 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->is_master_admin()) {
+        // Guest posting under logged in user
+        if ($this->is_logged_in() && $this->get_last_posted_user_name() != $this->get_user_name()) {
+            $_SESSION["last_posted_user"] = reqvar("user_name");
+        } elseif (!$this->is_master_admin()) {
             $_SESSION["user_name"] = reqvar("user_name");
         }
         

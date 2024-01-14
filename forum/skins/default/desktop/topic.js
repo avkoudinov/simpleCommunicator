@@ -1279,6 +1279,10 @@ function load_created_post(created_post, original_post)
           message_container.id = "post_" + load_created_post_ajax.created_post;
           message_container.classList.add("message_container");
           message_container.classList.add("message_container_with_offset");
+          
+          var reply_indicator = document.createElement("div");
+          reply_indicator.classList.add("reply_indicator");
+          message_container.append(reply_indicator);
 
           elm.parentNode.insertBefore(message_container, elm.nextSibling);
           
@@ -4036,9 +4040,6 @@ function handle_writing_cancel()
     Forum.hide_user_msgbox(true);
     cancel_confirmed = false;
     cancel_confirmaction_in_progress = false;
-
-    form.elements['author'].readOnly = false;
-    form.elements['author'].classList.remove('read_only_field');
 
     form.elements['edit_mode'].value = '';
     form.elements['edit_mode'].defaultValue = '';

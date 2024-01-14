@@ -185,10 +185,15 @@ function toggle_selection(td, tid)
 
 var topic_choose_apply_func = function()
 {
-  var elm = document.getElementById("found_topics");
+  var new_topic = "";
+
+  var elm = document.getElementById("new_topic");
+  if(elm) new_topic = elm.value;
+
+  elm = document.getElementById("found_topics");
   if(!elm) return false;
 
-  if(!elm.value)
+  if(!elm.value && !new_topic)
   {
     var mbuttons = [
       {
@@ -202,7 +207,7 @@ var topic_choose_apply_func = function()
     return false;
   }
 
-  return do_action({ topic_action: "merge_topics", target_topic: elm.value });
+  return do_action({ topic_action: "merge_topics", target_topic: elm.value, new_topic: new_topic });
 }
 
 function select_target_topic()
@@ -236,7 +241,7 @@ function select_target_topic()
     }
   ];
 
-  Forum.show_topic_selector("<?php echo_js(text("MergeTopics")); ?>", buttons, false, true, 600);
+  Forum.show_topic_selector("<?php echo_js(text("MergeTopics")); ?>", buttons, true, true, 600);
 
   return false;
 }
@@ -451,7 +456,7 @@ if(!empty($forum_data["moderators"]))
 
 <?php endif; ?>
 
-<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"])): ?>
+<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && !empty($forum_data["user_posting_as_guest"])): ?>
 <?php if(empty($_SESSION["guest_posting_mode"])): ?>
 <span class="separator">|</span> <a href="<?php echo($base_url); ?>&guest_posting_on=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a>
 <?php else: ?>

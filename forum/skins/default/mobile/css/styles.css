@@ -1648,6 +1648,11 @@ td.enter_password
   padding-right: 52px;
 }
 
+.new_topic_table #poll_comment
+{
+  height: 200px;
+}
+
 .new_topic_table #poll_options
 {
   height: 250px;
@@ -1727,8 +1732,8 @@ a.post_subscribe_loading
 .blocked_in_topic
 {
   display: inline-block;
-  background: transparent url('../images/blocked.png') no-repeat center 13px;
-  width: 33px;
+  background: transparent url('../images/blocked.png') no-repeat center 17px;
+  width: 39px;
   background-size: 100%;
   cursor: pointer;
 }
@@ -2159,6 +2164,19 @@ img.mourning_band
 .message_container_with_offset
 {
   margin-left: 120px;
+  position: relative;
+}
+
+.message_container_with_offset .reply_indicator {
+  width: 86px;
+  height: 86px;
+  position: absolute;
+  top: 0;
+  left: -100px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/reply.png);
+  background-size: 100%;
 }
 
 .message_table td .emb_wrapper,
@@ -4992,6 +5010,7 @@ img.image_placeholder
 {
   border: 2px solid gray;
   float: left;
+  margin: 20px 0px 20px 0px;
 }
 
 .poll_area img
@@ -4999,12 +5018,19 @@ img.image_placeholder
   max-width: 260px;  
 }
 
+.poll_note
+{
+  font-size: 32px;
+  padding: 14px;
+  color: maroon;
+  margin-top: 20px;
+}
+
 .poll_comment
 {
   font-size: 32px;
-  color: maroon;
-  padding-top: 10px;
-  margin-bottom: 30px;
+  padding: 14px;
+  margin-bottom: 20px;
 }
 
 .poll_area .aux_table td
@@ -5022,7 +5048,7 @@ img.image_placeholder
 .poll_header
 {
   border-bottom: 2px solid gray;
-  font-size: 40px;
+  font-size: 36px;
 }
 
 .poll_footer
@@ -5045,6 +5071,7 @@ img.image_placeholder
 .poll_table
 {
   border-collapse: collapse;
+  width: 100%;
 }
 
 .poll_table td
@@ -5055,30 +5082,27 @@ img.image_placeholder
   font-size: 36px;
 }
 
-.poll_table tr:last-child td
-{
-  padding-bottom: 10px;
-}
-
-.poll_table td:nth-child(1)
+.poll_table > tbody > tr > td:nth-child(1)
 {
   padding: 12px 0px 0px 12px;
+  width: 1px;
 }
 
-.poll_table td:nth-child(2)
+.poll_table > tbody > tr >  td:nth-child(2)
 {
   width: 500px;
 }
 
-.poll_table td:nth-child(3)
+.poll_table > tbody > tr >  td:nth-child(3)
 {
   text-align: right;
   padding-left: 60px;
+  width: 1px;
 }
 
-.poll_table td:nth-child(4)
+.poll_table > tbody > tr > td:nth-child(4)
 {
-  min-width: 200px;
+  min-width: 160px;
 }
 
 .poll_table .aux_table td
@@ -5308,6 +5332,7 @@ td.install_langs
   font-size: 42px;
   float: left; 
   cursor: pointer;
+  word-wrap: anywhere;
 }
 
 .quote_header .qauthor_ignored
@@ -5847,53 +5872,6 @@ td.preferred_forums
 {
   word-break: break-word;
 }
-
-/* BEGIN: calender */
-
-.calendar_container table
-{
-  border-spacing: 3px;
-}
-
-.calendar_container td
-{
-  width: 66px;
-  height: 60px;
-  font-size: 30px;
-}
-
-.calendar_container td.weekday
-{
-  height: 50px;
-}
-
-.calendar_container button.arrow_right,
-.calendar_container button.arrow_left
-{
-  width: 80px;
-  font-size: 30px;
-  height: 50px;
-}
-
-.calendar_container select
-{
-    font-size: 35px;
-}
-
-.calendar_container select.month_selector
-{
-  width: 190px;
-  margin-right: 15px;
-  height: 50px;
-}
-
-.calendar_container select.year_selector
-{
-  width: 110px;
-  height: 50px;
-}
-
-/* END: calender */
 
 /* BEGIN: user message box */
 

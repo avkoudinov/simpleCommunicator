@@ -1156,8 +1156,8 @@ a.post_subscribe_loading:focus
 .blocked_in_topic
 {
   display: inline-block;
-  background: transparent url('../images/blocked.png') no-repeat center 4px;
-  width: 9px;
+  background: transparent url('../images/blocked.png') no-repeat center 3px;
+  width: 14px;
   background-size: 100%;
   cursor: pointer;
 }
@@ -1937,6 +1937,11 @@ a.new_topic_disabled:hover
   margin: 0 auto;
 }
 
+.new_topic_table #poll_comment
+{
+  height: 100px;
+}
+
 .new_topic_table #poll_options
 {
   height: 150px;
@@ -2203,6 +2208,19 @@ tr.selected_row td.checkbox_selector
 .message_container_with_offset
 {
   margin-left: 40px;
+  position: relative;
+}
+
+.message_container_with_offset .reply_indicator {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  left: -35px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/reply.png);
+  background-size: 100%;
 }
 
 .message_table td .emb_wrapper,
@@ -5580,6 +5598,7 @@ img.mourning_band
 {
   border: 1px solid gray;
   float: left;
+  margin-bottom: 10px;
 }
 
 .poll_area img
@@ -5587,12 +5606,19 @@ img.mourning_band
   max-width: 160px;  
 }
 
+.poll_note
+{
+  color: maroon;
+  font-size: 12px;
+  padding: 5px;
+  margin-top: 7px;
+}
+
 .poll_comment
 {
-  font-size: 11px;
-  color: maroon;
-  padding-top: 5px;
-  margin-bottom: 30px;
+  font-size: 12px;
+  padding: 5px;
+  margin-bottom: 7px;
 }
 
 .poll_area .aux_table td
@@ -5642,23 +5668,23 @@ img.mourning_band
   font-size: 12px;
 }
 
-.poll_table td:nth-child(1)
+.poll_table > td:nth-child(1)
 {
   padding: 4px 0px 0px 4px;
 }
 
-.poll_table td:nth-child(2)
+.poll_table > tbody > tr > td:nth-child(2)
 {
-  width: 450px;
+  min-width: 350px;
 }
 
-.poll_table td:nth-child(3)
+.poll_table > tbody > tr > td:nth-child(3)
 {
   text-align: right;
   padding-left: 60px;
 }
 
-.poll_table td:nth-child(4)
+.poll_table > tbody > tr > td:nth-child(4)
 {
   min-width: 100px;
 }
@@ -5885,6 +5911,7 @@ td.install_langs
 {
   float: left; 
   cursor: pointer;
+  word-wrap: anywhere;
 }
 
 .quote_header .qauthor_ignored
