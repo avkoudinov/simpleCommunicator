@@ -3848,8 +3848,6 @@ abstract class ForumManager
         $forum_data["access_message_count"] = "";
         
         if (empty($fid)) {
-            //debug_message(extract_call_stack(debug_backtrace()));
-            
             MessageHandler::setError(sprintf(text("ErrForumDoesNotExist"), "-"));
             return false;
         }
@@ -6499,6 +6497,7 @@ abstract class ForumManager
             $_SESSION["logged_in"] = 1;
             $_SESSION["user_login"] = "admin";
             $_SESSION["user_name"] = "admin";
+            $_SESSION["last_posted_user"] = $_SESSION["user_name"];
             $_SESSION["user_email"] = "";
             $_SESSION["activated"] = true;
             $_SESSION["approved"] = true;
@@ -6611,6 +6610,7 @@ abstract class ForumManager
         }
         
         $result = $this->update_user_status();
+        $_SESSION["last_posted_user"] = $_SESSION["user_name"];
         
         // invalidate new info cache
         if (!$this->new_checker->invalidate_new_messages_cache()) {
@@ -6670,6 +6670,7 @@ abstract class ForumManager
             $_SESSION["logged_in"] = 1;
             $_SESSION["user_login"] = "admin";
             $_SESSION["user_name"] = "admin";
+            $_SESSION["last_posted_user"] = $_SESSION["user_name"];
             $_SESSION["user_email"] = "";
             $_SESSION["activated"] = true;
             $_SESSION["approved"] = true;
@@ -6755,6 +6756,7 @@ abstract class ForumManager
         }
         
         $result = $this->update_user_status();
+        $_SESSION["last_posted_user"] = $_SESSION["user_name"];
         
         // renew cookie, 30 days
         set_cookie("autologin", $autologin_hash, time() + 30 * 24 * 3600);
@@ -6822,6 +6824,8 @@ abstract class ForumManager
         unset($_SESSION["ip_block_time_left"]);
         unset($_SESSION["ip_block_expires"]);
         unset($_SESSION["ip_block_reason"]);
+        
+        unset($_SESSION["guest_posting_mode"]);
         
         set_cookie("q_last_guest_name", "", time());
         
@@ -7609,12 +7613,12 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time() - KEEP_ONLINE_PERIOD);
         
-        if (!$dbw->execute_query("select {$prfx}_user.id, {$prfx}_user.user_name, activated, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout,
+        if (!$dbw->execute_query("select {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout,
                              max(dt) last_time
                              from {$prfx}_forum_hits
                              left join {$prfx}_user on ({$prfx}_forum_hits.user_id = {$prfx}_user.id)
                              where dt >= '$now'
-                             group by {$prfx}_user.id, {$prfx}_user.user_name, activated, forum_id, topic_id, guest_name, {$prfx}_forum_hits.ip, user_agent, logout
+                             group by {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout
                              order by max(dt) desc")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -7622,6 +7626,8 @@ abstract class ForumManager
         
         $anonyms_total_stat = [];
         $anonyms_forum_stat = [];
+        
+        $same_guest_counts = [];
         
         while ($dbw->fetch_row()) {
             $uid = $dbw->field_by_name("id");
@@ -7660,6 +7666,15 @@ abstract class ForumManager
                     continue;
                 }
                 
+                $read_marker = $dbw->field_by_name("read_marker");
+
+                $same_guest_counts[$read_marker][$guest] = $guest;
+
+                // Protection from cluttering the online user list
+                if (count($same_guest_counts[$read_marker]) > 2) {
+                    continue;
+                }
+                
                 $idx = "g_" . $guest;
                 $user = array(
                     "name" => $guest,
@@ -7673,7 +7688,7 @@ abstract class ForumManager
                     "time_ago" => $time_ago
                 );
             }
-            
+
             $anonym_id = $dbw->field_by_name("ip") . $dbw->field_by_name("user_agent");
             
             if (!$dbw->field_by_name("logout")) {
@@ -20417,6 +20432,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_message_for_edit($pid, &$response)
     {
+        global $READ_MARKER;
+        
         if (empty($pid) || !is_numeric($pid)) {
             return false;
         }
@@ -20437,9 +20454,10 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select topic_id, {$prfx}_post.author,
                              text_content, is_comment, is_adult,
-                             {$prfx}_topic.name, profiled_topic
+                             {$prfx}_topic.name, profiled_topic, user_posting_as_guest, {$prfx}_post.read_marker
                              from {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                              where {$prfx}_post.id = $pid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -20452,10 +20470,12 @@ abstract class ForumManager
         
         $topic_id = $dbw->field_by_name("topic_id");
         $author = $this->get_display_name($dbw->field_by_name("author"));
+        $read_marker = $dbw->field_by_name("read_marker");
         $topic_name = $dbw->field_by_name("name");
         $is_thematic = !$dbw->field_by_name("is_comment");
         $is_adult = $dbw->field_by_name("is_adult") == 1;
         $profiled_topic = $dbw->field_by_name("profiled_topic");
+        $user_posting_as_guest = $dbw->field_by_name("user_posting_as_guest");
         $message = Emoji::Decode($dbw->field_by_name("text_content"));
         
         $dbw->free_result();
@@ -20471,6 +20491,8 @@ abstract class ForumManager
         $response["is_thematic"] = $is_thematic;
         $response["is_adult"] = $is_adult;
         $response["profiled_topic"] = $profiled_topic;
+        
+        $response["may_edit_author"] = ($READ_MARKER == $read_marker) && (!$this->is_logged_in() || ($user_posting_as_guest && !empty($_SESSION["guest_posting_mode"]) && $author != $this->get_status_user_name()));
         
         $_SESSION["last_edit_hash"] = $message;
         $_SESSION["last_edit_post"] = $pid;
@@ -20872,15 +20894,15 @@ abstract class ForumManager
         
         $forced_guest_posting = false;
         if ($this->is_logged_in() && !empty($user_posting_as_guest) && 
-            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_user_name()
+            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_status_user_name()
         ) {
            $forced_guest_posting = true;
         }        
         
-        if ($forced_guest_posting) {
-            // let author as is
-        } elseif ($this->is_master_admin()) {
+        if ($this->is_master_admin()) {
             $_REQUEST["author"] = "admin";
+        } elseif ($forced_guest_posting) {
+            // let author as is
         } elseif ($this->is_logged_in()) {
             $_REQUEST["author"] = $this->get_user_name();
         } 
@@ -21206,7 +21228,7 @@ abstract class ForumManager
         
         // author update
         
-        if ($self_edited && (!$this->is_logged_in() || $forced_guest_posting) && $old_post_author != reqvar("author")) {
+        if ($self_edited && $old_post_author != reqvar("author")) {
             if (reqvar_empty("author", true)) {
                 MessageHandler::setError(text("ErrAuthorNameEmpty"));
                 MessageHandler::setErrorElement("author");
@@ -21230,12 +21252,29 @@ abstract class ForumManager
                 return false;
             }
             
+            $uid_appendix = "";
+            $current_uid = $this->get_user_id();
+            // The user converted his guest post to the own post
+            if (!empty($current_uid) && reqvar("author") == $this->get_user_name()) {
+                $uid_appendix = "user_id = $current_uid,";
+
+                $query = "update {$prfx}_user_statistics set
+                    post_count = post_count + 1
+                    where user_id = $current_uid";
+                if (!$dbw->execute_query($query)) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+            }
+            
             $author = $dbw->quotes_or_null(reqvar("author"));
             $query = "update {$prfx}_post set
+                $uid_appendix
                 author = $author,
                 last_updated_by = $author
                 where id = $edited_post";
-            
+                
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
@@ -21418,8 +21457,11 @@ abstract class ForumManager
 
         $response["self_edited"] = $self_edited;
         
-        $_SESSION["user_name"] = reqvar("author");
         $_SESSION["last_posted_user"] = reqvar("author");
+
+        if (empty($forced_guest_posting)) {
+            $_SESSION["user_name"] = reqvar("author");
+        }
         
         $response["target_url"] = "topic.php?fid=$post_data[forum_id]";
         if (!reqvar_empty("fpage")) {
@@ -22117,6 +22159,8 @@ abstract class ForumManager
         if (preg_match("/[^\p{L} _\-\.\(\),0-9!%:\$€₽&¥¥£Ұ₴，]+/u", $author, $matches)) {
             $symbols = $matches[0];
           
+            trace_message_to_file(date("d.m.Y, H:i") . ": the string [$author] contains the prohibited symbols [$symbols]", "symbols.log");
+
             return false;
         }
 
@@ -22132,6 +22176,8 @@ abstract class ForumManager
         
         if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>—~&#–§№\$€₽¥¥£Ұ₴°\"\'“”0-9，]+/u", $subject, $matches)) {
             $symbols = $matches[0];
+
+            trace_message_to_file(date("d.m.Y, H:i") . ": the string [$subject] contains the prohibited symbols [$symbols]", "symbols.log");
 
             return false;
         }
@@ -22577,15 +22623,15 @@ abstract class ForumManager
 
         $forced_guest_posting = false;
         if ($this->is_logged_in() && !empty($user_posting_as_guest) && 
-            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_user_name()
+            !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_status_user_name()
         ) {
            $forced_guest_posting = true;
         }        
         
-        if ($forced_guest_posting) {
-            // let author as is
-        } elseif ($this->is_master_admin()) {
+        if ($this->is_master_admin()) {
             $_REQUEST["author"] = "admin";
+        } elseif ($forced_guest_posting) {
+            // let author as is
         } elseif ($this->is_logged_in()) {
             $_REQUEST["author"] = $this->get_user_name();
         } 
@@ -23175,7 +23221,7 @@ abstract class ForumManager
             return false;
         }
         
-        if ($uid != "NULL" && !$is_private) {
+        if ($uid != "NULL" && !$is_private && !$forced_guest_posting) {
             $query = "update {$prfx}_user_statistics set
                 post_count = post_count + 1
                 where user_id = $uid";
@@ -23404,8 +23450,11 @@ abstract class ForumManager
         }
         
         $_SESSION["last_post_hash"] = $last_post_hash;
-        $_SESSION["user_name"] = reqvar("author");
         $_SESSION["last_posted_user"] = reqvar("author");
+        
+        if (empty($forced_guest_posting)) {
+            $_SESSION["user_name"] = reqvar("author");
+        }
         
         if ($is_private) {
             $fid = "private";
@@ -25242,7 +25291,7 @@ abstract class ForumManager
         }
         
         // Protection against cluttering the guest list.
-        // The guest list is filled by the guest name who were active
+        // The guest list is filled by the guest names who were active
         // within the last KEEP_ONLINE_PERIOD minutes.
         // If a visitor, changes the guest name repeatedly, all new
         // names may clutter the guest list.
@@ -27288,6 +27337,12 @@ abstract class ForumManager
     {
         global $READ_MARKER;
         
+        if (!empty($_SESSION["skip_next_hit"])) {
+            unset($_SESSION["skip_next_hit"]);
+            
+            return true;
+        }
+
         if (!empty($fid) && !is_numeric($fid)) {
             return false;
         }
@@ -27314,11 +27369,33 @@ abstract class ForumManager
         if (empty($tid)) {
             $tid = "NULL";
         }
+
+        if (!$dbw->execute_query("select
+                             user_posting_as_guest
+                             from {$prfx}_forum
+                             where id = $fid")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        $user_posting_as_guest = true;
+        if ($dbw->fetch_row()) {
+            $user_posting_as_guest = $dbw->field_by_name("user_posting_as_guest");
+        }
+        
+        $dbw->free_result();
+
+        $forced_guest_posting = false;
+        if ($this->is_logged_in() && !empty($user_posting_as_guest) && 
+            !empty($_SESSION["guest_posting_mode"]) && $this->get_last_posted_user_name() != $this->get_user_name()
+        ) {
+           $forced_guest_posting = true;
+        }        
         
         $uid = $dbw->escape($this->get_user_id());
         $guest_name = $this->get_user_name();
         
-        if (empty($uid)) {
+        if (empty($uid) || $forced_guest_posting) {
             $uid = "NULL";
             
             if ($this->is_master_admin()) {
@@ -27377,7 +27454,7 @@ abstract class ForumManager
             return false;
         }
         
-        $author = $dbw->quotes_or_null($this->get_user_name());
+        $author = $guest_name;
         
         if (!$dbw->execute_query("update {$prfx}_read_marker_activity
                              set current_name_hits = 0, current_name_start = '$now'
@@ -27752,12 +27829,6 @@ abstract class ForumManager
         if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
             return true;
         }
-        
-        //debug_message("----------------------------------------------------------");
-        //debug_message("user: " . $this->get_user_name());
-        //debug_message($_SERVER["PHP_SELF"]);
-        
-        //debug_message("updating DB state for topic: " . $tid . ", last_post_read_date: " . date("Y-m-d H:i", $last_post_read_date));
         
         global $READ_MARKER;
         
@@ -30950,6 +31021,11 @@ abstract class ForumManager
             $user_data["user_name"] = text("MasterAdministrator");
         }
         
+        // Guest posting under logged in user
+        if ($this->is_logged_in() && $this->get_last_posted_user_name() != $this->get_user_name()) {
+            $user_data["user_name"] = $this->get_last_posted_user_name();
+        }
+        
         $user_data["hide_ignored"] = val_or_empty($_SESSION["hide_ignored"]);
         $user_data["hide_pictures"] = val_or_empty($_SESSION["hide_pictures"]);
         $user_data["donot_hide_adult_pictures"] = val_or_empty($_SESSION["donot_hide_adult_pictures"]);
@@ -31030,7 +31106,7 @@ abstract class ForumManager
         global $READ_MARKER;
         global $settings;
         
-        if ($this->is_logged_in() && !$this->is_master_admin()) {
+        if ($this->is_logged_in() && !$this->is_master_admin() && $this->get_last_posted_user_name() == $this->get_user_name()) {
             return true;
         }
 
@@ -31081,7 +31157,10 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->is_master_admin()) {
+        // Guest posting under logged in user
+        if ($this->is_logged_in() && $this->get_last_posted_user_name() != $this->get_user_name()) {
+            $_SESSION["last_posted_user"] = reqvar("user_name");
+        } elseif (!$this->is_master_admin()) {
             $_SESSION["user_name"] = reqvar("user_name");
         }
         

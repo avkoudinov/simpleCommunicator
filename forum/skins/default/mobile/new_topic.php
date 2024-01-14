@@ -484,12 +484,12 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 <?php
 $author = $fmanager->get_user_name();
 $read_only = '';
-if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"])))
+if($fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]) && !$fmanager->is_master_admin()))
 {
   $read_only = ' class="read_only_field" readonly';
 }
 
-if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]))
+if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]) && !$fmanager->is_master_admin())
 {
   $author = $fmanager->get_last_posted_user_name();
 }
