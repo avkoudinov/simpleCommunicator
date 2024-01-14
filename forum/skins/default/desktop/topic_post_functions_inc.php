@@ -710,9 +710,12 @@ function add_form_to_container(cid, pid)
   var elm = document.getElementById('author');
   if(elm)
   {
-    <?php if(!$fmanager->is_logged_in() && !(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]))): ?>
+    <?php if(!$fmanager->is_logged_in() || (!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]))): ?>
     elm.readOnly = false;
     elm.classList.remove('read_only_field');
+    <?php else: ?>
+    elm.readOnly = true;
+    elm.classList.add('read_only_field');
     <?php endif; ?>
   }
 
@@ -798,7 +801,12 @@ function edit_message(params, response)
     elm.value = response.author;
     elm.defaultValue = elm.value;
 
-    if(params.user_id != '0' && params.user_id != '')
+    if(response.may_edit_author)
+    {
+      elm.readOnly = false;
+      elm.classList.remove('read_only_field');
+    }
+    else
     {
       elm.readOnly = true;
       elm.classList.add('read_only_field');
@@ -1075,9 +1083,6 @@ function post_message(action)
               window.history.back();
             });
 
-            form.elements['author'].readOnly = false;
-            form.elements['author'].classList.remove('read_only_field');
-            
             form.elements['edit_mode'].value = '';
             form.elements['edit_mode'].defaultValue = '';
             form.elements['message'].value = '';
@@ -1146,9 +1151,6 @@ function post_message(action)
             var filtered_comment_posting = form.elements['profiled_topic'].value && filtered_comment_mode;
 
             debug_line("Original post for this posting is: " + original_post, "posting");
-
-            form.elements['author'].readOnly = false;
-            form.elements['author'].classList.remove('read_only_field');
 
             form.elements['edit_mode'].value = '';
             form.elements['edit_mode'].defaultValue = '';

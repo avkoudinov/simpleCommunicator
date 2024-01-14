@@ -2164,6 +2164,19 @@ img.mourning_band
 .message_container_with_offset
 {
   margin-left: 120px;
+  position: relative;
+}
+
+.message_container_with_offset .reply_indicator {
+  width: 86px;
+  height: 86px;
+  position: absolute;
+  top: 0;
+  left: -100px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/reply.png);
+  background-size: 100%;
 }
 
 .message_table td .emb_wrapper,

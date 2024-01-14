@@ -4,10 +4,7 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
-if ($fmanager->is_logged_in() && !$fmanager->is_master_admin()) {
-    header("Location: profile.php");
-    exit;
-}
+
 //------------------------------------------------------------------
 $title = text("Profile") . " - " . get_site_name(current_language());
 $ogtitle = text("Profile") . " - " . get_site_name(current_language());
@@ -32,9 +29,8 @@ $ignored = array();
 $ignored_topics = array();
 $hides = array();
 $hidden = array();
-$aname = System::generateHash($READ_MARKER . val_or_empty($_SESSION["user_name"]), SALT_KEY);
 
-if (!$fmanager->get_guest_ignore_info("", $aname, $ignores, $ignored, $ignored_topics, $hides, $hidden)) {
+if (!$fmanager->get_guest_ignore_info("", $user_data["aname"], $ignores, $ignored, $ignored_topics, $hides, $hidden)) {
     header("location: " . $target_url);
     exit;
 }
