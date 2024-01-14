@@ -93,7 +93,7 @@ require_once "topic_post_functions_inc.php";
 <div class="header3">
 
 <div class="left_action_panel">
-<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"])): ?>
+<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && !$fmanager->is_master_admin()): ?>
 <?php if(empty($_SESSION["guest_posting_mode"])): ?>
 <a href="<?php echo($base_url . "&startmsg=" . $pagination_info["first_page_message"]); ?>&guest_posting_on=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a>
 <?php else: ?>

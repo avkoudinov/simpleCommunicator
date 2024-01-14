@@ -2208,6 +2208,19 @@ tr.selected_row td.checkbox_selector
 .message_container_with_offset
 {
   margin-left: 40px;
+  position: relative;
+}
+
+.message_container_with_offset .reply_indicator {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  left: -35px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/reply.png);
+  background-size: 100%;
 }
 
 .message_table td .emb_wrapper,

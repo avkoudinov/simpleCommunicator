@@ -449,7 +449,7 @@ elseif(!empty($fid_for_url))
 
 <a href="<?php echo($base_url . $fpage_appendix); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmMarkRead"), true); ?>", { mark_read_action: "mark_forum_read", forum: "<?php echo_js($fid); ?>", uncritical: 1 });'><?php echo_html(text("MarkRead")); ?></a><br>
 
-<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"])): ?>
+<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && !empty($forum_data["user_posting_as_guest"])): ?>
 <?php if(empty($_SESSION["guest_posting_mode"])): ?>
 <a href="<?php echo($base_url); ?>&guest_posting_on=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a><br>
 <?php else: ?>

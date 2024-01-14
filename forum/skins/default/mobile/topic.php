@@ -382,7 +382,7 @@ require_once "topic_post_functions_inc.php";
 <a href="<?php echo($base_url . $startmsg_appendix . "&download=1"); ?>"><?php echo_html(text("Download")); ?></a> <br>
 <?php endif; ?>
 
-<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"])): ?>
+<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && !$fmanager->is_master_admin()): ?>
 <?php if(empty($_SESSION["guest_posting_mode"])): ?>
 <a href="<?php echo($base_url . $gotomsg_appendix); ?>&guest_posting_on=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a><br>
 <?php else: ?>

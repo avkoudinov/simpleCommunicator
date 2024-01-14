@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     09.09.2023 22:03:21                          */
+/* Created on:     14.01.2024 19:59:49                          */
 /*==============================================================*/
 
 
@@ -1767,7 +1767,8 @@ create table v1_settings
    mourning_active      tinyint not null default 0,
    snow_effect          tinyint not null default 0,
    hide_users_from_robots tinyint not null default 0,
-   archive_mode         tinyint not null default 0
+   archive_mode         tinyint not null default 0,
+   hash_ip_addresses    tinyint not null default 0
 );
 
 /*==============================================================*/
@@ -2142,6 +2143,7 @@ create index v1_topic_view_history_guest_name_idx on v1_topic_view_history
 create table v1_tor_ips
 (
    ip                   varchar(250) not null,
+   hashed_ip            varchar(250) not null,
    block_level          int not null default 0,
    refresh_date         datetime
 );
@@ -2222,8 +2224,6 @@ create table v1_user
    show_ip              tinyint not null default 0,
    notify_on_words      tinyint not null default 0,
    words_to_notify      text,
-   hide_comments        tinyint not null default 0,
-   thematic_per_default tinyint not null default 0,
    last_host            varchar(255),
    custom_css           text,
    custom_smiles        text,
