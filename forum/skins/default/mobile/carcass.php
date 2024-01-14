@@ -535,7 +535,7 @@ if(!empty($settings["mourning_active"])) $mourning_active = " mourning_active";
 
   echo($member_link); 
 
-  if ($fmanager->get_last_posted_user_name() != $fmanager->get_user_name()) {
+  if ($fmanager->get_last_posted_user_name() != $fmanager->get_user_name() && !empty($_SESSION["guest_posting_mode"])) {
     $aname_appendix = "&aname=" . System::generateHash($READ_MARKER . $fmanager->get_last_posted_user_name(), SALT_KEY);
     
     echo " / <a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_last_posted_user_name()) . $aname_appendix . "'>" . escape_html($fmanager->get_last_posted_user_name()) . "</a>";
