@@ -481,7 +481,7 @@ if(!empty($moderator_caption))
 <tr>
 <td></td>
 <td>
-<a class="moderator_link" href="profile.php"><?php echo_html(text("ProfileSettings")); ?></a>
+<a class="moderator_link" href="guest_profile.php"><?php echo_html(text("ProfileSettings")); ?></a>
 </td>
 </tr>
 

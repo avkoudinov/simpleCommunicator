@@ -119,11 +119,7 @@ if (!$fmanager->has_access_to_topic($tid, true)) {
 // we need do it here before get_topic_data
 // to get private topic visits
 
-if (!empty($_SESSION["skip_next_hit"])) {
-    unset($_SESSION["skip_next_hit"]);
-} else {
-    $fmanager->track_hit($tid, $fid);
-}
+$fmanager->track_hit($tid, $fid);
 
 if (!reqvar_empty("force_comments")) {
     unset($_SESSION["filtered_topics"][$tid]);

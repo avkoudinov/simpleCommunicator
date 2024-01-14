@@ -1403,7 +1403,8 @@ create table v1_settings (
    mourning_active      tinyint              not null default 0,
    snow_effect          tinyint              not null default 0,
    hide_users_from_robots tinyint              not null default 0,
-   archive_mode         tinyint              not null default 0
+   archive_mode         tinyint              not null default 0,
+   hash_ip_addresses    tinyint              not null default 0
 )
 ';
 
@@ -1690,6 +1691,7 @@ guest_name ASC
 $sql_cmds[] = '
 create table v1_tor_ips (
    ip                   varchar(250)         not null,
+   hashed_ip            varchar(250)         not null,
    block_level          int                  not null default 0,
    refresh_date         datetime             null
 )
@@ -1766,8 +1768,6 @@ create table v1_user (
    show_ip              tinyint              not null default 0,
    notify_on_words      tinyint              not null default 0,
    words_to_notify      nvarchar(max)        null,
-   hide_comments        tinyint              not null default 0,
-   thematic_per_default tinyint              not null default 0,
    last_host            nvarchar(255)        null,
    custom_css           nvarchar(max)        null,
    custom_smiles        nvarchar(max)        null,
