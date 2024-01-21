@@ -44,7 +44,7 @@
  position: absolute;
  opacity: 0.25;
  display: none;
- z-index: 999;
+ z-index: 1000999;
  top: 0;
  left: 0;
  width: 300px;
