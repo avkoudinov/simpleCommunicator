@@ -792,7 +792,6 @@ else
 <?php endif; ?>
 
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[img]','[/img]', 0)" tabindex="-1">IMG</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[ascii-art]','[/ascii-art]', 0)" tabindex="-1">ANIM</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[anim]','[/anim]', 0)" tabindex="-1">ANIM</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[url=]','[/url]', 0)" tabindex="-1">URL</button></div>
 
@@ -838,6 +837,7 @@ else
     <div onclick="insert_tag('[rambler]','[/rambler]', 0)">RAMBLER</div>
     <div onclick="insert_tag('[tiktok]','[/tiktok]', 0)">TIKTOK</div>
     <div onclick="insert_tag('[anim]','[/anim]', 0)">ANIM</div>
+    <div onclick="insert_tag('[ascii-art]','[/ascii-art]', 0)">ASCII ART</div>
     <div onclick="insert_tag('[gallery]','[/gallery]', 0)">GALLERY</div>
     <div onclick="insert_tag('[video]','[/video]', 0)">VIDEO</div>
     <div onclick="insert_tag('[audio]','[/audio]', 0)">AUDIO</div>

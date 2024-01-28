@@ -218,6 +218,7 @@ $GLOBALS['DEF_TEXTS']['ua']['ModeratorLog'] = 'Мод. лог';
 $GLOBALS['DEF_TEXTS']['ua']['OnlineMembers'] = 'Користувачі онлайн';
 $GLOBALS['DEF_TEXTS']['ua']['ReadingForum'] = 'Читали форум';
 $GLOBALS['DEF_TEXTS']['ua']['ReadingTopic'] = 'Читали тему';
+$GLOBALS['DEF_TEXTS']['ua']['BlockedInTopic'] = 'Заблоковані в темі';
 $GLOBALS['DEF_TEXTS']['ua']['IgnoringTopic'] = 'Ігнорують тему';
 $GLOBALS['DEF_TEXTS']['ua']['ReadTopics'] = 'Прочитані теми';
 $GLOBALS['DEF_TEXTS']['ua']['IgnoredTopics'] = 'Ігноровані теми';

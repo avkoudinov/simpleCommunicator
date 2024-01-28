@@ -46,12 +46,6 @@ hr
 .footer
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   color: white;
   padding-top: 3px;
@@ -204,12 +198,6 @@ h2
 .header1
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   height: 58px;
   font-family: Arial,Verdana;
@@ -841,12 +829,6 @@ input[type="button"].load_user_rates
 .topic_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -883,12 +865,12 @@ td.author_col
 {
   width: 182px;
   min-width: 120px;
-  background-color: #dddddd;
 }
 
 td.author_col
 {
   text-align: left;
+  background-color: #dddddd;
 }
 
 th.forum_col,
@@ -949,6 +931,10 @@ td.date_col
 {
   width: 130px;
   text-align: center;
+}
+
+td.date_col
+{
   background-color: #dddddd;
 }
 
@@ -1272,12 +1258,6 @@ textarea
 .search_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -1289,12 +1269,6 @@ textarea
 {
   background-image: none;
   background-color: #909090;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#909090),color-stop(100%,#A6A6A6));
-  background-image:-webkit-linear-gradient(to top,#909090,#A6A6A6);
-  background-image:-moz-linear-gradient(to top,#909090,#A6A6A6);
-  background-image:-o-linear-gradient(to top,#909090,#A6A6A6);
-  background-image:-ms-linear-gradient(to top,#909090,#A6A6A6);
-  background-image:linear-gradient(to top,#909090,#A6A6A6);
   padding: 2px;
 }
 
@@ -2661,13 +2635,6 @@ a.carma_both
 .rm_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
-
   font-weight: normal;
   color: white;
 }
@@ -2733,13 +2700,6 @@ a.carma_both
 .user_agent_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
-
   font-weight: normal;
   color: white;
 }
@@ -2778,13 +2738,6 @@ a.carma_both
 .user_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
-
   font-weight: normal;
   color: white;
 }
@@ -3201,13 +3154,6 @@ a.sorter.desc:hover
 .post_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
-
   font-weight: normal;
   color: white;
   
@@ -3285,56 +3231,26 @@ td.post_footer
 .post_table tr.selected_post_row th.checkbox_post_selector
 {
   background-color:#E2A102;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#E2A102),color-stop(100%,#F1C838));
-  background-image:-webkit-linear-gradient(to top,#E2A102,#F1C838);
-  background-image:-moz-linear-gradient(to top,#E2A102,#F1C838);
-  background-image:-o-linear-gradient(to top,#E2A102,#F1C838);
-  background-image:-ms-linear-gradient(to top,#E2A102,#F1C838);
-  background-image:linear-gradient(to top,#E2A102,#F1C838);
 }
 
 .post_table.pinned_post > tbody > tr > th
 {
-  background-color:#87A9C3;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#44606F),color-stop(100%,#87A9C3));
-  background-image:-webkit-linear-gradient(to top,#44606F,#87A9C3);
-  background-image:-moz-linear-gradient(to top,#44606F,#87A9C3);
-  background-image:-o-linear-gradient(to top,#44606F,#87A9C3);
-  background-image:-ms-linear-gradient(to top,#44606F,#87A9C3);
-  background-image:linear-gradient(to top,#44606F,#87A9C3);
+  background-color:#537182;
 }
 
 .post_table th.current_post
 {
   background-color:#04A038;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#017D2A),color-stop(100%,#04A038));
-  background-image:-webkit-linear-gradient(to top,#017D2A,#04A038);
-  background-image:-moz-linear-gradient(to top,#017D2A,#04A038);
-  background-image:-o-linear-gradient(to top,#017D2A,#04A038);
-  background-image:-ms-linear-gradient(to top,#017D2A,#04A038);
-  background-image:linear-gradient(to top,#017D2A,#04A038);
 }
 
 .post_table th.deleted_post
 {
   background-color:#BD4A2A;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#983B22),color-stop(100%,#BD4A2A));
-  background-image:-webkit-linear-gradient(to top,#983B22,#BD4A2A);
-  background-image:-moz-linear-gradient(to top,#983B22,#BD4A2A);
-  background-image:-o-linear-gradient(to top,#983B22,#BD4A2A);
-  background-image:-ms-linear-gradient(to top,#983B22,#BD4A2A);
-  background-image:linear-gradient(to top,#983B22,#BD4A2A);
 }
 
 .post_table th.deleted_post.current_post
 {
   background-color:#C20000;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,maroon),color-stop(100%,#C20000));
-  background-image:-webkit-linear-gradient(to top,maroon,#C20000);
-  background-image:-moz-linear-gradient(to top,maroon,#C20000);
-  background-image:-o-linear-gradient(to top,maroon,#C20000);
-  background-image:-ms-linear-gradient(to top,maroon,#C20000);
-  background-image:linear-gradient(to top,maroon,#C20000);
 }
 
 .pinned_sign
@@ -3749,12 +3665,6 @@ table.message_table td
 table.message_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -4580,12 +4490,6 @@ input[type="button"].member_search_button {
 .moderator_log_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -4681,12 +4585,6 @@ input[type="button"].member_search_button {
 .guest_ip_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -4774,12 +4672,6 @@ input[type="button"].member_search_button {
 .rate_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -4843,12 +4735,6 @@ a.message_count:hover
 .subscription_tabe th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -4888,12 +4774,6 @@ a.message_count:hover
 .event_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -4961,12 +4841,6 @@ a.message_count:hover
 .general_statistics_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -5281,12 +5155,6 @@ img.mourning_band
 .like_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -5555,12 +5423,6 @@ img.mourning_band
 .load_statistic_table th
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   font-weight: normal;
   color: white;
@@ -6353,6 +6215,14 @@ a.not_preferred:hover
   color: #333;
 }
 
+.topic_blocked_users a:link,
+.topic_blocked_users a:active,
+.topic_blocked_users a:visited,
+.topic_blocked_users a:hover
+{
+  color: maroon;
+}
+
 .preferred_forums div.preferred_forums_wrapper
 {
   max-height: 205px;
@@ -6440,12 +6310,6 @@ a.not_preferred:hover
 ._user_msgbox_head
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   width: 450px;
   height: 25px;
@@ -6732,12 +6596,6 @@ a.not_preferred:hover
 ._sys_lightbox_head
 {
   background-color:#5182B5;
-  background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-  background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-  background-image:linear-gradient(to top,#386CA3,#729CC6);
 
   width: 500px;
   height: 25px;
