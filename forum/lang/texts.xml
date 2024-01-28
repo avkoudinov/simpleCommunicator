@@ -1534,6 +1534,13 @@
             <ua>Читали тему</ua>
         </text>
 
+        <text id="BlockedInTopic">
+            <en>Blocked in topic</en>
+            <de>Im Thema geblockt</de>
+            <ru>Заблокированы в теме</ru>
+            <ua>Заблоковані в темі</ua>
+        </text>
+
         <text id="IgnoringTopic">
             <en>Topic ignored</en>
             <de>Thema ignoriert</de>

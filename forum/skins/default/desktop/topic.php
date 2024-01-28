@@ -1148,6 +1148,31 @@ if($rcnt > 0)
 
   $tignorers = trim($tignorers, ", ");
 }
+
+$tblocked = "";
+$rcnt = count($topic_blocked_users);
+if($rcnt > 0)
+{
+  $tblocked = escape_html(text("BlockedInTopic")) . " ($rcnt): ";
+
+  foreach($topic_blocked_users as $iuid => $uinfo)
+  {
+      $online_status = "";
+      if(empty($settings["hide_online_status"]) && !empty($uinfo["online"]))
+      {
+          $online_status = "&nbsp;<span class='online_text'>✓</span>";
+      }
+      
+      $active_ignorer = "";
+      if (empty($uinfo["auto_ignored"])) {
+          $active_ignorer = "class='active_ignorer'";
+      }
+
+      $tblocked .= "<span class='user_name'><a $active_ignorer href='view_profile.php?uid=$iuid' >" . escape_html($uinfo["name"]) . "</a>$online_status</span>, ";
+  }
+
+  $tblocked = trim($tblocked, ", ");
+}
 ?>
 
 <div class="online_users_area">
