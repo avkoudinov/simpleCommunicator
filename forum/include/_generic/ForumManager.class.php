@@ -2712,6 +2712,11 @@ abstract class ForumManager
             return false;
         }
         
+        if (!$dbw->execute_query("delete from {$prfx}_attachment where post_id in (select id from $tmp_id_collector_table)")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
         // unset flag HAS_PINNED_POST for topics where pinned post was deleted
         $query = "update {$prfx}_topic set has_pinned_post = 0
                   where id in (select topic_id from {$prfx}_post where pinned = 1 and id in (select id from $tmp_id_collector_table))";
