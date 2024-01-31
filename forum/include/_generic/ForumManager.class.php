@@ -32870,6 +32870,10 @@ abstract class ForumManager
             postprocess_message($pdata["html_content"]);
             postprocess_message($pdata["last_warned_by"]);
             
+            if (in_array($pdata["last_warning"], ["MSG(MsgGuestsDisallowed)", "MSG(MsgAuthorRequestedModeration)"])) {
+                $pdata["display_action_author"] = true;
+            }
+            
             $this->format_manager->format_message_simple($dbw, $prfx, $pdata["last_warning"], "warning");
             postprocess_message($pdata["last_warning"]);
         }
