@@ -73,6 +73,7 @@ Forum = {};
 <script src='skins/<?php echo($skin); ?>/js/ajax.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/multiselect.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/file_input.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <script src='skins/<?php echo($skin); ?>/js/snow.js<?php echo($cache_appendix); ?>'></script>
 
@@ -602,9 +603,16 @@ $main_menu_id = "main_menu";
 <!-- BEGIN: header2 -->
 
 <div class="header2">
+<table style="width:100%" class="aux_table">
+<tr>
+<td style="position: relative">
 <?php
+$forum_selector_id = 1;
 @include "forum_selector_inc.php";
 ?>
+</td>
+</tr>
+</table>
 </div>
       
 <!-- END: header2 -->
@@ -691,9 +699,16 @@ $main_menu_id = "main_menu_bottom";
 <!-- BEGIN: header2 -->
 
 <div class="header2">
+<table style="width:100%" class="aux_table">
+<tr>
+<td style="position: relative">
 <?php
+$forum_selector_id = 2;
 @include "forum_selector_inc.php";
 ?>
+</td>
+</tr>
+</table>
 </div>
 
 <!-- END: header2 -->

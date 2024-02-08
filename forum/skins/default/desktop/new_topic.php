@@ -3,7 +3,6 @@
 <script src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
-<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <!--
 <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

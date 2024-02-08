@@ -10,7 +10,6 @@ var ensure_anchor_visible = '<?php echo_js(val_or_empty($_SESSION["ensure_anchor
 <script src='skins/<?php echo($skin); ?>/js/attachment_posting.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/attachment_drag_drop.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/caret.js<?php echo($cache_appendix); ?>'></script>
-<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <!--
 <div id="fb-root"></div>
@@ -455,13 +454,21 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 
   &nbsp;&nbsp;<?php echo_html(text("Forum")); ?>:
     <div class="select_container">
-    <select id="forum_selection_list" size="10" onclick='if(!mustAdjustMultiSelect()) { if(this.value) { do_action({ topic_action: "move_topic", forum: "<?php echo_js($fid); ?>", topic: "<?php echo_js($tid); ?>", target_forum: this.value }); } }' onchange='if(mustAdjustMultiSelect()) { if(this.value) { do_action({ topic_action: "move_topic", forum: "<?php echo_js($fid); ?>", topic: "<?php echo_js($tid); ?>", target_forum: this.value }); } }'>
-      <?php foreach($forum_list as $forum_id => $fdata):
-      if($forum_id == $fid) continue;
+      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("GotoForum")); ?>" onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })" onkeyup="return filter_entries(this, event)" onfocus="reset_forum_selector(this.id);">
+
+      <select id="forum_selector_move_lookup" size="15"
+         onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
+         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum_if_active('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
+
+         onkeypress="return forum_move_handle_enter('forum_selector_move', event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })"
+      >
+
+      <?php foreach($forum_list as $sfid => $fdata): 
+         if($sfid == $fid) continue;
       ?>
-      <option value="<?php echo_html($forum_id); ?>"><?php echo_html($fdata["name"]); ?></option>
+      <option value="<?php echo_html($sfid); ?>"><?php echo_html($fdata["name"]); ?></option>
       <?php endforeach; ?>
-    </select>
+      </select>
     </div>
 
   </div>

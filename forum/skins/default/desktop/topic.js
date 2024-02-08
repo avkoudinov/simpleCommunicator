@@ -716,6 +716,8 @@ function toggle_forum_selection_area()
 
   if(need_show)
   {
+    reset_forum_selector('forum_selector_move');
+    
     elm.style.marginLeft = "0px";
     elm.style.display = "block";
     
@@ -727,6 +729,9 @@ function toggle_forum_selection_area()
     {
       elm.style.marginLeft = "-" + (rect.left + width - document.documentElement.clientWidth + 10) + "px";
     }
+
+    elm = document.getElementById("forum_selector_move");
+    if (elm) elm.focus();
   }
 
   return false;

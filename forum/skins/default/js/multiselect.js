@@ -26,6 +26,8 @@ function refreshMutliSelectControl(list, select_control)
   
   for(i = 0; i < list.options.length; i++)
   {
+    if(list.options[i].style.display == "none") continue;
+
     if(!list.options[i].selected) continue;
     
     txt = document.createTextNode(list.options[i].text);
@@ -38,6 +40,8 @@ function refreshMutliSelectControl(list, select_control)
   
   for(i = 0; i < list.options.length; i++)
   {
+    if(list.options[i].style.display == "none") continue;
+
     if(list.options[i].selected) continue;
     
     txt = document.createTextNode(list.options[i].text);
