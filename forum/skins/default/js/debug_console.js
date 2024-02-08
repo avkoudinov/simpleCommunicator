@@ -36,18 +36,18 @@ function reset_debug_console()
 
 function debug_line(str, context = '')
 {
-  if(!DEBUG_MODE) return;
+  if(context != "force" && !DEBUG_MODE) return;
   
-  if(DEBUG_CONTEXT == 'none') return;
+  if(context != "force" && DEBUG_CONTEXT == 'none') return;
 
-  if(DEBUG_CONTEXT != '' && DEBUG_CONTEXT != 'all' && context && context != DEBUG_CONTEXT) return;
+  if(DEBUG_CONTEXT != '' && DEBUG_CONTEXT != 'all' && context != "force" && context && context != DEBUG_CONTEXT) return;
 
-  console.log((context ? context + ": " : "") + str);
+  console.log((context && context != "force" ? context + ": " : "") + str);
   
   var dco = document.getElementById("debug_console_output");
   if(!dco) return;
 
-  dco.value += (context ? context + ": " : "") + str + "\n";
+  dco.value += (context && context != "force" ? context + ": " : "") + str + "\n";
   dco.scrollTop = dco.scrollHeight;
 }
 

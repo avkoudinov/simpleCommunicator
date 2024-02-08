@@ -105,6 +105,50 @@ function lookup_entries(action, fld, ev)
   return true;
 } // lookup_entries
 
+function filter_entries(fld, ev)
+{
+  var lst = document.getElementById(fld.id + "_lookup");
+
+  if(ev.keyCode == 27) // Esc
+  {
+    fld.value = "";
+  }
+
+  if(ev.keyCode == 40)
+  {
+    lst.focus();
+
+    if (!lst.value) 
+    {
+      lst.selectedIndex = 0;
+    }
+    
+    return false;
+  }
+  
+  lst.selectedIndex = -1;
+
+  for (let i = 0; i < lst.options.length; i++) {
+    if (fld.value == "") {
+      lst.options[i].style.display = "block";
+      continue;
+    }
+    
+    if (lst.options[i].text.indexOf(fld.value) == 0) {
+      lst.options[i].style.display = "block";
+      
+      if (lst.selectedIndex == -1) {
+        if (!mustAdjustMultiSelect()) lst.options[i].selected = true;  
+      }
+    } else {
+      lst.options[i].style.display = "none";
+    }
+  }
+
+  Forum.fireEvent(lst, 'show');
+  Forum.fireEvent(lst, 'change');
+}
+
 function lookup_existing_topics(fld, ev, fid)
 {
   var lst = document.getElementById(fld.id + "_lookup");
@@ -223,12 +267,25 @@ function lookup_handle_enter(eid, ev)
   }
 }
 
-function lookup_delayed_hide(eid)
+function show_lookup_list(eid)
 {
   var lst = document.getElementById(eid + "_lookup");
   if(!lst) return;
 
-  setTimeout(function () { if(document.activeElement != lst) lst.parentNode.style.display = "none"; }, 500);
+  lst.parentNode.style.display = "block";
+
+  Forum.fireEvent(lst, 'show');
+}
+
+function lookup_delayed_hide(eid)
+{
+  var elm = document.getElementById(eid);
+  if(!elm) return;
+
+  var lst = document.getElementById(eid + "_lookup");
+  if(!lst) return;
+
+  setTimeout(function () { if(document.activeElement != lst && document.activeElement != elm) lst.parentNode.style.display = "none"; }, 500);
 }
 
 function lookup_apply_selection_if_active(eid)
@@ -570,4 +627,78 @@ function check_personal_appeal2(ev)
   }
   
   return null;
+}
+
+function forum_lookup_handle_enter(eid, ev)
+{
+  if(ev.keyCode != 13) return;
+
+  lookup_goto_forum(eid);
+}
+
+function reset_forum_selector(eid)
+{
+  var elm = document.getElementById(eid);
+  if (elm) elm.value = "";
+  
+  elm = document.getElementById(eid + "_lookup");
+  if (elm) 
+  {
+    elm.selectedIndex = -1;
+
+    for (let i = 0; i < elm.options.length; i++) 
+    {
+      elm.options[i].style.display = "block";
+    }
+  }
+
+  Forum.fireEvent(elm, 'show');
+  Forum.fireEvent(elm, 'change');
+}
+
+function lookup_goto_forum(eid)
+{
+  var lst = document.getElementById(eid + "_lookup");
+  if (!lst || !lst.value) return;
+
+  document.location.href = lst.value;
+}
+
+function lookup_goto_forum_if_active(eid)
+{
+  var lst = document.getElementById(eid + "_lookup");
+  if (!lst || !lst.value) return;
+
+  if(document.activeElement != lst) return;
+
+  document.location.href = lst.value;
+}
+
+function lookup_move_to_forum(eid, params)
+{
+  var lst = document.getElementById(eid + "_lookup");
+  if (!lst || !lst.value) return;
+
+  params.target_forum = lst.value;
+  
+  do_action(params);
+}
+
+function lookup_move_to_forum_if_active(eid, params)
+{
+  var lst = document.getElementById(eid + "_lookup");
+  if (!lst || !lst.value) return;
+
+  if(document.activeElement != lst) return;
+
+  params.target_forum = lst.value;
+
+  do_action(params);
+}
+
+function forum_move_handle_enter(eid, ev, params)
+{
+  if(ev.keyCode != 13) return;
+
+  lookup_move_to_forum(eid, params);
 }

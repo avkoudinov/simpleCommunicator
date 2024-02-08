@@ -4,6 +4,8 @@
 <title><?php echo_html($title); ?></title>
 
 <?php
+$forum_selector_id = "";
+
 $cache_appendix = "?v=" . $skin_version;
 ?>
 
@@ -67,6 +69,7 @@ Forum = {};
 <script src='skins/<?php echo($skin); ?>/js/ajax.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/multiselect.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/file_input.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <script src='skins/<?php echo($skin); ?>/js/snow.js<?php echo($cache_appendix); ?>'></script>
 

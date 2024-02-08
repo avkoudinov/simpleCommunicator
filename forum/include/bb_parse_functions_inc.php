@@ -1248,9 +1248,9 @@ function check_youtube_url($url, &$content, $message_mode)
     if (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
-        return true;
-    }
-    
+            return true;
+        }
+        
         $content = gen_youtube_html($matches[1], $apikey, $matches[3], $url);
         return true;
     }
@@ -1268,9 +1268,9 @@ function check_youtube_url($url, &$content, $message_mode)
     if (preg_match("~https?://[^/]*youtube.com/watch\?((?:t|start|time_continue)=[^&]+).*?&v=([^&?]+).*~", $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
-        return true;
-    }
-    
+            return true;
+        }
+        
         $content = gen_youtube_html($matches[2], $apikey, $matches[1], $url);
         return true;
     }

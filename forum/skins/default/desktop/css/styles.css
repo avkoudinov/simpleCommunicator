@@ -461,7 +461,7 @@ img.maintenance
 
 .user_search_bar .field_lookup_area
 {
-  width: 271px;
+  width: 272px;
 }
 
 a.member_nick:link,
@@ -3034,9 +3034,25 @@ a.sorter.desc:hover
   width: 250px;
 }
 
-.forum_selector
+#forum_selector
 {
-  width: 200px;
+  width: 300px;
+  box-sizing: border-box;
+  padding-right: 20px; 
+  background: white url('../images/arrow_down.png') no-repeat center right;
+  background-size: auto 100%;
+}
+
+#forum_selector_move
+{
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid gray;
+}
+
+#forum_selector_lookup
+{
+  width: 100%;
 }
 
 .post_anchor
@@ -4284,7 +4300,7 @@ a.more_users:link
 {
   display: block;
   position: absolute;
-  width: 300px; 
+  width: 298px; 
   z-index: 8000;
   background-color: white;
   border: 1px solid gray;
