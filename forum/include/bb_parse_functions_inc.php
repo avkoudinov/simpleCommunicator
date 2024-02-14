@@ -1684,6 +1684,10 @@ function bb_process_telegram($bbcode, $action, $name, $default, $params, $conten
 function check_telegram_url($url, &$content, $message_mode)
 {
     if (preg_match('/https:\\/\\/t\\.me\\/(.+?\\/.+?)(\?.*?)?$/i', $url, $matches)) {
+        if (strpos($matches[1], "addstickers") !== false) {
+            return false;
+        }
+        
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Telegram]\n\n";
             return true;
@@ -2738,6 +2742,9 @@ function gen_vkvideo_html($code, $bbcode)
     $player = "";
     $has_error = false;
     
+    
+    $style = "";
+    
     try {
         $url = "https://api.vk.com/method/video.get";
         $client = new Zend_Http_Client($url, array(
@@ -2779,6 +2786,24 @@ function gen_vkvideo_html($code, $bbcode)
             if (!empty($json["response"]["items"][0]["content_restricted"])) {
                 $has_error = true;
             }
+            
+            if (!empty($json["response"]["items"][0]["width"]) &&
+                !empty($json["response"]["items"][0]["height"])
+               ) {
+                $width = $json["response"]["items"][0]["width"];
+                $height = $json["response"]["items"][0]["height"];
+                
+                if ($width >= $height && $width > 800) {
+                    $height = $height * 800 / $width;
+                    $width = 800;
+                } elseif ($height > 800) {
+                    $width = $width * 800 / $height;
+                    $height = 800;
+                }
+                
+                $style .= "width: " . $width . "px;";
+                $style .= "height: " . $height . "px;";
+            }
         } else {
             $has_error = true;
         }
@@ -2806,8 +2831,12 @@ function gen_vkvideo_html($code, $bbcode)
     $html .= "</div></div></div>";
     */
     
+    if (!empty($style)) {
+        $style = "style='$style'";
+    }
+    
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
-    $html .= "<div class='vkvideo_container detailed_video'>";
+    $html .= "<div class='vkvideo_container detailed_video' $style>";
     $html .= "<iframe src='$player' width='100%' height='100%' frameborder='0' allowfullscreen></iframe>";
     $html .= "</div>";
     $html .= "<a class='attachment_link' href='https://vk.com/video$code' target='_blank'>{{link}}</a>";
