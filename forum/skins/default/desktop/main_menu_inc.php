@@ -42,10 +42,11 @@ else
 
 echo($member_link); 
 
-if ($fmanager->get_last_posted_user_name() != $fmanager->get_user_name() && !empty($_SESSION["guest_posting_mode"])) {
-  $aname_appendix = "&aname=" . System::generateHash($READ_MARKER . $fmanager->get_last_posted_user_name(), SALT_KEY);
-
-  echo " / <a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_last_posted_user_name()) . $aname_appendix . "'>" . escape_html($fmanager->get_last_posted_user_name()) . "</a>";
+if (!empty($_SESSION["guest_posting_mode"])) {
+  if ($fmanager->get_last_posted_user_name() != $fmanager->get_user_name() && $fmanager->get_last_posted_user_name() != "")
+    echo " / <a class='guest_link' href='guest_profile.php'>" . escape_html($fmanager->get_last_posted_user_name()) . "</a>";
+  else 
+    echo " / <a class='guest_link' href='guest_profile.php'>" . escape_html(text("Guest")) . "</a>";
 }
 ?>
 </div>

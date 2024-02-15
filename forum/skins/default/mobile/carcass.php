@@ -73,6 +73,7 @@ Forum = {};
 <script src='skins/<?php echo($skin); ?>/js/ajax.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/multiselect.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/file_input.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
 
 <script src='skins/<?php echo($skin); ?>/js/snow.js<?php echo($cache_appendix); ?>'></script>
 
@@ -535,10 +536,11 @@ if(!empty($settings["mourning_active"])) $mourning_active = " mourning_active";
 
   echo($member_link); 
 
-  if ($fmanager->get_last_posted_user_name() != $fmanager->get_user_name() && !empty($_SESSION["guest_posting_mode"])) {
-    $aname_appendix = "&aname=" . System::generateHash($READ_MARKER . $fmanager->get_last_posted_user_name(), SALT_KEY);
-    
-    echo " / <a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($fmanager->get_last_posted_user_name()) . $aname_appendix . "'>" . escape_html($fmanager->get_last_posted_user_name()) . "</a>";
+  if (!empty($_SESSION["guest_posting_mode"])) {
+    if ($fmanager->get_last_posted_user_name() != $fmanager->get_user_name() && $fmanager->get_last_posted_user_name() != "")
+      echo " / <a class='guest_link' href='guest_profile.php'>" . escape_html($fmanager->get_last_posted_user_name()) . "</a>";
+    else 
+      echo " / <a class='guest_link' href='guest_profile.php'>" . escape_html(text("Guest")) . "</a>";
   }
   ?>
 
@@ -601,9 +603,16 @@ $main_menu_id = "main_menu";
 <!-- BEGIN: header2 -->
 
 <div class="header2">
+<table style="width:100%" class="aux_table">
+<tr>
+<td style="position: relative">
 <?php
+$forum_selector_id = 1;
 @include "forum_selector_inc.php";
 ?>
+</td>
+</tr>
+</table>
 </div>
       
 <!-- END: header2 -->
@@ -690,9 +699,16 @@ $main_menu_id = "main_menu_bottom";
 <!-- BEGIN: header2 -->
 
 <div class="header2">
+<table style="width:100%" class="aux_table">
+<tr>
+<td style="position: relative">
 <?php
+$forum_selector_id = 2;
 @include "forum_selector_inc.php";
 ?>
+</td>
+</tr>
+</table>
 </div>
 
 <!-- END: header2 -->

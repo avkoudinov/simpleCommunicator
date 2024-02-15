@@ -390,9 +390,7 @@ function check_image_url(&$url, &$large_url)
             'method' => "GET",
             'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\r\n" .
                         "Cache-Control: no-cache\r\n" .
-                        "Content-Type: text/xml; charset=utf-8\r\n" .
                         "Accept: */*\r\n" .
-                        "Host: $host\r\n" .
                         "Upgrade-Insecure-Requests: 1\r\n" .
                         "Access-Control-Allow-Headers: X-Quic\r\n" .
                         "Accept-Encoding:	gzip, deflate, br\r\n" .
@@ -403,7 +401,7 @@ function check_image_url(&$url, &$large_url)
             'verify_peer_name' => false
         ]
     ]);
-    
+
     $url_to_check = $url;
     if (!preg_match("/^http/", $url_to_check)) {
         $url_to_check = get_host_address() . get_url_path() . $url;   
@@ -447,7 +445,12 @@ function check_image_url(&$url, &$large_url)
   
     if (strpos($src_type, "image") === 0) 
     {
-      $info = @getimagesize($url);
+      $url_to_check = $url;
+      if (!preg_match("/^http/", $url_to_check)) {
+          $url_to_check = get_host_address() . get_url_path() . $url;   
+      }
+
+      $info = @getimagesize($url_to_check);
       if (preg_match('/width="(\d+)" height="(\d+)"/', val_or_empty($info["3"]), $matches) &&
           ($matches[1] > 10000 || $matches[2] > 10000)) {
           $large_url = $url;
@@ -1654,6 +1657,10 @@ function bb_process_telegram($bbcode, $action, $name, $default, $params, $conten
 function check_telegram_url($url, &$content, $message_mode)
 {
     if (preg_match('/https:\\/\\/t\\.me\\/(.+?\\/.+?)(\?.*?)?$/i', $url, $matches)) {
+        if (strpos($matches[1], "addstickers") !== false) {
+            return false;
+        }
+        
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Telegram]\n\n";
             return true;
@@ -2708,6 +2715,9 @@ function gen_vkvideo_html($code, $bbcode)
     $player = "";
     $has_error = false;
     
+    
+    $style = "";
+    
     try {
         $url = "https://api.vk.com/method/video.get";
         $client = new Zend_Http_Client($url, array(
@@ -2749,6 +2759,24 @@ function gen_vkvideo_html($code, $bbcode)
             if (!empty($json["response"]["items"][0]["content_restricted"])) {
                 $has_error = true;
             }
+            
+            if (!empty($json["response"]["items"][0]["width"]) &&
+                !empty($json["response"]["items"][0]["height"])
+               ) {
+                $width = $json["response"]["items"][0]["width"];
+                $height = $json["response"]["items"][0]["height"];
+                
+                if ($width >= $height && $width > 800) {
+                    $height = $height * 800 / $width;
+                    $width = 800;
+                } elseif ($height > 800) {
+                    $width = $width * 800 / $height;
+                    $height = 800;
+                }
+                
+                $style .= "width: " . $width . "px;";
+                $style .= "height: " . $height . "px;";
+            }
         } else {
             $has_error = true;
         }
@@ -2776,8 +2804,12 @@ function gen_vkvideo_html($code, $bbcode)
     $html .= "</div></div></div>";
     */
     
+    if (!empty($style)) {
+        $style = "style='$style'";
+    }
+    
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
-    $html .= "<div class='vkvideo_container detailed_video'>";
+    $html .= "<div class='vkvideo_container detailed_video' $style>";
     $html .= "<iframe src='$player' width='100%' height='100%' frameborder='0' allowfullscreen></iframe>";
     $html .= "</div>";
     $html .= "<a class='attachment_link' href='https://vk.com/video$code' target='_blank'>{{link}}</a>";

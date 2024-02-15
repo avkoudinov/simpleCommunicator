@@ -97,7 +97,8 @@ $online_users = array();
 $forum_readers = array();
 $topic_readers = array();
 $topic_ignorers = array();
-$fmanager->get_online_users($online_users, $forum_readers, $topic_readers, $topic_ignorers, $fid, $tid);
+$topic_blocked_users = array();
+$fmanager->get_online_users($online_users, $forum_readers, $topic_readers, $topic_ignorers, $topic_blocked_users, $fid, $tid);
 
 $in_search = !reqvar_empty("in_search");
 

@@ -4,7 +4,10 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
-
+if ($fmanager->is_logged_in() && !$fmanager->is_master_admin() && empty($_SESSION["guest_posting_mode"])) {
+    header("Location: profile.php");
+    exit;
+}
 //------------------------------------------------------------------
 $title = text("Profile") . " - " . get_site_name(current_language());
 $ogtitle = text("Profile") . " - " . get_site_name(current_language());

@@ -218,6 +218,7 @@ $GLOBALS['DEF_TEXTS']['de']['ModeratorLog'] = 'Moder.-Log';
 $GLOBALS['DEF_TEXTS']['de']['OnlineMembers'] = 'Online-Benutzer';
 $GLOBALS['DEF_TEXTS']['de']['ReadingForum'] = 'Forum grelesen';
 $GLOBALS['DEF_TEXTS']['de']['ReadingTopic'] = 'Thema grelesen';
+$GLOBALS['DEF_TEXTS']['de']['BlockedInTopic'] = 'Im Thema geblockt';
 $GLOBALS['DEF_TEXTS']['de']['IgnoringTopic'] = 'Thema ignoriert';
 $GLOBALS['DEF_TEXTS']['de']['ReadTopics'] = 'Gelesene Themen';
 $GLOBALS['DEF_TEXTS']['de']['IgnoredTopics'] = 'Ignorierte Themen';

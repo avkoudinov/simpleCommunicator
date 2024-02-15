@@ -1202,6 +1202,19 @@ function post_message(action)
               return;
             }
 
+            var may_load_new_posts = false;
+            
+            var posts = document.getElementsByClassName("post_table");
+            var posts_count = posts.length;
+            
+            posts = document.getElementsByClassName("deleted_post");
+            posts_count -= posts.length;
+            
+            if(posts_count < posts_per_page)
+            {
+              may_load_new_posts = true;
+            }
+
             var highlight_message = '';
             if(response.return_post) 
             {
@@ -1232,7 +1245,7 @@ function post_message(action)
               debug_line("We are in the filtered comment posting, load just created post", "posting");
               load_created_post(response.created_post, original_post);
             }
-            else if(is_last_page)
+            else if(is_last_page && may_load_new_posts)
             {
               debug_line("We are on the last page, load new posts", "posting");
               exec_load_new_posts(highlight_message, response.target_url);

@@ -716,7 +716,12 @@ function toggle_forum_selection_area()
 
   if(need_show)
   {
+    reset_forum_selector('forum_selector_move');
+
     elm.style.display = "block";
+
+    elm = document.getElementById("forum_selector_move");
+    if (elm) elm.focus();
   }
 
   return false;

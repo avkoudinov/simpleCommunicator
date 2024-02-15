@@ -89,7 +89,7 @@ abstract class DBWorker
     {
         if ($this->last_error === null) return null;
 		
-		return trim($this->last_error);
+	return trim($this->last_error);
     }
     
     //--------------------------------------------------------------------

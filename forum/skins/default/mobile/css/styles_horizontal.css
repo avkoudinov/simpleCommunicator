@@ -3036,12 +3036,6 @@
   ._user_msgbox_head
   {
     background-color:#5182B5;
-    background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-    background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:linear-gradient(to top,#386CA3,#729CC6);
 
     width: 550px;
     height: 30px;
@@ -3247,12 +3241,6 @@
   ._sys_lightbox_head
   {
     background-color:#5182B5;
-    background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#386CA3),color-stop(100%,#729CC6));
-    background-image:-webkit-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:-moz-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:-o-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:-ms-linear-gradient(to top,#386CA3,#729CC6);
-    background-image:linear-gradient(to top,#386CA3,#729CC6);
 
     width: 500px;
     border: 1px solid gray;

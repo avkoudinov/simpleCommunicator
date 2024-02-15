@@ -992,7 +992,7 @@ if(!empty($pinfo["last_warning"]))
 
 $warned_by = $fmanager->get_display_name($pinfo["last_warned_by"]);
 
-if(!$fmanager->is_moderator_log_visible() || (val_or_empty($settings["moderator_log"]) == "all_names_hidden" && !$fmanager->is_moderator()))
+if(empty($pinfo["display_action_author"]) && (!$fmanager->is_moderator_log_visible() || (val_or_empty($settings["moderator_log"]) == "all_names_hidden" && !$fmanager->is_moderator())))
 {
   $warned_by = text("Moderator");
 }

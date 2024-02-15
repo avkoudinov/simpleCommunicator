@@ -112,6 +112,7 @@ if ($fmanager->check_hash()) {
     }
     if (!reqvar_empty("guest_posting_on")) {
         $_SESSION["guest_posting_mode"] = 1;
+        $_SESSION["last_posted_user"] = get_cookie("q_last_guest_name");
         header("Location: " . $uri);
         exit;
     }

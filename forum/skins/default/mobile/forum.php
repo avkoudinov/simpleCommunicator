@@ -27,8 +27,13 @@ function show_forum_selector(tid)
 
   if(!elm || !target_area) return false;
 
+  reset_forum_selector('forum_selector_move');
+
   target_area.appendChild(elm);
   elm.style.display = "block";
+
+  elm = document.getElementById("forum_selector_move");
+  if (elm) elm.focus();
 
   return false;
 }
@@ -1014,13 +1019,21 @@ if(empty($is_private))
 
 &nbsp;&nbsp;<?php echo_html(text("Forum")); ?>:
   <div class="select_container">
-  <select id="forum_selection_list" size="10" onclick='if(!mustAdjustMultiSelect()) { if(this.value) { do_action({ topic_action: "move_topics", forum: "<?php echo_js($fid); ?>", target_forum: this.value }); } }' onchange='if(mustAdjustMultiSelect()) { if(this.value) { do_action({ topic_action: "move_topics", forum: "<?php echo_js($fid); ?>", target_forum: this.value }); } }'>
-    <?php foreach($forum_list as $forum_id => $fdata):
-    if($forum_id == $fid) continue;
-    ?>
-    <option value="<?php echo_html($forum_id); ?>"><?php echo_html($fdata["name"]); ?></option>
-    <?php endforeach; ?>
-  </select>
+      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("GotoForum")); ?>" onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' })" onkeyup="return filter_entries(this, event)" onfocus="reset_forum_selector(this.id);">
+
+      <select id="forum_selector_move_lookup" size="15"
+         onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' }); }" 
+         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum_if_active('forum_selector_move', { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' }); }" 
+
+         onkeypress="return forum_move_handle_enter('forum_selector_move', event, { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' })"
+      >
+
+      <?php foreach($forum_list as $sfid => $fdata): 
+         if($sfid == $fid) continue;
+      ?>
+      <option value="<?php echo_html($sfid); ?>"><?php echo_html($fdata["name"]); ?></option>
+      <?php endforeach; ?>
+      </select>
   </div>
 
 </div>

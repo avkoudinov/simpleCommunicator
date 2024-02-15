@@ -1,5 +1,3 @@
-<script src='skins/<?php echo($skin); ?>/js/field_lookup.js<?php echo($cache_appendix); ?>'></script>
-
 <script>
 var config = {
   format: "<?php echo_js(text("DateFormat")); ?>",

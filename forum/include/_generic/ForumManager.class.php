@@ -2712,6 +2712,11 @@ abstract class ForumManager
             return false;
         }
         
+        if (!$dbw->execute_query("delete from {$prfx}_attachment where post_id in (select id from $tmp_id_collector_table)")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
         // unset flag HAS_PINNED_POST for topics where pinned post was deleted
         $query = "update {$prfx}_topic set has_pinned_post = 0
                   where id in (select topic_id from {$prfx}_post where pinned = 1 and id in (select id from $tmp_id_collector_table))";
@@ -7577,7 +7582,7 @@ abstract class ForumManager
     } // check_ip
     
     //-----------------------------------------------------------------
-    function get_online_users(&$online_users, &$forum_readers, &$topic_readers, &$topic_ignorers, $current_fid, $current_tid)
+    function get_online_users(&$online_users, &$forum_readers, &$topic_readers, &$topic_ignorers, &$topic_blocked_users, $current_fid, $current_tid)
     {
         if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
             return true;
@@ -7767,6 +7772,29 @@ abstract class ForumManager
                 $topic_ignorers[$uid]["name"] = $dbw->field_by_name("user_name");
                 $topic_ignorers[$uid]["online"] = (xstrtotime($dbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $dbw->field_by_name("logout") == 0);
                 $topic_ignorers[$uid]["auto_ignored"] = $dbw->field_by_name("auto_ignored");
+            }
+            
+            $dbw->free_result();
+
+            $query = "select {$prfx}_user.id, {$prfx}_user.user_name, last_visit_date, logout
+                      from {$prfx}_user
+                      inner join {$prfx}_topic_blocked on ({$prfx}_topic_blocked.user_id = {$prfx}_user.id and {$prfx}_topic_blocked.topic_id = $current_tid)
+                      order by last_visit_date desc";
+            
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            while ($dbw->fetch_row()) {
+                $uid = $dbw->field_by_name("id");
+                
+                if (!empty($_SESSION["hide_ignored"]) && $this->is_user_ignored($uid) && empty($disable_ignore)) {
+                    continue;
+                }
+
+                $topic_blocked_users[$uid]["name"] = $dbw->field_by_name("user_name");
+                $topic_blocked_users[$uid]["online"] = (xstrtotime($dbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $dbw->field_by_name("logout") == 0);
             }
             
             $dbw->free_result();
@@ -31017,15 +31045,19 @@ abstract class ForumManager
         
         $user_data["user_name"] = val_or_empty($_SESSION["user_name"]);
         
+        // Guest posting under logged in user
+        if (!empty($_SESSION["guest_posting_mode"])) {
+            $user_data["user_name"] = "";
+          
+            if ($this->get_last_posted_user_name() != $this->get_user_name() && $this->get_last_posted_user_name() != "") {
+                $user_data["user_name"] = $this->get_last_posted_user_name();
+            }
+        }
+        
         if ($this->is_master_admin()) {
             $user_data["user_name"] = text("MasterAdministrator");
         }
-        
-        // Guest posting under logged in user
-        if ($this->is_logged_in() && $this->get_last_posted_user_name() != $this->get_user_name()) {
-            $user_data["user_name"] = $this->get_last_posted_user_name();
-        }
-        
+
         $user_data["hide_ignored"] = val_or_empty($_SESSION["hide_ignored"]);
         $user_data["hide_pictures"] = val_or_empty($_SESSION["hide_pictures"]);
         $user_data["donot_hide_adult_pictures"] = val_or_empty($_SESSION["donot_hide_adult_pictures"]);
@@ -31083,9 +31115,10 @@ abstract class ForumManager
             $user_data["preferred_forums"] = $_SESSION["preferred_forums"];
         }
         
+        $user_data["aname"] = "";
         if ($this->is_master_admin()) {
             $user_data["aname"] = "admin";
-        } else {
+        } elseif (!empty($user_data["user_name"])) {
             $user_data["aname"] = System::generateHash($READ_MARKER . $user_data["user_name"], SALT_KEY);
         }
         
@@ -31106,7 +31139,7 @@ abstract class ForumManager
         global $READ_MARKER;
         global $settings;
         
-        if ($this->is_logged_in() && !$this->is_master_admin() && $this->get_last_posted_user_name() == $this->get_user_name()) {
+        if ($this->is_logged_in() && !$this->is_master_admin() && empty($_SESSION["guest_posting_mode"])) {
             return true;
         }
 
@@ -31158,8 +31191,9 @@ abstract class ForumManager
         }
         
         // Guest posting under logged in user
-        if ($this->is_logged_in() && $this->get_last_posted_user_name() != $this->get_user_name()) {
+        if ($this->is_logged_in() && !$this->is_master_admin() && !empty($_SESSION["guest_posting_mode"])) {
             $_SESSION["last_posted_user"] = reqvar("user_name");
+            set_cookie("q_last_guest_name", val_or_empty($_SESSION["last_posted_user"]), time() + 90 * 24 * 3600);
         } elseif (!$this->is_master_admin()) {
             $_SESSION["user_name"] = reqvar("user_name");
         }
@@ -32835,6 +32869,10 @@ abstract class ForumManager
             
             postprocess_message($pdata["html_content"]);
             postprocess_message($pdata["last_warned_by"]);
+            
+            if (in_array($pdata["last_warning"], ["MSG(MsgGuestsDisallowed)", "MSG(MsgAuthorRequestedModeration)"])) {
+                $pdata["display_action_author"] = true;
+            }
             
             $this->format_manager->format_message_simple($dbw, $prfx, $pdata["last_warning"], "warning");
             postprocess_message($pdata["last_warning"]);
