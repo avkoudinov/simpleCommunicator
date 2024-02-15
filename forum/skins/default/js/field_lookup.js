@@ -661,6 +661,10 @@ function lookup_goto_forum(eid)
   var lst = document.getElementById(eid + "_lookup");
   if (!lst || !lst.value) return;
 
+  lst.parentNode.style.display = "none";
+  
+  Forum.show_sys_progress_indicator(true);
+
   document.location.href = lst.value;
 }
 
@@ -670,6 +674,10 @@ function lookup_goto_forum_if_active(eid)
   if (!lst || !lst.value) return;
 
   if(document.activeElement != lst) return;
+
+  lst.parentNode.style.display = "none";
+
+  Forum.show_sys_progress_indicator(true);
 
   document.location.href = lst.value;
 }
