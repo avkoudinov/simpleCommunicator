@@ -11,7 +11,7 @@ function lookup_entries(action, fld, ev)
     return false;
   }
 
-  if(ev.keyCode == 40)
+  if(ev.keyCode == 40 || ev.keyCode == 38)
   {
     if(lst.value) lst.focus();
     return false;
@@ -114,7 +114,7 @@ function filter_entries(fld, ev)
     fld.value = "";
   }
 
-  if(ev.keyCode == 40)
+  if(ev.keyCode == 40 || ev.keyCode == 38)
   {
     lst.focus();
 
@@ -160,7 +160,7 @@ function lookup_existing_topics(fld, ev, fid)
     return false;
   }
 
-  if(ev.keyCode == 40)
+  if(ev.keyCode == 40 || ev.keyCode == 30)
   {
     if(lst.value) lst.focus();
     return false;

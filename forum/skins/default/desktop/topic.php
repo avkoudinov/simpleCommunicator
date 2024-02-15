@@ -729,6 +729,7 @@ $all_entry_post = $first_message;
 <tr>
 <td>
 <?php
+$forum_selector_id = 1;
 @include "forum_selector_inc.php";
 ?>
 </td>
@@ -824,6 +825,7 @@ $all_entry_post = $last_message;
 <tr>
 <td>
 <?php
+$forum_selector_id = 2;
 @include "forum_selector_inc.php";
 ?>
 </td>

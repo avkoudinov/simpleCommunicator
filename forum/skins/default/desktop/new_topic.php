@@ -463,6 +463,7 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 <tr>
 <td>
 <?php
+$forum_selector_id = 1;
 @include "forum_selector_inc.php";
 ?>
 </td>

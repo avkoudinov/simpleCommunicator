@@ -3931,9 +3931,14 @@ a.more_users:link
   background-color: white;
   position: absolute;
   border: 2px solid gray;
-  -webkit-box-shadow: 10px 10px 20px #000000;
-     -moz-box-shadow: 10px 10px 20px #000000;
-          box-shadow: 10px 10px 20px #000000;
+  margin-top: -2px;
+  box-shadow: 10px 10px 10px gray;
+}
+
+.field_lookup_area2
+{
+  box-shadow: 10px -10px 10px gray;
+  margin-top: -333px;
 }
 
 .field_lookup_area select
