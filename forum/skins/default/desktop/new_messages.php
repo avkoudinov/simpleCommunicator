@@ -454,6 +454,7 @@ if(!empty($fid_for_url))
 <tr>
 <td>
 <?php
+$forum_selector_id = 1;
 @include "forum_selector_inc.php";
 ?>
 </td>
@@ -774,6 +775,7 @@ if(!empty($fid_for_url))
 <tr>
 <td>
 <?php
+$forum_selector_id = 2;
 @include "forum_selector_inc.php";
 ?>
 </td>

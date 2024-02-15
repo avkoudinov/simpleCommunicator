@@ -288,6 +288,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <tr>
 <td>
 <?php
+$forum_selector_id = 1;
 @include "forum_selector_inc.php";
 ?>
 </td>
@@ -1374,6 +1375,7 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
 </td>
 <td>
 <?php
+$forum_selector_id = 2;
 @include "forum_selector_inc.php";
 ?>
 </td>
@@ -1632,6 +1634,7 @@ echo($ip);
 <tr>
 <td>
 <?php
+$forum_selector_id = 3;
 @include "forum_selector_inc.php";
 ?>
 </td>

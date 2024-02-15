@@ -4,8 +4,6 @@
 <title><?php echo_html($title); ?></title>
 
 <?php
-$forum_selector_id = "";
-
 $cache_appendix = "?v=" . $skin_version;
 ?>
 
