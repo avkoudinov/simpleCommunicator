@@ -153,11 +153,22 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
 </div>
 
-<?php if($fmanager->is_admin()): ?>
 <div class="forum_action_bar">
+<table>
+<tr>
+<td>
+<?php
+@include "forum_selector_inc.php";
+?>
+</td>
+<?php if($fmanager->is_admin()): ?>
+<td>
 <input type="button" class="standard_button" value="<?php echo_html(text("CreateForum")); ?>" onclick="delay_redirect('edit_forum.php')">
-</div>
+</td>
 <?php endif; ?>
+</tr>
+</table>
+</div>
 
 <div class="clear_both">
 </div>
