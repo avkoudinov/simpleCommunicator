@@ -456,6 +456,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
       <tr>
         <td>
           <?php
+          $forum_selector_id = 1;
           @include "forum_selector_inc.php";
           ?>
         </td>
@@ -773,6 +774,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
           <tr>
             <td>
               <?php
+              $forum_selector_id = 2;
               @include "forum_selector_inc.php";
               ?>
             </td>

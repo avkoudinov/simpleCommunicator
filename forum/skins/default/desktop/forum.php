@@ -592,6 +592,7 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <tr>
 <td>
 <?php
+$forum_selector_id = 1;
 @include "forum_selector_inc.php";
 ?>
 </td>
@@ -924,6 +925,7 @@ if(!empty($tinfo["deleted"])) $deleted .= " deleted_row";
 <tr>
 <td>
 <?php
+$forum_selector_id = 2;
 @include "forum_selector_inc.php";
 ?>
 </td>

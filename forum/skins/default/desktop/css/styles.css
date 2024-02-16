@@ -3034,7 +3034,9 @@ a.sorter.desc:hover
   width: 250px;
 }
 
-#forum_selector
+#forum_selector1,
+#forum_selector2,
+#forum_selector3
 {
   width: 300px;
   box-sizing: border-box;
@@ -3043,16 +3045,18 @@ a.sorter.desc:hover
   background-size: auto 100%;
 }
 
+#forum_selector_lookup1,
+#forum_selector_lookup2,
+#forum_selector_lookup3
+{
+  width: 100%;
+}
+
 #forum_selector_move
 {
   width: 100%;
   border: 0;
   border-bottom: 1px solid gray;
-}
-
-#forum_selector_lookup
-{
-  width: 100%;
 }
 
 .post_anchor
@@ -4304,9 +4308,15 @@ a.more_users:link
   z-index: 8000;
   background-color: white;
   border: 1px solid gray;
-  -webkit-box-shadow: 5px 5px 10px gray;
-     -moz-box-shadow: 5px 5px 10px gray;
-          box-shadow: 5px 5px 10px gray;
+  box-shadow: 5px 5px 10px gray;
+  margin-top: -1px;
+}
+
+.field_lookup_area2,
+.field_lookup_area3
+{
+  margin-top: -193px;
+  box-shadow: 5px -5px 10px gray;
 }
 
 .field_lookup_area select 
