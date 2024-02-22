@@ -113,11 +113,13 @@ if ($fmanager->check_hash()) {
     if (!reqvar_empty("guest_posting_on")) {
         $_SESSION["guest_posting_mode"] = 1;
         $_SESSION["last_posted_user"] = get_cookie("q_last_guest_name");
+        set_cookie("q_guest_posting_mode", 1, time() + 30 * 24 * 3600);
         header("Location: " . $uri);
         exit;
     }
     if (!reqvar_empty("guest_posting_off")) {
         $_SESSION["guest_posting_mode"] = 0;
+        set_cookie("q_guest_posting_mode", 0, time() + 30 * 24 * 3600);
         header("Location: " . $uri);
         exit;
     }

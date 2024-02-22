@@ -6112,6 +6112,11 @@ abstract class ForumManager
         
         $dbw->free_result();
         
+        $_SESSION["guest_posting_mode"] = get_cookie("q_guest_posting_mode");
+        if (!empty($_SESSION["guest_posting_mode"])) {
+            $_SESSION["last_posted_user"] = get_cookie("q_last_guest_name");
+        }
+        
         $block_reason = "";
         if (!empty($_SESSION["blocked"]) && !empty($_SESSION["block_reason"])) {
             $block_reason = $_SESSION["block_reason"];
@@ -30824,7 +30829,7 @@ abstract class ForumManager
             }
             
             if (!is_maintenance()) {
-                if (empty($_SESSION["last_posted_user"]) && $this->check_read_marker_last_activity($READ_MARKER)) {
+                if (empty($_SESSION["last_posted_user"])) {
                     $_SESSION["last_posted_user"] = $_SESSION["user_name"];
                 }
             }
@@ -33922,7 +33927,7 @@ abstract class ForumManager
                 $_SESSION["user_name"] = utf8_trim(utf8_substr($_SESSION["user_name"], 0, $settings["max_user_name_symbols"]));
             }
             
-            if (empty($_SESSION["last_posted_user"]) && $this->check_read_marker_last_activity($READ_MARKER)) {
+            if (empty($_SESSION["last_posted_user"])) {
                 $_SESSION["last_posted_user"] = $_SESSION["user_name"];
             }
         }
@@ -35420,7 +35425,7 @@ abstract class ForumManager
             $profiled_topic = $dbw->field_by_name("profiled_topic");
             // If the topic is a blog (profiled_topic == 2) the type of the message can be chosen only by the author of the topic.
             // In that case, we set it to 1.
-            if ($profiled_topic == 2 && (($dbw->field_by_name("topic_author_id") == $current_uid && !empty($uid)) || ($read_marker == $READ_MARKER && empty($uid)) || $moderatable)) {
+            if ($profiled_topic == 2 && (($dbw->field_by_name("topic_author_id") == $current_uid && !empty($uid)) || $moderatable)) {
                 $profiled_topic = 1;
             }
 
