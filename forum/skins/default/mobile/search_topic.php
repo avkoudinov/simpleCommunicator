@@ -482,8 +482,152 @@ if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["pre
 <!-- END: forum_bar -->
 
 <?php
-@include "online_users_inc.php";
+$treaders = "";
+$freaders = "";
+
+if(!empty($topic_data["is_private"]))
+{
+  $rcnt = empty($topic_data["participants"]) ? 0 : count($topic_data["participants"]);
+
+  $treaders = escape_html(text("Members")) . " ($rcnt): ";
+
+  if(!empty($topic_data["participants"]))
+  {
+    foreach($topic_data["participants"] as $pid => $pdata)
+    {
+      $appendix = "<span class='last_visit_info'>&nbsp;" . escape_html($pdata["last_visit"]) . "</span>";
+
+      $online_status = "";
+      if(empty($settings["hide_online_status"]) && !empty($pdata["online"]))
+      {
+        $online_status = "&nbsp;<span class='online_text'>✓</span>";
+      }
+
+      $treaders .= "<span class='user_name'><a href='view_profile.php?uid=$pid' >" . escape_html($pdata["user"]) . "</a>$online_status$appendix</span>, ";
+    }
+
+    $treaders = trim($treaders, ", ");
+  }
+}
+else
+{
+  $rcnt = count($topic_readers);
+  if(!empty($topic_readers["g_#anonyms#"]["count"])) $rcnt += ($topic_readers["g_#anonyms#"]["count"] - 1);
+
+  $treaders = "";
+  
+  foreach($topic_readers as $ouid => $uinfo)
+  {
+    $appendix = "";
+    if($uinfo["time_ago"] != text("Now"))
+      $appendix = "<span class='last_visit_info'>&nbsp;" . escape_html($uinfo["time_ago"]) . "</span>";
+
+    if(!empty($uinfo["id"]))
+      $treaders .= "<span class='user_name'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+    elseif(!empty($uinfo["bot"]))
+      $treaders .= "<span class='user_name'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+    elseif($ouid == "g_#anonyms#")
+      $treaders .= "<span class='user_name'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
+    elseif($uinfo["name"] == "admin")
+      $treaders .= "<span class='user_name'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
+    else
+      $treaders .= "<span class='user_name'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+  }
+
+  $treaders = trim($treaders, ", ");
+
+  if (!empty($treaders)) {
+    $treaders = escape_html(text("ReadingTopic")) . " ($rcnt): " . $treaders;
+  }
+
+  $rcnt = count($forum_readers);
+  if(!empty($forum_readers["g_#anonyms#"]["count"])) $rcnt += ($forum_readers["g_#anonyms#"]["count"] - 1);
+
+  $freaders = "";
+
+  foreach($forum_readers as $ouid => $uinfo)
+  {
+    $appendix = "";
+    if($uinfo["time_ago"] != text("Now"))
+      $appendix = "<span class='last_visit_info'>&nbsp;" . escape_html($uinfo["time_ago"]) . "</span>";
+
+    if(!empty($uinfo["id"]))
+      $freaders .= "<span class='user_name'><a href='view_profile.php?uid=$uinfo[id]'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+    elseif(!empty($uinfo["bot"]))
+      $freaders .= "<span class='user_name'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+    elseif($ouid == "g_#anonyms#")
+      $freaders .= "<span class='user_name'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
+    elseif($uinfo["name"] == "admin")
+      $freaders .= "<span class='user_name'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
+    else
+      $freaders .= "<span class='user_name'><a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
+  }
+
+  $freaders = trim($freaders, ", ");
+
+  if (!empty($freaders)) {
+    $freaders = escape_html(text("ReadingForum")) . " ($rcnt): " . $freaders;
+  }
+}
+
+$tignorers = "";
+$rcnt = count($topic_ignorers);
+if($rcnt > 0)
+{
+  $tignorers = escape_html(text("IgnoringTopic")) . " ($rcnt): ";
+
+  foreach($topic_ignorers as $iuid => $uinfo)
+  {
+      $online_status = "";
+      if(empty($settings["hide_online_status"]) && !empty($uinfo["online"]))
+      {
+          $online_status = "&nbsp;<span class='online_text'>✓</span>";
+      }
+      
+      $active_ignorer = "";
+      if (empty($uinfo["auto_ignored"])) {
+          $active_ignorer = "class='active_ignorer'";
+      }
+
+      $tignorers .= "<span class='user_name'><a $active_ignorer href='view_profile.php?uid=$iuid' >" . escape_html($uinfo["name"]) . "</a>$online_status</span>, ";
+  }
+
+  $tignorers = trim($tignorers, ", ");
+}
+
+$tblocked = "";
+$rcnt = count($topic_blocked_users);
+if($rcnt > 0)
+{
+  $tblocked = escape_html(text("BlockedInTopic")) . " ($rcnt): ";
+
+  foreach($topic_blocked_users as $iuid => $uinfo)
+  {
+      $online_status = "";
+      if(empty($settings["hide_online_status"]) && !empty($uinfo["online"]))
+      {
+          $online_status = "&nbsp;<span class='online_text'>✓</span>";
+      }
+      
+      $active_ignorer = "";
+      if (empty($uinfo["auto_ignored"])) {
+          $active_ignorer = "class='active_ignorer'";
+      }
+
+      $tblocked .= "<span class='user_name'><a $active_ignorer href='view_profile.php?uid=$iuid' >" . escape_html($uinfo["name"]) . "</a>$online_status</span>, ";
+  }
+
+  $tblocked = trim($tblocked, ", ");
+}
 ?>
+
+  <div class="online_users_area">
+
+  <?php
+  @include "topic_online_users_inc.php";
+  ?>
+
+  </div>
 
 <?php
 unset($_SESSION["ensure_anchor_visible"]);

@@ -586,7 +586,7 @@ $forum_readers = array();
 $topic_readers = array();
 $topic_ignorers = array();
 $topic_blocked_users = array();
-$fmanager->get_online_users($online_users, $forum_readers, $topic_readers, $topic_ignorers, $topic_blocked_users, "", "");
+$fmanager->get_online_users($online_users, $forum_readers, $topic_readers, $topic_ignorers, $topic_blocked_users, $fid, $tid);
 //------------------------------------------------------------------
 $_SESSION["last_url"] = val_or_empty($_SERVER["REQUEST_URI"]);
 //------------------------------------------------------------------
