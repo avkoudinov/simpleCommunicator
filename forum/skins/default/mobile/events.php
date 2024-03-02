@@ -231,16 +231,18 @@ $selected = (val_or_empty($_SESSION["event_log_filter"]["event_type"]) == $eid) 
 <td>
 <select name="forum" id="forum" class="filter_field" onchange="Forum.show_sys_progress_indicator(true); this.form.submit();">
 <option value="">-</option>
+
+<?php
+$selected = (val_or_empty($_SESSION["event_log_filter"]["forum"]) == "private") ? "selected" : "";
+?>
+<option value="private" <?php echo($selected); ?>><?php echo_html(text("PrivateTopics")); ?></option>
+
 <?php foreach($forum_list as $fid => $fdata):
 $selected = (val_or_empty($_SESSION["event_log_filter"]["forum"]) == $fid) ? "selected" : "";
 ?>
 <option value="<?php echo_html($fid); ?>" <?php echo($selected); ?>><?php echo_html($fdata["name"]); ?></option>
 <?php endforeach; ?>
 
-<?php
-$selected = (val_or_empty($_SESSION["event_log_filter"]["forum"]) == "private") ? "selected" : "";
-?>
-<option value="private" <?php echo($selected); ?>><?php echo_html(text("PrivateTopics")); ?></option>
 </select>
 </td>
 </tr>

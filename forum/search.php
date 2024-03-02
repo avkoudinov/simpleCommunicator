@@ -276,7 +276,7 @@ if (!empty($search_title_appendix)) {
 //------------------------------------------------------------------
 $tid = reqvar("tid");
 $fid = reqvar("fid");
-if (empty($fid) && !empty($_REQUEST["forums"]) && count($_REQUEST["forums"]) == 1) {
+if (empty($fid) && !empty($_REQUEST["forums"]) && count($_REQUEST["forums"]) == 1 && is_numeric($_REQUEST["forums"][0])) {
     $fid = $_REQUEST["forums"][0];
 }
 
@@ -356,7 +356,7 @@ if (!empty($fid)) {
 $fmanager->track_hit($tid, $fid);
 
 $all_forum_list = array();
-$fmanager->get_forum_list($all_forum_list, false);
+$fmanager->get_groupped_forum_list($all_forum_list, false);
 
 $online_users = array();
 $forum_readers = array();

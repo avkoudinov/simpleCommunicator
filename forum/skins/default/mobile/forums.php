@@ -152,6 +152,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <?php if($fmanager->is_admin()): ?>
 <div class="forum_action_bar">
 <input type="button" class="standard_button" value="<?php echo_html(text("CreateForum")); ?>" onclick="delay_redirect('edit_forum.php')">
+<input type="button" class="standard_button" value="<?php echo_html(text("ForumGroups")); ?>" onclick="delay_redirect('forum_groups.php')">
 </div>
 <?php endif; ?>
 
@@ -168,7 +169,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <th><?php echo_html(text("Forum")); ?></th>
 </tr>
 
-<?php if(count($forum_list) == 0): ?>
+<?php if(count($groupped_forum_list) == 0): ?>
 
 <tr>
 <td class="table_message"><?php echo_html(text("NoForums")); ?></td>
@@ -177,12 +178,27 @@ if(!empty($topics_with_new_count)) $display = "";
 <?php else: ?>
 
 <?php
-foreach($forum_list as $fid => $finfo):
+$current_group = "";
+
+foreach($groupped_forum_list as $fid => $finfo):
 if(!empty($_SESSION["hide_ignored"]) && !empty($finfo["not_preferred"]) &&
    !$fmanager->is_forum_moderator($fid)) continue;
    
 $deleted = "";
 if(!empty($finfo["deleted"])) $deleted = "deleted_row";
+?>
+
+<?php
+if (!empty($_SESSION["has_forum_groups"]) && $current_group != $finfo["forum_group_name"]):
+$current_group = $finfo["forum_group_name"];
+?>
+
+<tr>
+<th class="subheader"><?php echo_html(empty($current_group) ? text("OtherForums") : $current_group); ?></th>
+</tr>
+
+<?php
+endif;
 ?>
 
 <tr class="<?php echo_html($deleted); ?>">

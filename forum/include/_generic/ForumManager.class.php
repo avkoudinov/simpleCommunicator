@@ -2382,7 +2382,7 @@ abstract class ForumManager
                              left join {$prfx}_post on ({$prfx}_forum_statistics.last_message_id = {$prfx}_post.id)
                              left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
                              $where
-                             order by sort_order, name")) {
+                             order by name")) {
             MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
             return false;
         }
@@ -2480,6 +2480,146 @@ abstract class ForumManager
         return true;
     } // get_forum_list
     
+    //-----------------------------------------------------------------
+    function get_groupped_forum_list(&$get_groupped_forum_list, $exclude_not_preferred = true)
+    {
+        start_action_time_measure();
+        
+        $rodbw = System::getRODBWorker();
+        if (!$rodbw) {
+            return false;
+        }
+        
+        $forum_list_tmp = array();
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+        
+        $where = "where {$prfx}_forum.name <> 'PRIVATE_MESSAGES'";
+        
+        $forum_restriction_appendix = $this->get_forum_restriction_appendix($rodbw, $prfx, true);
+        if (!empty($forum_restriction_appendix)) {
+            $where .= " and $forum_restriction_appendix";
+        }
+        
+        if (!$rodbw->execute_query("select {$prfx}_forum.id, {$prfx}_forum.name, description, {$prfx}_forum.creation_date,
+                             user_posting_as_guest,
+                             topic_count, topic_count_total,
+                             last_message_date, forum_group_id,
+                             {$prfx}_forum.deleted, closed, disable_ignore,
+                             {$prfx}_post.user_id, {$prfx}_post.author, {$prfx}_user.user_name, {$prfx}_post.read_marker,
+                             last_visit_date, logout, {$prfx}_forum_group.name forum_group_name
+                             from {$prfx}_forum
+                             left join {$prfx}_forum_group on ({$prfx}_forum.forum_group_id = {$prfx}_forum_group.id)
+                             inner join {$prfx}_forum_statistics on ({$prfx}_forum.id = {$prfx}_forum_statistics.forum_id)
+                             left join {$prfx}_post on ({$prfx}_forum_statistics.last_message_id = {$prfx}_post.id)
+                             left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
+                             $where
+                             order by case when {$prfx}_forum.forum_group_id is NULL then 1 else 0 end,
+                             {$prfx}_forum_group.sort_order, {$prfx}_forum_group.name, {$prfx}_forum.sort_order, {$prfx}_forum.name")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $_SESSION["has_forums_with_user_guest_posting"] = false;
+        $_SESSION["has_forum_groups"] = false;
+        
+        while ($rodbw->fetch_row()) {
+            if ($rodbw->field_by_name("user_posting_as_guest")) {
+                $_SESSION["has_forums_with_user_guest_posting"] = true;
+            }            
+            
+            if ($rodbw->field_by_name("forum_group_name")) {
+                $_SESSION["has_forum_groups"] = true;
+            }            
+
+            $fid = $rodbw->field_by_name("id");
+            
+            $topic_count = $rodbw->field_by_name("topic_count");
+            $deleted = $rodbw->field_by_name("deleted");
+            
+            if (!empty($_SESSION["show_deleted"])) {
+                if ($deleted && !$this->is_admin() && !$this->is_forum_moderator($fid)) {
+                    continue;
+                }
+                
+                if ($this->is_admin() || $this->is_forum_moderator($fid)) {
+                    $topic_count = $rodbw->field_by_name("topic_count_total");
+                }
+            } elseif ($deleted) {
+                continue;
+            }
+            
+            $last_author_id = $rodbw->field_by_name("user_id");
+            $last_author_readmarker = $rodbw->field_by_name("read_marker");
+            $last_author = $rodbw->field_by_name("user_name") ? $rodbw->field_by_name("user_name") : $rodbw->field_by_name("author");
+            $last_author_online = (xstrtotime($rodbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $rodbw->field_by_name("logout") == 0);
+            
+            $last_author_ignored = false;
+            if (!$rodbw->field_by_name("disable_ignore")) {
+                $this->clear_if_ignored($last_author_id, $last_author, $last_author_readmarker, $last_author_online, $last_author_ignored, $fid, "");
+            }
+            
+            $forum_list_tmp[$fid] = array(
+                "name" => $rodbw->field_by_name("name"),
+                "description" => $rodbw->field_by_name("description"),
+                "forum_group_id" => $rodbw->field_by_name("forum_group_id"),
+                "forum_group_name" => $rodbw->field_by_name("forum_group_name"),
+                "last_message_date" => smart_date2(xstrtotime($rodbw->field_by_name("last_message_date"))),
+                "topic_count" => $topic_count,
+                "last_author" => $last_author,
+                "last_author_id" => $last_author_id,
+                "last_author_online" => $last_author_online,
+                "last_author_ignored" => $last_author_ignored,
+                "closed" => $rodbw->field_by_name("closed"),
+                "disable_ignore" => $rodbw->field_by_name("disable_ignore"),
+                "deleted" => $deleted,
+                "not_preferred" => !empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid]),
+                "topics_with_new_count" => 0
+            );
+        }
+        
+        $rodbw->free_result();
+        
+        if (!$rodbw->execute_query("select user_id, forum_id, user_name,
+                             last_visit_date, logout
+                             from
+                             {$prfx}_forum_moderator
+                             inner join {$prfx}_user on ({$prfx}_forum_moderator.user_id = {$prfx}_user.id)
+                             order by user_name")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        while ($rodbw->fetch_row()) {
+            if (empty($forum_list_tmp[$rodbw->field_by_name("forum_id")])) {
+                continue;
+            }
+            
+            $forum_list_tmp[$rodbw->field_by_name("forum_id")]["moderators"][$rodbw->field_by_name("user_id")] = array(
+                "name" => $rodbw->field_by_name("user_name"),
+                "online" => (xstrtotime($rodbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $rodbw->field_by_name("logout") == 0),
+            );
+        }
+        
+        $rodbw->free_result();
+        
+        if (empty($_SESSION["preferred_forums"]) || empty($exclude_not_preferred)) {
+            $get_groupped_forum_list = $forum_list_tmp;
+            
+            measure_action_time("get forum list");
+            return true;
+        }
+        
+        foreach ($forum_list_tmp as $fid => $forum_data) {
+            if (!empty($_SESSION["preferred_forums"][$fid])) {
+                $get_groupped_forum_list[$fid] = $forum_data;
+            }
+        }
+        
+        measure_action_time("get forum list");
+        return true;
+    } // get_groupped_forum_list
+
     //-----------------------------------------------------------------
     function check_hash()
     {
@@ -3829,6 +3969,7 @@ abstract class ForumManager
         $forum_data["id"] = "";
         $forum_data["forum_name"] = "";
         $forum_data["forum_description"] = "";
+        $forum_data["forum_group"] = "";
         
         $forum_data["topic_count"] = 0;
         $forum_data["ignored_topic_count"] = 0;
@@ -3888,7 +4029,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select
                              id, name, description, no_guests, restricted_guest_mode, user_posting_as_guest, stringent_rules, allow_edit, restricted_access, hide_from_robots, sort_order,
-                             access_duration, access_message_count, disable_ignore,
+                             access_duration, access_message_count, disable_ignore, forum_group_id,
                              protected_by_password, deleted, closed, $count_field topic_count
                              from {$prfx}_forum
                              inner join {$prfx}_forum_statistics on ({$prfx}_forum.id = {$prfx}_forum_statistics.forum_id)
@@ -3905,6 +4046,7 @@ abstract class ForumManager
             }
             
             $forum_data["forum_description"] = $dbw->field_by_name("description");
+            $forum_data["forum_group"] = $dbw->field_by_name("forum_group_id");
             
             $forum_data["topic_count"] = $dbw->field_by_name("topic_count");
             
@@ -4187,6 +4329,11 @@ abstract class ForumManager
             $sort_order = 0;
         }
         
+        $forum_group_id = $dbw->escape(reqvar("forum_group"));
+        if (empty($forum_group_id) || !is_numeric($forum_group_id)) {
+            $forum_group_id = "NULL";
+        }
+
         $forum_description = $dbw->quotes_or_null(reqvar("forum_description"));
         $password = $dbw->quotes_or_null(reqvar("password"));
         
@@ -4237,9 +4384,9 @@ abstract class ForumManager
             $now = $dbw->format_datetime(time());
             
             $query = "insert into {$prfx}_forum
-               (name, description, allow_edit, hide_from_robots, no_guests, restricted_guest_mode, user_posting_as_guest, restricted_access, stringent_rules, disable_ignore, protected_by_password, deleted, password, creation_date, sort_order, access_duration, access_message_count)
+               (name, description, forum_group_id, allow_edit, hide_from_robots, no_guests, restricted_guest_mode, user_posting_as_guest, restricted_access, stringent_rules, disable_ignore, protected_by_password, deleted, password, creation_date, sort_order, access_duration, access_message_count)
                 values
-               ($forum_name, $forum_description, $allow_edit, $hide_from_robots, $no_guests, $restricted_guest_mode, $user_posting_as_guest, $restricted_access, $stringent_rules, $disable_ignore, $protected_by_password, $deleted, $password, '$now', $sort_order, $access_duration, $access_message_count)";
+               ($forum_name, $forum_description, $forum_group_id, $allow_edit, $hide_from_robots, $no_guests, $restricted_guest_mode, $user_posting_as_guest, $restricted_access, $stringent_rules, $disable_ignore, $protected_by_password, $deleted, $password, '$now', $sort_order, $access_duration, $access_message_count)";
         } else {
             $password_string = "password = $password,";
             if ($protected_by_password && $password_is_set && reqvar_empty("password")) {
@@ -4249,6 +4396,7 @@ abstract class ForumManager
             $query = "update {$prfx}_forum set
                 name = $forum_name,
                 description = $forum_description,
+                forum_group_id = $forum_group_id,
                 sort_order = $sort_order,
                 no_guests = $no_guests,
                 restricted_guest_mode = $restricted_guest_mode,
@@ -29699,6 +29847,9 @@ abstract class ForumManager
     {
         global $forum_list;
         
+        $forum_group_list = array();
+        $this->get_forum_group_list($forum_group_list);
+        
         $search_title = "";
         
         if (!reqvar_empty("search_keys")) {
@@ -29999,11 +30150,13 @@ abstract class ForumManager
             $search_title .= text("SearchInForums") . ": ";
             
             foreach ($_REQUEST["forums"] as $fid) {
-                if (!empty($forum_list[$fid]["name"])) {
-                    $search_title .= val_or_empty($forum_list[$fid]["name"]) . ", ";
-                } elseif ($fid == "private") {
+                if ($fid == "private") {
                     $search_title .= text("PrivateTopics");
-                }
+                } elseif (preg_match("/g(\\d*)/", $fid, $matches)) {                 
+                    $search_title .= (empty($matches[1]) ? text("OtherForums") : val_or_empty($forum_group_list[$matches[1]])) . ", ";
+                } elseif (!empty($forum_list[$fid]["name"])) {
+                    $search_title .= val_or_empty($forum_list[$fid]["name"]) . ", ";
+                } 
             }
         }
         
@@ -38353,6 +38506,17 @@ abstract class ForumManager
                     
                     continue;
                 } // private
+                
+                if (preg_match("/g(\\d+)/", $fid, $matches)) {
+                    if (!empty($forum_where)) {
+                        $forum_where .= " or ";
+                    }
+                    
+                    $forum_where .= "{$prfx}_forum.forum_group_id = $matches[1]" . "\n";
+
+                    continue;
+                }
+                
                 //-----------------------------------------------------------
                 // must be after handling $fid == "private"
                 //-----------------------------------------------------------
@@ -39815,5 +39979,180 @@ abstract class ForumManager
         
         $avatar = str_replace(APPLICATION_ROOT, "", $files[array_rand($files)]);
     } // check_avatar
+    
+    
+    //---------------------------------------------------------------
+    function get_forum_groups(&$forum_groups)
+    {
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        if (!$dbw->execute_query("select
+                             id, name, sort_order
+                             
+                             from {$prfx}_forum_group
+                             
+                             order by sort_order")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        while ($dbw->fetch_row()) {
+            $id = $dbw->field_by_name("id");
+            
+            $forum_groups[$id] = [
+                "name" => $dbw->field_by_name("name"),
+                "sort_order" => $dbw->field_by_name("sort_order")
+            ];
+        }
+        
+        $dbw->free_result();
+        
+        if (empty($forum_groups)) {
+            $forum_groups[-1] = [
+                "name" => "",
+                "sort_order" => ""
+            ];
+        }
+    } // get_forum_groups
+
+    //---------------------------------------------------------------
+    function save_forum_groups()
+    {
+        if ($this->demo_mode()) {
+            MessageHandler::setWarning(text("MsgDemoMode"));
+            return true;
+        }
+        
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        if (!$dbw->start_transaction()) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        $in_list = "NULL";
+        if (!empty($_REQUEST["groups"]))
+        {
+            $in_list = $dbw->escape(implode(", ", array_keys($_REQUEST["groups"])));
+        }
+        
+        if (!$dbw->execute_query("update {$prfx}_forum set forum_group_id = NULL where forum_group_id not in ($in_list)")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            $dbw->rollback_transaction();
+            return false;
+        }
+
+        if (!$dbw->execute_query("delete from {$prfx}_forum_group where id not in ($in_list)")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            $dbw->rollback_transaction();
+            return false;
+        }
+        
+        if (!empty($_REQUEST["groups"]))
+        {
+            foreach ($_REQUEST["groups"] as $id => $group_data)
+            {
+                if ($id < 0 && count($_REQUEST["groups"]) == 1 && empty($group_data["name"])) {
+                    continue;
+                }
+                
+                if (empty($group_data["name"])) {
+                    MessageHandler::setError(text("ErrForumGroupNameEmpty"));
+                    MessageHandler::setErrorElement("group_{$id}_name");
+
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+                
+                $id = $dbw->escape($id);
+                $name = $dbw->escape($group_data["name"]);
+                $sort_order = $dbw->escape($group_data["sort_order"]);
+                if (empty($sort_order) || !is_numeric($sort_order)) {
+                    $sort_order = 0;
+                }
+                
+                if (!$dbw->execute_query("select 1 from {$prfx}_forum_group where name = '$name' and id <> $id")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+
+                if ($dbw->fetch_row()) {
+                    $dbw->free_result();
+
+                    MessageHandler::setError(text("ErrForumGroupNameExists"));
+                    MessageHandler::setErrorElement("group_{$id}_name");
+
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+                
+                $dbw->free_result();
+
+                if ($id < 0) {
+                    $query = "insert into {$prfx}_forum_group (name, sort_order) values ('$name', $sort_order)";
+                } else {
+                    $query = "update {$prfx}_forum_group set 
+                    name = '$name', 
+                    sort_order = $sort_order
+                    where id = $id
+                    ";
+                }
+
+                if (!$dbw->execute_query($query)) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
+                    return false;
+                }
+            }
+        }
+
+        if (!$dbw->commit_transaction()) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
+        MessageHandler::setInfo(text("MsgDataSaved"));
+        
+        return true;
+    } // save_forum_groups
+    
+    //---------------------------------------------------------------
+    function get_forum_group_list(&$forum_group_list)
+    {
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        if (!$dbw->execute_query("select
+                             id, name
+                             from {$prfx}_forum_group
+                             
+                             order by name")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        while ($dbw->fetch_row()) {
+            $id = $dbw->field_by_name("id");
+            
+            $forum_group_list[$id] = $dbw->field_by_name("name");
+        }
+        
+        $dbw->free_result();
+    } // get_forum_group_list
 } // class ForumManager
 ?>

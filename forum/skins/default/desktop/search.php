@@ -1198,7 +1198,20 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
             <option value="private" <?php echo_html(reqvar_selected("forums", "private")); ?>><?php echo_html(text("PrivateTopics")); ?></option>
           <?php endif; ?>
           
-          <?php foreach ($all_forum_list as $fid => $fdata): ?>
+          <?php 
+          $current_group = "";
+          foreach ($all_forum_list as $fid => $fdata): ?>
+            <?php
+            if (!empty($_SESSION["has_forum_groups"]) && $current_group != $fdata["forum_group_name"]):
+            $current_group = $fdata["forum_group_name"];
+            ?>
+
+            <option class="forum_group_option" value="g<?php echo_html($fdata["forum_group_id"]); ?>" <?php echo_html(reqvar_selected("forums", "g" . $fdata["forum_group_id"])); ?>><?php echo_html(empty($current_group) ? text("OtherForums") : $current_group); ?></option>
+
+            <?php
+            endif;
+            ?>
+
             <option value="<?php echo_html($fid); ?>" <?php echo_html(reqvar_selected("forums", $fid)); ?>><?php echo_html($fdata["name"]); ?></option>
           <?php endforeach; ?>
 

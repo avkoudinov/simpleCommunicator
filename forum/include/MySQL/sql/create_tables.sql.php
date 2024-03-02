@@ -355,6 +355,7 @@ create table v1_forum
    access_message_count int,
    stringent_rules      tinyint not null default 0,
    disable_ignore       tinyint not null default 0,
+   forum_group_id       int,
    primary key (id)
 )
 ';
@@ -415,6 +416,23 @@ $sql_cmds[] = '
 create index v1_forum_blocked_forum_id_idx on v1_forum_blocked
 (
    forum_id
+)
+';
+
+$sql_cmds[] = '
+create table v1_forum_group
+(
+   id                   int not null auto_increment,
+   name                 varchar(255) not null,
+   sort_order           int not null default 0,
+   primary key (id)
+)
+';
+
+$sql_cmds[] = '
+create unique index v1_forum_group_name_unq on v1_forum_group
+(
+   name
 )
 ';
 

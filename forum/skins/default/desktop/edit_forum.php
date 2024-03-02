@@ -384,6 +384,17 @@ Forum.addXEvent(window, 'load', function () { enable_disable(); });
 </tr>
 
 <tr>
+<td><?php echo_html(text("ForumGroup")); ?>:</td>
+<td>
+<select name="forum_group" id="forum_group">
+<?php foreach($forum_group_list as $gid => $forum_group_name): ?>
+<option value="<?php echo_html($gid); ?>" <?php echo(selected(val_or_empty($forum_data["forum_group"]), $gid)); ?>><?php echo_html($forum_group_name); ?></option>
+<?php endforeach; ?>
+</select>
+</td>
+</tr>
+
+<tr>
 <td><?php echo_html(text("Sorting")); ?>:</td>
 <td><input type="text" id="sort_order" name="sort_order" class="small_field" value="<?php echo_html(val_or_empty($forum_data["sort_order"])); ?>" autocomplete="off"></td>
 </tr>
