@@ -1,5 +1,7 @@
 function mustAdjustMultiSelect()
 {
+  //return true;
+  
   //if(/mobile.*firefox/.test(window.navigator.userAgent.toLowerCase())) return false;
 
   //if(/edge/.test(window.navigator.userAgent.toLowerCase())) return false;
@@ -32,6 +34,10 @@ function refreshMutliSelectControl(list, select_control)
     
     txt = document.createTextNode(list.options[i].text);
     elm = document.createElement('div');
+    if (list.options[i].classList.contains("forum_group_option")) {
+      elm.classList.add("forum_group_option_mc");
+    }
+
     elm.setAttribute('data-value', list.options[i].value);
     elm.classList.add('selected');
     elm.appendChild(txt);
@@ -46,6 +52,10 @@ function refreshMutliSelectControl(list, select_control)
     
     txt = document.createTextNode(list.options[i].text);
     elm = document.createElement('div');
+    if (list.options[i].classList.contains("forum_group_option")) {
+      elm.classList.add("forum_group_option_mc");
+    }
+    
     elm.setAttribute('data-value', list.options[i].value);
     elm.appendChild(txt);
     select_control.appendChild(elm);

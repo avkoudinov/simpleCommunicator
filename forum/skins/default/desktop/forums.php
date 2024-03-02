@@ -165,6 +165,7 @@ $forum_selector_id = 1;
 <?php if($fmanager->is_admin()): ?>
 <td>
 <input type="button" class="standard_button" value="<?php echo_html(text("CreateForum")); ?>" onclick="delay_redirect('edit_forum.php')">
+<input type="button" class="standard_button" value="<?php echo_html(text("ForumGroups")); ?>" onclick="delay_redirect('forum_groups.php')">
 </td>
 <?php endif; ?>
 </tr>
@@ -192,26 +193,43 @@ $forum_selector_id = 1;
 
 </tr>
 
-<?php if(count($forum_list) == 0): ?>
+<?php 
+if($fmanager->is_admin()) $colspan = 6;
+else                      $colspan = 5; 
+?>
+
+<?php if(count($groupped_forum_list) == 0): ?>
 
 <tr>
-<?php if($fmanager->is_admin()): ?>
-<td colspan="6" class="table_message"><?php echo_html(text("NoForums")); ?></td>
-<?php else: ?>
-<td colspan="5" class="table_message"><?php echo_html(text("NoForums")); ?></td>
-<?php endif; ?>
+<td colspan="<?php echo($colspan); ?>" class="table_message"><?php echo_html(text("NoForums")); ?></td>
 </tr>
 
 <?php else: ?>
 
 <?php
-foreach($forum_list as $fid => $finfo):
+$current_group = "";
+
+foreach($groupped_forum_list as $fid => $finfo):
 if(!empty($_SESSION["hide_ignored"]) && !empty($finfo["not_preferred"]) &&
    !$fmanager->is_forum_moderator($fid)) continue;
    
 $deleted = "";
 if(!empty($finfo["deleted"])) $deleted = "deleted_row";
 ?>
+
+<?php
+if (!empty($_SESSION["has_forum_groups"]) && $current_group != $finfo["forum_group_name"]):
+$current_group = $finfo["forum_group_name"];
+?>
+
+<tr>
+<th class="subheader" colspan="<?php echo($colspan); ?>"><?php echo_html(empty($current_group) ? text("OtherForums") : $current_group); ?></th>
+</tr>
+
+<?php
+endif;
+?>
+
 
 <tr class="<?php echo_html($deleted); ?>">
 <td></td>

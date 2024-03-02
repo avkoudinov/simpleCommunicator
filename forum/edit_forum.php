@@ -41,6 +41,10 @@ if(!reqvar_empty("fid"))
   $fmanager->get_moderator_list(reqvar("fid"), $moderator_list);
   $fmanager->track_hit("", reqvar("fid"));
 }
+
+$forum_group_list = array();
+$forum_group_list[""] = "-";
+$fmanager->get_forum_group_list($forum_group_list);
 //------------------------------------------------------------------
 require_once "include/check_new_inc.php";
 //------------------------------------------------------------------

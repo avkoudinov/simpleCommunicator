@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     14.01.2024 20:00:05                          */
+/* Created on:     02.03.2024 11:48:14                          */
 /*==============================================================*/
 
 
@@ -396,6 +396,7 @@ create table v1_forum (
    access_message_count int                  null,
    stringent_rules      tinyint              not null default 0,
    disable_ignore       tinyint              not null default 0,
+   forum_group_id       int                  null,
    constraint v1_forum_pk primary key nonclustered (id)
 )
 go
@@ -464,6 +465,25 @@ go
 /*==============================================================*/
 create index v1_forum_blocked_forum_id_idx on v1_forum_blocked (
 forum_id ASC
+)
+go
+
+/*==============================================================*/
+/* Table: v1_forum_group                                        */
+/*==============================================================*/
+create table v1_forum_group (
+   id                   int                  identity,
+   name                 varchar(255)         not null,
+   sort_order           int                  not null default 0,
+   constraint v1_forum_group_pk primary key nonclustered (id)
+)
+go
+
+/*==============================================================*/
+/* Index: v1_forum_group_name_unq                               */
+/*==============================================================*/
+create unique index v1_forum_group_name_unq on v1_forum_group (
+name ASC
 )
 go
 

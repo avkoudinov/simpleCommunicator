@@ -9,14 +9,22 @@
 
 .multiselect_control div
 {
-  width: 2000px;
   overflow: hidden;
   padding-left: 7px;
   box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .multiselect_control div.selected
 {
   color: white;
-  background-color: #3399FF;
+  background-color: #0078D7;
+}
+
+.multiselect_control div.forum_group_option_mc.selected
+{
+  color: white;
+  background-color: #145390;
+  text-lign: left;
 }
