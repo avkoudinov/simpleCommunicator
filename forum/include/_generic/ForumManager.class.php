@@ -35585,8 +35585,8 @@ abstract class ForumManager
             $ip = $dbw->field_by_name("ip");
             if (!$this->is_admin() && 
                 (!$this->is_forum_moderator($dbw->field_by_name("forum_id")) || !$this->may_see_ip()) &&
-                !($this->get_user_id() == "" && $READ_MARKER == $read_marker) &&
-                !(!empty($uid) && $uid == $this->get_user_id())
+                !($READ_MARKER == $read_marker) &&
+                !(!empty($uid) && $uid == $this->get_user_id()) 
                 ) {
                 $ip = "";
             }
