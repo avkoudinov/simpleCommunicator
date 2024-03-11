@@ -1497,4 +1497,9 @@ $GLOBALS['DEF_TEXTS']['de']['ImageUrlBlackList'] = 'Schwarze Liste der Bilddomä
 $GLOBALS['DEF_TEXTS']['de']['ImageUrlWhiteList'] = 'Weiße Liste der Bilddomäne';
 $GLOBALS['DEF_TEXTS']['de']['Comments'] = 'Kommentare';
 $GLOBALS['DEF_TEXTS']['de']['HashIPAddresses'] = 'IP-Adressen haschen';
+$GLOBALS['DEF_TEXTS']['de']['ForumGroup'] = 'Forumgruppe';
+$GLOBALS['DEF_TEXTS']['de']['ForumGroups'] = 'Forumgruppen';
+$GLOBALS['DEF_TEXTS']['de']['OtherForums'] = 'Sonstige Foren';
+$GLOBALS['DEF_TEXTS']['de']['ErrForumGroupNameEmpty'] = 'Forumgruppename ist nicht angegeben!';
+$GLOBALS['DEF_TEXTS']['de']['ErrForumGroupNameExists'] = 'Eine Forumgruppe mit diesem Namen existiert bereits!';
 ?>

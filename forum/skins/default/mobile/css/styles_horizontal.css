@@ -1222,6 +1222,19 @@
     width: 190px;
   }
   
+  .forum_group_table td:nth-child(3) input
+  {
+    width: 50px;
+    min-width: 50px;
+    background-size: 60%;
+  }
+
+  .forum_group_table td
+  {
+    border: 1px solid gray;
+    padding: 7px;
+  }
+
   .settings_table,
   .forum_edit_table,
   .topic_statistic_table,
@@ -1559,6 +1572,14 @@
   .post_anchor_fixed_menu
   {
     top: -65px;
+  }
+
+  .forum_table th.subheader,
+  .post_table th.subheader,
+  .form_table th.subheader,
+  .search_table th.subheader
+  {
+    padding: 5px;
   }
 
   .post_table th,
@@ -2616,11 +2637,19 @@
     border: 1px solid gray;
   }
   
+  .forum_group_option,
+  .forum_group_option_mc
+  {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
   .multiselect_control div
   {
     font-size: 20px;
     line-height: 24px;
     font-weight: normal;
+    padding: 2px;
   }
   
   .search_topic_area select 

@@ -10381,5 +10381,40 @@
             <ua>Хешувати IP-адреси</ua>
         </text>
 
+        <text id="ForumGroup">
+            <en>Forum group</en>
+            <de>Forumgruppe</de>
+            <ru>Группа форумов</ru>
+            <ua>Група форумів</ua>
+        </text>
+
+        <text id="ForumGroups">
+            <en>Forum groups</en>
+            <de>Forumgruppen</de>
+            <ru>Группы форумов</ru>
+            <ua>Групи форумів</ua>
+        </text>
+
+        <text id="OtherForums">
+            <en>Other forums</en>
+            <de>Sonstige Foren</de>
+            <ru>Прочие форумы</ru>
+            <ua>Інші форуми</ua>
+        </text>
+
+        <text id="ErrForumGroupNameEmpty">
+            <en>Forum group name is not specified!</en>
+            <de>Forumgruppename ist nicht angegeben!</de>
+            <ru>Не задано название группы форума!</ru>
+            <ua>Не задано назву групи форуму!</ua>
+        </text>
+
+        <text id="ErrForumGroupNameExists">
+            <en>A forum group with that name already exists!</en>
+            <de>Eine Forumgruppe mit diesem Namen existiert bereits!</de>
+            <ru>Группа форумов с таким названием уже существует!</ru>
+            <ua>Група форумів із такою назвою вже існує!</ua>
+        </text>
+
     </texts>
 </document>

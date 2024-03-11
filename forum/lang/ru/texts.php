@@ -1502,4 +1502,9 @@ $GLOBALS['DEF_TEXTS']['ru']['ImageUrlBlackList'] = 'Черный список д
 $GLOBALS['DEF_TEXTS']['ru']['ImageUrlWhiteList'] = 'Белый список доменов изображений';
 $GLOBALS['DEF_TEXTS']['ru']['Comments'] = 'Комментарии';
 $GLOBALS['DEF_TEXTS']['ru']['HashIPAddresses'] = 'Хэшировать IP-адреса';
+$GLOBALS['DEF_TEXTS']['ru']['ForumGroup'] = 'Группа форумов';
+$GLOBALS['DEF_TEXTS']['ru']['ForumGroups'] = 'Группы форумов';
+$GLOBALS['DEF_TEXTS']['ru']['OtherForums'] = 'Прочие форумы';
+$GLOBALS['DEF_TEXTS']['ru']['ErrForumGroupNameEmpty'] = 'Не задано название группы форума!';
+$GLOBALS['DEF_TEXTS']['ru']['ErrForumGroupNameExists'] = 'Группа форумов с таким названием уже существует!';
 ?>

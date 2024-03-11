@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     14.01.2024 19:59:49                          */
+/* Created on:     02.03.2024 11:49:39                          */
 /*==============================================================*/
 
 
@@ -400,6 +400,7 @@ create table v1_forum
    access_message_count int,
    stringent_rules      tinyint not null default 0,
    disable_ignore       tinyint not null default 0,
+   forum_group_id       int,
    primary key (id)
 );
 
@@ -468,6 +469,25 @@ create index v1_forum_blocked_user_id_idx on v1_forum_blocked
 create index v1_forum_blocked_forum_id_idx on v1_forum_blocked
 (
    forum_id
+);
+
+/*==============================================================*/
+/* Table: v1_forum_group                                        */
+/*==============================================================*/
+create table v1_forum_group
+(
+   id                   int not null auto_increment,
+   name                 varchar(255) not null,
+   sort_order           int not null default 0,
+   primary key (id)
+);
+
+/*==============================================================*/
+/* Index: v1_forum_group_name_unq                               */
+/*==============================================================*/
+create unique index v1_forum_group_name_unq on v1_forum_group
+(
+   name
 );
 
 /*==============================================================*/

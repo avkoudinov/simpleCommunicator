@@ -15,6 +15,9 @@ if(!$fmanager->is_logged_in() && $fmanager->check_tor_ip(val_or_empty($_SERVER["
 $title = text("Forums") . " - " . get_site_name(current_language());
 $ogtitle = text("Forums") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
+$groupped_forum_list = array();
+$fmanager->get_groupped_forum_list($groupped_forum_list);
+
 $fmanager->track_hit("", "");
 
 $online_users = array();

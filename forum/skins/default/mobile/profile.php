@@ -553,7 +553,7 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 <td><?php echo_html(text("Avatar")); ?>:</td>
 </tr>
 <tr>
-<td><input type="file" id="avatar" name="avatar">
+<td><input type="file" data-placeholder="<?php echo_html(text("SelectFile")); ?>" id="avatar" name="avatar">
 
 <div class="inner_label"><?php echo_html(text("AvatarComment")); ?></div>
 
@@ -1032,7 +1032,7 @@ foreach($time_zones as $time_zone => $time_zone_name)
 </tr>
 
 <tr>
-<td><input type="file" id="photo" name="photo"></td>
+<td><input type="file" data-placeholder="<?php echo_html(text("SelectFile")); ?>" id="photo" name="photo"></td>
 </tr>
 
 <tr>

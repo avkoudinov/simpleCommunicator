@@ -881,6 +881,17 @@ elseif (!reqvar_empty("save_settings")) {
         $show_messages = false;
     }
 } //---------------------------------------------------------------------
+elseif (!reqvar_empty("save_forum_groups")) {
+    if (!$fmanager->is_admin()) {
+        MessageHandler::setError(text("ErrActionNotAllowed"));
+    } else {
+        $response['success'] = $fmanager->save_forum_groups();
+    }
+    
+    if ($response['success']) {
+        $show_messages = false;
+    }
+} //---------------------------------------------------------------------
 elseif (!reqvar_empty("send_message")) {
     $response['success'] = $fmanager->send_contact_message();
     

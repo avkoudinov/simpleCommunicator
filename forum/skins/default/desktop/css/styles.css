@@ -1264,6 +1264,14 @@ textarea
   border: 1px solid gray;
 }
 
+.topic_table th.subheader
+{
+  background-image: none;
+  background-color: #909090;
+  padding: 2px;
+  text-align: left;
+}
+
 .form_table th.subheader,
 .search_table th.subheader
 {
@@ -1622,6 +1630,47 @@ td.admin_actions
   font-size: 11px;
 }
 
+.forum_group_table td:nth-child(1) input
+{
+  width: 400px;
+}
+
+.forum_group_table td:nth-child(2) 
+{
+  width: 60px;
+}
+
+.forum_group_table td:nth-child(2) input
+{
+  width: 100%;
+}
+
+.forum_group_table td:nth-child(3) input
+{
+  width: 30px;
+  min-width: 30px;
+  background-image: url('../images/delete.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  cursor: pointer;
+}
+
+.forum_group_table td
+{
+  border: 1px solid gray;
+  padding-bottom: 5px;
+}
+
+.forum_group_table td:first-child.button_area 
+{
+  width: auto;
+}
+
+.forum_group_table td:first-child.button_area input
+{
+  width: auto;
+}
+
 .settings_table,
 .forum_edit_table
 {
@@ -1772,6 +1821,36 @@ select.search_forum_select
   margin-bottom: 0px;
   box-sizing: border-box;
   display: block;
+}
+
+.multiselect_control div
+{
+  padding: 2px;
+}
+
+.forum_group_option,
+.forum_group_option_mc
+{
+  background-color: gray;
+  color: white;
+  text-align: center;
+  padding-left: 7px;
+  padding-right: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+select.search_forum_select option[selected]
+{
+  background-color: #0078D7;
+  color: white;
+}
+
+select.search_forum_select option[selected].forum_group_option
+{
+  background-color: #145390;
+  color: white;
 }
 
 .device-ios select.search_forum_select
@@ -4619,14 +4698,14 @@ input[type="button"].member_search_button {
 
 .ip_table td,
 .ip_table2 td,
-.guest_ip_table th
+.guest_ip_table td
 {
   background-color: #EEEEEE;
 }
 
 .ip_table tr:hover td,
 .ip_table2 tr:hover td,
-.guest_ip_table td
+.guest_ip_table tr:hover td
 {
   background-color: #F1F7FD;
 }

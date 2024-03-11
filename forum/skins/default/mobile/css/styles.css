@@ -964,13 +964,20 @@ textarea
   top: -170px;
 }
 
-.post_table  th.subheader,
+.forum_table th.subheader
+{
+  background-image: none;
+  background-color: #909090;
+  padding: 4px;
+}
+
+.post_table th.subheader,
 .form_table th.subheader,
 .search_table th.subheader
 {
   background-image: none;
   background-color: #909090;
-  padding: 2px;
+  padding: 4px;
 }
 
 #profiled_topic_row
@@ -1339,6 +1346,49 @@ td.admin_actions
   font-size: 11px;
 }
 
+.forum_group_table td:nth-child(1) input
+{
+  width: 500px;
+}
+
+.forum_group_table td:nth-child(2) 
+{
+  width: 60px;
+}
+
+.forum_group_table td:nth-child(2) input
+{
+  width: 100%;
+}
+
+.forum_group_table td:nth-child(3) input
+{
+  width: 70px;
+  min-width: 70px;
+  background-image: url('../images/delete.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 80%;
+  cursor: pointer;
+  display: block;
+}
+
+.forum_group_table td
+{
+  border: 2px solid gray;
+  padding: 12px;
+}
+
+.forum_group_table td:first-child.button_area 
+{
+  width: auto;
+}
+
+.forum_group_table td:first-child.button_area input
+{
+  width: auto;
+}
+
 .settings_table,
 .forum_edit_table
 {
@@ -1401,6 +1451,31 @@ button.me_button
   margin-left: 12px;
   min-width: 120px;
   cursor: pointer;
+}
+
+.forum_group_option,
+.forum_group_option_mc
+{
+  background-color: gray;
+  color: white;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+select.search_forum_select option[selected]
+{
+  background-color: #0078D7;
+  color: white;
+}
+
+select.search_forum_select option[selected].forum_group_option
+{
+  background-color: #145390;
+  color: white;
 }
 
 select.search_forum_select
@@ -4055,6 +4130,7 @@ a.more_users:link
   font-size: 40px;
   line-height: 44px;
   font-weight: normal;
+  padding: 5px;
 }
 
 .search_member_area
