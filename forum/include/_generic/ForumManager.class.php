@@ -7784,6 +7784,7 @@ abstract class ForumManager
         
         $anonyms_total_stat = [];
         $anonyms_forum_stat = [];
+        $anonyms_topic_stat = [];
         
         $same_guest_counts = [];
         
@@ -7875,8 +7876,7 @@ abstract class ForumManager
                 } 
                 
                 if ($idx == "g_#anonyms#") {
-                    $topic_readers[$idx]["count"]++;
-                    $topic_readers[$idx]["name"] = text("Anonyms") . " (" . $topic_readers[$idx]["count"] . ")";
+                    $anonyms_topic_stat[$anonym_id] = 1;
                 }
             }
         }
@@ -7891,6 +7891,11 @@ abstract class ForumManager
         if (!empty($anonyms_forum_stat)) {
             $forum_readers["g_#anonyms#"]["count"] = count($anonyms_forum_stat);
             $forum_readers["g_#anonyms#"]["name"] = text("Anonyms") . " (" . $forum_readers["g_#anonyms#"]["count"] . ")";
+        }
+
+        if (!empty($anonyms_topic_stat)) {
+            $topic_readers["g_#anonyms#"]["count"] = count($anonyms_topic_stat);
+            $topic_readers["g_#anonyms#"]["name"] = text("Anonyms") . " (" . $topic_readers["g_#anonyms#"]["count"] . ")";
         }
 
         if(!empty($current_tid))

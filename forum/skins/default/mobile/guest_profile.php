@@ -736,8 +736,8 @@ foreach($time_zones as $time_zone => $time_zone_name)
 <td class="preferred_forums">
 
   <div style="position: relative">
-    <div class="scroll_up" onmousedown="start_scroll_preferred('up')" onmouseup="stop_scroll_preferred()"></div>
-    <div class="scroll_down" onmousedown="start_scroll_preferred('down')" onmouseup="stop_scroll_preferred()"></div>
+      <div class="scroll_up" onclick="scroll_preferred('up')"></div>
+      <div class="scroll_down" onclick="scroll_preferred('down')"></div>
     
     <div id="preferred_forum_area" class="preferred_forums_wrapper">
     <div>

@@ -357,7 +357,7 @@ a.member_nick:hover
   color: gray;
 }
 
-.sort_selector,
+.sort_selector
 {
   width: 100%;
 }
@@ -5746,7 +5746,7 @@ td.preferred_forums
 .preferred_forums div.preferred_forums_wrapper
 {
   max-height: 380px;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .preferred_forums div.preferred_forums_wrapper div
