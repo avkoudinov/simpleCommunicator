@@ -1466,18 +1466,6 @@ button.me_button
   white-space: nowrap;
 }
 
-select.search_forum_select option[selected]
-{
-  background-color: #0078D7;
-  color: white;
-}
-
-select.search_forum_select option[selected].forum_group_option
-{
-  background-color: #145390;
-  color: white;
-}
-
 select.search_forum_select
 {
   height: 350px;

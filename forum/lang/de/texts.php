@@ -510,6 +510,7 @@ $GLOBALS['DEF_TEXTS']['de']['TopicsOfSubscribedAuthors'] = 'Die von den aboniert
 $GLOBALS['DEF_TEXTS']['de']['SinceLastView'] = 'seit der letzen Anschau';
 $GLOBALS['DEF_TEXTS']['de']['Important'] = 'Wichtig';
 $GLOBALS['DEF_TEXTS']['de']['GotoForum'] = 'Zum Forum wechseln ...';
+$GLOBALS['DEF_TEXTS']['de']['FindForum'] = 'Forum suchen ...';
 $GLOBALS['DEF_TEXTS']['de']['GotoTopic'] = 'Zum Thema rübergehen';
 $GLOBALS['DEF_TEXTS']['de']['GotoTopicShort'] = 'Zm Thema';
 $GLOBALS['DEF_TEXTS']['de']['all'] = 'alle';

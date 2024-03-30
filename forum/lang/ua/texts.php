@@ -510,6 +510,7 @@ $GLOBALS['DEF_TEXTS']['ua']['TopicsOfSubscribedAuthors'] = 'Шукати тем�
 $GLOBALS['DEF_TEXTS']['ua']['SinceLastView'] = 'з моменту останнього перегляду';
 $GLOBALS['DEF_TEXTS']['ua']['Important'] = 'Важливо';
 $GLOBALS['DEF_TEXTS']['ua']['GotoForum'] = 'Перейти у форум ...';
+$GLOBALS['DEF_TEXTS']['ua']['FindForum'] = 'Знайти форум ...';
 $GLOBALS['DEF_TEXTS']['ua']['GotoTopic'] = 'Перейти в тему';
 $GLOBALS['DEF_TEXTS']['ua']['GotoTopicShort'] = 'В тему';
 $GLOBALS['DEF_TEXTS']['ua']['all'] = 'все';

@@ -510,6 +510,7 @@ $GLOBALS['DEF_TEXTS']['en']['TopicsOfSubscribedAuthors'] = 'Search the topics cr
 $GLOBALS['DEF_TEXTS']['en']['SinceLastView'] = 'since the last view';
 $GLOBALS['DEF_TEXTS']['en']['Important'] = 'Important';
 $GLOBALS['DEF_TEXTS']['en']['GotoForum'] = 'Go to forum ...';
+$GLOBALS['DEF_TEXTS']['en']['FindForum'] = 'Find forum ...';
 $GLOBALS['DEF_TEXTS']['en']['GotoTopic'] = 'Go to topic';
 $GLOBALS['DEF_TEXTS']['en']['GotoTopicShort'] = 'To topic';
 $GLOBALS['DEF_TEXTS']['en']['all'] = 'all';
