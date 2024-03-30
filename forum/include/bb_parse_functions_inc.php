@@ -2584,6 +2584,8 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
 //------------------------------------------------------
 function gen_instagram_html($code, $bbcode)
 {
+    $height = 900;
+    /*
     try {
         $url = "https://api.instagram.com/oembed?url=http://instagr.am/p/$code/";
         $client = new Zend_Http_Client($url, array(
@@ -2594,16 +2596,20 @@ function gen_instagram_html($code, $bbcode)
         $request = $client->request('GET');
         $response = $request->getBody();
         
-        $height = 510;
         $json = json_decode($response, true);
         if ($json) {
             if (!empty($json["thumbnail_height"])) {
                 $height = $json["thumbnail_height"];
             }
         }
+        
+        if (empty($height)) {
+            $height = 900;
+        }
     } catch (Exception $ex) {
         //$result = $ex->getMessage();
     }
+    */
     
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
     $html .= "<div class='short_video'><a class='instagram_short_container' href='https://www.instagram.com/p/$code/' target='blank' onclick='return show_embedded_video(this)'>Instagram</a></div>";
