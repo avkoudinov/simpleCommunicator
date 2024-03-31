@@ -5,6 +5,7 @@ $may_rate = true;
 $may_write = true;
 $may_answer = true;
 $post_ignored = 0;
+$citatable = "citatable";
 
 $first_topic_post = (val_or_empty($topic_data["first_topic_pinned_message"]) == $pid || (empty($topic_data["first_topic_pinned_message"]) && val_or_empty($topic_data["absolute_first_topic_message"]) == $pid));
 
@@ -179,6 +180,7 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 <a href="forum.php?fid=<?php echo_html($fid_for_url); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($pinfo["forum_name"]); ?></a> 
 
 / <span class="topic_title_main"><?php echo_html(postprocess_message($current_topic_name)); ?></span>
+
 <?php if(!empty($_SESSION["ignored_topics"][$current_topic_id])): ?>
  <span class="<?php echo(empty($current_forum_disable_ignore) ? "closed" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
 <?php endif; ?>
@@ -239,7 +241,7 @@ $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
     <?php endif; ?>
 </div>
 
-<div class="topic_name post_checkbox" onclick="toggle_selection(this, '<?php echo_html($pid); ?>'); show_moderator_popup_menu('<?php echo_html($pid); ?>')" data-pid="<?php echo_html($pid); ?>"><?php echo_html(smart_date($pinfo["creation_date"])); ?><?php echo($pinned_appendix); ?></div>
+<div class="<?php echo($citatable); ?> topic_name post_checkbox" onclick="toggle_selection(this, '<?php echo_html($pid); ?>'); show_moderator_popup_menu('<?php echo_html($pid); ?>')" data-pid="<?php echo_html($pid); ?>"><?php echo_html(smart_date($pinfo["creation_date"])); ?><?php echo($pinned_appendix); ?></div>
 <?php else: ?>
 <th id="post_head_<?php echo_html($pid); ?>" class="post_head <?php echo_html($current); ?> <?php echo_html($deleted); ?>">
 
@@ -972,7 +974,7 @@ $poll_rendered = true;
 <?php endif; ?>
 
 <!-- must be without spaces, because of sibling getting -->
-<div class="message_text" id="message_text_<?php echo_html($pid); ?>"><?php echo($pinfo["html_content"]); ?></div><div class="message_text_more_wrapper"><div class="message_text_more">...</div></div>
+<div class="message_text <?php echo($citatable); ?>" id="message_text_<?php echo_html($pid); ?>"><?php echo($pinfo["html_content"]); ?></div><div class="message_text_more_wrapper"><div class="message_text_more">...</div></div>
 
 </td>
 </tr>
@@ -1207,7 +1209,7 @@ $display = !empty($pinfo["may_reset_rating"]) && !empty($pinfo["already_rated"])
   $citate_caption = empty($pinfo["ip"]) ? text("Citate") : text("CitateShort");
   if(empty($may_write)) $citate_caption = text("CitateForCopy");
   ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_citate=" . $pid); ?>" onclick='return citate_post("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html($citate_caption); ?></a> 
+  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_citate=" . $pid); ?>" onclick='return citate_post("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html($citate_caption); ?></a>
   <?php endif; // may_answer ?>
 
   <?php if($may_write): ?>

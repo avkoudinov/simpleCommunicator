@@ -2158,12 +2158,18 @@ function process_selection()
   var author_ignored = null;
 
   var range = null;
+  
+  if((selection.rangeCount == 0 || !selection.toString()) && !selection.stored_range) return false;
 
-  if(selection.rangeCount == 0 || !selection.toString()) return false;
-
-  range = selection.getRangeAt(0);
-  if(!range) return false;
-
+  if (selection.rangeCount > 0)
+  {
+    range = selection.getRangeAt(0);
+  }
+  else
+  {
+    range = selection.stored_range;
+  }
+  
   var parent_tag_container = null;
   var selection_parent = range.commonAncestorContainer;
 
@@ -3204,34 +3210,22 @@ function clear_selection()
   if(selection) selection.removeAllRanges();
 }
 
-function show_citation_dialog(parent_pid, pid, author, tid, subject, profiled_topic, stringent_rules, text, x, y)
+function store_current_selection()
 {
-  hide_all_popups();
+  var selection = window.getSelection();
+  if(!selection) return false;
+  
+  if(selection.rangeCount == 0 || !selection.toString()) return false;
 
-  var elm = document.getElementById('citation_action');
-  if(!elm) return;
+  selection.stored_range = selection.getRangeAt(0);
+}
 
-  elm.setAttribute('data-parent-pid', parent_pid);
-  elm.setAttribute('data-pid', pid);
-  elm.setAttribute('data-author', author);
-  elm.setAttribute('data-tid', tid);
-  elm.setAttribute('data-subject', subject);
-  elm.setAttribute('data-profiled_topic', profiled_topic);
-  elm.setAttribute('data-stringent_rules', stringent_rules);
-  elm.setAttribute('data-text', text);
+function init_citations()
+{
+  var citatables = document.getElementsByClassName("citatable");
+  if(citatables.length == 0) return;
 
-  elm = document.getElementById('citation_dialog');
-  if(!elm) return;
-
-  var computedStyle = getComputedStyle(elm);
-
-  var pos = window.pageXOffset + x;
-  var width = parseInt(computedStyle.width, 10) + 50;
-  if(pos + width > window.innerWidth) pos = window.innerWidth - width;
-
-  elm.style.left = pos + 'px';
-  elm.style.top = (window.pageYOffset + y + 3) + 'px';
-  elm.style.display = 'block';
+  Forum.addXEvent(document, 'selectionchange', store_current_selection);
 }
 
 var last_saved_text = "";
@@ -3934,6 +3928,7 @@ Forum.addXEvent(window, 'DOMContentLoaded', function () {
 
   init_lightbox_images();
   init_more_buttons();
+  init_citations();
 
   debug_line("Topic history intialization", 'history');
   window.history.scrollRestoration = 'manual';
