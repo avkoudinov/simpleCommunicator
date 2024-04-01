@@ -333,6 +333,16 @@ function convert_nodes_to_bbcode(container, quote_level)
       break;
 
       case 'DIV':
+      if(container.childNodes[i].classList.contains('attachment_del_indicator'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('attachment_button'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
       if(container.childNodes[i].classList.contains('hidden_phrase_expander'))
       {
         current_node = document.createTextNode('');
@@ -652,6 +662,11 @@ function convert_nodes_to_bbcode(container, quote_level)
       case 'A':
       text = convert_nodes_to_bbcode(container.childNodes[i], quote_level);
       if(container.childNodes[i].classList.contains('attachment_link'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('attachment_image'))
       {
         current_node = document.createTextNode('');
         break;
