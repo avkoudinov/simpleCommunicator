@@ -1,17 +1,17 @@
 <div class="help">
 <h1 style="margin-top: 0px; text-align: center">О форуме simpleCommunicator</h1>
 
-<p><strong>Автор проекта: архитектура, разработка и программирование — <a href="https://nosql.itwrks.org/forum/view_profile.php?uid=9">Programmizd 02</a></strong>
+<p><strong>Автор проекта: архитектура, разработка и программирование — <a href="https://nosql.ru/forum/view_profile.php?uid=9">Programmizd 02</a></strong>
 <br>
 <br>
-Улучшения и кастомизация — <a href="https://chat.kroleg.tk/">Кролег</a>
+Улучшения и кастомизация — <a href="https://chat.kroleg.keenetic.pro/">Кролег</a>
 <br>
 Тестирование, поиск уязвимостей — <a href="http://fintank.ru/game/">Пашэ</a>
 <br>
 Техническая поддержка — <a href="https://anton.koudinov.ru/">Антон</a>
 <br>
 <br>
-Демонстрация работы — <a href="https://nosql.itwrks.org/forum/forums.php">Дедофорум NoSQL.ru</a>, <a href="https://resql.ru/forum/forums.php">SQL.ru | ReSQL.ru</a>
+Демонстрация работы — <a href="https://nosql.ru/forum/forums.php">Дедофорум NoSQL.ru</a>, <a href="https://resql.ru/forum/forums.php">SQL.ru | ReSQL.ru</a>
 </p>
 
 <h2>Лицензия</h2>
@@ -27,8 +27,8 @@
 
 <h2>Загрузка и установка</h2>
 
-<p>Версия: 2.0.16<br>
-Релиз: 27.01.2024</p>
+<p>Версия: 2.0.18<br>
+Релиз: 19.03.2024</p>
 
 <ol>
 <li>Распакуйте архив и скопируйте файлы из директории <b>forum</b> в целевую директорию веб-сервера.</li>
