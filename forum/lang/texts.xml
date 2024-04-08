@@ -3542,6 +3542,13 @@
             <ua>Перейти у форум ...</ua>
         </text>
 
+        <text id="FindForum">
+            <en>Find forum ...</en>
+            <de>Forum suchen ...</de>
+            <ru>Найти форум ...</ru>
+            <ua>Знайти форум ...</ua>
+        </text>
+
         <text id="GotoTopic">
             <en>Go to topic</en>
             <de>Zum Thema rübergehen</de>

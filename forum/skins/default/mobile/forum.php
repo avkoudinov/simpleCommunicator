@@ -1019,7 +1019,7 @@ if(empty($is_private))
 
 &nbsp;&nbsp;<?php echo_html(text("Forum")); ?>:
   <div class="select_container">
-      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("GotoForum")); ?>" onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' })" onkeyup="return filter_entries(this, event)" onfocus="reset_forum_selector(this.id);">
+      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>" onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' })" onkeyup="return filter_entries(this, event)" onfocus="reset_forum_selector(this.id);">
 
       <select id="forum_selector_move_lookup" size="15"
          onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' }); }" 

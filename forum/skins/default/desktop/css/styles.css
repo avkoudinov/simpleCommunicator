@@ -591,6 +591,7 @@ textarea
   padding-left: 4px;
   padding-right: 4px;
   margin: 0px;
+  color: black;
 }
 
 textarea
@@ -1839,18 +1840,6 @@ select.search_forum_select
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-select.search_forum_select option[selected]
-{
-  background-color: #0078D7;
-  color: white;
-}
-
-select.search_forum_select option[selected].forum_group_option
-{
-  background-color: #145390;
-  color: white;
 }
 
 .device-ios select.search_forum_select
