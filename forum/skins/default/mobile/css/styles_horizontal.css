@@ -583,6 +583,17 @@
     margin-bottom: 18px;
   }
   
+  .forum_bar_breakable
+  {
+    margin-top: 0px;
+  }
+
+  .forum_bar_breakable .forum_action_bar,
+  .forum_bar_breakable .forum_name_bar
+  {
+    margin-top: 18px;
+  }
+  
   .forum_table th, 
   .forum_table td
   {

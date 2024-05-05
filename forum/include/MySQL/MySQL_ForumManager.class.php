@@ -1391,14 +1391,17 @@ class MySQL_ForumManager extends ForumManager
         $total_user_hits_count = 0;
         while ($rodbw->fetch_row()) {
             $name = $rodbw->field_by_name("guest_name");
+            $is_anonym = 0;
             if (empty($name)) {
                 $name = text("Anonymous");
+                $is_anonym = 1;
             }
             
             $total_user_hits_count += $rodbw->field_by_name("cnt");
             $user_activity[] = array(
                 "id" => $rodbw->field_by_name("user_id"),
                 "user_name" => $name,
+                "is_anonym" => $is_anonym,
                 "cnt" => $rodbw->field_by_name("cnt"),
                 "online" => (xstrtotime($rodbw->field_by_name("last_visit_date")) > (time() - $keep_online_period) && $rodbw->field_by_name("logout") == 0)
             );

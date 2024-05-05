@@ -124,7 +124,7 @@ function do_action(params)
 
 <!-- BEGIN: forum_bar -->
 
-<div class="forum_bar">
+<div class="forum_bar forum_bar_breakable">
 
 <div class="forum_name_bar"><a href="forums.php"><?php echo_html(text("Forums")); ?></a>
 
