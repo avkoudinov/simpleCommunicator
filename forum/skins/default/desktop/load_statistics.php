@@ -110,7 +110,9 @@ if(!empty($uinfo["id"]))
 }
 else
 {
-  if($uinfo["user_name"] == "admin")
+  if(!empty($uinfo["is_anonym"]))
+    $uname = escape_html($uinfo["user_name"]);
+  elseif($uinfo["user_name"] == "admin")
     $uname = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["user_name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>";
   else  
     $uname = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["user_name"]) . "'>" . escape_html($uinfo["user_name"]) . "</a>";

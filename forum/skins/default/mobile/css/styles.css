@@ -1877,6 +1877,11 @@ a.post_subscribe_loading
   width: 870px;
 }
 
+.profile_view_table a:link
+{
+  word-break: break-all;
+}
+
 .checkbox_table
 {
   border-collapse: collapse;
@@ -2822,6 +2827,17 @@ a.carma_both
   float: right;
 }
 
+.forum_bar_breakable
+{
+  margin-top: 0px;
+}
+
+.forum_bar_breakable .forum_action_bar,
+.forum_bar_breakable .forum_name_bar
+{
+  margin-top: 32px;
+}
+
 .navigator_bar
 {
   float: left;
@@ -3592,6 +3608,7 @@ a.user_appeal:hover
 .user_post_actions
 {
   float: left;
+  margin-bottom: 8px;
 }
 
 .user_post_actions > .separator
@@ -3608,6 +3625,7 @@ a.user_appeal:hover
 {
   float: right;
   margin-top: -2px;
+  margin-bottom: 8px;
 }
 
 .post_id_info
