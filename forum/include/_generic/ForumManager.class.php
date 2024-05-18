@@ -21468,6 +21468,12 @@ abstract class ForumManager
             }
             
             $post_data["author_name"] = reqvar("author");
+
+            $_SESSION["last_posted_user"] = reqvar("author");
+            
+            if (empty($forced_guest_posting)) {
+                $_SESSION["user_name"] = reqvar("author");
+            }
         }
         
         if (!$self_edited && empty($post_data["topic_private"]) && empty($topic_publish_delay)) {
