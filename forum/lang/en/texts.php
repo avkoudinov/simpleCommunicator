@@ -118,13 +118,13 @@ $GLOBALS['DEF_TEXTS']['en']['Forums'] = 'Forums';
 $GLOBALS['DEF_TEXTS']['en']['Forum'] = 'Forum';
 $GLOBALS['DEF_TEXTS']['en']['UserLogin'] = 'Login';
 $GLOBALS['DEF_TEXTS']['en']['UserLoginComment'] = 'Your internal login name for logging in into the forum. The login is not visible to other members. This makes harder the possible
-                try to break your account through password brute force. It is not recommended to set the login indentical to the user name.
+                try to break your user account through password brute force. It is not recommended to set the login indentical to the user name.
             ';
 $GLOBALS['DEF_TEXTS']['en']['UserLoginComment2'] = 'The internal login name for logging in into the forum. The login is not visible to other members.';
 $GLOBALS['DEF_TEXTS']['en']['UserName'] = 'User name';
 $GLOBALS['DEF_TEXTS']['en']['UserNameComment'] = 'Your name that will be displayed on the forum. Please note, you will not be able to change the name.';
 $GLOBALS['DEF_TEXTS']['en']['UserNameComment2'] = 'User name that will be displayed on the forum.';
-$GLOBALS['DEF_TEXTS']['en']['UserEmailComment'] = 'Please, enter a valid e-mail address. The activation link will sent to that e-mail address. The link should
+$GLOBALS['DEF_TEXTS']['en']['UserEmailComment'] = 'Please, enter a valid e-mail address. The activation link will be sent to that e-mail address. The link should
                 be clicked to complete the registration on the foum.
             ';
 $GLOBALS['DEF_TEXTS']['en']['UserEmailComment2'] = 'If you change your e-mail address, you will have to enter your current password and re-activate your user account.';
@@ -326,12 +326,36 @@ $GLOBALS['DEF_TEXTS']['en']['ErrEmailEmpty'] = 'E-mail is not specified!';
 $GLOBALS['DEF_TEXTS']['en']['ErrUserLoginTooLong'] = 'Login cannot contain more than %s characters!';
 $GLOBALS['DEF_TEXTS']['en']['ErrUserNameTooLong'] = 'User name cannot contain more than %s characters!';
 $GLOBALS['DEF_TEXTS']['en']['ErrEmailTooLong'] = 'Email cannot contain more than %s characters!';
-$GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccess'] = 'Your account has been successfully created. Now, you can setup additional properties of your user profile like photo, avatar, location, signature etc. 
-            
-                For completion of the registration, please, click the activation link that has been sent to the e-mail address specified by the registration.
+$GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccess'] = 'Your user account has been successfully created! 
 
-                If the e-mail with the activation link does not come, you can login anyway and request the activation e-mail again or change the e-mail address. If the e-mail still does not come, please contact the administration of the forum over the menu "Contact".
+                To complete the registration process, you need to activate your user account by confirming your entered e-mail address by clicking on the activation link that was sent to you.                
+
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You can also activate your user account by clicking the activation link that was sent to you. 
+
+                If the activation link email does not arrive, you can log in to the forum and request that the activation link email be resent or change your email address. 
+
+                If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.
             ';
+$GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccessApproval'] = 'Your user account has been successfully created!
+                
+                However, you need to wait for the administrator to confirm your user account!
+                
+                In the meantime, you can now set additional properties for your profile, such as a photo, avatar, signature, etc., and activate your user account by confirming the email address you entered by clicking on the activation link that was sent to you.                
+                
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
+                
+                If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.';
+$GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccessApprovalDelayed'] = 'Your user account has been successfully created!
+            
+                However, you need to wait for the administrator to confirm your user account!
+                
+                After confirmation, you will be sent an email with a link to activate your user account. Please confirm your entered email address by clicking on this link.
+
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You will also be able to set additional properties for your profile.                
+                
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
+                
+                If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.';
 $GLOBALS['DEF_TEXTS']['en']['MessageEditingAllowed'] = 'Allow editing own messages';
 $GLOBALS['DEF_TEXTS']['en']['RegistrationComment'] = 'After completion of the registration, you will be able to setup additional properties of your user profile like photo, avatar, location, signature etc.';
 $GLOBALS['DEF_TEXTS']['en']['ErrUserLoginInUse'] = 'This login is already used!';
@@ -346,7 +370,7 @@ $GLOBALS['DEF_TEXTS']['en']['RegistrationRulesAgreement'] = 'By performing the r
 $GLOBALS['DEF_TEXTS']['en']['PostRulesAgreement'] = 'By posting the message, I agree with the <a href=\'rules.php\' target=\'_blank\'>forum rules</a> and I accept the <a href=\'user_agreement.php\' target=\'_blank\'>user agreement</a>.';
 $GLOBALS['DEF_TEXTS']['en']['ErrAgreementRequired'] = 'You have to read and accept the rules of the forum and the user agreement!';
 $GLOBALS['DEF_TEXTS']['en']['ErrActivationLinkExpired'] = 'The activation link is invalid or is expired! But you can login anyway and request the activation e-mail again.';
-$GLOBALS['DEF_TEXTS']['en']['ErrActivationSuccess'] = 'Your account has been successfully activated.';
+$GLOBALS['DEF_TEXTS']['en']['ErrActivationSuccess'] = 'Your user account has been successfully activated.';
 $GLOBALS['DEF_TEXTS']['en']['PasswordRestoration'] = 'Password restoration';
 $GLOBALS['DEF_TEXTS']['en']['ErrCookiesNotEnabled'] = 'The session could not be started. Either your browser disallows cookies for this site or generally, or the session cookie path is set wrong in relation to the application URL.';
 $GLOBALS['DEF_TEXTS']['en']['ErrWrongLogin'] = 'Wrong login name or password!';
@@ -357,19 +381,21 @@ $GLOBALS['DEF_TEXTS']['en']['ErrAccountNotActivated'] = 'Your user account is no
 
                 If the e-mail still does not come, please contact the administration of the forum over the menu "Contact".
             ';
-$GLOBALS['DEF_TEXTS']['en']['ErrAccountNotApproved'] = 'Your user account is not yet approved by the administrator! You have to wait until the administrator checks and approves your account.
+$GLOBALS['DEF_TEXTS']['en']['ErrAccountNotApproved'] = 'Your user account is not yet approved by the administrator! You have to wait until the administrator checks and approves your user account.
 
                 If the approval takes too long, please contact the administration of the forum over the menu "Contact".
             ';
-$GLOBALS['DEF_TEXTS']['en']['WarningAccountNotActivated'] = 'Your user account is not yet activated! You can request the activation e-mail again.';
-$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlocked'] = 'Your account has been blocked!';
-$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedUntil'] = 'Your account has been blocked until %s! Time remaining: %s.';
+$GLOBALS['DEF_TEXTS']['en']['WarningAccountNotActivated'] = 'Your user account is not yet activated! You can request the activation e-mail again!';
+$GLOBALS['DEF_TEXTS']['en']['WarningAccountNotApproved'] = 'Your account has not yet been approved by the forum administration! Once approved, you will be able to request an email with an activation link!';
+$GLOBALS['DEF_TEXTS']['en']['ErrActivationAccountNotApproved'] = 'You can only request to send a link to activate your user account after your user account has been approved by the administrator!';
+$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlocked'] = 'Your user account has been blocked!';
+$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedUntil'] = 'Your user account has been blocked until %s! Time remaining: %s.';
 $GLOBALS['DEF_TEXTS']['en']['MsgMasterAdminWarning'] = 'You are logged in as the master administrator. The master administrator has no profile, no favourites etc. and should be used for system purposes only!';
-$GLOBALS['DEF_TEXTS']['en']['PasswordRestoreComment'] = 'Enter the e-mail address assigned to your account. We will send the e-mail with the instructions how to reset your password.';
+$GLOBALS['DEF_TEXTS']['en']['PasswordRestoreComment'] = 'Enter the e-mail address assigned to your user account. We will send the e-mail with the instructions how to reset your password.';
 $GLOBALS['DEF_TEXTS']['en']['MsgErrEmailNotFound'] = 'The e-mail \'%s\' is not associated with any account!';
 $GLOBALS['DEF_TEXTS']['en']['MsgPasswordRestore'] = 'The e-mail with the instructions how to reset your password has been sent to the specified address.';
 $GLOBALS['DEF_TEXTS']['en']['PasswordReset'] = 'Password reset';
-$GLOBALS['DEF_TEXTS']['en']['PasswordResetComment'] = 'Set the new password for your account.';
+$GLOBALS['DEF_TEXTS']['en']['PasswordResetComment'] = 'Set the new password for your user account.';
 $GLOBALS['DEF_TEXTS']['en']['PasswordResetLinkInvalid'] = 'The password reset link is invalid or is expired! Please request the new password reset link.';
 $GLOBALS['DEF_TEXTS']['en']['MsgPasswordResetSuccess'] = 'The password has been successfully changed. You can login with your new password.';
 $GLOBALS['DEF_TEXTS']['en']['MsgPasswordChangeSuccess'] = 'The password has been successfully changed.';
@@ -400,7 +426,8 @@ $GLOBALS['DEF_TEXTS']['en']['ErrHomepageTooLong'] = 'Homepage cannot contain mor
 $GLOBALS['DEF_TEXTS']['en']['ErrLocationTooLong'] = 'Location cannot contain more than %s characters!';
 $GLOBALS['DEF_TEXTS']['en']['ErrSignatureTooLong'] = 'Signature cannot contain more than %s characters!';
 $GLOBALS['DEF_TEXTS']['en']['ErrInformationTooLong'] = 'Information field cannot contain more than %s characters!';
-$GLOBALS['DEF_TEXTS']['en']['MsgNewActivationRequired'] = 'Since you have changed the e-mail address, your profile has been deactivated and an e-mail with the activation link has been sent to the new e-mail address. Klick the activation link to confirm the change of the e-mail address.';
+$GLOBALS['DEF_TEXTS']['en']['MsgNewActivationRequired'] = 'Since you have changed the e-mail address, your profile has been deactivated, an e-mail with the activation link has been sent to the new e-mail address. Klick the activation link to confirm the change of the e-mail address.';
+$GLOBALS['DEF_TEXTS']['en']['MsgNewApprovalActivationRequired'] = 'Because you have changed your e-mail address, your profile has been deactivated and must be approved by the forum administration. Once approved, you will be sent an email with a link to activate your user account.';
 $GLOBALS['DEF_TEXTS']['en']['ErrCurrentPasswordRequired'] = 'You have to enter your current password if you want to change the e-mail address or the password!';
 $GLOBALS['DEF_TEXTS']['en']['RequestActivationLink'] = 'Request the activation link';
 $GLOBALS['DEF_TEXTS']['en']['MsgActivationLinkSent'] = 'The e-mail with the activation link has been sent to the specified address.';
@@ -817,7 +844,7 @@ $GLOBALS['DEF_TEXTS']['en']['ActionUserTopicUnblocked'] = 'User has been unblock
 $GLOBALS['DEF_TEXTS']['en']['ActionUserForumBlockedUntil'] = 'User has been blocked for writing on a forum until {time}';
 $GLOBALS['DEF_TEXTS']['en']['UnblockOnForums'] = 'Unblock on the forums';
 $GLOBALS['DEF_TEXTS']['en']['ErrForumNotAccessible'] = 'You do not have access to the forum \'%s\'!';
-$GLOBALS['DEF_TEXTS']['en']['ErrForumNotAccessibleDueToBlock'] = 'You do not have access to the protected forum \'%s\' due to block of your account! The access to the forum will be restored when the block expires.';
+$GLOBALS['DEF_TEXTS']['en']['ErrForumNotAccessibleDueToBlock'] = 'You do not have access to the protected forum \'%s\' due to block of your user account! The access to the forum will be restored when the block expires.';
 $GLOBALS['DEF_TEXTS']['en']['WarnTopicDeleted'] = 'The requested topic has been deleted!';
 $GLOBALS['DEF_TEXTS']['en']['WarnForumDeleted'] = 'The requested forum has been deleted!';
 $GLOBALS['DEF_TEXTS']['en']['AccessToRestrictedForums'] = 'Access to restricted forums';
@@ -854,9 +881,9 @@ $GLOBALS['DEF_TEXTS']['en']['ErrForumClosed'] = 'The forum is closed!';
 $GLOBALS['DEF_TEXTS']['en']['ErrTopicClosed'] = 'The topic is closed!';
 $GLOBALS['DEF_TEXTS']['en']['ErrForumGuestsNotAllowed'] = 'The unregistered users are not allowed to post messages on this forum or in this topic!';
 $GLOBALS['DEF_TEXTS']['en']['MsgComplaintSent'] = 'The complaint has been successfully sent.';
-$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedOnForum'] = 'Your account has been blocked for writing on the forum \'%s\' forum! You can view the reason in your profile in the moderator log.';
-$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedUntilOnForum'] = 'Your account has been blocked for writing on the forum \'%s\' until %s! You can view the reason in your profile in the moderator log.';
-$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedInTopic'] = 'Your account has been blocked for writing in this topic!';
+$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedOnForum'] = 'Your user account has been blocked for writing on the forum \'%s\' forum! You can view the reason in your profile in the moderator log.';
+$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedUntilOnForum'] = 'Your user account has been blocked for writing on the forum \'%s\' until %s! You can view the reason in your profile in the moderator log.';
+$GLOBALS['DEF_TEXTS']['en']['ErrAccountIsBlockedInTopic'] = 'Your user account has been blocked for writing in this topic!';
 $GLOBALS['DEF_TEXTS']['en']['ErrIPIsBlocked'] = 'Your IP address [%s] has been blocked! If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact" using another IP address or register an account.';
 $GLOBALS['DEF_TEXTS']['en']['ErrIPIsBlockedUntil'] = 'Your IP address [%s] has been blocked until %s! Time remaining: %s. If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact" using another IP address or register an account.';
 $GLOBALS['DEF_TEXTS']['en']['ErrFingerPrintIsBlocked'] = 'Your browser has been blocked! If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact" using another browser or register an account.';
@@ -899,6 +926,7 @@ $GLOBALS['DEF_TEXTS']['en']['HiddenForums'] = 'Hidden forums';
 $GLOBALS['DEF_TEXTS']['en']['Poll'] = 'Poll';
 $GLOBALS['DEF_TEXTS']['en']['PollResultsDelayed'] = 'Results after publication';
 $GLOBALS['DEF_TEXTS']['en']['DelayPublishing'] = 'Delay publishing';
+$GLOBALS['DEF_TEXTS']['en']['MsgNoDelayedTopicAsGuest'] = 'Creating topics with delayed publication is not possible under guests!';
 $GLOBALS['DEF_TEXTS']['en']['MsgPollCompleteConfirm'] = 'Are you sure to complete the poll?';
 $GLOBALS['DEF_TEXTS']['en']['MsgPollOpenConfirm'] = 'Are you sure to open the poll again?';
 $GLOBALS['DEF_TEXTS']['en']['NotPublished'] = 'Not published';
@@ -919,7 +947,8 @@ $GLOBALS['DEF_TEXTS']['en']['PollOptions'] = 'Poll answer options';
 $GLOBALS['DEF_TEXTS']['en']['ErrNoPollOptions'] = 'The poll answer options are not specified!';
 $GLOBALS['DEF_TEXTS']['en']['ErrPollOptionTooLong'] = 'The answer option cannot contain more than %s characters!';
 $GLOBALS['DEF_TEXTS']['en']['ErrPollOptionExists'] = 'The poll contains dublicate answer option \'%s\'!';
-$GLOBALS['DEF_TEXTS']['en']['AccountConfirmationRequired'] = 'Administrator confirmation required';
+$GLOBALS['DEF_TEXTS']['en']['AccountConfirmationRequired'] = 'Administrator approval required';
+$GLOBALS['DEF_TEXTS']['en']['DelayedRegistrationMailing'] = 'Sending the e-mail with activation after approval';
 $GLOBALS['DEF_TEXTS']['en']['Approved'] = 'Approved';
 $GLOBALS['DEF_TEXTS']['en']['MsgUserDeleteConfirm'] = 'Are you sure to delete this user with all his messages?';
 $GLOBALS['DEF_TEXTS']['en']['MsgUserDeleted'] = 'User has been successfully deleted.';
@@ -1030,6 +1059,7 @@ $GLOBALS['DEF_TEXTS']['en']['EventsShort'] = 'Evts';
 $GLOBALS['DEF_TEXTS']['en']['Event'] = 'Event';
 $GLOBALS['DEF_TEXTS']['en']['Approve'] = 'Approve';
 $GLOBALS['DEF_TEXTS']['en']['MsgEventUserRegisteredForAdmin'] = 'A new member {author} has registered. Administrator approval is required. {approve}.';
+$GLOBALS['DEF_TEXTS']['en']['MsgEventUserEmailChangedForAdmin'] = 'The user {author} has changed his email. Administrator approval is required. {approve}.';
 $GLOBALS['DEF_TEXTS']['en']['MsgEventUserRegistered'] = 'A new member {author} has registered.';
 $GLOBALS['DEF_TEXTS']['en']['MsgEventMessageLiked'] = 'The member {author} has liked your message {message} from {post_date} in the topic {topic} on the forum {forum}.';
 $GLOBALS['DEF_TEXTS']['en']['MsgEventMessageDisliked'] = 'The member {author} has disliked your message {message} from {post_date} in the topic {topic} on the forum {forum}.';

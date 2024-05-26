@@ -422,10 +422,14 @@ if($fmanager->demo_mode()) $user_data["user_email"] = text("hidden");
 <td><input type="email" id="user_email" name="user_email" value="<?php echo_html($user_data["user_email"]); ?>">
 
 <?php if(!empty($user_data["activated"])): ?>
-<div class="field_comment"><?php echo_html(text("UserEmailComment2")); ?></div>
+  <div class="field_comment"><?php echo_html(text("UserEmailComment2")); ?></div>
 <?php else: ?>
-<div class="field_comment error_text" style="margin-bottom: 3px"><?php echo_html(text("WarningAccountNotActivated")); ?></div>
-<input type="button" class="standard_button" value="<?php echo_html(text("RequestActivationLink")); ?>" onclick="request_activation()">
+  <?php if(!empty($user_data["approved"]) || empty($settings["delayed_reg_mailing"])): ?>
+  <div class="field_comment error_text" style="margin-bottom: 3px"><?php echo_html(text("WarningAccountNotActivated")); ?></div>
+  <input type="button" class="standard_button" value="<?php echo_html(text("RequestActivationLink")); ?>" onclick="request_activation()">
+  <?php else: ?>
+  <div class="field_comment error_text"><?php echo_html(text("WarningAccountNotApproved")); ?></div>
+  <?php endif; ?>
 <?php endif; ?>
 
 </td>

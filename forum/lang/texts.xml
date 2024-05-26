@@ -841,7 +841,7 @@
 
         <text id="UserLoginComment">
             <en>Your internal login name for logging in into the forum. The login is not visible to other members. This makes harder the possible
-                try to break your account through password brute force. It is not recommended to set the login indentical to the user name.
+                try to break your user account through password brute force. It is not recommended to set the login indentical to the user name.
             </en>
             <de>Ihr interner Loginname zum Einloggen im Forum. Der Loginname für die anderen Teilnehmer des Forums nicht sichtbar. Das erschwert
                 das Knacken Ihres Benutzerkontos durch Brute Force. Es wird nicht emfohlen, den Login dem Benutyernamen gleich festzulegen.
@@ -883,7 +883,7 @@
         </text>
 
         <text id="UserEmailComment">
-            <en>Please, enter a valid e-mail address. The activation link will sent to that e-mail address. The link should
+            <en>Please, enter a valid e-mail address. The activation link will be sent to that e-mail address. The link should
                 be clicked to complete the registration on the foum.
             </en>
             <de>Bitte geben Sie eine gültige E-Mail-Adresse ein. An diese Adresse wird der Aktivierungs-Link gesendet. Der Link
@@ -2290,36 +2290,135 @@
             <ua>Довжина електронної адреси не повинна перевищувати %s символів!</ua>
         </text>
 
-            <en>Your account has been successfully activated. Now, you can setup additional properties of your user profile like photo, avatar, location, signature etc.</en>
-            <de>Ihr Benutzerkonto wurde erfolgreich aktiviert. </de>
-            <ru>Ваша учетная запись успешно активирована. </ru>
-            <ua>Ваш обліковий запис успішно активовано. </ua>
-
         <text id="MsgRegistrationSuccess">
-            <en>Your account has been successfully created. Now, you can setup additional properties of your user profile like photo, avatar, location, signature etc. 
-            
-                For completion of the registration, please, click the activation link that has been sent to the e-mail address specified by the registration.
+            <en>Your user account has been successfully created! 
 
-                If the e-mail with the activation link does not come, you can login anyway and request the activation e-mail again or change the e-mail address. If the e-mail still does not come, please contact the administration of the forum over the menu "Contact".
+                To complete the registration process, you need to activate your user account by confirming your entered e-mail address by clicking on the activation link that was sent to you.                
+
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You can also activate your user account by clicking the activation link that was sent to you. 
+
+                If the activation link email does not arrive, you can log in to the forum and request that the activation link email be resent or change your email address. 
+
+                If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.
             </en>
-            <de>Ihr Benutzerkonto wurde erfolgreich angelegt. Sie können nun weitere Eigenschaften Ihres Benutzerprofils wie Foto, Avatar, Ort usw. festlegen.
-            
-                Um die Registirierung abzuschließen, bitte klicken Sie den Aktivierungs-Link, der auf die von Ihnen abgegebene Adresse gesendet wurde.
+            <de>Ihr Benutzerkonto wurde erfolgreich erstellt! 
 
-                Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, können Sie sich trotzdem einloggen und die E-Mail mit dem Aktivierungs-Link erneut anfordern oder die E-Email-Adresse ändern. Wenn die E-Mail immer noch nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".
+                Um den Registrierungsprozess abzuschließen, müssen Sie Ihr Benutzerkonto aktivieren, indem Sie die eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
+
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto aktivieren, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde. 
+
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+
+                Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".
             </de>
-            <ru>Ваша учетная запись успешно создана. Теперь вы можете задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др. 
-            
-                Завершите процесс регистрации переходом по ссылке активации, которая была выслана вам на указанный вами электронный адрес.
-                
-                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес. Если электронное сообщение так и не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".
-            </ru>
-            <ua>Ваш обліковий запис успішно створений. Тепер ви можете задати додаткові властивості вашого профілю, такі як фотографія, аватар, підпис та ін.
-            
-                Завершіть процес реєстрації переходом за посиланням активації, яка була надіслана вам на вказану вами електронну адресу.
+            <ru>Ваша учетная запись успешно создана! 
 
-                Якщо електронне повідомлення з посиланням активації не приходить, ви можете авторизуватися на форумі і запросити повторну відправку електронного повідомлення з посиланням активації або змінити електронну адресу. Якщо електронне повідомлення так і не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".
+                Для завершения процесса регистрации вам необходимо активировать вашу учетную запись, подтвердив введенный электронный адрес переходом по ссылке активации, которая была выслана вам на него.                
+
+                Тем временем, вы можете уже сейчас вы можете задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др. 
+
+                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес. 
+
+                Если электронное сообщение так и не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".
+            </ru>
+            <ua>Ваш обліковий запис успішно створено! 
+
+                Для завершення процесу реєстрації вам необхідно активувати ваш обліковий запис, підтвердивши введену електронну адресу переходом за посиланням активації, що було надіслано вам на неї.                
+
+                Тим часом, ви можете вже зараз ви можете задати додаткові властивості вашого профілю, такі як фотографія, аватар, підпис тощо. 
+
+                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу. 
+
+                Якщо електронне повідомлення так і не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".
             </ua>
+        </text>
+
+        <text id="MsgRegistrationSuccessApproval">
+            <en>Your user account has been successfully created!
+                
+                However, you need to wait for the administrator to confirm your user account!
+                
+                In the meantime, you can now set additional properties for your profile, such as a photo, avatar, signature, etc., and activate your user account by confirming the email address you entered by clicking on the activation link that was sent to you.                
+                
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
+                
+                If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.</en>
+            <de>Ihr Benutzerkonto wurde erfolgreich erstellt!
+                
+                Sie müssen jedoch noch auf die Bestätigung Ihres Kontos durch den Administrator warten!
+                
+                In der Zwischenzeit können Sie weitere Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw., und Ihr Benutzerkonto aktivieren, indem Sie die von Ihnen eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
+                
+                Wenn Sie keine E-Mail mit dem Aktivierungslink erhalten, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+                
+                Wenn Sie die E-Mail immer noch nicht erhalten haben, kontaktieren Sie bitte die Forum-Administration über das Menü "Kontakt".</de>
+            <ru>Ваша учетная запись успешно создана!
+                
+                Однако вам необходимо дождаться, когда администратор подтвердит вашу учетную запись!
+                
+                Тем временем, вы можете уже сейчас задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др., а также активировать вашу учетную запись, подтвердив введенный электронный адрес переходом по ссылке активации, которая была выслана вам на него.                
+                
+                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес. 
+                
+                Если электронное сообщение так и не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".
+            </ru>
+            <ua>Ваш обліковий запис успішно створено!
+                
+                Однак вам необхідно дочекатися, коли адміністратор підтвердить ваш обліковий запис!
+                
+                Тим часом, ви можете вже зараз задати додаткові властивості вашого профілю, як-от фотографія, аватар, підпис тощо, а також активувати ваш обліковий запис, підтвердивши введену електронну адресу, перейшовши за посиланням активації, що було надіслано вам на неї.                
+                
+                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу. 
+                
+                Якщо електронне повідомлення так і не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
+        </text>
+
+        <text id="MsgRegistrationSuccessApprovalDelayed">
+            <en>Your user account has been successfully created!
+            
+                However, you need to wait for the administrator to confirm your user account!
+                
+                After confirmation, you will be sent an email with a link to activate your user account. Please confirm your entered email address by clicking on this link.
+
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You will also be able to set additional properties for your profile.                
+                
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
+                
+                If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.</en>
+            <de>Ihr Benutzerkonto wurde erfolgreich erstellt!
+            
+                Sie müssen jedoch auf die Bestätigung Ihres Kontos durch den Administrator warten!
+                
+                Nach der Bestätigung wird Ihnen eine E-Mail mit einem Link zur Aktivierung Ihres Kontos zugesandt. Bitte bestätigen Sie Ihre eingegebene E-Mail-Adresse, indem Sie auf diesen Link klicken.
+
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto auch aktivieren, indem Sie auf diesen Link klicken.                
+                
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+                
+                Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".</de>
+            <ru>Ваша учетная запись успешно создана!
+            
+                Однако вам необходимо дождаться, когда администратор подтвердит вашу учетную запись!
+                
+                После подтверждения, вам будет выслано электронное сообщение со ссылкой активации вашей учетной записи. Подтвердите введенный электронный адрес переходом по данной ссылке.
+
+                Тем временем, вы можете уже сейчас задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др.                
+                
+                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес. 
+                
+                Если электронное сообщение так и не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".
+            </ru>
+            <ua>Ваш обліковий запис успішно створено!
+            
+                Однак вам необхідно дочекатися, коли адміністратор підтвердить ваш обліковий запис!
+                
+                Після підтвердження, вам буде надіслано електронне повідомлення з посиланням активації вашого облікового запису. Підтвердіть введену електронну адресу переходом за цим посиланням.
+
+                Тим часом, ви можете вже зараз задати додаткові властивості вашого профілю, такі як фотографія, аватар, підпис тощо.                
+                
+                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу. 
+                
+                Якщо електронне повідомлення так і не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
         </text>
 
         <text id="MessageEditingAllowed">
@@ -2359,7 +2458,7 @@
         
         <text id="ErrUserNameProtected">
             <en>This guest name is protected and cannot be used for registration! If you are a regular guest with this nickname and want to become a registered user, contact the forum administration.</en>
-            <de>Dieser Gastname ist geschützt und kann nicht zur Registrierung verwendet werden! Wenn Sie ein regelmäßiger Gast mit diesem Nicknamen sind und ein registrierter Benutzer werden möchten, wenden Sie sich an die Forumadministration.</de>
+            <de>Dieser Gastname ist geschützt und kann nicht zur Registrierung verwendet werden! Wenn Sie ein regelmäßiger Gast mit diesem Nicknamen sind und ein registrierter Benutzer werden möchten, wenden Sie sich an die Forum-Administration.</de>
             <ru>Данное имя гостя защищено и не может быть использовано для регистрации! Если вы являетесь гостем завсегдатаем с данным ником и хотите стать зарегистрированным пользователем, обратитесь к администрации форума.</ru>
             <ua>Дане ім'я гостя захищено і не може бути використано для реєстрації! Якщо ви є гостем завсідником з даними ніком і хочете стати зареєстрованим користувачем, зверніться до адміністрації форуму.</ua>
         </text>        
@@ -2421,7 +2520,7 @@
         </text>
 
         <text id="ErrActivationSuccess">
-            <en>Your account has been successfully activated.</en>
+            <en>Your user account has been successfully activated.</en>
             <de>Ihr Benutzerkonto wurde erfolgreich aktiviert.</de>
             <ru>Ваша учетная запись успешно активирована.</ru>
             <ua>Ваш обліковий запис успішно активовано.</ua>
@@ -2457,14 +2556,14 @@
 
         <text id="ErrAccountBlockedBecauseDeath">
             <en>The account has been blocked because of the owner's death! If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact".</en>
-            <de>Das Benutzerkonto wurde geblockt, weil der Besitzer verstorben ist! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".</de>
+            <de>Das Benutzerkonto wurde geblockt, weil der Besitzer verstorben ist! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".</de>
             <ru>Учетная запись заблокирована в связи со смертью владельца! Если вы считаете блокировку ошибочной, свяжитесь с администрацией форума через пункт меню "Контакт".</ru>
             <ua>Обліковий запис заблоковано у зв'язку зі смертю власника! Якщо ви вважаєте блокування помилковим, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
         </text>
 
         <text id="ErrAccountBlockedBecauseLossSuspect">
             <en>The account blocked due to suspected account loss! If you are the owner of the account, please contact the administration of the forum over the menu "Contact".</en>
-            <de>Das Benutzerkonto wurde geblockt wegen Verdacht auf Kontoverlust! Wenn Sie der Besitzer des Benutzerkontos sind, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".</de>
+            <de>Das Benutzerkonto wurde geblockt wegen Verdacht auf Kontoverlust! Wenn Sie der Besitzer des Benutzerkontos sind, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".</de>
             <ru>Учетная запись заблокирована в связи с подозрением на утрату учетной записи! Если вы являетесь владельцем учетной записи, свяжитесь с администрацией форума через пункт меню "Контакт".</ru>
             <ua>Обліковий запис заблоковано у зв'язку з підозрою на втрату облікового запису! Якщо ви є власником облікового запису, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
         </text>
@@ -2476,7 +2575,7 @@
             </en>
             <de>Ihr Benutzerkonto ist noch nicht aktiviert! Sie können die E-Mail mit dem Aktivierungs-Link in Ihrem Profil erneut anfordern oder die E-Email-Adresse ändern.
 
-                Wenn die E-Mail immer noch nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".
+                Wenn die E-Mail immer noch nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".
             </de>
             <ru>Ваша учетная запись не активирована! Bы можете запросить повторную отправку электронного сообщения со ссылкой активации в вашем профиле или сменить электронный адрес.
 
@@ -2488,15 +2587,15 @@
             </ua>
         </text>
         <text id="ErrAccountNotApproved">
-            <en>Your user account is not yet approved by the administrator! You have to wait until the administrator checks and approves your account.
+            <en>Your user account is not yet approved by the administrator! You have to wait until the administrator checks and approves your user account.
 
                 If the approval takes too long, please contact the administration of the forum over the menu "Contact".
             </en>
             <de>Ihr Benutzerkonto ist noch nicht durch den Administrator bestätigt! Sie müssen warten, bis der Administrator Ihr Benutzerkonto bestätigt.
 
-                Wenn die Bestätigung zu lange dauert, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".
+                Wenn die Bestätigung zu lange dauert, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".
             </de>
-            <ru>Ваша учетная запись еще не подтверждена администратором! Вы должны дождаться, когда администратор подтвердит вашу учетную запись.
+            <ru>Ваша учетная запись еще не одобрена администратором! Вы должны дождаться, когда администратор одобрит вашу учетную запись.
 
                 Если подтверждение длится слишком долго, свяжитесь с администрацией форума через пункт меню "Контакт".
             </ru>
@@ -2506,21 +2605,35 @@
             </ua>
         </text>
         <text id="WarningAccountNotActivated">
-            <en>Your user account is not yet activated! You can request the activation e-mail again.</en>
-            <de>Ihr Benutzerkonto ist noch nicht aktiviert! Sie können die E-Mail mit dem Aktivierungs-Link erneut anfordern.</de>
-            <ru>Ваша учетная запись не активирована! Bы можете запросить повторную отправку электронного сообщения со ссылкой активации.</ru>
-            <ua>Ваш обліковий запис не активовано! Bы можете запросити повторну відправку електронного повідомлення з посиланням активації.</ua>
+            <en>Your user account is not yet activated! You can request the activation e-mail again!</en>
+            <de>Ihr Benutzerkonto ist noch nicht aktiviert! Sie können die E-Mail mit dem Aktivierungs-Link erneut anfordern!</de>
+            <ru>Ваша учетная запись не активирована! Bы можете запросить повторную отправку электронного сообщения со ссылкой активации!</ru>
+            <ua>Ваш обліковий запис не активовано! Bы можете запросити повторну відправку електронного повідомлення з посиланням активації!</ua>
+        </text>
+
+        <text id="WarningAccountNotApproved">
+            <en>Your account has not yet been approved by the forum administration! Once approved, you will be able to request an email with an activation link!</en>
+            <de>Ihr Benutzerkonto ist noch nicht von der Forum-Administration genehmigt worden! Sobald es genehmigt ist, können Sie eine E-Mail mit einem Aktivierungslink anfordern!</de>
+            <ru>Ваша учетная запись еще не одобрена администрацией! После одобрения, вы сможете запросить отправку электронного сообщения со ссылкой активации!</ru>
+            <ua>Ваш обліковий запис ще не схвалений адміністрацією! Після схвалення, ви зможете запросити надсилання електронного повідомлення з посиланням активації!</ua>
+        </text>
+
+        <text id="ErrActivationAccountNotApproved">
+            <en>You can only request to send a link to activate your user account after your user account has been approved by the administrator!</en>
+            <de>Sie können die Zusendung eines Links zur Aktivierung Ihres Benutzerkontos erst beantragen, nachdem Ihr Benutzerkonto von dem Administrator genehmigt wurde!</de>
+            <ru>Запрос отправки ссылки для активации учетной записи возможен только после одобрения учетной записи администратором!</ru>
+            <ua>Запит надсилання посилання для активації облікового запису можливий тільки після схвалення облікового запису адміністратором!</ua>
         </text>
 
         <text id="ErrAccountIsBlocked">
-            <en>Your account has been blocked!</en>
+            <en>Your user account has been blocked!</en>
             <de>Ihr Benutzerkonto wurde blockiert!</de>
             <ru>Ваша учетная запись заблокирована!</ru>
             <ua>Ваш обліковий запис заблоковано!</ua>
         </text>
 
         <text id="ErrAccountIsBlockedUntil">
-            <en>Your account has been blocked until %s! Time remaining: %s.</en>
+            <en>Your user account has been blocked until %s! Time remaining: %s.</en>
             <de>Ihr Benutzerkonto wurde bis zum %s blockiert! Zeit verblieben: %s.</de>
             <ru>Ваша учетная запись заблокирована до %s! Осталось времени: %s.</ru>
             <ua>Ваш обліковий запис заблокований до %s! Залишилося часу: %s.</ua>
@@ -2534,7 +2647,7 @@
         </text>
 
         <text id="PasswordRestoreComment">
-            <en>Enter the e-mail address assigned to your account. We will send the e-mail with the instructions how to reset your password.</en>
+            <en>Enter the e-mail address assigned to your user account. We will send the e-mail with the instructions how to reset your password.</en>
             <de>Bitte geben Sie die E-Mail-Adresse, die mit Ihrem Benutzerkonto verknüpft ist, ein. An diese Adresse wird die E-Mail mit den Anweisungen, wie Sie Ihr Kennwort zurücksetzten können, gesendet.</de>
             <ru>Введите электронный адрес, который был использован в вашей учетной записи. На него будет выслано электронное сообщение с инструкциями, как переустановить пароль.</ru>
             <ua>Введіть електронну адресу, яка була використана у вашому обліковому записі. На нього буде вислано електронне повідомлення з інструкціями, як перевстановити пароль.</ua>
@@ -2562,7 +2675,7 @@
         </text>
 
         <text id="PasswordResetComment">
-            <en>Set the new password for your account.</en>
+            <en>Set the new password for your user account.</en>
             <de>Legen Sie das neue Kennwort für Ihr Benutzerkonto fest.</de>
             <ru>Задайте новый пароль для вашей учетной записи.</ru>
             <ua>Вкажіть новий пароль для вашого облікового запису.</ua>
@@ -2773,12 +2886,19 @@
         </text>
 
         <text id="MsgNewActivationRequired">
-            <en>Since you have changed the e-mail address, your profile has been deactivated and an e-mail with the activation link has been sent to the new e-mail address. Klick the activation link to confirm the change of the e-mail address.</en>
-            <de>Da Sie die E-Mail-Adressse geändert haben, wurde Ihr Benutzerprofil deaktiviert, und eine E-Mail mit dem Aktivierungs-Link wurde an die neue Adresse gesendet. Klicken Sie auf dem Aktivierungs-Link, um die Änderung der E-Mail-Adresse zu bestätigen.</de>
-            <ru>Поскольку вы изменили электронный адрес, ваш профиль был деактивирован, и на новый адрес было отправлено сообщение со ссылкой активации. Перейдите по ссылке активации, чтобы подтвердить изменение электронного адреса.</ru>
-            <ua>Оскільки ви змінили електронну адресу, ваш профіль деактивовано, і на нову адресу було надіслано повідомлення з посиланням активації. Перейдіть по посиланню активації, аби підтвердити зміну електронної адреси.</ua>
+            <en>Since you have changed the e-mail address, your profile has been deactivated, an e-mail with the activation link has been sent to the new e-mail address. Klick the activation link to confirm the change of the e-mail address.</en>
+            <de>Da Sie die E-Mail-Adressse geändert haben, wurde Ihr Benutzerprofil deaktiviert, eine E-Mail mit dem Aktivierungs-Link wurde an die neue Adresse gesendet. Klicken Sie auf dem Aktivierungs-Link, um die Änderung der E-Mail-Adresse zu bestätigen.</de>
+            <ru>Поскольку вы изменили электронный адрес, ваш профиль был деактивирован, на новый адрес было отправлено сообщение со ссылкой активации. Перейдите по ссылке активации, чтобы подтвердить изменение электронного адреса.</ru>
+            <ua>Оскільки ви змінили електронну адресу, ваш профіль деактивовано, на нову адресу було надіслано повідомлення з посиланням активації. Перейдіть по посиланню активації, аби підтвердити зміну електронної адреси.</ua>
         </text>
         
+        <text id="MsgNewApprovalActivationRequired">
+            <en>Because you have changed your e-mail address, your profile has been deactivated and must be approved by the forum administration. Once approved, you will be sent an email with a link to activate your user account.</en>
+            <de>Da Sie Ihre E-Mail-Adresse geändert haben, wurde Ihr Profil deaktiviert und muss von der Forum-Administration genehmigt werden. Nach der Genehmigung erhalten Sie eine E-Mail mit einem Link zur Aktivierung Ihres Benutzerkontos.</de>
+            <ru>Поскольку вы изменили электронный адрес, ваш профиль был деактивирован и должен быть одобрен администрацией. После одобрения, вам будет выслано электронное сообщение со ссылкой активации вашей учетной записи.</ru>
+            <ua>Оскільки ви змінили електронну адресу, ваш профіль був деактивований і має бути схвалений адміністрацією. Після схвалення, вам буде надіслано електронне повідомлення з посиланням активації вашого облікового запису.</ua>
+        </text>
+
         <text id="ErrCurrentPasswordRequired">
             <en>You have to enter your current password if you want to change the e-mail address or the password!</en>
             <de>Sie müssen Ihr aktuelles Kennowrt eingeben, um die E-Mail-Adresse oder das Kennowrt ändern zu können!</de>
@@ -5670,7 +5790,7 @@
         </text>
 
         <text id="ErrForumNotAccessibleDueToBlock">
-            <en>You do not have access to the protected forum '%s' due to block of your account! The access to the forum will be restored when the block expires.</en>
+            <en>You do not have access to the protected forum '%s' due to block of your user account! The access to the forum will be restored when the block expires.</en>
             <de>Sie haben keinen Zugriff auf den geschützten Forum '%s' wegen der Blockierung Ihres Benutzerkontos! Der Zugang zum Forum wird wiederhergestellt, sobald die Blockierung abgelaufen ist.</de>
             <ru>У вас нет доступа в защищенный форум '%s' из-за блокировки вашей учетной записи! Доступ к форуму будет восстановлен по истечении срока блокировки.</ru>
             <ua>У вас немає у захищений форум '%s' через блокування вашого облікового запису! Доступ до форуму буде відновлено після закінчення терміну блокування.</ua>
@@ -5930,21 +6050,21 @@
         </text>
 
         <text id="ErrAccountIsBlockedOnForum">
-            <en>Your account has been blocked for writing on the forum '%s' forum! You can view the reason in your profile in the moderator log.</en>
+            <en>Your user account has been blocked for writing on the forum '%s' forum! You can view the reason in your profile in the moderator log.</en>
             <de>Ihr Benutzerkonto wurde für Schreiben auf dem Forum '%s' blockiert! Sie können den Grund in Ihrem Profil einsehen im Moderator-Protokoll einsehen.</de>
             <ru>Ваша учетная запись заблокирована на запись на форуме '%s'! Вы можете посмотреть причину блокировки в вашем профиле в модераторском логе.</ru>
             <ua>Ваш обліковий запис заблокований на запис на форумі '%s'! Ви можете переглянути причину блокування у вашому профілі в модераторському лозі.</ua>
         </text>
 
         <text id="ErrAccountIsBlockedUntilOnForum">
-            <en>Your account has been blocked for writing on the forum '%s' until %s! You can view the reason in your profile in the moderator log.</en>
+            <en>Your user account has been blocked for writing on the forum '%s' until %s! You can view the reason in your profile in the moderator log.</en>
             <de>Ihr Benutzerkonto wurde auf dem Forum '%s' bis zum '%s' blockiert! Sie können den Grund in Ihrem Profil einsehen im Moderator-Protokoll einsehen.</de>
             <ru>Ваша учетная запись заблокирована на запись на форуме '%s' до %s! Вы можете посмотреть причину блокировки в вашем профиле в модераторском логе.</ru>
             <ua>Ваш обліковий запис заблокований на запис на форумі '%s' до %s! Ви можете переглянути причину блокування у вашому профілі в модераторському лозі.</ua>
         </text>
 
         <text id="ErrAccountIsBlockedInTopic">
-            <en>Your account has been blocked for writing in this topic!</en>
+            <en>Your user account has been blocked for writing in this topic!</en>
             <de>Ihr Benutzerkonto wurde für Schreiben in diesem Thema blockiert!</de>
             <ru>Ваша учетная запись заблокирована на запись в данной теме!</ru>
             <ua>Ваш обліковий запис заблокований на запис в цій темі!</ua>
@@ -5952,28 +6072,28 @@
 
          <text id="ErrIPIsBlocked">
             <en>Your IP address [%s] has been blocked! If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact" using another IP address or register an account.</en>
-            <de>Ihre IP-Adresse [%s] wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" mit einer anderen IP Adresse oder registrieren Sie sich.</de>
+            <de>Ihre IP-Adresse [%s] wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" mit einer anderen IP Adresse oder registrieren Sie sich.</de>
             <ru>Ваш IP-адрес [%s] заблокирован! Если вы считаете блокировку ошибочной, свяжитесь с администрацией форума через пункт меню "Контакт", используя другой IP адрес, или зарегистрируйтесь.</ru>
             <ua>Ваш IP- адреса [%s] заблокована! Якщо ви вважаєте блокування помилковим, зв'яжіться з адміністрацією форуму через пункт меню "Контакт", використовуючи інший IP адреса, або зареєструйтеся.</ua>
         </text>
 
         <text id="ErrIPIsBlockedUntil">
             <en>Your IP address [%s] has been blocked until %s! Time remaining: %s. If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact" using another IP address or register an account.</en>
-            <de>Ihre IP-Adresse [%s] wurde bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.</de>
+            <de>Ihre IP-Adresse [%s] wurde bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.</de>
             <ru>Ваш IP-адрес [%s] заблокирован до %s! Осталось времени: %s. Если вы считаете блокировку ошибочной, свяжитесь с администрацией форума через пункт меню "Контакт", используя другой IP адрес, или зарегистрируйтесь.</ru>
             <ua>Ваш IP-адреса [%s] заблокован до %s! Залишилося часу: %s. Якщо ви вважаєте блокування помилковим, зв'яжіться з адміністрацією форуму через пункт меню "Контакт", використовуючи інший IP адреса, або зареєструйтеся.</ua>
         </text>
 
         <text id="ErrFingerPrintIsBlocked">
             <en>Your browser has been blocked! If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact" using another browser or register an account.</en>
-            <de>Ihr Browser wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" min einem anderen Browser oder registrieren Sie sich.</de>
+            <de>Ihr Browser wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" min einem anderen Browser oder registrieren Sie sich.</de>
             <ru>Ваш браузер заблокирован! Если вы считаете блокировку ошибочной, свяжитесь с администрацией форума через пункт меню "Контакт", используя другой браузер, или зарегистрируйтесь.</ru>
             <ua>Ваш браузер заблокован! Якщо ви вважаєте блокування помилковим, зв'яжіться з адміністрацією форуму через пункт меню "Контакт" або зареєструйтеся.</ua>
         </text>
 
         <text id="ErrFingerPrintIsBlockedUntil">
             <en>You have been blocked until %s! Time remaining: %s. If you suppose it is a mistake, please contact the administration of the forum over the menu "Contact" or register an account.</en>
-            <de>Sie wurden bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.</de>
+            <de>Sie wurden bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.</de>
             <ru>Вы заблокированы до %s! Осталось времени: %s. Если вы считаете блокировку ошибочной, свяжитесь с администрацией форума через пункт меню "Контакт" или зарегистрируйтесь.</ru>
             <ua>Ви заблоковані до %s! Залишилося часу: %s. Якщо ви вважаєте блокування помилковим, зв'яжіться з адміністрацією форуму через пункт меню "Контакт" або зареєструйтеся.</ua>
         </text>
@@ -6244,6 +6364,13 @@
             <ua>Відкласти публікацію</ua>
         </text>
 
+        <text id="MsgNoDelayedTopicAsGuest">
+            <en>Creating topics with delayed publication is not possible under guests!</en>
+            <de>Das Erstellen von Themen mit verlegter Veröffentlichung ist unter Gästen nicht möglich!</de>
+            <ru>Создание тем с отложенной публикацией невозможно под гостями!</ru>
+            <ua>Створення тем з відкладеною публікацією неможливе під гостями!</ua>
+        </text>
+
         <text id="MsgPollCompleteConfirm">
             <en>Are you sure to complete the poll?</en>
             <de>Sind Sie sicher, dass Sie die Umfrage abschliessen möchten?</de>
@@ -6385,10 +6512,17 @@
         </text>
 
         <text id="AccountConfirmationRequired">
-            <en>Administrator confirmation required</en>
-            <de>Bestätigung durch einen Administrator erforderlich</de>
+            <en>Administrator approval required</en>
+            <de>Genehmigung durch einen Administrator erforderlich</de>
             <ru>Требуется подтверждение администратора</ru>
             <ua>Потрібно підтвердження адміністратора</ua>
+        </text>
+
+        <text id="DelayedRegistrationMailing">
+            <en>Sending the e-mail with activation after approval</en>
+            <de>Versenden der E-Mail mit der Aktivierung nach der Genehmigung</de>
+            <ru>Отправка эл. сообщения с активацией после одобрения</ru>
+            <ua>Надсилання ел. повідомлення з активацією після підтвердження</ua>
         </text>
 
         <text id="Approved">
@@ -7151,6 +7285,13 @@
             <de>Ein neuer Teilnehmer {author} hat sich registriert. Die Administratorbestätigung ist erforderlich. {approve}.</de>
             <ru>Зарегистрировался новый участник {author}. Требуется подтверждение администратора. {approve}.</ru>
             <ua>Зареєструвався новий участник {author}. Необхідне підтвердження адміністратора. {approve}.</ua>
+        </text>
+
+        <text id="MsgEventUserEmailChangedForAdmin">
+            <en>The user {author} has changed his email. Administrator approval is required. {approve}.</en>
+            <de>Der Benutzer {author} hat seine E-Mail geändert. Die Administratorbestätigung ist erforderlich. {approve}.</de>
+            <ru>Пользователь {author} сменил свой электронный адрес. Требуется подтверждение администратора. {approve}.</ru>
+            <ua>Користувач {author} змінив свою електронну адресу. Необхідне підтвердження адміністратора. {approve}.</ua>
         </text>
 
         <text id="MsgEventUserRegistered">
@@ -10091,7 +10232,7 @@
                 If the e-mail with the activation link does not come, please contact the administration of the forum over the menu "Contact".</en>
             <de>ACHTUNG! Eine E-Mail mit dem Aktivierungs-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
                 
-                Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt"</de>
+                Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"</de>
             <ru>ВНИМАНИЕ! Электронное сообщение со ссылкой активации может попасть в СПАМ или быть заблокировано вашим мейл-сервером. 
             
                 Если электронное сообщение со ссылкой активации не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".</ru>
@@ -10106,7 +10247,7 @@
                 If the e-mail with the password reset link does not come, please contact the administration of the forum over the menu "Contact".</en>
             <de>ACHTUNG! Eine E-Mail mit dem Reset-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
                 
-                Wenn die E-Mail mit dem Reset-Link nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt"</de>
+                Wenn die E-Mail mit dem Reset-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"</de>
             <ru>ВНИМАНИЕ! Электронное сообщение со ссылкой переустановки пароля может попасть в СПАМ или быть заблокировано вашим мейл-сервером. 
             
                 Если электронное сообщение со ссылкой переустановки пароля не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".</ru>

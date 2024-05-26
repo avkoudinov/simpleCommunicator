@@ -5,7 +5,7 @@ A new request has been received on the forum '{site_name}'
 {site_url}
 
 Time: {time}
-IP address: {ip} - https://whatismyipaddress.com/ip/{ip}
+IP address: {ip} - {ip_link}
 Fingerprint: {user_marker} 
 
 Sender: {email}

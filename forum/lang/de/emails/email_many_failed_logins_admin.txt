@@ -8,7 +8,7 @@ Es gab mehrere erfolglose Versuche, sich unter dem Login '{user_login}' des Benu
 
 von der IP-Adresse:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 Mit freundlichen Grüßen,
 

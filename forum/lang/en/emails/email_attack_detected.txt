@@ -8,7 +8,7 @@ You received this message because you are the administrator of forum '{site_name
 
 DOS attack from IP address has been prevented on the forum:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 {Hits} requests ({atype}) were made from this IP address in {check_period} minutes.
 
