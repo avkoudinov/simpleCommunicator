@@ -8,7 +8,7 @@
 
 На форуме предотвращена DOS атака с IP адреса:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 С данного IP адреса было осуществлено {hits} запросов ({atype}) в {check_period} минут.
 

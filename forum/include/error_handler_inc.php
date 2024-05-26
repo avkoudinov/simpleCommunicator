@@ -230,6 +230,10 @@ function debug_message($msg)
     $path = str_replace("include/$basename", "log/", $path);
     $file = $path . "debug.log";
     
+    if (is_array($msg)) {
+        $msg = print_r($msg, true);
+    }
+
     $backfiles = debug_backtrace();
 
     $callfile = "";

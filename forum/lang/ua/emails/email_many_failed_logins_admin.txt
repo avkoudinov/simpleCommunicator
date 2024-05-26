@@ -8,7 +8,7 @@
 
 з IP адреси:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 З повагою,
 

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     02.03.2024 11:49:39                          */
+/* Created on:     26.05.2024 10:49:13                          */
 /*==============================================================*/
 
 
@@ -1770,6 +1770,7 @@ create table v1_settings
    whois_server         varchar(500),
    hide_online_status   tinyint not null default 0,
    approval_required    tinyint not null default 0,
+   delayed_reg_mailing  tinyint not null default 0,
    max_rates_hour       int,
    max_topics_day       int,
    rates_active         tinyint not null default 0,

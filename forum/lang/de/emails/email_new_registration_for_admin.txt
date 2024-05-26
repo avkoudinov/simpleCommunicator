@@ -11,7 +11,7 @@ Ein neuer Benutzer hat sich im Forum registriert:
 Login: {user_login}
 Benutzername: {user_name}
 E-Mail-Adresse: {user_email}
-IP-Adresse: {ip} - https://whatismyipaddress.com/ip/{ip}
+IP-Adresse: {ip} - {ip_link}
 
 Sein Konto muss vom Administrator genehmigt werden. Sie können Ihre Kontodaten unter folgendem Link anzeigen und genehmigen:
 
