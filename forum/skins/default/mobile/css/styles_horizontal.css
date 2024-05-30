@@ -283,6 +283,29 @@
     height: 30px;
     outline:1px solid gray;
   }
+  
+  .forum_selector_container
+  {
+    border: 1px solid gray;
+    border-left: 0;
+  }
+
+  .forum_selector_table .forum_selector
+  {
+    height: 30px;
+    width: 40px;
+    border-left: 0;
+    appearance: none;
+    opacity: 0;
+  }
+
+  .device-ios select.forum_selector,
+  .device-ios select.forum_selector:active,
+  .device-ios select.forum_selector:focus
+  {
+    height: 30px;
+    outline: 0;
+  }
 
   button,
   input[type=button],
@@ -581,6 +604,17 @@
   {
     margin-top: 18px;
     margin-bottom: 18px;
+  }
+  
+  .forum_bar_breakable
+  {
+    margin-top: 0px;
+  }
+
+  .forum_bar_breakable .forum_action_bar,
+  .forum_bar_breakable .forum_name_bar
+  {
+    margin-top: 18px;
   }
   
   .forum_table th, 

@@ -119,6 +119,24 @@ function handle_likes_checkboxes()
   Forum.fireEvent(dislikes_anonym, 'update_view');
 }
 
+function handle_reg_checkboxes()
+{
+  var approval_required = document.getElementById('approval_required');
+  var delayed_reg_mailing = document.getElementById('delayed_reg_mailing');
+  
+  if(!approval_required || !delayed_reg_mailing) return;
+  
+  if(approval_required.checked)
+  {
+    delayed_reg_mailing.disabled = false;
+  }
+  else
+  {
+    delayed_reg_mailing.checked = false;
+    delayed_reg_mailing.disabled = true;
+  }
+}
+
 var save_data_ajax = null;
 
 function save_data()
@@ -183,7 +201,7 @@ function save_data()
   return false;
 } // save_data
 
-Forum.addXEvent(window, 'load', function () { handle_likes_checkboxes(); handle_special_mode_checkboxes(); });
+Forum.addXEvent(window, 'load', function () { handle_likes_checkboxes(); handle_reg_checkboxes(); handle_special_mode_checkboxes(); });
 </script>
 
 <!-- BEGIN: forum_bar -->
@@ -336,17 +354,25 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td><?php echo_html(text("Registration")); ?>:</td>
+<td style="vertical-align: top"><?php echo_html(text("Registration")); ?>:</td>
 </tr>
 <tr>
 <td>
    <table class="checkbox_table">
    <tr>
      <td>
-     <input type="checkbox" id="approval_required" name="approval_required" <?php echo_html(checked($settings["approval_required"])); ?>> 
+     <input type="checkbox" id="approval_required" name="approval_required" <?php echo_html(checked($settings["approval_required"])); ?> onchange="handle_reg_checkboxes()"> 
      </td>
      <td>
      <label for="approval_required"><?php echo_html(text("AccountConfirmationRequired")); ?></label>
+     </td>
+   </tr>
+   <tr>
+     <td>
+     <input type="checkbox" id="delayed_reg_mailing" name="delayed_reg_mailing" <?php echo_html(checked($settings["delayed_reg_mailing"])); ?>> 
+     </td>
+     <td>
+     <label for="delayed_reg_mailing"><?php echo_html(text("DelayedRegistrationMailing")); ?></label>
      </td>
    </tr>
    </table>

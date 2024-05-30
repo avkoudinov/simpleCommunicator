@@ -8,7 +8,7 @@
 
 под вашим логином '{user_login}' с IP адреса:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 С уважением,
 

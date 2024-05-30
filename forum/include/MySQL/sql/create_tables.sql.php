@@ -1580,6 +1580,7 @@ create table v1_settings
    whois_server         varchar(500),
    hide_online_status   tinyint not null default 0,
    approval_required    tinyint not null default 0,
+   delayed_reg_mailing  tinyint not null default 0,
    max_rates_hour       int,
    max_topics_day       int,
    rates_active         tinyint not null default 0,

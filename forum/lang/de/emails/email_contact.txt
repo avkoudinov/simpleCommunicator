@@ -5,7 +5,7 @@ Eine neue Anfrage im Forum '{site_name}' ist eingegangen
 {Seiten-URL}
 
 Zeit: {time}
-IP-Adresse: {ip} - https://whatismyipaddress.com/ip/{ip}
+IP-Adresse: {ip} - {ip_link}
 Fingerprint: {user_marker} 
 
 Absender: {email}

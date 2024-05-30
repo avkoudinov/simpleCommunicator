@@ -8,7 +8,7 @@ Sie haben diese Nachricht erhalten, weil Sie der Administrator des Forums '{site
 
 DOS-Angriff von IP-Adresse wurde im Forum verhindert:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 {hits} Anfragen ({atype}) wurden von dieser IP-Adresse in {check_period} Minuten gesendet.
 

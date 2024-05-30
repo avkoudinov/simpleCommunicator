@@ -67,8 +67,6 @@ $topic_ignorers = array();
 $topic_blocked_users = array();
 $fmanager->get_online_users($online_users, $forum_readers, $topic_readers, $topic_ignorers, $topic_blocked_users, $fid, reqvar("topic"));
 
-debug_message(print_r($topic_blocked_users, true));
-
 $treaders = "";
 $freaders = "";
 

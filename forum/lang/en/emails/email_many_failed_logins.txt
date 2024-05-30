@@ -8,7 +8,7 @@ There have been multiple unsuccessful attempts to enter the forum '{site_name}'
 
 under your login name '{user_login}' from the IP address:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 Yours faithfully,
 

@@ -5,7 +5,7 @@
 {site_url}
 
 Час: {time}
-IP адреса: {ip} - https://whatismyipaddress.com/ip/{ip}
+IP адреса: {ip} - {ip_link}
 Фінгерпрінт: {user_marker} 
 
 Відправник: {email}

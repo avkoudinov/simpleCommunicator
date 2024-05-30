@@ -11,7 +11,7 @@ A new user has registered on the forum:
 Login: {user_login}
 Username: {user_name}
 Email address: {user_email}
-IP address: {ip} - https://whatismyipaddress.com/ip/{ip}
+IP address: {ip} - {ip_link}
 
 His account must be approved by the administrator. You can view and approve your account details at the following link:
 

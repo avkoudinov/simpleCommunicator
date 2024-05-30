@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     02.03.2024 11:48:14                          */
+/* Created on:     26.05.2024 10:49:31                          */
 /*==============================================================*/
 
 
@@ -1795,6 +1795,7 @@ create table v1_settings (
    whois_server         nvarchar(500)        null,
    hide_online_status   tinyint              not null default 0,
    approval_required    tinyint              not null default 0,
+   delayed_reg_mailing  tinyint              not null default 0,
    max_rates_hour       int                  null,
    max_topics_day       int                  null,
    rates_active         tinyint              not null default 0,

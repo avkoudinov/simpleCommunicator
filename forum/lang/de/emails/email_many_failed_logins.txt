@@ -8,7 +8,7 @@ Es gab mehrere erfolglose Versuche, sich im Forum '{site_name}' anzumelden.
 
 unter Ihrem Login '{user_login}' von der IP-Adresse:
 
-{ip} - https://whatismyipaddress.com/ip/{ip}
+{ip} - {ip_link}
 
 Mit freundlichen Grüßen,
 

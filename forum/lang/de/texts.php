@@ -326,18 +326,42 @@ $GLOBALS['DEF_TEXTS']['de']['ErrEmailEmpty'] = 'E-Mail ist nicht angegeben!';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserLoginTooLong'] = 'Login kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserNameTooLong'] = 'Benutzername kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrEmailTooLong'] = 'E-Mail kann höchstens %s Zeichen beinhalten!';
-$GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccess'] = 'Ihr Benutzerkonto wurde erfolgreich angelegt. Sie können nun weitere Eigenschaften Ihres Benutzerprofils wie Foto, Avatar, Ort usw. festlegen.
-            
-                Um die Registirierung abzuschließen, bitte klicken Sie den Aktivierungs-Link, der auf die von Ihnen abgegebene Adresse gesendet wurde.
+$GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccess'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt! 
 
-                Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, können Sie sich trotzdem einloggen und die E-Mail mit dem Aktivierungs-Link erneut anfordern oder die E-Email-Adresse ändern. Wenn die E-Mail immer noch nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".
+                Um den Registrierungsprozess abzuschließen, müssen Sie Ihr Benutzerkonto aktivieren, indem Sie die eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
+
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto aktivieren, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde. 
+
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+
+                Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".
             ';
+$GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccessApproval'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt!
+                
+                Sie müssen jedoch noch auf die Bestätigung Ihres Kontos durch den Administrator warten!
+                
+                In der Zwischenzeit können Sie weitere Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw., und Ihr Benutzerkonto aktivieren, indem Sie die von Ihnen eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
+                
+                Wenn Sie keine E-Mail mit dem Aktivierungslink erhalten, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+                
+                Wenn Sie die E-Mail immer noch nicht erhalten haben, kontaktieren Sie bitte die Forum-Administration über das Menü "Kontakt".';
+$GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccessApprovalDelayed'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt!
+            
+                Sie müssen jedoch auf die Bestätigung Ihres Kontos durch den Administrator warten!
+                
+                Nach der Bestätigung wird Ihnen eine E-Mail mit einem Link zur Aktivierung Ihres Kontos zugesandt. Bitte bestätigen Sie Ihre eingegebene E-Mail-Adresse, indem Sie auf diesen Link klicken.
+
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto auch aktivieren, indem Sie auf diesen Link klicken.                
+                
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+                
+                Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".';
 $GLOBALS['DEF_TEXTS']['de']['MessageEditingAllowed'] = 'Bearbeiten eigener Nachrichten erlauben';
 $GLOBALS['DEF_TEXTS']['de']['RegistrationComment'] = 'Nach der Registirierung können Sie weitere Eigenschaften Ihres Benutzerprofils wie Foto, Avatar, Ort usw. festlegen.';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserLoginInUse'] = 'Dieser Login wird bereits verwendet!';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserNameInUse'] = 'Dieser Benutzername wird bereits verwendet!';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserNameReserved'] = 'Dieser Benutzername ist reserviert und darf nicht verwendet werden!';
-$GLOBALS['DEF_TEXTS']['de']['ErrUserNameProtected'] = 'Dieser Gastname ist geschützt und kann nicht zur Registrierung verwendet werden! Wenn Sie ein regelmäßiger Gast mit diesem Nicknamen sind und ein registrierter Benutzer werden möchten, wenden Sie sich an die Forumadministration.';
+$GLOBALS['DEF_TEXTS']['de']['ErrUserNameProtected'] = 'Dieser Gastname ist geschützt und kann nicht zur Registrierung verwendet werden! Wenn Sie ein regelmäßiger Gast mit diesem Nicknamen sind und ein registrierter Benutzer werden möchten, wenden Sie sich an die Forum-Administration.';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserEmailInUse'] = 'Diese E-Mail-Adresse wird bereits verwendet! Wenn es Ihre E-Mail-Adresse ist und Sie die Logindaten vergessen haben, benutzen Sie die Funktion für das Zurücksetzen des Kennworts.';
 $GLOBALS['DEF_TEXTS']['de']['ErrEmailDomainNotAllowed'] = 'Dieses E-Mail-Domain \'%s\' ist für die Registrierung nicht erlaubt!';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserEmailInUseShort'] = 'Diese E-Mail-Adresse wird bereits verwendet!';
@@ -351,17 +375,19 @@ $GLOBALS['DEF_TEXTS']['de']['PasswordRestoration'] = 'Kennwortwiederherstellung'
 $GLOBALS['DEF_TEXTS']['de']['ErrCookiesNotEnabled'] = 'Die Session kann nicht gestartet werden. Entweder Ihr Browser verbietet die Cookies für diese Seite oder grundsätzlich, oder die Einstellung des Session-Cookie-Pfades relativ zu der Anwendungs-URL ist falsch.';
 $GLOBALS['DEF_TEXTS']['de']['ErrWrongLogin'] = 'Falscher Loginname oder Kennwort!';
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountDeleted'] = 'Ihr Benutzerkonto wurde gelöscht!';
-$GLOBALS['DEF_TEXTS']['de']['ErrAccountBlockedBecauseDeath'] = 'Das Benutzerkonto wurde geblockt, weil der Besitzer verstorben ist! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".';
-$GLOBALS['DEF_TEXTS']['de']['ErrAccountBlockedBecauseLossSuspect'] = 'Das Benutzerkonto wurde geblockt wegen Verdacht auf Kontoverlust! Wenn Sie der Besitzer des Benutzerkontos sind, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".';
+$GLOBALS['DEF_TEXTS']['de']['ErrAccountBlockedBecauseDeath'] = 'Das Benutzerkonto wurde geblockt, weil der Besitzer verstorben ist! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".';
+$GLOBALS['DEF_TEXTS']['de']['ErrAccountBlockedBecauseLossSuspect'] = 'Das Benutzerkonto wurde geblockt wegen Verdacht auf Kontoverlust! Wenn Sie der Besitzer des Benutzerkontos sind, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".';
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountNotActivated'] = 'Ihr Benutzerkonto ist noch nicht aktiviert! Sie können die E-Mail mit dem Aktivierungs-Link in Ihrem Profil erneut anfordern oder die E-Email-Adresse ändern.
 
-                Wenn die E-Mail immer noch nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".
+                Wenn die E-Mail immer noch nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".
             ';
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountNotApproved'] = 'Ihr Benutzerkonto ist noch nicht durch den Administrator bestätigt! Sie müssen warten, bis der Administrator Ihr Benutzerkonto bestätigt.
 
-                Wenn die Bestätigung zu lange dauert, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt".
+                Wenn die Bestätigung zu lange dauert, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt".
             ';
-$GLOBALS['DEF_TEXTS']['de']['WarningAccountNotActivated'] = 'Ihr Benutzerkonto ist noch nicht aktiviert! Sie können die E-Mail mit dem Aktivierungs-Link erneut anfordern.';
+$GLOBALS['DEF_TEXTS']['de']['WarningAccountNotActivated'] = 'Ihr Benutzerkonto ist noch nicht aktiviert! Sie können die E-Mail mit dem Aktivierungs-Link erneut anfordern!';
+$GLOBALS['DEF_TEXTS']['de']['WarningAccountNotApproved'] = 'Ihr Benutzerkonto ist noch nicht von der Forum-Administration genehmigt worden! Sobald es genehmigt ist, können Sie eine E-Mail mit einem Aktivierungslink anfordern!';
+$GLOBALS['DEF_TEXTS']['de']['ErrActivationAccountNotApproved'] = 'Sie können die Zusendung eines Links zur Aktivierung Ihres Benutzerkontos erst beantragen, nachdem Ihr Benutzerkonto von dem Administrator genehmigt wurde!';
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountIsBlocked'] = 'Ihr Benutzerkonto wurde blockiert!';
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountIsBlockedUntil'] = 'Ihr Benutzerkonto wurde bis zum %s blockiert! Zeit verblieben: %s.';
 $GLOBALS['DEF_TEXTS']['de']['MsgMasterAdminWarning'] = 'Sie sind als der Masteradministrator eingeloggt. Der Masteradministrator hat kein Profil, keine Favoriten usw., und soll nur für Systemzwecke verwendet werden!';
@@ -400,7 +426,8 @@ $GLOBALS['DEF_TEXTS']['de']['ErrHomepageTooLong'] = 'Homepage kann höchstens %s
 $GLOBALS['DEF_TEXTS']['de']['ErrLocationTooLong'] = 'Ort kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrSignatureTooLong'] = 'Signatur kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrInformationTooLong'] = 'Das Feld \'Information\' kann höchstens %s Zeichen beinhalten!';
-$GLOBALS['DEF_TEXTS']['de']['MsgNewActivationRequired'] = 'Da Sie die E-Mail-Adressse geändert haben, wurde Ihr Benutzerprofil deaktiviert, und eine E-Mail mit dem Aktivierungs-Link wurde an die neue Adresse gesendet. Klicken Sie auf dem Aktivierungs-Link, um die Änderung der E-Mail-Adresse zu bestätigen.';
+$GLOBALS['DEF_TEXTS']['de']['MsgNewActivationRequired'] = 'Da Sie die E-Mail-Adressse geändert haben, wurde Ihr Benutzerprofil deaktiviert, eine E-Mail mit dem Aktivierungs-Link wurde an die neue Adresse gesendet. Klicken Sie auf dem Aktivierungs-Link, um die Änderung der E-Mail-Adresse zu bestätigen.';
+$GLOBALS['DEF_TEXTS']['de']['MsgNewApprovalActivationRequired'] = 'Da Sie Ihre E-Mail-Adresse geändert haben, wurde Ihr Profil deaktiviert und muss von der Forum-Administration genehmigt werden. Nach der Genehmigung erhalten Sie eine E-Mail mit einem Link zur Aktivierung Ihres Benutzerkontos.';
 $GLOBALS['DEF_TEXTS']['de']['ErrCurrentPasswordRequired'] = 'Sie müssen Ihr aktuelles Kennowrt eingeben, um die E-Mail-Adresse oder das Kennowrt ändern zu können!';
 $GLOBALS['DEF_TEXTS']['de']['RequestActivationLink'] = 'Den Aktivierungs-Link anfordern';
 $GLOBALS['DEF_TEXTS']['de']['MsgActivationLinkSent'] = 'An die angegebene Adresse wurde die E-Mail mit dem Aktivierungs-Link gesendet.';
@@ -857,10 +884,10 @@ $GLOBALS['DEF_TEXTS']['de']['MsgComplaintSent'] = 'Die Beschwerde wurde erfolgre
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountIsBlockedOnForum'] = 'Ihr Benutzerkonto wurde für Schreiben auf dem Forum \'%s\' blockiert! Sie können den Grund in Ihrem Profil einsehen im Moderator-Protokoll einsehen.';
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountIsBlockedUntilOnForum'] = 'Ihr Benutzerkonto wurde auf dem Forum \'%s\' bis zum \'%s\' blockiert! Sie können den Grund in Ihrem Profil einsehen im Moderator-Protokoll einsehen.';
 $GLOBALS['DEF_TEXTS']['de']['ErrAccountIsBlockedInTopic'] = 'Ihr Benutzerkonto wurde für Schreiben in diesem Thema blockiert!';
-$GLOBALS['DEF_TEXTS']['de']['ErrIPIsBlocked'] = 'Ihre IP-Adresse [%s] wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" mit einer anderen IP Adresse oder registrieren Sie sich.';
-$GLOBALS['DEF_TEXTS']['de']['ErrIPIsBlockedUntil'] = 'Ihre IP-Adresse [%s] wurde bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.';
-$GLOBALS['DEF_TEXTS']['de']['ErrFingerPrintIsBlocked'] = 'Ihr Browser wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" min einem anderen Browser oder registrieren Sie sich.';
-$GLOBALS['DEF_TEXTS']['de']['ErrFingerPrintIsBlockedUntil'] = 'Sie wurden bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.';
+$GLOBALS['DEF_TEXTS']['de']['ErrIPIsBlocked'] = 'Ihre IP-Adresse [%s] wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" mit einer anderen IP Adresse oder registrieren Sie sich.';
+$GLOBALS['DEF_TEXTS']['de']['ErrIPIsBlockedUntil'] = 'Ihre IP-Adresse [%s] wurde bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.';
+$GLOBALS['DEF_TEXTS']['de']['ErrFingerPrintIsBlocked'] = 'Ihr Browser wurde blockiert! Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" min einem anderen Browser oder registrieren Sie sich.';
+$GLOBALS['DEF_TEXTS']['de']['ErrFingerPrintIsBlockedUntil'] = 'Sie wurden bis zum %s blockiert! Zeit verblieben: %s. Wenn Sie meinen, dass es sich um eine Fehlblockierung handlet, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt" oder registrieren Sie sich.';
 $GLOBALS['DEF_TEXTS']['de']['ErrMessageLimitExceeded'] = 'Sie haben das Limit %s! Bitte versuchen Sie es später, Ihre Nachricht abzusenden.';
 $GLOBALS['DEF_TEXTS']['de']['MessageLimitMinuteText'] = '(%s Nachrichten pro Minute)';
 $GLOBALS['DEF_TEXTS']['de']['MessageLimitHourText'] = '(%s Nachrichten pro Stunde)';
@@ -899,6 +926,7 @@ $GLOBALS['DEF_TEXTS']['de']['HiddenForums'] = 'Versteckte Foren';
 $GLOBALS['DEF_TEXTS']['de']['Poll'] = 'Umfrage';
 $GLOBALS['DEF_TEXTS']['de']['PollResultsDelayed'] = 'Ergebnisse nach der Publizierung';
 $GLOBALS['DEF_TEXTS']['de']['DelayPublishing'] = 'Publizierung verlegen';
+$GLOBALS['DEF_TEXTS']['de']['MsgNoDelayedTopicAsGuest'] = 'Das Erstellen von Themen mit verlegter Veröffentlichung ist unter Gästen nicht möglich!';
 $GLOBALS['DEF_TEXTS']['de']['MsgPollCompleteConfirm'] = 'Sind Sie sicher, dass Sie die Umfrage abschliessen möchten?';
 $GLOBALS['DEF_TEXTS']['de']['MsgPollOpenConfirm'] = 'Sind Sie sicher, dass Sie die Umfrage wieder öffnen möchten?';
 $GLOBALS['DEF_TEXTS']['de']['NotPublished'] = 'Nicht publiziert';
@@ -919,7 +947,8 @@ $GLOBALS['DEF_TEXTS']['de']['PollOptions'] = 'Antwortoptionen für die Umfrage';
 $GLOBALS['DEF_TEXTS']['de']['ErrNoPollOptions'] = 'Die Antwortoptionen für die Umfrage sind nicht angegeben!';
 $GLOBALS['DEF_TEXTS']['de']['ErrPollOptionTooLong'] = 'Der Antwortoption kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrPollOptionExists'] = 'Die Antwortoption \'%s\' kommt in der Umfrage doppelt vor!';
-$GLOBALS['DEF_TEXTS']['de']['AccountConfirmationRequired'] = 'Bestätigung durch einen Administrator erforderlich';
+$GLOBALS['DEF_TEXTS']['de']['AccountConfirmationRequired'] = 'Genehmigung durch einen Administrator erforderlich';
+$GLOBALS['DEF_TEXTS']['de']['DelayedRegistrationMailing'] = 'Versenden der E-Mail mit der Aktivierung nach der Genehmigung';
 $GLOBALS['DEF_TEXTS']['de']['Approved'] = 'Bestätigt';
 $GLOBALS['DEF_TEXTS']['de']['MsgUserDeleteConfirm'] = 'Sind Sie sicher, dass Sie den Benutzer mit allen seinen Nachrichten löschen möchten?';
 $GLOBALS['DEF_TEXTS']['de']['MsgUserDeleted'] = 'Benutzer wurde erfolgreich gelöscht.';
@@ -1030,6 +1059,7 @@ $GLOBALS['DEF_TEXTS']['de']['EventsShort'] = 'Ereig.';
 $GLOBALS['DEF_TEXTS']['de']['Event'] = 'Ereignis';
 $GLOBALS['DEF_TEXTS']['de']['Approve'] = 'Bestätigen';
 $GLOBALS['DEF_TEXTS']['de']['MsgEventUserRegisteredForAdmin'] = 'Ein neuer Teilnehmer {author} hat sich registriert. Die Administratorbestätigung ist erforderlich. {approve}.';
+$GLOBALS['DEF_TEXTS']['de']['MsgEventUserEmailChangedForAdmin'] = 'Der Benutzer {author} hat seine E-Mail geändert. Die Administratorbestätigung ist erforderlich. {approve}.';
 $GLOBALS['DEF_TEXTS']['de']['MsgEventUserRegistered'] = 'Ein neuer Teilnehmer {author} hat sich registriert.';
 $GLOBALS['DEF_TEXTS']['de']['MsgEventMessageLiked'] = 'Der Teilnehmer {author} hat Ihre Nachricht {message} vom {post_date} im Thema {topic} auf dem Forum {forum} geliket.';
 $GLOBALS['DEF_TEXTS']['de']['MsgEventMessageDisliked'] = 'Der Teilnehmer {author} hat Ihre Nachricht {message} vom {post_date} im Thema {topic} auf dem Forum {forum} disliket.';
@@ -1455,10 +1485,10 @@ $GLOBALS['DEF_TEXTS']['de']['ErrSystemMessageСhange'] = 'System-Meldung kann ni
 $GLOBALS['DEF_TEXTS']['de']['NotSpecified'] = 'Nicht angegeben';
 $GLOBALS['DEF_TEXTS']['de']['RegistrationWarning'] = 'ACHTUNG! Eine E-Mail mit dem Aktivierungs-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
                 
-                Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt"';
+                Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"';
 $GLOBALS['DEF_TEXTS']['de']['PasswordRestoreWarning'] = 'ACHTUNG! Eine E-Mail mit dem Reset-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
                 
-                Wenn die E-Mail mit dem Reset-Link nicht kommt, bitte setzten Sie sich mit der Forumadministration in Verbindung über den Menüpunkt "Kontakt"';
+                Wenn die E-Mail mit dem Reset-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"';
 $GLOBALS['DEF_TEXTS']['de']['MsgTryLogin'] = 'Wenn Sie ein Benutzerkonto haben, melden Sie sich an, um Zugang zu erhalten!';
 $GLOBALS['DEF_TEXTS']['de']['MsgUserPrivateTopicLeft'] = 'Der Benutzer hat das private Thema verlassen';
 $GLOBALS['DEF_TEXTS']['de']['MsgUsersPrivateTopicInvited'] = 'Die Benutzer wurden in das private Thema eingeladen';

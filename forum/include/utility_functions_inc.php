@@ -1837,7 +1837,7 @@ function detect_bot($user_agent)
     // allow TelegramBot, Twitterbot, Slackbot, Mail.RU_Bot, Facebot Twitterbot, SEOkicks, Applebot, SiteCheckerBot to load links
 
     // "/.*(SemrushBot|DotBot|HubSpot Crawler|Barkrowler|LightspeedSystemsCrawler|Twitterbot|MegaIndex|startmebot|Adsbot|MJ12bot|Slackbot|TestBot|AhrefsBot|BLEXBot|Mail\\.RU_Bot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Facebot Twitterbot|Exabot|SEOkicks|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|Applebot|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|SiteCheckerBot|tracemyfile|trendictionbot|Cliqzbot).*/i"
-    if (preg_match("/.*(SemrushBot|DotBot|HubSpot Crawler|Barkrowler|LightspeedSystemsCrawler|MegaIndex|startmebot|Adsbot|MJ12bot|TestBot|AhrefsBot|BLEXBot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Exabot|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|tracemyfile|trendictionbot|Cliqzbot).*/i",
+    if (preg_match("/.*(SemrushBot|DotBot|DataForSeoBot|HubSpot Crawler|ClaudeBot|AmazonBot|Barkrowler|LightspeedSystemsCrawler|MegaIndex|yacybot|Translation-Search-Machine|startmebot|Adsbot|MJ12bot|TestBot|AhrefsBot|BLEXBot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Exabot|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|tracemyfile|trendictionbot|Cliqzbot).*/i",
         $user_agent, $matches)) {
         return $matches[1];
     }
@@ -1852,7 +1852,7 @@ function detect_bot($user_agent)
     // allow Favicons, SEOdiver to load links
     // "/.*Yandex(Antivirus|Search|Bot|Images|Video|Media|Blogs|Addurl|Favicons|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot|SEOdiver).*/i"
 
-    if (preg_match("/.*Yandex(Antivirus|Search|Bot|Images|Video|Media|Blogs|Addurl|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot).*/i", $user_agent)) {
+    if (preg_match("/.*Yandex(Antivirus|Search|Bot|RCA|Images|Video|Media|Blogs|Addurl|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot).*/i", $user_agent)) {
         return "Yandex Bot";
     }
     

@@ -4717,6 +4717,7 @@ abstract class ForumManager
         $settings["max_user_name_symbols"] = "";
         $settings["max_topic_name_symbols"] = "";
         $settings["approval_required"] = "";
+        $settings["delayed_reg_mailing"] = "";
         $settings["hide_online_status"] = "";
         $settings["hide_users_from_robots"] = "";
         $settings["rates_active"] = "";
@@ -4741,7 +4742,7 @@ abstract class ForumManager
         $prfx = $dbw->escape(System::getDBPrefix());
         
         if (!$dbw->execute_query("select
-                             block_tor_ips, moderator_log, default_sender, receiver, whois_server, approval_required, hide_online_status,
+                             block_tor_ips, moderator_log, default_sender, receiver, whois_server, approval_required, delayed_reg_mailing, hide_online_status,
                              dislikes_active, rates_active, dislikes_anonym, skin, max_poll_options,
                              max_message_length, max_pinned_topics, max_private_members,
                              max_att_size, max_att_size_audiovideo, max_messages_minute, max_messages_hour, max_messages_day, 
@@ -4767,6 +4768,7 @@ abstract class ForumManager
             $settings["receiver"] = $dbw->field_by_name("receiver");
             
             $settings["approval_required"] = $dbw->field_by_name("approval_required");
+            $settings["delayed_reg_mailing"] = $dbw->field_by_name("delayed_reg_mailing");
             $settings["hide_online_status"] = $dbw->field_by_name("hide_online_status");
             $settings["hide_users_from_robots"] = $dbw->field_by_name("hide_users_from_robots");
             
@@ -5101,6 +5103,7 @@ abstract class ForumManager
         }
         
         $approval_required = reqvar_empty("approval_required") ? "0" : "1";
+        $delayed_reg_mailing = reqvar_empty("delayed_reg_mailing") ? "0" : "1";
         $hide_online_status = reqvar_empty("hide_online_status") ? "0" : "1";
         $hide_users_from_robots = reqvar_empty("hide_users_from_robots") ? "0" : "1";
         
@@ -5126,6 +5129,7 @@ abstract class ForumManager
                              receiver = $receiver,
                              whois_server = $whois_server,
                              approval_required = $approval_required,
+                             delayed_reg_mailing = $delayed_reg_mailing,
                              hide_online_status = $hide_online_status,
                              hide_users_from_robots = $hide_users_from_robots,
                              max_poll_options = $max_poll_options,
@@ -5790,6 +5794,7 @@ abstract class ForumManager
         
         unset($_SESSION["last_url"]);
         $_SESSION["not_activated_notified"] = true;
+        $_SESSION["not_approved_notified"] = true;
 
         $this->update_user_status();
 
@@ -5853,15 +5858,17 @@ abstract class ForumManager
         
         $params = array();
         
-        $params["{user_login}"] = reqvar("user_login");
-        $params["{user_name}"] = reqvar("user_name");
-        $params["{user_email}"] = reqvar("user_email");
-        $params["{user_password}"] = reqvar("password");
-        
-        $params["{site_url}"] = get_host_address() . get_url_path();
-        $params["{activation_url}"] = get_host_address() . get_url_path() . "activate.php?code=" . xrawurlencode($activation_hash);
-        
-        $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), "email_registration.txt", $params, current_language());
+        if (empty($settings["approval_required"]) || empty($settings["delayed_reg_mailing"])) {
+            $params["{user_login}"] = reqvar("user_login");
+            $params["{user_name}"] = reqvar("user_name");
+            $params["{user_email}"] = reqvar("user_email");
+            $params["{user_password}"] = reqvar("password");
+            
+            $params["{site_url}"] = get_host_address() . get_url_path();
+            $params["{activation_url}"] = get_host_address() . get_url_path() . "activate.php?code=" . xrawurlencode($activation_hash);
+            
+            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), "email_registration.txt", $params, current_language());
+        }
         
         $already_notified = array();
         
@@ -5907,7 +5914,15 @@ abstract class ForumManager
             }
         }
         
-        MessageHandler::setInfo(text("MsgRegistrationSuccess"), null, false);
+        if (empty($settings["approval_required"])) {
+            MessageHandler::setInfo(text("MsgRegistrationSuccess"), null, false);
+        } else {
+            if (!empty($settings["delayed_reg_mailing"])) {
+                MessageHandler::setWarning(text("MsgRegistrationSuccessApprovalDelayed"));
+            } else {
+                MessageHandler::setWarning(text("MsgRegistrationSuccessApproval"));
+            }
+        }
         
         return true;
     } // register
@@ -5948,7 +5963,7 @@ abstract class ForumManager
         $dbw->free_result();
         
         $query = "update {$prfx}_user set
-              activated = 1, activation_hash = NULL, activation_expire = NULL,
+              activated = 1, email_changed = 0, activation_hash = NULL, activation_expire = NULL,
               last_visit_date = '$now'
               where id = $uid";
         
@@ -5977,6 +5992,7 @@ abstract class ForumManager
     function update_user_status()
     {
         global $READ_MARKER;
+        global $settings;
         
         if ($this->is_master_admin()) {
             if (ADMIN_PASSWORD != val_or_empty($_SESSION["password_hash"])) {
@@ -6576,15 +6592,6 @@ abstract class ForumManager
         
         // notify user
         
-        if (empty($_SESSION["activated"])) {
-            if (empty($_SESSION["not_activated_notified"])) {
-                $_SESSION["not_activated_notified"] = true;
-                MessageHandler::setWarning(text("ErrAccountNotActivated"));
-            }
-        } else {
-            $_SESSION["not_activated_notified"] = false;
-        }
-        
         if (empty($_SESSION["approved"])) {
             if (empty($_SESSION["not_approved_notified"])) {
                 $_SESSION["not_approved_notified"] = true;
@@ -6592,6 +6599,15 @@ abstract class ForumManager
             }
         } else {
             $_SESSION["not_approved_notified"] = false;
+        }
+        
+        if (empty($_SESSION["activated"])) {
+            if (empty($_SESSION["not_activated_notified"]) && (empty($settings["delayed_reg_mailing"]) || !empty($_SESSION["approved"]))) {
+                $_SESSION["not_activated_notified"] = true;
+                MessageHandler::setWarning(text("ErrAccountNotActivated"));
+            }
+        } else {
+            $_SESSION["not_activated_notified"] = false;
         }
         
         if (!empty($_SESSION["blocked"])) {
@@ -9778,12 +9794,12 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function save_profile()
     {
+        global $settings;
+
         if ($this->demo_mode()) {
             MessageHandler::setWarning(text("MsgDemoMode"));
             return true;
         }
-        
-        global $settings;
         
         $dbw = System::getDBWorker();
         if (!$dbw) {
@@ -9883,7 +9899,7 @@ abstract class ForumManager
         // check e-mail
         
         if (!$dbw->execute_query("select
-                             email_hash, password_hash
+                             approved, email_hash, password_hash, login, user_name
                              from {$prfx}_user
                              where id = $uid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -9891,13 +9907,19 @@ abstract class ForumManager
             return false;
         }
         
+        $approved = false;
         $password_hash = "";
         $old_email_hash = "";
         $activation_hash = "";
+        $user_login = "";
+        $user_name = "";
         
         if ($dbw->fetch_row()) {
+            $approved = $dbw->field_by_name("approved");
             $password_hash = $dbw->field_by_name("password_hash");
             $old_email_hash = $dbw->field_by_name("email_hash");
+            $user_login = $dbw->field_by_name("login");
+            $user_name = $dbw->field_by_name("user_name");
         }
         
         $dbw->free_result();
@@ -10006,10 +10028,15 @@ abstract class ForumManager
             $activation_hash_db = $dbw->quotes_or_null($activation_hash);
             $activation_expire = $dbw->format_datetime(time() + 3600);
             
-            $additional_updates .= "ACTIVATED = 0,
-                              ACTIVATION_HASH = $activation_hash_db,
-                              ACTIVATION_EXPIRE = '$activation_expire',
+            $additional_updates .= "activated = 0,
+                              email_changed = 1,
+                              activation_hash = $activation_hash_db,
+                              activation_expire = '$activation_expire',
                              ";
+                             
+            if (!empty($settings["delayed_reg_mailing"])) {
+                $additional_updates .= "approved = 0,";
+            }
         }
         
         // skin properties
@@ -10294,7 +10321,15 @@ abstract class ForumManager
         $email_change_message = "";
         $email_change_message2 = "";
         if ($old_email_hash != $this->hash_email(reqvar("user_email"))) {
-            $email_change_message = text("MsgNewActivationRequired");
+            $_SESSION["not_activated_notified"] = true;
+            $_SESSION["not_approved_notified"] = true;
+
+            if (empty($settings["delayed_reg_mailing"])) {
+                $email_change_message = text("MsgNewActivationRequired");
+            } else {
+                $email_change_message = text("MsgNewApprovalActivationRequired");
+            }
+            
             $email_change_message2 = text("RegistrationWarning");
         }
         
@@ -10344,15 +10379,71 @@ abstract class ForumManager
             
             $params = array();
             
-            $params["{user_login}"] = $_SESSION["user_login"];
-            $params["{user_name}"] = $_SESSION["user_name"];
-            $params["{user_email}"] = $_SESSION["user_email"];
-            $params["{user_email}"] = $_SESSION["user_email"];
-            
-            $params["{site_url}"] = get_host_address() . get_url_path();
-            $params["{activation_url}"] = get_host_address() . get_url_path() . "activate.php?code=" . xrawurlencode($activation_hash);
-            
-            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), "email_activation.txt", $params, current_language());
+            if (empty($settings["approval_required"]) || empty($settings["delayed_reg_mailing"])) {
+                $params["{user_login}"] = $_SESSION["user_login"];
+                $params["{user_name}"] = $_SESSION["user_name"];
+                $params["{user_email}"] = $_SESSION["user_email"];
+                $params["{user_email}"] = $_SESSION["user_email"];
+                
+                $params["{site_url}"] = get_host_address() . get_url_path();
+                $params["{activation_url}"] = get_host_address() . get_url_path() . "activate.php?code=" . xrawurlencode($activation_hash);
+                
+                $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), "email_activation.txt", $params, current_language());
+            } else {
+                $administrators = array();
+                
+                if (!$dbw->execute_query("select id, email, user_name, interface_language, last_host
+                                     from {$prfx}_user
+                                     where is_admin = 1 and login <> 'demoadmin'")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    return false;
+                }
+                
+                while ($dbw->fetch_row()) {
+                    $administrators[$dbw->field_by_name("id")] = array(
+                        "name" => $dbw->field_by_name("user_name"),
+                        "email" => $dbw->field_by_name("email"),
+                        "last_host" => $dbw->field_by_name("last_host"),
+                        "interface_language" => $dbw->field_by_name("interface_language")
+                    );
+                }
+                
+                $dbw->free_result();
+                
+                // there is no administrators, send to the master admin
+                
+                if (empty($administrators)) {
+                    $administrators[0] = array(
+                        "name" => text("Administrator", defined('DEFAULT_LANGUAGE') ? DEFAULT_LANGUAGE : "en"),
+                        "email" => $settings["receiver"],
+                        "last_host" => "",
+                        "interface_language" => defined('DEFAULT_LANGUAGE') ? DEFAULT_LANGUAGE : "en"
+                    );
+                }
+
+                $params = array();
+                $params["{id}"] = $uid;
+                $params["{user_login}"] = $user_login;
+                $params["{user_name}"] = $user_name;
+                $params["{user_email}"] = reqvar("user_email");
+                
+                foreach ($administrators as $aid => $uinfo) {
+                    $params["{administrator_name}"] = $uinfo["name"];
+                    
+                    $params["{site_url}"] = get_host_address($uinfo["last_host"]) . get_url_path();
+                    $params["{user_edit_url}"] = get_host_address($uinfo["last_host"]) . get_url_path() . "edit_user.php?uid=" . xrawurlencode($uid);
+                    
+                    $already_notified[$aid] = 1;
+                    
+                    if ($aid != 0) {
+                        $this->log_user_event($aid, $uid, reqvar("user_name"), "MsgEventUserEmailChangedForAdmin", $params);
+                    }
+                    
+                    if (!empty($uinfo["email"])) {
+                        $this->email_manager->send_email($settings["default_sender"], $uinfo["email"], "email_change_for_admin.txt", $params, $uinfo["interface_language"]);
+                    }
+                }
+            }
         }
         
         return true;
@@ -10365,6 +10456,11 @@ abstract class ForumManager
         
         if (empty($_SESSION["user_id"])) {
             return true;
+        }
+        
+        if (empty($_SESSION["approved"]) && !empty($settings["delayed_reg_mailing"])) {
+            MessageHandler::setError(text("ErrActivationAccountNotApproved"));
+            return false;
         }
         
         $dbw = System::getDBWorker();
@@ -10623,7 +10719,7 @@ abstract class ForumManager
         }
         
         // old approval state and name
-        if (!$dbw->execute_query("select user_name, approved, is_admin, last_host, interface_language from {$prfx}_user where id = $uid")) {
+        if (!$dbw->execute_query("select user_name, approved, email_changed, is_admin, last_host, interface_language from {$prfx}_user where id = $uid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -10633,12 +10729,14 @@ abstract class ForumManager
         $old_approved = "0";
         $old_user_name = "0";
         $old_is_admin = "0";
+        $email_changed = 0;
         while ($dbw->fetch_row()) {
             $last_host = $dbw->field_by_name("last_host");
             $old_approved = $dbw->field_by_name("approved");
             $lng = $dbw->field_by_name("interface_language");
             $old_user_name = $dbw->field_by_name("user_name");
             $old_is_admin = $dbw->field_by_name("is_admin");
+            $email_changed = $dbw->field_by_name("email_changed");
         }
         
         $dbw->free_result();
@@ -10696,6 +10794,18 @@ abstract class ForumManager
             return false;
         }
         
+        $activation_sql = "";
+        if ($approved == 1 && $old_approved == 0 && reqvar_empty("activated")) {
+            $activation_hash = System::generateHash(reqvar("user_login") . rand(100000, 900000), SALT_KEY);
+            $activation_hash_db = $dbw->quotes_or_null($activation_hash);
+            $activation_expire = $dbw->format_datetime(time() + 3600);
+            
+            $activation_sql = "
+            activation_hash = $activation_hash_db, 
+            activation_expire = '$activation_expire',
+            ";
+        }
+        
         $query = "update {$prfx}_user set
               $additional_updates
               user_name = $user_name,
@@ -10709,6 +10819,7 @@ abstract class ForumManager
               signature = $signature,
               info = $info,
               activated = $activated,
+              $activation_sql
               approved = $approved
               where id = $uid";
         
@@ -10804,10 +10915,22 @@ abstract class ForumManager
         
         $params = array();
         $params["{user_name}"] = $old_user_name;
+        $params["{user_login}"] = reqvar("user_login");
+        $params["{user_email}"] = reqvar("user_email");
         $params["{site_url}"] = get_host_address($last_host) . get_url_path();
         
         if ($approved == 1 && $old_approved == 0) {
-            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), "email_user_approved.txt", $params, $lng);
+            $email_template = "email_user_approved.txt";
+            if (reqvar_empty("activated")) {
+                $email_template = "email_user_approved_delayed.txt";
+                if ($email_changed) {
+                    $email_template = "email_activation.txt";
+                }
+
+                $params["{activation_url}"] = get_host_address() . get_url_path() . "activate.php?code=" . xrawurlencode($activation_hash);
+            }
+            
+            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
         }
         
         if ($old_user_name != reqvar("user_name") && $uid != $this->get_user_id()) {
@@ -12848,7 +12971,7 @@ abstract class ForumManager
                                         not exists (
                                             select 1 from
                                             {$prfx}_user usr
-                                            left join {$prfx}_ignored_forums on (usr.id = {$prfx}_ignored_forums.user_id)
+                                            inner join {$prfx}_ignored_forums on (usr.id = {$prfx}_ignored_forums.user_id)
                                             where usr.id = {$prfx}_user.id and (forum_id = {$prfx}_forum.id or forum_id is NULL)
                                         )
                                       ")
@@ -21468,6 +21591,12 @@ abstract class ForumManager
             }
             
             $post_data["author_name"] = reqvar("author");
+
+            $_SESSION["last_posted_user"] = reqvar("author");
+            
+            if (empty($forced_guest_posting)) {
+                $_SESSION["user_name"] = reqvar("author");
+            }
         }
         
         if (!$self_edited && empty($post_data["topic_private"]) && empty($topic_publish_delay)) {
@@ -21963,7 +22092,7 @@ abstract class ForumManager
                                         not exists (
                                             select 1 from
                                             {$prfx}_user usr
-                                            left join {$prfx}_ignored_forums on (usr.id = {$prfx}_ignored_forums.user_id)
+                                            inner join {$prfx}_ignored_forums on (usr.id = {$prfx}_ignored_forums.user_id)
                                             where usr.id = {$prfx}_user.id and (forum_id = {$prfx}_forum.id or forum_id is NULL)
                                         )
                                       ")
@@ -22812,7 +22941,12 @@ abstract class ForumManager
             !empty($_SESSION["guest_posting_mode"]) && reqvar("author") != $this->get_status_user_name()
         ) {
            $forced_guest_posting = true;
-        }        
+        }    
+
+        if (!reqvar_empty("publish_delay") && $forced_guest_posting) {
+            MessageHandler::setError(text("MsgNoDelayedTopicAsGuest"));
+            return false;
+        }
         
         if ($this->is_master_admin()) {
             $_REQUEST["author"] = "admin";
@@ -23886,7 +24020,7 @@ abstract class ForumManager
                                         not exists (
                                             select 1 from
                                             {$prfx}_user usr
-                                            left join {$prfx}_ignored_forums on (usr.id = {$prfx}_ignored_forums.user_id)
+                                            inner join {$prfx}_ignored_forums on (usr.id = {$prfx}_ignored_forums.user_id)
                                             where usr.id = {$prfx}_user.id and (forum_id = {$prfx}_forum.id or forum_id is NULL)
                                         )
                                       ")
@@ -23918,14 +24052,14 @@ abstract class ForumManager
         }
         
         $dbw->free_result();
-        
+
         if (!$this->get_my_ignore_status_for_users($dbw, $word_subscribers)) {
             return false;
         }
         
         // personal appeals
         
-        // take possible new pasted citations of the top level only into concideration
+        // take possible new pasted citations of the top level only into consideration
         // $tmp_html is stripped from deep citation
         
         // get topic info
@@ -25108,13 +25242,13 @@ abstract class ForumManager
                 $block_reason = text("Reason") . ":\n\n[html]" . $block_reason . "[/html]";
             }
             
-            if (!$activated) {
-                MessageHandler::setError(text("ErrAccountNotActivated"));
+            if (!$approved) {
+                MessageHandler::setError(text("ErrAccountNotApproved"));
                 return true;
             }
             
-            if (!$approved) {
-                MessageHandler::setError(text("ErrAccountNotApproved"));
+            if (!$activated) {
+                MessageHandler::setError(text("ErrAccountNotActivated"));
                 return true;
             }
             

@@ -8,7 +8,7 @@
 
 На форумі відвернена DOS атака з IP адреси:
 
-{iIp} - https://whatismyipaddress.com/ip/{ip}
+{iIp} - {ip_link}
 
 З даного IP адреси було здійснено {hits} запитів ({atype}) в {check_period} хвилин.
 
