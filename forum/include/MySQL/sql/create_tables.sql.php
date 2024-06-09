@@ -439,7 +439,7 @@ create unique index v1_forum_group_name_unq on v1_forum_group
 $sql_cmds[] = '
 create table v1_forum_hits
 (
-   forum_id             INT,
+   forum_id             int,
    topic_id             int,
    dt                   datetime not null,
    user_id              int,
@@ -453,7 +453,8 @@ create table v1_forum_hits
    os                   varchar(250),
    bot                  varchar(250),
    processed            tinyint not null default 0,
-   read_marker          varchar(255)
+   read_marker          varchar(255),
+   statistics_request   tinyint not null default 0
 )
 ';
 
@@ -2016,6 +2017,7 @@ create table v1_user
    custom_css           text,
    custom_smiles        text,
    ref                  int,
+   email_changed        tinyint not null default 0,
    primary key (id)
 )
 ';

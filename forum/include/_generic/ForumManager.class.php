@@ -7646,6 +7646,7 @@ abstract class ForumManager
             return false;
         }
         
+        $limit = MAX_REQUESTS_PER_MINUTE;
         $hits = 0;
         
         while ($dbw->fetch_row()) {
@@ -7654,10 +7655,30 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if ($hits <= MAX_REQUESTS_PER_MINUTE) {
-            return true;
+        $stat_hit_limit = 0;
+        $stat_hits = 0;
+        
+        if (defined("STATISTICS_REQUEST") && defined("MAX_STAT_REQUESTS_PER_MINUTE") && MAX_STAT_REQUESTS_PER_MINUTE > 0) {
+            $stat_hit_limit = MAX_STAT_REQUESTS_PER_MINUTE;
+            
+            if (!$dbw->execute_query("select 1
+                                 from {$prfx}_forum_hits
+                                 where dt >= '$now' and ip = '$ip' and statistics_request = 1")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            while ($dbw->fetch_row()) {
+                $stat_hits++;
+            }
+            
+            $dbw->free_result();
         }
         
+        if ($hits <= $limit && $stat_hits <= $stat_hit_limit) {
+            return true;
+        }
+
         $wait_time_after_attack = 30;
         if (defined("WAIT_TIME_AFTER_ATTACK") && WAIT_TIME_AFTER_ATTACK > 0) {
             $wait_time_after_attack = WAIT_TIME_AFTER_ATTACK;
@@ -7747,6 +7768,8 @@ abstract class ForumManager
             $this->email_manager->send_email($settings["default_sender"], $uinfo["email"], "email_attack_detected.txt", $params, $uinfo["interface_language"]);
         }
         
+        exit("<h3>Too many requests! Try again later!</h3>");
+
         return true;
     } // check_ip
     
@@ -27743,7 +27766,6 @@ abstract class ForumManager
         $ip = $dbw->quotes_or_null(System::getIPAddress());
         
         $uri = val_or_empty($_SERVER["REQUEST_URI"]);
-        $uri = str_replace(get_url_path(), "", substr($uri, 0, 1800));
         $uri = $dbw->quotes_or_null($uri);
         
         $now = $dbw->format_datetime(time());
@@ -27766,9 +27788,11 @@ abstract class ForumManager
         $os = $dbw->quotes_or_null($os);
         $bot_name = $dbw->quotes_or_null($bot);
         
-        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, uri, ip, read_marker, browser, os, bot)
+        $statistics_request = defined("STATISTICS_REQUEST") ? 1 : 0;
+        
+        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, uri, ip, read_marker, browser, os, bot, statistics_request)
               values
-              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $uri, $ip, '$rm', $browser, $os, $bot_name)";
+              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $uri, $ip, '$rm', $browser, $os, $bot_name, $statistics_request)";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;

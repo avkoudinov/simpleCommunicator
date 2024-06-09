@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     26.05.2024 10:49:31                          */
+/* Created on:     09.06.2024 23:30:51                          */
 /*==============================================================*/
 
 
@@ -491,7 +491,7 @@ go
 /* Table: v1_forum_hits                                         */
 /*==============================================================*/
 create table v1_forum_hits (
-   forum_id             INT                  null,
+   forum_id             int                  null,
    topic_id             int                  null,
    dt                   datetime             not null,
    user_id              int                  null,
@@ -505,7 +505,8 @@ create table v1_forum_hits (
    os                   nvarchar(250)        null,
    bot                  nvarchar(250)        null,
    processed            tinyint              not null default 0,
-   read_marker          varchar(255)         null
+   read_marker          varchar(255)         null,
+   statistics_request   tinyint              not null default 0
 )
 go
 
@@ -2266,6 +2267,7 @@ create table v1_user (
    custom_css           nvarchar(max)        null,
    custom_smiles        nvarchar(max)        null,
    ref                  int                  null,
+   email_changed        tinyint              not null default 0,
    constraint v1_user_pk primary key nonclustered (id)
 )
 go
