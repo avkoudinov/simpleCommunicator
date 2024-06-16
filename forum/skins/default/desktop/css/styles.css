@@ -874,11 +874,29 @@ td.author_col
   background-color: #dddddd;
 }
 
+td.author_col .smart_break
+{
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 182px;
+  width: 182px;
+  text-overflow: ellipsis;
+}
+
 th.forum_col,
 td.forum_col
 {
   width: 200px;
   min-width: 100px;
+}
+
+td.forum_col .smart_break
+{
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 200px;
+  width: 200px;
+  text-overflow: ellipsis;
 }
 
 th.members_col,

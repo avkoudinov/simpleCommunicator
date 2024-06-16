@@ -650,6 +650,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
 
           </td>
           <td class="forum_col">
+          <div class="smart_break">
             <?php
             $not_preferred = "";
             if (!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$tinfo["forum_id"]]) && $tinfo["forum_id"] != "private") {
@@ -657,6 +658,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
             }
             ?>
             <a href="forum.php?fid=<?php echo_html($tinfo["forum_id"]); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($tinfo["forum_name"]); ?></a>
+          </div>
           </td>
           <td class="author_col">
             <div class="smart_break">

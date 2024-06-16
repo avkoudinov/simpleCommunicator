@@ -607,11 +607,13 @@ if(!empty($_SESSION["topic_moderator"][$tid])) $deleted .= " moderated_topic_row
 
 </td>
 <td class="forum_col">
+<div class="smart_break">
 <?php
 $not_preferred = "";
 if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["preferred_forums"][$tinfo["forum_id"]]) && $tinfo["forum_id"] != "private") $not_preferred = "not_preferred";
 ?>
 <a href="forum.php?fid=<?php echo_html($tinfo["forum_id"]); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($tinfo["forum_name"]); ?></a>
+</div>
 </td>
 <td class="author_col">
 <div class="smart_break">
