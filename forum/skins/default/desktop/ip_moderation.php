@@ -1544,6 +1544,7 @@ echo($topic);
 </div>
 </td>
 <td class="forum_col">
+<div class="smart_break">
 <?php
 $forum = escape_html($evinfo["forum_name"]);
 if(!empty($forum) && !empty($evinfo["forum_id"]))
@@ -1554,6 +1555,7 @@ if(!empty($forum) && !empty($evinfo["forum_id"]))
 }
 echo($forum);
 ?>
+</div>
 </td>
 <td class="date_col"><?php echo_html($evinfo["event_time"]); ?></td>
 <td class="copy_event_ref">

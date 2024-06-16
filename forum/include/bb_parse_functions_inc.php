@@ -1171,6 +1171,8 @@ function bb_process_youtube($bbcode, $action, $name, $default, $params, $content
         $code = $matches[1];
     } elseif (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $content, $matches)) {
         $code = $matches[2];
+    } elseif (preg_match("~https?://([^/]*youtube.com|youtu.be)/live/([^&?]+).*~", $content, $matches)) {
+        $code = $matches[2];
     } elseif (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $content, $matches)) {
         $code = $matches[1];
         $appendix = val_or_empty($matches[3]);
@@ -1239,6 +1241,16 @@ function check_youtube_url($url, &$content, $message_mode)
     }
 
     if (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: YouTube]\n\n";
+            return true;
+        }
+        
+        $content = gen_youtube_html($matches[2], $apikey, "", $url);
+        return true;
+    }
+
+    if (preg_match("~https?://([^/]*youtube.com|youtu.be)/live/([^&?]+).*~", $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
