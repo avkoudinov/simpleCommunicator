@@ -119,6 +119,7 @@ define('MAX_POSTS_PER_MINUTE', 10);
 define('WAIT_TIME_AFTER_ATTACK', 50); // minutes
 
 define('JOB_PER_CRON', 0);
+define('REFRESH_TOR_IPS', 1);
 
 define('BULK_DELETE_COUNT', 5);
 

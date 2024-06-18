@@ -13012,6 +13012,10 @@ abstract class ForumManager
             // The post in the delayed topic cannot be a comment
             // No handling necessary
             
+            if (!$dbw->field_by_name("words_to_notify")) {
+                continue;
+            }
+
             $word_subscribers[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
@@ -13019,7 +13023,7 @@ abstract class ForumManager
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist"),
-                "words" => preg_split("/[\r\n]+/", $dbw->field_by_name("words_to_notify"), -1, PREG_SPLIT_NO_EMPTY)
+                "words" => preg_split("/[\r\n, ]+/", $dbw->field_by_name("words_to_notify") ?? "", -1, PREG_SPLIT_NO_EMPTY)
             );
         }
         
@@ -22135,6 +22139,10 @@ abstract class ForumManager
                 continue;
             }
             
+            if (!$dbw->field_by_name("words_to_notify")) {
+                continue;
+            }
+
             $word_subscribers[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
@@ -22142,7 +22150,7 @@ abstract class ForumManager
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist"),
-                "words" => preg_split("/[\r\n]+/", $dbw->field_by_name("words_to_notify"), -1, PREG_SPLIT_NO_EMPTY)
+                "words" => preg_split("/[\r\n, ]+/", $dbw->field_by_name("words_to_notify") ?? "", -1, PREG_SPLIT_NO_EMPTY)
             );
         }
         
@@ -24063,6 +24071,10 @@ abstract class ForumManager
                 continue;
             }
             
+            if (!$dbw->field_by_name("words_to_notify")) {
+                continue;
+            }
+            
             $word_subscribers[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
@@ -24070,7 +24082,7 @@ abstract class ForumManager
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist"),
-                "words" => preg_split("/[\r\n]+/", $dbw->field_by_name("words_to_notify"), -1, PREG_SPLIT_NO_EMPTY)
+                "words" => preg_split("/[\r\n, ]+/", $dbw->field_by_name("words_to_notify") ?? "", -1, PREG_SPLIT_NO_EMPTY)
             );
         }
         
@@ -25997,7 +26009,6 @@ abstract class ForumManager
 
             $where = "where topic_id = $tid and {$prfx}_post.id < $pid and {$prfx}_post.pinned <> 1
                            $ignore_post_where_appendix
-                           $ignore_comment_where_appendix
                            $deleted_where_appendix";
 
             if (!$dbw->execute_query($this->get_query_previous_valid_topic_post($prfx, $where))) {
@@ -34426,19 +34437,27 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        try {
-            $url = 'https://check.torproject.org/torbulkexitlist';
-            $client = new Zend_Http_Client($url, array(
-                'maxredirects' => 5,
-                'timeout' => 50
-            ));
-            
-            $request = $client->request('GET');
-            $response = $request->getBody();
-            
-            $ips = preg_split("/[\n\r]+/", $response, -1, PREG_SPLIT_NO_EMPTY);
-        } catch (Exception $ex) {
-            return false;
+        $ips = [];
+        
+        if (defined('REFRESH_TOR_IPS') && REFRESH_TOR_IPS != 0) {
+            try {
+                $url = 'https://check.torproject.org/torbulkexitlist';
+                $client = new Zend_Http_Client($url, array(
+                    'maxredirects' => 5,
+                    'timeout' => 50
+                ));
+                
+                $request = $client->request('GET');
+                $response = $request->getBody();
+                
+                $ips = preg_split("/[\n\r]+/", $response, -1, PREG_SPLIT_NO_EMPTY);
+            } catch (Exception $ex) {
+                return false;
+            }
+        } else {
+            if (file_exists(APPLICATION_ROOT . "user_data/config/torbulkexitlist")) {
+                $ips = preg_split("/[\n\r]+/", trim(file_get_contents(APPLICATION_ROOT . "user_data/config/torbulkexitlist")), -1, PREG_SPLIT_NO_EMPTY);
+            }
         }
         
         if (!$dbw->start_transaction()) {
