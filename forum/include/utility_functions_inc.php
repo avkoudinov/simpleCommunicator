@@ -1832,60 +1832,126 @@ function get_allow_moderate_period()
 //------------------------------------------------------
 function detect_bot($user_agent)
 {
-    if (empty($user_agent)) $user_agent = "";
+    if (empty($user_agent)) {
+        return null;
+    }     
+    
+    $bot_data = [ "name" => "", "allowed" => 0 ];
     
     // allow TelegramBot, Twitterbot, Slackbot, Mail.RU_Bot, Facebot Twitterbot, SEOkicks, Applebot, SiteCheckerBot to load links
-
-    // "/.*(SemrushBot|DotBot|HubSpot Crawler|Barkrowler|LightspeedSystemsCrawler|Twitterbot|MegaIndex|startmebot|Adsbot|MJ12bot|Slackbot|TestBot|AhrefsBot|BLEXBot|Mail\\.RU_Bot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Facebot Twitterbot|Exabot|SEOkicks|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|Applebot|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|SiteCheckerBot|tracemyfile|trendictionbot|Cliqzbot).*/i"
-    if (preg_match("/.*(SemrushBot|DotBot|DataForSeoBot|HubSpot Crawler|ClaudeBot|AmazonBot|Barkrowler|LightspeedSystemsCrawler|MegaIndex|yacybot|Translation-Search-Machine|startmebot|Adsbot|MJ12bot|TestBot|AhrefsBot|BLEXBot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Exabot|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|tracemyfile|trendictionbot|Cliqzbot).*/i",
+    if (preg_match("/.*(TelegramBot|vkShare|Twitterbot|Slackbot|Mail.RU_Bot|Facebot Twitterbot|SEOkicks|Applebot|SiteCheckerBot).*/i",
         $user_agent, $matches)) {
-        return $matches[1];
+        $bot_data["name"] = $matches[1];
+        $bot_data["allowed"] = 1;
+        
+        return $bot_data;
+    }
+
+    if (preg_match("/.*(AmazonBot).*/i", $user_agent)) {
+        $bot_data["name"] = "Amazon Bot";
+
+        return $bot_data;
+    }
+
+    // allow WhatsApp to load links
+    if (preg_match("/.*(WhatsApp).*/i", $user_agent)) {
+        $bot_data["name"] = "WhatsApp Bot";
+        $bot_data["allowed"] = 1;
+
+        return $bot_data;
+    }
+
+    if (preg_match("/.*(SemrushBot|ImagesiftBot|Dataprovider\.com|intelx\.io_bot|VKRobotRB|AwarioBot|keys-so-bot|Bytespider|SeekportBot|GPTBot|DotBot|DataForSeoBot|HubSpot Crawler|ClaudeBot|Barkrowler|LightspeedSystemsCrawler|MegaIndex|yacybot|Translation-Search-Machine|startmebot|Adsbot|MJ12bot|TestBot|AhrefsBot|BLEXBot|James BOT|GumGum-Bot|linkdexbot|WBSearchBot|Claritybot|msnbot-media|Domain Re-Animator Bot|SiteAnalyzerbot|NetpeakCheckerBot|BananaBot|BLEXBot|Linguee Bot|openstat\\.ru|CCBot|SMTBot|Exabot|BDCbot|Netpeak|statdom.ru\\/Bot|SeznamBot|Wotbox|PiplBot|DnyzBot|LinkedInBot|SafeDNSBot|DeuSu|calculon spider|HybridBot|LinkpadBot|MauiBot|sukibot|techleadzbot|yacybot|tracemyfile|trendictionbot|Cliqzbot).*/i",
+        $user_agent, $matches)) {
+        $bot_data["name"] = $matches[1];
+        
+        return $bot_data;
     }
     
-    // allow Google Favicon to load links
-    // "/.*(Googlebot|Mediapartners-Google|Google Favicon).*/i"
+    if (preg_match("/.*(FriendlyCrawler\/Nutch|Friendly_Crawler\/Nutch).*/i", $user_agent)) {
+        $bot_data["name"] = "FriendlyCrawler Nutch";
 
-    if (preg_match("/.*(Googlebot|Mediapartners-Google).*/i", $user_agent)) {
-        return "Google Bot";
+        return $bot_data;
+    }
+
+    // allow Google Favicon to load links
+    if (preg_match("/.*(Google Favicon).*/i", $user_agent)) {
+        $bot_data["name"] = "Google Bot";
+        $bot_data["allowed"] = 1;
+
+        return $bot_data;
+    }
+
+    if (preg_match("/.*(Googlebot|Mediapartners-Google|Google-PageRenderer).*/i", $user_agent)) {
+        $bot_data["name"] = "Google Bot";
+
+        return $bot_data;
     }
     
     // allow Favicons, SEOdiver to load links
-    // "/.*Yandex(Antivirus|Search|Bot|Images|Video|Media|Blogs|Addurl|Favicons|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot|SEOdiver).*/i"
+    if (preg_match("/.*Yandex(Favicons|SEOdiver).*/i", $user_agent)) {
+        $bot_data["name"] = "Yandex Bot";
+        $bot_data["allowed"] = 1;
 
-    if (preg_match("/.*Yandex(Antivirus|Search|Bot|RCA|Images|Video|Media|Blogs|Addurl|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot).*/i", $user_agent)) {
-        return "Yandex Bot";
+        return $bot_data;
+    }
+
+    if (preg_match("/.*Yandex(Antivirus|Search|Userproxy|Bot|RCA|Images|Video|Media|Blogs|Addurl|Direct|Metrika|Catalog|News|ImageResizer|MobileBot|AccessibilityBot).*/i", $user_agent)) {
+        $bot_data["name"] = "Yandex Bot";
+
+        return $bot_data;
     }
     
     // allow BingPreview to load links
-    // "/.*(bingbot|BingPreview).*/i"
+    if (preg_match("/.*(BingPreview).*/i", $user_agent)) {
+        $bot_data["name"] = "Bing Bot";
+        $bot_data["allowed"] = 1;
+
+        return $bot_data;
+    }
 
     if (preg_match("/.*(bingbot).*/i", $user_agent)) {
-        return "Bing Bot";
+        $bot_data["name"] = "Bing Bot";
+
+        return $bot_data;
     }
     
     if (preg_match("/.*statdom.*/i", $user_agent)) {
-        return "statdom.ru bot";
+        $bot_data["name"] = "statdom.ru Bot";
+
+        return $bot_data;
     }
     
     if (preg_match("/.*openstat.*/i", $user_agent)) {
-        return "openstat.ru bot";
+        $bot_data["name"] = "openstat.ru Bot";
+
+        return $bot_data;
     }
     
     if (preg_match("/.*serpstatbot.*/i", $user_agent)) {
-        return "serpstatbot bot";
+        $bot_data["name"] = "serpstatbot Bot";
+
+        return $bot_data;
     }
     
+    // allow it to load links facebookexternalhit
     if (preg_match("/.*(facebookexternalhit).*/i", $user_agent)) {
-        // allow it to load links
-        //return "Facebook Bot";
+        $bot_data["name"] = "Facebook Bot";
+        $bot_data["allowed"] = 1;
+
+        return $bot_data;
     }
     
     if (preg_match("/.*(petalbot).*/i", $user_agent)) {
-        return "PetalBot";
+        $bot_data["name"] = "PetalBot Bot";
+
+        return $bot_data;
     }
     
     if (preg_match("/.*(archive.org_bot|ia_archiver|Wayback Machine Live Record).*/i", $user_agent)) {
-        return "Archive.org Bot";
+        $bot_data["name"] = "Archive.org Bot";
+
+        return $bot_data;
     }
     
     $ip = val_or_empty($_SERVER["REMOTE_ADDR"]);
@@ -1899,14 +1965,20 @@ function detect_bot($user_agent)
         "207.241.226.247",
         "207.241.225.236"
     ))) {
-        return "Archive.org Bot";
+        $bot_data["name"] = "Archive.org Bot";
+
+        return $bot_data;
     }
     
-    return "";
+    return null;
 } // detect_bot
 //------------------------------------------------------
 function detect_browser($user_agent)
 {
+    if (empty($user_agent)) {
+        return null;
+    }     
+   
     $browser_data = get_browser($user_agent, true);
     if (empty($browser_data)) {
         return null;
@@ -1920,11 +1992,19 @@ function detect_browser($user_agent)
         return null;
     }
     
+    if ($browser_data["browser"] == "Safari" && preg_match("/.*(iPhone).*/i", $user_agent)) {
+        $browser_data["browser"] = "Safari Mobile";
+    }
+    
     $os = $browser_data["platform_description"];
     if ($os == "iPod, iPhone & iPad") {
         $os = "iOS";
     }
     
+    if ($os == "Windows" && preg_match("/.*(Windows NT 11).*/i", $user_agent)) {
+        $os = "Windows 11";
+    }
+
     if (strpos($os, "Windows Phone OS") !== false) {
         $os = "Windows Phone OS";
     }

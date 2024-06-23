@@ -11,7 +11,7 @@ $response = array();
 $response['success'] = false;
 $response['protection_hash'] = val_or_empty($_SESSION["hash"]);
 //-----------------------------------------------------------------------
-if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
     exit;
 }
 //-----------------------------------------------------------------------

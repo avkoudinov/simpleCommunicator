@@ -936,6 +936,104 @@ abstract class ForumManager
     } // gen_user_daily_activity
     
     //-----------------------------------------------------------------
+    function gen_bot_daily_activity($bot)
+    {
+        unset($_SESSION["bot_hits"]);
+        
+        if (empty($bot)) {
+            return false;
+        }
+        
+        $rodbw = System::getRODBWorker();
+        if (!$rodbw) {
+            return false;
+        }
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+        
+        $bot = $rodbw->escape($bot);
+        
+        $start_date = xstrtotime("-6 months");
+        switch (reqvar("period")) {
+            case "last_month":
+                $_SESSION["user_activity_period"] = reqvar("period");
+                $start_date = xstrtotime("-1 month");
+                break;
+            case "last_half_year":
+                $_SESSION["user_activity_period"] = reqvar("period");
+                $start_date = xstrtotime("-6 months");
+                break;
+            case "last_year":
+                $_SESSION["user_activity_period"] = reqvar("period");
+                $start_date = xstrtotime("-1 year");
+                break;
+            case "whole_period":
+                $_SESSION["user_activity_period"] = reqvar("period");
+                $start_date = 0;
+                break;
+            default:
+                $_SESSION["user_activity_period"] = "last_half_year";
+                $start_date = xstrtotime("-6 months");
+                break;
+        }
+        
+        $where = "where bot = '$bot'";
+        
+        $now = $rodbw->format_datetime(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
+        $where .= " and dt < '$now'";
+        
+        if (!empty($start_date)) {
+            $start_date = $rodbw->format_datetime($start_date);
+            $where .= " and dt >= '$start_date'";
+        }
+        
+        if (!$rodbw->execute_query("
+                            select dt, sum(bot_hits_count) bot_hits_count
+                            from {$prfx}_daily_statistics
+                            $where
+                            group by dt
+                            order by dt
+                           ")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        while ($rodbw->fetch_row()) {
+            $date = xstrtotime($rodbw->field_by_name("dt"));
+            
+            $_SESSION["bot_hits"][$date] = $rodbw->field_by_name("bot_hits_count");
+        }
+        
+        $rodbw->free_result();
+        
+        if (!empty($_SESSION["user_hits"])) {
+            $min = min(array_keys($_SESSION["user_hits"]));
+            $max = max(array_keys($_SESSION["user_hits"]));
+            for ($t = $min; $t < $max; $t = $t + 24 * 3600) {
+                if (empty($_SESSION["user_hits"][$t])) {
+                    $_SESSION["user_hits"][$t] = 0;
+                }
+            }
+            
+            ksort($_SESSION["user_hits"]);
+        }
+        
+        if (!empty($_SESSION["user_posts"])) {
+            $min = min(array_keys($_SESSION["user_posts"]));
+            $max = max(array_keys($_SESSION["user_posts"]));
+            for ($t = $min; $t < $max; $t = $t + 24 * 3600) {
+                if (empty($_SESSION["user_posts"][$t])) {
+                    $_SESSION["user_posts"][$t] = 0;
+                }
+            }
+            
+            ksort($_SESSION["user_posts"]);
+        }
+        
+        return true;
+    } // gen_bot_daily_activity
+
+    //-----------------------------------------------------------------
     function gen_user_weekday_activity($uid)
     {
         unset($_SESSION["user_posts"]);
@@ -1075,6 +1173,7 @@ abstract class ForumManager
         $_SESSION["period"]["total_topics"] = 0;
         $_SESSION["period"]["new_users"] = 0;
         $_SESSION["period"]["total_hits"] = 0;
+        $_SESSION["period"]["total_bot_hits"] = 0;
         $_SESSION["period"]["posts_per_day"] = 0;
         $_SESSION["period"]["online_users"] = 0;
         
@@ -1085,6 +1184,7 @@ abstract class ForumManager
         $_SESSION["today"]["total_topics"] = 0;
         $_SESSION["today"]["new_users"] = 0;
         $_SESSION["today"]["total_hits"] = 0;
+        $_SESSION["today"]["total_bot_hits"] = 0;
         $_SESSION["today"]["posts_per_day"] = 0;
         $_SESSION["today"]["online_users"] = 0;
         
@@ -1095,6 +1195,7 @@ abstract class ForumManager
         $_SESSION["yesterday"]["total_topics"] = 0;
         $_SESSION["yesterday"]["new_users"] = 0;
         $_SESSION["yesterday"]["total_hits"] = 0;
+        $_SESSION["yesterday"]["total_bot_hits"] = 0;
         $_SESSION["yesterday"]["posts_per_day"] = 0;
         $_SESSION["yesterday"]["online_users"] = 0;
         
@@ -1118,6 +1219,7 @@ abstract class ForumManager
     {
         unset($_SESSION["forum_posts"]);
         unset($_SESSION["forum_hits"]);
+        unset($_SESSION["forum_bot_hits"]);
         
         $rodbw = System::getRODBWorker();
         if (!$rodbw) {
@@ -1162,6 +1264,7 @@ abstract class ForumManager
         
         if (!$rodbw->execute_query("select dt,
                              sum(hits_count) hits_count,
+                             sum(bot_hits_count) bot_hits_count,
                              sum(post_count) post_count
                              from {$prfx}_daily_statistics
                              where 1 = 1
@@ -1175,6 +1278,7 @@ abstract class ForumManager
         }
         
         $forum_hits = array();
+        $forum_bot_hits = array();
         $forum_posts = array();
         $months_counted = array();
         while ($rodbw->fetch_row()) {
@@ -1191,6 +1295,12 @@ abstract class ForumManager
             }
 
             $forum_hits[$month] += $rodbw->field_by_name("hits_count");
+
+            if(empty($forum_bot_hits[$month])) {
+                $forum_bot_hits[$month] = 0;
+            }
+
+            $forum_bot_hits[$month] += $rodbw->field_by_name("bot_hits_count");
 
             if(empty($forum_posts[$month])) {
                 $forum_posts[$month] = 0;
@@ -1215,6 +1325,20 @@ abstract class ForumManager
             ksort($forum_hits);
         }
         
+        if (!empty($forum_bot_hits)) {
+            for ($mn = 1; $mn <= 12; $mn++) {
+                if (empty($months_counted[$mn])) {
+                    $months_counted[$mn] = 1;
+                }
+
+                if (empty($forum_bot_hits[$mn])) {
+                    $forum_bot_hits[$mn] = 0;
+                }
+            }
+            
+            ksort($forum_bot_hits);
+        }
+
         if (!empty($forum_posts)) {
             for ($mn = 1; $mn <= 12; $mn++) {
                 if (empty($months_counted[$mn])) {
@@ -1233,6 +1357,10 @@ abstract class ForumManager
             $_SESSION["forum_hits"][$this->get_month_short_name($mn)] = $val / $months_counted[$mn];
         }
         
+        foreach($forum_bot_hits as $mn => $val) {
+            $_SESSION["forum_bot_hits"][$this->get_month_short_name($mn)] = $val / $months_counted[$mn];
+        }
+
         foreach($forum_posts as $mn => $val) {
             $_SESSION["forum_posts"][$this->get_month_short_name($mn)] = $val / $months_counted[$mn];
         }
@@ -1247,6 +1375,7 @@ abstract class ForumManager
     {
         unset($_SESSION["forum_posts"]);
         unset($_SESSION["forum_hits"]);
+        unset($_SESSION["forum_bot_hits"]);
         
         $rodbw = System::getRODBWorker();
         if (!$rodbw) {
@@ -1293,6 +1422,7 @@ abstract class ForumManager
         
         if (!$rodbw->execute_query("select dt,
                              sum(hits_count) hits_count,
+                             sum(bot_hits_count) bot_hits_count,
                              sum(post_count) post_count
                              from {$prfx}_daily_statistics
                              where 1 = 1
@@ -1309,6 +1439,7 @@ abstract class ForumManager
             $date = xstrtotime($rodbw->field_by_name("dt"));
             
             $_SESSION["forum_hits"][$date] = $rodbw->field_by_name("hits_count");
+            $_SESSION["forum_bot_hits"][$date] = $rodbw->field_by_name("bot_hits_count");
             $_SESSION["forum_posts"][$date] = $rodbw->field_by_name("post_count");
         }
         
@@ -1326,6 +1457,18 @@ abstract class ForumManager
             ksort($_SESSION["forum_hits"]);
         }
         
+        if (!empty($_SESSION["forum_bot_hits"])) {
+            $min = min(array_keys($_SESSION["forum_bot_hits"]));
+            $max = max(array_keys($_SESSION["forum_bot_hits"]));
+            for ($t = $min; $t < $max; $t = $t + 24 * 3600) {
+                if (empty($_SESSION["forum_bot_hits"][$t])) {
+                    $_SESSION["forum_bot_hits"][$t] = 0;
+                }
+            }
+            
+            ksort($_SESSION["forum_bot_hits"]);
+        }
+
         if (!empty($_SESSION["forum_posts"])) {
             $min = min(array_keys($_SESSION["forum_posts"]));
             $max = max(array_keys($_SESSION["forum_posts"]));
@@ -1444,7 +1587,7 @@ abstract class ForumManager
         // posts statistics
         
         if (!$rodbw->execute_query("select
-                             sum(hits_count) hits_count, sum(post_count) post_count,
+                             sum(hits_count) hits_count, sum(bot_hits_count) bot_hits_count, sum(post_count) post_count,
                              min(dt) min_dt, max(dt) max_dt
                              from {$prfx}_daily_statistics
                              where 1 = 1
@@ -1458,6 +1601,7 @@ abstract class ForumManager
         if ($rodbw->fetch_row()) {
             $stat_data["total_posts"] = $rodbw->field_by_name("post_count");
             $stat_data["total_hits"] = $rodbw->field_by_name("hits_count");
+            $stat_data["total_bot_hits"] = $rodbw->field_by_name("bot_hits_count");
             
             $stat_data["posts_per_day"] = $rodbw->field_by_name("post_count");
             
@@ -1481,6 +1625,9 @@ abstract class ForumManager
         }
         if (empty($stat_data["total_hits"])) {
             $stat_data["total_hits"] = 0;
+        }
+        if (empty($stat_data["total_bot_hits"])) {
+            $stat_data["total_bot_hits"] = 0;
         }
         
         // online users statistics
@@ -1642,7 +1789,8 @@ abstract class ForumManager
         // hits statistics
         
         if (!$rodbw->execute_query("select
-                             sum(hits_count) hits_count
+                             count(browser) hits_count,
+                             count(bot) bot_hits_count
                              from
                              {$prfx}_forum_hits
                              where 1 = 1
@@ -1655,6 +1803,7 @@ abstract class ForumManager
         
         if ($rodbw->fetch_row()) {
             $stat_data["total_hits"] = $rodbw->field_by_name("hits_count");
+            $stat_data["total_bot_hits"] = $rodbw->field_by_name("bot_hits_count");
         }
         
         $rodbw->free_result();
@@ -1663,6 +1812,10 @@ abstract class ForumManager
             $stat_data["total_hits"] = 0;
         }
         
+        if (empty($stat_data["total_bot_hits"])) {
+            $stat_data["total_bot_hits"] = 0;
+        }
+
         // online user statistics
         
         if (!$rodbw->execute_query("select
@@ -7606,8 +7759,7 @@ abstract class ForumManager
         }
         
         // we allow the search bot to make many requests
-        $bot = detect_bot($user_agent);
-        if (!empty($bot)) {
+        if (detect_bot($user_agent)) {
             return true;
         }
         
@@ -7776,7 +7928,7 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_online_users(&$online_users, &$forum_readers, &$topic_readers, &$topic_ignorers, &$topic_blocked_users, $current_fid, $current_tid)
     {
-        if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+        if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
             return true;
         }
         
@@ -7852,10 +8004,10 @@ abstract class ForumManager
                     "name" => $dbw->field_by_name("user_name"),
                     "time_ago" => $time_ago
                 );
-            } elseif ($bot = detect_bot($dbw->field_by_name("user_agent"))) {
-                $idx = "b_" . $bot;
+            } elseif ($bot_data = detect_bot($dbw->field_by_name("user_agent"))) {
+                $idx = "b_" . $bot_data["name"];
                 $user = array(
-                    "name" => $bot,
+                    "name" => $bot_data["name"],
                     "bot" => true,
                     "time_ago" => $time_ago
                 );
@@ -9675,6 +9827,8 @@ abstract class ForumManager
         $now = $rodbw->format_datetime(time());
 
         $start = $rodbw->format_datetime(time() - 30*60);
+        //xxx
+        $start = $rodbw->format_datetime(time());
         
         $query = "delete from {$prfx}_browser_statistics_cache where tm < '$start'";
         
@@ -27767,7 +27921,8 @@ abstract class ForumManager
         $browser = "";
         $bot = "";
         
-        if ($bot = detect_bot(val_or_empty($agent))) {
+        if ($bot_data = detect_bot(val_or_empty($agent))) {
+            $bot = $bot_data["name"];
         } elseif ($browser_data = detect_browser($agent)) {
             $browser = $browser_data["browser"];
             $os = $browser_data["os"];
@@ -27795,15 +27950,18 @@ abstract class ForumManager
         
         $rm = $dbw->escape($READ_MARKER);
         
+        $browser_increment = empty($browser) ? 0 : 1;
+        $bot_increment = empty($bot) ? 0 : 1;
+        
         $browser = $dbw->quotes_or_null($browser);
         $os = $dbw->quotes_or_null($os);
-        $bot_name = $dbw->quotes_or_null($bot);
+        $bot = $dbw->quotes_or_null($bot);
         
         $statistics_request = defined("STATISTICS_REQUEST") ? 1 : 0;
         
         $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, uri, ip, read_marker, browser, os, bot, statistics_request)
               values
-              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $uri, $ip, '$rm', $browser, $os, $bot_name, $statistics_request)";
+              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $uri, $ip, '$rm', $browser, $os, $bot, $statistics_request)";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -27838,7 +27996,7 @@ abstract class ForumManager
         if ($tid != "NULL") {
             $hit_column = "hits_count";
             
-            if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+            if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
                 $hit_column = "bot_hits_count";
             }
             
@@ -27901,52 +28059,32 @@ abstract class ForumManager
             }
         }
         
-        if ($fid != "NULL") {
-            $dtnow = $dbw->format_date(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
-            
-            if ($uid != "NULL") {
-                $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id)
-                  select '$dtnow', $uid, $fid
-                  from {$prfx}_dual
-                  where
-                  not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' and user_id = $uid and forum_id = $fid);
-                 ";
-                if (!$dbw->execute_query($query)) {
-                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                    return false;
-                }
-                
-                $query = "update {$prfx}_daily_statistics set
-                  hits_count = hits_count + 1, time_online = time_online + $duration
-                  where
-                  dt = '$dtnow' and user_id = $uid and forum_id = $fid;
-                 ";
-                if (!$dbw->execute_query($query)) {
-                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                    return false;
-                }
-            } else {
-                $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id)
-                  select '$dtnow', NULL, $fid
-                  from {$prfx}_dual
-                  where
-                  not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' and user_id is NULL and forum_id = $fid);
-                 ";
-                if (!$dbw->execute_query($query)) {
-                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                    return false;
-                }
-                
-                $query = "update {$prfx}_daily_statistics set
-                  hits_count = hits_count + 1
-                  where
-                  dt = '$dtnow' and user_id is NULL and forum_id = $fid;
-                 ";
-                if (!$dbw->execute_query($query)) {
-                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                    return false;
-                }
-            }
+        $user_clause = ($uid != "NULL") ? "and user_id = $uid" : "and user_id is NULL";
+        $bot_clause = ($bot != "NULL") ? "and bot = $bot" : "and bot is NULL";
+        $forum_clause = ($fid != "NULL") ? "and forum_id = $fid" : "and forum_id is NULL";
+
+        $dtnow = $dbw->format_date(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
+        
+        $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
+          select '$dtnow', $uid, $fid, $bot
+          from {$prfx}_dual
+          where
+          not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' $user_clause $bot_clause $forum_clause);
+         ";
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        $query = "update {$prfx}_daily_statistics set
+          hits_count = hits_count + $browser_increment, bot_hits_count = bot_hits_count + $bot_increment, 
+          time_online = time_online + $duration
+          where
+          dt = '$dtnow' $user_clause $bot_clause $forum_clause;
+         ";
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
         }
         
         // this was a guest
@@ -27988,7 +28126,7 @@ abstract class ForumManager
     {
         global $READ_MARKER;
         
-        if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+        if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
             return true;
         }
         
@@ -28181,7 +28319,7 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function update_topic_read_status($tid, $fid, $last_post_read_date)
     {
-        if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+        if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
             return true;
         }
         

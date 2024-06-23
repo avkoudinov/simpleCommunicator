@@ -4,7 +4,8 @@ session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
-if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+$bot_data = detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
+if(!empty($bot_data) && empty($bot_data["allowed"])) {
     echo "no data";
     exit;
 }
