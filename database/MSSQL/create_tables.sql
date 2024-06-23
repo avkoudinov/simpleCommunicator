@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     09.06.2024 23:30:51                          */
+/* Created on:     23.06.2024 14:13:29                          */
 /*==============================================================*/
 
 
@@ -149,11 +149,13 @@ go
 /*==============================================================*/
 create table v1_daily_statistics (
    user_id              int                  null,
-   forum_id             int                  not null,
+   forum_id             int                  null,
    dt                   date                 not null,
    hits_count           int                  not null default 0,
+   bot_hits_count       int                  not null default 0,
    post_count           int                  not null default 0,
-   time_online          bigint               not null default 0
+   time_online          bigint               not null default 0,
+   bot                  varchar(250)         null
 )
 go
 
@@ -163,7 +165,8 @@ go
 create unique index v1_daily_statistics_unq on v1_daily_statistics (
 user_id ASC,
 forum_id ASC,
-dt ASC
+dt ASC,
+bot ASC
 )
 go
 
@@ -188,6 +191,14 @@ go
 /*==============================================================*/
 create index v1_daily_statistics_forum_idx on v1_daily_statistics (
 forum_id ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_daily_statistics_bot_idx                           */
+/*==============================================================*/
+create index v1_daily_statistics_bot_idx on v1_daily_statistics (
+bot ASC
 )
 go
 

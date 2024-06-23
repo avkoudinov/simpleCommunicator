@@ -6,13 +6,10 @@ require_once "../include/session_start_readonly_inc.php";
 $ajax_processing = true;
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
-if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
+if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])))
 {
   exit;
 }
-//------------------------------------------------------------------
-header("Content-type: image/png");
-header("Content-Disposition: inline; filename=\"forum_statistics.png\"");
 //------------------------------------------------------------------
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph.php");
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph_line.php");
@@ -69,6 +66,9 @@ if(!empty($_SESSION["forum_posts"]))
   {
     $xhits = array_keys($_SESSION["forum_posts"]);
     $yhits = array_fill(0,count($xhits),0);
+
+    $x_bot_hits = $xhits;
+    $y_bot_hits = $yhits;
   }
 }
 
@@ -80,11 +80,26 @@ if(!empty($_SESSION["forum_hits"]))
   $_SESSION["forum_hits_avg"] = array();
   if(reqvar("type") == "daily") build_trendline($_SESSION["forum_hits"], $_SESSION["forum_hits_avg"]);
 
+  if(empty($_SESSION["forum_bot_hits"])) 
+  {
+    $x_bot_hits = $xhits;
+    $y_bot_hits = $yhits;
+  }
+
   if(empty($_SESSION["forum_posts"])) 
   {
     $xposts = array_keys($_SESSION["forum_hits"]);
     $yposts = array_fill(0,count($xposts),0);
   }
+}
+
+if(!empty($_SESSION["forum_bot_hits"]))
+{
+  $x_bot_hits = array_keys($_SESSION["forum_bot_hits"]);
+  $y_bot_hits = array_values($_SESSION["forum_bot_hits"]);
+
+  $_SESSION["forum_bot_hits_avg"] = array();
+  if(reqvar("type") == "daily") build_trendline($_SESSION["forum_bot_hits"], $_SESSION["forum_bot_hits_avg"]);
 }
 
 if(!empty($_SESSION["forum_posts_avg"]))
@@ -99,7 +114,14 @@ if(!empty($_SESSION["forum_hits_avg"]))
   $yhits_avg = array_values($_SESSION["forum_hits_avg"]);
 }
 
+if(!empty($_SESSION["forum_bot_hits_avg"]))
+{
+  $x_bot_hits_avg = array_keys($_SESSION["forum_bot_hits_avg"]);
+  $y_bot_hits_avg = array_values($_SESSION["forum_bot_hits_avg"]);
+}
+
 $maxhits = max(round(1.1*max($yhits)),50);
+$max_bot_hits = max(round(1.1*max($y_bot_hits)),50);
 $maxposts = max(round(1.1*max($yposts)),50);
 
 //-----------------------------------------------------
@@ -122,7 +144,7 @@ $hitsgraph->y2axis->SetFont(FF_VERDANA,FS_NORMAL,8);
 if (reqvar("type") == "daily") $hitsgraph->xaxis->HideLabels();
 
 $label = utf8_to_nce(text("HitsPerDay"));
-$hitsgraph->yaxis->title->Set($label);
+$hitsgraph->yaxis->title->Set($label . " (" . utf8_to_nce(text("Browsers")) . ")");
 $hitsgraph->yaxis->title->SetFont(FF_VERDANA,FS_NORMAL,8);
 $hitsgraph->yaxis->title->SetMargin(25,15,15,15);
 
@@ -166,6 +188,70 @@ if (reqvar("type") == "monthly") {
 $hitsgraph->legend->SetLayout(LEGEND_HOR);
 $hitsgraph->legend->SetFont(FF_VERDANA,FS_NORMAL,8);
 $hitsgraph->legend->Pos(0.07,0.05,"left","bottom");
+//-----------------------------------------------------
+$bot_hitsgraph = new Graph(938,290);
+
+$bot_hitsgraph->SetMargin(70,60,20,40);
+
+if (reqvar("type") == "daily") {
+    $bot_hitsgraph->SetScale('datlin',0,$max_bot_hits);
+} else {
+    $bot_hitsgraph->SetScale('textlin',0,$max_bot_hits);
+}
+
+$bot_hitsgraph->SetY2Scale("lin",0,$max_bot_hits);
+
+$bot_hitsgraph->xaxis->SetFont(FF_VERDANA,FS_NORMAL,8);
+$bot_hitsgraph->yaxis->SetFont(FF_VERDANA,FS_NORMAL,8);
+$bot_hitsgraph->y2axis->SetFont(FF_VERDANA,FS_NORMAL,8);
+
+if (reqvar("type") == "daily") $bot_hitsgraph->xaxis->HideLabels();
+
+$label = utf8_to_nce(text("HitsPerDay"));
+$bot_hitsgraph->yaxis->title->Set($label . " (" . utf8_to_nce(text("Bots")) . ")");
+$bot_hitsgraph->yaxis->title->SetFont(FF_VERDANA,FS_NORMAL,8);
+$bot_hitsgraph->yaxis->title->SetMargin(25,15,15,15);
+
+if (reqvar("type") == "monthly") {
+    $bot_hitsgraph->xaxis->SetTickLabels($x_bot_hits);
+
+    $plot = new BarPlot($y_bot_hits);
+    $bot_hitsgraph->Add($plot);
+
+    $plot->SetColor("darkgreen@0.7");
+    $plot->SetFillColor('darkgreen@0.7');
+} else {  
+    $bot_hitsgraph->xaxis->SetLabelAngle(50);
+    $bot_hitsgraph->xscale->SetDateFormat(text("DateFormat"));
+
+    $plot = new LinePlot($y_bot_hits,$x_bot_hits);
+
+    $bot_hitsgraph->Add($plot);
+
+    $plot->SetWeight("1"); 
+    $plot->SetStyle("solid"); 
+    $plot->SetColor("darkgreen");
+
+    $plot->SetLegend($label);
+
+    if(!empty($_SESSION["forum_bot_hits_avg"]))
+    {
+      $plot = new LinePlot($y_bot_hits_avg,$x_bot_hits_avg);
+
+      $bot_hitsgraph->Add($plot);
+
+      $plot->SetWeight("1"); 
+      $plot->SetStyle("solid"); 
+      $plot->SetColor("red");
+      
+      $label = utf8_to_nce(text("TrendLine"));
+      $plot->SetLegend($label);
+    }
+} 
+
+$bot_hitsgraph->legend->SetLayout(LEGEND_HOR);
+$bot_hitsgraph->legend->SetFont(FF_VERDANA,FS_NORMAL,8);
+$bot_hitsgraph->legend->Pos(0.07,0.05,"left","bottom");
 //-----------------------------------------------------
 $postsgraph = new Graph(938,280);
 
@@ -229,10 +315,14 @@ $postsgraph->legend->SetLayout(LEGEND_HOR);
 $postsgraph->legend->SetFont(FF_VERDANA,FS_NORMAL,8);
 $postsgraph->legend->Pos(0.07,0.05,"left","bottom");
 //-----------------------------------------------------
-
 $mgraph = new MGraph(938);
 $mgraph->Add($hitsgraph,0,0);
-$mgraph->Add($postsgraph,0,280);
+$mgraph->Add($bot_hitsgraph,0,280);
+$mgraph->Add($postsgraph,0,560);
+//-----------------------------------------------------
+header("Content-type: image/png");
+header("Content-Disposition: inline; filename=\"forum_statistics.png\"");
+//-----------------------------------------------------
 $mgraph->Stroke();
-//-----------------------------------------------------------------------
+//-----------------------------------------------------
 ?>

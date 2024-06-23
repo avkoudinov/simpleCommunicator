@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     09.06.2024 23:30:35                          */
+/* Created on:     23.06.2024 14:13:12                          */
 /*==============================================================*/
 
 
@@ -153,11 +153,13 @@ create table v1_cache_invalidation
 create table v1_daily_statistics
 (
    user_id              int,
-   forum_id             int not null,
+   forum_id             int,
    dt                   date not null,
    hits_count           int not null default 0,
+   bot_hits_count       int not null default 0,
    post_count           int not null default 0,
-   time_online          bigint not null default 0
+   time_online          bigint not null default 0,
+   bot                  varchar(250)
 );
 
 /*==============================================================*/
@@ -167,7 +169,8 @@ create unique index v1_daily_statistics_unq on v1_daily_statistics
 (
    user_id,
    forum_id,
-   dt
+   dt,
+   bot
 );
 
 /*==============================================================*/
@@ -192,6 +195,14 @@ create index v1_daily_statistics_user_idx on v1_daily_statistics
 create index v1_daily_statistics_forum_idx on v1_daily_statistics
 (
    forum_id
+);
+
+/*==============================================================*/
+/* Index: v1_daily_statistics_bot_idx                           */
+/*==============================================================*/
+create index v1_daily_statistics_bot_idx on v1_daily_statistics
+(
+   bot
 );
 
 /*==============================================================*/

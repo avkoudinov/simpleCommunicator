@@ -70,7 +70,8 @@ $hide_from_robots = 0;
 $fmanager->get_topic_forum_id($tid, $fid, $hide_from_robots);
 $fid_for_url = $fid;
 
-if (!empty($hide_from_robots) && detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+$bot_data = detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
+if (!empty($hide_from_robots) && !empty($bot_data) && empty($bot_data["allowed"])) {
     echo "no data";
     exit;
 }

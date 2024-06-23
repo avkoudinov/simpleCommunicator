@@ -6,13 +6,10 @@ require_once "../include/session_start_readonly_inc.php";
 $ajax_processing = true;
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
-if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
+if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])))
 {
   exit;
 }
-//------------------------------------------------------------------
-header("Content-type: image/png");
-header("Content-Disposition: inline; filename=\"user_statistics.png\"");
 //------------------------------------------------------------------
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph.php");
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph_line.php");
@@ -243,10 +240,13 @@ $postsgraph->legend->SetLayout(LEGEND_HOR);
 $postsgraph->legend->SetFont(FF_VERDANA,FS_NORMAL,8);
 $postsgraph->legend->Pos(0.11,0.06,"left","bottom");
 //-----------------------------------------------------
-
 $mgraph = new MGraph(598);
 $mgraph->Add($hitsgraph,0,0);
 $mgraph->Add($postsgraph,0,240);
+//-----------------------------------------------------
+header("Content-type: image/png");
+header("Content-Disposition: inline; filename=\"user_statistics.png\"");
+//-----------------------------------------------------
 $mgraph->Stroke();
-//-----------------------------------------------------------------------
+//-----------------------------------------------------
 ?>

@@ -52,7 +52,8 @@ if ($is_private) {
     }
 }
 
-if (!empty($forum_data["hide_from_robots"]) && detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+$bot_data = detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
+if (!empty($forum_data["hide_from_robots"]) && !empty($bot_data) && empty($bot_data["allowed"])) {
     echo "no data";
     exit;
 }

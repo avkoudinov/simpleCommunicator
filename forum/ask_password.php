@@ -11,7 +11,7 @@ if(!$fmanager->get_forum_data(reqvar("fid"), $forum_data))
   exit;
 }
 //------------------------------------------------------------------
-if (!empty($forum_data["hide_from_robots"]) && detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "") {
+if (!empty($forum_data["hide_from_robots"]) && detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
     echo "no data";
     exit;
 }

@@ -1,4 +1,14 @@
 <script>
+function reload_daily_activity_image(period)
+{
+  var img = document.getElementById("bot_daily_activity_image");
+  if(img)
+  {
+    img.style.opacity = "0.2";
+    img.src = "ajax/bot_activity_diagram.php?bot=<?php echo_html(xrawurlencode(reqvar("bot"))); ?>&period=" + period + "&rnd=" + Math.random();
+  }
+}
+
 function expand_statistics_list(elm)
 {
   var parent_table = elm.parentNode;
@@ -232,6 +242,23 @@ endforeach;
 </table>
 
 <?php endif; ?>
+
+<h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h2>
+
+<select name="bot_activity_period" class="user_activity_period_select" onchange="reload_daily_activity_image(this.value)" autocomplete="off">
+<?php $selected = val_or_empty($_SESSION["bot_activity_period"]) == "last_month" ? "selected" : ""; ?>
+<option value="last_month" <?php echo($selected); ?>><?php echo_html(text("LastMonth")); ?></option>
+<?php $selected = (val_or_empty($_SESSION["bot_activity_period"]) == "last_half_year" || empty($_SESSION["bot_activity_period"])) ? "selected" : ""; ?>
+<option value="last_half_year" <?php echo($selected); ?>><?php echo_html(text("LastHalfYear")); ?></option>
+<?php $selected = val_or_empty($_SESSION["bot_activity_period"]) == "last_year" ? "selected" : ""; ?>
+<option value="last_year" <?php echo($selected); ?>><?php echo_html(text("LastYear")); ?></option>
+<?php $selected = val_or_empty($_SESSION["bot_activity_period"]) == "whole_period" ? "selected" : ""; ?>
+<option value="whole_period" <?php echo($selected); ?>><?php echo_html(text("WholePeriod")); ?></option>
+</select>
+
+<div class="user_activity_image_wrapper">
+<img id="bot_daily_activity_image" class="user_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/bot_activity_diagram.php?period=<?php echo_html(val_or_empty($_SESSION["bot_activity_period"])); ?>&bot=<?php echo_html(xrawurlencode(reqvar("bot"))); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+</div>
 
 
 <div style="margin-bottom: 70px"></div>
