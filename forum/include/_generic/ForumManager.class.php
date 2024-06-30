@@ -9878,8 +9878,7 @@ abstract class ForumManager
         $now = $rodbw->format_datetime(time());
 
         $start = $rodbw->format_datetime(time() - 30*60);
-        //xxx
-        $start = $rodbw->format_datetime(time());
+        //$start = $rodbw->format_datetime(time());
         
         $query = "delete from {$prfx}_browser_statistics_cache where tm < '$start'";
         
@@ -9906,41 +9905,13 @@ abstract class ForumManager
         
         if (!$exist) {
             $query = "insert into {$prfx}_browser_statistics_cache
-                      (tm, tp, name, cnt)
-                      select '$now', 'browser', browser, count(*) cnt from
-                        (select read_marker, browser
+                      (tm, browser, os, bot, cnt)
+                      select '$now', browser, os, bot, count(*) cnt from
+                        (select read_marker, browser, os, bot
                         from {$prfx}_forum_hits
-                        where browser is not NULL
-                        group by read_marker, browser) stat
-                        group by browser";
-            
-            if (!$rodbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
-                return false;
-            }
-            
-            $query = "insert into {$prfx}_browser_statistics_cache
-                      (tm, tp, name, cnt)
-                      select '$now', 'os', os, count(*) cnt from
-                        (select read_marker, os
-                        from {$prfx}_forum_hits
-                        where os is not NULL
-                        group by read_marker, os) stat
-                        group by os";
-            
-            if (!$rodbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
-                return false;
-            }
-            
-            $query = "insert into {$prfx}_browser_statistics_cache
-                      (tm, tp, name, cnt)
-                      select '$now', 'bot', bot, count(*) cnt from
-                        (select read_marker, bot
-                        from {$prfx}_forum_hits
-                        where bot is not NULL
-                        group by read_marker, bot) stat
-                        group by bot";
+                        where browser is not NULL or bot is not NULL
+                        group by read_marker, browser, os, bot) stat
+                        group by browser, os, bot";
             
             if (!$rodbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
@@ -9948,9 +9919,10 @@ abstract class ForumManager
             }
         }
 
-        $query = "select name, cnt from
+        $query = "select browser, sum(cnt) cnt from
                     {$prfx}_browser_statistics_cache
-                    where tp = 'browser'
+                    where browser is not null
+                    group by browser
                     order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -9961,7 +9933,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $browser_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
+            $browser_stat[$rodbw->field_by_name("browser")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
@@ -9970,9 +9942,10 @@ abstract class ForumManager
             $browser_stat[$browser] = 100 * $val / $total;
         }
         
-        $query = "select name, cnt from
+        $query = "select os, sum(cnt) cnt from
                     {$prfx}_browser_statistics_cache
-                    where tp = 'os'
+                    where os is not null
+                    group by os
                     order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -9983,7 +9956,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $os_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
+            $os_stat[$rodbw->field_by_name("os")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
@@ -9992,9 +9965,10 @@ abstract class ForumManager
             $os_stat[$os] = 100 * $val / $total;
         }
         
-        $query = "select name, cnt from
+        $query = "select bot, sum(cnt) cnt from
                     {$prfx}_browser_statistics_cache
-                    where tp = 'bot'
+                    where bot is not null
+                    group by bot
                     order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -10005,7 +9979,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $bot_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
+            $bot_stat[$rodbw->field_by_name("bot")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
