@@ -6,7 +6,7 @@ require_once "../include/session_start_readonly_inc.php";
 $ajax_processing = true;
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
-if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
+if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])))
 {
   exit;
 }
@@ -31,11 +31,6 @@ $tid = reqvar("topic");
 $fid = "";
 $fmanager->get_topic_forum_id($tid, $fid, $hide_from_robots);
 $fid_for_url = $fid;
-
-if(!empty($hide_from_robots) && detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
-{
-  exit;
-}
 
 $is_private = false;
 if($fid == $fmanager->get_private_forum_id())

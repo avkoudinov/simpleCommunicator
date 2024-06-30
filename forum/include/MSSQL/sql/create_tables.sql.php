@@ -113,11 +113,13 @@ create table v1_cache_invalidation (
 $sql_cmds[] = '
 create table v1_daily_statistics (
    user_id              int                  null,
-   forum_id             int                  not null,
+   forum_id             int                  null,
    dt                   date                 not null,
    hits_count           int                  not null default 0,
+   bot_hits_count       int                  not null default 0,
    post_count           int                  not null default 0,
-   time_online          bigint               not null default 0
+   time_online          bigint               not null default 0,
+   bot                  varchar(250)         null
 )
 ';
 
@@ -125,7 +127,8 @@ $sql_cmds[] = '
 create unique index v1_daily_statistics_unq on v1_daily_statistics (
 user_id ASC,
 forum_id ASC,
-dt ASC
+dt ASC,
+bot ASC
 )
 ';
 
@@ -144,6 +147,12 @@ user_id ASC
 $sql_cmds[] = '
 create index v1_daily_statistics_forum_idx on v1_daily_statistics (
 forum_id ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_daily_statistics_bot_idx on v1_daily_statistics (
+bot ASC
 )
 ';
 
@@ -383,7 +392,7 @@ name ASC
 
 $sql_cmds[] = '
 create table v1_forum_hits (
-   forum_id             INT                  null,
+   forum_id             int                  null,
    topic_id             int                  null,
    dt                   datetime             not null,
    user_id              int                  null,
@@ -397,7 +406,8 @@ create table v1_forum_hits (
    os                   nvarchar(250)        null,
    bot                  nvarchar(250)        null,
    processed            tinyint              not null default 0,
-   read_marker          varchar(255)         null
+   read_marker          varchar(255)         null,
+   statistics_request   tinyint              not null default 0
 )
 ';
 
@@ -1789,6 +1799,7 @@ create table v1_user (
    custom_css           nvarchar(max)        null,
    custom_smiles        nvarchar(max)        null,
    ref                  int                  null,
+   email_changed        tinyint              not null default 0,
    constraint v1_user_pk primary key nonclustered (id)
 )
 ';

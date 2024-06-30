@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     26.05.2024 10:49:31                          */
+/* Created on:     23.06.2024 14:13:29                          */
 /*==============================================================*/
 
 
@@ -149,11 +149,13 @@ go
 /*==============================================================*/
 create table v1_daily_statistics (
    user_id              int                  null,
-   forum_id             int                  not null,
+   forum_id             int                  null,
    dt                   date                 not null,
    hits_count           int                  not null default 0,
+   bot_hits_count       int                  not null default 0,
    post_count           int                  not null default 0,
-   time_online          bigint               not null default 0
+   time_online          bigint               not null default 0,
+   bot                  varchar(250)         null
 )
 go
 
@@ -163,7 +165,8 @@ go
 create unique index v1_daily_statistics_unq on v1_daily_statistics (
 user_id ASC,
 forum_id ASC,
-dt ASC
+dt ASC,
+bot ASC
 )
 go
 
@@ -188,6 +191,14 @@ go
 /*==============================================================*/
 create index v1_daily_statistics_forum_idx on v1_daily_statistics (
 forum_id ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_daily_statistics_bot_idx                           */
+/*==============================================================*/
+create index v1_daily_statistics_bot_idx on v1_daily_statistics (
+bot ASC
 )
 go
 
@@ -491,7 +502,7 @@ go
 /* Table: v1_forum_hits                                         */
 /*==============================================================*/
 create table v1_forum_hits (
-   forum_id             INT                  null,
+   forum_id             int                  null,
    topic_id             int                  null,
    dt                   datetime             not null,
    user_id              int                  null,
@@ -505,7 +516,8 @@ create table v1_forum_hits (
    os                   nvarchar(250)        null,
    bot                  nvarchar(250)        null,
    processed            tinyint              not null default 0,
-   read_marker          varchar(255)         null
+   read_marker          varchar(255)         null,
+   statistics_request   tinyint              not null default 0
 )
 go
 
@@ -2266,6 +2278,7 @@ create table v1_user (
    custom_css           nvarchar(max)        null,
    custom_smiles        nvarchar(max)        null,
    ref                  int                  null,
+   email_changed        tinyint              not null default 0,
    constraint v1_user_pk primary key nonclustered (id)
 )
 go

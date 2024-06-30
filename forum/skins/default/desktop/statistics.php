@@ -200,9 +200,15 @@ $forum_selector_id = 1;
 </tr>
 
 <tr>
-<td><?php echo_html(text("HitsCount")); ?></td>
+<td><?php echo_html(text("HitsCount") . " (" . text("Browsers") . ")"); ?></td>
 <td><?php if(isset($_SESSION["yesterday"]["total_hits"])) echo_html(format_number($_SESSION["yesterday"]["total_hits"])); ?></td>
 <td><?php if(isset($_SESSION["today"]["total_hits"])) echo_html(format_number($_SESSION["today"]["total_hits"])); ?></td>
+</tr>
+
+<tr>
+<td><?php echo_html(text("HitsCount") . " (" . text("Bots") . ")"); ?></td>
+<td><?php if(isset($_SESSION["yesterday"]["total_bot_hits"])) echo_html(format_number($_SESSION["yesterday"]["total_bot_hits"])); ?></td>
+<td><?php if(isset($_SESSION["today"]["total_bot_hits"])) echo_html(format_number($_SESSION["today"]["total_bot_hits"])); ?></td>
 </tr>
 
 <?php if(!empty($settings["rates_active"])): ?>
@@ -240,7 +246,7 @@ $forum_selector_id = 1;
   <select name="fid" id="forum_activity_forum" onchange="reload_statistics()">
   <option value=""><?php echo_html(text("AllForums")); ?></option>
   <?php foreach($forum_list as $fid => $fdata):
-  $selected = (reqvar("fid") == $fid) ? "selected" : "";
+  $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selected" : "";
   ?>
   <option value="<?php echo_html($fid); ?>" <?php echo($selected); ?>><?php echo_html($fdata["name"]); ?></option>
   <?php endforeach; ?>
@@ -290,8 +296,13 @@ $forum_selector_id = 1;
 </tr>
 
 <tr>
-<td><?php echo_html(text("HitsCount")); ?></td>
+<td><?php echo_html(text("HitsCount") . " (" . text("Browsers") . ")"); ?></td>
 <td><?php if(isset($_SESSION["period"]["total_hits"])) echo_html(format_number($_SESSION["period"]["total_hits"])); ?></td>
+</tr>
+
+<tr>
+<td><?php echo_html(text("HitsCount") . " (" . text("Bots") . ")"); ?></td>
+<td><?php if(isset($_SESSION["period"]["total_bot_hits"])) echo_html(format_number($_SESSION["period"]["total_bot_hits"])); ?></td>
 </tr>
 
 <tr>

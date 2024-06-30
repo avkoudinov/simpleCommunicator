@@ -114,10 +114,12 @@ define('MIN_ALLOWED_READMARKER_AGE', 8); // hours
 
 // dos protection, 0 for none
 define('MAX_REQUESTS_PER_MINUTE', 30);
+define('MAX_STAT_REQUESTS_PER_MINUTE', 4);
 define('MAX_POSTS_PER_MINUTE', 10);
 define('WAIT_TIME_AFTER_ATTACK', 50); // minutes
 
 define('JOB_PER_CRON', 0);
+define('REFRESH_TOR_IPS', 1);
 
 define('BULK_DELETE_COUNT', 5);
 

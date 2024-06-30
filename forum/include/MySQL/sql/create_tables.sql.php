@@ -133,11 +133,13 @@ $sql_cmds[] = '
 create table v1_daily_statistics
 (
    user_id              int,
-   forum_id             int not null,
+   forum_id             int,
    dt                   date not null,
    hits_count           int not null default 0,
+   bot_hits_count       int not null default 0,
    post_count           int not null default 0,
-   time_online          bigint not null default 0
+   time_online          bigint not null default 0,
+   bot                  varchar(250)
 )
 ';
 
@@ -146,7 +148,8 @@ create unique index v1_daily_statistics_unq on v1_daily_statistics
 (
    user_id,
    forum_id,
-   dt
+   dt,
+   bot
 )
 ';
 
@@ -168,6 +171,13 @@ $sql_cmds[] = '
 create index v1_daily_statistics_forum_idx on v1_daily_statistics
 (
    forum_id
+)
+';
+
+$sql_cmds[] = '
+create index v1_daily_statistics_bot_idx on v1_daily_statistics
+(
+   bot
 )
 ';
 
@@ -439,7 +449,7 @@ create unique index v1_forum_group_name_unq on v1_forum_group
 $sql_cmds[] = '
 create table v1_forum_hits
 (
-   forum_id             INT,
+   forum_id             int,
    topic_id             int,
    dt                   datetime not null,
    user_id              int,
@@ -453,7 +463,8 @@ create table v1_forum_hits
    os                   varchar(250),
    bot                  varchar(250),
    processed            tinyint not null default 0,
-   read_marker          varchar(255)
+   read_marker          varchar(255),
+   statistics_request   tinyint not null default 0
 )
 ';
 
@@ -2016,6 +2027,7 @@ create table v1_user
    custom_css           text,
    custom_smiles        text,
    ref                  int,
+   email_changed        tinyint not null default 0,
    primary key (id)
 )
 ';

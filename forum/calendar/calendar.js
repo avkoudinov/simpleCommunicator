@@ -24,12 +24,23 @@ SimpleCalendar.fire_event = function (oEmt, sEvt) {
 };
 
 SimpleCalendar.validate_date = function (day, month, year) {
-    if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+        return false;
+    }
+    
+    day = parseInt(day);
+    month = parseInt(month);
+    year = parseInt(year);
+    
     if (month < 1 || month > 12) {
         return false;
     }
 
-    var dt = new Date(year, month + 1, 0);
+    // we get the number of days in the month by setting
+    // next month with the day 0.
+    // The month index starts with 0, so, the normal month
+    // value is already the next month
+    var dt = new Date(year, month, 0);
 
     if (day < 1 || day > dt.getDate()) {
         return false;

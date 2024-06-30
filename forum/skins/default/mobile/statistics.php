@@ -179,9 +179,15 @@ if(!empty($topics_with_new_count)) $display = "";
 </tr>
 
 <tr>
-<td><?php echo_html(text("HitsCount")); ?></td>
+<td><?php echo_html(text("HitsCount") . " (" . text("Browsers") . ")"); ?></td>
 <td><?php if(isset($_SESSION["yesterday"]["total_hits"])) echo_html(format_number($_SESSION["yesterday"]["total_hits"])); ?></td>
 <td><?php if(isset($_SESSION["today"]["total_hits"])) echo_html(format_number($_SESSION["today"]["total_hits"])); ?></td>
+</tr>
+
+<tr>
+<td><?php echo_html(text("HitsCount") . " (" . text("Bots") . ")"); ?></td>
+<td><?php if(isset($_SESSION["yesterday"]["total_bot_hits"])) echo_html(format_number($_SESSION["yesterday"]["total_bot_hits"])); ?></td>
+<td><?php if(isset($_SESSION["today"]["total_bot_hits"])) echo_html(format_number($_SESSION["today"]["total_bot_hits"])); ?></td>
 </tr>
 
 <?php if(!empty($settings["rates_active"])): ?>
@@ -270,8 +276,13 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 </tr>
 
 <tr>
-<td><?php echo_html(text("HitsCount")); ?></td>
+<td><?php echo_html(text("HitsCount") . " (" . text("Browsers") . ")"); ?></td>
 <td><?php if(isset($_SESSION["period"]["total_hits"])) echo_html(format_number($_SESSION["period"]["total_hits"])); ?></td>
+</tr>
+
+<tr>
+<td><?php echo_html(text("HitsCount") . " (" . text("Bots") . ")"); ?></td>
+<td><?php if(isset($_SESSION["period"]["total_bot_hits"])) echo_html(format_number($_SESSION["period"]["total_bot_hits"])); ?></td>
 </tr>
 
 <tr>
@@ -297,7 +308,7 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 <h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h2>
 
 <div class="forum_activity_image_wrapper">
-<img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=daily&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+<img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="<?php echo_text("DailyActivity"); ?>" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=daily&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(text("MonthlyActivity")); ?></h2>
