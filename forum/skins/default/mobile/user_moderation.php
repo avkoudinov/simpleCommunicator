@@ -907,6 +907,8 @@ if(!empty($evinfo["moderator_name"]))
 {
   if(!empty($evinfo["moderator_id"])) 
     $moderator = "<a href='view_profile.php?uid=" . $evinfo["moderator_id"] . "' >" . escape_html($evinfo["moderator_name"]) . "</a>";
+  elseif($evinfo["moderator_name"] == "#system#")
+    $moderator = escape_html(text("System"));
   elseif($evinfo["moderator_name"] == "admin")
     $moderator = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($evinfo["moderator_name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>";
   else

@@ -2,6 +2,8 @@
 //------------------------------------------------------------------
 session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
+
+define('STATISTICS_REQUEST', 1);
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
 $bot_data = detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
@@ -22,7 +24,9 @@ if (!$fmanager->is_moderator_log_visible()) {
     header("Location: " . $target_url);
     exit;
 }
-
+//------------------------------------------------------------------
+$fmanager->track_hit("", "");
+//------------------------------------------------------------------
 $param_string = $fmanager->build_mlog_paramter_string();
 if(!empty($param_string)) $param_string = "?" . $param_string;
 //------------------------------------------------------------------
@@ -42,8 +46,6 @@ $action_list = array();
 $fmanager->build_action_list($action_list);
 
 //------------------------------------------------------------------
-$fmanager->track_hit("", "");
-
 $online_users = array();
 $forum_readers = array();
 $topic_readers = array();

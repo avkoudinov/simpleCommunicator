@@ -5,7 +5,7 @@ require_once "../include/session_start_readonly_inc.php";
 
 $ajax_processing = true;
 
-define('STATISTICS_REQUEST', 1);
+define('STATISTICS_REQUEST', 6);
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
 if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
@@ -23,6 +23,8 @@ if(reqvar_empty("uid"))
   exit;
 }
 //------------------------------------------------------------------
+$fmanager->track_hit("", "");
+
 $total_likes = 0;
 $total_liked = 0;
 $likes = array();
@@ -40,8 +42,6 @@ if(!$fmanager->get_user_rating_info(reqvar("uid"),
 {
   exit;
 }
-
-$fmanager->track_hit("", "");
 
 require $view_path . "user_rates_inc.php";
 

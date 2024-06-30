@@ -57,6 +57,7 @@ function user_esc_handler()
 <?php endif; ?>
 
 <option value="users.php?sort=blocked_users" <?php echo(reqvar("sort") == "blocked_users" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("BlockedUsers")); ?></option>
+<option value="users.php?sort=not_activated_users" <?php echo(reqvar("sort") == "not_activated_users" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("NotActivatedUsers")); ?></option>
 <option value="users.php?sort=left_users" <?php echo(reqvar("sort") == "left_users" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("LeftUsers")); ?></option>
 <option value="users.php?sort=moderators" <?php echo(reqvar("sort") == "moderators" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("ForumModerators")); ?></option>
 <option value="users.php?sort=administrators" <?php echo(reqvar("sort") == "administrators" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("Administrators")); ?></option>

@@ -123,6 +123,8 @@ if (reqvar("author_mode") == "last_posts" || !reqvar_empty("rate_statistics"))
     $sort = "asc";
 }
 
+$fmanager->track_hit($tid, $fid);
+
 //------------------------------------------------------------------
 $user_tags = array();
 $fmanager->get_user_tags($user_tags, $fmanager->get_user_id());
@@ -354,8 +356,6 @@ if (!empty($fid)) {
     }
 }
 //------------------------------------------------------------------
-$fmanager->track_hit($tid, $fid);
-
 $all_forum_list = array();
 $fmanager->get_groupped_forum_list($all_forum_list, false);
 

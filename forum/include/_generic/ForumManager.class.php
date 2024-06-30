@@ -5053,6 +5053,11 @@ abstract class ForumManager
         
         $settings["protected_guests"] = trim($settings["protected_guests"]);
         
+        $settings["blocked_ip_addresses"] = "";
+        if (file_exists(APPLICATION_ROOT . "user_data/config/ip_black_list.txt")) {
+            $settings["blocked_ip_addresses"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/ip_black_list.txt"));
+        }
+
         $settings["blocked_email_domains"] = "";
         if (file_exists(APPLICATION_ROOT . "user_data/config/email_black_list.txt")) {
             $settings["blocked_email_domains"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt"));
@@ -5349,6 +5354,12 @@ abstract class ForumManager
         
         if (file_put_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt", reqvar("blocked_email_domains")) === false) {
             MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/email_black_list.txt"), sys_get_last_error());
+            $dbw->rollback_transaction();
+            return false;
+        }
+
+        if (file_put_contents(APPLICATION_ROOT . "user_data/config/ip_black_list.txt", reqvar("blocked_ip_addresses")) === false) {
+            MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/ip_black_list.txt"), sys_get_last_error());
             $dbw->rollback_transaction();
             return false;
         }
@@ -7748,6 +7759,23 @@ abstract class ForumManager
     } // check_post_ip
     
     //-----------------------------------------------------------------
+    function ajust_check_limits(&$limit, &$check_period)
+    {
+        $check_period = 60;
+        
+        if ($limit >= 10 && $limit <= 20) {
+            $limit = $limit / 2;
+            $check_period = 30;
+        } elseif ($limit >= 20 && $limit <= 30) {
+            $limit = $limit / 3;
+            $check_period = 20;
+        } else {
+            $limit = $limit / 6;
+            $check_period = 10;
+        }
+    } // ajust_check_limits
+    
+    //-----------------------------------------------------------------
     function check_ip($ip, $user_agent)
     {
         if (empty($ip) || !defined("MAX_REQUESTS_PER_MINUTE") || MAX_REQUESTS_PER_MINUTE < 1) {
@@ -7758,7 +7786,7 @@ abstract class ForumManager
             return true;
         }
         
-        // we allow the search bot to make many requests
+        // we allow the search bots to make many requests
         if (detect_bot($user_agent)) {
             return true;
         }
@@ -7766,6 +7794,18 @@ abstract class ForumManager
         $dbw = System::getDBWorker();
         if (!$dbw) {
             return false;
+        }
+        
+        if (file_exists(APPLICATION_ROOT . "user_data/config/ip_black_list.txt")) {
+            $ip_black_list = file_get_contents(APPLICATION_ROOT . "user_data/config/ip_black_list.txt");
+            
+            $ip_black_list = preg_split("/[\n\r]+/", $ip_black_list, -1, PREG_SPLIT_NO_EMPTY);
+            
+            foreach ($ip_black_list as $ip_sample) {
+                if (strpos($ip, $ip_sample) === 0) {
+                    exit("<h3>Your IP address '$ip' is blacklisted! Connect the administrator of the server!</h3>");
+                }
+            }
         }
         
         $prfx = $dbw->escape(System::getDBPrefix());
@@ -7789,16 +7829,19 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        $now = $dbw->format_datetime(time() - 1 * 60);
+        $limit = MAX_REQUESTS_PER_MINUTE;
+        $check_period = 60;
+        $this->ajust_check_limits($limit, $check_period);
+
+        $now = $dbw->format_datetime(time() - $check_period);
         
         if (!$dbw->execute_query("select 1
                              from {$prfx}_forum_hits
-                             where dt >= '$now' and ip = '$ip'")) {
+                             where dt >= '$now' and ip = '$ip' and statistics_request = 0")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
-        $limit = MAX_REQUESTS_PER_MINUTE;
         $hits = 0;
         
         while ($dbw->fetch_row()) {
@@ -7809,13 +7852,21 @@ abstract class ForumManager
         
         $stat_hit_limit = 0;
         $stat_hits = 0;
+        $request_type = 0;
         
         if (defined("STATISTICS_REQUEST") && defined("MAX_STAT_REQUESTS_PER_MINUTE") && MAX_STAT_REQUESTS_PER_MINUTE > 0) {
             $stat_hit_limit = MAX_STAT_REQUESTS_PER_MINUTE;
+            if (STATISTICS_REQUEST > 1) $stat_hit_limit += 2;
             
+            $check_period = 60;
+            $this->ajust_check_limits($stat_hit_limit, $check_period);
+            $request_type = STATISTICS_REQUEST;
+            
+            $now = $dbw->format_datetime(time() - $check_period);
+
             if (!$dbw->execute_query("select 1
                                  from {$prfx}_forum_hits
-                                 where dt >= '$now' and ip = '$ip' and statistics_request = 1")) {
+                                 where dt >= '$now' and ip = '$ip' and statistics_request = $request_type")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 return false;
             }
@@ -14869,7 +14920,12 @@ abstract class ForumManager
 
         $event_time = $dbw->format_datetime(time());
         
-        $moderator_name = $this->get_user_name();
+        if (!empty($event_data["moderator_name"])) {
+            $moderator_name = $event_data["moderator_name"];
+        } else {
+            $moderator_name = $this->get_user_name();
+        }
+        
         if (empty($moderator_name) && !empty($event_data["author_name"])) {
             $moderator_name = $event_data["author_name"];
         }
@@ -27957,7 +28013,7 @@ abstract class ForumManager
         $os = $dbw->quotes_or_null($os);
         $bot = $dbw->quotes_or_null($bot);
         
-        $statistics_request = defined("STATISTICS_REQUEST") ? 1 : 0;
+        $statistics_request = defined("STATISTICS_REQUEST") ? STATISTICS_REQUEST : 0;
         
         $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, uri, ip, read_marker, browser, os, bot, statistics_request)
               values
@@ -28065,26 +28121,28 @@ abstract class ForumManager
 
         $dtnow = $dbw->format_date(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
         
-        $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
-          select '$dtnow', $uid, $fid, $bot
-          from {$prfx}_dual
-          where
-          not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' $user_clause $bot_clause $forum_clause);
-         ";
-        if (!$dbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
-        }
-        
-        $query = "update {$prfx}_daily_statistics set
-          hits_count = hits_count + $browser_increment, bot_hits_count = bot_hits_count + $bot_increment, 
-          time_online = time_online + $duration
-          where
-          dt = '$dtnow' $user_clause $bot_clause $forum_clause;
-         ";
-        if (!$dbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
+        if (!defined("STATISTICS_REQUEST") || STATISTICS_REQUEST != 2) {
+            $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
+              select '$dtnow', $uid, $fid, $bot
+              from {$prfx}_dual
+              where
+              not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' $user_clause $bot_clause $forum_clause);
+             ";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            $query = "update {$prfx}_daily_statistics set
+              hits_count = hits_count + $browser_increment, bot_hits_count = bot_hits_count + $bot_increment, 
+              time_online = time_online + $duration
+              where
+              dt = '$dtnow' $user_clause $bot_clause $forum_clause;
+             ";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
         }
         
         // this was a guest
@@ -34526,6 +34584,11 @@ abstract class ForumManager
         echo (time() - $start_time) . " seconds\r\n";
         
         $start_time = time();
+        echo "Job 'clean_not_activated_users': ";
+        $this->job_manager->clean_not_activated_users();
+        echo (time() - $start_time) . " seconds\r\n";
+
+        $start_time = time();
         echo "Job 'clean_old_autosaved_messages': ";
         $this->job_manager->clean_old_autosaved_messages();
         echo (time() - $start_time) . " seconds\r\n";
@@ -34996,6 +35059,14 @@ abstract class ForumManager
             } else {
                 $where .= " and user_name like '" . $rodbw->escape(reqvar("user_name")) . "%'";
             }
+        }
+        
+        if (val_or_empty($_SESSION["last_user_sort"]) != "not_activated_users") {
+            if (reqvar_empty("user_name")) {
+                $where .= " and activated = 1";
+            }    
+        } else {
+            $where .= " and activated = 0";
         }
         
         if (val_or_empty($_SESSION["last_user_sort"]) == "blocked_users") {

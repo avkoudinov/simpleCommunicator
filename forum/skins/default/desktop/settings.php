@@ -514,6 +514,14 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
+<td style="vertical-align: top"><?php echo_html(text("BlockedIPAddresses")); ?>:</td>
+<td>
+<textarea id="blocked_ip_addresses" name="blocked_ip_addresses" spellcheck="false"><?php echo_html($settings["blocked_ip_addresses"]); ?></textarea>
+<div class="field_comment"><?php echo_html(text("IPListComment")); ?></div>
+</td>
+</tr>
+
+<tr>
 <td style="vertical-align: top"><?php echo_html(text("ImageUrlBlackList")); ?>:</td>
 <td>
 <textarea id="img_domain_blacklist" name="img_domain_blacklist" spellcheck="false"><?php echo_html($settings["img_domain_blacklist"]); ?></textarea>

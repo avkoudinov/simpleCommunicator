@@ -4,12 +4,15 @@ session_set_cookie_params(0, str_replace("ajax/" . basename($_SERVER["PHP_SELF"]
 require_once "../include/session_start_readonly_inc.php";
 
 $ajax_processing = true;
+define('STATISTICS_REQUEST', 4);
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
 if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])))
 {
   exit;
 }
+//------------------------------------------------------------------
+$fmanager->track_hit("", "");
 //------------------------------------------------------------------
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph.php");
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph_line.php");
@@ -37,19 +40,19 @@ function gen_message_image($text)
 if (reqvar("type") == "hourly") {
     if(!$fmanager->gen_user_hourly_activity(reqvar("uid")))
     {
-        gen_message_immage(text("NoData"));
+        gen_message_image(text("NoData"));
         exit;
     }
 } elseif (reqvar("type") == "weekday") {
     if(!$fmanager->gen_user_weekday_activity(reqvar("uid")))
     {
-        gen_message_immage(text("NoData"));
+        gen_message_image(text("NoData"));
         exit;
     }
 } else {
     if(!$fmanager->gen_user_daily_activity(reqvar("uid")))
     {
-        gen_message_immage(text("NoData"));
+        gen_message_image(text("NoData"));
         exit;
     }
 }

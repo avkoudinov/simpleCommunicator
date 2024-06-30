@@ -12,6 +12,8 @@ if(!empty($bot_data) && empty($bot_data["allowed"])) {
   exit;
 }
 //------------------------------------------------------------------
+$fmanager->track_hit("", "");
+//------------------------------------------------------------------
 $title = text("Statistics") . " - " . get_site_name(current_language());
 $ogtitle = text("Statistics") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
@@ -44,8 +46,6 @@ if(!$fmanager->get_forum_activity())
   header("location: " . $target_url);
   exit;
 }
-//------------------------------------------------------------------
-$fmanager->track_hit("", "");
 //------------------------------------------------------------------
 $_SESSION["last_url"] = val_or_empty($_SERVER["REQUEST_URI"]);
 //------------------------------------------------------------------

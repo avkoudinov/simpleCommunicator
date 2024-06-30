@@ -3298,6 +3298,13 @@
             <ua>Заблоковані користувачі</ua>
         </text>
 
+        <text id="NotActivatedUsers">
+            <en>Not activated users</en>
+            <de>Nicht aktiviert Benutzer</de>
+            <ru>Неактивирвоанные пользователи</ru>
+            <ua>Неактивівірвоанні користувачі</ua>
+        </text>
+
         <text id="LeftUsers">
             <en>Left active users</en>
             <de>Gegangene aktive Benutzer</de>
@@ -5710,6 +5717,13 @@
             <de>Benutzer wurde gelöscht</de>
             <ru>Пользователь удален</ru>
             <ua>Користувач видалений</ua>
+        </text>
+
+        <text id="MsgActionUserDeletedInactive">
+            <en>The account has not been activated for a long time.</en>
+            <de>Das Konto ist seit langem nicht aktiviert.</de>
+            <ru>Учетная запись не была активирвоана за долгое время.</ru>
+            <ua>Обліковий запис не був активований за довгий час.</ua>
         </text>
 
         <text id="ActionUserRenamed">
@@ -10198,6 +10212,13 @@
             <ua>Інформація</ua>
         </text>
         
+        <text id="System">
+            <en>System</en>
+            <de>System</de>
+            <ru>Система</ru>
+            <ua>Система</ua>
+        </text>
+
         <text id="WarnNotAllAppealed">
             <en>The following users will not be appealed because they either have no access to the topic or they have turned off personal appeals or they ignore you or you ignore them or you appealed yourself: %s!</en>
             <de>Die folgenden Benutzer werden nicht angesprochen, weil sie entweder kein Zugriff auf das Thema haben oder sie persönlichen Ansprachen abgeschaltet haben oder sie ignorieren Sie, oder Sie ingnorieren sie, oder Sie sich slebst angesprochen haben: %s!</de>
@@ -10499,6 +10520,13 @@
             <de>Geben Sie die Domänen ein - einen Namen pro Zeile.</de>
             <ru>Введите домены - каждое имя с новой строки.</ru>
             <ua>Введіть домени - кожне ім'я з нового рядка.</ua>
+        </text>
+
+        <text id="IPListComment">
+            <en>Enter the IP addresses - one per line.</en>
+            <de>Geben Sie die IP-Adressen ein - eine pro Zeile.</de>
+            <ru>Введите IP адреса - каждый с новой строки.</ru>
+            <ua>Введіть IP адреси - кожен з нового рядка.</ua>
         </text>
 
         <text id="ImageUrlBlackList">
