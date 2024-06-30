@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     23.06.2024 14:13:29                          */
+/* Created on:     30.06.2024 21:34:34                          */
 /*==============================================================*/
 
 
@@ -132,7 +132,10 @@ create table v1_browser_statistics_cache (
    tm                   datetime             null,
    tp                   varchar(100)         null,
    name                 nvarchar(250)        null,
-   cnt                  int                  null
+   browser              nvarchar(250)        null,
+   os                   nvarchar(250)        null,
+   cnt                  int                  null,
+   bot                  nvarchar(250)        null
 )
 go
 
@@ -598,6 +601,22 @@ go
 /*==============================================================*/
 create index v1_forum_hits_bot_idx on v1_forum_hits (
 bot ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_forum_hits_browser_idx                             */
+/*==============================================================*/
+create index v1_forum_hits_browser_idx on v1_forum_hits (
+browser ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_forum_hits_os_idx                                  */
+/*==============================================================*/
+create index v1_forum_hits_os_idx on v1_forum_hits (
+os ASC
 )
 go
 

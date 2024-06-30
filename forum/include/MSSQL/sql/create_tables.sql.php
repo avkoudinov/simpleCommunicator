@@ -100,7 +100,10 @@ create table v1_browser_statistics_cache (
    tm                   datetime             null,
    tp                   varchar(100)         null,
    name                 nvarchar(250)        null,
-   cnt                  int                  null
+   browser              nvarchar(250)        null,
+   os                   nvarchar(250)        null,
+   cnt                  int                  null,
+   bot                  nvarchar(250)        null
 )
 ';
 
@@ -468,6 +471,18 @@ ip ASC
 $sql_cmds[] = '
 create index v1_forum_hits_bot_idx on v1_forum_hits (
 bot ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_forum_hits_browser_idx on v1_forum_hits (
+browser ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_forum_hits_os_idx on v1_forum_hits (
+os ASC
 )
 ';
 

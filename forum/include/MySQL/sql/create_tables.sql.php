@@ -539,6 +539,20 @@ create index v1_forum_hits_bot_idx on v1_forum_hits
 ';
 
 $sql_cmds[] = '
+create index v1_forum_hits_browser_idx on v1_forum_hits
+(
+   browser
+)
+';
+
+$sql_cmds[] = '
+create index v1_forum_hits_os_idx on v1_forum_hits
+(
+   os
+)
+';
+
+$sql_cmds[] = '
 create table v1_forum_member
 (
    user_id              int not null,
