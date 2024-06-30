@@ -5,7 +5,7 @@ require_once "../include/session_start_readonly_inc.php";
 
 $ajax_processing = true;
 
-define('STATISTICS_REQUEST', 1);
+define('STATISTICS_REQUEST', 7);
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
 if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
@@ -16,6 +16,8 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
 if (!$fmanager->check_hash()) {
     exit;
 }
+
+$fmanager->track_hit("", "");
 
 if (!reqvar_empty("period")) {
     $period_appendix = "&statistics_period=" . reqvar("period");
@@ -36,8 +38,6 @@ $total_rates = 0;
 if (!$fmanager->get_total_rating_info(reqvar("fid"), reqvar("period"), $total_likes, $total_dislikes, $total_rates)) {
     exit;
 }
-
-$fmanager->track_hit("", "");
 
 require $view_path . "total_rates_inc.php";
 
