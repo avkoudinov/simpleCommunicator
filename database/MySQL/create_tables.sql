@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     30.06.2024 21:34:48                          */
+/* Created on:     02.07.2024 15:59:39                          */
 /*==============================================================*/
 
 
@@ -514,6 +514,7 @@ create table v1_forum_hits
    duration             int not null default 0,
    guest_name           varchar(250),
    user_agent           varchar(700),
+   referrer             varchar(700),
    uri                  varchar(2000),
    ip                   varchar(250),
    browser              varchar(250),

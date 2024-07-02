@@ -402,6 +402,7 @@ create table v1_forum_hits (
    hits_count           int                  not null default 0,
    duration             int                  not null default 0,
    guest_name           nvarchar(250)        null,
+   referrer             varchar(700)         null,
    user_agent           nvarchar(700)        null,
    uri                  nvarchar(2000)       null,
    ip                   nvarchar(250)        null,
