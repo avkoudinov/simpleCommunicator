@@ -5,7 +5,7 @@ require_once "../include/session_start_readonly_inc.php";
 
 $ajax_processing = true;
 
-define('STATISTICS_REQUEST', 7);
+define('STATISTICS_REQUEST', -4);
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
 if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")

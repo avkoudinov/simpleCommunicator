@@ -3,7 +3,7 @@
 session_set_cookie_params(0, "");
 require_once "include/session_start_inc.php";
 
-define('STATISTICS_REQUEST', 1);
+define('STATISTICS_REQUEST', -8);
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
 $bot_data = detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]));
@@ -12,6 +12,8 @@ if(!empty($bot_data) && empty($bot_data["allowed"]))
   echo "no data";
   exit;
 }
+//------------------------------------------------------------------
+$fmanager->track_hit("", "");
 //------------------------------------------------------------------
 $title = text("LoadStatistics") . " - " . get_site_name(current_language());
 $ogtitle = text("LoadStatistics") . " - " . get_site_name(current_language());
@@ -44,8 +46,6 @@ if(!$fmanager->get_banned_ips($banned_ips))
 }
 
 //------------------------------------------------------------------
-$fmanager->track_hit("", "");
-
 $online_users = array();
 $forum_readers = array();
 $topic_readers = array();

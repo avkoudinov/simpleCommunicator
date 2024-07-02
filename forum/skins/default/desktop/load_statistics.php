@@ -164,7 +164,7 @@ $width .= "px";
 <?php
 foreach($agent_activity as $agifno):
 
-$pct = $agifno["cnt"] / $total_ip_hits_count;
+$pct = $agifno["cnt"] / $total_agents_hits_count;
 
 $agent = escape_html($agifno["agent"]);
 

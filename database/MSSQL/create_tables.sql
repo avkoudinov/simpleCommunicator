@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     30.06.2024 21:34:34                          */
+/* Created on:     02.07.2024 15:59:54                          */
 /*==============================================================*/
 
 
@@ -512,6 +512,7 @@ create table v1_forum_hits (
    hits_count           int                  not null default 0,
    duration             int                  not null default 0,
    guest_name           nvarchar(250)        null,
+   referrer             varchar(700)         null,
    user_agent           nvarchar(700)        null,
    uri                  nvarchar(2000)       null,
    ip                   nvarchar(250)        null,
