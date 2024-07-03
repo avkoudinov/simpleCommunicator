@@ -278,7 +278,7 @@ $width .= "px";
 <th><?php echo_html(text("IPAddress")); ?></th>
 <th style="width:1%"><?php echo_html(text("FirstAttack")); ?></th>
 <th style="width:1%"><?php echo_html(text("LastAttack")); ?></th>
-<th style="width:1%"><?php echo_html(text("Type")); ?></th>
+<th><?php echo_html(text("Type")); ?></th>
 <th style="width:1%"><?php echo_html(text("Attacks")); ?> / <?php echo_html(text("Hits")); ?></th>
 </tr>
 
@@ -342,7 +342,7 @@ echo($ip);
 </td>
 <td style="width:1%"><?php echo_html($ipfno["first_attack"]); ?></td>
 <td style="width:1%"><?php echo_html($ipfno["last_attack"]); ?></td>
-<td style="width:1%"><?php echo_html($ipfno["atype"]); ?></td>
+<td><?php echo_html($ipfno["atype"]); ?></td>
 <td style="width:1%">
 <?php echo_html($ipfno["cnt"]); ?> / <?php echo_html(round($ipfno["hits"])); ?>
 </td>
