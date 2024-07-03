@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     02.07.2024 15:59:54                          */
+/* Created on:     03.07.2024 17:26:14                          */
 /*==============================================================*/
 
 
@@ -521,7 +521,8 @@ create table v1_forum_hits (
    bot                  nvarchar(250)        null,
    processed            tinyint              not null default 0,
    read_marker          varchar(255)         null,
-   statistics_request   tinyint              not null default 0
+   statistics_request   tinyint              not null default 0,
+   headers              text                 null
 )
 go
 

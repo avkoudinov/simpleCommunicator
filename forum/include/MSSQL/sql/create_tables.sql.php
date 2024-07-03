@@ -411,7 +411,8 @@ create table v1_forum_hits (
    bot                  nvarchar(250)        null,
    processed            tinyint              not null default 0,
    read_marker          varchar(255)         null,
-   statistics_request   tinyint              not null default 0
+   statistics_request   tinyint              not null default 0,
+   headers              text                 null
 )
 ';
 

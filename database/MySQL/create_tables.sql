@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     02.07.2024 15:59:39                          */
+/* Created on:     03.07.2024 17:26:00                          */
 /*==============================================================*/
 
 
@@ -522,7 +522,8 @@ create table v1_forum_hits
    bot                  varchar(250),
    processed            tinyint not null default 0,
    read_marker          varchar(255),
-   statistics_request   tinyint not null default 0
+   statistics_request   tinyint not null default 0,
+   headers              text
 );
 
 /*==============================================================*/
