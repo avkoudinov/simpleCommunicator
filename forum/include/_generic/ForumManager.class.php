@@ -27993,6 +27993,14 @@ abstract class ForumManager
         
         $referrer = val_or_empty($_SERVER["HTTP_REFERER"]);
         $referrer = $dbw->quotes_or_null($referrer);
+        
+        $headers_json = "";
+        $headers = getallheaders();
+        if (!empty($headers)) {
+            $headers_json = json_encode($headers, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+        }
+        
+        $headers_json = $dbw->quotes_or_null($headers_json);
 
         $now = $dbw->format_datetime(time());
         
@@ -28019,9 +28027,9 @@ abstract class ForumManager
         
         $statistics_request = defined("STATISTICS_REQUEST") ? STATISTICS_REQUEST : 0;
         
-        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, referrer, uri, ip, read_marker, browser, os, bot, statistics_request)
+        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, referrer, headers, uri, ip, read_marker, browser, os, bot, statistics_request)
               values
-              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $referrer, $uri, $ip, '$rm', $browser, $os, $bot, $statistics_request)";
+              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $referrer, $headers_json, $uri, $ip, '$rm', $browser, $os, $bot, $statistics_request)";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
