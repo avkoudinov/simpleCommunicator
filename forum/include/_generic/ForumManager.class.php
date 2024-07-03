@@ -7854,9 +7854,9 @@ abstract class ForumManager
         $stat_hits = 0;
         $request_type = 0;
         
-        if (defined("STATISTICS_REQUEST") && defined("MAX_STAT_REQUESTS_PER_MINUTE") && MAX_STAT_REQUESTS_PER_MINUTE > 0) {
+        if (defined("STATISTICS_REQUEST") && defined("MAX_STAT_REQUESTS_PER_MINUTE") && MAX_STAT_REQUESTS_PER_MINUTE != 0) {
             $stat_hit_limit = MAX_STAT_REQUESTS_PER_MINUTE;
-            if (STATISTICS_REQUEST > 1) $stat_hit_limit += 2;
+            if (STATISTICS_REQUEST != 1) $stat_hit_limit += 2;
             
             $check_period = 60;
             $this->ajust_check_limits($stat_hit_limit, $check_period);
@@ -7876,10 +7876,38 @@ abstract class ForumManager
             }
             
             $dbw->free_result();
+            
+            if (STATISTICS_REQUEST < 0) {
+                $now = $dbw->format_datetime(time() - 10*60);
+
+                if (!$dbw->execute_query("select 1
+                                     from {$prfx}_forum_hits
+                                     where dt >= '$now' and statistics_request = $request_type")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    return false;
+                }
+                
+                $entire_hits = 0;
+                
+                while ($dbw->fetch_row()) {
+                    $entire_hits++;
+                }
+                
+                $dbw->free_result();
+                
+                if ($entire_hits > 30) {
+                    exit("<h3>Too many requests! Try again later!</h3>");
+                }
+            }
         }
         
         if ($hits <= $limit && $stat_hits <= $stat_hit_limit) {
             return true;
+        }
+
+        $block_type = "REQUEST";
+        if ($stat_hits > $stat_hit_limit) {
+            $block_type = "STAT REQUEST";
         }
 
         $wait_time_after_attack = 30;
@@ -7889,7 +7917,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time() + $wait_time_after_attack * 60);
         
-        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, atype) values ('$now', '$ip', $hits, 'REQUEST')")) {
+        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, atype) values ('$now', '$ip', $hits, '$block_type')")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -9878,7 +9906,6 @@ abstract class ForumManager
         $now = $rodbw->format_datetime(time());
 
         $start = $rodbw->format_datetime(time() - 30*60);
-        //$start = $rodbw->format_datetime(time());
         
         $query = "delete from {$prfx}_browser_statistics_cache where tm < '$start'";
         
@@ -27964,6 +27991,9 @@ abstract class ForumManager
         $uri = val_or_empty($_SERVER["REQUEST_URI"]);
         $uri = $dbw->quotes_or_null($uri);
         
+        $referrer = val_or_empty($_SERVER["HTTP_REFERER"]);
+        $referrer = $dbw->quotes_or_null($referrer);
+
         $now = $dbw->format_datetime(time());
         
         $duration = 0;
@@ -27989,9 +28019,9 @@ abstract class ForumManager
         
         $statistics_request = defined("STATISTICS_REQUEST") ? STATISTICS_REQUEST : 0;
         
-        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, uri, ip, read_marker, browser, os, bot, statistics_request)
+        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, referrer, uri, ip, read_marker, browser, os, bot, statistics_request)
               values
-              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $uri, $ip, '$rm', $browser, $os, $bot, $statistics_request)";
+              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $referrer, $uri, $ip, '$rm', $browser, $os, $bot, $statistics_request)";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
