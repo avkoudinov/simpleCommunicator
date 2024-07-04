@@ -28023,13 +28023,13 @@ abstract class ForumManager
         
         $browser = $dbw->quotes_or_null($browser);
         $os = $dbw->quotes_or_null($os);
-        $bot = $dbw->quotes_or_null($bot);
+        $bot_db = $dbw->quotes_or_null($bot);
         
         $statistics_request = defined("STATISTICS_REQUEST") ? STATISTICS_REQUEST : 0;
         
         $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, referrer, headers, uri, ip, read_marker, browser, os, bot, statistics_request)
               values
-              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $referrer, $headers_json, $uri, $ip, '$rm', $browser, $os, $bot, $statistics_request)";
+              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $referrer, $headers_json, $uri, $ip, '$rm', $browser, $os, $bot_db, $statistics_request)";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -28128,14 +28128,14 @@ abstract class ForumManager
         }
         
         $user_clause = ($uid != "NULL") ? "and user_id = $uid" : "and user_id is NULL";
-        $bot_clause = ($bot != "NULL") ? "and bot = $bot" : "and bot is NULL";
+        $bot_clause = ($bot_db != "NULL") ? "and bot = $bot_db" : "and bot is NULL";
         $forum_clause = ($fid != "NULL") ? "and forum_id = $fid" : "and forum_id is NULL";
 
         $dtnow = $dbw->format_date(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
         
         if (!defined("STATISTICS_REQUEST") || STATISTICS_REQUEST != 2) {
             $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
-              select '$dtnow', $uid, $fid, $bot
+              select '$dtnow', $uid, $fid, $bot_db
               from {$prfx}_dual
               where
               not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' $user_clause $bot_clause $forum_clause);

@@ -1841,7 +1841,7 @@ function detect_bot($user_agent)
     // allow TelegramBot, Twitterbot, Slackbot, Mail.RU_Bot, Facebot Twitterbot, SEOkicks, Applebot, SiteCheckerBot to load links
     if (preg_match("/.*(TelegramBot|vkShare|Twitterbot|Slackbot|Mail.RU_Bot|Facebot Twitterbot|SEOkicks|Applebot|SiteCheckerBot).*/i",
         $user_agent, $matches)) {
-        $bot_data["name"] = $matches[1] . " (URL parse)";
+        $bot_data["name"] = $matches[1] . " (url preview)";
         $bot_data["allowed"] = 1;
         
         return $bot_data;
@@ -1855,7 +1855,7 @@ function detect_bot($user_agent)
 
     // allow WhatsApp to load links
     if (preg_match("/.*(WhatsApp).*/i", $user_agent)) {
-        $bot_data["name"] = "WhatsApp Bot" . " (URL parse)";
+        $bot_data["name"] = "WhatsApp Bot" . " (url preview)";
         $bot_data["allowed"] = 1;
 
         return $bot_data;
@@ -1876,7 +1876,7 @@ function detect_bot($user_agent)
 
     // allow Google Favicon to load links
     if (preg_match("/.*(Google Favicon).*/i", $user_agent)) {
-        $bot_data["name"] = "Google Bot" . " (URL parse)";
+        $bot_data["name"] = "Google Bot" . " (url preview)";
         $bot_data["allowed"] = 1;
 
         return $bot_data;
@@ -1890,7 +1890,7 @@ function detect_bot($user_agent)
     
     // allow Favicons, SEOdiver to load links
     if (preg_match("/.*Yandex(Favicons|SEOdiver).*/i", $user_agent)) {
-        $bot_data["name"] = "Yandex Bot" . " (URL parse)";
+        $bot_data["name"] = "Yandex Bot" . " (url preview)";
         $bot_data["allowed"] = 1;
 
         return $bot_data;
@@ -1904,7 +1904,7 @@ function detect_bot($user_agent)
     
     // allow BingPreview to load links
     if (preg_match("/.*(BingPreview).*/i", $user_agent)) {
-        $bot_data["name"] = "Bing Bot" . " (URL parse)";
+        $bot_data["name"] = "Bing Bot" . " (url preview)";
         $bot_data["allowed"] = 1;
 
         return $bot_data;
@@ -1936,7 +1936,7 @@ function detect_bot($user_agent)
     
     // allow it to load links facebookexternalhit
     if (preg_match("/.*(facebookexternalhit).*/i", $user_agent)) {
-        $bot_data["name"] = "Facebook Bot" . " (URL parse)";
+        $bot_data["name"] = "Facebook Bot" . " (url preview)";
         $bot_data["allowed"] = 1;
 
         return $bot_data;
