@@ -9302,6 +9302,53 @@ abstract class ForumManager
     } // get_guest_data_for_view
     
     //-----------------------------------------------------------------
+    function get_anonym_activity(&$guest_data)
+    {
+        global $settings;
+        global $READ_MARKER;
+        
+        $exts = AttachmentManager::get_picture_exts();
+        
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        if (!$dbw->execute_query($this->get_query_last_guest_activity($prfx, "where guest_name is NULL and user_id is NULL and bot is NULL"))) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        if ($dbw->fetch_row()) {
+            $guest_data["last_visit_date"] = smart_date2(xstrtotime($dbw->field_by_name("dt")));
+            $guest_data["last_ip"] = $dbw->field_by_name("ip");
+        }
+        
+        $dbw->free_result();
+        
+        if (empty($guest_data["last_visit_date"])) {
+            if (!$dbw->execute_query($this->get_query_guest_last_activity($prfx, ""))) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            if ($dbw->fetch_row()) {
+                $guest_data["last_visit_date"] = smart_date2(xstrtotime($dbw->field_by_name("dt")));
+            }
+            
+            $dbw->free_result();
+        }
+        
+        if (empty($guest_data["last_visit_date"])) {
+            $guest_data["last_visit_date"] = text("Never");
+        }
+        
+        return true;
+    } // get_anonym_activity
+
+    //-----------------------------------------------------------------
     function get_guest_ignore_info($author, $aname, &$ignores, &$ignored, &$ignored_topics, &$hides, &$hidden)
     {
         global $READ_MARKER;
@@ -9948,7 +9995,7 @@ abstract class ForumManager
 
         $query = "select browser, sum(cnt) cnt from
                     {$prfx}_browser_statistics_cache
-                    where browser is not null
+                    where browser is not NULL
                     group by browser
                     order by cnt desc";
         
@@ -9971,7 +10018,7 @@ abstract class ForumManager
         
         $query = "select os, sum(cnt) cnt from
                     {$prfx}_browser_statistics_cache
-                    where os is not null
+                    where os is not NULL
                     group by os
                     order by cnt desc";
         
@@ -9994,7 +10041,7 @@ abstract class ForumManager
         
         $query = "select bot, sum(cnt) cnt from
                     {$prfx}_browser_statistics_cache
-                    where bot is not null
+                    where bot is not NULL
                     group by bot
                     order by cnt desc";
         
@@ -28124,6 +28171,29 @@ abstract class ForumManager
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     return false;
                 }
+            } elseif ($guest_name == "NULL") {
+                if (!$dbw->execute_query("select 1 from {$prfx}_topic_view_history where guest_name is NULL and user_id is NULL and topic_id = $tid")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    return false;
+                }
+                
+                $entry_exists = false;
+                if ($dbw->fetch_row()) {
+                    $entry_exists = true;
+                }
+                
+                $dbw->free_result();
+                
+                if (!$entry_exists) {
+                    $query = "insert into {$prfx}_topic_view_history (guest_name, topic_id, dt, ip) values ($guest_name, $tid, '$now', $ip)";
+                } else {
+                    $query = "update {$prfx}_topic_view_history set dt = '$now', ip = $ip where guest_name is NULL and user_id is NULL and topic_id = $tid";
+                }
+                
+                if (!$dbw->execute_query($query)) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    return false;
+                }
             }
         }
         
@@ -37347,10 +37417,6 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_guest_read_topics($guest, &$read_topics)
     {
-        if (empty($guest)) {
-            return true;
-        }
-        
         start_action_time_measure();
         
         $dbw = System::getDBWorker();

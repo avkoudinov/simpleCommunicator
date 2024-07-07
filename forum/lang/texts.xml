@@ -10592,5 +10592,12 @@
             <ua>Група форумів із такою назвою вже існує!</ua>
         </text>
 
+        <text id="AnonymActivity">
+            <en>Activity of anonyms</en>
+            <de>Anonyme-Aktivität</de>
+            <ru>Активность анонимов</ru>
+            <ua>Активність анонімів</ua>
+        </text>
+
     </texts>
 </document>

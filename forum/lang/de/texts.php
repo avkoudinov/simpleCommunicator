@@ -1537,4 +1537,5 @@ $GLOBALS['DEF_TEXTS']['de']['ForumGroups'] = 'Forumgruppen';
 $GLOBALS['DEF_TEXTS']['de']['OtherForums'] = 'Sonstige Foren';
 $GLOBALS['DEF_TEXTS']['de']['ErrForumGroupNameEmpty'] = 'Forumgruppename ist nicht angegeben!';
 $GLOBALS['DEF_TEXTS']['de']['ErrForumGroupNameExists'] = 'Eine Forumgruppe mit diesem Namen existiert bereits!';
+$GLOBALS['DEF_TEXTS']['de']['AnonymActivity'] = 'Anonyme-Aktivität';
 ?>

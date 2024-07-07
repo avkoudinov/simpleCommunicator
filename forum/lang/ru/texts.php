@@ -1544,4 +1544,5 @@ $GLOBALS['DEF_TEXTS']['ru']['ForumGroups'] = 'Группы форумов';
 $GLOBALS['DEF_TEXTS']['ru']['OtherForums'] = 'Прочие форумы';
 $GLOBALS['DEF_TEXTS']['ru']['ErrForumGroupNameEmpty'] = 'Не задано название группы форума!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrForumGroupNameExists'] = 'Группа форумов с таким названием уже существует!';
+$GLOBALS['DEF_TEXTS']['ru']['AnonymActivity'] = 'Активность анонимов';
 ?>
