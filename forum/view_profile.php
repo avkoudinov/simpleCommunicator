@@ -31,8 +31,12 @@ if (!empty($user_data["photo"])) {
   $ogimage = $user_data["photo"];
 }  
 elseif (!empty($user_data["avatar"])) {
-  $ogimage = $user_data["avatar"];
+  $ogimage = $user_data["avatar"]; 
 }  
+
+if (empty($ogimage)) {
+  $ogimage = $view_path . "images/guest.jpg";
+}
 
 $title .= " - " . get_site_name(current_language());
 $ogtitle = $title;

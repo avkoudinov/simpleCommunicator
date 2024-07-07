@@ -42,6 +42,10 @@ if (!empty($guest_data["avatar"])) {
   $ogimage = $guest_data["avatar"];
 }  
 
+if (empty($ogimage)) {
+  $ogimage = $view_path . "images/guest.jpg";
+}
+
 $online_users = array();
 $forum_readers = array();
 $topic_readers = array();

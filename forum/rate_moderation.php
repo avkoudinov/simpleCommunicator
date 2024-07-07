@@ -36,6 +36,10 @@ elseif (!empty($user_data["avatar"])) {
   $ogimage = $user_data["avatar"];
 }  
 
+if (empty($ogimage)) {
+  $ogimage = $view_path . "images/guest.jpg";
+}
+
 $rate_info = array();
 if(!$fmanager->get_last_user_rates(reqvar("uid"), $rate_info))
 {

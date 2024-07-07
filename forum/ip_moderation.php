@@ -151,6 +151,10 @@ elseif (!empty($user_data["avatar"])) {
   $ogimage = $user_data["avatar"];
 }  
 
+if (empty($ogimage)) {
+  $ogimage = $view_path . "images/guest.jpg";
+}
+
 //------------------------------------------------------------------
 $reason_list = array();
 
