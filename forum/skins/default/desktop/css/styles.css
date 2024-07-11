@@ -4760,7 +4760,8 @@ input[type="button"].member_search_button {
 
 .ip_table2 td:nth-child(2),
 .ip_table2 td:nth-child(3),
-.ip_table2 td:nth-child(5)
+.ip_table2 td:nth-child(4),
+.ip_table2 td:nth-child(6)
 {
   text-align: center;
   white-space: nowrap;

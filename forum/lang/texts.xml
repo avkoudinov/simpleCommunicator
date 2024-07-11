@@ -3284,13 +3284,6 @@
             <ua>не схвалений</ua>
         </text>
 
-        <text id="Blocked">
-            <en>Blocked</en>
-            <de>Blockiert</de>
-            <ru>Заблокирован</ru>
-            <ua>Заблокований</ua>
-        </text>
-
         <text id="BlockedUsers">
             <en>Blocked users</en>
             <de>Blockierte Benutzer</de>
@@ -3310,6 +3303,13 @@
             <de>Gegangene aktive Benutzer</de>
             <ru>Ушедшие активные пользователи</ru>
             <ua>Покинувши активні учасники</ua>
+        </text>
+
+        <text id="Blocked">
+            <en>Blocked</en>
+            <de>Blockiert</de>
+            <ru>Заблокирован</ru>
+            <ua>Заблокований</ua>
         </text>
 
         <text id="BlockedUntil">
