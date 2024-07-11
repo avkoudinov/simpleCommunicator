@@ -308,13 +308,13 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 <h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h2>
 
 <div class="forum_activity_image_wrapper">
-<img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="<?php echo_text("DailyActivity"); ?>" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=daily&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+<img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="<?php echo_text("DailyActivity"); ?>" src="ajax/forum_daily_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(text("MonthlyActivity")); ?></h2>
 
 <div class="forum_activity_image_wrapper">
-<img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_activity_diagram.php<?php echo($query_string); ?>&type=monthly&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+<img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_monthly_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <?php if(defined('REVOLVERMAPS_KEY') && !empty(REVOLVERMAPS_KEY)): ?>

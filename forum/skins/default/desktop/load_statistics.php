@@ -278,6 +278,7 @@ $width .= "px";
 <th><?php echo_html(text("IPAddress")); ?></th>
 <th style="width:1%"><?php echo_html(text("FirstAttack")); ?></th>
 <th style="width:1%"><?php echo_html(text("LastAttack")); ?></th>
+<th style="width:1%"><?php echo_html(text("Blocked")); ?></th>
 <th><?php echo_html(text("Type")); ?></th>
 <th style="width:1%"><?php echo_html(text("Attacks")); ?> / <?php echo_html(text("Hits")); ?></th>
 </tr>
@@ -285,7 +286,7 @@ $width .= "px";
 <?php if(empty($banned_ips)): ?>
 
 <tr>
-<td colspan="5" class="table_message"><?php echo_html(text("NoData")); ?></td>
+<td colspan="6" class="table_message"><?php echo_html(text("NoData")); ?></td>
 </tr>
 
 <?php else: ?>
@@ -342,6 +343,7 @@ echo($ip);
 </td>
 <td style="width:1%"><?php echo_html($ipfno["first_attack"]); ?></td>
 <td style="width:1%"><?php echo_html($ipfno["last_attack"]); ?></td>
+<td style="width:1%"><?php echo_html($ipfno["banned_until"]); ?></td>
 <td><?php echo_html($ipfno["atype"]); ?></td>
 <td style="width:1%">
 <?php echo_html($ipfno["cnt"]); ?> / <?php echo_html(round($ipfno["hits"])); ?>

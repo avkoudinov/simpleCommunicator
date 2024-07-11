@@ -7907,6 +7907,7 @@ abstract class ForumManager
 
         $block_type = "REQUEST";
         if ($stat_hits > $stat_hit_limit) {
+            $hits = $stat_hits;
             $block_type = "STAT REQUEST";
         }
 
@@ -39756,7 +39757,7 @@ abstract class ForumManager
         }
         
         $wait_time_after_attack = 30;
-        if (defined("WAIT_TIME_AFTER_ATTACK") && WAIT_TIME_AFTER_ATTACK > 1) {
+        if (defined("WAIT_TIME_AFTER_ATTACK") && WAIT_TIME_AFTER_ATTACK >= 1) {
             $wait_time_after_attack = WAIT_TIME_AFTER_ATTACK;
         }
         
@@ -39769,6 +39770,7 @@ abstract class ForumManager
                 "atype" => $rodbw->field_by_name("atype"),
                 "first_attack" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("first_attack")) - $wait_time_after_attack * 60, text("DateTimeFormat")),
                 "last_attack" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("last_attack")) - $wait_time_after_attack * 60, text("DateTimeFormat")),
+                "banned_until" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("last_attack")), text("DateTimeFormat")),
                 "cnt" => $rodbw->field_by_name("cnt"),
                 "hits" => $rodbw->field_by_name("hits")
             );

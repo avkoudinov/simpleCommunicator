@@ -326,6 +326,7 @@ echo($ip);
 <div class="forum_info">
 <?php echo_html(text("FirstAttack")); ?>: <span class="number"><?php echo_html($ipfno["first_attack"]); ?></span><br>
 <?php echo_html(text("LastAttack")); ?>: <span class="number"><?php echo_html($ipfno["last_attack"]); ?></span><br>
+<?php echo_html(text("Blocked")); ?>: <span class="number"><?php echo_html($ipfno["banned_until"]); ?></span><br>
 <?php echo_html(text("Type")); ?>: <span class="number"><?php echo_html($ipfno["atype"]); ?></span><br>
 <?php echo_html(text("Attacks")); ?> / <?php echo_html(text("Hits")); ?>: <span class="number"><?php echo_html($ipfno["cnt"]); ?> / <?php echo_html(round($ipfno["hits"])); ?></span>
 

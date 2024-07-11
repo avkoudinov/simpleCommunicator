@@ -1436,7 +1436,7 @@ class MySQL_ForumManager extends ForumManager
                              group by {$prfx}_forum_hits.ip, {$prfx}_ip_blocked.ip
                              order by cnt desc
                              limit 20")) {
-            MessageHandler::setError(text("ErrQueryFailed"),
+                MessageHandler::setError(text("ErrQueryFailed"),
                 $rodbw->get_last_error() . "\n\n" .
                 $rodbw->get_last_query()
             );
@@ -1670,7 +1670,7 @@ class MySQL_ForumManager extends ForumManager
        return "select ip, atype,
                min(banned_until) first_attack,
                max(banned_until) last_attack,
-               avg(hits) hits,
+               max(hits) hits,
                count(*) cnt
                from {$prfx}_banned_ips
                group by ip, atype

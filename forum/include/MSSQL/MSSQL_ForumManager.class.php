@@ -1611,7 +1611,7 @@ class MSSQL_ForumManager extends ForumManager
         return "select top 200 ip, atype,
                min(banned_until) first_attack,
                max(banned_until) last_attack,
-               avg(hits) hits,
+               max(hits) hits,
                count(*) cnt
                from {$prfx}_banned_ips
                group by ip, atype
