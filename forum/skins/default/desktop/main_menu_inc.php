@@ -40,6 +40,11 @@ if($fmanager->get_user_name() == "admin")
 else
   $member_link = "<a class='member_nick' href='view_profile.php?uid=" . $fmanager->get_user_id() . "'>" . escape_html($fmanager->get_status_user_name()) . "</a>";
 
+if(!empty($_SESSION["privileged"]))
+{
+  $member_link .= "<img class='privileged_user' src='" . $view_path . "images/privilege.png' alt='" . escape_html(text("PrivilegedMember")) . "' title='" . escape_html(text("PrivilegedMember")) . "'>";
+}
+
 echo($member_link); 
 
 if (!empty($_SESSION["guest_posting_mode"])) {
