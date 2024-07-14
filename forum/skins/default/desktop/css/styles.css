@@ -1201,6 +1201,7 @@ a.post_subscribe_loading:focus
   height: 15px;
   margin-bottom: -3px;
   margin-left: 3px;
+  opacity: 0.8;
 }
 
 .protected_guest
