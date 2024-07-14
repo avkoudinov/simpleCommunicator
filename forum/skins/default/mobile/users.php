@@ -59,6 +59,7 @@ function user_esc_handler()
 <option value="users.php?sort=blocked_users" <?php echo(reqvar("sort") == "blocked_users" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("BlockedUsers")); ?></option>
 <option value="users.php?sort=not_activated_users" <?php echo(reqvar("sort") == "not_activated_users" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("NotActivatedUsers")); ?></option>
 <option value="users.php?sort=left_users" <?php echo(reqvar("sort") == "left_users" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("LeftUsers")); ?></option>
+<option value="users.php?sort=privileged_users" <?php echo(reqvar("sort") == "privileged_users" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("PrivilegedMembers")); ?></option>
 <option value="users.php?sort=moderators" <?php echo(reqvar("sort") == "moderators" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("ForumModerators")); ?></option>
 <option value="users.php?sort=administrators" <?php echo(reqvar("sort") == "administrators" ? "selected" : ""); ?>><?php echo_html(text("Sort")); ?>: <?php echo_html(text("Administrators")); ?></option>
 
@@ -136,6 +137,11 @@ foreach($user_list as $uid => $user_data):
   if(empty($settings["hide_online_status"]) && !empty($user_data["online"]))
   {
     $online_status = "&nbsp;<span class='online_text'>✓</span>";
+  }
+
+  if(!empty($user_data["privileged"]))
+  {
+    $online_status .= "<img class='privileged_user' src='" . $view_path . "images/privilege.png' alt='" . escape_html(text("PrivilegedMember")) . "' title='" . escape_html(text("PrivilegedMember")) . "'>";
   }
   ?>
   <div class="smart_break">

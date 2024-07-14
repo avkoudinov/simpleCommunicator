@@ -55,8 +55,6 @@ if(!empty($_SESSION["forum_posts"]))
   $xposts = array_keys($_SESSION["forum_posts"]);
   $yposts = array_values($_SESSION["forum_posts"]);
   
-  $_SESSION["forum_posts_avg"] = array();
-  
   if(empty($_SESSION["forum_hits"])) 
   {
     $xhits = array_keys($_SESSION["forum_posts"]);
@@ -71,8 +69,6 @@ if(!empty($_SESSION["forum_hits"]))
 {
   $xhits = array_keys($_SESSION["forum_hits"]);
   $yhits = array_values($_SESSION["forum_hits"]);
-
-  $_SESSION["forum_hits_avg"] = array();
 
   if(empty($_SESSION["forum_bot_hits"])) 
   {
@@ -91,26 +87,6 @@ if(!empty($_SESSION["forum_bot_hits"]))
 {
   $x_bot_hits = array_keys($_SESSION["forum_bot_hits"]);
   $y_bot_hits = array_values($_SESSION["forum_bot_hits"]);
-
-  $_SESSION["forum_bot_hits_avg"] = array();
-}
-
-if(!empty($_SESSION["forum_posts_avg"]))
-{
-  $xposts_avg = array_keys($_SESSION["forum_posts_avg"]);
-  $yposts_avg = array_values($_SESSION["forum_posts_avg"]);
-}
-
-if(!empty($_SESSION["forum_hits_avg"]))
-{
-  $xhits_avg = array_keys($_SESSION["forum_hits_avg"]);
-  $yhits_avg = array_values($_SESSION["forum_hits_avg"]);
-}
-
-if(!empty($_SESSION["forum_bot_hits_avg"]))
-{
-  $x_bot_hits_avg = array_keys($_SESSION["forum_bot_hits_avg"]);
-  $y_bot_hits_avg = array_values($_SESSION["forum_bot_hits_avg"]);
 }
 
 $maxhits = max(round(1.1*max($yhits)),50);

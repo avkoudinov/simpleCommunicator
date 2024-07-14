@@ -73,14 +73,14 @@ function reload_daily_activity_image(period)
   if(img)
   {
     img.style.opacity = "0.2";
-    img.src = "ajax/user_activity_diagram.php?type=daily&uid=<?php echo_html(reqvar("uid")); ?>&period=" + period + "&rnd=" + Math.random();
+    img.src = "ajax/user_daily_activity_diagram.php?uid=<?php echo_html(reqvar("uid")); ?>&period=" + period + "&rnd=" + Math.random();
   }
 
   img = document.getElementById("user_weekday_activity_image");
   if(img)
   {
     img.style.opacity = "0.2";
-    img.src = "ajax/user_activity_diagram.php?type=weekday&uid=<?php echo_html(reqvar("uid")); ?>&period=" + period + "&rnd=" + Math.random();
+    img.src = "ajax/user_weekday_activity_diagram.php?uid=<?php echo_html(reqvar("uid")); ?>&period=" + period + "&rnd=" + Math.random();
   }
 }
 
@@ -91,7 +91,7 @@ function reload_hourly_activity_image(time_zone)
 
   img.style.opacity = "0.2";
 
-  img.src = "ajax/user_activity_diagram.php?type=hourly&uid=<?php echo_html(reqvar("uid")); ?>&time_zone=" + time_zone + "&rnd=" + Math.random();
+  img.src = "ajax/user_hourly_activity_diagram.php?uid=<?php echo_html(reqvar("uid")); ?>&time_zone=" + time_zone + "&rnd=" + Math.random();
 }
 
 var show_user_email_ajax = null;
@@ -420,6 +420,11 @@ $forum_selector_id = 1;
   {
     $online_status = "&nbsp;<span class='online_text'>✓</span>";
   }
+
+  if(!empty($user_data["privileged"]))
+  {
+    $online_status .= "<img class='privileged_user' src='" . $view_path . "images/privilege.png' alt='" . escape_html(text("PrivilegedMember")) . "' title='" . escape_html(text("PrivilegedMember")) . "'>";
+  }
   ?>
 <td><span class="number"><?php echo_html($user_data["user_name"]); ?></span><?php echo($online_status); ?></td>
 </tr>
@@ -493,7 +498,7 @@ if(!empty($user_data["avatar"]))
 
   <?php else: ?>
 
-    <?php echo_html(text("RegisteredUser")); ?><br>
+    <?php echo_html(text("Member")); ?><br>
 
   <?php endif; ?>
 
@@ -1289,13 +1294,13 @@ $width .= "px";
 </select>
 
 <div class="user_activity_image_wrapper">
-<img id="user_daily_activity_image" class="user_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=daily&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+<img id="user_daily_activity_image" class="user_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="&nbsp;" src="ajax/user_daily_activity_diagram.php?period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(text("WeekdayActivity")); ?></h2>
 
 <div class="user_activity_image_wrapper">
-<img id="user_weekday_activity_image" class="user_activity_image" title="<?php echo_text("WeekdayActivity"); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=weekday&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+<img id="user_weekday_activity_image" class="user_activity_image" title="<?php echo_text("WeekdayActivity"); ?>" alt="&nbsp;" src="ajax/user_weekday_activity_diagram.php?period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <h3 class="profile_caption"><?php echo_html(sprintf(text("HourlyActivity"), 30)); ?></h2>
@@ -1308,7 +1313,7 @@ $width .= "px";
 </select>
 
 <div class="user_activity_image_wrapper">
-<img id="user_hourly_activity_image" class="user_activity_image" title="<?php echo_html(sprintf(text("HourlyActivity"), 30)); ?>" alt="&nbsp;" src="ajax/user_activity_diagram.php?type=hourly&period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+<img id="user_hourly_activity_image" class="user_activity_image" title="<?php echo_html(sprintf(text("HourlyActivity"), 30)); ?>" alt="&nbsp;" src="ajax/user_hourly_activity_diagram.php?period=<?php echo_html(val_or_empty($_SESSION["user_activity_period"])); ?>&uid=<?php echo_html(reqvar("uid")); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
 <?php 

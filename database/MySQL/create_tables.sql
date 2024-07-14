@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     11.07.2024 21:18:10                          */
+/* Created on:     14.07.2024 16:51:18                          */
 /*==============================================================*/
 
 
@@ -117,7 +117,8 @@ create table v1_banned_ips
    ip                   varchar(250) not null,
    banned_until         datetime not null,
    hits                 int not null,
-   atype                varchar(255)
+   atype                varchar(255),
+   statistics_request   int not null default 0
 );
 
 /*==============================================================*/
@@ -129,14 +130,55 @@ create index v1_banned_ips_idx on v1_banned_ips
 );
 
 /*==============================================================*/
-/* Table: v1_browser_statistics_cache                           */
+/* Table: v1_browser_daily_statistics                           */
 /*==============================================================*/
-create table v1_browser_statistics_cache
+create table v1_browser_daily_statistics
 (
-   tm                   datetime,
-   tp                   varchar(100),
-   name                 varchar(250),
-   cnt                  int
+   dt                   date not null,
+   browser              varchar(250),
+   os                   varchar(250),
+   bot                  varchar(250),
+   read_marker          varchar(255)
+);
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_dt_idx                    */
+/*==============================================================*/
+create index v1_browser_daily_statistics_dt_idx on v1_browser_daily_statistics
+(
+   dt
+);
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_browser_idx               */
+/*==============================================================*/
+create index v1_browser_daily_statistics_browser_idx on v1_browser_daily_statistics
+(
+   browser
+);
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_os_idx                    */
+/*==============================================================*/
+create index v1_browser_daily_statistics_os_idx on v1_browser_daily_statistics
+(
+   os
+);
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_bot_idx                   */
+/*==============================================================*/
+create index v1_browser_daily_statistics_bot_idx on v1_browser_daily_statistics
+(
+   bot
+);
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_rm_idx                    */
+/*==============================================================*/
+create index v1_browser_daily_statistics_rm_idx on v1_browser_daily_statistics
+(
+   read_marker
 );
 
 /*==============================================================*/
@@ -522,7 +564,7 @@ create table v1_forum_hits
    bot                  varchar(250),
    processed            tinyint not null default 0,
    read_marker          varchar(255),
-   statistics_request   tinyint not null default 0,
+   statistics_request   int not null default 0,
    headers              text
 );
 

@@ -120,6 +120,13 @@
             <ua>Привілейований користувач</ua>
         </text>
 
+        <text id="PrivilegedMembers">
+            <en>Privileged users</en>
+            <de>Privilegierte Benutzer</de>
+            <ru>Привилегированные пользователи</ru>
+            <ua>Привілейовані користувачі</ua>
+        </text>
+
         <text id="PrivilegedTopicModerator">
             <en>Privileged topic moderator</en>
             <de>Privilegierter Themenmoderator</de>
@@ -1497,13 +1504,6 @@
             <de>Geblockt auf den Foren</de>
             <ru>Заблокирован на форумах</ru>
             <ua>Заблокований на форумах</ua>
-        </text>
-
-        <text id="RegisteredUser">
-            <en>Registered user</en>
-            <de>Registirierter Benutzer</de>
-            <ru>Зарегистрированный пользователь</ru>
-            <ua>Зареєстрований користувач</ua>
         </text>
 
         <text id="ModeratorLog">
@@ -9104,6 +9104,13 @@
             <de>Geben Sie die Gastnamen ein - einen Namen pro Zeile. Wenn Sie alle Gäste ignorieren möchten, lassen Sie das Feld leer.</de>
             <ru>Введите имена гостей - каждое имя с новой строки. Если вы хотите игнорировать всех гостей, оставьте поле пустым.</ru>
             <ua>Введіть імена гостей - кожне ім'я з нового рядка. Якщо ви бажаєте ігнорувати усіх гостей, залиште поле порожнім.</ua>
+        </text>
+
+        <text id="ProtectedGuest">
+            <en>Protected guest</en>
+            <de>Geschützter Gast</de>
+            <ru>Защищенный гость</ru>
+            <ua>Захищений гість</ua>
         </text>
 
         <text id="ProtectedGuestNames">
