@@ -9953,11 +9953,11 @@ abstract class ForumManager
         
         $prfx = $rodbw->escape(System::getDBPrefix());
 
-        $start = $rodbw->format_datetime(time() - 30*60);
+        $start = $rodbw->format_datetime(time() - 92*24*3600); // last 3 months
         
         $query = "select browser, count(*) cnt from
                     {$prfx}_browser_daily_statistics
-                    where browser is not NULL
+                    where dt > '$start' and browser is not NULL
                     group by browser
                     order by cnt desc";
         
@@ -9980,7 +9980,7 @@ abstract class ForumManager
         
         $query = "select os, count(*) cnt from
                     {$prfx}_browser_daily_statistics
-                    where os is not NULL
+                    where dt > '$start' and os is not NULL
                     group by os
                     order by cnt desc";
         
@@ -10003,7 +10003,7 @@ abstract class ForumManager
         
         $query = "select bot, count(*) cnt from
                     {$prfx}_browser_daily_statistics
-                    where bot is not NULL
+                    where dt > '$start' and bot is not NULL
                     group by bot
                     order by cnt desc";
         
