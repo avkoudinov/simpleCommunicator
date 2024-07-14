@@ -7586,6 +7586,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function check_post_ip($ip)
     {
+        global $settings;
+
         if (empty($ip) || !defined("MAX_POSTS_PER_MINUTE") || MAX_POSTS_PER_MINUTE < 1) {
             return true;
         }
@@ -7699,9 +7701,6 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        $settings = array();
-        $this->get_settings($settings);
-        
         // there is no administrators, send to the master admin
         
         if (empty($administrators)) {
@@ -7776,6 +7775,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function check_ip($ip, $user_agent)
     {
+        global $settings;
+        
         if (empty($ip) || !defined("MAX_REQUESTS_PER_MINUTE") || MAX_REQUESTS_PER_MINUTE < 1) {
             return true;
         }
@@ -7949,9 +7950,6 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        $settings = array();
-        $this->get_settings($settings);
-        
         // there is no administrators, send to the master admin
         
         if (empty($administrators)) {
@@ -7967,7 +7965,7 @@ abstract class ForumManager
         $params = array();
         $params["{ip}"] = $ip;
         $params["{hits}"] = $hits;
-        $params["{atype}"] = 'REQUEST';
+        $params["{atype}"] = $block_type;
         $params["{check_period}"] = 1;
         
         $params["{total_attacks}"] = '-';

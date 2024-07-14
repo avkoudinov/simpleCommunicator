@@ -52,11 +52,6 @@ function is_maintenance() {
     return (!empty($maintenance_until) && empty($_SESSION["admdebug"]));
 }
 
-if($installed && !is_maintenance())
-{
-  $fmanager->check_ip(System::getIPAddress(), val_or_empty($_SERVER["HTTP_USER_AGENT"]));
-}
-
 // Generate a random hash to protect against unwanted actions
 // through action URLs in the pictures or links.
 
@@ -241,6 +236,8 @@ if (!$installed) {
 } else {
     $settings = array();
     $fmanager->get_settings($settings);
+    
+    $fmanager->check_ip(System::getIPAddress(), val_or_empty($_SERVER["HTTP_USER_AGENT"]));
     
     $fmanager->read_user_cookies();
     
