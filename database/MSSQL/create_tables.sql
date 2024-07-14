@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     11.07.2024 21:18:42                          */
+/* Created on:     14.07.2024 16:51:31                          */
 /*==============================================================*/
 
 
@@ -113,7 +113,8 @@ create table v1_banned_ips (
    ip                   varchar(250)         not null,
    banned_until         datetime             not null,
    hits                 int                  not null,
-   atype                varchar(255)         null
+   atype                varchar(255)         null,
+   statistics_request   int                  not null default 0
 )
 go
 
@@ -126,16 +127,54 @@ ip ASC
 go
 
 /*==============================================================*/
-/* Table: v1_browser_statistics_cache                           */
+/* Table: v1_browser_daily_statistics                           */
 /*==============================================================*/
-create table v1_browser_statistics_cache (
-   tm                   datetime             null,
-   tp                   varchar(100)         null,
-   name                 nvarchar(250)        null,
+create table v1_browser_daily_statistics (
+   dt                   date                 not null,
    browser              nvarchar(250)        null,
    os                   nvarchar(250)        null,
-   cnt                  int                  null,
-   bot                  nvarchar(250)        null
+   bot                  nvarchar(250)        null,
+   read_marker          varchar(255)         null
+)
+go
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_dt_idx                    */
+/*==============================================================*/
+create index v1_browser_daily_statistics_dt_idx on v1_browser_daily_statistics (
+dt ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_browser_idx               */
+/*==============================================================*/
+create index v1_browser_daily_statistics_browser_idx on v1_browser_daily_statistics (
+browser ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_os_idx                    */
+/*==============================================================*/
+create index v1_browser_daily_statistics_os_idx on v1_browser_daily_statistics (
+os ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_bot_idx                   */
+/*==============================================================*/
+create index v1_browser_daily_statistics_bot_idx on v1_browser_daily_statistics (
+bot ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_browser_daily_statistics_rm_idx                    */
+/*==============================================================*/
+create index v1_browser_daily_statistics_rm_idx on v1_browser_daily_statistics (
+read_marker ASC
 )
 go
 
@@ -521,7 +560,7 @@ create table v1_forum_hits (
    bot                  nvarchar(250)        null,
    processed            tinyint              not null default 0,
    read_marker          varchar(255)         null,
-   statistics_request   tinyint              not null default 0,
+   statistics_request   int                  not null default 0,
    headers              text                 null
 )
 go

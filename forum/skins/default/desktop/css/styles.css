@@ -1196,6 +1196,21 @@ a.post_subscribe_loading:focus
   background-color: #FBF4B5;
 }
 
+.privileged_user
+{
+  height: 15px;
+  margin-bottom: -3px;
+  margin-left: 3px;
+}
+
+.protected_guest
+{
+  height: 12px;
+  margin-bottom: -1px;
+  margin-left: 3px;
+  opacity: 0.7;
+}
+
 .has_notes_flag
 {
   height: 15px;
@@ -3224,19 +3239,6 @@ a.sorter.desc:hover
 .post_table .author_name
 {
   margin-top: 7px;
-}
-
-.profile_table .protected_guest,
-.post_table .protected_guest
-{
-  display: inline-block;
-  background-image: url(../images/protected_guest.png);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100%;
-  width: 10px;
-  height: 10px;
-  opacity: 0.7;
 }
 
 .post_table.ignored_post .author_wrapper

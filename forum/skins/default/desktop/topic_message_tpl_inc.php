@@ -476,10 +476,9 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
     $online_status = "&nbsp;<span class='online_text'>✓</span>";
   }
   
-  $protected_guest = "";
-  if(!empty($settings["protected_guest_list"][$pinfo["author"]]) && $fmanager->is_admin())
+  if(!empty($settings["protected_guest_list"][$pinfo["author"]]))
   {
-    $protected_guest = "<div class='protected_guest'></div>";
+    $online_status .= "<img class='protected_guest' src='" . $view_path . "images/protected_guest.png' alt='" . escape_html(text("ProtectedGuest")) . "' title='" . escape_html(text("ProtectedGuest")) . "'>";
   }
   
   if($pinfo["author"] == "admin")
@@ -487,7 +486,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
   else
     $author = '<a class="guest_link" href="view_guest_profile.php?guest=' . xrawurlencode($pinfo["author"]) . $aname_appendix . '">' . escape_html($pinfo["author"]) . '</a>';
 
-  echo($author . $protected_guest . $online_status); 
+  echo($author . $online_status); 
   ?>
   </div>
   <div class="member_status">
@@ -579,6 +578,11 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
   if(empty($settings["hide_online_status"]) && !empty($user_data[$pinfo["user_id"]]["online"]))
   {
     $online_status .= "&nbsp;<span class='online_text'>✓</span>";
+  }
+  
+  if(!empty($user_data[$pinfo["user_id"]]["privileged"]))
+  {
+    $online_status .= "<img class='privileged_user' src='" . $view_path . "images/privilege.png' alt='" . escape_html(text("PrivilegedMember")) . "' title='" . escape_html(text("PrivilegedMember")) . "'>";
   }
   
   if(!empty($user_data[$pinfo["user_id"]]["notes"]))

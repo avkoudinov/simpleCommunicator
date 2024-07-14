@@ -278,7 +278,7 @@ class MySQL_ForumManager extends ForumManager
         $begin = ($pagination_info["page"] - 1) * $pagination_info["rows_per_page"];
         
         return "select
-           id, user_name, activated, approved, hidden,
+           id, user_name, activated, approved, privileged, hidden,
            blocked, self_blocked, block_expires,
            registration_date, last_visit_date, logout,
            

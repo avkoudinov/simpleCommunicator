@@ -272,7 +272,7 @@ class MSSQL_ForumManager extends ForumManager
         $end = $begin + $pagination_info["rows_per_page"] - 1;
         
         return "select
-             id, user_name, activated, approved, hidden,
+             id, user_name, activated, approved, privileged, hidden,
              blocked, self_blocked, block_expires,
              registration_date, last_visit_date, logout,
 

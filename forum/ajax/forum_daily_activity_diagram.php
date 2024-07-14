@@ -251,7 +251,7 @@ $plot->SetColor("#C51C20");
 
 $plot->SetLegend($label);
 
-if(!empty($_SESSION["forum_posts_avg"]) && reqvar("type") == "daily")
+if(!empty($_SESSION["forum_posts_avg"]))
 {
   $plot = new LinePlot($yposts_avg,$xposts_avg);
 
