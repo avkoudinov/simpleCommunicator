@@ -111,7 +111,7 @@ if(!empty($uinfo["id"]))
 else
 {
   if(!empty($uinfo["is_anonym"]))
-    $uname = escape_html($uinfo["user_name"]);
+    $uname = "<a class='guest_link' href='view_anonym_activity.php'>" . escape_html($uinfo["user_name"]) . "</a>";
   elseif($uinfo["user_name"] == "admin")
     $uname = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["user_name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>";
   else  
@@ -164,7 +164,7 @@ $width .= "px";
 <?php
 foreach($agent_activity as $agifno):
 
-$pct = $agifno["cnt"] / $total_ip_hits_count;
+$pct = $agifno["cnt"] / $total_agents_hits_count;
 
 $agent = escape_html($agifno["agent"]);
 
@@ -278,14 +278,15 @@ $width .= "px";
 <th><?php echo_html(text("IPAddress")); ?></th>
 <th style="width:1%"><?php echo_html(text("FirstAttack")); ?></th>
 <th style="width:1%"><?php echo_html(text("LastAttack")); ?></th>
-<th style="width:1%"><?php echo_html(text("Type")); ?></th>
+<th style="width:1%"><?php echo_html(text("Blocked")); ?></th>
+<th><?php echo_html(text("Type")); ?></th>
 <th style="width:1%"><?php echo_html(text("Attacks")); ?> / <?php echo_html(text("Hits")); ?></th>
 </tr>
 
 <?php if(empty($banned_ips)): ?>
 
 <tr>
-<td colspan="5" class="table_message"><?php echo_html(text("NoData")); ?></td>
+<td colspan="6" class="table_message"><?php echo_html(text("NoData")); ?></td>
 </tr>
 
 <?php else: ?>
@@ -342,7 +343,8 @@ echo($ip);
 </td>
 <td style="width:1%"><?php echo_html($ipfno["first_attack"]); ?></td>
 <td style="width:1%"><?php echo_html($ipfno["last_attack"]); ?></td>
-<td style="width:1%"><?php echo_html($ipfno["atype"]); ?></td>
+<td style="width:1%"><?php echo_html($ipfno["banned_until"]); ?></td>
+<td><?php echo_html($ipfno["atype"]); ?></td>
 <td style="width:1%">
 <?php echo_html($ipfno["cnt"]); ?> / <?php echo_html(round($ipfno["hits"])); ?>
 </td>

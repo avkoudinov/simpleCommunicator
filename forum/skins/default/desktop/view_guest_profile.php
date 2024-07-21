@@ -235,13 +235,12 @@ $forum_selector_id = 1;
     $online_status = "&nbsp;<span class='online_text'>✓</span>";
   }
 
-  $protected_guest = "";
-  if(!empty($settings["protected_guest_list"][$guest_data["user_name"]]) && $fmanager->is_admin())
+  if(!empty($settings["protected_guest_list"][$guest_data["user_name"]]))
   {
-    $protected_guest = "<div class='protected_guest'></div>";
+    $online_status .= "<img class='protected_guest' src='" . $view_path . "images/protected_guest.png' alt='" . escape_html(text("ProtectedGuest")) . "' title='" . escape_html(text("ProtectedGuest")) . "'>";
   }
   ?>
-<td><span class="number"><?php echo_html($fmanager->get_display_name($guest_data["user_name"])); ?></span><?php echo($protected_guest . $online_status); ?></td>
+<td><span class="number"><?php echo_html($fmanager->get_display_name($guest_data["user_name"])); ?></span><?php echo($online_status); ?></td>
 </tr>
 
 <tr>

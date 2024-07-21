@@ -1584,8 +1584,6 @@ abstract class ForumManager
             $stat_data["total_topics"] = 0;
         }
         
-        // posts statistics
-        
         if (!$rodbw->execute_query("select
                              sum(hits_count) hits_count, sum(bot_hits_count) bot_hits_count, sum(post_count) post_count,
                              min(dt) min_dt, max(dt) max_dt
@@ -7588,6 +7586,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function check_post_ip($ip)
     {
+        global $settings;
+
         if (empty($ip) || !defined("MAX_POSTS_PER_MINUTE") || MAX_POSTS_PER_MINUTE < 1) {
             return true;
         }
@@ -7701,9 +7701,6 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        $settings = array();
-        $this->get_settings($settings);
-        
         // there is no administrators, send to the master admin
         
         if (empty($administrators)) {
@@ -7778,6 +7775,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function check_ip($ip, $user_agent)
     {
+        global $settings;
+        
         if (empty($ip) || !defined("MAX_REQUESTS_PER_MINUTE") || MAX_REQUESTS_PER_MINUTE < 1) {
             return true;
         }
@@ -7814,9 +7813,16 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         
+        $request_type = 0;
+        $where_appendix = " and statistics_request = 0";
+        if (defined("STATISTICS_REQUEST")) {
+            $request_type = STATISTICS_REQUEST;
+            $where_appendix = "";
+        }
+
         if (!$dbw->execute_query("select 1
                              from {$prfx}_banned_ips
-                             where banned_until > '$now' and ip = '$ip'")) {
+                             where banned_until > '$now' and ip = '$ip' $where_appendix")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -7852,15 +7858,13 @@ abstract class ForumManager
         
         $stat_hit_limit = 0;
         $stat_hits = 0;
-        $request_type = 0;
         
-        if (defined("STATISTICS_REQUEST") && defined("MAX_STAT_REQUESTS_PER_MINUTE") && MAX_STAT_REQUESTS_PER_MINUTE > 0) {
+        if (defined("STATISTICS_REQUEST") && defined("MAX_STAT_REQUESTS_PER_MINUTE") && MAX_STAT_REQUESTS_PER_MINUTE != 0) {
             $stat_hit_limit = MAX_STAT_REQUESTS_PER_MINUTE;
-            if (STATISTICS_REQUEST > 1) $stat_hit_limit += 2;
+            if (STATISTICS_REQUEST != 1) $stat_hit_limit += 2;
             
             $check_period = 60;
             $this->ajust_check_limits($stat_hit_limit, $check_period);
-            $request_type = STATISTICS_REQUEST;
             
             $now = $dbw->format_datetime(time() - $check_period);
 
@@ -7876,10 +7880,39 @@ abstract class ForumManager
             }
             
             $dbw->free_result();
+            
+            if (STATISTICS_REQUEST < 0) {
+                $now = $dbw->format_datetime(time() - 10*60);
+
+                if (!$dbw->execute_query("select 1
+                                     from {$prfx}_forum_hits
+                                     where dt >= '$now' and statistics_request = $request_type")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    return false;
+                }
+                
+                $entire_hits = 0;
+                
+                while ($dbw->fetch_row()) {
+                    $entire_hits++;
+                }
+                
+                $dbw->free_result();
+                
+                if ($entire_hits > 30) {
+                    exit("<h3>Too many requests! Try again later!</h3>");
+                }
+            }
         }
         
         if ($hits <= $limit && $stat_hits <= $stat_hit_limit) {
             return true;
+        }
+
+        $block_type = "REQUEST";
+        if ($stat_hits > $stat_hit_limit) {
+            $hits = $stat_hits;
+            $block_type = "STAT REQUEST";
         }
 
         $wait_time_after_attack = 30;
@@ -7889,7 +7922,7 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time() + $wait_time_after_attack * 60);
         
-        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, atype) values ('$now', '$ip', $hits, 'REQUEST')")) {
+        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, atype, statistics_request) values ('$now', '$ip', $hits, '$block_type', $request_type)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -7917,9 +7950,6 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        $settings = array();
-        $this->get_settings($settings);
-        
         // there is no administrators, send to the master admin
         
         if (empty($administrators)) {
@@ -7935,7 +7965,7 @@ abstract class ForumManager
         $params = array();
         $params["{ip}"] = $ip;
         $params["{hits}"] = $hits;
-        $params["{atype}"] = 'REQUEST';
+        $params["{atype}"] = $block_type;
         $params["{check_period}"] = 1;
         
         $params["{total_attacks}"] = '-';
@@ -9274,6 +9304,53 @@ abstract class ForumManager
     } // get_guest_data_for_view
     
     //-----------------------------------------------------------------
+    function get_anonym_activity(&$guest_data)
+    {
+        global $settings;
+        global $READ_MARKER;
+        
+        $exts = AttachmentManager::get_picture_exts();
+        
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        if (!$dbw->execute_query($this->get_query_last_guest_activity($prfx, "where guest_name is NULL and user_id is NULL and bot is NULL"))) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        if ($dbw->fetch_row()) {
+            $guest_data["last_visit_date"] = smart_date2(xstrtotime($dbw->field_by_name("dt")));
+            $guest_data["last_ip"] = $dbw->field_by_name("ip");
+        }
+        
+        $dbw->free_result();
+        
+        if (empty($guest_data["last_visit_date"])) {
+            if (!$dbw->execute_query($this->get_query_guest_last_activity($prfx, ""))) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            if ($dbw->fetch_row()) {
+                $guest_data["last_visit_date"] = smart_date2(xstrtotime($dbw->field_by_name("dt")));
+            }
+            
+            $dbw->free_result();
+        }
+        
+        if (empty($guest_data["last_visit_date"])) {
+            $guest_data["last_visit_date"] = text("Never");
+        }
+        
+        return true;
+    } // get_anonym_activity
+
+    //-----------------------------------------------------------------
     function get_guest_ignore_info($author, $aname, &$ignores, &$ignored, &$ignored_topics, &$hides, &$hidden)
     {
         global $READ_MARKER;
@@ -9875,82 +9952,13 @@ abstract class ForumManager
         }
         
         $prfx = $rodbw->escape(System::getDBPrefix());
-        $now = $rodbw->format_datetime(time());
 
-        $start = $rodbw->format_datetime(time() - 30*60);
-        //xxx
-        $start = $rodbw->format_datetime(time());
+        $start = $rodbw->format_datetime(time() - 92*24*3600); // last 3 months
         
-        $query = "delete from {$prfx}_browser_statistics_cache where tm < '$start'";
-        
-        if (!$rodbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
-            return false;
-        }
-
-        $query = "select count(*) cnt from
-                    {$prfx}_browser_statistics_cache
-                    order by cnt desc";
-        
-        if (!$rodbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
-            return false;
-        }
-        
-        $exist = 0;
-        if ($rodbw->fetch_row()) {
-            $exist = $rodbw->field_by_name("cnt");
-        }
-        
-        $rodbw->free_result();
-        
-        if (!$exist) {
-            $query = "insert into {$prfx}_browser_statistics_cache
-                      (tm, tp, name, cnt)
-                      select '$now', 'browser', browser, count(*) cnt from
-                        (select read_marker, browser
-                        from {$prfx}_forum_hits
-                        where browser is not NULL
-                        group by read_marker, browser) stat
-                        group by browser";
-            
-            if (!$rodbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
-                return false;
-            }
-            
-            $query = "insert into {$prfx}_browser_statistics_cache
-                      (tm, tp, name, cnt)
-                      select '$now', 'os', os, count(*) cnt from
-                        (select read_marker, os
-                        from {$prfx}_forum_hits
-                        where os is not NULL
-                        group by read_marker, os) stat
-                        group by os";
-            
-            if (!$rodbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
-                return false;
-            }
-            
-            $query = "insert into {$prfx}_browser_statistics_cache
-                      (tm, tp, name, cnt)
-                      select '$now', 'bot', bot, count(*) cnt from
-                        (select read_marker, bot
-                        from {$prfx}_forum_hits
-                        where bot is not NULL
-                        group by read_marker, bot) stat
-                        group by bot";
-            
-            if (!$rodbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
-                return false;
-            }
-        }
-
-        $query = "select name, cnt from
-                    {$prfx}_browser_statistics_cache
-                    where tp = 'browser'
+        $query = "select browser, count(*) cnt from
+                    {$prfx}_browser_daily_statistics
+                    where dt > '$start' and browser is not NULL
+                    group by browser
                     order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -9961,7 +9969,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $browser_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
+            $browser_stat[$rodbw->field_by_name("browser")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
@@ -9970,9 +9978,10 @@ abstract class ForumManager
             $browser_stat[$browser] = 100 * $val / $total;
         }
         
-        $query = "select name, cnt from
-                    {$prfx}_browser_statistics_cache
-                    where tp = 'os'
+        $query = "select os, count(*) cnt from
+                    {$prfx}_browser_daily_statistics
+                    where dt > '$start' and os is not NULL
+                    group by os
                     order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -9983,7 +9992,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $os_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
+            $os_stat[$rodbw->field_by_name("os")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
@@ -9992,9 +10001,10 @@ abstract class ForumManager
             $os_stat[$os] = 100 * $val / $total;
         }
         
-        $query = "select name, cnt from
-                    {$prfx}_browser_statistics_cache
-                    where tp = 'bot'
+        $query = "select bot, count(*) cnt from
+                    {$prfx}_browser_daily_statistics
+                    where dt > '$start' and bot is not NULL
+                    group by bot
                     order by cnt desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -10005,7 +10015,7 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $bot_stat[$rodbw->field_by_name("name")] = $rodbw->field_by_name("cnt");
+            $bot_stat[$rodbw->field_by_name("bot")] = $rodbw->field_by_name("cnt");
         }
         
         $rodbw->free_result();
@@ -22915,7 +22925,7 @@ abstract class ForumManager
             $query = "update {$prfx}_daily_statistics set
                 post_count = post_count + 1
                 where
-                dt = '$dtnow' and user_id is NULL and forum_id = $fid;
+                dt = '$dtnow' and user_id is NULL and bot is NULL and forum_id = $fid;
                ";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -23842,7 +23852,7 @@ abstract class ForumManager
             $query = "update {$prfx}_daily_statistics set
                 post_count = post_count + 1
                 where
-                dt = '$dtnow' and user_id is NULL and forum_id = $fid;
+                dt = '$dtnow' and user_id is NULL and bot is NULL and forum_id = $fid;
                ";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -27990,6 +28000,17 @@ abstract class ForumManager
         $uri = val_or_empty($_SERVER["REQUEST_URI"]);
         $uri = $dbw->quotes_or_null($uri);
         
+        $referrer = val_or_empty($_SERVER["HTTP_REFERER"]);
+        $referrer = $dbw->quotes_or_null($referrer);
+        
+        $headers_json = "";
+        $headers = getallheaders();
+        if (!empty($headers)) {
+            $headers_json = json_encode($headers, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+        }
+        
+        $headers_json = $dbw->quotes_or_null($headers_json);
+
         $now = $dbw->format_datetime(time());
         
         $duration = 0;
@@ -28011,13 +28032,13 @@ abstract class ForumManager
         
         $browser = $dbw->quotes_or_null($browser);
         $os = $dbw->quotes_or_null($os);
-        $bot = $dbw->quotes_or_null($bot);
+        $bot_db = $dbw->quotes_or_null($bot);
         
         $statistics_request = defined("STATISTICS_REQUEST") ? STATISTICS_REQUEST : 0;
         
-        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, uri, ip, read_marker, browser, os, bot, statistics_request)
+        $query = "insert into {$prfx}_forum_hits (forum_id, topic_id, dt, user_id, hits_count, duration, guest_name, user_agent, referrer, headers, uri, ip, read_marker, browser, os, bot, statistics_request)
               values
-              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $uri, $ip, '$rm', $browser, $os, $bot, $statistics_request)";
+              ($fid, $tid, '$now', $uid, 1, $duration, $guest_name, $agent, $referrer, $headers_json, $uri, $ip, '$rm', $browser, $os, $bot_db, $statistics_request)";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -28112,37 +28133,71 @@ abstract class ForumManager
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     return false;
                 }
+            } elseif ($guest_name == "NULL") {
+                if (!$dbw->execute_query("select 1 from {$prfx}_topic_view_history where guest_name is NULL and user_id is NULL and topic_id = $tid")) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    return false;
+                }
+                
+                $entry_exists = false;
+                if ($dbw->fetch_row()) {
+                    $entry_exists = true;
+                }
+                
+                $dbw->free_result();
+                
+                if (!$entry_exists) {
+                    $query = "insert into {$prfx}_topic_view_history (guest_name, topic_id, dt, ip) values ($guest_name, $tid, '$now', $ip)";
+                } else {
+                    $query = "update {$prfx}_topic_view_history set dt = '$now', ip = $ip where guest_name is NULL and user_id is NULL and topic_id = $tid";
+                }
+                
+                if (!$dbw->execute_query($query)) {
+                    MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    return false;
+                }
             }
         }
         
         $user_clause = ($uid != "NULL") ? "and user_id = $uid" : "and user_id is NULL";
-        $bot_clause = ($bot != "NULL") ? "and bot = $bot" : "and bot is NULL";
+        $bot_clause = ($bot_db != "NULL") ? "and bot = $bot_db" : "and bot is NULL";
+        $os_clause = ($os != "NULL") ? "and os = $os" : "and os is NULL";
+        $browser_clause = ($browser != "NULL") ? "and browser = $browser" : "and browser is NULL";
         $forum_clause = ($fid != "NULL") ? "and forum_id = $fid" : "and forum_id is NULL";
 
         $dtnow = $dbw->format_date(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
         
-        if (!defined("STATISTICS_REQUEST") || STATISTICS_REQUEST != 2) {
-            $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
-              select '$dtnow', $uid, $fid, $bot
-              from {$prfx}_dual
-              where
-              not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' $user_clause $bot_clause $forum_clause);
-             ";
-            if (!$dbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                return false;
-            }
-            
-            $query = "update {$prfx}_daily_statistics set
-              hits_count = hits_count + $browser_increment, bot_hits_count = bot_hits_count + $bot_increment, 
-              time_online = time_online + $duration
-              where
-              dt = '$dtnow' $user_clause $bot_clause $forum_clause;
-             ";
-            if (!$dbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                return false;
-            }
+        $query = "insert into {$prfx}_browser_daily_statistics (dt, browser, os, bot, read_marker)
+          select '$dtnow', $browser, $os, $bot_db, '$rm'
+          from {$prfx}_dual
+          where
+          not exists (select 1 from {$prfx}_browser_daily_statistics where dt = '$dtnow' and read_marker ='$rm' $browser_clause $os_clause $bot_clause);
+         ";
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
+        $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
+          select '$dtnow', $uid, $fid, $bot_db
+          from {$prfx}_dual
+          where
+          not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' $user_clause $bot_clause $forum_clause);
+         ";
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        $query = "update {$prfx}_daily_statistics set
+          hits_count = hits_count + $browser_increment, bot_hits_count = bot_hits_count + $bot_increment, 
+          time_online = time_online + $duration
+          where
+          dt = '$dtnow' $user_clause $bot_clause $forum_clause;
+         ";
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
         }
         
         // this was a guest
@@ -33256,7 +33311,7 @@ abstract class ForumManager
         }
         
         if (empty($tid) || empty($fid)) {
-            $query = "select id, is_admin, activated, approved, blocked, self_blocked, hidden, {$prfx}_user.block_expires, location, message, signature, ignore_guests_whitelist,
+            $query = "select id, is_admin, activated, approved, blocked, self_blocked, privileged, hidden, {$prfx}_user.block_expires, location, message, signature, ignore_guests_whitelist,
                 post_count,
                 like_count,
                 dislike_count,
@@ -33268,7 +33323,7 @@ abstract class ForumManager
                 left join {$prfx}_user_statistics on ({$prfx}_user.id = {$prfx}_user_statistics.user_id)
                 where id in ($in_list)";
         } else {
-            $query = "select id, is_admin, activated, approved, blocked, self_blocked, hidden, {$prfx}_user.block_expires, location, message, signature, ignore_guests_whitelist,
+            $query = "select id, is_admin, activated, approved, blocked, self_blocked, privileged, hidden, {$prfx}_user.block_expires, location, message, signature, ignore_guests_whitelist,
                 post_count,
                 like_count,
                 dislike_count,
@@ -33298,6 +33353,7 @@ abstract class ForumManager
             
             $user_data[$uid]["activated"] = $dbw->field_by_name("activated");
             $user_data[$uid]["approved"] = $dbw->field_by_name("approved");
+            $user_data[$uid]["privileged"] = $dbw->field_by_name("privileged");
             
             $user_data[$uid]["blocked"] = $dbw->field_by_name("blocked");
             $user_data[$uid]["self_blocked"] = $dbw->field_by_name("self_blocked");
@@ -35069,6 +35125,11 @@ abstract class ForumManager
             $where .= " and activated = 0";
         }
         
+        if (val_or_empty($_SESSION["last_user_sort"]) == "privileged_users") {
+            $now = $rodbw->format_datetime(time());
+            $where .= " and privileged = 1";
+        }
+
         if (val_or_empty($_SESSION["last_user_sort"]) == "blocked_users") {
             $now = $rodbw->format_datetime(time());
             $where .= " and blocked = 1 and (block_expires is NULL or block_expires > '$now')";
@@ -35199,6 +35260,7 @@ abstract class ForumManager
                 "user_name" => $rodbw->field_by_name("user_name"),
                 "activated" => $rodbw->field_by_name("activated"),
                 "approved" => $rodbw->field_by_name("approved"),
+                "privileged" => $rodbw->field_by_name("privileged"),
                 "hidden" => $rodbw->field_by_name("hidden"),
                 "carma_minus" => $rodbw->field_by_name("dislike_count") ? $rodbw->field_by_name("dislike_count") : 0,
                 "carma_plus" => $rodbw->field_by_name("like_count") ? $rodbw->field_by_name("like_count") : 0,
@@ -37335,10 +37397,6 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_guest_read_topics($guest, &$read_topics)
     {
-        if (empty($guest)) {
-            return true;
-        }
-        
         start_action_time_measure();
         
         $dbw = System::getDBWorker();
@@ -39678,7 +39736,7 @@ abstract class ForumManager
         }
         
         $wait_time_after_attack = 30;
-        if (defined("WAIT_TIME_AFTER_ATTACK") && WAIT_TIME_AFTER_ATTACK > 1) {
+        if (defined("WAIT_TIME_AFTER_ATTACK") && WAIT_TIME_AFTER_ATTACK >= 1) {
             $wait_time_after_attack = WAIT_TIME_AFTER_ATTACK;
         }
         
@@ -39691,6 +39749,7 @@ abstract class ForumManager
                 "atype" => $rodbw->field_by_name("atype"),
                 "first_attack" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("first_attack")) - $wait_time_after_attack * 60, text("DateTimeFormat")),
                 "last_attack" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("last_attack")) - $wait_time_after_attack * 60, text("DateTimeFormat")),
+                "banned_until" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("last_attack")), text("DateTimeFormat")),
                 "cnt" => $rodbw->field_by_name("cnt"),
                 "hits" => $rodbw->field_by_name("hits")
             );

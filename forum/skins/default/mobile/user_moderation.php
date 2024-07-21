@@ -152,6 +152,11 @@ if(!empty($topics_with_new_count)) $display = "";
   {
     $online_status = "&nbsp;<span class='online_text'>✓</span>";
   }
+
+  if(!empty($user_data["privileged"]))
+  {
+    $online_status .= "<img class='privileged_user' src='" . $view_path . "images/privilege.png' alt='" . escape_html(text("PrivilegedMember")) . "' title='" . escape_html(text("PrivilegedMember")) . "'>";
+  }
   ?>
 <td><div class="smart_break"><span class="number"><?php echo_html($user_data["user_name"]); ?></span><?php echo($online_status); ?></div></td>
 </tr>
@@ -205,7 +210,7 @@ if(!empty($user_data["avatar"]))
 
   <?php else: ?>
 
-    <?php echo_html(text("RegisteredUser")); ?><br>
+    <?php echo_html(text("Member")); ?><br>
 
   <?php endif; ?>
 

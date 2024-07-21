@@ -50,6 +50,10 @@ elseif (!empty($user_data["avatar"])) {
   $ogimage = $user_data["avatar"];
 }  
 
+if (empty($ogimage)) {
+  $ogimage = $view_path . "images/guest.jpg";
+}
+
 $ignores = array();
 $ignored = array();
 if(!$fmanager->get_user_ignore_info($fmanager->get_user_id(), $ignores, $ignored))

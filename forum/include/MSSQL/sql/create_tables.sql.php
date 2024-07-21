@@ -85,7 +85,8 @@ create table v1_banned_ips (
    ip                   varchar(250)         not null,
    banned_until         datetime             not null,
    hits                 int                  not null,
-   atype                varchar(255)         null
+   atype                varchar(255)         null,
+   statistics_request   int                  not null default 0
 )
 ';
 
@@ -96,11 +97,42 @@ ip ASC
 ';
 
 $sql_cmds[] = '
-create table v1_browser_statistics_cache (
-   tm                   datetime             null,
-   tp                   varchar(100)         null,
-   name                 nvarchar(250)        null,
-   cnt                  int                  null
+create table v1_browser_daily_statistics (
+   dt                   date                 not null,
+   browser              nvarchar(250)        null,
+   os                   nvarchar(250)        null,
+   bot                  nvarchar(250)        null,
+   read_marker          varchar(255)         null
+)
+';
+
+$sql_cmds[] = '
+create index v1_browser_daily_statistics_dt_idx on v1_browser_daily_statistics (
+dt ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_browser_daily_statistics_browser_idx on v1_browser_daily_statistics (
+browser ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_browser_daily_statistics_os_idx on v1_browser_daily_statistics (
+os ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_browser_daily_statistics_bot_idx on v1_browser_daily_statistics (
+bot ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_browser_daily_statistics_rm_idx on v1_browser_daily_statistics (
+read_marker ASC
 )
 ';
 
@@ -399,6 +431,7 @@ create table v1_forum_hits (
    hits_count           int                  not null default 0,
    duration             int                  not null default 0,
    guest_name           nvarchar(250)        null,
+   referrer             varchar(700)         null,
    user_agent           nvarchar(700)        null,
    uri                  nvarchar(2000)       null,
    ip                   nvarchar(250)        null,
@@ -407,7 +440,8 @@ create table v1_forum_hits (
    bot                  nvarchar(250)        null,
    processed            tinyint              not null default 0,
    read_marker          varchar(255)         null,
-   statistics_request   tinyint              not null default 0
+   statistics_request   int                  not null default 0,
+   headers              text                 null
 )
 ';
 
@@ -468,6 +502,18 @@ ip ASC
 $sql_cmds[] = '
 create index v1_forum_hits_bot_idx on v1_forum_hits (
 bot ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_forum_hits_browser_idx on v1_forum_hits (
+browser ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_forum_hits_os_idx on v1_forum_hits (
+os ASC
 )
 ';
 

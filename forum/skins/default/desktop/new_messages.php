@@ -815,7 +815,7 @@ if(empty($is_private))
     elseif(!empty($uinfo["bot"]))
       $freaders .= "<span style='white-space: nowrap'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif($ouid == "g_#anonyms#")
-      $freaders .= "<span style='white-space: nowrap'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
+      $freaders .= "<span style='white-space: nowrap'><i><a class='guest_link' href='view_anonym_activity.php'>" . escape_html($uinfo["name"]) . "</a></i>$appendix</span>, ";
     elseif($uinfo["name"] == "admin")
       $freaders .= "<span style='white-space: nowrap'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
     else

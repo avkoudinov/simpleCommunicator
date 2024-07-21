@@ -123,7 +123,7 @@ if (reqvar("author_mode") == "last_posts" || !reqvar_empty("rate_statistics"))
     $sort = "asc";
 }
 
-$fmanager->track_hit($tid, $fid);
+$fmanager->track_hit("", "");
 
 //------------------------------------------------------------------
 $user_tags = array();

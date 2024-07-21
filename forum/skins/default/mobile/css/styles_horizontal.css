@@ -1279,7 +1279,7 @@
     width: 770px;
   }
   
-  .settings_table #protected_guestsб
+  .settings_table #protected_guests,
   .settings_table #blocked_email_domains
   {
     height: 500px;
@@ -1503,6 +1503,21 @@
   {
     height: 22px;
     margin-bottom: -5px;
+  }
+
+  .privileged_user
+  {
+    height: 22px;
+    margin-bottom: -5px;
+    margin-left: 3px;
+  }
+
+  .protected_guest
+  {
+    height: 18px;
+    margin-bottom: -2px;
+    margin-left: 3px;
+    opacity: 0.7;
   }
 
   .user_notes {
@@ -2963,13 +2978,6 @@
   {
     padding-right: 160px;
     font-size: 20px;
-  }
-
-  .profile_table .protected_guest,
-  .post_table .protected_guest
-  {
-    width: 14px;
-    height: 14px;
   }
 
   .author_actions img

@@ -493,7 +493,7 @@ function trace_message_to_file($msg, $file)
 //------------------------------------------------------------------------------
 function profile_point($msg)
 {
-    static $profile_time;
+    global $profile_time;
     
     if (empty($profile_time)) {
         $profile_time = microtime(true);
@@ -516,7 +516,7 @@ function profile_point($msg)
 //------------------------------------------------------------------------------
 function profile_message($msg)
 {
-    static $profile_time;
+    global $profile_time;
     
     if (empty($profile_time)) {
         $profile_time = microtime(true);

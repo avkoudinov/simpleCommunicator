@@ -23,7 +23,7 @@ if(!empty($online_users["g_#anonyms#"]["count"])) $ucnt += ($online_users["g_#an
     elseif(!empty($uinfo["bot"]))
       $users_str .= "<span class='user_name'><a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>$appendix</span>, ";
     elseif($ouid == "g_#anonyms#")
-      $users_str .= "<span class='user_name'><i>" . escape_html($uinfo["name"]) . "</i>$appendix</span>, ";
+      $users_str .= "<span class='user_name'><i><a class='guest_link' href='view_anonym_activity.php'>" . escape_html($uinfo["name"]) . "</a></i>$appendix</span>, ";
     elseif($uinfo["name"] == "admin")
       $users_str .= "<span class='user_name'><a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>$appendix</span>, ";
     else

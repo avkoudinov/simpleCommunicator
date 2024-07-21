@@ -120,6 +120,13 @@
             <ua>Привілейований користувач</ua>
         </text>
 
+        <text id="PrivilegedMembers">
+            <en>Privileged users</en>
+            <de>Privilegierte Benutzer</de>
+            <ru>Привилегированные пользователи</ru>
+            <ua>Привілейовані користувачі</ua>
+        </text>
+
         <text id="PrivilegedTopicModerator">
             <en>Privileged topic moderator</en>
             <de>Privilegierter Themenmoderator</de>
@@ -1497,13 +1504,6 @@
             <de>Geblockt auf den Foren</de>
             <ru>Заблокирован на форумах</ru>
             <ua>Заблокований на форумах</ua>
-        </text>
-
-        <text id="RegisteredUser">
-            <en>Registered user</en>
-            <de>Registirierter Benutzer</de>
-            <ru>Зарегистрированный пользователь</ru>
-            <ua>Зареєстрований користувач</ua>
         </text>
 
         <text id="ModeratorLog">
@@ -3284,13 +3284,6 @@
             <ua>не схвалений</ua>
         </text>
 
-        <text id="Blocked">
-            <en>Blocked</en>
-            <de>Blockiert</de>
-            <ru>Заблокирован</ru>
-            <ua>Заблокований</ua>
-        </text>
-
         <text id="BlockedUsers">
             <en>Blocked users</en>
             <de>Blockierte Benutzer</de>
@@ -3310,6 +3303,13 @@
             <de>Gegangene aktive Benutzer</de>
             <ru>Ушедшие активные пользователи</ru>
             <ua>Покинувши активні учасники</ua>
+        </text>
+
+        <text id="Blocked">
+            <en>Blocked</en>
+            <de>Blockiert</de>
+            <ru>Заблокирован</ru>
+            <ua>Заблокований</ua>
         </text>
 
         <text id="BlockedUntil">
@@ -9106,6 +9106,13 @@
             <ua>Введіть імена гостей - кожне ім'я з нового рядка. Якщо ви бажаєте ігнорувати усіх гостей, залиште поле порожнім.</ua>
         </text>
 
+        <text id="ProtectedGuest">
+            <en>Protected guest</en>
+            <de>Geschützter Gast</de>
+            <ru>Защищенный гость</ru>
+            <ua>Захищений гість</ua>
+        </text>
+
         <text id="ProtectedGuestNames">
             <en>Protected guest names</en>
             <de>Geschützte Gastnamen</de>
@@ -10590,6 +10597,13 @@
             <de>Eine Forumgruppe mit diesem Namen existiert bereits!</de>
             <ru>Группа форумов с таким названием уже существует!</ru>
             <ua>Група форумів із такою назвою вже існує!</ua>
+        </text>
+
+        <text id="AnonymActivity">
+            <en>Activity of anonyms</en>
+            <de>Anonyme-Aktivität</de>
+            <ru>Активность анонимов</ru>
+            <ua>Активність анонімів</ua>
         </text>
 
     </texts>

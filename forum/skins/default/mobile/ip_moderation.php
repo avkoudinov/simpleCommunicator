@@ -313,13 +313,17 @@ if(!empty($user_data["user_name"])): ?>
     $online_status = "&nbsp;<span class='online_text'>✓</span>";
   }
 
-  $protected_guest = "";
-  if(!empty($settings["protected_guest_list"][$user_data["user_name"]]) && $fmanager->is_admin() && empty($user_data["id"]))
+  if(!empty($user_data["privileged"]))
   {
-    $protected_guest = "<div class='protected_guest'></div>";
+    $online_status .= "<img class='privileged_user' src='" . $view_path . "images/privilege.png' alt='" . escape_html(text("PrivilegedMember")) . "' title='" . escape_html(text("PrivilegedMember")) . "'>";
+  }
+
+  if(!empty($settings["protected_guest_list"][$user_data["user_name"]]) && empty($user_data["id"]))
+  {
+    $online_status .= "<img class='protected_guest' src='" . $view_path . "images/protected_guest.png' alt='" . escape_html(text("ProtectedGuest")) . "' title='" . escape_html(text("ProtectedGuest")) . "'>";
   }
   ?>
-<td><div class="smart_break"><span class="number"><?php echo_html($fmanager->get_display_name($user_data["user_name"])); ?></span><?php echo($protected_guest . $online_status); ?></div></td>
+<td><div class="smart_break"><span class="number"><?php echo_html($fmanager->get_display_name($user_data["user_name"])); ?></span><?php echo($online_status); ?></div></td>
 </tr>
 
 <tr>
@@ -507,7 +511,7 @@ echo $ip;
 
   <?php else: ?>
 
-    <?php echo_html(text("RegisteredUser")); ?><br>
+    <?php echo_html(text("Member")); ?><br>
 
   <?php endif; ?>
 

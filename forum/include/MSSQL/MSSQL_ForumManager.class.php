@@ -272,7 +272,7 @@ class MSSQL_ForumManager extends ForumManager
         $end = $begin + $pagination_info["rows_per_page"] - 1;
         
         return "select
-             id, user_name, activated, approved, hidden,
+             id, user_name, activated, approved, privileged, hidden,
              blocked, self_blocked, block_expires,
              registration_date, last_visit_date, logout,
 
@@ -1138,12 +1138,24 @@ class MSSQL_ForumManager extends ForumManager
     //-----------------------------------------------------------------
     function get_query_guest_last_activity($prfx, $guest)
     {
-        return "select top 1 dt, ip from {$prfx}_topic_view_history where guest_name = '$guest' order by dt desc";
+        if (empty($guest)) {
+            $where = "where guest_name is NULL and user_id is NULL";
+        } else {
+            $where = "where guest_name = '$guest'";
+        }
+
+        return "select top 1 dt, ip from {$prfx}_topic_view_history $where order by dt desc";
     } // get_query_guest_last_activity
 
     //-----------------------------------------------------------------
     function get_query_guest_read_topics($prfx, $guest, $forum_appendix)
     {
+        if (empty($guest) || $guest == "NULL") {
+            $where = "{$prfx}_topic_view_history.guest_name is NULL and {$prfx}_topic_view_history.user_id is NULL";
+        } else {
+            $where = "{$prfx}_topic_view_history.guest_name = $guest";
+        }
+
         return "select
              top 200
              {$prfx}_topic.id, forum_id, {$prfx}_topic.name, {$prfx}_forum.name forum_name, {$prfx}_topic_view_history.dt
@@ -1151,7 +1163,7 @@ class MSSQL_ForumManager extends ForumManager
              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
              inner join {$prfx}_topic_view_history on ({$prfx}_topic.id = {$prfx}_topic_view_history.topic_id)
              where
-             {$prfx}_topic_view_history.guest_name = $guest and
+             $where and
              {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1 and {$prfx}_topic.publish_delay <> 1 and {$prfx}_topic.is_private < 1
              $forum_appendix
              order by {$prfx}_topic_view_history.dt desc
@@ -1599,7 +1611,7 @@ class MSSQL_ForumManager extends ForumManager
         return "select top 200 ip, atype,
                min(banned_until) first_attack,
                max(banned_until) last_attack,
-               avg(hits) hits,
+               max(hits) hits,
                count(*) cnt
                from {$prfx}_banned_ips
                group by ip, atype
