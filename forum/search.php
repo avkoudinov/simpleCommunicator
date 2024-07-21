@@ -19,6 +19,10 @@ if (!$fmanager->is_logged_in() && $fmanager->check_tor_ip(val_or_empty($_SERVER[
 //------------------------------------------------------------------
 shrink_spaces($_REQUEST["author"], true);
 
+if (!empty($_REQUEST["author"]) && $_REQUEST["author"] == "admin") {
+    $_REQUEST["author"] = text("MasterAdministrator");
+}
+
 invert_dates($_REQUEST["start_date"], $_REQUEST["end_date"], text("DateFormat"));
 
 if (reqvar_empty("author_mode") && reqvar_empty("news_digest")) {

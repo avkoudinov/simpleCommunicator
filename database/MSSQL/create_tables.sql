@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     14.07.2024 16:51:31                          */
+/* Created on:     21.07.2024 10:49:59                          */
 /*==============================================================*/
 
 
@@ -134,7 +134,8 @@ create table v1_browser_daily_statistics (
    browser              nvarchar(250)        null,
    os                   nvarchar(250)        null,
    bot                  nvarchar(250)        null,
-   read_marker          varchar(255)         null
+   read_marker          varchar(255)         null,
+   bot_hits_count       int                  not null default 0
 )
 go
 

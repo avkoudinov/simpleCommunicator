@@ -536,7 +536,7 @@ if(!empty($user_data["avatar"]))
     <?php endif; ?>
   <?php endif; ?>
 
-  <?php if((!$fmanager->is_logged_in() || $fmanager->is_master_admin()) && !empty($user_data["ignores_all_guests"])): ?>
+  <?php if(!$fmanager->is_logged_in() && !empty($user_data["ignores_all_guests"])): ?>
   <br><span class="error_text"><?php echo_html(text("IgnoringGuests")); ?></span>
   <?php elseif(val_or_empty($user_data["ignoring_me"]) == 1): ?>
   <br><span class="error_text"><?php echo_html(text("IgnoringMe")); ?></span>

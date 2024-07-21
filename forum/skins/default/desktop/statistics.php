@@ -50,7 +50,7 @@ function load_browser_stats(load_browser_stat_button)
   load_browser_stats_ajax.setPOST('user_logged', user_logged);
   load_browser_stats_ajax.setPOST('trace_sql', trace_sql);
 
-  load_browser_stats_ajax.request("ajax/load_browser_stats.php");
+  load_browser_stats_ajax.request("ajax/load_browser_stats.php<?php echo($query_string); ?>");
 
   return false;
 }
