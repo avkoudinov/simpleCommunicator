@@ -1929,7 +1929,7 @@ function detect_bot($user_agent)
     }
     
     if (preg_match("/.*serpstatbot.*/i", $user_agent)) {
-        $bot_data["name"] = "serpstatbot Bot";
+        $bot_data["name"] = "serpstatbot";
 
         return $bot_data;
     }
@@ -1942,6 +1942,19 @@ function detect_bot($user_agent)
         return $bot_data;
     }
     
+    if (preg_match("/.*(meta-externalfetcher).*/i", $user_agent)) {
+        $bot_data["name"] = "Facebook Bot" . " (url preview)";
+        $bot_data["allowed"] = 1;
+
+        return $bot_data;
+    }
+
+    if (preg_match("/.*(meta-externalagent).*/i", $user_agent)) {
+        $bot_data["name"] = "Facebook Bot" . " (AI Training)";
+
+        return $bot_data;
+    }
+
     if (preg_match("/.*(petalbot).*/i", $user_agent)) {
         $bot_data["name"] = "PetalBot Bot";
 

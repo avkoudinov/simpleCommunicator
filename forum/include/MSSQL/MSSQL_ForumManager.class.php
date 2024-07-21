@@ -690,7 +690,7 @@ class MSSQL_ForumManager extends ForumManager
         }
         
         $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
-        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx, 1);
+        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
         
         return "select isnull({$prfx}_user.user_name, {$prfx}_post.author) author, count(*) cnt
                 from {$prfx}_post
@@ -717,7 +717,7 @@ class MSSQL_ForumManager extends ForumManager
         }
         
         $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
-        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx, 1);
+        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
         
         return "select isnull({$prfx}_user.user_name, {$prfx}_topic.author) author, count(*) cnt
                 from {$prfx}_topic
@@ -753,9 +753,9 @@ class MSSQL_ForumManager extends ForumManager
         
         $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
         
-        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx, 1);
+        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
         
-        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx, 1);
+        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
         
         $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
 

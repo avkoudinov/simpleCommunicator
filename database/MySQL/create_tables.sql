@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     14.07.2024 16:51:18                          */
+/* Created on:     21.07.2024 10:49:46                          */
 /*==============================================================*/
 
 
@@ -138,7 +138,8 @@ create table v1_browser_daily_statistics
    browser              varchar(250),
    os                   varchar(250),
    bot                  varchar(250),
-   read_marker          varchar(255)
+   read_marker          varchar(255),
+   bot_hits_count       int not null default 0
 );
 
 /*==============================================================*/

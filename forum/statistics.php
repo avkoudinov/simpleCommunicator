@@ -19,12 +19,9 @@ $title = text("Statistics") . " - " . get_site_name(current_language());
 $ogtitle = text("Statistics") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 
-if(!reqvar_empty("period"))
+if(reqvar_empty("period"))
 {
-  $period_appendix = "&statistics_period=" . reqvar("period");
-} else {
   $_REQUEST["period"] = "last_year";
-  $period_appendix = "&statistics_period=last_year";
 }
 
 $query_string = "?period=" . reqvar("period");

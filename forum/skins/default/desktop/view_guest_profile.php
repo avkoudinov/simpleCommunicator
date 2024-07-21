@@ -446,7 +446,7 @@ if(!empty($moderator_caption))
 <td colspan="2"></td>
 </tr>
 
-<?php if(reqvar("ignored") != 2): ?>
+<?php if(reqvar("ignored") != 2 && $guest_data["user_name"] != "admin"): ?>
 <tr>
 <td></td>
 <td>

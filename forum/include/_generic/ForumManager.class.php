@@ -8964,7 +8964,7 @@ abstract class ForumManager
             $user_data["my_profile"] = true;
         }
         
-        if (!empty($current_uid)) {
+        if (!empty($current_uid) || $this->is_master_admin()) {
             measure_action_time("get user data");
             
             return true;
@@ -9953,11 +9953,31 @@ abstract class ForumManager
         
         $prfx = $rodbw->escape(System::getDBPrefix());
 
-        $start = $rodbw->format_datetime(time() - 92*24*3600); // last 3 months
+        $now = time();
+        
+        switch (reqvar("period")) {
+            case "last_month":
+                $start_date = xstrtotime("-1 month", $now);
+                break;
+            case "last_half_year":
+                $start_date = xstrtotime("-6 months", $now);
+                break;
+            case "last_year":
+                $start_date = xstrtotime("-1 year", $now);
+                break;
+            case "whole_period":
+                $start_date = 0;
+                break;
+            default:
+                $start_date = xstrtotime("-1 year", $now);
+                break;
+        }
+        
+        $start_date = $rodbw->format_datetime($start_date);
         
         $query = "select browser, count(*) cnt from
                     {$prfx}_browser_daily_statistics
-                    where dt > '$start' and browser is not NULL
+                    where dt >= '$start_date' and browser is not NULL
                     group by browser
                     order by cnt desc";
         
@@ -9980,7 +10000,7 @@ abstract class ForumManager
         
         $query = "select os, count(*) cnt from
                     {$prfx}_browser_daily_statistics
-                    where dt > '$start' and os is not NULL
+                    where dt >= '$start_date' and os is not NULL
                     group by os
                     order by cnt desc";
         
@@ -10001,9 +10021,9 @@ abstract class ForumManager
             $os_stat[$os] = 100 * $val / $total;
         }
         
-        $query = "select bot, count(*) cnt from
+        $query = "select bot, sum(bot_hits_count) cnt from
                     {$prfx}_browser_daily_statistics
-                    where dt > '$start' and bot is not NULL
+                    where dt >= '$start_date' and bot is not NULL
                     group by bot
                     order by cnt desc";
         
@@ -19629,6 +19649,10 @@ abstract class ForumManager
         shrink_spaces($_REQUEST["moderator_name"]);
         shrink_spaces($_REQUEST["user_name"]);
         
+        if (!empty($_REQUEST["user_name"]) && $_REQUEST["user_name"] == "admin") {
+            $_REQUEST["user_name"] = text("MasterAdministrator");
+        }
+        
         invert_dates($_REQUEST["start_date"], $_REQUEST["end_date"], text("DateFormat"));
         
         if ($apply_filter == -1) {
@@ -22775,7 +22799,13 @@ abstract class ForumManager
         $ip = System::getIPAddress();
         
         $prfx = $dbw->escape(System::getDBPrefix());
-        $author = $dbw->quotes_or_null($this->get_status_user_name());
+        
+        if ($this->is_master_admin()) {
+            $author = $dbw->quotes_or_null("admin");
+        } else {
+            $author = $dbw->quotes_or_null($this->get_status_user_name());
+        }
+        
         $uid = $dbw->escape($this->get_user_id());
         if (empty($uid)) {
             $uid = "NULL";
@@ -25745,6 +25775,10 @@ abstract class ForumManager
     {
         global $READ_MARKER;
         
+        if ($guest == "admin") {
+            return 0;
+        }
+        
         if ($read_marker == $READ_MARKER) {
             return 0;
         }
@@ -28167,15 +28201,42 @@ abstract class ForumManager
 
         $dtnow = $dbw->format_date(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
         
-        $query = "insert into {$prfx}_browser_daily_statistics (dt, browser, os, bot, read_marker)
-          select '$dtnow', $browser, $os, $bot_db, '$rm'
-          from {$prfx}_dual
-          where
-          not exists (select 1 from {$prfx}_browser_daily_statistics where dt = '$dtnow' and read_marker ='$rm' $browser_clause $os_clause $bot_clause);
-         ";
-        if (!$dbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
+        if ($os != "NULL" && $os != "NULL") {
+            // Track browser. Distiguish it by read_marker to estimate the count
+            $query = "insert into {$prfx}_browser_daily_statistics (dt, browser, os, read_marker)
+              select '$dtnow', $browser, $os, '$rm'
+              from {$prfx}_dual
+              where
+              not exists (select 1 from {$prfx}_browser_daily_statistics where dt = '$dtnow' and read_marker = '$rm' and bot is NULL $browser_clause $os_clause);
+             ";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+        }
+
+        if ($bot_db != "NULL") {
+            // Track bot. Increment bot hits.
+            $query = "insert into {$prfx}_browser_daily_statistics (dt, bot)
+              select '$dtnow', $bot_db
+              from {$prfx}_dual
+              where
+              not exists (select 1 from {$prfx}_browser_daily_statistics where dt = '$dtnow' and read_marker is NULL and browser is NULL and os is NULL $bot_clause);
+             ";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+
+            $query = "update {$prfx}_browser_daily_statistics set
+              bot_hits_count = bot_hits_count + 1
+              where
+              dt = '$dtnow' and read_marker is NULL and browser is NULL and os is NULL $bot_clause;
+             ";
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
         }
 
         $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
@@ -28731,8 +28792,8 @@ abstract class ForumManager
         // The moderators must see what happens in the topics where they are responsible.
         // Such topics are not left out, but just colored in grey.
         
-        // force_exclusion_of_ignored = 2 for filtering, also for moderators
-        if ($force_exclusion_of_ignored <> 2) {
+        // force_exclusion_of_ignored = for active filtering, also for moderators
+        if (empty($force_exclusion_of_ignored)) {
           if (!empty($_SESSION["forum_moderator"])) {
               $in_list = implode(", ", $_SESSION["forum_moderator"]);
               $where .= "\n" . "      or {$prfx}_topic.forum_id in ($in_list)" . "\n";
@@ -28889,22 +28950,17 @@ abstract class ForumManager
             }
         }
 
-        // force_exclusion_of_ignored = 1 - in the search, we exclude the ignored event in the week ignore mode or if we need to jump to the first new non-ignored post
-        // force_exclusion_of_ignored = 2 - we want to see only non ignored in the search, hide the ignored even if the user is moderator
-        
         $or_appendix = "";
-        
-        if (!empty($force_exclusion_of_ignored)) {
-            $or_appendix = "    or {$prfx}_post.is_system = 1 or {$prfx}_post.pinned = 1";
-        }
         
         $or_appendix .= "\n" . "    or exists (select 1 from {$prfx}_topic where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_topic.forum_id in (select id from {$prfx}_forum where disable_ignore = 1))";
 
-        if ($force_exclusion_of_ignored <> 2) {
-            // The moderators must see what happens in the topics where they are responsible.
-            // Such topics are not left out, but just colored in grey.
+        // The moderators must see what happens in the topics where they are responsible.
+        // Such topics are not left out, but just colored in grey.
+
+        // force_exclusion_of_ignored = for active filtering, also for moderators
+        if (empty($force_exclusion_of_ignored)) {
+            $or_appendix .= "    or {$prfx}_post.is_system = 1 or {$prfx}_post.pinned = 1";
             
-            // Exception: force_exclusion_of_ignored = 2 - we want to see only non ignored in the search, hide the ignored even if the user is moderator
             if (!empty($_SESSION["forum_moderator"])) {
                 $in_list = implode(", ", $_SESSION["forum_moderator"]);
                 $or_appendix .= "\n" . "    or exists (select 1 from {$prfx}_topic where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_topic.forum_id in ($in_list))";
@@ -29188,7 +29244,7 @@ abstract class ForumManager
             $where_appendix .= " and ({$prfx}_post.user_id is NULL or {$prfx}_post.user_id <> $uid)";
         }
         
-        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx, 1);
+        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
         $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
 
         $new_tracking_period = defined('NEW_TRACKING_PERIOD') ? NEW_TRACKING_PERIOD : 30;
@@ -30344,6 +30400,10 @@ abstract class ForumManager
             }
             
             $author = reqvar("author");
+            if ($author == "admin") {
+                $author = text("MasterAdministrator");
+            }
+            
             if(!empty($author) && $author[0] == ":") {
                 $author = ltrim($author, ":") . " (" . text("Guest") . ")";
             }
@@ -32895,7 +32955,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        if (!empty($current_uid)) {
+        if (!empty($current_uid) || $this->is_master_admin()) {
             return true;
         }
         
@@ -33349,7 +33409,7 @@ abstract class ForumManager
             $user_data[$uid]["post_count"] = 0;
             $user_data[$uid]["is_admin"] = $dbw->field_by_name("is_admin");
             $user_data[$uid]["hidden"] = $dbw->field_by_name("hidden");
-            $user_data[$uid]["ignores_all_guests"] = $dbw->field_by_name("ignore_guests_whitelist");
+            $user_data[$uid]["ignores_all_guests"] = $dbw->field_by_name("ignore_guests_whitelist"); // will be cleared if necessary
             
             $user_data[$uid]["activated"] = $dbw->field_by_name("activated");
             $user_data[$uid]["approved"] = $dbw->field_by_name("approved");
@@ -38632,6 +38692,8 @@ abstract class ForumManager
         
         $dbw->free_result();
         
+        $result = true;
+        
         // check whether the previous post exits
         
         if (count($post_list) > 0) {
@@ -38664,9 +38726,11 @@ abstract class ForumManager
                 
                 $prev_post_time = $post_list[$pid]["creation_date_sec"];
             }
+            
+            $result = $this->get_additional_post_data($dbw, $prfx, $fid, $tid, $user_ids, $post_list, $user_data);
         }
         
-        return $this->get_additional_post_data($dbw, $prfx, $fid, $tid, $user_ids, $post_list, $user_data);
+        return $result;
     } // get_new_topic_posts
     
     //-----------------------------------------------------------------
@@ -38830,7 +38894,7 @@ abstract class ForumManager
             $show_deleted = true;
         }
         
-        if (!reqvar_empty("ip ")) {
+        if (!reqvar_empty("ip")) {
             $show_deleted = true;
         }
         
@@ -39217,9 +39281,9 @@ abstract class ForumManager
                 !(in_array(reqvar("author_mode"), array("ignoring", "moderating", "author_likes", "author_liked", "author_dislikes", "author_disliked", "last_posts", "wrote_post")) && !reqvar_empty("author")) &&
                 reqvar_empty("rate_statistics")                 
                ) {
-                $mode = 1; // in the search, we exclude the ignored event in the week ignore mode
+                $mode = 0; 
                 if (!reqvar_empty("non_ignored_by_author")) {
-                    $mode = 2; // we want to see only non ignored in the search, hide the ignored even if the user is moderator
+                    $mode = 1; // we want to see only non ignored in the search, hide the ignored even if the user is moderator
                 }
                 
                 $post_part_where .= $this->get_ignore_post_where_appendix($srdbw, $prfx, $mode);
