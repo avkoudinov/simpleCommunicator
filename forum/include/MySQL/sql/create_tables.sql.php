@@ -120,7 +120,8 @@ create table v1_browser_daily_statistics
    browser              varchar(250),
    os                   varchar(250),
    bot                  varchar(250),
-   read_marker          varchar(255)
+   read_marker          varchar(255),
+   bot_hits_count       int not null default 0
 )
 ';
 
