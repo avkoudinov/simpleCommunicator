@@ -453,7 +453,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
     <?php endif; ?>
   <?php endif; ?>
   
-  <?php if($pinfo["read_marker"] != $READ_MARKER && !($fmanager->is_master_admin() && $pinfo["author"] == "admin")): ?>  
+  <?php if($pinfo["read_marker"] != $READ_MARKER && !($fmanager->is_master_admin() && $pinfo["author"] == "admin") && $pinfo["author"] != "admin"): ?>  
     <?php if(empty($pinfo["guest_ignored"])): ?>
     <a class="ignore_user_a_<?php echo_html(md5($pinfo["author"])); ?>" href="<?php echo($message_url); ?>" title="<?php echo_html(text("PutToIgnoreList")); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmUserIgnore"), true); ?>".replace(/%s/, "<?php echo_js($fmanager->get_display_name($pinfo["author"]), true); ?>"), { ignore_action: "put_guest_to_ignore_list", guest_name: "<?php echo_js($pinfo["author"]); ?>", display_guest_name: "<?php echo_js($fmanager->get_display_name($pinfo["author"])); ?>", guest_id: "<?php echo_html(md5($pinfo["author"])); ?>" });'><img class="ignore_user_img_<?php echo_html(md5($pinfo["author"])); ?>" src="<?php echo($view_path); ?>images/ignore_user.png" alt="<?php echo_html(text("PutToIgnoreList")); ?>"></a>
     <?php elseif ($pinfo["guest_ignored"] != 2): ?>
@@ -619,7 +619,7 @@ if(!empty($pinfo["editable"]) && empty($pinfo["is_system"]) && (($fmanager->is_a
     <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignored")); ?>]</span>
     <?php endif; ?>
 
-    <?php if((!$fmanager->is_logged_in() || $fmanager->is_master_admin()) && !empty($user_data[$pinfo["user_id"]]["ignores_all_guests"])): ?>
+    <?php if(!$fmanager->is_logged_in() && !empty($user_data[$pinfo["user_id"]]["ignores_all_guests"])): ?>
     <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignoring_guests")); ?>]</span>
     <?php elseif(val_or_empty($user_data[$pinfo["user_id"]]["ignoring_me"]) == 1): ?>
     <br><span class="<?php echo(empty($pinfo["disable_ignore"]) ? "error_text" : "ignore_off"); ?>">[<?php echo_html(text("ignoring_me")); ?>]</span>

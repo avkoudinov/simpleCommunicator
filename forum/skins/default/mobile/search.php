@@ -35,7 +35,7 @@ Forum.addXEvent(window, 'load', function () {
 
 function set_to_me() {
   var elm = document.getElementById("author");
-  if (elm) elm.value = "<?php echo_js($fmanager->get_user_name()); ?>";
+  if (elm) elm.value = "<?php echo_js($fmanager->get_display_name($fmanager->get_user_name())); ?>";
   return false;
 }
 

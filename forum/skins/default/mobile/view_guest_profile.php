@@ -402,7 +402,7 @@ echo $ip;
 <td></td>
 </tr>
 
-<?php if(reqvar("ignored") != 2): ?>
+<?php if(reqvar("ignored") != 2 && $guest_data["user_name"] != "admin"): ?>
 <tr>
 <td>
 <?php if(empty($guest_data["guest_ignored"])): ?>
