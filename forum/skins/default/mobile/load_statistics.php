@@ -326,9 +326,10 @@ echo($ip);
 <div class="forum_info">
 <?php echo_html(text("FirstAttack")); ?>: <span class="number"><?php echo_html($ipfno["first_attack"]); ?></span><br>
 <?php echo_html(text("LastAttack")); ?>: <span class="number"><?php echo_html($ipfno["last_attack"]); ?></span><br>
-<?php echo_html(text("Blocked")); ?>: <span class="number"><?php echo_html($ipfno["banned_until"]); ?></span><br>
+<?php echo_html(text("Attacks")); ?>: <span class="number"><?php echo_html($ipfno["attacks_count"]); ?></span><br>
 <?php echo_html(text("Type")); ?>: <span class="number"><?php echo_html($ipfno["atype"]); ?></span><br>
-<?php echo_html(text("Attacks")); ?> / <?php echo_html(text("Hits")); ?>: <span class="number"><?php echo_html($ipfno["cnt"]); ?> / <?php echo_html(round($ipfno["hits"])); ?></span>
+<?php echo_html(text("Hits")); ?>: <span class="number"><?php echo_html($ipfno["hits"]); ?></span><br>
+<?php echo_html(text("Limit")); ?>: <span class="number"><?php echo_html($ipfno["hit_limit"]); ?> / <?php echo_html($ipfno["check_period"]); ?> <?php echo_html(text("SecondsShort")); ?></span><br>
 
   <div class="navigation_arrows_right">
   <div class="scroll_up" onclick="window.scrollTo(0, 0);"></div>

@@ -237,14 +237,14 @@ if (!$installed) {
     $settings = array();
     $fmanager->get_settings($settings);
     
-    $fmanager->check_ip(System::getIPAddress(), val_or_empty($_SERVER["HTTP_USER_AGENT"]));
-    
     $fmanager->read_user_cookies();
     
     $fmanager->try_auto_login();
     
     $fmanager->update_user_status();
     
+    $fmanager->check_ip(System::getIPAddress(), val_or_empty($_SERVER["HTTP_USER_AGENT"]));
+
     $fmanager->define_view_path($skin, $view_path, $view_mode, $skin_version);
     
     $fmanager->get_forum_list($forum_list);
