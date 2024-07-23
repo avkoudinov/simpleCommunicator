@@ -1667,15 +1667,23 @@ class MySQL_ForumManager extends ForumManager
     //-----------------------------------------------------------------
     function get_query_banned_ips($prfx)
     {
-       return "select ip, atype,
-               min(banned_until) first_attack,
-               max(banned_until) last_attack,
-               max(hits) hits,
-               count(*) cnt
-               from {$prfx}_banned_ips
-               group by ip, atype
-               order by max(banned_until) desc
-               limit 200
+       return "select ip_summary.ip, first_attack, last_attack, attacks_count, atype, hits, hit_limit, check_period
+               from
+                 (select ip, 
+                  min(banned_until) first_attack,
+                  max(banned_until) last_attack,
+                  count(*) attacks_count
+                  from {$prfx}_banned_ips
+                  group by ip
+                  order by max(banned_until) desc
+                  limit 200) ip_summary
+                inner join
+                 (select ip, 
+                  atype, hits, hit_limit, check_period, 
+                  row_number() over (partition by ip order by banned_until desc) as rnk
+                  from {$prfx}_banned_ips
+                 ) last_attacks
+                on (ip_summary.ip = last_attacks.ip and last_attacks.rnk = 1)
                ";
     } // get_query_banned_ips
 

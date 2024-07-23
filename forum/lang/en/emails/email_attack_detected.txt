@@ -10,7 +10,7 @@ DOS attack from IP address has been prevented on the forum:
 
 {ip} - {ip_link}
 
-{Hits} requests ({atype}) were made from this IP address in {check_period} minutes.
+{Hits} requests ({atype}) were made from this IP address in {check_period} seconds.
 
 Total number of attacks: {total_attacks}
 First attack: {first_attack}

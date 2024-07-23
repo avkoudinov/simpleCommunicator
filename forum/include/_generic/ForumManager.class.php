@@ -7624,7 +7624,9 @@ abstract class ForumManager
         
         // check the count of the posts in a minute
         
-        $now = $dbw->format_datetime(time() - 1 * 60);
+        $check_period = 60; // 1 minute
+        
+        $now = $dbw->format_datetime(time() - $check_period);
         
         if (!$dbw->execute_query("select count(*) cnt
                              from {$prfx}_post
@@ -7633,6 +7635,8 @@ abstract class ForumManager
             return false;
         }
         
+        $atype = "POST";
+        $limit = MAX_POSTS_PER_MINUTE;
         $hits = 0;
         
         if ($dbw->fetch_row()) {
@@ -7646,34 +7650,13 @@ abstract class ForumManager
             $wait_time_after_attack = WAIT_TIME_AFTER_ATTACK;
         }
         
-        if ($hits <= MAX_POSTS_PER_MINUTE) {
-            // second check - MAX_POSTS_PER_MINUTE x 2 per 3 minutes
-            
-            $now = $dbw->format_datetime(time() - 3 * 60);
-            
-            if (!$dbw->execute_query("select count(*) cnt
-                             from {$prfx}_post
-                             where creation_date >= '$now' and ip = '$ip'")) {
-                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                return false;
-            }
-            
-            $hits = 0;
-            
-            if ($dbw->fetch_row()) {
-                $hits = $dbw->field_by_name("cnt");
-            }
-            
-            $dbw->free_result();
-            
-            if ($hits <= 2 * MAX_POSTS_PER_MINUTE) {
-                return true;
-            }
+        if ($hits <= $limit) {
+            return true;
         }
         
-        $now = $dbw->format_datetime(time() + $wait_time_after_attack * 60);
+        $banned_until = $dbw->format_datetime(time() + $wait_time_after_attack * 60);
         
-        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, atype) values ('$now', '$ip', $hits, 'POST')")) {
+        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, check_period, hit_limit, atype, statistics_request) values ('$banned_until', '$ip', $hits, $check_period, $limit, '$atype', 0)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -7716,8 +7699,8 @@ abstract class ForumManager
         $params = array();
         $params["{ip}"] = $ip;
         $params["{hits}"] = $hits;
-        $params["{atype}"] = 'POST';
-        $params["{check_period}"] = 1;
+        $params["{atype}"] = $atype;
+        $params["{check_period}"] = $check_period;
         
         $params["{total_attacks}"] = '-';
         $attack_data["{first_attack}"] = '-';
@@ -7726,7 +7709,7 @@ abstract class ForumManager
         if (!$dbw->execute_query("select
                                   min(banned_until) first_attack,
                                   max(banned_until) last_attack,
-                                  count(*) cnt
+                                  count(*) attacks_count
                                   from {$prfx}_banned_ips
                                   where ip = '$ip'")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -7734,7 +7717,7 @@ abstract class ForumManager
         }
         
         if ($dbw->fetch_row()) {
-            $params["{total_attacks}"] = $dbw->field_by_name("cnt");
+            $params["{total_attacks}"] = $dbw->field_by_name("attacks_count");
             $attack_data["{first_attack}"] = xstrtotime($dbw->field_by_name("first_attack"));
             $attack_data["{last_attack}"] = xstrtotime($dbw->field_by_name("last_attack"));
         }
@@ -7756,19 +7739,26 @@ abstract class ForumManager
     } // check_post_ip
     
     //-----------------------------------------------------------------
-    function ajust_check_limits(&$limit, &$check_period)
+    function ajust_check_limits(&$limit, &$check_period, $stat_request)
     {
         $check_period = 60;
         
-        if ($limit >= 10 && $limit <= 20) {
-            $limit = $limit / 2;
-            $check_period = 30;
-        } elseif ($limit >= 20 && $limit <= 30) {
-            $limit = $limit / 3;
-            $check_period = 20;
+        if ($stat_request) {
+            if ($limit >= 20 && $limit <= 42) {
+                $limit = $limit / 2;
+                $check_period = 30;
+            } elseif ($limit > 42) {
+                $limit = $limit / 3;
+                $check_period = 20;
+            }
         } else {
-            $limit = $limit / 6;
-            $check_period = 10;
+            if ($limit >= 40 && $limit <= 72) {
+                $limit = $limit / 2;
+                $check_period = 30;
+            } elseif ($limit > 72) {
+                $limit = $limit / 3;
+                $check_period = 20;
+            }
         }
     } // ajust_check_limits
     
@@ -7820,24 +7810,35 @@ abstract class ForumManager
             $where_appendix = "";
         }
 
-        if (!$dbw->execute_query("select 1
+        if (!$dbw->execute_query("select hits, hit_limit, check_period, banned_until
                              from {$prfx}_banned_ips
-                             where banned_until > '$now' and ip = '$ip' $where_appendix")) {
+                             where banned_until > '$now' and ip = '$ip' and atype <> 'POST' $where_appendix")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
         if ($dbw->fetch_row()) {
+            $hits = $dbw->field_by_name("hits");
+            $limit = $dbw->field_by_name("hit_limit");
+            $check_period = $dbw->field_by_name("check_period");
+            $wait_time = xstrtotime($dbw->field_by_name("banned_until")) - time();
+            
+            if ($wait_time > 60) {
+                $wait_time = round($wait_time / 60) . " minutes";
+            } else {
+                $wait_time = $wait_time . " seconds";
+            }
+            
             $dbw->free_result();
             
-            exit("<h3>Too many requests! Try again later!</h3>");
+            exit("<h3 style='text-align: center; margin-top: 50px;'>Too many requests: $hits within $check_period seconds, limit is $limit within $check_period seconds! Try again later in " . $wait_time . "!</h3>");
         }
         
         $dbw->free_result();
         
         $limit = MAX_REQUESTS_PER_MINUTE;
         $check_period = 60;
-        $this->ajust_check_limits($limit, $check_period);
+        $this->ajust_check_limits($limit, $check_period, false);
 
         $now = $dbw->format_datetime(time() - $check_period);
         
@@ -7861,10 +7862,9 @@ abstract class ForumManager
         
         if (defined("STATISTICS_REQUEST") && defined("MAX_STAT_REQUESTS_PER_MINUTE") && MAX_STAT_REQUESTS_PER_MINUTE != 0) {
             $stat_hit_limit = MAX_STAT_REQUESTS_PER_MINUTE;
-            if (STATISTICS_REQUEST != 1) $stat_hit_limit += 2;
             
             $check_period = 60;
-            $this->ajust_check_limits($stat_hit_limit, $check_period);
+            $this->ajust_check_limits($stat_hit_limit, $check_period, true);
             
             $now = $dbw->format_datetime(time() - $check_period);
 
@@ -7900,7 +7900,7 @@ abstract class ForumManager
                 $dbw->free_result();
                 
                 if ($entire_hits > 30) {
-                    exit("<h3>Too many requests! Try again later!</h3>");
+                    exit("<h3 style='text-align: center; margin-top: 50px;'>Too many requests! Try again later!</h3>");
                 }
             }
         }
@@ -7912,6 +7912,7 @@ abstract class ForumManager
         $block_type = "REQUEST";
         if ($stat_hits > $stat_hit_limit) {
             $hits = $stat_hits;
+            $limit = $stat_hit_limit;
             $block_type = "STAT REQUEST";
         }
 
@@ -7920,9 +7921,9 @@ abstract class ForumManager
             $wait_time_after_attack = WAIT_TIME_AFTER_ATTACK;
         }
         
-        $now = $dbw->format_datetime(time() + $wait_time_after_attack * 60);
+        $banned_until = $dbw->format_datetime(time() + $wait_time_after_attack * 60);
         
-        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, atype, statistics_request) values ('$now', '$ip', $hits, '$block_type', $request_type)")) {
+        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, check_period, hit_limit, atype, statistics_request) values ('$banned_until', '$ip', $hits, $check_period, $limit, '$block_type', $request_type)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -7966,7 +7967,7 @@ abstract class ForumManager
         $params["{ip}"] = $ip;
         $params["{hits}"] = $hits;
         $params["{atype}"] = $block_type;
-        $params["{check_period}"] = 1;
+        $params["{check_period}"] = $check_period;
         
         $params["{total_attacks}"] = '-';
         $attack_data["{first_attack}"] = '-';
@@ -7975,7 +7976,7 @@ abstract class ForumManager
         if (!$dbw->execute_query("select
                                   min(banned_until) first_attack,
                                   max(banned_until) last_attack,
-                                  count(*) cnt
+                                  count(*) attacks_count
                                   from {$prfx}_banned_ips
                                   where ip = '$ip'")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -7983,7 +7984,7 @@ abstract class ForumManager
         }
         
         if ($dbw->fetch_row()) {
-            $params["{total_attacks}"] = $dbw->field_by_name("cnt");
+            $params["{total_attacks}"] = $dbw->field_by_name("attacks_count");
             $attack_data["{first_attack}"] = xstrtotime($dbw->field_by_name("first_attack"));
             $attack_data["{last_attack}"] = xstrtotime($dbw->field_by_name("last_attack"));
         }
@@ -8001,7 +8002,15 @@ abstract class ForumManager
             $this->email_manager->send_email($settings["default_sender"], $uinfo["email"], "email_attack_detected.txt", $params, $uinfo["interface_language"]);
         }
         
-        exit("<h3>Too many requests! Try again later!</h3>");
+        $wait_time = $wait_time_after_attack * 60;
+        
+        if ($wait_time > 60) {
+            $wait_time = round($wait_time / 60) . " minutes";
+        } else {
+            $wait_time = $wait_time . " seconds";
+        }
+        
+        exit("<h3 style='text-align: center; margin-top: 50px;'>Too many requests: $hits within $check_period seconds, limit is $limit within $check_period seconds! Try again later in " . $wait_time . "!</h3>");
 
         return true;
     } // check_ip
@@ -9834,7 +9843,7 @@ abstract class ForumManager
               inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
               inner join {$prfx}_user on ({$prfx}_user.id = {$prfx}_post.user_id)
               where {$prfx}_post_rating.user_id = $uid and is_private < 1
-              group by {$prfx}_user.id, {$prfx}_user.user_name, last_visit_date, logout
+              group by {$prfx}_user.id, {$prfx}_user.user_name, {$prfx}_user.read_marker, last_visit_date, logout
               order by count(*) desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -9890,7 +9899,7 @@ abstract class ForumManager
               inner join {$prfx}_post on ({$prfx}_post_rating.post_id = {$prfx}_post.id)
               inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
               where {$prfx}_post.user_id = $uid and is_private < 1
-              group by {$prfx}_user.id, {$prfx}_user.user_name, last_visit_date, logout
+              group by {$prfx}_user.id, {$prfx}_user.user_name, {$prfx}_user.read_marker, last_visit_date, logout
               order by count(*) desc";
         
         if (!$rodbw->execute_query($query)) {
@@ -23003,6 +23012,7 @@ abstract class ForumManager
         $ip = System::getIPAddress();
         
         if (!$this->check_post_ip($ip)) {
+            MessageHandler::setError(sprintf(text("ErrTooManyPostsFromIP"), $ip));
             return false;
         }
         
@@ -39813,9 +39823,11 @@ abstract class ForumManager
                 "atype" => $rodbw->field_by_name("atype"),
                 "first_attack" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("first_attack")) - $wait_time_after_attack * 60, text("DateTimeFormat")),
                 "last_attack" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("last_attack")) - $wait_time_after_attack * 60, text("DateTimeFormat")),
-                "banned_until" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("last_attack")), text("DateTimeFormat")),
-                "cnt" => $rodbw->field_by_name("cnt"),
-                "hits" => $rodbw->field_by_name("hits")
+                "attacks_count" => $rodbw->field_by_name("attacks_count"),
+                "hits" => $rodbw->field_by_name("hits"),
+                "atype" => $rodbw->field_by_name("atype"),
+                "hit_limit" => $rodbw->field_by_name("hit_limit"),
+                "check_period" => $rodbw->field_by_name("check_period")
             );
         }
         

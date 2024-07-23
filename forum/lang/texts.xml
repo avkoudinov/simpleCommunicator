@@ -1128,6 +1128,13 @@
             <ua>Атаки</ua>
         </text>
         
+        <text id="Limit">
+            <en>Limit</en>
+            <de>Limit</de>
+            <ru>Лимит</ru>
+            <ua>Ліміт</ua>
+        </text>
+
         <text id="DateTimeFormat">
             <en>Y-m-d, H:i</en>
             <de>d.m.Y, H:i</de>
@@ -5479,6 +5486,13 @@
             <de>Min.</de>
             <ru>мин.</ru>
             <ua>хв.</ua>
+        </text>
+
+        <text id="SecondsShort">
+            <en>sec.</en>
+            <de>Sek.</de>
+            <ru>сек.</ru>
+            <ua>сек.</ua>
         </text>
 
         <text id="Reason">
@@ -10604,6 +10618,13 @@
             <de>Anonyme-Aktivität</de>
             <ru>Активность анонимов</ru>
             <ua>Активність анонімів</ua>
+        </text>
+        
+        <text id="ErrTooManyPostsFromIP">
+            <en>Too many posts submitted from this IP address '%s'. Try again later!</en>
+            <de>Zu viele Nachrichten von dieser IP-Adresse '%s' eingereicht. Versuchen Sie es später noch einmal!</de>
+            <ru>Слишком много сообщений отправлено с данного IP-адреса '%s'. Повторите попытку позже!</ru>
+            <ua>Занадто багато повідомлень надіслано з цієї IP-адреси '%s'. Повторіть спробу пізніше!</ua>
         </text>
 
     </texts>
