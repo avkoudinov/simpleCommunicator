@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     21.07.2024 10:49:46                          */
+/* Created on:     23.07.2024 20:12:18                          */
 /*==============================================================*/
 
 
@@ -117,6 +117,8 @@ create table v1_banned_ips
    ip                   varchar(250) not null,
    banned_until         datetime not null,
    hits                 int not null,
+   hit_limit            int not null default 0,
+   check_period         int not null default 60,
    atype                varchar(255),
    statistics_request   int not null default 0
 );

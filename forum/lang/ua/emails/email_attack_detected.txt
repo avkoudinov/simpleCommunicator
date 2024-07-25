@@ -10,7 +10,7 @@
 
 {iIp} - {ip_link}
 
-З даного IP адреси було здійснено {hits} запитів ({atype}) в {check_period} хвилин.
+З даного IP адреси було здійснено {hits} запитів ({atype}) за {check_period} секунд(и).
 
 Загальна кількість атак: {total_attacks}
 Перша атака: {first_attack}

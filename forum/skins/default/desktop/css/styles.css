@@ -4770,6 +4770,12 @@ input[type="button"].member_search_button {
   white-space: nowrap;
 }
 
+.ip_table2 td:nth-child(7)
+{
+  text-align: right;
+  white-space: nowrap;
+}
+
 .rate_table
 {
   width: 800px;
@@ -4971,6 +4977,12 @@ a.message_count:hover
 .general_statistics_table th
 {
   white-space: nowrap;  
+}
+
+.general_statistics_table th:nth-child(2), 
+.general_statistics_table th:nth-child(3) 
+{
+  width: 1%;
 }
 
 .general_statistics_table td:nth-child(2), 

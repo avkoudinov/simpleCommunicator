@@ -85,6 +85,8 @@ create table v1_banned_ips (
    ip                   varchar(250)         not null,
    banned_until         datetime             not null,
    hits                 int                  not null,
+   hit_limit            int                  not null default 0,
+   check_period         int                  not null default 60,
    atype                varchar(255)         null,
    statistics_request   int                  not null default 0
 )

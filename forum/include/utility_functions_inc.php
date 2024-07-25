@@ -1934,10 +1934,8 @@ function detect_bot($user_agent)
         return $bot_data;
     }
     
-    // allow it to load links facebookexternalhit
     if (preg_match("/.*(facebookexternalhit).*/i", $user_agent)) {
-        $bot_data["name"] = "Facebook Bot" . " (url preview)";
-        $bot_data["allowed"] = 1;
+        $bot_data["name"] = "Facebook Bot";
 
         return $bot_data;
     }

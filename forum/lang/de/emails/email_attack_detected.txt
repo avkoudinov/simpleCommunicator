@@ -10,7 +10,7 @@ DOS-Angriff von IP-Adresse wurde im Forum verhindert:
 
 {ip} - {ip_link}
 
-{hits} Anfragen ({atype}) wurden von dieser IP-Adresse in {check_period} Minuten gesendet.
+{hits} Anfragen ({atype}) wurden von dieser IP-Adresse in {check_period} Sekunden gesendet.
 
 Gesamtzahl der Angriffe: {total_attacks}
 Erster Angriff: {first_attack}
