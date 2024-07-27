@@ -489,7 +489,7 @@ if(!empty($in_search)) $wide_bar = "wide_bar";
       <th class="author_col"><?php echo_html(text("LastAuthor")); ?></th>
       <th class="date_col"><?php echo_html(text("LastMessage")); ?></th>
       <th class="number_col"><?php echo_html(text("Messages")); ?></th>
-      <th class="number_col"><?php echo_html(text("Views")); ?></th>
+      <th class="number_col"><?php echo_html(text("Views")); ?> / <?php echo_html(text("Bots")); ?></th>
     </tr>
     
     <?php if (count($topic_list) == 0): ?>
