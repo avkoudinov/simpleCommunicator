@@ -479,7 +479,7 @@ $forum_selector_id = 1;
 <th class="author_col"><?php echo_html(text("LastAuthor")); ?></th>
 <th class="date_col"><?php echo_html(text("LastMessage")); ?></th>
 <th class="number_col"><?php echo_html(text("Messages")); ?></th>
-<th class="number_col"><?php echo_html(text("Views")); ?></th>
+<th class="number_col"><?php echo_html(text("Views")); ?> / <?php echo_html(text("Bots")); ?></th>
 </tr>
 
 <?php if(count($topic_list) == 0): ?>
@@ -801,6 +801,15 @@ if(empty($is_private))
 {
   $rcnt = count($forum_readers);
   if(!empty($forum_readers["g_#anonyms#"]["count"])) $rcnt += ($forum_readers["g_#anonyms#"]["count"] - 1);
+
+  $bcnt = 0;
+  foreach($forum_readers as $ouid => $uinfo)
+  {
+    if(!empty($uinfo["bot"])) $bcnt++;
+  }
+  if (!empty($rcnt)) $rcnt = ($rcnt - $bcnt);
+
+  if (!empty($bcnt)) $rcnt .= "/" . $bcnt;
 
   $freaders = escape_html(text("ReadingForum")) . " ($rcnt): ";
 

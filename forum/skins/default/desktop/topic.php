@@ -1085,6 +1085,15 @@ else
   $rcnt = count($topic_readers);
   if(!empty($topic_readers["g_#anonyms#"]["count"])) $rcnt += ($topic_readers["g_#anonyms#"]["count"] - 1);
 
+  $bcnt = 0;
+  foreach($topic_readers as $ouid => $uinfo)
+  {
+    if(!empty($uinfo["bot"])) $bcnt++;
+  }
+  if (!empty($rcnt)) $rcnt = ($rcnt - $bcnt);
+
+  if (!empty($bcnt)) $rcnt .= "/" . $bcnt;
+
   $treaders = escape_html(text("ReadingTopic")) . " ($rcnt): ";
 
   foreach($topic_readers as $ouid => $uinfo)
@@ -1109,6 +1118,15 @@ else
 
   $rcnt = count($forum_readers);
   if(!empty($forum_readers["g_#anonyms#"]["count"])) $rcnt += ($forum_readers["g_#anonyms#"]["count"] - 1);
+
+  $bcnt = 0;
+  foreach($forum_readers as $ouid => $uinfo)
+  {
+    if(!empty($uinfo["bot"])) $bcnt++;
+  }
+  if (!empty($rcnt)) $rcnt = ($rcnt - $bcnt);
+
+  if (!empty($bcnt)) $rcnt .= "/" . $bcnt;
 
   $freaders = escape_html(text("ReadingForum")) . " ($rcnt): ";
 

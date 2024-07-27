@@ -453,7 +453,11 @@ if(!empty($_SESSION["skin_properties"][$skin]["show_df_logotype"]))
 }
 ?>
 <a href="../"><?php echo($ftitle); ?></a></div>
-<div class="title_appendix"><span class="title_appendix_text" title="Debug Console" onclick='show_debug_console(true)'>&nbsp; <?php if(!empty($_SESSION["admdebug"]) || !empty($_SESSION["debug_context"])) echo "[debug]"; else echo "&nbsp;&nbsp;&nbsp;"; ?></span></div>
+
+<div class="title_appendix"><a class="version_text" href="about.php" ><?php echo(VERSION); ?></a></div>
+
+<div class="title_appendix"><span class="title_appendix_text" title="Debug Console" onclick='show_debug_console(true)'><?php if(!empty($_SESSION["admdebug"]) || !empty($_SESSION["debug_context"])) echo "[debug]"; else echo "&nbsp;&nbsp;&nbsp;"; ?></span></div>
+
 
 <div class="title_separator"></div>
 

@@ -135,19 +135,33 @@ h3
 {
   float: left;
   height: 94px;
+  margin-right: 20px;
 }
 
 .title_appendix
 {
   float: left;
+  margin-right: 17px;
+  margin-top: 10px;
 }
 
 .title_appendix_text
 {
   display: block;
-  margin-top: 20px;
   font-size: 30px;
   cursor: pointer;
+  
+}
+
+a.version_text:link,
+a.version_text:active,
+a.version_text:visited,
+a.version_text:hover
+{
+  display: block;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
 }
 
 .title_separator

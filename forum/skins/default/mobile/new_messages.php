@@ -657,7 +657,7 @@ if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["pre
 <br> <?php echo_html(text("LastMessage")); ?>: <span class="number"><?php echo_html($tinfo["last_message_date"]); ?></span>
 
 <br> <?php echo_html(text("Messages")); ?> <span class="number"><?php echo_html(format_number($tinfo["post_count"])); ?></span>
-<br> <?php echo_html(text("Views")); ?>:  <span class="number"><?php echo_html(format_number($tinfo["hits_count"])); ?></span><?php if(!empty($tinfo["bot_hits_count"])): ?> / <span class="number"><?php echo_html(format_number($tinfo["bot_hits_count"])); ?></span><?php endif; ?>
+<br> <?php echo_html(text("Views")); ?> / <?php echo_html(text("Bots")); ?>:  <span class="number"><?php echo_html(format_number($tinfo["hits_count"])); ?></span><?php if(!empty($tinfo["bot_hits_count"])): ?> / <span class="number"><?php echo_html(format_number($tinfo["bot_hits_count"])); ?></span><?php endif; ?>
 
   <div class="navigation_arrows_right">
   <div class="scroll_up" onclick="window.scrollTo(0, 0);"></div>
@@ -789,6 +789,15 @@ if(empty($is_private))
 {
   $rcnt = count($forum_readers);
   if(!empty($forum_readers["g_#anonyms#"]["count"])) $rcnt += ($forum_readers["g_#anonyms#"]["count"] - 1);
+
+  $bcnt = 0;
+  foreach($forum_readers as $ouid => $uinfo)
+  {
+    if(!empty($uinfo["bot"])) $bcnt++;
+  }
+  if (!empty($rcnt)) $rcnt = ($rcnt - $bcnt);
+
+  if (!empty($bcnt)) $rcnt .= "/" . $bcnt;
 
   $freaders = escape_html(text("ReadingForum")) . " ($rcnt): ";
 
