@@ -1376,7 +1376,7 @@ class MySQL_ForumManager extends ForumManager
                 $start_date = xstrtotime("-7 days", $now_rounded);
                 break;
             default:
-                $start_date = xstrtotime("-10 minutes", $now_rounded);
+                $start_date = xstrtotime("-1 day", $now_rounded);
                 break;
         }
         
