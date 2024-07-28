@@ -19780,7 +19780,7 @@ abstract class ForumManager
                 $_SESSION["load_activity_period"] = reqvar("period");
                 break;
             default:
-                $_SESSION["load_activity_period"] = "last_10_minutes";
+                $_SESSION["load_activity_period"] = "last_day";
                 break;
         }
         

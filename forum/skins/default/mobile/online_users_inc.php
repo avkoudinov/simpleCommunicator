@@ -5,6 +5,16 @@ $add_class = pathinfo($_SERVER["PHP_SELF"], PATHINFO_FILENAME);
 
 $ucnt = count($online_users);
 if(!empty($online_users["g_#anonyms#"]["count"])) $ucnt += ($online_users["g_#anonyms#"]["count"] - 1);
+
+$bcnt = 0;
+foreach($online_users as $ouid => $uinfo)
+{
+  if(!empty($uinfo["bot"])) $bcnt++;
+}
+
+if (!empty($bcnt)) $ucnt = ($ucnt - $bcnt);
+
+if (!empty($bcnt)) $ucnt .= "/" . $bcnt;
 ?>
 <div class="header2 <?php echo($add_class); ?> all_online_users">
 <?php echo_html(text("OnlineMembers")); ?> (<?php echo_html($ucnt); ?>):

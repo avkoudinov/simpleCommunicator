@@ -1320,7 +1320,7 @@ class MSSQL_ForumManager extends ForumManager
                 $start_date = xstrtotime("-7 days", $now_rounded);
                 break;
             default:
-                $start_date = xstrtotime("-10 minutes", $now_rounded);
+                $start_date = xstrtotime("-1 day", $now_rounded);
                 break;
         }
         
@@ -1331,7 +1331,7 @@ class MSSQL_ForumManager extends ForumManager
                              from
                              {$prfx}_forum_hits
                              left join {$prfx}_user on ({$prfx}_forum_hits.user_id = {$prfx}_user.id)
-                             where dt >= '$start_date'
+                             where dt >= '$start_date' and bot is NULL
                              group by user_id, guest_name, last_visit_date, logout
                              order by cnt desc")) {
             MessageHandler::setError(text("ErrQueryFailed"),
