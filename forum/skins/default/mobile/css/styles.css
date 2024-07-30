@@ -4821,7 +4821,7 @@ img.image_placeholder
 .ignore_table td
 {
   border: 0;
-  padding: 2px 12px 2px 12px;
+  padding: 2px 12px 8px 12px;
 }
 
 .ignore_table td:nth-child(1)
