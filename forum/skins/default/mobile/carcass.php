@@ -418,6 +418,7 @@ elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_
 <a href="forums.php"><?php echo_html(text("Forums")); ?></a> <br> 
 <a href="users.php"><?php echo_html(text("Users")); ?></a> <br>
 <a href="statistics.php"><?php echo_html(text("Statistics")); ?></a> <br>
+<a href="load_statistics.php"><?php echo_html(text("LoadStatistics")); ?></a> <br>
 
   <?php if($fmanager->is_moderator_log_visible()): ?>
   <a href="moderation_log.php"><?php echo_html(text("ModeratorLog")); ?></a> <br>
