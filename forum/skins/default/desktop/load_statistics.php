@@ -355,9 +355,10 @@ echo($ip);
 <?php endif; ?>
 
 </table>
-<br>
 
 <?php endif; ?>
+
+<br>
 
 </div>
 
