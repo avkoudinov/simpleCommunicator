@@ -86,6 +86,10 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             return "{$nl}[{{video}}: Radikal]{$nl2}";
             break;
         
+        case "plvideo":
+            return "{$nl}[{{video}}: Plvideo]{$nl2}";
+            break;
+
         case "reddit":
             return "{$nl}[{{video}}: Reddit]{$nl2}";
             break;
@@ -1482,6 +1486,44 @@ function check_radikal_url($url, &$content, $message_mode)
     return false;
 } // check_radikal_url
 //------------------------------------------------------------------------------
+function bb_process_plvideo($bbcode, $action, $name, $default, $params, $content)
+{
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
+    $content = trim($content);
+    $code = $content;
+    
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+        return $content;
+    }
+    
+    if (preg_match("~https://plvideo.ru/(watch\\?v=|shorts/)(.+)~i", $content, $matches)) {
+        $code = $matches[2];
+    }
+    
+    $bbcode_text = "[" . $name . "]" . $content . "[/" . $name . "]";
+    
+    return gen_plvideo_html($code, $bbcode_text);
+} // bb_process_plvideo
+//------------------------------------------------------------------------------
+function check_plvideo_url($url, &$content, $message_mode)
+{
+    if (preg_match("~https://plvideo.ru/(watch\\?v=|shorts/)(.+)~i", $url, $matches)) {
+        if ($message_mode != "message") {
+            $content = "\n[{{video}}: Plvideo]\n\n";
+            return true;
+        }
+        
+        $content = gen_plvideo_html($matches[2], $url);
+        
+        return true;
+    }
+    
+    return false;
+} // check_plvideo_url
+//------------------------------------------------------------------------------
 function bb_process_vimeo($bbcode, $action, $name, $default, $params, $content)
 {
     if ($action == BBCODE_CHECK) {
@@ -1934,6 +1976,10 @@ function check_special_url($url, &$content, $message_mode)
         return true;
     }
     
+    if (check_plvideo_url($url, $content, $message_mode)) {
+        return true;
+    }
+
     if (check_reddit_url($url, $content, $message_mode)) {
         return true;
     }
@@ -2057,6 +2103,8 @@ function tags_to_lowercase(&$text)
         "vkvideo",
         "instagram",
         "radikal",
+        "reddit",
+        "plvideo",
         "rutube",
         "twitter",
         "vimeo",
@@ -2644,6 +2692,19 @@ function gen_radikal_html($code, $bbcode)
     
     return $html;
 } // gen_radikal_html
+//------------------------------------------------------
+function gen_plvideo_html($code, $bbcode)
+{
+    $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'>";
+    $html .= "<div class='short_video'><a class='plvideo_short_container' href='https://plvideo.ru/watch?v=$code' target='blank' onclick='return show_embedded_video(this)'>Plvideo</a></div>";
+    $html .= "<div class='plvideo detailed_video'>";
+    $html .= '<iframe width="560" height="560" src="https://plvideo.ru/embed/' . $code . '" title="Platform video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+    $html .= "</div>
+              <a class='attachment_link' href='https://plvideo.ru/watch?v=$code' target='_blank'>{{link}}</a>
+              </div>";
+    
+    return $html;
+} // gen_plvideo_html
 //------------------------------------------------------
 function gen_dzen_html($code, $bbcode)
 {
@@ -3459,6 +3520,18 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
             'after_tag' => 'a',
             'before_endtag' => 'a',
             'method' => 'bb_process_reddit',
+            'allow_in' => array('block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('plvideo',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'after_tag' => 'a',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_plvideo',
             'allow_in' => array('block', 'columns', 'inline', 'link')
         ));
     //----------------------------------------------
