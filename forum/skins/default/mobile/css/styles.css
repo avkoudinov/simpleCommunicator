@@ -6660,6 +6660,28 @@ a.radikal_short_container
 
 /* END: Radikal */
 
+/* BEGIN: Plvideo */
+
+a.plvideo_short_container
+{
+  font-size: 25px;
+  display: table-cell;
+  width:563px;
+  height:66px;
+  color:white; 
+  font-weight: bold; 
+  padding: 5px 5px 5px 80px;
+  background-color: black;
+  background-image: url(../images/plvideo_short.png);
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 58px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+/* END: Plvideo */
+
 /* BEGIN: Reddit */
 
 a.reddit_short_container

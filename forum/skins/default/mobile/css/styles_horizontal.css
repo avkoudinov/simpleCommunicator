@@ -2415,7 +2415,7 @@
   a.youtube_short_container,
   a.instagram_short_container,
   a.radikal_short_container,
-  a.emb_video_short_container,
+  a.plvideo_short_container,
   a.fbvideo_short_container,
   a.twitter_short_container,
   a.telegram_short_container,
@@ -2425,8 +2425,8 @@
   a.tiktok_short_container,
   a.rutube_short_container,
   a.coub_short_container,
-  a.emb_video_short_container,
-  a.vkvideo_short_container
+  a.vkvideo_short_container,
+  a.emb_video_short_container
   {
     font-size: 16px;
     display: table-cell;
