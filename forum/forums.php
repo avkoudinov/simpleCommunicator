@@ -16,7 +16,7 @@ $title = text("Forums") . " - " . get_site_name(current_language());
 $ogtitle = text("Forums") . " - " . get_site_name(current_language());
 //------------------------------------------------------------------
 $groupped_forum_list = array();
-$fmanager->get_groupped_forum_list($groupped_forum_list);
+$fmanager->get_groupped_forum_list($groupped_forum_list, !empty($_SESSION["hide_ignored"]));
 
 $fmanager->track_hit("", "");
 

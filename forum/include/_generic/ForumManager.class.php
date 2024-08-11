@@ -2501,7 +2501,7 @@ abstract class ForumManager
     } // need_forum_password
     
     //-----------------------------------------------------------------
-    function get_forum_list(&$forum_list, $exclude_not_preferred = true)
+    function get_forum_list(&$forum_list, $exclude_ignored = true)
     {
         start_action_time_measure();
         
@@ -2584,7 +2584,7 @@ abstract class ForumManager
                 "closed" => $rodbw->field_by_name("closed"),
                 "disable_ignore" => $rodbw->field_by_name("disable_ignore"),
                 "deleted" => $deleted,
-                "not_preferred" => !empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid]),
+                "in_ignored" => !empty($_SESSION["ignored_forums"][$fid]),
                 "topics_with_new_count" => 0
             );
         }
@@ -2614,7 +2614,7 @@ abstract class ForumManager
         
         $rodbw->free_result();
         
-        if (empty($_SESSION["preferred_forums"]) || empty($exclude_not_preferred)) {
+        if (empty($_SESSION["ignored_forums"]) || empty($exclude_ignored)) {
             $forum_list = $forum_list_tmp;
             
             measure_action_time("get forum list");
@@ -2622,7 +2622,7 @@ abstract class ForumManager
         }
         
         foreach ($forum_list_tmp as $fid => $forum_data) {
-            if (!empty($_SESSION["preferred_forums"][$fid])) {
+            if (empty($_SESSION["ignored_forums"][$fid])) {
                 $forum_list[$fid] = $forum_data;
             }
         }
@@ -2632,7 +2632,7 @@ abstract class ForumManager
     } // get_forum_list
     
     //-----------------------------------------------------------------
-    function get_groupped_forum_list(&$get_groupped_forum_list, $exclude_not_preferred = true)
+    function get_groupped_forum_list(&$groupped_forum_list, $exclude_ignored = true)
     {
         start_action_time_measure();
         
@@ -2724,7 +2724,7 @@ abstract class ForumManager
                 "closed" => $rodbw->field_by_name("closed"),
                 "disable_ignore" => $rodbw->field_by_name("disable_ignore"),
                 "deleted" => $deleted,
-                "not_preferred" => !empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid]),
+                "in_ignored" => !empty($_SESSION["ignored_forums"][$fid]),
                 "topics_with_new_count" => 0
             );
         }
@@ -2754,16 +2754,16 @@ abstract class ForumManager
         
         $rodbw->free_result();
         
-        if (empty($_SESSION["preferred_forums"]) || empty($exclude_not_preferred)) {
-            $get_groupped_forum_list = $forum_list_tmp;
+        if (empty($_SESSION["ignored_forums"]) || empty($exclude_ignored)) {
+            $groupped_forum_list = $forum_list_tmp;
             
             measure_action_time("get forum list");
             return true;
         }
         
         foreach ($forum_list_tmp as $fid => $forum_data) {
-            if (!empty($_SESSION["preferred_forums"][$fid])) {
-                $get_groupped_forum_list[$fid] = $forum_data;
+            if (empty($_SESSION["ignored_forums"][$fid])) {
+                $groupped_forum_list[$fid] = $forum_data;
             }
         }
         
@@ -4239,6 +4239,10 @@ abstract class ForumManager
         
         $dbw->free_result();
         
+        if (!empty($_SESSION["ignored_forums"][$fid])) {
+            $forum_data["in_ignored"] = true;
+        }
+
         // statistics, use rodbw
         
         if (!empty($_SESSION["ignored_topics"])) {
@@ -6514,29 +6518,6 @@ abstract class ForumManager
         
         $dbw->free_result();
 
-        // preferred forums
-        
-        $_SESSION["preferred_forums"] = array();
-        
-        $query = "select id
-                  from {$prfx}_forum
-                  where 
-                  exists (select 1 from {$prfx}_ignored_forums where user_id = $uid) and
-                  id not in (select forum_id from {$prfx}_ignored_forums where user_id = $uid) and {$prfx}_forum.name <> 'PRIVATE_MESSAGES'";
-        
-        if (!$dbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
-        }
-        
-        while ($dbw->fetch_row()) {
-            $fid = $dbw->field_by_name("id");
-            
-            $_SESSION["preferred_forums"][$fid] = $fid;
-        }
-        
-        $dbw->free_result();
-        
         // blocked forums
         
         $_SESSION["blocked_forums"] = array();
@@ -8777,26 +8758,6 @@ abstract class ForumManager
             $user_data["last_ip_whitelisted"] = 1;
         }
         
-        // preferred forums
-        
-        $query = "select id
-                  from {$prfx}_forum
-                  where 
-                  exists (select 1 from {$prfx}_ignored_forums where user_id = $uid) and
-                  id not in (select forum_id from {$prfx}_ignored_forums where user_id = $uid) and {$prfx}_forum.name <> 'PRIVATE_MESSAGES'";
-        
-        if (!$dbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            return false;
-        }
-        
-        while ($dbw->fetch_row()) {
-            $fid = $dbw->field_by_name("id");
-            $user_data["preferred_forums"][$fid] = $fid;
-        }
-        
-        $dbw->free_result();
-        
         // user avatar
         
         $exts = AttachmentManager::get_picture_exts();
@@ -10500,28 +10461,6 @@ abstract class ForumManager
             }
         }
 
-        // preferred forums
-        
-        $query = "delete from {$prfx}_ignored_forums where user_id = $uid";
-        if (!$dbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-            $dbw->rollback_transaction();
-            return false;
-        }
-        
-        if (!empty($_REQUEST["preferred_forums"])) {
-            $in_list = $dbw->escape(implode(",", $_REQUEST["preferred_forums"]));
-
-            $query = "insert into {$prfx}_ignored_forums
-                (user_id, forum_id)
-                select $uid, id from {$prfx}_forum where id not in ($in_list) and {$prfx}_forum.name <> 'PRIVATE_MESSAGES'";
-            if (!$dbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                $dbw->rollback_transaction();
-                return false;
-            }
-        }
-        
         // self block
         $period = 24 * 3600 * (int)reqvar("days") + 3600 * (int)reqvar("hours") + 60 * (int)reqvar("minutes");
         if (!empty($period)) {
@@ -12525,13 +12464,13 @@ abstract class ForumManager
         $tid = $dbw->escape($tid);
         $uid = $dbw->escape($this->get_user_id());
         
-        if (empty($uid)) {
-            return $this->do_topic_guest_action($tid, $action, $response);
-        }
-        
         if (!$this->has_access_to_topic($tid, false)) {
             MessageHandler::setError(text("ErrActionNotAllowed"));
             return false;
+        }
+        
+        if (empty($uid)) {
+            return $this->do_topic_guest_action($tid, $action, $response);
         }
         
         if (!$dbw->start_transaction()) {
@@ -12822,6 +12761,125 @@ abstract class ForumManager
         
         return true;
     } // do_topic_user_action
+    
+    //-----------------------------------------------------------------
+    function do_forum_user_action($fid, $action, &$response)
+    {
+        global $settings;
+        
+        if (empty($fid) || !is_numeric($fid)) {
+            MessageHandler::setError(text("ErrNoForumSelected"));
+            return false;
+        }
+        
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        $fid = $dbw->escape($fid);
+        $uid = $dbw->escape($this->get_user_id());
+        
+        $dummy = false;
+        if (!$this->has_access_to_forum($fid, $dummy, false)) {
+            MessageHandler::setError(text("ErrActionNotAllowed") . "333");
+            return false;
+        }
+
+        if (empty($uid)) {
+            return $this->do_forum_guest_action($fid, $action, $response);
+        }
+        
+        if (!$dbw->start_transaction()) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
+        if ($action == "add_to_ignored" || $action == "remove_from_ignored") {
+            if (!$dbw->execute_query("delete from {$prfx}_ignored_forums
+                               where user_id = $uid and forum_id = $fid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            // invalidate new info cache
+            if (!$this->new_checker->invalidate_new_messages_cache()) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $imsg = text("MsgForumRemovedFromIgnored");
+            $response['convert_action_link'] = "add_to_ignored";
+        }
+        
+        if ($action == "add_to_ignored") {
+            if (!$dbw->execute_query("insert into {$prfx}_ignored_forums
+                               (user_id, forum_id)
+                               values
+                               ($uid, $fid)")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            // invalidate new info cache
+            if (!$this->new_checker->invalidate_new_messages_cache()) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $imsg = text("MsgForumAddedToIgnored");
+            $response['convert_action_link'] = "remove_from_ignored";
+        }
+
+        if (!$dbw->commit_transaction()) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+
+        MessageHandler::setInfo($imsg);
+
+        return true;
+    } // do_forum_user_action
+    
+    //-----------------------------------------------------------------
+    function do_forum_guest_action($fid, $action, &$response)
+    {
+        global $settings;
+        global $READ_MARKER;
+        
+        if (empty($fid) || !is_numeric($fid)) {
+            MessageHandler::setError(text("ErrNoForumSelected"));
+            return false;
+        }
+
+        if ($action == "remove_from_ignored") {
+            unset($_SESSION["ignored_forums"][$fid]);
+            
+            // invalidate new info cache
+            $this->new_checker->invalidate_new_messages_cache();
+            
+            $imsg = text("MsgForumRemovedFromIgnored");
+            $response['convert_action_link'] = "add_to_ignored";
+        } elseif ($action == "add_to_ignored") {
+            $_SESSION["ignored_forums"][$fid] = $fid;
+            
+            // invalidate new info cache
+            $this->new_checker->invalidate_new_messages_cache();
+            
+            $imsg = text("MsgForumAddedToIgnored");
+            $response['convert_action_link'] = "remove_from_ignored";
+        }
+        
+        $this->update_user_cookies();
+
+        MessageHandler::setInfo($imsg);
+
+        return true;
+    } // do_forum_guest_action
     
     //-----------------------------------------------------------------
     function handle_request_moderation($tid)
@@ -28752,7 +28810,7 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function get_ignore_forum_where_appendix($dbw, $prfx, $force_exclusion_of_ignored = 0)
     {
-        if (empty($_SESSION["preferred_forums"])) {
+        if (empty($_SESSION["ignored_forums"])) {
             return "";
         }
         
@@ -28764,7 +28822,8 @@ abstract class ForumManager
             $tmp_forums = array_keys($_SESSION["forum_moderator"]);
         }
         
-        $tmp_forums = array_merge($_SESSION["preferred_forums"], $tmp_forums);
+        // exclude moderated forums from the list of the ignored forums
+        $tmp_forums = array_diff($_SESSION["ignored_forums"], $tmp_forums);
         
         if (empty($tmp_forums)) {
             return "";
@@ -28772,7 +28831,7 @@ abstract class ForumManager
         
         $in_list = $dbw->escape(implode(",", $tmp_forums));
         
-        return " and ({$prfx}_topic.forum_id in ($in_list) or {$prfx}_topic.is_private > 0)";
+        return " and {$prfx}_topic.forum_id not in ($in_list)";
     } // get_ignore_forum_where_appendix
     
     //-----------------------------------------------------------------
@@ -31628,7 +31687,7 @@ abstract class ForumManager
                 
                 $_SESSION["ignored_forums"][$fid] = $fid;
             }
-            }
+        }
 
         $_SESSION["time_zone"] = get_cookie("q_time_zone");
         if (empty($_SESSION["time_zone"]) || !in_array($_SESSION["time_zone"], $GLOBALS['time_zones'])) {
@@ -31667,28 +31726,6 @@ abstract class ForumManager
         }
         
         $dbw->free_result();
-
-        // preferred forums
-        
-        $_SESSION["preferred_forums"] = array();
-        
-        if (!empty($_SESSION["ignored_forums"])) {
-            $in_list = $dbw->escape(implode(",", $_SESSION["ignored_forums"]));
-
-            $query = "select id from {$prfx}_forum where id not in ($in_list) and {$prfx}_forum.name <> 'PRIVATE_MESSAGES'";
-            if (!$dbw->execute_query($query)) {
-                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
-                return false;
-            }
-            
-            while ($dbw->fetch_row()) {
-                $fid = $dbw->field_by_name("id");
-                
-                $_SESSION["preferred_forums"][$fid] = $fid;
-            }
-            
-            $dbw->free_result();
-        }
     } // read_user_cookies
     
     //-----------------------------------------------------------------
@@ -31761,11 +31798,6 @@ abstract class ForumManager
         $user_data["time_zone"] = val_or_empty($_SESSION["time_zone"]);
         if (empty($user_data["time_zone"]) || !in_array($user_data["time_zone"], $GLOBALS['time_zones'])) {
             $user_data["time_zone"] = TIME_ZONE;
-        }
-        
-        $user_data["preferred_forums"] = array();
-        if (!empty($_SESSION["preferred_forums"])) {
-            $user_data["preferred_forums"] = $_SESSION["preferred_forums"];
         }
         
         $user_data["aname"] = "";
@@ -31926,24 +31958,6 @@ abstract class ForumManager
             foreach ($_REQUEST["remove_from_ignore"] as $uid) {
                 unset($_SESSION["ignored_users"][$uid]);
             }
-        }
-        
-        unset($_SESSION["preferred_forums"]);
-        unset($_SESSION["ignored_forums"]);
-        
-        if (!empty($_REQUEST["preferred_forums"])) {
-            $_SESSION["preferred_forums"] = $_REQUEST["preferred_forums"];
-
-            $forum_list = array();
-            if (!$this->get_forum_list($forum_list, false)) {
-                return false;
-            }
-            
-            foreach ($forum_list as $fid => $dummy) {
-                if (empty($_REQUEST["preferred_forums"][$fid])) {
-                    $_SESSION["ignored_forums"][$fid] = $fid;
-                }
-            }            
         }
         
         if (!reqvar_empty("interface_language")) {

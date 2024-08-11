@@ -20,8 +20,7 @@
 
 <?php foreach($forum_list as $sfid => $fdata): 
 if(!empty($_SESSION["hide_ignored"]) && 
-   !empty($_SESSION["preferred_forums"]) && 
-   empty($_SESSION["preferred_forums"][$sfid]) &&
+   !empty($_SESSION["ignored_forums"][$sfid]) &&
    !$fmanager->is_forum_moderator($sfid)) continue;
 ?>
 <option value="forum.php?fid=<?php echo_html($sfid); ?>"><?php echo_html($fdata["name"]); ?></option>
@@ -43,8 +42,7 @@ if(!empty($_SESSION["hide_ignored"]) &&
 
 <?php foreach($forum_list as $sfid => $fdata): 
 if(!empty($_SESSION["hide_ignored"]) && 
-   !empty($_SESSION["preferred_forums"]) && 
-   empty($_SESSION["preferred_forums"][$sfid]) &&
+   !empty($_SESSION["ignored_forums"][$sfid]) &&
    !$fmanager->is_forum_moderator($sfid)) continue;
 ?>
 <option value="forum.php?fid=<?php echo_html($sfid); ?>"><?php echo_html($fdata["name"]); ?></option>

@@ -176,7 +176,7 @@ if(!empty($pinfo["topic_private"])) $fid_for_url = "private";
 
 <?php
 $not_preferred = "";
-if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$current_forum_id]) && empty($pinfo["topic_private"])) $not_preferred = "not_preferred";
+if(!empty($_SESSION["ignored_forums"][$current_forum_id]) && empty($pinfo["topic_private"])) $not_preferred = "not_preferred";
 ?>
 <a href="forum.php?fid=<?php echo_html($fid_for_url); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($pinfo["forum_name"]); ?></a> 
 

@@ -189,6 +189,16 @@ $fmanager->track_hit("", $fid);
 //------------------------------------------------------------------
 require_once "include/check_new_inc.php";
 //------------------------------------------------------------------
+$forum_data['topics_with_new_count'] = 0;
+
+if (!empty($_SESSION["new_messages_info_cache"]["data"]["forums"][$fid])) {
+    $forum_data['topics_with_new_count'] = count($_SESSION["new_messages_info_cache"]["data"]["forums"][$fid]);
+}
+
+if ($is_private && !empty($_SESSION["new_messages_info_cache"]["data"]["private_topics"])) {
+    $forum_data['topics_with_new_count'] = count($_SESSION["new_messages_info_cache"]["data"]["private_topics"]);
+}
+//------------------------------------------------------------------
 require_once "include/final_inc.php";
 //------------------------------------------------------------------
 $view = "new_topic.php";

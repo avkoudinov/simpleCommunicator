@@ -2563,13 +2563,13 @@ function check_new_messages()
           
           elm = forums[i].getElementsByClassName("topics_with_new_count");
           
-          if(response.not_preferred_forums && response.not_preferred_forums[fid] > 0)
+          if(response.ignored_forums && response.ignored_forums[fid] > 0)
           {
-            forums[i].classList.add("topic_ignored");
+            forums[i].classList.add("not_preferred");
           }
           else
           {
-            forums[i].classList.remove("topic_ignored");
+            forums[i].classList.remove("not_preferred");
           }
 
           if(response.forums_with_new && response.forums_with_new[fid] > 0)
