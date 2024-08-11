@@ -6304,11 +6304,6 @@ a.go_to_last:hover
   word-wrap: break-word; 
 }
 
-td.preferred_forums
-{
-  padding: 0px;
-}
-
 .not_preferred,
 a.not_preferred:link,
 a.not_preferred:active,
@@ -6354,17 +6349,6 @@ a.not_preferred:hover
 .topic_blocked_users a:hover
 {
   color: maroon;
-}
-
-.preferred_forums div.preferred_forums_wrapper
-{
-  max-height: 205px;
-  overflow-y: auto;
-}
-
-.preferred_forums div.preferred_forums_wrapper div
-{
-  margin: 7px;
 }
 
 #ignore_guests_except_area

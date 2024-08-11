@@ -5812,38 +5812,6 @@ a.not_preferred:hover
   color: maroon;
 }
 
-td.preferred_forums
-{
-  padding: 12px;
-}
-
-.preferred_forums div.preferred_forums_wrapper
-{
-  max-height: 380px;
-  overflow: scroll;
-}
-
-.preferred_forums div.preferred_forums_wrapper div
-{
-  margin: 0px 50px 0px 15px;
-}
-
-.preferred_forums div.scroll_up
-{
-  margin: 0px;
-  top: 0px;
-  right: 0px;
-  position: absolute;
-}
-
-.preferred_forums div.scroll_down
-{
-  position: absolute;
-  margin: 0px;
-  bottom: 0px;
-  right: 0px;
-}
-
 #ignore_guests_area,
 #notify_on_words_area
 {

@@ -743,41 +743,6 @@ foreach($time_zones as $time_zone => $time_zone_name)
 <?php endif; ?>
 
 <tr>
-<th class="subheader"><?php echo_html(text("PreferredForums")); ?></th>
-</tr>
-
-<tr>
-<td class="preferred_forums">
-
-  <div style="position: relative">
-      <div class="scroll_up" onclick="scroll_preferred('up')"></div>
-      <div class="scroll_down" onclick="scroll_preferred('down')"></div>
-    
-    <div id="preferred_forum_area" class="preferred_forums_wrapper">
-    <div>
-       <table class="checkbox_table">
-      <?php
-      foreach($all_forum_list as $fid => $finfo):
-      $checked = !empty($user_data["preferred_forums"][$fid]) ? "checked" : "";
-      ?>
-       <tr>
-         <td>
-         <input type="checkbox" id="preferred_forum_<?php echo_html($fid); ?>" name="preferred_forums[<?php echo_html($fid); ?>]" value="<?php echo_html($fid); ?>" <?php echo($checked); ?>>
-         </td>
-         <td>
-         <label for="preferred_forum_<?php echo_html($fid); ?>"><?php echo_html($finfo["name"]); ?></label>
-         </td>
-       </tr>
-      <?php endforeach; ?>
-       </table>
-    </div>
-    </div>
-  </div>
-
-</td>
-</tr>
-
-<tr>
 <td class="button_area">
 <div class="left_buttons">
 <input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
