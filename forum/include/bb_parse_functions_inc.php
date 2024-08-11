@@ -50,6 +50,10 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             return "{$nl}[ascii-art]{$nl2}";
             break;
 
+        case "kroleg-pipe":
+            return "{$nl}[kroleg-pipe]{$nl2}";
+            break;
+
         case "audio":
             return "{$nl}[{{audio}}]{$nl2}";
             break;
@@ -734,6 +738,18 @@ function bb_process_ascii_art($bbcode, $action, $name, $default, $params, $conte
     
     return "<pre class='ascii_art' data-fsize='{$fsize}' data-bg='{$bg}' style=\"background-color: {$bg}; font-size: {$fsize}px; line-height: {$fsize}px;\">{$content}</pre>\n\n";
 } // bb_process_ascii_art
+//------------------------------------------------------------------------------
+function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $content) {
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
+    $color = $params['color'] ?? '#fff';
+    $uid = $params['uid'] ?? '0';
+    $ext = $params['ext'] ?? 'jpg';
+    
+return "<span class='kroleg_pipe' style='color: {$color};' data-uid='{$uid}' data-ext='{$ext}'>{$content}</span>\n\n";
+} // bb_process_kroleg_pipe
 //------------------------------------------------------------------------------
 function bb_process_fixed($bbcode, $action, $name, $default, $params, $content)
 {
@@ -3310,6 +3326,18 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
             'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
         ));
     //----------------------------------------------
+    $bbcode->AddRule('kroleg-pipe',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => '',
+            'after_endtag' => '',
+            'after_tag' => 'n',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_kroleg_pipe',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
     $bbcode->AddRule('fixed',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
@@ -3858,6 +3886,16 @@ function parse_bb_code_simple(&$text, $mode = "email")
         ));
     //----------------------------------------------
     $bbcode->AddRule('ascii-art',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'content' => BBCODE_VERBATIM,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'method' => 'bb_word',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('kroleg-pipe',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
             'content' => BBCODE_VERBATIM,
