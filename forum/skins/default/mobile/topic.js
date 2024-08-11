@@ -875,23 +875,23 @@ async function reload_attachment(att, nr)
   await fetch("ajax/attachment.php?attachment_button=1&aid=" + att + "&nr=" + nr, {cache: 'no-cache'});
   await fetch("ajax/attachment.php?attachment_del_indicator=1&aid=" + att + "&nr=" + nr, {cache: 'no-cache'});
 
-    var atts = document.getElementsByClassName('attachment_picture_' + att + '_' + nr);
-    for(var i = 0; i < atts.length; i++)
-    {
+  var atts = document.getElementsByClassName('attachment_picture_' + att + '_' + nr);
+  for(var i = 0; i < atts.length; i++)
+  {
     atts[i].src = "ajax/attachment.php?aid=" + att + "&nr=" + nr + "&thumb=1&picture=1&doing_delete=" + new Date().getTime();
-    }
+  }
 
-    atts = document.getElementsByClassName('attachment_button_' + att + '_' + nr);
-    for(var i = 0; i < atts.length; i++)
-    {
-      atts[i].style.backgroundImage = "url('ajax/attachment.php?attachment_button=1&aid=" + att + "&nr=" + nr + "&d=" + new Date().getTime() + "')";
-    }
+  atts = document.getElementsByClassName('attachment_button_' + att + '_' + nr);
+  for(var i = 0; i < atts.length; i++)
+  {
+    atts[i].style.backgroundImage = "url('ajax/attachment.php?attachment_button=1&aid=" + att + "&nr=" + nr + "&d=" + new Date().getTime() + "')";
+  }
 
-    atts = document.getElementsByClassName('attachment_del_indicator_' + att + '_' + nr);
-    for(var i = 0; i < atts.length; i++)
-    {
-      atts[i].style.backgroundImage = "url('ajax/attachment.php?attachment_del_indicator=1&aid=" + att + "&nr=" + nr + "&d=" + new Date().getTime() + "')";
-    }
+  atts = document.getElementsByClassName('attachment_del_indicator_' + att + '_' + nr);
+  for(var i = 0; i < atts.length; i++)
+  {
+    atts[i].style.backgroundImage = "url('ajax/attachment.php?attachment_del_indicator=1&aid=" + att + "&nr=" + nr + "&d=" + new Date().getTime() + "')";
+  }
 
   Forum.show_sys_progress_indicator(false);
 }
@@ -1362,7 +1362,7 @@ function load_created_post(created_post, original_post)
 
 var load_new_posts_ajax = null;
 
-function load_new_posts(topic, forum,  highlight_message, target_url)
+function load_new_posts(topic, forum, highlight_message, target_url)
 {
   var post_area = document.getElementById("post_area");
   if(!post_area) return false;
@@ -1485,7 +1485,7 @@ function load_new_posts(topic, forum,  highlight_message, target_url)
                 break_auto_save();
                 store_unposted_message();
                 // it happens if only ignored remained, we do not force to be the first on the next page
-                  delay_redirect(load_new_posts_ajax.target_url); 
+                delay_redirect(load_new_posts_ajax.target_url); 
                 return false;
               }
               else
@@ -1497,7 +1497,7 @@ function load_new_posts(topic, forum,  highlight_message, target_url)
           
           init_lightbox_images();
           init_embedded_widgets();
-          
+        
           // highlichting code if not highlighted yet
           var codes = post_area.getElementsByTagName('code');
           for(var i = 0; i < codes.length; i++)

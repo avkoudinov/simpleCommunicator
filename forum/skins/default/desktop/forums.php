@@ -132,6 +132,12 @@ function do_action(params)
 
 <div class="forum_name_bar" style="float:left"><a href="forums.php"><?php echo_html(text("Forums")); ?></a>
 
+<?php
+$display = "style='display:none'";
+if(!empty($topics_with_new_count)) $display = "";
+?>
+<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
+
 <?php if(!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])): ?>
 <span class="closed">[<?php echo_html(empty($_SESSION["ip_block_time_left"]) ? text("ip_blocked") : sprintf(text("ip_blocked_until"), $_SESSION["ip_block_time_left"])); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["activated"])): ?>
@@ -146,11 +152,6 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <span class="closed <?php echo($self_blocked_class); ?>">[<?php echo_html(empty($_SESSION["block_time_left"]) ? text("blocked") : sprintf(text("blocked_until"), $_SESSION["block_time_left"])); ?>]</span>
 <?php endif; ?>
 
-<?php
-$display = "style='display:none'";
-if(!empty($topics_with_new_count)) $display = "";
-?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
 </div>
 
 <div class="forum_action_bar">
@@ -210,7 +211,7 @@ else                      $colspan = 5;
 $current_group = "";
 
 foreach($groupped_forum_list as $fid => $finfo):
-if(!empty($_SESSION["hide_ignored"]) && !empty($finfo["not_preferred"]) &&
+if(!empty($_SESSION["hide_ignored"]) && !empty($finfo["in_ignored"]) &&
    !$fmanager->is_forum_moderator($fid)) continue;
    
 $deleted = "";
@@ -244,7 +245,7 @@ endif;
       <?php
       $topic_ignored = "";
       $not_preferred = "";
-      if(!empty($finfo["not_preferred"])) 
+      if(!empty($finfo["in_ignored"])) 
       {
         $not_preferred = "not_preferred";
         $topic_ignored = "topic_ignored";
