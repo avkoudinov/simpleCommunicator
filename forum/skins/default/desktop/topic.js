@@ -4149,3 +4149,272 @@ function handle_writing_cancel()
   }
 }
 
+var kroleg_post_message_ajax = null;
+
+function kroleg_post_message(need_redirect, bubble_message)
+{
+  var form = document.getElementById('post_form');
+  if(!form) return false;
+
+  Forum.show_sys_progress_indicator(true);
+
+  if(!kroleg_post_message_ajax)
+  {
+    kroleg_post_message_ajax = new Forum.AJAX();
+
+    kroleg_post_message_ajax.timeout = TIMEOUT;
+
+    kroleg_post_message_ajax.onload = function(text, xml)
+    {
+      try
+      {
+        var response = JSON.parse(text);
+
+        if(response.ERROR_ELEMENT == "user_password")
+        {
+          if(form.elements["user_password"]) form.elements["user_password"].value = "";
+        }
+
+        if(form.elements["captcha_field"] && response.ERROR_ELEMENT == "captcha_field")
+        {
+          form.elements["captcha_field"].value = "";
+          show_hide_captcha(true);
+        }
+
+        Forum.handle_response_messages(response);
+
+        if(response.success)
+        {
+          debug_line("We have posted", "posting");
+          
+          break_auto_save();
+
+          // do not hide captcha upon preview
+          if(!response.html) show_hide_captcha(false);
+
+          // we update the author only if no edit mode
+          if(form.elements['edit_mode'].value != '1' || response.self_edited == '1') last_author = form.elements['author'].value;
+
+          if(response.double_post)
+          {
+            debug_line("Double post detected", "posting");
+
+            hide_post_form(form);
+            debug_line('Previous action removed from the stack', 'history');
+            history_undo_actions_stack.pop();
+            debug_line('Go-back action put to the stack', 'history');
+            history_undo_actions_stack.push(function () {
+              debug_line("Doing back", 'history');
+              window.history.back();
+            });
+
+            form.elements['edit_mode'].value = '';
+            form.elements['edit_mode'].defaultValue = '';
+            form.elements['message'].value = '';
+            form.elements['message'].defaultValue = '';
+            form.elements['edited_post'].value = '';
+            form.elements['edited_post'].defaultValue = '';
+            form.elements['citated_post'].value = '';
+            form.elements['citated_post'].defaultValue = '';
+            form.elements['return_post'].value = '';
+            form.elements['return_post'].defaultValue = '';
+            form.elements['special_case'].value = '';
+            form.elements['special_case'].defaultValue = '';
+            form.elements['profiled_topic'].value = '';
+            form.elements['profiled_topic'].defaultValue = '';
+            form.elements['stringent_rules'].value = '';
+            form.elements['stringent_rules'].defaultValue = '';
+            form.elements['login_active'].value = '';
+            form.elements['login_active'].defaultValue = '';
+
+            if(form.elements['user_login']) 
+            {
+              form.elements['user_login'].value = '';
+              form.elements['user_login'].defaultValue = '';
+            }
+            if(form.elements['user_password']) 
+            {
+              form.elements['user_password'].value = '';
+              form.elements['user_password'].defaultValue = '';
+            }
+            
+            form.elements['is_thematic'].checked = false;
+            form.elements['is_thematic'].defaultChecked = false;
+            form.elements['is_adult'].checked = false;
+            form.elements['is_adult'].defaultChecked = false;
+
+            form.reset();
+            reset_attachment_fields_and_slots();
+
+            check_new_messages();
+            
+            Forum.show_sys_progress_indicator(false);
+
+            if(response.return_post)
+            {
+              set_current_post(response.return_post);
+            }
+
+            return;
+          }
+
+          if(response.target_url)
+          {
+            hide_post_form(form);
+            debug_line('Previous action removed from the stack', 'history');
+            history_undo_actions_stack.pop();
+            debug_line('Go-back action put to the stack', 'history');
+            history_undo_actions_stack.push(function () {
+              debug_line("Doing back", 'history');
+              window.history.back();
+            });
+
+            var was_edit_mode = (form.elements['edit_mode'].value == '1');
+            var edited_post = form.elements['edited_post'].value;
+            var original_post = form.elements['return_post'].value;
+            
+            var filtered_comment_posting = form.elements['profiled_topic'].value && filtered_comment_mode;
+
+            debug_line("Original post for this posting is: " + original_post, "posting");
+
+            form.elements['edit_mode'].value = '';
+            form.elements['edit_mode'].defaultValue = '';
+            form.elements['message'].value = '';
+            form.elements['message'].defaultValue = '';
+            form.elements['edited_post'].value = '';
+            form.elements['edited_post'].defaultValue = '';
+            form.elements['citated_post'].value = '';
+            form.elements['citated_post'].defaultValue = '';
+            form.elements['return_post'].value = '';
+            form.elements['return_post'].defaultValue = '';
+            form.elements['special_case'].value = '';
+            form.elements['special_case'].defaultValue = '';
+            form.elements['profiled_topic'].value = '';
+            form.elements['profiled_topic'].defaultValue = '';
+            form.elements['stringent_rules'].value = '';
+            form.elements['stringent_rules'].defaultValue = '';
+            form.elements['login_active'].value = '';
+            form.elements['login_active'].defaultValue = '';
+
+            if(form.elements['user_login']) 
+            {
+              form.elements['user_login'].value = '';
+              form.elements['user_login'].defaultValue = '';
+            }
+            if(form.elements['user_password']) 
+            {
+              form.elements['user_password'].value = '';
+              form.elements['user_password'].defaultValue = '';
+            }
+
+            form.elements['is_thematic'].checked = false;
+            form.elements['is_thematic'].defaultChecked = false;
+            form.elements['is_adult'].checked = false;
+            form.elements['is_adult'].defaultChecked = false;
+
+            form.reset();
+            reset_attachment_fields_and_slots();
+
+            if(response.login_performed)
+            {
+              delay_redirect(response.target_url);
+              return;
+            }
+
+            if(was_edit_mode)
+            {
+              reload_post(edited_post);
+              return;
+            }
+            
+            if (need_redirect) {
+              delay_redirect("topic.php?msg=" + response.created_post);
+              return;
+            }
+            
+            load_created_post(response.created_post, original_post);
+            
+            if (bubble_message) {
+              response.INFO_MESSAGE = bubble_message;
+              response.AUTO_HIDE_INFO = 7;
+              Forum.handle_response_messages(response);
+            }
+
+            return;
+          }
+        }
+      }
+      catch(err)
+      {
+        Forum.handle_ajax_error(this, err.message, this.last_url, {});
+      }
+
+      Forum.show_sys_progress_indicator(false);
+
+      // We halted the auto save while submission of the post.
+      // Post was not submitted, so activate auto save again
+      activate_auto_save();
+    };
+
+    kroleg_post_message_ajax.onerror = function(error, url, info)
+    {
+      Forum.show_sys_progress_indicator(false);
+
+      Forum.handle_ajax_error(this, error, url, info);
+
+      // We halted the auto save while submission of the post.
+      // Post was not submitted, so activate auto save again
+      activate_auto_save();
+    };
+  } // init ajax
+  else
+  {
+  }
+
+  kroleg_post_message_ajax.abort();
+  kroleg_post_message_ajax.resetParams();
+
+  break_auto_save();
+  break_check_new_messages();
+
+  var formData = new FormData(form);
+
+  formData.append("post_message", "1");
+  formData.append('hash', get_protection_hash());
+  formData.append('user_logged', user_logged);  
+  formData.append('user_marker', user_marker);
+  formData.append('fpage', fpage);
+
+  for(var i = 1; i <= ATTACHMENTS_PER_POST; i++)
+  {
+    index = i;
+    if(index == 1) index = '';
+    
+    if(attachment_buffer["del_attachment" + index] == 1)
+    {
+      formData.append("del_attachment" + index, 1);
+    }
+    
+    // if pasted image exists, replace the file field
+    if(attachment_buffer["attachment" + index])
+    {
+      if(formData.delete)
+      {
+        formData.delete("attachment" + index);
+      }
+      
+      //alert("appending to formData:" + attachment_buffer["attachment" + index].file.name + "/" + attachment_buffer["attachment" + index].file.type + "/" + attachment_buffer["attachment" + index].file.size);
+      
+      formData.append("attachment" + index, attachment_buffer["attachment" + index].file, attachment_buffer["attachment" + index].file_name);
+    }
+  }
+
+  kroleg_post_message_ajax.setFormData(formData);
+
+  // if writing a message takes long time,
+  // posting of the message over AJAX may loose the session,
+  // although the session of the main script still live.
+  kroleg_post_message_ajax.request("ajax/process.php");
+
+  return false;
+} // kroleg_post_message
