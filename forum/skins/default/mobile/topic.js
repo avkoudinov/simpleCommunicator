@@ -1067,6 +1067,8 @@ function reload_post(post)
             exec_reload_nav_control('navigator_bar', first_new_message);
             exec_reload_online_users();
             
+            changeChatAvatar();
+            
             Forum.fireEvent(window, "post_reloaded");
           }, 200);
         }
@@ -1319,6 +1321,8 @@ function load_created_post(created_post, original_post)
           exec_reload_nav_control('navigator_bar', load_created_post_ajax.created_post);
           exec_reload_online_users();
           
+          changeChatAvatar();
+          
           Forum.fireEvent(window, "new_post_loaded");
         }, 200);
 
@@ -1533,12 +1537,11 @@ function load_new_posts(topic, forum, highlight_message, target_url)
           exec_reload_nav_control('message_info_bar', first_new_message);
           exec_reload_nav_control('navigator_bar', first_new_message);
           exec_reload_online_users();
+
+          changeChatAvatar();
         }, 200);
 
-        if(messages) {
-          Forum.handle_response_messages(messages);
-          changeChatAvatar();
-        }
+        if(messages) Forum.handle_response_messages(messages);
       }
       catch(err)
       {
