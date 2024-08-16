@@ -4331,7 +4331,7 @@ function kroleg_post_message(need_redirect)
               return;
             }
             
-            if (need_redirect) {
+            if (this.need_redirect) {
               delay_redirect("topic.php?msg=" + response.created_post);
               return;
             }
@@ -4368,6 +4368,8 @@ function kroleg_post_message(need_redirect)
   else
   {
   }
+  
+  kroleg_post_message_ajax.need_redirect = need_redirect;
 
   kroleg_post_message_ajax.abort();
   kroleg_post_message_ajax.resetParams();

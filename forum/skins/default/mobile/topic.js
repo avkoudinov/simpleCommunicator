@@ -4119,7 +4119,7 @@ function changeChatAvatar() {
 
 var kroleg_post_message_ajax = null;
 
-function kroleg_post_message(need_redirect, bubble_message)
+function kroleg_post_message(need_redirect)
 {
   var form = document.getElementById('post_form');
   if(!form) return false;
@@ -4295,7 +4295,7 @@ function kroleg_post_message(need_redirect, bubble_message)
               return;
             }
             
-            if (need_redirect) {
+            if (this.need_redirect) {
               delay_redirect("topic.php?msg=" + response.created_post);
               return;
             }
@@ -4332,6 +4332,8 @@ function kroleg_post_message(need_redirect, bubble_message)
   else
   {
   }
+  
+  kroleg_post_message_ajax.need_redirect = need_redirect;
 
   kroleg_post_message_ajax.abort();
   kroleg_post_message_ajax.resetParams();
