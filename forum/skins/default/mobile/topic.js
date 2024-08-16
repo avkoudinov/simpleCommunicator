@@ -1066,6 +1066,8 @@ function reload_post(post)
             exec_reload_nav_control('message_info_bar', first_new_message);
             exec_reload_nav_control('navigator_bar', first_new_message);
             exec_reload_online_users();
+            
+            Forum.fireEvent(window, "post_reloaded");
           }, 200);
         }
 
@@ -1316,6 +1318,8 @@ function load_created_post(created_post, original_post)
           exec_reload_nav_control('message_info_bar', load_created_post_ajax.created_post);
           exec_reload_nav_control('navigator_bar', load_created_post_ajax.created_post);
           exec_reload_online_users();
+          
+          Forum.fireEvent(window, "new_post_loaded");
         }, 200);
 
         if(messages) Forum.handle_response_messages(messages);
@@ -4296,7 +4300,7 @@ function kroleg_post_message(need_redirect, bubble_message)
               return;
             }
             
-            kroleg_load_created_post(response.created_post, original_post, bubble_message);
+            load_created_post(response.created_post, original_post);
             
             return;
           }
@@ -4376,143 +4380,3 @@ function kroleg_post_message(need_redirect, bubble_message)
 
   return false;
 } // kroleg_post_message
-
-var kroleg_load_created_post_ajax = null;
-
-function kroleg_load_created_post(created_post, original_post, bubble_message)
-{
-  hide_all_popups();
-
-  Forum.show_sys_progress_indicator(true);
-
-  debug_line("Loading just created post: " + created_post, "posting");
-
-  var params = { post: created_post, in_search: in_search };
-
-  if(!kroleg_load_created_post_ajax)
-  {
-    kroleg_load_created_post_ajax = new Forum.AJAX();
-
-    kroleg_load_created_post_ajax.timeout = TIMEOUT;
-
-    kroleg_load_created_post_ajax.beforestart = function() { break_check_new_messages(); };
-    kroleg_load_created_post_ajax.aftercomplete = function(error) { activate_check_new_messages(); };
-
-    kroleg_load_created_post_ajax.onload = function(text, xml)
-    {
-      try
-      {
-        debug_line("We have loaded created post successfully", "posting");
-
-        // remove old possible transfer file
-        var elm = document.getElementById('ajax_data');
-        if(elm) elm.parentNode.removeChild(elm);
-
-        if(text != '')
-        {
-          elm = document.getElementById("no_posts_message");
-          if(elm) elm.style.display = "none";
-        }
-
-        elm = document.getElementById("post_" + kroleg_load_created_post_ajax.original_post);
-        if(elm) 
-        {
-          var message_container = document.createElement("div");
-          message_container.id = "post_" + kroleg_load_created_post_ajax.created_post;
-          message_container.classList.add("message_container");
-          message_container.classList.add("message_container_with_offset");
-          
-          var reply_indicator = document.createElement("div");
-          reply_indicator.classList.add("reply_indicator");
-          message_container.append(reply_indicator);
-
-          elm.parentNode.insertBefore(message_container, elm.nextSibling);
-          
-          message_container.insertAdjacentHTML('beforeend', text);
-        }
-
-        setTimeout(function () {
-          init_citations();
-          init_lightbox_images();
-          init_embedded_widgets();
-
-          elm = document.getElementById('ajax_data');
-          if(elm) 
-          {
-            // check for possible warning and errors
-            extract_attributes(elm);
-          }
-          
-          init_lightbox_images();
-          init_embedded_widgets();
-        
-          // highlichting code if not highlighted yet
-          var codes = post_area.getElementsByTagName('code');
-          for(var i = 0; i < codes.length; i++)
-          {
-            if(!codes[i].classList.contains("hljs")) hljs.highlightBlock(codes[i]);
-          }
-
-          debug_line("Highlighting the message: " + kroleg_load_created_post_ajax.created_post, "posting");
-          set_current_post(kroleg_load_created_post_ajax.created_post);
-
-          // by using insertAdjacentHTML for a content with images
-          // they are loaded not immediately, we need a timeout before
-          // calcualtion of the heights
-          setTimeout(init_more_buttons, 1000);
-          setTimeout(init_more_buttons, 2500);
-
-          exec_reload_nav_control('message_info_bar', kroleg_load_created_post_ajax.created_post);
-          exec_reload_nav_control('navigator_bar', kroleg_load_created_post_ajax.created_post);
-          exec_reload_online_users();
-        }, 200);
-
-        if (bubble_message) {
-          messages.INFO_MESSAGE = bubble_message;
-          messages.AUTO_HIDE_INFO = true;
-        }
-        
-        var topic_title = document.querySelector("#post_head_" + kroleg_load_created_post_ajax.created_post + " .topic_title");
-        if (topic_title) topic_title.innerHTML = "Карцер => " + topic_title.innerHTML;
-
-        if(messages) Forum.handle_response_messages(messages);
-      }
-      catch(err)
-      {
-        Forum.handle_ajax_error(this, err.message, this.last_url, {});
-      }
-
-      Forum.show_sys_progress_indicator(false);
-    };
-
-    kroleg_load_created_post_ajax.onerror = function(error, url, info)
-    {
-      Forum.show_sys_progress_indicator(false);
-
-      Forum.handle_ajax_error(this, error, url, info);
-    };
-  } // init ajax
-
-  kroleg_load_created_post_ajax.abort();
-  kroleg_load_created_post_ajax.resetParams();
-
-  kroleg_load_created_post_ajax.created_post = created_post;
-  kroleg_load_created_post_ajax.original_post = original_post;
-
-  for(var p in params)
-  {
-    if(!Object.prototype.hasOwnProperty.call(params, p)) continue;
-
-    kroleg_load_created_post_ajax.setPOST(p, params[p]);
-  }
-
-  kroleg_load_created_post_ajax.setPOST('hash', get_protection_hash());
-  kroleg_load_created_post_ajax.setPOST('user_logged', user_logged);
-  kroleg_load_created_post_ajax.setPOST('trace_sql', trace_sql);
-
-  kroleg_load_created_post_ajax.setPOST('fpage', fpage);
-
-  kroleg_load_created_post_ajax.request("ajax/load_post.php");
-
-  return false;
-}

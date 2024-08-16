@@ -408,7 +408,7 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
 <input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset(this.form)">
 </div>
 <div class="right_buttons">
-<input type="button" class="standard_button" value="<?php echo_html(text("Preview")); ?>" onclick="post_message('preview_message')">
+<input type="button" class="standard_button" value="<?php echo_html(text("Preview")); ?>" onclick="kroleg_post_message(false)">
 
 <input type="submit" class="standard_button send_button" value="<?php echo_html(text("Send")); ?>">
 </div>
