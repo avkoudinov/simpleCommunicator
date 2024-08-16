@@ -2002,35 +2002,6 @@ function focus_message_field()
   }
 }
 
-function getChatAuthor(pid, author) {
-  var
-  msgObj = document.querySelector('#message_text_' + pid),
-  userNick = msgObj.querySelector('.kroleg_pipe');
-
-  return (userNick)
-  ? { author: userNick.innerText.replace(/:$/, ''), krolegPipe: true }
-  : { author: author, krolegPipe: false };
-} // getChatAuthor
-
-function changeChatAvatar() {
-  var img;
-  var chatArray = document.querySelectorAll('.kroleg_pipe');
-
-  chatArray.forEach((v) => {
-    if(!v.dataset.uid || !v.dataset.ext) return true;
-    img = document.createElement('img');
-    img.src = /^a_/.test(v.dataset.uid)
-    ? 'https://news.kroleg.keenetic.pro/pic/avatars/' + v.dataset.uid
-    : 'https://kroleg.keenetic.pro/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
-    img.onload = function() {
-      var img = v.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.avatar_container').querySelector('img');
-
-      img.src = this.src;
-      img.className = 'kroleg_pipe';
-    }
-  });
-} // changeChatAvatar
-
 function answer_to_author(pid, author, tid, subject, profiled_topic, stringent_rules)
 {
   var cid = 'post_container_' + pid;
@@ -4112,6 +4083,35 @@ function handle_writing_cancel()
     confirm_cancel(form);
   }
 }
+
+function getChatAuthor(pid, author) {
+  var
+  msgObj = document.querySelector('#message_text_' + pid),
+  userNick = msgObj.querySelector('.kroleg_pipe');
+
+  return (userNick)
+  ? { author: userNick.innerText.replace(/:$/, ''), krolegPipe: true }
+  : { author: author, krolegPipe: false };
+} // getChatAuthor
+
+function changeChatAvatar() {
+  var img;
+  var chatArray = document.querySelectorAll('.kroleg_pipe');
+
+  chatArray.forEach((v) => {
+    if(!v.dataset.uid || !v.dataset.ext) return true;
+    img = document.createElement('img');
+    img.src = /^a_/.test(v.dataset.uid)
+    ? 'https://news.kroleg.keenetic.pro/pic/avatars/' + v.dataset.uid
+    : 'https://kroleg.keenetic.pro/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
+    img.onload = function() {
+      var img = v.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.avatar_container').querySelector('img');
+
+      img.src = this.src;
+      img.className = 'kroleg_pipe';
+    }
+  });
+} // changeChatAvatar
 
 var kroleg_post_message_ajax = null;
 

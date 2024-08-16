@@ -5403,6 +5403,10 @@ abstract class ForumManager
     {
         global $READ_MARKER;
         
+        if (!empty($_SESSION[$READ_MARKER]["old_known_guest"])) {
+            return true;
+        }
+        
         if (empty($_SESSION["last_user_marker"])) {
             return false;
         }
@@ -23312,7 +23316,7 @@ abstract class ForumManager
             MessageHandler::setError(text("ErrTorNodeBlocked"));
             return false;
         }
-        
+
         if (!$this->verify_captcha()) {
             return false;
         }
@@ -31726,6 +31730,10 @@ abstract class ForumManager
         }
         
         $dbw->free_result();
+        
+        if($this->check_guest_read_marker($dbw, $READ_MARKER) == 0) {
+            $_SESSION[$READ_MARKER]["old_known_guest"] = true;
+        }  
     } // read_user_cookies
     
     //-----------------------------------------------------------------
