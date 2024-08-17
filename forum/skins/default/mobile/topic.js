@@ -1708,6 +1708,10 @@ function do_action(params)
             return;
           }
 
+          if(this.params.topic_action == "delete_post" || this.params.topic_action == "restore_post") {
+             Forum.fireEvent(window, this.params.topic_action);
+          }
+          
           if(response.convert_action_link) convert_action_link(response.convert_action_link, this.params);
           
           if(this.params.subscribe_action == "subscribe_to_user" || this.params.subscribe_action == "unsubscribe_from_user") 
@@ -1727,10 +1731,6 @@ function do_action(params)
              this.params.topic_action == "convert_to_thematic" || this.params.topic_action == "convert_to_comment" ||
              this.params.topic_action == "convert_to_adult" || this.params.topic_action == "convert_to_nonadult") update_posts(this.params);
 
-          if(this.params.topic_action == "delete_post" || this.params.topic_action == "restore_post") {
-             Forum.fireEvent(window, this.params.topic_action);
-          }
-          
           if(this.params.load_auto_saved && response.message) load_message(response.message);
 
           if(response.rating) set_new_post_rating(this.params.post, response.rating);
