@@ -111,8 +111,8 @@ if ($response['success']) {
         foreach ($_SESSION["new_messages_info_cache"]["data"]["forums"] as $fid => $topics) {
             $response['forums_with_new'][$fid] = count($topics);
             
-            if (!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid])) {
-                $response['not_preferred_forums'][$fid] = 1;
+            if (!empty($_SESSION["ignored_forums"][$fid])) {
+                $response['ignored_forums'][$fid] = 1;
             }
             
             // we are in the topic exclude the current topic from the count of topics with new

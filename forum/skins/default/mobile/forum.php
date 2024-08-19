@@ -288,20 +288,6 @@ function confirm_delete_action(msg, params)
 
 function confirm_action(msg, params)
 {
-  if(!params.mark_read_action && Forum.isEmptyObject(selected_topics))
-  {
-    var mbuttons = [
-      {
-        caption: msg_OK,
-        handler: function() { Forum.hide_user_msgbox(); }
-      }
-    ];
-
-    Forum.show_user_msgbox(msg_Error, "<?php echo_js(text("ErrNoTopicSelected")); ?>", 'icon-error.gif', mbuttons);
-
-    return false;
-  }
-
   if(no_confirmation_of_any_actions == 1 || (no_confirmation_of_uncritical_actions == 1 && params.uncritical)) 
   {
     Forum.hide_user_msgbox();
@@ -371,6 +357,8 @@ function do_action(params)
             delay_reload();
             return;
           }
+
+          if(response.convert_action_link) convert_action_link(response.convert_action_link, this.params);
         }
       }
       catch(err)
@@ -391,6 +379,8 @@ function do_action(params)
 
   action_ajax.abort();
   action_ajax.resetParams();
+
+  action_ajax.params = params;
 
   for(var p in params)
   {
@@ -417,6 +407,33 @@ function do_action(params)
   action_ajax.request("ajax/process.php");
 
   return false;
+}
+
+function convert_action_link(target, params)
+{
+  var elm;
+
+  if(target == "add_to_ignored")
+  {
+    elm = document.getElementById("ignore_action");
+    if(elm)
+    {
+      params.topic_action = "add_to_ignored";
+      elm.innerHTML = "<?php echo_js(text("AddToIgnoredForums")); ?>";
+      elm.onclick = function (event) { return confirm_action("<?php echo_js(text("MsgConfirmForumIgnore"), true); ?>", params); }
+    }
+  }
+
+  if(target == "remove_from_ignored")
+  {
+    elm = document.getElementById("ignore_action");
+    if(elm)
+    {
+      params.topic_action = "remove_from_ignored";
+      elm.innerHTML = "<?php echo_js(text("RemoveFromIgnoredForums")); ?>";
+      elm.onclick = function (event) { return do_action(params); }
+    }
+  }
 }
 </script>
 
@@ -451,6 +468,14 @@ elseif(!empty($fid_for_url))
 }
 ?>
 <span class="<?php echo($class); ?>" <?php echo($display); ?> data-fid="<?php echo_html(val_or_empty($fid_for_url)); ?>"><a href="<?php echo($digest_url); ?>" ><?php echo_html(text("Digest")); ?></a> <br></span>
+
+<?php if(!$is_private): ?>
+<?php if(empty($forum_data["in_ignored"])): ?>
+<a id="ignore_action" href="<?php echo($base_url); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmForumIgnore"), true); ?>", { forum_user_action: "add_to_ignored", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("AddToIgnoredForums")); ?></a> <br>
+<?php else: ?>
+<a id="ignore_action" href="<?php echo($base_url); ?>" onclick='return do_action({ forum_user_action: "remove_from_ignored", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("RemoveFromIgnoredForums")); ?></a> <br>
+<?php endif; ?>
+<?php endif; ?>
 
 <a href="<?php echo($base_url . $fpage_appendix); ?>" onclick='return confirm_action("<?php echo_js(text("MsgConfirmMarkRead"), true); ?>", { mark_read_action: "mark_forum_read", forum: "<?php echo_js($fid); ?>", uncritical: 1 });'><?php echo_html(text("MarkRead")); ?></a><br>
 
@@ -494,6 +519,12 @@ else
 
 <a href="forums.php"><?php echo_html(text("Forums")); ?></a>
 
+<?php
+$display = "style='display:none'";
+if(!empty($topics_with_new_count)) $display = "";
+?>
+<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
+
 <?php if(!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])): ?>
 <span class="closed">[<?php echo_html(empty($_SESSION["ip_block_time_left"]) ? text("ip_blocked") : sprintf(text("ip_blocked_until"), $_SESSION["ip_block_time_left"])); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["activated"])): ?>
@@ -509,16 +540,16 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <?php endif; ?>
 
 <?php
-$display = "style='display:none'";
-if(!empty($topics_with_new_count)) $display = "";
-?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
-
-<?php
 $not_preferred = "";
-if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
+if(!empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
 ?>
 / <a href="<?php echo("forum.php?fid=" . $fid_for_url); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($forum_title); ?></a>
+
+<?php
+$display = "style='display:none'";
+if(!empty($forum_data["topics_with_new_count"])) $display = "";
+?>
+<span class="new forum_with_new_indicator <?php echo($not_preferred); ?>" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid_for_url); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 
 <?php if(!empty($forum_data["disable_ignore"])): ?>
 <span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
@@ -537,12 +568,6 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 <?php elseif(!empty($forum_data["no_guests"]) && !$fmanager->is_logged_in()): ?>
 <span class="closed">[<?php echo_html(text("closed_for_guests")); ?>]</span>
 <?php endif; ?>
-
-<?php
-$display = "style='display:none'";
-if(!empty($forum_data["topics_with_new_count"])) $display = "";
-?>
-<span class="new forum_with_new_indicator" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid_for_url); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 
 / <?php echo_html(text("Topics")); ?>:&nbsp;<span class='count_number'><?php echo_html(format_number(val_or_empty($pagination_info["total_count"]))); ?></span>,
 
@@ -897,6 +922,12 @@ if(!empty($tinfo["never_visited_topic"])) $never_visited_topic = "never_visited_
 
 <a href="forums.php"><?php echo_html(text("Forums")); ?></a>
 
+<?php
+$display = "style='display:none'";
+if(!empty($topics_with_new_count)) $display = "";
+?>
+<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
+
 <?php if(!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])): ?>
 <span class="closed">[<?php echo_html(empty($_SESSION["ip_block_time_left"]) ? text("ip_blocked") : sprintf(text("ip_blocked_until"), $_SESSION["ip_block_time_left"])); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["activated"])): ?>
@@ -912,16 +943,16 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <?php endif; ?>
 
 <?php
-$display = "style='display:none'";
-if(!empty($topics_with_new_count)) $display = "";
-?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
-
-<?php
 $not_preferred = "";
-if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
+if(!empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
 ?>
 / <a href="<?php echo("forum.php?fid=" . $fid_for_url); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($forum_title); ?></a>
+
+<?php
+$display = "style='display:none'";
+if(!empty($forum_data["topics_with_new_count"])) $display = "";
+?>
+<span class="new forum_with_new_indicator <?php echo($not_preferred); ?>" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid_for_url); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 
 <?php if(!empty($forum_data["disable_ignore"])): ?>
 <span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
@@ -940,12 +971,6 @@ if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][
 <?php elseif(!empty($forum_data["no_guests"]) && !$fmanager->is_logged_in()): ?>
 <span class="closed">[<?php echo_html(text("closed_for_guests")); ?>]</span>
 <?php endif; ?>
-
-<?php
-$display = "style='display:none'";
-if(!empty($forum_data["topics_with_new_count"])) $display = "";
-?>
-<span class="new forum_with_new_indicator" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid_for_url); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 
 / <?php echo_html(text("Topics")); ?>:&nbsp;<span class='count_number'><?php echo_html(format_number(val_or_empty($pagination_info["total_count"]))); ?></span>,
 

@@ -380,7 +380,21 @@ Forum.addXEvent(window, 'DOMContentLoaded', function () {
 $display = "style='display:none'";
 if(!empty($topics_with_new_count)) $display = "";
 ?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span> 
+<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
+
+<?php if(!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])): ?>
+<span class="closed">[<?php echo_html(empty($_SESSION["ip_block_time_left"]) ? text("ip_blocked") : sprintf(text("ip_blocked_until"), $_SESSION["ip_block_time_left"])); ?>]</span>
+<?php elseif($fmanager->is_logged_in() && empty($_SESSION["activated"])): ?>
+<span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
+<?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
+<span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
+<?php elseif(!empty($_SESSION["blocked"])): 
+$self_blocked_class = "";
+if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
+elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
+?>
+<span class="closed <?php echo($self_blocked_class); ?>">[<?php echo_html(empty($_SESSION["block_time_left"]) ? text("blocked") : sprintf(text("blocked_until"), $_SESSION["block_time_left"])); ?>]</span>
+<?php endif; ?>
 
 / <span class="topic_title_main"><?php echo_html(text("Profile")); ?></span>
 </div>
@@ -729,41 +743,6 @@ foreach($time_zones as $time_zone => $time_zone_name)
 <?php endif; ?>
 
 <tr>
-<th class="subheader"><?php echo_html(text("PreferredForums")); ?></th>
-</tr>
-
-<tr>
-<td class="preferred_forums">
-
-  <div style="position: relative">
-      <div class="scroll_up" onclick="scroll_preferred('up')"></div>
-      <div class="scroll_down" onclick="scroll_preferred('down')"></div>
-    
-    <div id="preferred_forum_area" class="preferred_forums_wrapper">
-    <div>
-       <table class="checkbox_table">
-      <?php
-      foreach($all_forum_list as $fid => $finfo):
-      $checked = !empty($user_data["preferred_forums"][$fid]) ? "checked" : "";
-      ?>
-       <tr>
-         <td>
-         <input type="checkbox" id="preferred_forum_<?php echo_html($fid); ?>" name="preferred_forums[<?php echo_html($fid); ?>]" value="<?php echo_html($fid); ?>" <?php echo($checked); ?>>
-         </td>
-         <td>
-         <label for="preferred_forum_<?php echo_html($fid); ?>"><?php echo_html($finfo["name"]); ?></label>
-         </td>
-       </tr>
-      <?php endforeach; ?>
-       </table>
-    </div>
-    </div>
-  </div>
-
-</td>
-</tr>
-
-<tr>
 <td class="button_area">
 <div class="left_buttons">
 <input type="button" class="standard_button" value="<?php echo_html(text("Reset")); ?>" onclick="confirm_reset()">
@@ -966,7 +945,7 @@ $row_class = "statistics_row_hidden";
 
 <?php foreach($ignored_topics as $tinfo):
 $not_preferred = "";
-if(!empty($_SESSION["preferred_forums"]) && empty($_SESSION["preferred_forums"][$tinfo["fid"]])) $not_preferred = "not_preferred";
+if(!empty($_SESSION["ignored_forums"][$tinfo["fid"]])) $not_preferred = "not_preferred";
 ?>
 
 <tr>

@@ -211,6 +211,11 @@ elseif (!reqvar_empty("mark_events_done")) {
 elseif (!reqvar_empty("set_event_done")) {
     $response['success'] = $fmanager->set_event_done(reqvar("event"));
 } //---------------------------------------------------------------------
+elseif (!reqvar_empty("forum_user_action")) {
+    $response['target_url'] = "";
+    
+    $response['success'] = $fmanager->do_forum_user_action(reqvar("forum"), reqvar("forum_user_action"), $response);
+} //---------------------------------------------------------------------
 elseif (!reqvar_empty("mark_read_action")) {
     switch (reqvar("mark_read_action")) {
         case "mark_subscriptions_read":

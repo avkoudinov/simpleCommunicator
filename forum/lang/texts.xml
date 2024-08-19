@@ -680,7 +680,7 @@
 
         <text id="ForumPassword">
             <en>Password for entering forum</en>
-            <de>Kennwort für den Forumzugang</de>
+            <de>Kennwort für das Forumzugang</de>
             <ru>Пароль для входа на форум</ru>
             <ua>Пароль для входа на форум</ua>
         </text>
@@ -1709,6 +1709,27 @@
             <ua>Ігнор. тему</ua>
         </text>
 
+        <text id="RemoveFromIgnoredTopics">
+            <en>Do not ignore topic</en>
+            <de>Thema nicht ignorieren</de>
+            <ru>Не игнор. тему</ru>
+            <ua>Не ігнор. тему</ua>
+        </text>
+
+        <text id="AddToIgnoredForums">
+            <en>Ignore forum</en>
+            <de>Forum ignorieren</de>
+            <ru>Игнор. форум</ru>
+            <ua>Ігнор. форум</ua>
+        </text>
+
+        <text id="RemoveFromIgnoredForums">
+            <en>Do not ignore forum</en>
+            <de>Forum nicht ignorieren</de>
+            <ru>Не игнор. форум</ru>
+            <ua>Не ігнор. форум</ua>
+        </text>
+
         <text id="AddTopicsToIgnoredTopics">
             <en>Ignore topics</en>
             <de>Themen ignorieren</de>
@@ -1737,11 +1758,11 @@
             <ua>Ви упевнені, що бажаєте ігнорувати обрані теми?</ua>
         </text>
 
-        <text id="RemoveFromIgnoredTopics">
-            <en>Do not ignore topic</en>
-            <de>Thema nicht ignorieren</de>
-            <ru>Не игнор. тему</ru>
-            <ua>Не ігнор. тему</ua>
+        <text id="MsgConfirmForumIgnore">
+            <en>Are you sure to ignore the forum?</en>
+            <de>Sind Sie sicher, dass Sie das Forum ignorieren möchten?</de>
+            <ru>Вы уверены, что хотите игнорировать данный форум?</ru>
+            <ua>Ви упевнені, що бажаєте ігнорувати даний форум?</ua>
         </text>
 
         <text id="Subscription">
@@ -2222,7 +2243,7 @@
 
         <text id="ErrForumNameTooLong">
             <en>The name of the forum cannot contain more than %s characters!</en>
-            <de>Der Forumname kann höchstens %s Zeichen beinhalten!</de>
+            <de>Das Forumname kann höchstens %s Zeichen beinhalten!</de>
             <ru>Название форума не должно превышать %s символов!</ru>
             <ua>Назва форуму не повинна перевищувати %s символів!</ua>
         </text>
@@ -3923,7 +3944,7 @@
 
         <text id="MsgErrMaxPinnedTopicsPerForum">
             <en>A forum can have maximally %s topics!</en>
-            <de>Der Forum kann maximal %s angehefteten Themen haben!</de>
+            <de>Das Forum kann maximal %s angehefteten Themen haben!</de>
             <ru>Можно прикрепить максимум %s тем на один форум!</ru>
             <ua>Можна прикріпити максимум %s тем на один форум!</ua>
         </text>
@@ -4073,6 +4094,20 @@
             <de>Die Themen wirden nicht mehr ignoriert.</de>
             <ru>Темы больше не игнорируются.</ru>
             <ua>Теми більше не ігноруються.</ua>
+        </text>
+
+        <text id="MsgForumAddedToIgnored">
+            <en>The forum is now ignored and the checking of the new messages will be no more perforemd.</en>
+            <de>Das Forum wird nun ignoriert und die Überprüfung der neuen Nachrichten wird nicht mehr durchgeführt werden.</de>
+            <ru>Форум теперь игнорируется, и проверка новых сообщений больше не будет осуществляться.</ru>
+            <ua>Форум тепер ігнорується, і перевірка нових повідомлень більше не буде виконуватися.</ua>
+        </text>
+
+        <text id="MsgForumRemovedFromIgnored">
+            <en>The forum is no more ignored.</en>
+            <de>Forum wird nicht mehr ignoriert.</de>
+            <ru>Форум больше не игнорируется.</ru>
+            <ua>Форум більше не ігнорується.</ua>
         </text>
 
         <text id="MsgTopicSubscribed">
@@ -5812,14 +5847,14 @@
 
         <text id="ErrForumNotAccessible">
             <en>You do not have access to the forum '%s'!</en>
-            <de>Sie haben keinen Zugriff auf den Forum '%s'!</de>
+            <de>Sie haben keinen Zugriff auf das Forum '%s'!</de>
             <ru>У вас нет доступа в форум '%s'!</ru>
             <ua>У вас немає доступу у форум '%s'!</ua>
         </text>
 
         <text id="ErrForumNotAccessibleDueToBlock">
             <en>You do not have access to the protected forum '%s' due to block of your user account! The access to the forum will be restored when the block expires.</en>
-            <de>Sie haben keinen Zugriff auf den geschützten Forum '%s' wegen der Blockierung Ihres Benutzerkontos! Der Zugang zum Forum wird wiederhergestellt, sobald die Blockierung abgelaufen ist.</de>
+            <de>Sie haben keinen Zugriff auf den geschütztas Forum '%s' wegen der Blockierung Ihres Benutzerkontos! Der Zugang zum Forum wird wiederhergestellt, sobald die Blockierung abgelaufen ist.</de>
             <ru>У вас нет доступа в защищенный форум '%s' из-за блокировки вашей учетной записи! Доступ к форуму будет восстановлен по истечении срока блокировки.</ru>
             <ua>У вас немає у захищений форум '%s' через блокування вашого облікового запису! Доступ до форуму буде відновлено після закінчення терміну блокування.</ua>
         </text>
@@ -5855,14 +5890,14 @@
 
         <text id="ActionGrantForumAccess">
             <en>Access to the restricted forum has been granted</en>
-            <de>Zugang zu dem geschützten Forum wurde gegeben</de>
+            <de>Zugang zu dem geschütztas Forum wurde gegeben</de>
             <ru>Дан доступ в защищенный форум</ru>
             <ua>Даний доступ в захищений форум</ua>
         </text>
 
         <text id="ActionRevokeForumAccess">
             <en>Access to the restricted forum has been revoked</en>
-            <de>Zugang zu dem geschützten Forum wurde weggenommen</de>
+            <de>Zugang zu dem geschütztas Forum wurde weggenommen</de>
             <ru>Отнят доступ в защищенный форум</ru>
             <ua>Скасовано доступ в захищений форум</ua>
         </text>
@@ -6730,7 +6765,7 @@
 
         <text id="MsgForumMarkedRead">
             <en>The forum has been successfully marked read!</en>
-            <de>Der Forum wurde erfolgreich als gelesen markiert!</de>
+            <de>Das Forum wurde erfolgreich als gelesen markiert!</de>
             <ru>Форум успешно помечен прочитанным!</ru>
             <ua>Форум успішно позначено прочитаним!</ua>
         </text>
@@ -7422,35 +7457,35 @@
 
         <text id="MsgEventGrantAdministrator">
             <en>The forum owner has given you the administrator rights.</en>
-            <de>Der Forumbesitzer hat Ihnen die Administratorenrechte gegeben.</de>
+            <de>Das Forumbesitzer hat Ihnen die Administratorenrechte gegeben.</de>
             <ru>Владелец форума выдал вам права администратора.</ru>
             <ua>Власник форуму видав вам права адміністратора.</ua>
         </text>
 
         <text id="MsgEventRevokeAdministrator">
             <en>The forum owner has revoked from you the administrator rights.</en>
-            <de>Der Forumbesitzer hat Ihnen die Administratorenrechte entnommen.</de>
+            <de>Das Forumbesitzer hat Ihnen die Administratorenrechte entnommen.</de>
             <ru>Владелец форума забрал у вас права администратора.</ru>
             <ua>Власник форуму забрав у вас права адміністратора.</ua>
         </text>
         
         <text id="MsgEventNewAdministratorAdded">
             <en>The forum owner has given the user {administrator} the administrator rights.</en>
-            <de>Der Forumbesitzer hat dem Benutzer {administrator} die Administratorenrechte gegeben.</de>
+            <de>Das Forumbesitzer hat dem Benutzer {administrator} die Administratorenrechte gegeben.</de>
             <ru>Владелец форума выдал пользователю {administrator} права администратора.</ru>
             <ua>Власник форуму видав користувачеві {administrator} права адміністратора.</ua>
         </text>
 
         <text id="MsgEventAdministratorRemoved">
             <en>The forum owner has revoked from the user {administrator} the administrator rights.</en>
-            <de>Der Forumbesitzer hat dem Benutzer {administrator} die Administratorenrechte entnommen.</de>
+            <de>Das Forumbesitzer hat dem Benutzer {administrator} die Administratorenrechte entnommen.</de>
             <ru>Владелец форума забрал у пользователя {administrator} права администратора.</ru>
             <ua>Власник форуму забрав у користувача {administrator} права адміністратора.</ua>
         </text>        
 
         <text id="MsgEventGrantForumModerator">
             <en>The administrator {author} has given you the moderator rights on the forum {forum}.</en>
-            <de>Der Administrator {author} hat Ihnen die Moderatorenrechte auf den Forum {forum} gegeben.</de>
+            <de>Der Administrator {author} hat Ihnen die Moderatorenrechte auf das Forum {forum} gegeben.</de>
             <ru>Администратор {author} выдал вам права модератора на форум {forum}.</ru>
             <ua>Адміністратор {author} видав вам права модератора на форум {forum}.</ua>
         </text>
@@ -7471,49 +7506,49 @@
 
         <text id="MsgEventGrantForumModeratorAnonym">
             <en>You have been given the moderator rights on the forum {forum}.</en>
-            <de>Ihnen wurden die Moderatorenrechte auf den Forum {forum} gegeben.</de>
+            <de>Ihnen wurden die Moderatorenrechte auf das Forum {forum} gegeben.</de>
             <ru>Вам выданы права модератора на форум {forum}.</ru>
             <ua>Вам видані права модератора на форум {forum}.</ua>
         </text>
 
         <text id="MsgEventRevokeForumModerator">
             <en>The administrator {author} has revoked from you the moderator rights on the forum {forum}.</en>
-            <de>Der Administrator {author} hat Ihnen die Moderatorenrechte auf den Forum {forum} entnommen.</de>
+            <de>Der Administrator {author} hat Ihnen die Moderatorenrechte auf das Forum {forum} entnommen.</de>
             <ru>Администратор {author} забрал у вас права модератора на форум {forum}.</ru>
             <ua>Адміністратор {author} відібрав у вас права модератора на форум {forum}.</ua>
         </text>
 
         <text id="MsgEventRevokeForumModeratorAnonym">
             <en>Your moderator rights on the forum {forum} have been revoked.</en>
-            <de>Ihnen wurden die Moderatorenrechte auf den Forum {forum} entnommen.</de>
+            <de>Ihnen wurden die Moderatorenrechte auf das Forum {forum} entnommen.</de>
             <ru>У вас отняты права модератора на форум {forum}.</ru>
             <ua>У вас відібрані права модератора на форум {forum}.</ua>
         </text>
 
         <text id="MsgEventNewForumModeratorAdded">
             <en>The administrator {author} has given the user {moderator} the moderator rights on the forum {forum}.</en>
-            <de>Der Administrator {author} hat dem Benutzer {moderator} die Moderatorenrechte auf den Forum {forum} gegeben.</de>
+            <de>Der Administrator {author} hat dem Benutzer {moderator} die Moderatorenrechte auf das Forum {forum} gegeben.</de>
             <ru>Администратор {author} выдал пользователю {moderator} права модератора на форум {forum}.</ru>
             <ua>Адміністратор {author} видав користувачеві {moderator} права модератора на форум {forum}.</ua>
         </text>
 
         <text id="MsgEventNewForumModeratorAddedAnonym">
             <en>The user {moderator} has got the moderator rights on the forum {forum}.</en>
-            <de>Dem Benutzer {moderator} wurden die Moderatorenrechte auf den Forum {forum} gegeben.</de>
+            <de>Dem Benutzer {moderator} wurden die Moderatorenrechte auf das Forum {forum} gegeben.</de>
             <ru>Пользователю {moderator} выданы права модератора на форум {forum}.</ru>
             <ua>Користувачеві {moderator} видані права модератора на форум {forum}.</ua>
         </text>
 
         <text id="MsgEventForumModeratorRemoved">
             <en>The administrator {author} has revoked from the user {moderator} the moderator rights on the forum {forum}.</en>
-            <de>Der Administrator {author} hat dem Benutzer {moderator} die Moderatorenrechte auf den Forum {forum} entnommen.</de>
+            <de>Der Administrator {author} hat dem Benutzer {moderator} die Moderatorenrechte auf das Forum {forum} entnommen.</de>
             <ru>Администратор {author} забрал у пользователя {moderator} права модератора на форум {forum}.</ru>
             <ua>Адміністратор {author} забрав у користувача {moderator} права модератора на форум {forum}.</ua>
         </text>
 
         <text id="MsgEventForumModeratorRemovedAnonym">
             <en>The moderator rights of the user {moderator} on the forum {forum} have been revoked.</en>
-            <de>Dem Benutzer {moderator} wurden die Moderatorenrechte auf den Forum {forum} entnommen.</de>
+            <de>Dem Benutzer {moderator} wurden die Moderatorenrechte auf das Forum {forum} entnommen.</de>
             <ru>У пользователя {moderator} отняты права модератора на форум {forum}.</ru>
             <ua>У користувача {moderator} відняті права модератора на форум {forum}.</ua>
         </text>
@@ -8129,56 +8164,56 @@
 
         <text id="MsgEventTopicMoved">
             <en>The moderator {author} has moved your topic {topic} from the forum {source_forum} to the forum {target_forum}.</en>
-            <de>Der Moderator {author} hat Ihr Thema {topic} aus dem Forum {source_forum} in den Forum {target_forum} verschoben.</de>
+            <de>Der Moderator {author} hat Ihr Thema {topic} aus dem Forum {source_forum} in das Forum {target_forum} verschoben.</de>
             <ru>Модератор {author} перенес вашу тему {topic} из форума {source_forum} на форум {target_forum}.</ru>
             <ua>Модератор {author} переніс вашу тему {topic} з форуму {source_forum} на форум {target_forum}.</ua>
         </text>
 
         <text id="MsgEventTopicMovedAnonym">
             <en>Your topic {topic} has been moved from the forum {source_forum} to the forum {target_forum}.</en>
-            <de>Ihr Thema {topic} wurde aus dem Forum {source_forum} in den Forum {target_forum} verschoben.</de>
+            <de>Ihr Thema {topic} wurde aus dem Forum {source_forum} in das Forum {target_forum} verschoben.</de>
             <ru>Ваша тема {topic} перенесена из форума {source_forum} на форум {target_forum}.</ru>
             <ua>Ваша тема {topic} перенесена з форуму {source_forum} на форум {target_forum}.</ua>
         </text>
 
         <text id="MsgEventTopicMovedModerators">
             <en>The moderator {author} has moved the topic {topic}, where you are the moderator, from the forum {source_forum} to the forum {target_forum}.</en>
-            <de>Der Moderator {author} hat das Thema {topic}, wo Sie der Moderator sind, aus dem Forum {source_forum} in den Forum {target_forum} verschoben.</de>
+            <de>Der Moderator {author} hat das Thema {topic}, wo Sie der Moderator sind, aus dem Forum {source_forum} in das Forum {target_forum} verschoben.</de>
             <ru>Модератор {author} перенес тему {topic}, где вы являетесь модератором, из форума {source_forum} на форум {target_forum}.</ru>
             <ua>Модератор {author} переніс тему {topic}, де ви є модератором, з форуму {source_forum} на форум {target_forum}.</ua>
         </text>
 
         <text id="MsgEventTopicMovedModeratorsAnonym">
             <en>The topic {topic}, where you are the moderator, has been moved from the forum {source_forum} to the forum {target_forum}.</en>
-            <de>Das Thema {topic}, wo Sie der Moderator sind, wurde aus dem Forum {source_forum} in den Forum {target_forum} verschoben.</de>
+            <de>Das Thema {topic}, wo Sie der Moderator sind, wurde aus dem Forum {source_forum} in das Forum {target_forum} verschoben.</de>
             <ru>Тема {topic}, где вы являетесь модератором, перенесена из форума {source_forum} на форум {target_forum}.</ru>
             <ua>Тема {topic}, де ви є модератором, перенесена з форуму {source_forum} на форум {target_forum}.</ua>
         </text>
 
         <text id="MsgEventTopicMovedRevokeModerators">
             <en>The moderator {author} has moved the topic {topic}, where you were the moderator, from the forum {source_forum} to the forum {target_forum}. Ask the moderators of that forum to get the topic modearator status again.</en>
-            <de>Der Moderator {author} hat das Thema {topic}, wo Sie der Moderator waren, aus dem Forum {source_forum} in den Forum {target_forum} verschoben. Fragen Sie die Moderatoren dieses Forums den Status des Themamoderatoren Ihnen wieder zu geben.</de>
+            <de>Der Moderator {author} hat das Thema {topic}, wo Sie der Moderator waren, aus dem Forum {source_forum} in das Forum {target_forum} verschoben. Fragen Sie die Moderatoren dieses Forums den Status des Themamoderatoren Ihnen wieder zu geben.</de>
             <ru>Модератор {author} перенес тему {topic}, где вы были модератором, из форума {source_forum} на форум {target_forum}. Обратитесь к модераторам данного форума для получения модераторских прав на тему.</ru>
             <ua>Модератор {author} переніс тему {topic}, де ви були модератором, з форуму {source_forum} на форум {target_forum}. Зверніться до модераторів цього форуму для отримання модераторских прав на тему.</ua>
         </text>
 
         <text id="MsgEventTopicMovedRevokeModeratorsAnonym">
             <en>The topic {topic}, where you were the moderator, has been moved from the forum {source_forum} to the forum {target_forum}. Ask the moderators of that forum to get the topic modearator status again.</en>
-            <de>Das Thema {topic}, wo Sie der Moderator waren, wurde aus dem Forum {source_forum} in den Forum {target_forum} verschoben. Fragen Sie die Moderatoren dieses Forums den Status des Themamoderatoren Ihnen wieder zu geben.</de>
+            <de>Das Thema {topic}, wo Sie der Moderator waren, wurde aus dem Forum {source_forum} in das Forum {target_forum} verschoben. Fragen Sie die Moderatoren dieses Forums den Status des Themamoderatoren Ihnen wieder zu geben.</de>
             <ru>Тема {topic}, где вы были модератором, перенесена из форума {source_forum} на форум {target_forum}. Обратитесь к модераторам данного форума для получения модераторских прав на тему.</ru>
             <ua>Тема {topic}, де ви були модератором, перенесена з форуму {source_forum} на форум {target_forum}. Зверніться до модераторів цього форуму для отримання модераторских прав на тему.</ua>
         </text>
 
         <text id="MsgEventTopicMovedSubscribers">
             <en>The moderator {author} has moved the topic {topic} from the forum {source_forum} to the forum {target_forum}.</en>
-            <de>Der Moderator {author} hat das Thema {topic} aus dem Forum {source_forum} in den Forum {target_forum} verschoben.</de>
+            <de>Der Moderator {author} hat das Thema {topic} aus dem Forum {source_forum} in das Forum {target_forum} verschoben.</de>
             <ru>Модератор {author} перенес тему {topic} из форума {source_forum} на форум {target_forum}.</ru>
             <ua>Модератор {author} переніс тему {topic} з форуму {source_forum} на форум {target_forum}.</ua>
         </text>
 
         <text id="MsgEventTopicMovedSubscribersAnonym">
             <en>The topic {topic} has been moved from the forum {source_forum} to the forum {target_forum}.</en>
-            <de>Das Thema {topic} wurde aus dem Forum {source_forum} in den Forum {target_forum} verschoben.</de>
+            <de>Das Thema {topic} wurde aus dem Forum {source_forum} in das Forum {target_forum} verschoben.</de>
             <ru>Тема {topic} перенесена из форума {source_forum} на форум {target_forum}.</ru>
             <ua>Тема {topic} перенесена з форуму {source_forum} на форум {target_forum}.</ua>
         </text>
@@ -8381,28 +8416,28 @@
 
         <text id="MsgEventUserAccessGranted">
             <en>The moderator {author} has given you the access to the restricted forum {forum}.</en>
-            <de>Der Moderator {author} hat Ihnen den Zugang auf den geschützten Forum {forum} gegeben.</de>
+            <de>Der Moderator {author} hat Ihnen den Zugang auf den geschütztas Forum {forum} gegeben.</de>
             <ru>Модератор {author} дал вам доступ в защищенный форум {forum}.</ru>
             <ua>Модератор {author} надав вам доступ в захищений форум {forum}.</ua>
         </text>
 
         <text id="MsgEventUserAccessGrantedAnonym">
             <en>You have been granted the access to the restricted forum {forum}.</en>
-            <de>Ihnen wurde der Zugang auf den geschützten Forum {forum} gegeben.</de>
+            <de>Ihnen wurde der Zugang auf den geschütztas Forum {forum} gegeben.</de>
             <ru>Вам дан доступ в защищенный форум {forum}.</ru>
             <ua>Вам надано доступ в захищений форум {forum}.</ua>
         </text>
 
         <text id="MsgEventUserAccessRevoked">
             <en>The moderator {author} has revoked your access to the restricted forum {forum}.</en>
-            <de>Der Moderator {author} hat Ihnen den Zugang auf den geschützten Forum {forum} entnommen.</de>
+            <de>Der Moderator {author} hat Ihnen den Zugang auf den geschütztas Forum {forum} entnommen.</de>
             <ru>Модератор {author} забрал у вас доступ в защищенный форум {forum}.</ru>
             <ua>Модератор {author} позбавив вас доступу в захищений форум {forum}.</ua>
         </text>
 
         <text id="MsgEventUserAccessRevokedAnonym">
             <en>You access to the restricted forum {forum} has been revoked.</en>
-            <de>Ihr Zugang auf den geschützten Forum {forum} wurde entnommen.</de>
+            <de>Ihr Zugang auf den geschütztas Forum {forum} wurde entnommen.</de>
             <ru>У вас отнят доступ в защищенный форум {forum}.</ru>
             <ua>Вас позбавлено доступу в захищений форум {forum}.</ua>
         </text>
@@ -9026,7 +9061,7 @@
 
         <text id="MaintenanceComment">
             <en>The forum is currently under maintenance presumably until %s (time zone: %s).</en>
-            <de>Der Forum wird momentan gewartet, voraussichtlich bis %s (Zeitzone: %s).</de>
+            <de>Das Forum wird momentan gewartet, voraussichtlich bis %s (Zeitzone: %s).</de>
             <ru>Форум на обслуживании предположительно до %s (временная зона: %s).</ru>
             <ua>Форум на обслуговуванні імовірно до %s (часова зона: %s).</ua>
         </text>
@@ -9213,14 +9248,14 @@
 
         <text id="WarnAuthorizationRequired">
             <en>The forum or topic are closed for guests. The autorization is reuiqred!</en>
-            <de>Der Forum oder Thema sind für die Gäste is geschlossen. Die Autorisierung is erforderlich!</de>
+            <de>Das Forum oder Thema sind für die Gäste is geschlossen. Die Autorisierung is erforderlich!</de>
             <ru>Форум или тема закрыты для гостей. Необходима авторизация!</ru>
             <ua>Форум або тема закриті для гостей. Потрібна авторизація!</ua>
         </text>
 
         <text id="WarnWritingNotPossible">
             <en>Writing is not possible Either the forum or topiс are closed or you are blocked!</en>
-            <de>Schreiben ist nicht möglich! Der Forum oder das Thema sind geschlossen oder Sie sind geblockt!</de>
+            <de>Schreiben ist nicht möglich! Das Forum oder das Thema sind geschlossen oder Sie sind geblockt!</de>
             <ru>Отправка сообщений невозможна. Либо форум либо тема закрыты, либо вы заблокированы!</ru>
             <ua>Відправлення повідомлень неможлива. Або форум або тема закриті, або ви заблоковані!</ua>
         </text>

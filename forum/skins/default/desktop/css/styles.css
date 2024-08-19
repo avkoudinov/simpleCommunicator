@@ -6304,11 +6304,6 @@ a.go_to_last:hover
   word-wrap: break-word; 
 }
 
-td.preferred_forums
-{
-  padding: 0px;
-}
-
 .not_preferred,
 a.not_preferred:link,
 a.not_preferred:active,
@@ -6318,6 +6313,11 @@ a.not_preferred:hover
   color: gray;
 }
 
+.new.not_preferred,
+.new.not_preferred a:link,
+.new.not_preferred a:active,
+.new.not_preferred a:visited,
+.new.not_preferred a:hover,
 .new.topic_ignored,
 .new.topic_ignored a:link,
 .new.topic_ignored a:active,
@@ -6349,17 +6349,6 @@ a.not_preferred:hover
 .topic_blocked_users a:hover
 {
   color: maroon;
-}
-
-.preferred_forums div.preferred_forums_wrapper
-{
-  max-height: 205px;
-  overflow-y: auto;
-}
-
-.preferred_forums div.preferred_forums_wrapper div
-{
-  margin: 7px;
 }
 
 #ignore_guests_except_area
@@ -7127,6 +7116,27 @@ a.radikal_short_container
 }
 
 /* END: Radikal */
+
+/* BEGIN: Plvideo */
+
+a.plvideo_short_container
+{
+  display: table-cell;
+  width:415px;
+  height:40px;
+  color:white; 
+  font-weight: bold; 
+  padding: 5px 5px 5px 60px;
+  background-color: black;
+  background-image: url(../images/plvideo_short.png);
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 40px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+/* END: Plvideo */
 
 /* BEGIN: Reddit */
 

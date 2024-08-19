@@ -5774,6 +5774,11 @@ a.not_preferred:hover
   color: gray;
 }
 
+.new.not_preferred,
+.new.not_preferred a:link,
+.new.not_preferred a:active,
+.new.not_preferred a:visited,
+.new.not_preferred a:hover,
 .new.topic_ignored,
 .new.topic_ignored a:link,
 .new.topic_ignored a:active,
@@ -5805,38 +5810,6 @@ a.not_preferred:hover
 .topic_blocked_users a:hover
 {
   color: maroon;
-}
-
-td.preferred_forums
-{
-  padding: 12px;
-}
-
-.preferred_forums div.preferred_forums_wrapper
-{
-  max-height: 380px;
-  overflow: scroll;
-}
-
-.preferred_forums div.preferred_forums_wrapper div
-{
-  margin: 0px 50px 0px 15px;
-}
-
-.preferred_forums div.scroll_up
-{
-  margin: 0px;
-  top: 0px;
-  right: 0px;
-  position: absolute;
-}
-
-.preferred_forums div.scroll_down
-{
-  position: absolute;
-  margin: 0px;
-  bottom: 0px;
-  right: 0px;
 }
 
 #ignore_guests_area,
@@ -6659,6 +6632,28 @@ a.radikal_short_container
 }
 
 /* END: Radikal */
+
+/* BEGIN: Plvideo */
+
+a.plvideo_short_container
+{
+  font-size: 25px;
+  display: table-cell;
+  width:563px;
+  height:66px;
+  color:white; 
+  font-weight: bold; 
+  padding: 5px 5px 5px 80px;
+  background-color: black;
+  background-image: url(../images/plvideo_short.png);
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 58px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+/* END: Plvideo */
 
 /* BEGIN: Reddit */
 

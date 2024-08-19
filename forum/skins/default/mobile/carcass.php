@@ -43,6 +43,10 @@ var no_confirmation_of_dislikes = <?php echo(!empty($_SESSION["skin_properties"]
 
 <link rel="stylesheet" href="<?php echo($view_path); ?>css/custom.css<?php echo($cache_appendix); ?>" type="text/css"/>
 
+<?php if($view_mode == "tablet"): ?>
+<link rel="stylesheet" href="<?php echo($view_path); ?>css/custom_horizontal.css<?php echo($cache_appendix); ?>" type="text/css">
+<?php endif; ?>
+
 <style>
 .dummy
 {

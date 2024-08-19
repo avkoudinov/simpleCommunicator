@@ -1993,22 +1993,6 @@
     max-width: 400px;
   }
 
-  td.preferred_forums
-  {
-    padding: 7px;
-  }
-
-  .preferred_forums div.preferred_forums_wrapper
-  {
-    max-height: 290px;
-    overflow: hidden;
-  }
-
-  .preferred_forums div.preferred_forums_wrapper div
-  {
-    margin: 0px 30px 0px 5px;
-  }
-
   ._user_msgbox_text .post_image
   {
     max-width: 300px;
@@ -2415,7 +2399,7 @@
   a.youtube_short_container,
   a.instagram_short_container,
   a.radikal_short_container,
-  a.emb_video_short_container,
+  a.plvideo_short_container,
   a.fbvideo_short_container,
   a.twitter_short_container,
   a.telegram_short_container,
@@ -2425,8 +2409,8 @@
   a.tiktok_short_container,
   a.rutube_short_container,
   a.coub_short_container,
-  a.emb_video_short_container,
-  a.vkvideo_short_container
+  a.vkvideo_short_container,
+  a.emb_video_short_container
   {
     font-size: 16px;
     display: table-cell;

@@ -355,6 +355,12 @@ else
 
 <a href="forums.php"><?php echo_html(text("Forums")); ?></a>
 
+<?php
+$display = "style='display:none'";
+if(!empty($topics_with_new_count)) $display = "";
+?>
+<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
+
 <?php if(!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])): ?>
 <span class="closed">[<?php echo_html(empty($_SESSION["ip_block_time_left"]) ? text("ip_blocked") : sprintf(text("ip_blocked_until"), $_SESSION["ip_block_time_left"])); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["activated"])): ?>
@@ -370,14 +376,8 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <?php endif; ?>
 
 <?php
-$display = "style='display:none'";
-if(!empty($topics_with_new_count)) $display = "";
-?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
-
-<?php
 $not_preferred = "";
-if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["preferred_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
+if(!empty($fid) && !empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
 
 $forum_url = "new_messages.php";
 
@@ -560,7 +560,7 @@ if(!empty($tinfo["never_visited_topic"])) $never_visited_topic = "never_visited_
 <?php echo_html(text("Forum")); ?>:
 <?php
 $not_preferred = "";
-if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["preferred_forums"][$tinfo["forum_id"]]) && $tinfo["forum_id"] != "private") $not_preferred = "not_preferred";
+if(!empty($fid) && !empty($_SESSION["ignored_forums"][$tinfo["forum_id"]]) && $tinfo["forum_id"] != "private") $not_preferred = "not_preferred";
 ?>
 <a href="forum.php?fid=<?php echo_html($tinfo["forum_id"]); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($tinfo["forum_name"]); ?></a>
 
@@ -689,6 +689,12 @@ if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["pre
 
 <a href="forums.php"><?php echo_html(text("Forums")); ?></a>
 
+<?php
+$display = "style='display:none'";
+if(!empty($topics_with_new_count)) $display = "";
+?>
+<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
+
 <?php if(!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])): ?>
 <span class="closed">[<?php echo_html(empty($_SESSION["ip_block_time_left"]) ? text("ip_blocked") : sprintf(text("ip_blocked_until"), $_SESSION["ip_block_time_left"])); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["activated"])): ?>
@@ -704,14 +710,8 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <?php endif; ?>
 
 <?php
-$display = "style='display:none'";
-if(!empty($topics_with_new_count)) $display = "";
-?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
-
-<?php
 $not_preferred = "";
-if(!empty($_SESSION["preferred_forums"]) && !empty($fid) && empty($_SESSION["preferred_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
+if(!empty($fid) && !empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
 
 $forum_url = "new_messages.php";
 
