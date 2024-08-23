@@ -32,7 +32,7 @@ $_SESSION["last_url"] = val_or_empty($_SERVER["REQUEST_URI"]);
 //------------------------------------------------------------------
 require_once "include/check_new_inc.php";
 //------------------------------------------------------------------
-$fmanager->get_forums_new_status($forum_list);
+$fmanager->get_forums_new_status($groupped_forum_list);
 //------------------------------------------------------------------
 require_once "include/final_inc.php";
 //------------------------------------------------------------------
