@@ -728,10 +728,6 @@ if(!empty($tinfo["topic_ignored"])) $not_preferred = "not_preferred";
 
 <?php echo(build_post_pagination($topic_base_url, $tinfo, $not_preferred)); ?>
 
-<?php if(!empty($tinfo["closed"])): ?>
-<span class="closed">[<?php echo_html(text("closed")); ?>]</span>
-<?php endif; ?>
-
 <?php
 $topic_ignored = "";
 $display = "style='display:none'";
@@ -742,6 +738,11 @@ $never_visited_topic = "";
 if(!empty($tinfo["never_visited_topic"])) $never_visited_topic = "never_visited_topic";
 ?>
 <span class="new <?php echo($never_visited_topic); ?> new_messages_indicator <?php echo($topic_ignored); ?>" data-tid="<?php echo_html($tid); ?>" <?php echo($display); ?>>[<a href="<?php echo($topic_base_url); ?>&gotonew=1" rel="nofollow"><?php echo_html(text("new")); ?>:<span class='new_messages_count'><?php echo($tinfo["new_messages_count"]); ?></span></a>]</span>
+
+<?php if(!empty($tinfo["closed"])): ?>
+<span class="closed">[<?php echo_html(text("closed")); ?>]</span>
+<?php endif; ?>
+
 
 </div>
 
