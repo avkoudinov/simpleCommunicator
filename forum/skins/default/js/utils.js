@@ -1702,6 +1702,8 @@ Forum.show_sys_progress_indicator = function(state)
 // --------------------------------------------------------
 Forum.handle_ajax_error = function(ajax, error, url, info)
 {
+  console.error(error);
+  
   var mbuttons = [
     {
       caption: msg_OK,

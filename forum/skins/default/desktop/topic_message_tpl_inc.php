@@ -1,5 +1,4 @@
 <?php
-
 $blocked = false;
 $blocked_only_topic = false;
 $may_rate = true;
@@ -207,7 +206,7 @@ else
 $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
 ?>
 
-<table id="post_table_<?php echo_html($pid); ?>" class="post_table forum_<?php echo($pinfo["forum_id"]); ?> topic_<?php echo($pinfo["topic_id"]); ?> <?php echo($user_identifier_class); ?> <?php echo_html($pinned); ?> <?php echo_html($attachment_editable_class); ?> <?php if($post_ignored) echo "ignored_post"; ?> <?php if(!empty($pinfo["profiled_topic"])) echo(empty($pinfo["is_comment"]) ? "thematic_post" : "comment_post"); ?> <?php if(!empty($pinfo["is_adult"])) echo "adult_post"; ?>">
+<table id="post_table_<?php echo_html($pid); ?>" data-pid="<?php echo_html($pid); ?>" class="post_table forum_<?php echo($pinfo["forum_id"]); ?> topic_<?php echo($pinfo["topic_id"]); ?> <?php echo($user_identifier_class); ?> <?php echo_html($pinned); ?> <?php echo_html($attachment_editable_class); ?> <?php if($post_ignored) echo "ignored_post"; ?> <?php if(!empty($pinfo["profiled_topic"])) echo(empty($pinfo["is_comment"]) ? "thematic_post" : "comment_post"); ?> <?php if(!empty($pinfo["is_adult"])) echo "adult_post"; ?>">
 <tr>
 
 <?php 

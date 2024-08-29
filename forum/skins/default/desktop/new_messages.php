@@ -302,6 +302,8 @@ $display = "style='display:none'";
 
 $digest_url = "search_topic.php?news_digest=1&do_search=1" . $fpage_appendix;
 
+debug_message($fid_for_url);
+
 if(val_or_empty($fid_for_url) == "private")
 {
   $class = "private_topics_with_new_indicator";
@@ -337,6 +339,8 @@ else
   $class = "topics_with_new_indicator";
   if(!empty($topics_with_new_count)) $display = "";
 }
+
+debug_message($class);
 ?>
 <span class="<?php echo($class); ?>" <?php echo($display); ?> data-fid="<?php echo_html(val_or_empty($fid_for_url)); ?>"><a href="<?php echo($digest_url); ?>" ><?php echo_html(text("Digest")); ?></a> |</span>
 
@@ -407,6 +411,20 @@ elseif(!empty($fid))
 ?>
 
 / <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
+
+<?php if(!empty($fid) || !empty($is_private)): ?>
+<?php
+debug_message($class);
+$not_preferred = "";
+if(!empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
+?>
+
+<?php
+$display = "style='display:none'";
+if(!empty($forum_data["topics_with_new_count"])) $display = "";
+?>
+<span class="new <?php echo($class); ?> <?php echo($not_preferred); ?>" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid_for_url); ?>"><?php echo_html(text("new")); ?>:<span class='<?php echo($class); ?>'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
+<?php endif; ?>
 
 <?php if(!empty($forum_data["disable_ignore"])): ?>
 <span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
@@ -729,6 +747,19 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <?php endif; ?>
 
 / <a class="<?php echo($not_preferred); ?>" rel="nofollow" href="<?php echo($forum_url); ?>"><?php echo_html($forum_title); ?></a>
+
+<?php if(!empty($fid) || !empty($is_private)): ?>
+<?php
+$not_preferred = "";
+if(!empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
+?>
+
+<?php
+$display = "style='display:none'";
+if(!empty($forum_data["topics_with_new_count"])) $display = "";
+?>
+<span class="new <?php echo($class); ?> <?php echo($not_preferred); ?>" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid_for_url); ?>"><?php echo_html(text("new")); ?>:<span class='<?php echo($class); ?>'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
+<?php endif; ?>
 
 <?php if(!empty($forum_data["disable_ignore"])): ?>
 <span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>

@@ -83,7 +83,11 @@ if (!empty($forum_data["forum_name"])) {
 $user_data = array();
 $post_list = array();
 
-if (!$fmanager->get_new_topic_posts(reqvar("last_read_message"), reqvar("limit"), $fid, $tid, $post_list, $user_data, !empty($topic_data["deleted"]))) {
+if (empty($_REQUEST["exclude_posts"])) {
+    $_REQUEST["exclude_posts"] = [];
+}
+
+if (!$fmanager->get_new_topic_posts(reqvar("last_read_message"), reqvar("limit"), $_REQUEST["exclude_posts"], $fid, $tid, $post_list, $user_data, !empty($topic_data["deleted"]))) {
     exit;
 }
 
