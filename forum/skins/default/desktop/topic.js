@@ -1242,7 +1242,7 @@ function reload_online_users(topic, forum)
 
 var load_created_post_ajax = null;
 
-function load_created_post(created_post, original_post)
+function load_created_post(created_post, original_post, on_loaded)
 {
   hide_all_popups();
 
@@ -1328,6 +1328,8 @@ function load_created_post(created_post, original_post)
           exec_reload_nav_control('message_info_bar', load_created_post_ajax.created_post);
           exec_reload_nav_control('navigator_bar', load_created_post_ajax.created_post);
           exec_reload_online_users();
+          
+          if (on_loaded) on_loaded();
         }, 200);
 
         if(messages) Forum.handle_response_messages(messages);
@@ -1390,6 +1392,9 @@ function load_new_posts(topic, forum, highlight_message, target_url)
   var posts_count = posts.length;
   
   posts = document.getElementsByClassName("deleted_post");
+  posts_count -= posts.length;
+  
+  posts = document.getElementsByClassName("message_container_with_offset");
   posts_count -= posts.length;
   
   if(posts_count < posts_per_page)
@@ -1569,6 +1574,12 @@ function load_new_posts(topic, forum, highlight_message, target_url)
   load_new_posts_ajax.highlight_message = highlight_message;
   load_new_posts_ajax.target_url = target_url;
 
+  var loaded_my_posts = document.querySelectorAll(".message_container_with_offset table.post_table");
+  for(var i = 0; i < loaded_my_posts.length; i++)
+  {
+    load_new_posts_ajax.setPOST("exclude_posts[" + i + "]", loaded_my_posts[i].getAttribute("data-pid"));
+  }
+  
   for(var p in params)
   {
     if(!Object.prototype.hasOwnProperty.call(params, p)) continue;

@@ -38656,7 +38656,7 @@ abstract class ForumManager
     } // calculate_new_topic_messages
     
     //-----------------------------------------------------------------
-    function get_new_topic_posts($last_pid, $limit, $fid, $tid, &$post_list, &$user_data, $topic_deleted)
+    function get_new_topic_posts($last_pid, $limit, &$exclude_posts, $fid, $tid, &$post_list, &$user_data, $topic_deleted)
     {
         if (empty($tid)) {
             MessageHandler::setError(sprintf(text("ErrTopicDoesNotExist"), "-"));
@@ -38706,6 +38706,10 @@ abstract class ForumManager
                   $deleted_where_appendix
                   $ignore_post_where_appendix
                   $ignore_comment_where_appendix";
+                  
+        if (!empty($exclude_posts)) {
+            $where .= " and {$prfx}_post.id not in (" . $dbw->escape(implode(", ", $exclude_posts)) . ")";
+        }
         
         $where_appendix = "";
         if (!empty($last_pid)) {

@@ -1221,45 +1221,16 @@ function post_message(action)
               highlight_message = response.return_post;
             }
             
-            if(do_not_check_new)
-            {
-              debug_line("New should not be checked", "posting");
-              
-              if(original_post)
-              {
-                debug_line("We set the original post as current", "posting");
+            load_created_post(response.created_post, original_post, function() {
+              if(!is_last_page ||
+                 !may_load_new_posts ||
+                 in_search ||
+                 filtered_comment_posting ||
+                 all_page_mode 
+                ) return;
                 
-                set_current_post(original_post);
-              }
-
-              Forum.show_sys_progress_indicator(false);
-            }            
-            else if(in_search)
-            {
-              debug_line("We are in the search mode, no loads", "posting");
-              
-              load_created_post(response.created_post, original_post);
-            }            
-            else if(filtered_comment_posting)
-            {
-              debug_line("We are in the filtered comment posting, load just created post", "posting");
-              load_created_post(response.created_post, original_post);
-            }
-            else if(is_last_page && may_load_new_posts)
-            {
-              debug_line("We are on the last page, load new posts", "posting");
               exec_load_new_posts(highlight_message, response.target_url);
-            }
-            else if(all_page_mode)
-            {
-              debug_line("We are in the all mode, load new posts", "posting");
-              exec_load_new_posts(highlight_message, response.target_url);
-            }
-            else
-            {
-              debug_line("We are not on the last page, load just created post", "posting");
-              load_created_post(response.created_post, original_post);
-            }
+            });
 
             return;
           }

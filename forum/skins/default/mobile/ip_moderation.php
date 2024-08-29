@@ -291,7 +291,15 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <span class="closed <?php echo($self_blocked_class); ?>">[<?php echo_html(empty($_SESSION["block_time_left"]) ? text("blocked") : sprintf(text("blocked_until"), $_SESSION["block_time_left"])); ?>]</span>
 <?php endif; ?>
 
-/ <a href="moderation.php"><?php echo_html(text("Moderation")); ?></a> / <span class="topic_title_main"><?php echo_html($subtitle); ?></span>
+/ <a href="moderation.php"><?php echo_html(text("Moderation")); ?></a> 
+
+/ <a href="rm_moderation.php"><?php echo_html(text("ReadmarkerModeration")); ?></a>
+
+/ <a href="user_agents.php"><?php echo_html(text("UserAgents")); ?></a>
+
+/ <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
+
+/ <span class="topic_title_main"><?php echo_html($subtitle); ?></span>
 </div>
 
 <!-- END: forum_bar -->

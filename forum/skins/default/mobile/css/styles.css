@@ -2277,6 +2277,7 @@ img.avatar_picture,
   max-width: 270px;
   margin: 0px;
   padding: 0px;
+  display: block;
 }
 
 .post_table .avatar_container img.mourning_band,

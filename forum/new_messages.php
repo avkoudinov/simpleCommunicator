@@ -176,6 +176,25 @@ $_SESSION["last_url"] = val_or_empty($_SERVER["REQUEST_URI"]);
 //------------------------------------------------------------------
 // check_new_inc.php is not necessary because called explicitly
 //------------------------------------------------------------------
+$forum_data['topics_with_new_count'] = 0;
+
+if (!empty($_SESSION["new_messages_info_cache"]["data"]["forums"][$fid])) {
+    $forum_data['topics_with_new_count'] = count($_SESSION["new_messages_info_cache"]["data"]["forums"][$fid]);
+}
+
+if ($is_private && !empty($_SESSION["new_messages_info_cache"]["data"]["private_topics"])) {
+    $forum_data['topics_with_new_count'] = count($_SESSION["new_messages_info_cache"]["data"]["private_topics"]);
+}
+elseif(val_or_empty($fid_for_url) == "favourites" && !empty($_SESSION["new_messages_info_cache"]["data"]["favourites"])) {
+    $forum_data['topics_with_new_count'] = count($_SESSION["new_messages_info_cache"]["data"]["favourites"]);
+}
+elseif(val_or_empty($fid_for_url) == "my_topics" && !empty($_SESSION["new_messages_info_cache"]["data"]["my_topics"])) {
+    $forum_data['topics_with_new_count'] = count($_SESSION["new_messages_info_cache"]["data"]["my_topics"]);
+}
+elseif(val_or_empty($fid_for_url) == "my_part_topics" && !empty($_SESSION["new_messages_info_cache"]["data"]["my_part_topics"])) {
+    $forum_data['topics_with_new_count'] = count($_SESSION["new_messages_info_cache"]["data"]["my_part_topics"]);
+}
+
 $fmanager->get_topics_new_status($topic_list);
 //------------------------------------------------------------------
 require_once "include/final_inc.php";
