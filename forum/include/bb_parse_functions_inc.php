@@ -90,6 +90,10 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             return "{$nl}[{{video}}: Reddit]{$nl2}";
             break;
         
+        case "dzen":
+            return "{$nl}[{{video}}: Yandex Dzen]{$nl2}";
+            break;
+
         case "tiktok":
             return "{$nl}[{{video}}: TikTok]{$nl2}";
             break;

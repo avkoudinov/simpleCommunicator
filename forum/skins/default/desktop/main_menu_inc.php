@@ -11,9 +11,13 @@ if(!empty($is_private))
 {
   $search_appendix = "&" . xrawurlencode("forums[]") . "=private";
 }
-elseif(basename($_SERVER["PHP_SELF"]) == "favourites.php" || !reqvar_empty("favourites_only") || !reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only"))
+elseif(basename($_SERVER["PHP_SELF"]) == "favourites.php" || !reqvar_empty("favourites_only") || reqvar("fid") == "favourites")
 {
   $search_appendix = "&favourites_only=1";
+}
+elseif(!reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only"))
+{
+  $search_appendix = "&favourite_posts_only=1";
 }
 elseif(reqvar("fid") == "my_topics" || 
        ($fmanager->is_logged_in() && reqvar("author") == $fmanager->get_user_name() && reqvar("author_mode") == "created_topic")
@@ -25,7 +29,7 @@ elseif(reqvar("fid") == "my_part_topics" ||
 ) {
   $search_appendix = "&author=" . xrawurlencode($fmanager->get_user_name()) . "&author_mode=participating&new_search=1";
 }
-elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_SELF"]) == "topic.php" || basename($_SERVER["PHP_SELF"]) == "new_topic.php") && !reqvar_empty("fid"))
+elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_SELF"]) == "new_messages.php" || basename($_SERVER["PHP_SELF"]) == "topic.php" || basename($_SERVER["PHP_SELF"]) == "new_topic.php") && !reqvar_empty("fid"))
 {
   $search_appendix = "&" . xrawurlencode("forums[]") . "=" . reqvar("fid");
 }
@@ -225,7 +229,7 @@ if(!empty($favourites_with_new_count)) $display = "";
 
 <?php if(!empty($is_private)): ?>
 <input type="hidden" name="forums[]" value="private">
-<?php elseif(basename($_SERVER["PHP_SELF"]) == "favourites.php" || !reqvar_empty("favourites_only")): ?>
+<?php elseif(basename($_SERVER["PHP_SELF"]) == "favourites.php" || !reqvar_empty("favourites_only") || reqvar("fid") == "favourites"): ?>
 <input type="hidden" name="favourites_only" value="1">
 <?php elseif(!reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only")): ?>
 <input type="hidden" name="favourite_posts_only" value="1">
@@ -237,7 +241,7 @@ if(!empty($favourites_with_new_count)) $display = "";
        ($fmanager->is_logged_in() && reqvar("author") == $fmanager->get_user_name() && reqvar("author_mode") == "participating")): ?>
 <input type="hidden" name="author" value="<?php echo_html($fmanager->get_user_name()); ?>">
 <input type="hidden" name="author_mode" value="participating">
-<?php elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_SELF"]) == "new_topic.php" || basename($_SERVER["PHP_SELF"]) == "topic.php") && !reqvar_empty("fid")): ?>
+<?php elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_SELF"]) == "new_messages.php" || basename($_SERVER["PHP_SELF"]) == "new_topic.php" || basename($_SERVER["PHP_SELF"]) == "topic.php") && !reqvar_empty("fid")): ?>
 <input type="hidden" name="forums[]" value="<?php echo_html(reqvar("fid")); ?>">
 <?php endif; ?>
 

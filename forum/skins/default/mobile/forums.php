@@ -218,15 +218,15 @@ if(!empty($finfo["in_ignored"]))
 
 <a href="forum.php?fid=<?php echo_html($fid); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($finfo["name"]); ?></a>
 
-<?php if(!empty($finfo["closed"])): ?>
-<span class="closed">[<?php echo_html(text("closed")); ?>]</span>
-<?php endif; ?>
-
 <?php
 $display = "style='display:none'";
 if(!empty($finfo["topics_with_new_count"])) $display = "";
 ?>
 <span class="new forum_with_new_indicator <?php echo($topic_ignored); ?>" data-fid="<?php echo_html($fid); ?>" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php?fid=<?php echo_html($fid); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($finfo["topics_with_new_count"]); ?></span></a>]</span>
+
+<?php if(!empty($finfo["closed"])): ?>
+<span class="closed">[<?php echo_html(text("closed")); ?>]</span>
+<?php endif; ?>
 
 <?php if(!empty($finfo["description"])): ?>
 <div class="forum_description"><?php echo_html($finfo["description"]); ?></div>

@@ -5218,7 +5218,7 @@ img.image_placeholder
 .post_table .avatar_container img
 {
   max-width: 130px;
-  display: inline-block;
+  display: block;
 }
 
 img.mourning_band

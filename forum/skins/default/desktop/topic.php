@@ -870,6 +870,19 @@ if(!empty($_SESSION["ignored_forums"][$fid]) && empty($topic_data["is_private"])
 ?>
 / <a href="forum.php?fid=<?php echo_html($fid_for_url); ?><?php echo($fpage_appendix); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($forum_title); ?></a>
 
+<?php if(!empty($topic_data["is_private"])):
+$display = "style='display:none'";
+if(!empty($private_topics_with_new_count)) $display = "";
+?>
+<span class="new private_topics_with_new_indicator" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=private"); ?>"><?php echo_html(text("new")); ?>:<span class='private_topics_with_new_count'><?php echo($private_topics_with_new_count); ?></span></a>]</span>
+<?php else:
+$display = "style='display:none'";
+if(!empty($forum_data["topics_with_new_count"])) $display = "";
+?>
+<span class="new forum_with_new_indicator <?php echo($not_preferred); ?>" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
+<?php endif; ?>
+
+
 <?php if(!empty($forum_data["disable_ignore"])): ?>
 <span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>
 <?php endif; ?>
@@ -886,18 +899,6 @@ if(!empty($_SESSION["ignored_forums"][$fid]) && empty($topic_data["is_private"])
 <span class="closed">[<?php echo_html(empty($forum_data["block_time_left"]) ? text("forum_blocked") : sprintf(text("forum_blocked_until"), $forum_data["block_time_left"])); ?>]</span>
 <?php elseif(!empty($forum_data["no_guests"]) && !$fmanager->is_logged_in()): ?>
 <span class="closed">[<?php echo_html(text("closed_for_guests")); ?>]</span>
-<?php endif; ?>
-
-<?php if(!empty($topic_data["is_private"])):
-$display = "style='display:none'";
-if(!empty($private_topics_with_new_count)) $display = "";
-?>
-<span class="new private_topics_with_new_indicator" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=private"); ?>"><?php echo_html(text("new")); ?>:<span class='private_topics_with_new_count'><?php echo($private_topics_with_new_count); ?></span></a>]</span>
-<?php else:
-$display = "style='display:none'";
-if(!empty($forum_data["topics_with_new_count"])) $display = "";
-?>
-<span class="new forum_with_new_indicator <?php echo($not_preferred); ?>" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 <?php endif; ?>
 
 / 
