@@ -1547,4 +1547,5 @@ $GLOBALS['DEF_TEXTS']['de']['ErrForumGroupNameEmpty'] = 'Forumgruppename ist nic
 $GLOBALS['DEF_TEXTS']['de']['ErrForumGroupNameExists'] = 'Eine Forumgruppe mit diesem Namen existiert bereits!';
 $GLOBALS['DEF_TEXTS']['de']['AnonymActivity'] = 'Anonyme-Aktivität';
 $GLOBALS['DEF_TEXTS']['de']['ErrTooManyPostsFromIP'] = 'Zu viele Nachrichten von dieser IP-Adresse \'%s\' eingereicht. Versuchen Sie es später noch einmal!';
+$GLOBALS['DEF_TEXTS']['de']['ConvertingHEICtoJPG'] = 'Konvertiere eines HEIC-Bildes in JPG ...';
 ?>

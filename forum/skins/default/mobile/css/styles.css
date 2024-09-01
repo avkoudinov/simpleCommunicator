@@ -2909,6 +2909,7 @@ a.carma_both
 }
 
 .forum_bar_breakable .forum_action_bar,
+.forum_bar_breakable .navigator_bar,
 .forum_bar_breakable .forum_name_bar
 {
   margin-top: 32px;

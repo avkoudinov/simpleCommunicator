@@ -583,7 +583,7 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 
 </div>
 
-<div class="forum_bar">
+<div class="forum_bar forum_bar_breakable">
 
 <?php if($pagination_info["page_count"] > 1): ?>
 <div class="navigator_bar"><?php echo(build_page_navigator($base_url . "&fpage=$", $pagination_info)); ?></div>
@@ -898,7 +898,7 @@ if(!empty($tinfo["never_visited_topic"])) $never_visited_topic = "never_visited_
 
 <!-- BEGIN: forum_bar -->
 
-<div class="forum_bar">
+<div class="forum_bar forum_bar_breakable">
 
 <?php if($pagination_info["page_count"] > 1): ?>
 <div class="navigator_bar"><?php echo(build_page_navigator($base_url . "&fpage=$", $pagination_info)); ?></div>

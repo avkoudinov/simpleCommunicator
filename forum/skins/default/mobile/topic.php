@@ -788,7 +788,7 @@ $all_entry_post = $last_message;
 
 <div class="forum_action_bar" id='bottom_new_message'>
 <?php if($may_write_to_topic): ?>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", last_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", get_actual_last_message(), "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
 <?php endif; ?>
 </div>
 

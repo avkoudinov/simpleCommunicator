@@ -69,6 +69,7 @@ Forum = {};
 <script src='skins/<?php echo($skin); ?>/js/css_device_selector.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/css_browser_selector.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/swipe-events.js<?php echo($cache_appendix); ?>'></script>
+<script src='skins/<?php echo($skin); ?>/js/heic2any.js<?php echo($cache_appendix); ?>'></script>
 
 <script src='skins/<?php echo($skin); ?>/js/debug_console.js<?php echo($cache_appendix); ?>'></script>
 <script src='skins/<?php echo($skin); ?>/js/xevent.js<?php echo($cache_appendix); ?>'></script>
@@ -140,6 +141,8 @@ def_js_message("ErrRequestError");
 
 def_js_message("MaxAttachmentCount");
 def_js_message("ErrNoImagesInClipboard");
+
+def_js_message("ConvertingHEICtoJPG");
 ?>
 
 <?php
