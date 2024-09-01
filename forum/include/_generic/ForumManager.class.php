@@ -5749,7 +5749,7 @@ abstract class ForumManager
         $symbols = "";
         if (!$this->check_author(reqvar("user_name"), $symbols)) {
             $error = text("ErrStringContainsInvalidSymbols");
-            if (!empty($symbols)) $error .= "\n\n" . $symbols;
+            if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
             
             MessageHandler::setError($error);
             MessageHandler::setErrorElement("user_name");
@@ -17809,7 +17809,7 @@ abstract class ForumManager
             $symbols = "";
             if (!$this->check_subject($new_topic, $symbols)) {
                 $error = text("ErrStringContainsInvalidSymbols");
-                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
                 
                 MessageHandler::setError($error);
                 return false;
@@ -18440,7 +18440,7 @@ abstract class ForumManager
             $symbols = "";
             if (!$this->check_subject($new_topic, $symbols)) {
                 $error = text("ErrStringContainsInvalidSymbols");
-                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
                 
                 MessageHandler::setError($error);
                 return false;
@@ -21392,7 +21392,7 @@ abstract class ForumManager
         $symbols = "";
         if (!$this->check_subject($subject, $symbols)) {
             $error = text("ErrStringContainsInvalidSymbols");
-            if (!empty($symbols)) $error .= "\n\n" . $symbols;
+            if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
             
             MessageHandler::setError($error);
             MessageHandler::setErrorElement("subject");
@@ -21896,7 +21896,7 @@ abstract class ForumManager
             $symbols = "";
             if (!$this->check_author(reqvar("author"), $symbols)) {
                 $error = text("ErrStringContainsInvalidSymbols");
-                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
 
                 MessageHandler::setError(text("ErrStringContainsInvalidSymbols"), $symbols);
                 MessageHandler::setErrorElement("author");
@@ -22835,7 +22835,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\/\*\+<>—~&#–§№\$€₽¥¥£Ұ₴°\"\'“”«»„“0-9，]+/u", $subject, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\\\\\/\*\+<>—~&#–§№\$€₽¥¥£Ұ₴°\"\'“”‘’«»„“0-9，（＾ω＾）ｖ]+/u", $subject, $matches)) {
             $symbols = $matches[0];
 
             trace_message_to_file(date("d.m.Y, H:i") . ": the string [$subject] contains the prohibited symbols [$symbols]", "symbols.log");
@@ -23096,7 +23096,7 @@ abstract class ForumManager
             $symbols = "";
             if (!$this->check_author(reqvar("author"), $symbols)) {
                 $error = text("ErrStringContainsInvalidSymbols");
-                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
                 
                 MessageHandler::setError($error);
                 MessageHandler::setErrorElement("author");
@@ -23121,7 +23121,7 @@ abstract class ForumManager
             $symbols = "";
             if (!$this->check_subject($subject, $symbols)) {
                 $error = text("ErrStringContainsInvalidSymbols");
-                if (!empty($symbols)) $error .= "\n\n" . $symbols;
+                if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
                 
                 MessageHandler::setError($error);
                 MessageHandler::setErrorElement("subject");
@@ -31859,7 +31859,7 @@ abstract class ForumManager
         $symbols = "";
         if (!$this->check_author(reqvar("user_name"), $symbols)) {
             $error = text("ErrStringContainsInvalidSymbols");
-            if (!empty($symbols)) $error .= "\n\n" . $symbols;
+            if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
 
             MessageHandler::setError(text("ErrStringContainsInvalidSymbols"), $symbols);
             MessageHandler::setErrorElement("user_name");

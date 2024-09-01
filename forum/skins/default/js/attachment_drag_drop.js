@@ -34,7 +34,35 @@ function release_attachment_buffer_slot(index)
   if(attachment_buffer["attachment_slot_locked" + index]) delete attachment_buffer["attachment_slot_locked" + index];
 }
 
-function add_attachment_to_buffer(file_data)
+async function check_heic_image(file_data, index)
+{
+  var re = new RegExp("^(.+)\.heic$", "i");
+  var matches = re.exec(file_data.file_name);
+  if (!matches) return;
+
+  elm = document.getElementById('attachment' + index);
+  if(!elm) return;
+
+  Forum.show_sys_progress_indicator(true);
+
+  setFileInputCaption(elm, msg_ConvertingHEICtoJPG, true);
+  
+  var targetType = "image/jpeg";
+  
+  var result = await heic2any({
+			blob: file_data.file,
+			toType: targetType,
+			quality: 0.9 
+		});  
+  
+  file_data.file_name = matches[1] + ".jpg";
+  file_data.file = new File([new Blob([result], {type: targetType})], file_data.file_name, {type: targetType});;
+  
+  //await new Promise(resolve => setTimeout(resolve, 3000));
+  //throw new Error("Something went wrong");
+}
+
+async function add_attachment_to_buffer(file_data)
 {
   if(!file_data.file.size)
   {
@@ -63,14 +91,38 @@ function add_attachment_to_buffer(file_data)
     
     if(!attachment_buffer["attachment" + index] && !attachment_buffer["attachment_slot_locked" + index])
     {
-      attachment_buffer["attachment" + index] = file_data;
-      
-      unset_attachment_delete_flag(index);
-      lock_attachment_buffer_slot(index);
+      try 
+      {
+        await check_heic_image(file_data, index);  
+        
+        attachment_buffer["attachment" + index] = file_data;
+        
+        unset_attachment_delete_flag(index);
+        lock_attachment_buffer_slot(index);
 
-      on_attachment_pasted(index);
+        await on_attachment_pasted(index);
 
-      return true;
+        Forum.show_sys_progress_indicator(false);
+
+        return true;
+      } 
+      catch (error) 
+      {
+        Forum.show_sys_progress_indicator(false);
+        
+        var mbuttons = [
+          {
+            caption: msg_OK,
+            handler: function() { Forum.hide_user_msgbox(); }
+          }
+        ];
+
+        resetFileField(elm);
+        
+        Forum.show_user_msgbox(msg_Error, error.message, 'icon-error.gif', mbuttons);
+
+        return false;
+      }
     }
   }
   
@@ -88,18 +140,43 @@ function add_attachment_to_buffer(file_data)
   return false;
 }
 
-function replace_attachment_in_buffer(file, index)
+async function replace_attachment_in_buffer(file_data, index)
 {
-  var elm;
+  elm = document.getElementById('attachment' + index);
+  if(!elm) return false;
   
-  attachment_buffer["attachment" + index] = file;
-  
-  unset_attachment_delete_flag(index);
-  lock_attachment_buffer_slot(index);
+  try 
+  {
+    await check_heic_image(file_data, index);  
 
-  on_attachment_pasted(index);
+    attachment_buffer["attachment" + index] = file_data;
+    
+    unset_attachment_delete_flag(index);
+    lock_attachment_buffer_slot(index);
 
-  return true;
+    await on_attachment_pasted(index);
+
+    Forum.show_sys_progress_indicator(false);
+
+    return true;
+  } 
+  catch (error) 
+  {
+    Forum.show_sys_progress_indicator(false);
+    
+    var mbuttons = [
+      {
+        caption: msg_OK,
+        handler: function() { Forum.hide_user_msgbox(); }
+      }
+    ];
+
+    resetFileField(elm);
+    
+    Forum.show_user_msgbox(msg_Error, error.message, 'icon-error.gif', mbuttons);
+
+    return false;
+  }
 }
 
 function delete_attachment_from_buffer(index)
@@ -138,7 +215,7 @@ Forum.addXEvent(window, 'load', function () {
       return false;
   });  
   
-  drag_drop_zone.addEventListener('paste', function (ev) {
+  drag_drop_zone.addEventListener('paste', async function (ev) {
     
     this.blur();
     
@@ -172,7 +249,7 @@ Forum.addXEvent(window, 'load', function () {
         
         //alert("adding to buffer (" + i + " of " + items.length + "): " + items[i].kind + "/" + items[i].type + ", " + typeof items[i]);
         
-        if(!add_attachment_to_buffer({ file_name: file_name, file: items[i].getAsFile() }))
+        if(!await add_attachment_to_buffer({ file_name: file_name, file: items[i].getAsFile() }))
         {
           return;
         }
@@ -188,18 +265,18 @@ Forum.addXEvent(window, 'load', function () {
   });  
 });
 
-function extract_dropped_files(dataTransfer)
+async function extract_dropped_files(dataTransfer)
 {
   for(i = 0; i < dataTransfer.files.length; i++)
   {
-    if(!add_attachment_to_buffer({ file_name: dataTransfer.files[i].name, file: dataTransfer.files[i] }))
+    if(!await add_attachment_to_buffer({ file_name: dataTransfer.files[i].name, file: dataTransfer.files[i] }))
     {
       return;
     }
   }
 } // extract_dropped_files
 
-function image_to_file(img)
+async function image_to_file(img)
 {
   if (img.src.split(',')[0].indexOf('base64') >= 0)
   {
@@ -230,7 +307,7 @@ function image_to_file(img)
     
     extracted_image_counter++;
     
-    if(!add_attachment_to_buffer({ file: blob, file_name: file_name }))
+    if(!await add_attachment_to_buffer({ file: blob, file_name: file_name }))
     {
       return false;
     }

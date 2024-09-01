@@ -10662,5 +10662,12 @@
             <ua>Занадто багато повідомлень надіслано з цієї IP-адреси '%s'. Повторіть спробу пізніше!</ua>
         </text>
 
+        <text id="ConvertingHEICtoJPG">
+            <en>Converting HEIC image to JPG ...</en>
+            <de>Konvertiere eines HEIC-Bildes in JPG ...</de>
+            <ru>Преобразование изображения HEIC в JPG ...</ru>
+            <ua>Перетворення зображення HEIC в JPG ...</ua>
+        </text>
+
     </texts>
 </document>

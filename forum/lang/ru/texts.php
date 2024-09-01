@@ -1554,4 +1554,5 @@ $GLOBALS['DEF_TEXTS']['ru']['ErrForumGroupNameEmpty'] = 'Не задано на�
 $GLOBALS['DEF_TEXTS']['ru']['ErrForumGroupNameExists'] = 'Группа форумов с таким названием уже существует!';
 $GLOBALS['DEF_TEXTS']['ru']['AnonymActivity'] = 'Активность анонимов';
 $GLOBALS['DEF_TEXTS']['ru']['ErrTooManyPostsFromIP'] = 'Слишком много сообщений отправлено с данного IP-адреса \'%s\'. Повторите попытку позже!';
+$GLOBALS['DEF_TEXTS']['ru']['ConvertingHEICtoJPG'] = 'Преобразование изображения HEIC в JPG ...';
 ?>

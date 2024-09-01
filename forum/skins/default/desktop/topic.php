@@ -832,7 +832,7 @@ $forum_selector_id = 2;
 
 <?php if($may_write_to_topic): ?>
 <td id='bottom_new_message'>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", last_message, "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", get_actual_last_message(), "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
 </td>
 <?php endif; ?>
 
@@ -881,7 +881,6 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 ?>
 <span class="new forum_with_new_indicator <?php echo($not_preferred); ?>" data-fid="<?php echo_html($fid_for_url); ?>" <?php echo($display); ?>>[<a href="<?php echo("new_messages.php?fid=" . $fid); ?>"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($forum_data["topics_with_new_count"]); ?></span></a>]</span>
 <?php endif; ?>
-
 
 <?php if(!empty($forum_data["disable_ignore"])): ?>
 <span class="ignore_off">[<?php echo_html(text("ignore_off")); ?>]</span>

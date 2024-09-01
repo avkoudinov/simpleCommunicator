@@ -1244,6 +1244,14 @@ function reload_online_users(topic, forum)
   return false;
 }
 
+function get_actual_last_message()
+{
+  var posts = document.getElementsByClassName("post_table");
+  if (posts.length == 0) return last_message;
+  
+  return posts[posts.length - 1].getAttribute("data-pid");
+}
+
 var load_created_post_ajax = null;
 
 function load_created_post(created_post, original_post, on_loaded)
@@ -1340,14 +1348,16 @@ function load_created_post(created_post, original_post, on_loaded)
           Forum.fireEvent(window, "new_post_loaded");
         }, 200);
 
+        if (!on_loaded) Forum.show_sys_progress_indicator(false);
+        
         if(messages) Forum.handle_response_messages(messages);
       }
       catch(err)
       {
+        Forum.show_sys_progress_indicator(false);
+        
         Forum.handle_ajax_error(this, err.message, this.last_url, {});
       }
-
-      Forum.show_sys_progress_indicator(false);
     };
 
     load_created_post_ajax.onerror = function(error, url, info)
@@ -1386,6 +1396,9 @@ var load_new_posts_ajax = null;
 
 function load_new_posts(topic, forum, highlight_message, target_url)
 {
+  // -1 highlighting the first new
+  // -2 no highlighting
+  
   var post_area = document.getElementById("post_area");
   if(!post_area) return false;
 
@@ -1424,7 +1437,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
     debug_line("We may not load new posts, the page is full", "posting");
     debug_line("Let's handle the highlighting", "posting");
     
-    if(!highlight_message)
+    if(!highlight_message || parseInt(highlight_message) == -2)
     {
       debug_line("No highlight message", "posting");
       Forum.show_sys_progress_indicator(false);
@@ -1537,7 +1550,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
             load_new_posts_ajax.highlight_message = first_new_message;
           }
 
-          if(load_new_posts_ajax.highlight_message)
+          if(load_new_posts_ajax.highlight_message && parseInt(load_new_posts_ajax.highlight_message) != -2)
           {
             set_current_post(load_new_posts_ajax.highlight_message);
           }
@@ -4239,18 +4252,38 @@ function kroleg_post_message(need_redirect)
               window.history.back();
             });
 
-            form.elements['edit_mode'].value = '';
-            form.elements['edit_mode'].defaultValue = '';
+            if (form.elements['edit_mode'])
+            {
+              form.elements['edit_mode'].value = '';
+              form.elements['edit_mode'].defaultValue = '';
+            }
+
+            if (form.elements['edited_post'])
+            {
+              form.elements['edited_post'].value = '';
+              form.elements['edited_post'].defaultValue = '';
+            }
+
+            if (form.elements['return_post'])
+            {
+              form.elements['return_post'].value = '';
+              form.elements['return_post'].defaultValue = '';
+            }
+
+            if (form.elements['citated_post'])
+            {
+              form.elements['citated_post'].value = '';
+              form.elements['citated_post'].defaultValue = '';
+            }
+
+            if (form.elements['special_case'])
+            {
+              form.elements['special_case'].value = '';
+              form.elements['special_case'].defaultValue = '';
+            }
+
             form.elements['message'].value = '';
             form.elements['message'].defaultValue = '';
-            form.elements['edited_post'].value = '';
-            form.elements['edited_post'].defaultValue = '';
-            form.elements['citated_post'].value = '';
-            form.elements['citated_post'].defaultValue = '';
-            form.elements['return_post'].value = '';
-            form.elements['return_post'].defaultValue = '';
-            form.elements['special_case'].value = '';
-            form.elements['special_case'].defaultValue = '';
             form.elements['profiled_topic'].value = '';
             form.elements['profiled_topic'].defaultValue = '';
             form.elements['stringent_rules'].value = '';
@@ -4300,26 +4333,46 @@ function kroleg_post_message(need_redirect)
               window.history.back();
             });
 
-            var was_edit_mode = (form.elements['edit_mode'].value == '1');
-            var edited_post = form.elements['edited_post'].value;
-            var original_post = form.elements['return_post'].value;
+            var was_edit_mode = (form.elements['edit_mode'] && form.elements['edit_mode'].value == '1');
+            var edited_post = form.elements['edited_post'] ? form.elements['edited_post'].value : "";
+            var original_post = form.elements['return_post'] ? form.elements['return_post'].value : "";
             
             var filtered_comment_posting = form.elements['profiled_topic'].value && filtered_comment_mode;
 
             debug_line("Original post for this posting is: " + original_post, "posting");
 
-            form.elements['edit_mode'].value = '';
-            form.elements['edit_mode'].defaultValue = '';
+            if (form.elements['edit_mode'])
+            {
+              form.elements['edit_mode'].value = '';
+              form.elements['edit_mode'].defaultValue = '';
+            }
+
+            if (form.elements['edited_post'])
+            {
+              form.elements['edited_post'].value = '';
+              form.elements['edited_post'].defaultValue = '';
+            }
+
+            if (form.elements['return_post'])
+            {
+              form.elements['return_post'].value = '';
+              form.elements['return_post'].defaultValue = '';
+            }
+
+            if (form.elements['citated_post'])
+            {
+              form.elements['citated_post'].value = '';
+              form.elements['citated_post'].defaultValue = '';
+            }
+
+            if (form.elements['special_case'])
+            {
+              form.elements['special_case'].value = '';
+              form.elements['special_case'].defaultValue = '';
+            }
+
             form.elements['message'].value = '';
             form.elements['message'].defaultValue = '';
-            form.elements['edited_post'].value = '';
-            form.elements['edited_post'].defaultValue = '';
-            form.elements['citated_post'].value = '';
-            form.elements['citated_post'].defaultValue = '';
-            form.elements['return_post'].value = '';
-            form.elements['return_post'].defaultValue = '';
-            form.elements['special_case'].value = '';
-            form.elements['special_case'].defaultValue = '';
             form.elements['profiled_topic'].value = '';
             form.elements['profiled_topic'].defaultValue = '';
             form.elements['stringent_rules'].value = '';
