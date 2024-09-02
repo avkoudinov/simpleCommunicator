@@ -297,6 +297,8 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
 / <a href="user_agents.php"><?php echo_html(text("UserAgents")); ?></a>
 
+/ <a href="guest_ips.php"><?php echo_html(text("GuestIPs")); ?></a>
+
 / <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
 
 / <span class="topic_title_main"><?php echo_html($subtitle); ?></span>
