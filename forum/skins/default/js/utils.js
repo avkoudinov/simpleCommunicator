@@ -6,7 +6,7 @@ var hexDigits = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D
 //----------------------------------------------------
 function rgb2hex(rgb)
 {
-  matches = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  var matches = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
 
   if(matches)
     return "#" + hex(matches[1]) + hex(matches[2]) + hex(matches[3]);

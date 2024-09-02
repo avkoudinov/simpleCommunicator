@@ -218,7 +218,7 @@ function on_attachment_pasted(index)
   show_hide_additional_attachments_area();  
 }
 
-function on_attachment_changed(index)
+async function on_attachment_changed(index)
 {
   elm = document.getElementById('attachment' + index);
   if(!elm) return;
@@ -231,12 +231,24 @@ function on_attachment_changed(index)
     return;
   }
   
-  for (var i = 0; i < elm.files.length; i++) {
+  var i = 0;
+  var files = [];
+  
+  for (i = 0; i < elm.files.length; i++) {
+    files[i] = { file_name: elm.files[i].name, file: elm.files[i] };
+  }
+  
+  for (i = 0; i < files.length; i++) {
     if(i == 0)
-      replace_attachment_in_buffer({ file_name: elm.files[i].name, file: elm.files[i] }, index);
+    {
+      if(!await replace_attachment_in_buffer(files[i], index))
+      {
+        return;
+      }
+    }
     else
     {
-      if(!add_attachment_to_buffer({ file_name: elm.files[i].name, file: elm.files[i] }))
+      if(!await add_attachment_to_buffer(files[i]))
       {
         return;
       }

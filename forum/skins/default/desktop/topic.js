@@ -1240,6 +1240,14 @@ function reload_online_users(topic, forum)
   return false;
 }
 
+function get_actual_last_message()
+{
+  var posts = document.getElementsByClassName("post_table");
+  if (posts.length == 0) return last_message;
+  
+  return posts[posts.length - 1].getAttribute("data-pid");
+}
+
 var load_created_post_ajax = null;
 
 function load_created_post(created_post, original_post, on_loaded)
@@ -1332,14 +1340,16 @@ function load_created_post(created_post, original_post, on_loaded)
           if (on_loaded) on_loaded();
         }, 200);
 
+        if (!on_loaded) Forum.show_sys_progress_indicator(false);
+        
         if(messages) Forum.handle_response_messages(messages);
       }
       catch(err)
       {
+        Forum.show_sys_progress_indicator(false);
+        
         Forum.handle_ajax_error(this, err.message, this.last_url, {});
       }
-
-      Forum.show_sys_progress_indicator(false);
     };
 
     load_created_post_ajax.onerror = function(error, url, info)
@@ -1378,6 +1388,9 @@ var load_new_posts_ajax = null;
 
 function load_new_posts(topic, forum, highlight_message, target_url)
 {
+  // -1 highlighting the first new
+  // -2 no highlighting
+  
   var post_area = document.getElementById("post_area");
   if(!post_area) return false;
 
@@ -1416,7 +1429,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
     debug_line("We may not load new posts, the page is full", "posting");
     debug_line("Let's handle the highlighting", "posting");
     
-    if(!highlight_message)
+    if(!highlight_message || parseInt(highlight_message) == -2)
     {
       debug_line("No highlight message", "posting");
       Forum.show_sys_progress_indicator(false);
@@ -1529,7 +1542,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
             load_new_posts_ajax.highlight_message = first_new_message;
           }
 
-          if(load_new_posts_ajax.highlight_message)
+          if(load_new_posts_ajax.highlight_message && parseInt(load_new_posts_ajax.highlight_message) != -2)
           {
             set_current_post(load_new_posts_ajax.highlight_message);
           }

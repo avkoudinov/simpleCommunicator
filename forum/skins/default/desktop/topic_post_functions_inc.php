@@ -1227,9 +1227,13 @@ function post_message(action)
                  in_search ||
                  filtered_comment_posting ||
                  all_page_mode 
-                ) return;
+                ) 
+              {
+                Forum.show_sys_progress_indicator(false);
+                return;
+              }
                 
-              exec_load_new_posts(highlight_message, response.target_url);
+              exec_load_new_posts(-2, response.target_url);
             });
 
             return;
