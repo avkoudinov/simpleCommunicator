@@ -1555,4 +1555,5 @@ $GLOBALS['DEF_TEXTS']['ru']['ErrForumGroupNameExists'] = 'Группа фору�
 $GLOBALS['DEF_TEXTS']['ru']['AnonymActivity'] = 'Активность анонимов';
 $GLOBALS['DEF_TEXTS']['ru']['ErrTooManyPostsFromIP'] = 'Слишком много сообщений отправлено с данного IP-адреса \'%s\'. Повторите попытку позже!';
 $GLOBALS['DEF_TEXTS']['ru']['ConvertingHEICtoJPG'] = 'Преобразование изображения HEIC в JPG ...';
+$GLOBALS['DEF_TEXTS']['ru']['RecentMessageModeration'] = 'Модерация последних сообщений';
 ?>
