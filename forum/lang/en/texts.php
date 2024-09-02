@@ -1548,4 +1548,5 @@ $GLOBALS['DEF_TEXTS']['en']['ErrForumGroupNameExists'] = 'A forum group with tha
 $GLOBALS['DEF_TEXTS']['en']['AnonymActivity'] = 'Activity of anonyms';
 $GLOBALS['DEF_TEXTS']['en']['ErrTooManyPostsFromIP'] = 'Too many posts submitted from this IP address \'%s\'. Try again later!';
 $GLOBALS['DEF_TEXTS']['en']['ConvertingHEICtoJPG'] = 'Converting HEIC image to JPG ...';
+$GLOBALS['DEF_TEXTS']['en']['RecentMessageModeration'] = 'Moderation of recent messages';
 ?>

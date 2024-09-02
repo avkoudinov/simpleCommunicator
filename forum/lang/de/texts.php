@@ -1548,4 +1548,5 @@ $GLOBALS['DEF_TEXTS']['de']['ErrForumGroupNameExists'] = 'Eine Forumgruppe mit d
 $GLOBALS['DEF_TEXTS']['de']['AnonymActivity'] = 'Anonyme-Aktivität';
 $GLOBALS['DEF_TEXTS']['de']['ErrTooManyPostsFromIP'] = 'Zu viele Nachrichten von dieser IP-Adresse \'%s\' eingereicht. Versuchen Sie es später noch einmal!';
 $GLOBALS['DEF_TEXTS']['de']['ConvertingHEICtoJPG'] = 'Konvertiere eines HEIC-Bildes in JPG ...';
+$GLOBALS['DEF_TEXTS']['de']['RecentMessageModeration'] = 'Moderation der letzten Nachrichten';
 ?>

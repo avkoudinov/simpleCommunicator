@@ -1553,4 +1553,5 @@ $GLOBALS['DEF_TEXTS']['ua']['ErrForumGroupNameExists'] = 'Група форум�
 $GLOBALS['DEF_TEXTS']['ua']['AnonymActivity'] = 'Активність анонімів';
 $GLOBALS['DEF_TEXTS']['ua']['ErrTooManyPostsFromIP'] = 'Занадто багато повідомлень надіслано з цієї IP-адреси \'%s\'. Повторіть спробу пізніше!';
 $GLOBALS['DEF_TEXTS']['ua']['ConvertingHEICtoJPG'] = 'Перетворення зображення HEIC в JPG ...';
+$GLOBALS['DEF_TEXTS']['ua']['RecentMessageModeration'] = 'Модерація останніх повідомлень';
 ?>

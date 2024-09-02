@@ -498,9 +498,15 @@ else
 ?>:<br>
 
 <?php if(empty($_SESSION["show_deleted"])): ?>
-<a href="<?php echo($base_url); ?>&show_deleted=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("DisplayDeleted")); ?></a>
+<a href="<?php echo($base_url); ?>&show_deleted=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("DisplayDeleted")); ?></a><br>
 <?php else: ?>
-<a href="<?php echo($base_url); ?>&hide_deleted=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("HideDeleted")); ?></a>
+<a href="<?php echo($base_url); ?>&hide_deleted=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("HideDeleted")); ?></a><br>
+<?php endif; ?>
+
+<?php if(!$is_private && ($fmanager->is_admin() || $fmanager->is_forum_moderator($fid))): 
+$start_date = date(text("DateFormat"), xstrtotime("-1 day"));
+?>
+<a href="search_topic.php?start_date=<?php echo_html($start_date); ?>&author_mode=wrote_post&post_list=1&post_sort=desc&forums[]=<?php echo_html($fid); ?>" class="moderator_link"><?php echo_html(text("RecentMessageModeration")); ?></a>
 <?php endif; ?>
 
 <?php endif; ?>

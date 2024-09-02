@@ -10669,5 +10669,12 @@
             <ua>Перетворення зображення HEIC в JPG ...</ua>
         </text>
 
+        <text id="RecentMessageModeration">
+            <en>Moderation of recent messages</en>
+            <de>Moderation der letzten Nachrichten</de>
+            <ru>Модерация последних сообщений</ru>
+            <ua>Модерація останніх повідомлень</ua>
+        </text>
+
     </texts>
 </document>
