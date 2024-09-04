@@ -110,6 +110,12 @@ $is_private = false;
 $topic_data = array();
 $forum_data = array();
 
+$online_users = array();
+$forum_readers = array();
+$topic_readers = array();
+$topic_ignorers = array();
+$topic_blocked_users = array();
+
 $private_fid = $fmanager->get_private_forum_id();
 //------------------------------------------------------------------
 if (!empty($tid)) {
@@ -125,6 +131,8 @@ if (!empty($tid)) {
         header("location: " . $target_url);
         exit;
     }
+
+    $fmanager->get_online_users($online_users, $forum_readers, $topic_readers, $topic_ignorers, $topic_blocked_users, $fid, $tid);
 
     if (!$fmanager->has_access_to_topic($tid, true)) {
         if (!$fmanager->is_logged_in()) {

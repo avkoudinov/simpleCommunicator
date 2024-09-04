@@ -6,7 +6,7 @@
 
 <?php endif; ?>
 
-<?php if(!empty($tignorers) && empty($_SESSION["skin_properties"][$skin]["no_online_users"])): ?>
+<?php if(!empty($tignorers)): ?>
 <div class="header3 topic_ignorers">
 <?php echo($tignorers); ?>
 </div>

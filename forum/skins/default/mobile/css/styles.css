@@ -2597,6 +2597,14 @@ a.guest_link:hover
   color: #333;
 }
 
+a.topic_readers:link,
+a.topic_readers:active,
+a.topic_readers:visited,
+a.topic_readers:hover
+{
+  color: #333;
+}
+
 a.admin_link:link,
 a.admin_link:active,
 a.admin_link:visited,
@@ -4789,7 +4797,7 @@ img.image_placeholder
 .topic_statistic_table td.date_col
 {
   text-align: center;
-  width: 212px;
+  width: 242px;
 }
 
 .statistics_list_expander

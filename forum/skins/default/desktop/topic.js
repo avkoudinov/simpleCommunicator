@@ -2186,6 +2186,27 @@ function extract_selection_nodes(container, selection)
 
     container.appendChild(range.cloneContents());
   }
+
+  var message_cell = container.querySelector(".message_cell");
+  if (!message_cell) return;
+
+  var fc = container.firstChild;
+  while(fc)
+  {
+    container.removeChild(fc);
+    fc = container.firstChild;
+  }
+  
+  var children = message_cell.children;
+
+  var fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < children.length; i++) {
+    var childClone = children[i].cloneNode(true); 
+    fragment.appendChild(childClone);
+  }
+
+  container.appendChild(fragment);  
 }
 
 function process_selection()
@@ -2209,6 +2230,16 @@ function process_selection()
 
   var parent_tag_container = null;
   var selection_parent = range.commonAncestorContainer;
+
+  // go inside into the selection
+  
+  var message_cell = selection_parent && selection_parent.querySelector ? selection_parent.querySelector(".message_cell") : null;
+  if (message_cell) 
+  {
+    selection_parent = message_cell;  
+  }
+  
+  // go outside out of the selection
 
   while(selection_parent)
   {
