@@ -592,8 +592,8 @@ else
 
   $treaders = trim($treaders, ", ");
 
-  if (!empty($treaders)) {
-    $treaders = escape_html(text("ReadingTopic")) . " ($rcnt): " . $treaders;
+  if (!empty($tid)) {
+      $treaders = "<a href='topic_readers.php?fid=" . $fid_for_url . "&tid=" . $tid . "' class='topic_readers'>" . escape_html(text("ReadingTopic")) . "</a> ($rcnt): " . $treaders;
   }
 
   $rcnt = count($forum_readers);
@@ -630,8 +630,8 @@ else
 
   $freaders = trim($freaders, ", ");
 
-  if (!empty($freaders)) {
-    $freaders = escape_html(text("ReadingForum")) . " ($rcnt): " . $freaders;
+  if (!empty($fid)) {
+      $freaders = escape_html(text("ReadingForum")) . " ($rcnt): " . $freaders;
   }  
 }
 

@@ -211,12 +211,6 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 / <a href="guest_profile.php"><?php echo_html(text("ProfileSettings")); ?></a> 
 <?php endif; ?>
 
-<?php
-$display = "style='display:none'";
-if(!empty($topics_with_new_count)) $display = "";
-?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span> 
-
 / <span class="topic_title_main"><?php echo_html(text("GuestProfile")); ?></span>
 </div>
 

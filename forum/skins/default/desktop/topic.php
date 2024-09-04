@@ -1094,7 +1094,7 @@ else
 
   if (!empty($bcnt)) $rcnt .= "/" . $bcnt;
 
-  $treaders = escape_html(text("ReadingTopic")) . " ($rcnt): ";
+  $treaders = "<a href='topic_readers.php?fid=" . $fid_for_url . "&tid=" . $tid . "' class='topic_readers'>" . escape_html(text("ReadingTopic")) . "</a> ($rcnt): ";
 
   foreach($topic_readers as $ouid => $uinfo)
   {

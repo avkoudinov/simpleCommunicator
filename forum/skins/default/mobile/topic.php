@@ -632,16 +632,6 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 
 <span class="topic_title_main"><?php echo_html($topic_title); ?></span>
 
-/ 
-
-<?php
-$all_entry_post = $first_message;
-?>
-
-<span class="message_info_bar">
-<?php require "message_info_bar_inc.php"; ?>
-</span>
-
 <?php
 $display = "style='display:none'";
 if(!empty($topic_data["new_messages_count"])) $display = "";
@@ -673,6 +663,16 @@ if(!empty($topic_data["new_messages_count"])) $display = "";
 <?php if(!reqvar_empty("download") && $fmanager->is_logged_in()): ?>
 <span class="new">[<?php echo_html(text("downloaded")); ?>]</span>
 <?php endif; ?>
+
+/ 
+
+<?php
+$all_entry_post = $first_message;
+?>
+
+<span class="message_info_bar">
+<?php require "message_info_bar_inc.php"; ?>
+</span>
 
 </div>
 
@@ -865,10 +865,6 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 
 <span class="topic_title_main"><?php echo_html($topic_title); ?></span>
 
-/ <span class="message_info_bar">
-<?php require "message_info_bar_inc.php"; ?>
-</span>
-
 <?php
 $display = "style='display:none'";
 if(!empty($topic_data["new_messages_count"])) $display = "";
@@ -900,6 +896,13 @@ if(!empty($topic_data["new_messages_count"])) $display = "";
 <?php if(!reqvar_empty("download") && $fmanager->is_logged_in()): ?>
 <span class="new">[<?php echo_html(text("downloaded")); ?>]</span>
 <?php endif; ?>
+
+/ 
+
+<span class="message_info_bar">
+<?php require "message_info_bar_inc.php"; ?>
+</span>
+
 
 </div>
 
@@ -1044,7 +1047,7 @@ else
 
   if (!empty($bcnt)) $rcnt .= "/" . $bcnt;
 
-  $treaders = escape_html(text("ReadingTopic")) . " ($rcnt): ";
+  $treaders = "<a href='topic_readers.php?fid=" . $fid_for_url . "&tid=" . $tid . "' class='topic_readers'>" . escape_html(text("ReadingTopic")) . "</a> ($rcnt): ";
 
   foreach($topic_readers as $ouid => $uinfo)
   {

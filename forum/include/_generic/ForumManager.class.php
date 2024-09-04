@@ -8001,6 +8001,123 @@ abstract class ForumManager
     } // check_ip
     
     //-----------------------------------------------------------------
+    function get_topic_readers($tid, &$topic_readers)
+    {
+        if (empty($tid)) {
+            return true;
+        }
+        
+        if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
+            return true;
+        }
+        
+        start_action_time_measure();
+        
+        $rodbw = system::getRODBWorker();
+        if (!$rodbw) {
+            return false;
+        }
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+        
+        $now = $rodbw->format_datetime(time() - 90 * 24 * 3600);
+        $tid = $rodbw->escape($tid);
+        
+        $keep_online_period = defined('KEEP_ONLINE_PERIOD') ? KEEP_ONLINE_PERIOD : 600;
+
+        if (!$rodbw->execute_query("select {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout,
+                             max(dt) last_time
+                             from {$prfx}_forum_hits
+                             left join {$prfx}_user on ({$prfx}_forum_hits.user_id = {$prfx}_user.id)
+                             where topic_id = $tid and dt >= '$now'
+                             group by {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout 
+                             order by max(dt) desc")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $same_guest_counts = [];
+        
+        while ($rodbw->fetch_row()) {
+            $uid = $rodbw->field_by_name("id");
+            
+            $time_ago = smart_date2(xstrtotime($rodbw->field_by_name("last_time")));
+            $online = (xstrtotime($rodbw->field_by_name("last_time")) > (time() - $keep_online_period) && $rodbw->field_by_name("logout") == 0);
+            
+            if (!empty($uid) && !$rodbw->field_by_name("activated")) {
+                $idx = "g_#anonyms#";
+                $user = array(
+                    "name" => text("Anonyms"),
+                    "count" => 1,
+                    "online" => $online,
+                    "time_ago" => $time_ago
+                );
+            } elseif (!empty($uid)) {
+                if (!empty($_SESSION["hide_ignored"]) && $this->is_user_ignored($uid)) {
+                    continue;
+                }
+                
+                $idx = "u_" . $uid;
+                $user = array(
+                    "id" => $uid,
+                    "name" => $rodbw->field_by_name("user_name"),
+                    "online" => $online,
+                    "time_ago" => $time_ago
+                );
+            } elseif ($bot_data = detect_bot($rodbw->field_by_name("user_agent"))) {
+                $idx = "b_" . $bot_data["name"];
+                $user = array(
+                    "name" => $bot_data["name"],
+                    "bot" => true,
+                    "online" => $online,
+                    "time_ago" => $time_ago
+                );
+            } elseif ($guest = $rodbw->field_by_name("guest_name")) {
+                if (!empty($_SESSION["hide_ignored"]) && $this->is_guest_ignored($guest, "")) {
+                    continue;
+                }
+                
+                $read_marker = $rodbw->field_by_name("read_marker");
+
+                $same_guest_counts[$read_marker][$guest] = $guest;
+
+                // Protection from cluttering the online user list
+                if (count($same_guest_counts[$read_marker]) > 2) {
+                    continue;
+                }
+                
+                $idx = "g_" . $guest;
+                $user = array(
+                    "name" => $guest,
+                    "online" => $online,
+                    "time_ago" => $time_ago
+                );
+            } else {
+                $idx = "g_#anonyms#";
+                $user = array(
+                    "name" => text("Anonyms"),
+                    "is_anonym" => 1,
+                    "count" => 1,
+                    "online" => $online,
+                    "time_ago" => $time_ago
+                );
+            }
+
+            $anonym_id = $rodbw->field_by_name("ip") . $rodbw->field_by_name("user_agent");
+            
+            if (empty($topic_readers[$idx])) {
+                $topic_readers[$idx] = $user;
+            } 
+        }
+        
+        $rodbw->free_result();
+        
+        measure_action_time("get topic readers");
+
+        return true;
+    }
+    
+    //-----------------------------------------------------------------
     function get_online_users(&$online_users, &$forum_readers, &$topic_readers, &$topic_ignorers, &$topic_blocked_users, $current_fid, $current_tid)
     {
         if (detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"]))) {
