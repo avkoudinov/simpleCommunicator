@@ -1405,7 +1405,7 @@ class MySQL_ForumManager extends ForumManager
             $name = $rodbw->field_by_name("guest_name");
             $is_anonym = 0;
             if (empty($name)) {
-                $name = text("Anonymous");
+                $name = text("Anonyms");
                 $is_anonym = 1;
             }
             

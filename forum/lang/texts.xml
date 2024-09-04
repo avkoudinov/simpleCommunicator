@@ -580,13 +580,6 @@
             <ua>Нові</ua>
         </text>
         
-        <text id="PreferredForums">
-            <en>Preferred forums</en>
-            <de>Bevorzugte Foren</de>
-            <ru>Предпочитаемые форумы</ru>
-            <ua>Форуми, яким віддаються переваги</ua>
-        </text>
-
         <text id="Topics">
             <en>Topics</en>
             <de>Themen</de>
@@ -9202,13 +9195,6 @@
             <de>Themen ausgewählt</de>
             <ru>Выбрано тем</ru>
             <ua>Вибрано тем</ua>
-        </text>
-
-        <text id="Anonymous">
-            <en>Anonymous</en>
-            <de>Anonyme</de>
-            <ru>Анонимные</ru>
-            <ua>Анонімні</ua>
         </text>
 
         <text id="GoToMessage">

@@ -185,7 +185,7 @@ else
   if(!empty($uinfo["bot"]))
     $uname = "<a class='bot_link' href='view_bot_profile.php?bot=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html($uinfo["name"]) . "</a>";
   elseif(!empty($uinfo["is_anonym"]))
-    $uname = "<a class='guest_link' href='view_anonym_activity.php'>" . escape_html($uinfo["name"]) . "</a>";
+    $uname = "<i><a class='guest_link' href='view_anonym_activity.php'>" . escape_html($uinfo["name"]) . "</a></i>";
   elseif($uinfo["name"] == "admin")
     $uname = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uinfo["name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>";
   else  
