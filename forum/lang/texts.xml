@@ -497,10 +497,10 @@
         </text>
 
         <text id="ConjuntTags">
-            <en>The message must contain all tags</en>
-            <de>Die Nachricht muss alle Tags enthalten</de>
-            <ru>Сообщение должно содержать все тэги</ru>
-            <ua>Повідомлення повинно містити всі теги</ua>
+            <en>The message must contain all selected tags</en>
+            <de>Die Nachricht muss alle ausgewählten Tags enthalten</de>
+            <ru>Сообщение должно содержать все выбранные тэги</ru>
+            <ua>Повідомлення повинно містити всі обрані теги</ua>
         </text>
 
         <text id="SearchResultsAsPostList">

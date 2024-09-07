@@ -1245,6 +1245,21 @@ function get_actual_last_message()
   var posts = document.getElementsByClassName("post_table");
   if (posts.length == 0) return last_message;
   
+  var actual_last_message = last_message;
+  
+  for (var i = 0; i < posts.length; i++)
+  {
+    actual_last_message = Math.max(actual_last_message, posts[i].getAttribute("data-pid"));
+  }
+  
+  return actual_last_message;
+}
+
+function get_visual_last_message()
+{
+  var posts = document.getElementsByClassName("post_table");
+  if (posts.length == 0) return last_message;
+  
   return posts[posts.length - 1].getAttribute("data-pid");
 }
 
