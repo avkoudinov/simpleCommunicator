@@ -302,8 +302,6 @@ $display = "style='display:none'";
 
 $digest_url = "search_topic.php?news_digest=1&do_search=1" . $fpage_appendix;
 
-debug_message($fid_for_url);
-
 if(val_or_empty($fid_for_url) == "private")
 {
   $class = "private_topics_with_new_indicator";
@@ -339,8 +337,6 @@ else
   $class = "topics_with_new_indicator";
   if(!empty($topics_with_new_count)) $display = "";
 }
-
-debug_message($class);
 ?>
 <span class="<?php echo($class); ?>" <?php echo($display); ?> data-fid="<?php echo_html(val_or_empty($fid_for_url)); ?>"><a href="<?php echo($digest_url); ?>" ><?php echo_html(text("Digest")); ?></a> |</span>
 
@@ -414,7 +410,6 @@ elseif(!empty($fid))
 
 <?php if(!empty($fid) || !empty($is_private)): ?>
 <?php
-debug_message($class);
 $not_preferred = "";
 if(!empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $not_preferred = "not_preferred";
 ?>
