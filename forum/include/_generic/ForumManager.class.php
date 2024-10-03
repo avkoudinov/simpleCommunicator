@@ -6197,7 +6197,8 @@ abstract class ForumManager
         $query = "select read_marker, author
                   from {$prfx}_read_marker_activity 
                   where (current_name_start > '$start_time' or current_name_hits < 500)
-                  and author is not NULL";
+                  and author is not NULL
+                  and not exists (select 1 from {$prfx}_user where {$prfx}_user.user_name = {$prfx}_read_marker_activity.author)";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
