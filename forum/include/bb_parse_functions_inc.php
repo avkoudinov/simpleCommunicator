@@ -403,7 +403,7 @@ function check_image_url(&$url, &$large_url)
     
     $ctx = stream_context_create([
         'http' => [
-            'method' => "GET",
+            'method' => "HEAD",
             'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\r\n" .
                         "Cache-Control: no-cache\r\n" .
                         "Accept: */*\r\n" .
@@ -461,18 +461,21 @@ function check_image_url(&$url, &$large_url)
   
     if (strpos($src_type, "image") === 0) 
     {
+      /*
       $url_to_check = $url;
       if (!preg_match("/^http/", $url_to_check)) {
           $url_to_check = get_host_address() . get_url_path() . $url;   
       }
 
       $info = @getimagesize($url_to_check);
-      if (preg_match('/width="(\d+)" height="(\d+)"/', val_or_empty($info["3"]), $matches) &&
+      
+      if (!empty($info) && preg_match('/width="(\d+)" height="(\d+)"/', val_or_empty($info["3"]), $matches) &&
           ($matches[1] > 10000 || $matches[2] > 10000)) {
           $large_url = $url;
           $url = "user_data/images/large_picture.png";
           return true;
       }
+      */
     } else {
           if (in_array($host, $img_white_list)) {
               return true;
