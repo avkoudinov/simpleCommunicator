@@ -86,7 +86,7 @@ function exec_reload_nav_control(ctrl, all_entry_post)
     pinned_message_count: '<?php echo_js($pagination_info["pinned_message_count"]); ?>', 
 
     first_page_message: first_message, 
-    last_page_message: last_message, 
+    last_page_message: get_actual_last_message(), 
     loaded_message_count: loaded_message_count, 
     posts_per_page: posts_per_page, 
 
@@ -832,7 +832,7 @@ $forum_selector_id = 2;
 
 <?php if($may_write_to_topic): ?>
 <td id='bottom_new_message'>
-<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", get_actual_last_message(), "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
+<input type="button" class="standard_button" value="<?php echo_html(text("NewMessage")); ?>" onclick='new_message("last_post_container", get_visual_last_message(), "<?php echo_js($tid, true); ?>", "<?php echo_js($topic_title, true); ?>", "<?php echo($topic_data["profiled_topic_final"]); ?>", <?php echo(!empty($forum_data["stringent_rules"]) ? 1 : 0); ?>)'>
 </td>
 <?php endif; ?>
 
@@ -1094,7 +1094,7 @@ else
 
   if (!empty($bcnt)) $rcnt .= "/" . $bcnt;
 
-  $treaders = escape_html(text("ReadingTopic")) . " ($rcnt): ";
+  $treaders = "<a href='topic_readers.php?fid=" . $fid_for_url . "&tid=" . $tid . "' class='topic_readers'>" . escape_html(text("ReadingTopic")) . "</a> ($rcnt): ";
 
   foreach($topic_readers as $ouid => $uinfo)
   {

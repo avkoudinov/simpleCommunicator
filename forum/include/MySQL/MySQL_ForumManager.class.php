@@ -1298,31 +1298,41 @@ class MySQL_ForumManager extends ForumManager
     //-----------------------------------------------------------------
     function get_query_clear_viewed_topics($prfx)
     {
-        return "select user_id,
-                
-                (select min(dt) from
-                (select max(dt) dt from {$prfx}_topic_view_history
-                where user_id = users.user_id
-                group by topic_id
-                order by max(dt) desc limit 300) topics) min_dt
-                
-                from
-                (select distinct user_id from {$prfx}_topic_view_history where user_id is not NULL) users";
+        return "select users.user_id, min(vth.dt) as min_dt
+                from (
+                    select user_id, topic_id, max(dt) as dt
+                    from v1_topic_view_history
+                    group by user_id, topic_id
+                    order by max(dt) desc
+                    limit 300
+                ) vth
+                inner join (
+                    select distinct user_id
+                    from v1_topic_view_history
+                    where user_id is not NULL
+                ) users
+                on vth.user_id = users.user_id
+                group by users.user_id";
     } // get_query_clear_viewed_topics
     
     //-----------------------------------------------------------------
     function get_query_clear_guest_viewed_topics($prfx)
     {
-        return "select guest_name,
-                
-                (select min(dt) from
-                (select max(dt) dt from {$prfx}_topic_view_history
-                where guest_name = guests.guest_name
-                group by topic_id
-                order by max(dt) desc limit 300) topics) min_dt
-                
-                from
-                (select distinct guest_name from {$prfx}_topic_view_history where guest_name is not NULL) guests";
+        return "select guests.guest_name, min(vth.dt) as min_dt
+                from (
+                    select guest_name, topic_id, max(dt) as dt
+                    from v1_topic_view_history
+                    group by guest_name, topic_id
+                    order by max(dt) desc
+                    limit 300
+                ) vth
+                join (
+                    select distinct guest_name
+                    from v1_topic_view_history
+                    where guest_name is not NULL
+                ) guests
+                on vth.guest_name = guests.guest_name
+                group by guests.guest_name";
     } // get_query_clear_viewed_topics
 
     //-----------------------------------------------------------------
@@ -1405,7 +1415,7 @@ class MySQL_ForumManager extends ForumManager
             $name = $rodbw->field_by_name("guest_name");
             $is_anonym = 0;
             if (empty($name)) {
-                $name = text("Anonymous");
+                $name = text("Anonyms");
                 $is_anonym = 1;
             }
             

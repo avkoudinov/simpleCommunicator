@@ -4,6 +4,12 @@ function show_debug_console(state)
   if(!cs) return;
   
   cs.style.display = state ? "block" : "none";
+
+  if (state)
+  {
+    var dco = document.getElementById("debug_console_output");
+    if(dco) dco.scrollTop = dco.scrollHeight;
+  }
   
   if(!state) reset_debug_console();
 }
@@ -68,9 +74,14 @@ function log_line(msg)
   sessionStorage.setItem('log', log);
 }
 
+function reset_log()
+{
+  sessionStorage.setItem('log', '');
+}
+
 function show_log()
 {
   reset_debug_console();
-  debug_line(sessionStorage.getItem('log'));
-  
+  debug_line(sessionStorage.getItem('log'), 'force');
+  show_debug_console(true);
 }
