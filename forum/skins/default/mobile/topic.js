@@ -1236,9 +1236,12 @@ function get_actual_last_message()
   
   var actual_last_message = last_message;
   
-  for (var i = 0; i < posts.length; i++)
+  if (is_last_page && loaded_message_count < posts_per_page)
   {
-    actual_last_message = Math.max(actual_last_message, posts[i].getAttribute("data-pid"));
+    for (var i = 0; i < posts.length; i++)
+    {
+      actual_last_message = Math.max(actual_last_message, posts[i].getAttribute("data-pid"));
+    }
   }
   
   return actual_last_message;
