@@ -147,7 +147,7 @@ if (empty($ajax_processing)) {
         $_SESSION["trace_sql"] = $_REQUEST["trace_sql"];
         $_SESSION["trace_time_start"] = microtime(true);
         $_SESSION["execution_profiles"] = array();
-        $_SESSION["execution_profiles"][] = array("action" => "Start - " . $_SERVER['REQUEST_URI'], "time" => 0);
+        $_SESSION["execution_profiles"][] = array("action" => "start [" . $_SERVER['REQUEST_URI'] . "]", "time" => 0);
         $_SESSION["trace_sql_log"] = "";
         
         $_SESSION["trace_sql_log"] .= "----------------------------------------------------------------------" . "\n";
@@ -159,7 +159,7 @@ if (empty($ajax_processing)) {
     } elseif (empty($_SESSION["trace_time_start"])) {
         $_SESSION["trace_time_start"] = microtime(true);
         $_SESSION["execution_profiles"] = array();
-        $_SESSION["execution_profiles"][] = array("action" => "Start [" . val_or_empty($_SERVER['REQUEST_URI']) . "]", "time" => 0);
+        $_SESSION["execution_profiles"][] = array("action" => "start [" . val_or_empty($_SERVER['REQUEST_URI']) . "]", "time" => 0);
         //debug_message("setting trace_time_start:" . round(1000*$_SESSION["trace_time_start"]));
     } else {
         //debug_message("continue time counting after redirection to $_SERVER[REQUEST_URI]:" . round(1000*(microtime(true) - $_SESSION["trace_time_start"])));
@@ -173,7 +173,7 @@ if (empty($ajax_processing)) {
         $_SESSION["ajax_trace_sql"] = $_REQUEST["trace_sql"];
         $_SESSION["ajax_trace_time_start"] = microtime(true);
         $_SESSION["ajax_execution_profiles"] = array();
-        $_SESSION["ajax_execution_profiles"][] = array("action" => "Start - " . $_SERVER['REQUEST_URI'], "time" => 0);
+        $_SESSION["ajax_execution_profiles"][] = array("action" => "start [" . $_SERVER['REQUEST_URI'] . "]", "time" => 0);
         $_SESSION["ajax_trace_sql_log"] = "";
         
         $_SESSION["ajax_trace_sql_log"] .= "----------------------------------------------------------------------" . "\n";
@@ -182,7 +182,7 @@ if (empty($ajax_processing)) {
     } elseif (empty($_SESSION["ajax_trace_time_start"])) {
         $_SESSION["ajax_trace_time_start"] = microtime(true);
         $_SESSION["ajax_execution_profiles"] = array();
-        $_SESSION["ajax_execution_profiles"][] = array("action" => "Start [" . val_or_empty($_SERVER['REQUEST_URI']) . "]", "time" => 0);
+        $_SESSION["ajax_execution_profiles"][] = array("action" => "start [" . val_or_empty($_SERVER['REQUEST_URI']) . "]", "time" => 0);
         //debug_message("setting trace_time_start:" . round(1000*$_SESSION["trace_time_start"]));
     }
 }
