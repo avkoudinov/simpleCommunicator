@@ -333,6 +333,61 @@ function convert_nodes_to_bbcode(container, quote_level)
       break;
 
       case 'DIV':
+      if(container.childNodes[i].classList.contains('user_post_actions'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('post_ip_info'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('moderator_post_actions'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('version_container'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }      
+      if(container.childNodes[i].classList.contains('post_rating'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('message_signature'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('moderator_warning'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('post_status_bar'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('update_info'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('tag'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('adult_tag'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
       if(container.childNodes[i].classList.contains('attachment_del_indicator'))
       {
         current_node = document.createTextNode('');
@@ -570,6 +625,21 @@ function convert_nodes_to_bbcode(container, quote_level)
       break;
 
       case 'SPAN':
+      if(container.childNodes[i].classList.contains('separator'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('carma_plus'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('carma_minus'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
       //-----------
       text = convert_nodes_to_bbcode(container.childNodes[i], quote_level);
       //-----------
@@ -738,6 +808,20 @@ function convert_nodes_to_bbcode(container, quote_level)
 
       case 'VIDEO':
       current_node = document.createTextNode(convert_video_to_bbcode(container.childNodes[i]));
+      break;
+
+      case 'TD':
+      if(!container.childNodes[i].classList.contains('csv_table_cell'))
+      {
+        current_node = document.createTextNode('');
+      }
+      break;
+  
+      case 'TH':
+      if(!container.childNodes[i].classList.contains('csv_table_cell'))
+      {
+        current_node = document.createTextNode('');
+      }
       break;
     }
     

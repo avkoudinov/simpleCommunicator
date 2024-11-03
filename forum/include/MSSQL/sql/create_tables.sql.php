@@ -1797,6 +1797,8 @@ create table v1_user (
    info                 nvarchar(max)        null,
    homepage             nvarchar(500)        null,
    signature            nvarchar(max)        null,
+   api_active           tinyint              not null default 0,
+   api_token            varchar(100)         null,
    pwd_reset_hash       varchar(100)         null,
    pwd_reset_expire     datetime             null,
    activation_hash      varchar(100)         null,

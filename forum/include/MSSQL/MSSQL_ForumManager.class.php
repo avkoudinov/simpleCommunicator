@@ -424,7 +424,7 @@ class MSSQL_ForumManager extends ForumManager
             $limit = "where nr between $begin and $end";
         }
         
-        return "select id, creation_date, html_content,
+        return "select id, creation_date, text_content, html_content,
             deleted, pinned, is_comment, is_adult,
             user_id, author, user_name, no_private_messages, ip, 
             read_marker, user_marker, user_agent,
@@ -438,7 +438,7 @@ class MSSQL_ForumManager extends ForumManager
             from
            (select
             row_number() over ($order_by) nr,
-            {$prfx}_post.id, {$prfx}_post.creation_date, html_content,
+            {$prfx}_post.id, {$prfx}_post.creation_date, text_content, html_content,
             {$prfx}_post.deleted, {$prfx}_post.pinned, {$prfx}_post.is_comment, {$prfx}_post.is_adult,
             {$prfx}_post.user_id, {$prfx}_post.author, user_name, no_private_messages, {$prfx}_post.ip, 
             {$prfx}_post.read_marker, {$prfx}_post.user_marker, {$prfx}_post.user_agent,
@@ -473,7 +473,7 @@ class MSSQL_ForumManager extends ForumManager
         }
     
         return "select $limit
-            {$prfx}_post.id, {$prfx}_post.creation_date, html_content,
+            {$prfx}_post.id, {$prfx}_post.creation_date, text_content, html_content,
             {$prfx}_post.deleted, {$prfx}_post.pinned, {$prfx}_post.is_comment, {$prfx}_post.is_adult,
             {$prfx}_post.topic_id, {$prfx}_topic.forum_id, {$prfx}_topic.name topic_name, {$prfx}_forum.name forum_name, disable_ignore,
             {$prfx}_topic.creation_date topic_creation_date, {$prfx}_topic.author topic_author, {$prfx}_topic.read_marker topic_author_read_marker, is_private,

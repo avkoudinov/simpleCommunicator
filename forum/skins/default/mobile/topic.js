@@ -2463,7 +2463,7 @@ function process_selection()
   {
     var table = document.createElement('table');
 
-    var fragment = null;
+    var fragment = document.createElement('div');
     extract_selection_nodes(fragment);
     if(!fragment.firstElementChild)
     {

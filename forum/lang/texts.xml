@@ -1142,6 +1142,13 @@
             <ua>d.m.Y</ua>
         </text>
 
+      <text id="ErrWrongDateFormat">
+        <en>Wrong date or time format! The date should be input in the format "%s".</en>
+        <de>Falsches Datums- bzw. Zeitsformat! Das Datum muss im Format "%s" eingegeben werden.</de>
+        <ru>Неправильный формат или значение даты или времени! Дату необходимо ввести в формате "%s".</ru>
+        <ua>Неправильний формат або значення дати чи часу! Дату необхідно ввести у форматі "%s".</ua>
+      </text>
+
         <text id="NoForums">
             <en>No forums.</en>
             <de>Keine Foren sind vorhanden.</de>
@@ -2561,6 +2568,13 @@
             <ua>Неможливо запустити сесію. Або ваш браузер забороняє використати cookies для цього сайту або усієї системи, або встановлено невірний шлях для cookie сесії по відношенню до URL адреси додатка.</ua>
         </text>
 
+        <text id="ErrAPITokenInvalid">
+            <en>The API token ist invalid!</en>
+            <de>Das API-Token ist ungültig!</de>
+            <ru>API тоукен недействителен!</ru>
+            <ua>API токен недійсний!</ua>
+        </text>
+
         <text id="ErrWrongLogin">
             <en>Wrong login name or password!</en>
             <de>Falscher Loginname oder Kennwort!</de>
@@ -2756,6 +2770,20 @@
             <de>Erweiterte Einstellungen</de>
             <ru>Расширенные настройки</ru>
             <ua>Розширені налаштування</ua>
+        </text>
+
+        <text id="APIActive">
+            <en>API active</en>
+            <de>API aktiv</de>
+            <ru>API активно</ru>
+            <ua>API активно</ua>
+        </text>
+
+        <text id="APIToken">
+            <en>API token</en>
+            <de>API-Token</de>
+            <ru>API Тоукен</ru>
+            <ua>API Тоукен</ua>
         </text>
 
         <text id="Location">
@@ -8496,6 +8524,13 @@
             <de>Anhang mit dieser ID (%s) existiert nicht!</de>
             <ru>Вложение с таким идентификатором (%s) не существует!</ru>
             <ua>Вкладення з таким ідентифікатором (%s) не існує!</ua>
+        </text>
+
+        <text id="ErrAttachmentIsDeleted">
+            <en>Attachment is deleted!</en>
+            <de>Anhang wurde gelöscht!</de>
+            <ru>Вложение удалено!</ru>
+            <ua>Вкладення видалено!</ua>
         </text>
 
         <text id="NoPosts">

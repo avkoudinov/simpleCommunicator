@@ -327,6 +327,33 @@ class System
     } // generateHash
     
     //-----------------------------------------------------------------
+    static function numberHash($str, $len = null)
+    {
+        $binhash = md5($str, true);
+        $numhash = unpack('N2', $binhash);
+        $hash = $numhash[1] . $numhash[2];
+        if ($len && is_int($len)) {
+            $hash = substr($hash, 0, $len);
+        }
+        
+        return $hash;
+    }
+
+    //-----------------------------------------------------------------
+    static function separateNumberString($num, $block_size, $separator)
+    {
+        $c = strlen($num) / $block_size;
+        
+        $str = "";
+        for($i = 1; $i <= $c; $i++)
+        {
+            $str .= substr($num, $block_size*($i-1), $block_size) . $separator;
+        }
+        
+        return trim($str, $separator);
+    }
+
+    //-----------------------------------------------------------------
     static function getIPAddress()
     {
         return self::hashIPAddress(val_or_empty($_SERVER["REMOTE_ADDR"]));
