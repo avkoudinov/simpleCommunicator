@@ -2330,6 +2330,10 @@ abstract class ForumManager
                 $forum_name = text("PrivateTopics");
                 $dbw->free_result();
                 
+                if ($with_message && !$this->get_user_id()) {
+                    MessageHandler::setWarning(sprintf(text("ErrForumNotAccessible"), $forum_name));
+                }  
+                
                 measure_action_time("check forum access");
                 return ($this->get_user_id() != 0);
             }
@@ -8403,6 +8407,8 @@ abstract class ForumManager
         $user_data["user_email"] = "";
         $user_data["location"] = "";
         $user_data["homepage"] = "";
+        $user_data["api_active"] = "";
+        $user_data["api_token"] = "";
         $user_data["info"] = "";
         $user_data["info_formatted"] = "";
         $user_data["message"] = "";
@@ -8490,7 +8496,7 @@ abstract class ForumManager
         $uid = $dbw->escape($uid);
         
         if (!$dbw->execute_query("select
-                             id, login, user_name, email, hide_email, message, homepage, signature, activated, approved, hidden,
+                             id, login, user_name, email, hide_email, message, homepage, signature, api_active, api_token, activated, approved, hidden,
                              rating_blocked, is_admin, privileged_topic_moderator, privileged, global_ban_allowed, show_ip, location, info, skin, interface_language, notify_citation,
                              notify_about_new_users, notify_on_words, words_to_notify, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, no_private_messages,
                              ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist, 
@@ -8526,6 +8532,8 @@ abstract class ForumManager
             $user_data["user_email"] = $dbw->field_by_name("email");
             $user_data["location"] = Emoji::Decode($dbw->field_by_name("location"));
             $user_data["homepage"] = $dbw->field_by_name("homepage");
+            $user_data["api_active"] = $dbw->field_by_name("api_active");
+            $user_data["api_token"] = $dbw->field_by_name("api_token");
             $user_data["info"] = Emoji::Decode($dbw->field_by_name("info"));
             $user_data["info_formatted"] = $user_data["info"];
             $user_data["message"] = Emoji::Decode($dbw->field_by_name("message"));
@@ -10249,7 +10257,7 @@ abstract class ForumManager
         // check e-mail
         
         if (!$dbw->execute_query("select
-                             approved, email_hash, password_hash, login, user_name
+                             approved, email_hash, password_hash, login, user_name, api_token
                              from {$prfx}_user
                              where id = $uid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -10263,8 +10271,10 @@ abstract class ForumManager
         $activation_hash = "";
         $user_login = "";
         $user_name = "";
+        $api_token = "";
         
         if ($dbw->fetch_row()) {
+            $api_token = $dbw->field_by_name("api_token");
             $approved = $dbw->field_by_name("approved");
             $password_hash = $dbw->field_by_name("password_hash");
             $old_email_hash = $dbw->field_by_name("email_hash");
@@ -10373,6 +10383,13 @@ abstract class ForumManager
         $ignore_guests_blacklist = reqvar_empty("ignore_guests_blacklist") ? "0" : "1";
         $ignore_guests_whitelist = reqvar_empty("ignore_guests_whitelist") ? "0" : "1";
         
+        $api_active = reqvar_empty("api_active") ? "0" : "1";
+        if (!empty($api_active) && empty($api_token)) {
+            $api_token = System::separateNumberString(System::numberHash(time()*1000 + rand(100000, 999999), 20), 4, "-");
+        } 
+
+        $api_token = $dbw->quotes_or_null($api_token);
+        
         if ($old_email_hash != $this->hash_email(reqvar("user_email"))) {
             $activation_hash = System::generateHash(reqvar("user_login") . rand(100000, 900000), SALT_KEY);
             $activation_hash_db = $dbw->quotes_or_null($activation_hash);
@@ -10446,6 +10463,8 @@ abstract class ForumManager
               custom_smiles = $custom_smiles,
               skin_properties = $skin_properties,
               interface_language = $interface_language,
+              api_active = $api_active,
+              api_token = $api_token,
               hide_email = $hide_email,
               hide_ignored = $hide_ignored,
               hide_pictures = $hide_pictures,
@@ -22935,7 +22954,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\),0-9!%:\$€₽&¥¥£Ұ₴，]+/u", $author, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\),0-9!%:\$€₽&¥¥£Ұ₴，]+/u", $author ?? "", $matches)) {
             $symbols = $matches[0];
           
             trace_message_to_file(date("d.m.Y, H:i") . ": the string [$author] contains the prohibited symbols [$symbols]", "symbols.log");
@@ -23400,7 +23419,7 @@ abstract class ForumManager
                 $is_private = ($dbw->field_by_name("forum_name") == 'PRIVATE_MESSAGES') ? (reqvar_empty("receiver") ? 2 : 1) : 0;
             }
         } else {
-            MessageHandler::setError(text("ErrNoTopicSelected"));
+            MessageHandler::setError(text("ErrNoForumSelected"));
             $dbw->free_result();
             return false;
         }
@@ -23631,7 +23650,7 @@ abstract class ForumManager
             
             $no_guests = reqvar_empty("no_guests") ? "0" : "1";
             if (!$this->is_logged_in() || $is_private) {
-                $no_guests = 0;
+                $no_guests = "0";
             }
 
             $query = "insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker, user_marker, is_private, is_poll, poll_comment, poll_results_delayed, has_pinned_post, publish_delay, request_moderation, no_guests, profiled_topic)
@@ -23675,13 +23694,14 @@ abstract class ForumManager
                     $query = "update {$prfx}_user set last_ip = '$ip' where id = $uid";
                     if (!$dbw->execute_query($query)) {
                         MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                        $dbw->rollback_transaction();
                         return false;
                     }
                     
                 }
             }
             
-            if (!$this->handle_topic_ignorance($dbw, $prfx, $tid, $this->get_user_id(), reqvar("author"))) {
+            if (!$this->handle_topic_ignorance($dbw, $prfx, $tid, $forced_guest_posting ? "" : $this->get_user_id(), reqvar("author"))) {
                 $dbw->rollback_transaction();
                 return false;
             }
@@ -23826,7 +23846,7 @@ abstract class ForumManager
         
         $post_id = $dbw->insert_id();
         
-        if ($uid != "NULL") {
+        if ($uid != "NULL" && empty($forced_guest_posting)) {
             $query = "insert into {$prfx}_topic_participants (user_id, topic_id)
                   select $uid, $tid from {$prfx}_dual
                   where not exists (select 1 from {$prfx}_topic_participants where user_id = $uid and topic_id = $tid)";
@@ -24043,6 +24063,7 @@ abstract class ForumManager
                ";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
                 return false;
             }
             
@@ -24054,6 +24075,7 @@ abstract class ForumManager
                    ";
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                    $dbw->rollback_transaction();
                     return false;
                 }
             }
@@ -24066,6 +24088,7 @@ abstract class ForumManager
                ";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
                 return false;
             }
             
@@ -24076,6 +24099,7 @@ abstract class ForumManager
                ";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
                 return false;
             }
         }
@@ -24296,6 +24320,18 @@ abstract class ForumManager
         if (!reqvar_empty("new_topic") && !$this->handle_request_moderation($tid)) {
             return false;
         }
+        
+        if (!$this->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $message, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users)) {
+            return false;
+        }
+        
+        return true;
+    } // post_message
+    
+    //-----------------------------------------------------------------
+    function do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $message, $short_message, $search_words_appendix, &$all_appealed_users, &$appealed_users)
+    {
+        global $settings;
         
         // get subscribed users
         // if a user ignores the current user or guests, do not notify him
@@ -24936,8 +24972,8 @@ abstract class ForumManager
         }
         
         return true;
-    } // post_message
-    
+    } // do_after_post_mailing
+
     //-----------------------------------------------------------------
     function get_doctype_thumb($base_path, &$attachment_data)
     {
@@ -36255,6 +36291,8 @@ abstract class ForumManager
             }
             
             $post_list[$pid] = array(
+                "post_id" => $pid,
+                "text_content" => Emoji::Decode($dbw->field_by_name("text_content")),
                 "html_content" => Emoji::Decode($dbw->field_by_name("html_content")),
                 "creation_date" => adjust_and_format_timezone(xstrtotime($dbw->field_by_name("creation_date")), text("DateTimeFormat")),
                 "creation_date_sec" => xstrtotime($dbw->field_by_name("creation_date")),

@@ -649,12 +649,10 @@ else
 
   <?php 
   $display_no_guests = "display:none";
-  if($fmanager->is_logged_in() && empty($forum_data["no_guests"]))
+  if($fmanager->is_logged_in() && (empty($forum_data["no_guests"]) || !empty($forum_data["user_posting_as_guest"])))
   {
     $display_no_guests = "";
   }
-  
-  if(empty($forum_data["no_guests"])):
   ?>
   <tr id="no_guests_row" style="<?php echo($display_no_guests); ?>">
   <td style="vertical-align: top;"></td>
@@ -671,7 +669,6 @@ else
    </table>
   </td>
   </tr>
-  <?php endif; ?>
 
   <?php if($fmanager->is_logged_in() && !$fmanager->is_master_admin()): ?>
   <tr>

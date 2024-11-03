@@ -493,6 +493,27 @@ SimpleCalendar.hide_if_inactive = function (calendar) {
     if (SimpleCalendar.handler) SimpleCalendar.handler();
 };
 
+SimpleCalendar.getPreviousDay = function (date) {
+  var previousDay = new Date(date);
+  
+  if (date.getDate() === 1) {
+    previousDay.setMonth(date.getMonth() - 1);
+    previousDay.setDate(new Date(date.getFullYear(), date.getMonth(), 0).getDate());
+  } else {
+    previousDay.setDate(date.getDate() - 1);
+  }
+  
+  return previousDay;
+};
+
+SimpleCalendar.getNextDay = function (date) {
+  var nextDay = new Date(date);
+
+  nextDay.setDate(date.getDate() + 1);
+
+  return nextDay;
+};
+
 SimpleCalendar.set_date = function (calendar, date) {
     calendar.display_date = date;
 
@@ -519,7 +540,7 @@ SimpleCalendar.set_date = function (calendar, date) {
     var first_day_of_week = first_day_date.getDay();
     if (first_day_of_week == 0) first_day_of_week = 7;
 
-    var other_month_date = new Date(first_day_date.getTime() - 1 * 24 * 3600 * 1000);
+    var other_month_date = SimpleCalendar.getPreviousDay(first_day_date);
 
     var current_date = new Date(other_month_date.getFullYear(), other_month_date.getMonth(), other_month_date.getDate() - first_day_of_week + 2, 0, 0, 0);
 
@@ -548,7 +569,7 @@ SimpleCalendar.set_date = function (calendar, date) {
             current_date.getDate() == calendar.selected_date.getDate()
         ) elms[i].classList.add('selected_date');
 
-        current_date = new Date(current_date.getTime() + 1 * 24 * 3600 * 1000);
+        current_date = SimpleCalendar.getNextDay(current_date);
     }
 };
 

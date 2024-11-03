@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     23.07.2024 20:12:05                          */
+/* Created on:     03.11.2024 15:53:30                          */
 /*==============================================================*/
 
 
@@ -2290,6 +2290,8 @@ create table v1_user (
    info                 nvarchar(max)        null,
    homepage             nvarchar(500)        null,
    signature            nvarchar(max)        null,
+   api_active           tinyint              not null default 0,
+   api_token            varchar(100)         null,
    pwd_reset_hash       varchar(100)         null,
    pwd_reset_expire     datetime             null,
    activation_hash      varchar(100)         null,

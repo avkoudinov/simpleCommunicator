@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     23.07.2024 20:12:18                          */
+/* Created on:     03.11.2024 15:53:42                          */
 /*==============================================================*/
 
 
@@ -2273,6 +2273,8 @@ create table v1_user
    info                 text,
    homepage             varchar(500),
    signature            text,
+   api_active           tinyint not null default 0,
+   api_token            varchar(100),
    pwd_reset_hash       varchar(255),
    pwd_reset_expire     datetime,
    activation_hash      varchar(100),

@@ -1090,7 +1090,7 @@ function bb_process_table($bbcode, $action, $name, $default, $params, $content)
                 $cell = $matches[1];
             }
             
-            $table .= "<$tag $colspan>" . $cell . "</$tag>\n";
+            $table .= "<$tag $colspan class='csv_table_cell'>" . $cell . "</$tag>\n";
         }
         $table .= "</tr>";
     }
