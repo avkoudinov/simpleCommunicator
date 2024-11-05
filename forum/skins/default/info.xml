@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description>
-  <version>24.09.05</version>
+  <version>20.09.27</version>
   
   <caption 
   ru="Синий минималистичеcкий"
@@ -14,7 +14,7 @@
     <property
     name="pin_the_menu" 
     type="checkbox"
-    default="0"
+    default = "0"
     
     ru="Прикреплять меню при скроллинге"
     ua="Прикріплювати меню при скролінгу"
@@ -23,20 +23,9 @@
     />
   
     <property
-    name="show_df_logotype" 
-    type="checkbox"
-    default="0"
-    
-    ru="Показывать картинку-логотип"
-    ua="Показывать картинку-логотип"
-    en="Show logo picture"
-    de="Logo-Bild anzeigen"
-    />
-  
-    <property
     name="show_my_part_topics" 
     type="checkbox"
-    default="0"
+    default = "0"
     restriction="user"
     
     ru="Показывать опцию меню 'С моим участием'"
@@ -48,7 +37,7 @@
     <property
     name="no_success_report" 
     type="checkbox"
-    default="0"
+    default = "0"
     
     ru="Не показывать всплывающие сообщения об успешной операции"
     ua="Не показувати спливаючі повідомлення про успішну операцію"
@@ -57,20 +46,9 @@
     />
     
     <property
-    name="no_online_users" 
-    type="checkbox"
-    default="0"
-    
-    ru="Не показывать пользователей онлайн"
-    ua="Не показувати користувачів онлайн"
-    en="Do not show online users"
-    de="Online-Benutzer nicht anzeigen"
-    />
-
-    <property
     name="no_confirmation_of_uncritical_actions" 
     type="checkbox"
-    default="0"
+    default = "0"
     
     ru="Не запрашивать подтверждения некритичных действий"
     ua="Не запрошувати підтвердження некритичних дій"
@@ -78,30 +56,7 @@
     de="Nach der Bestätigung unkritischer Aktionen nicht fragen"
     />
     
-    <property
-    name="no_confirmation_of_dislikes" 
-    type="checkbox"
-    default="1"
-    users_only="1"
-    dislikes_active="1"
-    
-    ru="Не запрашивать подтверждения дизлайков"
-    ua="Не запитувати підтвердження дізлайков"
-    en="Do not ask for confirmation of dislikes"
-    de="Nach der Bestätigung der Dislikes nicht fragen"
-    />
-
-    <property
-    name="no_confirmation_of_any_actions" 
-    type="checkbox"
-    default="0"
-    
-    ru="Не запрашивать подтверждения любых действий"
-    ua="Не запрошувати підтвердження будь-яких дій"
-    en="Do not ask for confirmation of any actions"
-    de="Nach der Bestätigung jeglicher Aktionen nicht fragen"
-    />
-
   </properties>
   
 </description>
+ 

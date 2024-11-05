@@ -669,8 +669,8 @@ if(!empty($fid) && !empty($_SESSION["ignored_forums"][$tinfo["forum_id"]]) && $t
   <?php endif; ?>
 <br> <?php echo_html(text("LastMessage")); ?>: <span class="number"><?php echo_html($tinfo["last_message_date"]); ?></span>
 
-<br> <?php echo_html(text("Messages")); ?> <span class="number"><?php echo_html(format_number($tinfo["post_count"])); ?></span>
-<br> <?php echo_html(text("Views")); ?> / <?php echo_html(text("Bots")); ?>:  <span class="number"><?php echo_html(format_number($tinfo["hits_count"])); ?></span><?php if(!empty($tinfo["bot_hits_count"])): ?> / <span class="number"><?php echo_html(format_number($tinfo["bot_hits_count"])); ?></span><?php endif; ?>
+<br> <?php echo_html(text("Messages")); ?>: <span class="number"><?php echo_html(format_number($tinfo["post_count"])); ?></span>
+<br> <?php echo_html(text("Views")); ?><?php if(!empty($tinfo["bot_hits_count"])): ?> / <?php echo_html(text("Bots")); ?><?php endif; ?>:  <span class="number"><?php echo_html(format_number($tinfo["hits_count"])); ?></span><?php if(!empty($tinfo["bot_hits_count"])): ?> / <span class="number"><?php echo_html(format_number($tinfo["bot_hits_count"])); ?></span><?php endif; ?>
 
   <div class="navigation_arrows_right">
   <div class="scroll_up" onclick="window.scrollTo(0, 0);"></div>

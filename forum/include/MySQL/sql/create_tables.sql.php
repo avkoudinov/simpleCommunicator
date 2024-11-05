@@ -2032,6 +2032,8 @@ create table v1_user
    info                 text,
    homepage             varchar(500),
    signature            text,
+   api_active           tinyint not null default 0,
+   api_token            varchar(100),
    pwd_reset_hash       varchar(255),
    pwd_reset_expire     datetime,
    activation_hash      varchar(100),

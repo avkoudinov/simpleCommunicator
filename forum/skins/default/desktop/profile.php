@@ -559,6 +559,26 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 </tr>
 
 <tr>
+<td><?php echo_html(text("APIToken")); ?>:</td>
+<td>
+<input type="text" id="api_token" name="api_token" value="<?php echo_html($user_data["api_token"]); ?>" class="read_only_field" readonly>
+
+   <table class="checkbox_table">
+   <tr>
+     <td>
+     <input type="checkbox" id="api_active" name="api_active" <?php echo_html(checked($user_data["api_active"])); ?>> 
+     </td>
+     <td>
+     <label for="api_active"><?php echo_html(text("APIActive")); ?></label>
+     </td>
+   </tr>
+   </table>
+
+
+</td>
+</tr>
+
+<tr>
 <td colspan="2"></td>
 </tr>
 
