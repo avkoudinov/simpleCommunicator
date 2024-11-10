@@ -2015,29 +2015,15 @@ function focus_message_field()
 {
   var elm;
 
-  elm = document.getElementById('post_form');
-  if(elm && elm.parentNode)
+  elm = document.getElementById('message');
+  if (elm)
   {
-    elm = elm.parentNode;
+    elm.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
 
-    var rect = elm.getBoundingClientRect();
+    if(elm.value.length > 0)
+      elm.setSelectionRange(elm.value.length, elm.value.length);
 
-    window.scrollTo(0, rect.top + window.pageYOffset - 10);
-  }
-
-  try
-  {
-    elm = document.getElementById('message');
-    if(elm)
-    {
-      elm.focus();
-
-      if(elm.value.length > 0)
-        elm.setSelectionRange(elm.value.length, elm.value.length);
-    }
-  }
-  catch(err)
-  {
+    elm.focus();
   }
 }
 

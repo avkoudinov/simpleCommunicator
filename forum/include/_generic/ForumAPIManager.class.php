@@ -2367,7 +2367,7 @@ abstract class ForumAPIManager
 
         if (!empty($request_data["attachments"])) {
             if (count($request_data["attachments"]) > $this->forum_manager->get_attachments_per_post()) {
-                throw new ForumAPIException(sprintf("Too many attachments! Only %s attachments are allowed!", $this->forum_manager->get_attachments_per_post()), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
+                throw new ForumAPIException(sprintf(text("MaxAttachmentCount"), $this->forum_manager->get_attachments_per_post()), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
             }
           
             $counter = 1;
@@ -2582,6 +2582,7 @@ abstract class ForumAPIManager
                 $has_attachment |= bindec($bin_str);
             } else {
                 $dbw->rollback_transaction();
+                throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
             }
         } // attachments
         
@@ -2912,7 +2913,239 @@ abstract class ForumAPIManager
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
 
-        if (!$this->forum_manager->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $message, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users)) {
+        if (!$this->forum_manager->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users)) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+
+        $where = "where {$prfx}_post.id = $post_id";
+        
+        if (!$dbw->execute_query($this->forum_manager->get_query_topic_posts($prfx, $uid, $where, "", ""))) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $post_list = [];
+        $user_ids = [];
+        $this->forum_manager->collect_posts($dbw, $uid, $post_list, $user_ids);
+
+        $dbw->free_result();
+        
+        if (!empty($post_list)) {
+            $post = array_shift($post_list);
+
+            unset($post["creation_date_sec"]);
+            unset($post["user_marker"]);
+            unset($post["read_marker"]);
+            unset($post["user_agent"]);
+            unset($post["aname"]);
+            unset($post["ip"]);
+            unset($post["topic_creation_date_sec"]);
+            unset($post["topic_author_read_marker"]);
+            unset($post["self_edited"]);
+            unset($post["editable"]);
+            unset($post["moderatable"]);
+        }        
+    }
+
+    //-----------------------------------------------------------------
+    function post_attachment(&$request_data, &$post)
+    {
+        global $settings;
+        global $READ_MARKER;
+
+        $_SESSION["api_posting"] = 1;
+
+        if (empty($request_data["post_id"])) {
+            throw new ForumAPIException(text("ErrNoPostSelected"), ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+        }
+
+        if (empty($request_data["file_name"])) {
+            throw new ForumAPIException("Name of the attachment (file_name) is not specified!", ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+        }
+
+        if (empty($request_data["mime_type"])) {
+            throw new ForumAPIException("Mime type of the attachment (mime_type) is not specified!", ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+        }
+
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            throw new ForumAPIException(text("ErrDbInaccessible"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+
+        $uid = $dbw->escape($this->forum_manager->get_user_id());
+        if (empty($uid)) {
+            $uid = 0;
+        }
+
+        $post_id = $dbw->escape($request_data["post_id"]);
+        
+        $has_attachment = 0;
+        
+        if (!$dbw->execute_query("select user_id, read_marker, has_attachment, text_content from {$prfx}_post where id = $post_id")) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        if (!$dbw->fetch_row()) {
+            $dbw->free_result();
+            throw new ForumAPIException(text("ErrNoPostSelected"), ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+        }
+        
+        if ($dbw->field_by_name("user_id") && $dbw->field_by_name("user_id") != $uid) {
+            $dbw->free_result();
+            throw new ForumAPIException("You are not the author of this message ($request_data[post_id])!", ForumAPIException::ERR_CODE_ACCESS_ERROR);
+        }
+        
+        if (!$dbw->field_by_name("user_id") && $dbw->field_by_name("read_marker") != $READ_MARKER) {
+            $dbw->free_result();
+            throw new ForumAPIException("You are not the author of this message ($request_data[post_id])!", ForumAPIException::ERR_CODE_ACCESS_ERROR);
+        }
+
+        $has_attachment = $dbw->field_by_name("has_attachment");
+        $message = $dbw->field_by_name("text_content");
+
+        $dbw->free_result();
+
+        if (!$dbw->execute_query("select count(*) cnt from {$prfx}_attachment where post_id = $post_id")) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $attachment_count = 0;
+        
+        if ($dbw->fetch_row()) {
+            $attachment_count = $dbw->field_by_name("cnt");
+        }
+
+        $dbw->free_result();
+        
+        $attachments_per_post = $this->forum_manager->get_attachments_per_post();
+        
+        if ($attachment_count == $attachments_per_post) {
+            throw new ForumAPIException(sprintf(text("MaxAttachmentCount"), $attachments_per_post), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
+        }
+        
+        // find next free slot
+        
+        $bin_str = str_pad(decbin($has_attachment), $attachments_per_post, '0', STR_PAD_LEFT);
+        $bin_str = strrev($bin_str);
+        
+        $pos = strpos($bin_str, '0');
+        if ($pos === false) {
+            throw new ForumAPIException(sprintf(text("MaxAttachmentCount"), $attachments_per_post), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
+        }
+        
+        $pos++;
+        
+        if ($pos == 1) $idx = "";
+        else           $idx = $pos;
+        
+        $attachment_base_name = session_id();
+        if (!empty($idx)) {
+            $attachment_base_name .= "-" . $idx;
+        }
+        
+        $pi = pathinfo($request_data["file_name"]);
+        $attachment_extension = val_or_empty($pi['extension']);
+        
+        $attachment_name = $attachment_base_name;
+        if (!empty($attachment_extension)) {
+            $attachment_name .= "." . strtolower($attachment_extension);
+        }
+
+        if (!file_put_contents(APPLICATION_ROOT . "tmp/" . $attachment_name, file_get_contents("php://input"))) {
+            throw new ForumAPIException(sprintf(text("ErrFileUpload"), $request_data["file_name"]), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+
+        $_FILES["attachment$idx"]["type"] = $request_data["mime_type"];
+        $_FILES["attachment$idx"]["name"] = $request_data["file_name"];
+        $_FILES["attachment$idx"]["size"] = filesize(APPLICATION_ROOT . "tmp/" . $attachment_name);
+        $_FILES["attachment$idx"]["tmp_name"] = APPLICATION_ROOT . "tmp/" . $attachment_name;
+      
+        if (!$this->attachment_manager->handle_attachments()) {
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+
+        if (empty($_SESSION["last_attachment$idx"])) {
+            throw new ForumAPIException(sprintf(text("ErrFileUpload"), $request_data["file_name"]), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+        
+        if (!$dbw->start_transaction()) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+
+        $attachment_type = "";
+        $attachment_name = "";
+        $attachment_origin_name = "";
+        if ($this->attachment_manager->finalize_attachment($post_id, $attachment_name, $attachment_origin_name, $attachment_type, $idx)) {
+            if (stripos($message, "[attachment$idx]") === false && stripos($message, "[attachment$idx=$post_id]") === false) {
+                $message .= "\n\n[attachment$idx]";
+            }
+            
+            $message = str_ireplace("[attachment$idx]", "[attachment$idx=$post_id]", $message);
+            
+            $attachment_name = $dbw->quotes_or_null($attachment_name);
+            $attachment_origin_name = $dbw->quotes_or_null(Emoji::Encode($attachment_origin_name));
+            $attachment_type = $dbw->escape($attachment_type);
+            
+            $idx_db = $dbw->escape($idx);
+            if (empty($idx_db)) {
+                $idx_db = 1;
+            }
+            
+            $query = "insert into {$prfx}_attachment (post_id, nr, name, origin_name, type, user_id, last_post_id)
+              values ($post_id, $idx_db, $attachment_name, $attachment_origin_name, '$attachment_type', $uid, $post_id)";
+            if (!$dbw->execute_query($query)) {
+                $dbw->rollback_transaction();
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+            
+            $bin_str = str_repeat("0", $attachments_per_post);
+            $bin_str[$attachments_per_post - $pos] = "1";
+            $has_attachment |= bindec($bin_str);
+        } else {
+            $dbw->rollback_transaction();
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+
+        $message = trim($message, "\n\r");
+        
+        $html_message = "";
+        $has_picture = "0";
+        $has_video = "0";
+        $has_audio = "0";
+        $has_link = "0";
+        $has_code = "0";
+        $has_attachment_ref = 0;
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+            $dbw->rollback_transaction();
+            return false;
+        }
+        
+        $html_message = trim($html_message);
+        
+        $message = Emoji::Encode($message);
+        $html_message = Emoji::Encode($html_message);
+        
+        $message = $dbw->quotes_or_null($message);
+        $html_message = $dbw->quotes_or_null($html_message);
+
+        $query = "update {$prfx}_post set 
+                  text_content = $message,
+                  html_content = $html_message,
+                  has_attachment = $has_attachment, 
+                  has_attachment_ref = $has_attachment_ref,
+                  has_picture = $has_picture, 
+                  has_video = $has_video, 
+                  has_audio = $has_audio, 
+                  has_link = $has_link, 
+                  has_code = $has_code 
+                  where id = $post_id";
+        if (!$dbw->execute_query($query)) {
+            $dbw->rollback_transaction();
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+
+        if (!$dbw->commit_transaction()) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
 
