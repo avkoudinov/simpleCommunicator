@@ -21856,7 +21856,17 @@ abstract class ForumManager
         
         $is_adult = reqvar_empty("is_adult") ? 0 : 1;
         
-        $query = "update {$prfx}_post set has_attachment = $has_attachment, has_attachment_ref = $has_attachment_ref, is_comment = $is_comment, is_adult = $is_adult where id = $edited_post";
+        $query = "update {$prfx}_post set 
+                  has_attachment = $has_attachment, 
+                  has_attachment_ref = $has_attachment_ref, 
+                  has_picture = $has_picture, 
+                  has_video = $has_video, 
+                  has_audio = $has_audio, 
+                  has_link = $has_link, 
+                  has_code = $has_code, 
+                  is_comment = $is_comment, 
+                  is_adult = $is_adult 
+                  where id = $edited_post";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             $dbw->rollback_transaction();
@@ -23865,6 +23875,8 @@ abstract class ForumManager
         
         $message = preg_replace("/\\[attachment1\\]/", "[attachment=$post_id]", $message);
         
+        $post_attachments = [];
+        
         $attachments_per_post = $this->get_attachments_per_post();
         for ($i = 1; $i <= $attachments_per_post; $i++) {
             $idx = ($i == 1) ? "" : $i;
@@ -23881,6 +23893,10 @@ abstract class ForumManager
                     $message .= "\n\n[attachment$idx]";
                 }
                 
+                $attachment_info = [];
+                
+                $attachment_info["file_name"] = $attachment_name;
+                
                 $message = str_ireplace("[attachment$idx]", "[attachment$idx=$post_id]", $message);
                 
                 $attachment_name = $dbw->quotes_or_null($attachment_name);
@@ -23892,6 +23908,8 @@ abstract class ForumManager
                     $idx_db = 1;
                 }
                 
+                $attachment_info["attachment_nr"] = $idx_db;
+
                 $query = "insert into {$prfx}_attachment (post_id, nr, name, origin_name, type, user_id, last_post_id)
                   values ($post_id, $idx_db, $attachment_name, $attachment_origin_name, '$attachment_type', $uid, $post_id)";
                 if (!$dbw->execute_query($query)) {
@@ -23900,8 +23918,11 @@ abstract class ForumManager
                     return false;
                 }
                 
+                $post_attachments[] = $attachment_info;
+
                 $bin_str = str_repeat("0", $attachments_per_post);
                 $bin_str[$attachments_per_post - $i] = "1";
+                
                 $has_attachment |= bindec($bin_str);
             } else {
                 $dbw->rollback_transaction();
@@ -23918,6 +23939,7 @@ abstract class ForumManager
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
+        
         if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             $dbw->rollback_transaction();
             return false;
@@ -24296,6 +24318,10 @@ abstract class ForumManager
         $response["created_post"] = $post_id;
         $response["return_post"] = $return_post;
         
+        if (!empty($post_attachments)) {
+            $response["post_attachments"] = $post_attachments;
+        }
+        
         $response["target_url"] = "topic.php?fid=$fid";
         if (!reqvar_empty("fpage")) {
             $response["target_url"] .= "&fpage=" . reqvar("fpage");
@@ -24321,7 +24347,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $message, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users)) {
+        if (!$this->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users)) {
             return false;
         }
         
@@ -24329,7 +24355,7 @@ abstract class ForumManager
     } // post_message
     
     //-----------------------------------------------------------------
-    function do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $message, $short_message, $search_words_appendix, &$all_appealed_users, &$appealed_users)
+    function do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, &$all_appealed_users, &$appealed_users)
     {
         global $settings;
         
