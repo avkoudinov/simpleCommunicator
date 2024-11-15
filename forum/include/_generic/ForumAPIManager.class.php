@@ -3,8 +3,8 @@
 abstract class ForumAPIManager
 {
     //-----------------------------------------------------------------
-    abstract function get_query_topic_list($prfx, $where, $limit);
-    abstract function get_query_post_list($prfx, $where, $uid, $limit);
+    abstract function get_query_topic_list($prfx, $where, $limit, $sort);
+    abstract function get_query_post_list($prfx, $where, $uid, $limit, $sort);
 
     //-----------------------------------------------------------------
     protected $forum_manager;
@@ -820,6 +820,11 @@ abstract class ForumAPIManager
         } else {
             $limit = $request_data["limit"];
         }
+        
+        $sort = "desc";
+        if (($request_data["sort"] ?? "") == "asc") {
+            $sort = "asc";
+        }
 
         $rodbw = System::getRODBWorker();
         if (!$rodbw) {
@@ -846,14 +851,19 @@ abstract class ForumAPIManager
 
         $where = "where {$prfx}_topic.forum_id = $fid";
         
-        if (!empty($request_data["last_post_before"])) {
-            $start_tiemstamp = xstrtotime($request_data["last_post_before"]);
-            if ($start_tiemstamp === false) {
+        if (!empty($request_data["continue_at"])) {
+            $start_timestamp = xstrtotime($request_data["continue_at"]);
+            if ($start_timestamp === false) {
                 throw new ForumAPIException(sprintf(text("ErrWrongDateFormat"), "2024-11-30 12:44:53"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
             }
 
-            $start_tiemstamp = $rodbw->format_datetime($start_tiemstamp);
-            $where .= " and {$prfx}_topic_statistics.last_message_date < '$start_tiemstamp'";
+            $start_timestamp = $rodbw->format_datetime($start_timestamp);
+            
+            if ($sort == "desc") {
+                $where .= " and {$prfx}_topic_statistics.last_message_date < '$start_timestamp'";
+            } else {
+                $where .= " and {$prfx}_topic_statistics.last_message_date > '$start_timestamp'";
+            }
         }        
 
         $uid = $rodbw->escape($this->forum_manager->get_user_id());
@@ -889,7 +899,10 @@ abstract class ForumAPIManager
         
         $where .= $user_delayed_topic_appendix;
         
-        if (!$rodbw->execute_query($this->get_query_topic_list($prfx, $where, $limit))) {
+        debug_message($this->get_query_topic_list($prfx, $where, $limit, $sort));
+        
+        
+        if (!$rodbw->execute_query($this->get_query_topic_list($prfx, $where, $limit, $sort))) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
@@ -1167,6 +1180,11 @@ abstract class ForumAPIManager
             $limit = $request_data["limit"];
         }
 
+        $sort = "desc";
+        if (($request_data["sort"] ?? "") == "asc") {
+            $sort = "asc";
+        }
+
         $rodbw = System::getRODBWorker();
         if (!$rodbw) {
             throw new ForumAPIException(text("ErrDbInaccessible"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
@@ -1206,17 +1224,22 @@ abstract class ForumAPIManager
                   $ignore_post_where_appendix
                   $ignore_comment_where_appendix";
 
-        if (!empty($request_data["last_post_before"])) {
-            $start_tiemstamp = xstrtotime($request_data["last_post_before"]);
-            if ($start_tiemstamp === false) {
+        if (!empty($request_data["continue_at"])) {
+            $start_timestamp = xstrtotime($request_data["continue_at"]);
+            if ($start_timestamp === false) {
                 throw new ForumAPIException(sprintf(text("ErrWrongDateFormat"), "2024-11-30 12:44:53"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
             }
 
-            $start_tiemstamp = $rodbw->format_datetime($start_tiemstamp);
-            $where .= " and {$prfx}_post.creation_date < '$start_tiemstamp'";
+            $start_timestamp = $rodbw->format_datetime($start_timestamp);
+            
+            if ($sort == "desc") {
+                $where .= " and {$prfx}_post.creation_date < '$start_timestamp'";
+            } else {
+                $where .= " and {$prfx}_post.creation_date > '$start_timestamp'";
+            }
         }        
 
-        if (!$rodbw->execute_query($this->get_query_post_list($prfx, $where, $uid, $limit))) {
+        if (!$rodbw->execute_query($this->get_query_post_list($prfx, $where, $uid, $limit, $sort))) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
 
