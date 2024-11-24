@@ -3200,4 +3200,181 @@ abstract class ForumAPIManager
             unset($post["moderatable"]);
         }        
     }
+    
+    //-----------------------------------------------------------------
+    function get_user_data(&$user_data, &$request_data)
+    {
+        global $settings;
+        global $READ_MARKER;
+        
+        if (empty($request_data["user_id"])) {
+            throw new ForumAPIException(sprintf(text("ErrUserDoesNotExist"), "-"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+        
+        if (!is_numeric($request_data["user_id"])) {
+            throw new ForumAPIException(sprintf(text("ErrUserDoesNotExist"), $request_data["user_id"]), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
+        $tmp = [];
+        
+        if (!$this->forum_manager->get_user_data($request_data["user_id"], $tmp)) {
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+        
+        $tmp["ignores"] = [];
+        $tmp["ignored"] = [];
+        if(!$this->forum_manager->get_user_ignore_info($request_data["user_id"], $tmp["ignores"], $tmp["ignored"])) {
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+        
+        $tmp["hides"] = [];
+        $tmp["hidden"] = [];
+        if(!$this->forum_manager->get_user_hide_info($request_data["user_id"], $tmp["hides"], $tmp["hidden"]))
+        {
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+
+        $user_data = $tmp;
+
+        unset($user_data["user_login"]);
+        unset($user_data["user_email"]);
+        unset($user_data["api_active"]);
+        unset($user_data["api_token"]);
+        unset($user_data["my_notes"]);
+        unset($user_data["my_notes_bb"]);
+        unset($user_data["hide_email"]);
+        unset($user_data["privileged"]);
+        unset($user_data["privileged_topic_moderator"]);
+        unset($user_data["global_ban_allowed"]);
+        unset($user_data["hide_ignored"]);
+        unset($user_data["hide_pictures"]);
+        unset($user_data["donot_hide_adult_pictures"]);
+        unset($user_data["hide_user_info"]);
+        unset($user_data["hide_user_avatars"]);
+        unset($user_data["no_private_messages"]);
+        unset($user_data["turnoff_events"]);
+        unset($user_data["send_notifications"]);
+        unset($user_data["turnoff_personal_appeals"]);
+        unset($user_data["last_host"]);
+        unset($user_data["donot_notify_on_rates"]);
+        unset($user_data["notify_about_new_users"]);
+        unset($user_data["notify_citation"]);
+        unset($user_data["notify_on_words"]);
+        unset($user_data["custom_css"]);
+        unset($user_data["custom_smiles"]);
+        unset($user_data["skin_properties"]);
+        unset($user_data["ip"]);
+        unset($user_data["last_ip"]);
+        unset($user_data["ip_blocked"]);
+        unset($user_data["last_ip_blocked"]);
+        unset($user_data["skin"]);
+        unset($user_data["interface_language"]);
+        unset($user_data["read_marker"]);
+        unset($user_data["time_zone"]);
+        unset($user_data["show_ip"]);
+        unset($user_data["words_to_notify"]);
+        unset($user_data["forum_access"]);
+     }
+     
+    //-----------------------------------------------------------------
+     function delete_posts(&$request_data)
+     {
+        global $settings;
+        global $READ_MARKER;
+
+        if (empty($request_data["posts"])) {
+            throw new ForumAPIException(text("ErrNoPostSelected"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
+        $_REQUEST["posts"] = $request_data["posts"];
+
+        if(!$this->forum_manager->delete_restore_posts("delete_post"))
+        {
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+     }
+
+     //-----------------------------------------------------------------
+     function restore_posts(&$request_data)
+     {
+        global $settings;
+        global $READ_MARKER;
+
+        if (empty($request_data["posts"])) {
+            throw new ForumAPIException(text("ErrNoPostSelected"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
+        $_REQUEST["posts"] = $request_data["posts"];
+
+        if(!$this->forum_manager->delete_restore_posts("restore_post"))
+        {
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+        }
+     }
+
+     //-----------------------------------------------------------------
+     function get_post(&$post, &$request_data)
+     {
+        global $READ_MARKER;
+        
+        if (empty($request_data["post_id"])) {
+            throw new ForumAPIException(text("ErrNoPostSelected"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
+        $rodbw = System::getRODBWorker();
+        if (!$rodbw) {
+            throw new ForumAPIException(text("ErrDbInaccessible"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+
+        $post_id = $rodbw->escape($request_data["post_id"]);
+
+        if (!$rodbw->execute_query("select topic_id from {$prfx}_post where id = $post_id")) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $topic_id = 0;
+        
+        if ($rodbw->fetch_row()) {
+            $topic_id = $rodbw->field_by_name("topic_id");
+        }
+        
+        $rodbw->free_result();
+
+        $this->check_access_to_topic($rodbw, $topic_id);
+
+        $uid = $rodbw->escape($this->forum_manager->get_user_id());
+        if (empty($uid)) {
+            $uid = 0;
+        }
+
+        $where = "where {$prfx}_post.id = $post_id";
+        
+        if (!$rodbw->execute_query($this->forum_manager->get_query_topic_posts($prfx, $uid, $where, "", ""))) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $post_list = [];
+        $user_ids = [];
+        $this->forum_manager->collect_posts($rodbw, $uid, $post_list, $user_ids);
+
+        $rodbw->free_result();
+        
+        if (!empty($post_list)) {
+            $post = array_shift($post_list);
+
+            unset($post["creation_date_sec"]);
+            unset($post["user_marker"]);
+            unset($post["read_marker"]);
+            unset($post["user_agent"]);
+            unset($post["aname"]);
+            unset($post["ip"]);
+            unset($post["topic_creation_date_sec"]);
+            unset($post["topic_author_read_marker"]);
+            unset($post["self_edited"]);
+            unset($post["editable"]);
+            unset($post["moderatable"]);
+        }        
+    }   
 } // ForumAPIManager
