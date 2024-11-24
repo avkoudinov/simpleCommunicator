@@ -1274,7 +1274,10 @@ function load_created_post(created_post, original_post, on_loaded)
     load_created_post_ajax.timeout = TIMEOUT;
 
     load_created_post_ajax.beforestart = function() { break_check_new_messages(); };
-    load_created_post_ajax.aftercomplete = function(error) { activate_check_new_messages(); };
+    load_created_post_ajax.aftercomplete = function(error) { 
+      activate_check_new_messages(); 
+      check_new_messages();
+    };
 
     load_created_post_ajax.onload = function(text, xml)
     {
@@ -1591,13 +1594,10 @@ function load_new_posts(topic, forum, highlight_message, target_url)
   load_new_posts_ajax.last_read_message = last_message;
   load_new_posts_ajax.highlight_message = highlight_message;
   load_new_posts_ajax.target_url = target_url;
-
-  var loaded_my_posts = document.querySelectorAll(".message_container_with_offset table.post_table");
-  for(var i = 0; i < loaded_my_posts.length; i++)
-  {
-    load_new_posts_ajax.setPOST("exclude_posts[" + i + "]", loaded_my_posts[i].getAttribute("data-pid"));
-  }
   
+  var elms = document.querySelectorAll(".message_container_with_offset");
+  elms.forEach(elm => elm.remove());
+
   for(var p in params)
   {
     if(!Object.prototype.hasOwnProperty.call(params, p)) continue;
@@ -2209,6 +2209,8 @@ function store_current_selection()
   
   var message_cell = window.stored_selection.querySelector(".message_cell");
   if (!message_cell) return;
+  
+  window.stored_selection_ancestor = message_cell;
 
   var fc = window.stored_selection.firstChild;
   while(fc)

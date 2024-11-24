@@ -168,6 +168,12 @@ class ForumAPIHandler
       $this->api_manager->get_topic_list($response_data["topic_list"], $request_data);
     } // get_topic_list
     //------------------------------------
+    function get_user_data(&$request_data, &$response_data)
+    {
+      $response_data["user_data"] = [];
+      $this->api_manager->get_user_data($response_data["user_data"], $request_data);
+    } // get_post_list
+    //------------------------------------
     function get_post_list(&$request_data, &$response_data)
     {
       $response_data["post_list"] = [];
@@ -190,4 +196,21 @@ class ForumAPIHandler
       $response_data["post"] = [];
       $this->api_manager->post_attachment($request_data, $response_data["post"]);
     } // post_attachment
+    //------------------------------------
+    function delete_posts(&$request_data, &$response_data)
+    {
+        $this->api_manager->delete_posts($request_data);
+    } // delete_posts
+    //------------------------------------
+    function restore_posts(&$request_data, &$response_data)
+    {
+        $this->api_manager->restore_posts($request_data);
+    } // restore_posts
+    //------------------------------------
+    function get_post(&$request_data, &$response_data)
+    {
+      $response_data["post"] = [];
+      $this->api_manager->get_post($response_data["post"], $request_data);
+    } // post_message
+    //------------------------------------
 } // ForumAPIHandler
