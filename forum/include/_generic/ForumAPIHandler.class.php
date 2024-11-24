@@ -29,10 +29,66 @@ class ForumAPIHandler
         echo json_encode($response_data, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
     } // sendJsonResponse
     //------------------------------------
+    function handleBinaryRequest($api_request)
+    {
+        $request_data = array();
+        $response_data = array();
+      
+        try {
+            $request_data["language"] = reqvar("language");
+            $request_data["api_token"] = reqvar("api_token");
+            $request_data["post_id"] = reqvar("post_id");
+            $request_data["file_name"] = reqvar("file_name");
+            $request_data["mime_type"] = reqvar("mime_type");
+            
+            // We agreed, that the method name is equal to the api request name.
+            // So we can use reflexion instead of maitanining the switch.
+            
+            $robject = new \ReflectionObject($this);
+            
+            if ($api_request == "handleRequest" || !$robject->hasMethod($api_request)) {
+                throw new ForumAPIException(sprintf("No handler is defined for the API request '%s'!", $api_request), ForumAPIException::ERR_CODE_SYSTEM_ERROR);
+            }
+            
+            $rmethod = $robject->getMethod($api_request);
+            
+            if ($rmethod->isConstructor() || $rmethod->isDestructor() || !$rmethod->isPublic()) {
+                throw new ForumAPIException(sprintf("No handler is defined for the API request '%s'!", $api_request), ForumAPIException::ERR_CODE_SYSTEM_ERROR);
+            }
+        
+            set_language($request_data["language"] ?? "");
+            
+            $this->check_token($request_data, $response_data);
+            
+            $rmethod->invokeArgs($this, [&$request_data, &$response_data]);
+            
+            $response_data["result"] = "success";
+        } catch (ForumAPIException $ex) {
+            $response_data["result"] = "error";
+            $response_data["errors"][] = array(
+              "error_code" => $ex->getErrorCode(),
+              "error_text" => $ex->getMessage()
+            );
+        } catch (\Exception $ex) {
+            $response_data["result"] = "error";
+            $response_data["errors"][] = array(
+              "error_code" => ForumAPIException::ERR_CODE_SYSTEM_ERROR,
+              "error_text" => $ex->getMessage()
+            );
+        }
+      
+        $this->sendJsonResponse($response_data);
+    } // handleBinaryRequest
+    //------------------------------------
     function handleRequest($api_request)
     {
         mb_internal_encoding("UTF-8");
         //date_default_timezone_set("GMT");
+        
+        if ($api_request == "post_attachment") {
+            $this->handleBinaryRequest($api_request);
+            return;
+        }
 
         $response_data = array();
       
@@ -104,13 +160,19 @@ class ForumAPIHandler
     {
       $response_data["forum_list"] = [];
       $this->api_manager->get_forum_list($response_data["forum_list"]);
-    } // innotour_statistics
+    } // get_forum_list
     //------------------------------------
     function get_topic_list(&$request_data, &$response_data)
     {
       $response_data["topic_list"] = [];
       $this->api_manager->get_topic_list($response_data["topic_list"], $request_data);
-    } // innotour_statistics
+    } // get_topic_list
+    //------------------------------------
+    function get_user_data(&$request_data, &$response_data)
+    {
+      $response_data["user_data"] = [];
+      $this->api_manager->get_user_data($response_data["user_data"], $request_data);
+    } // get_post_list
     //------------------------------------
     function get_post_list(&$request_data, &$response_data)
     {
@@ -121,11 +183,34 @@ class ForumAPIHandler
     function get_attachment(&$request_data, &$response_data)
     {
       $this->api_manager->get_attachment($request_data);
-    } // get_post_list
+    } // get_attachment
     //------------------------------------
     function post_message(&$request_data, &$response_data)
     {
       $response_data["post"] = [];
       $this->api_manager->post_message($request_data, $response_data["post"]);
-    } // get_post_list
+    } // post_message
+    //------------------------------------
+    function post_attachment(&$request_data, &$response_data)
+    {
+      $response_data["post"] = [];
+      $this->api_manager->post_attachment($request_data, $response_data["post"]);
+    } // post_attachment
+    //------------------------------------
+    function delete_posts(&$request_data, &$response_data)
+    {
+        $this->api_manager->delete_posts($request_data);
+    } // delete_posts
+    //------------------------------------
+    function restore_posts(&$request_data, &$response_data)
+    {
+        $this->api_manager->restore_posts($request_data);
+    } // restore_posts
+    //------------------------------------
+    function get_post(&$request_data, &$response_data)
+    {
+      $response_data["post"] = [];
+      $this->api_manager->get_post($response_data["post"], $request_data);
+    } // post_message
+    //------------------------------------
 } // ForumAPIHandler

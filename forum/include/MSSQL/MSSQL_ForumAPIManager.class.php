@@ -3,7 +3,7 @@
 class MSSQL_ForumAPIManager extends ForumAPIManager
 {
     //-----------------------------------------------------------------
-    function get_query_topic_list($prfx, $where, $limit)
+    function get_query_topic_list($prfx, $where, $limit, $sort)
     {
         return "select top $limit {$prfx}_topic.id, {$prfx}_topic.name, {$prfx}_topic.creation_date,
                {$prfx}_topic_statistics.last_message_date,
@@ -12,6 +12,7 @@ class MSSQL_ForumAPIManager extends ForumAPIManager
                {$prfx}_topic_statistics.hits_count,
                {$prfx}_topic_statistics.bot_hits_count,
                {$prfx}_topic.profiled_topic,
+               {$prfx}_topic.no_guests,
                {$prfx}_topic.deleted, {$prfx}_topic.closed, {$prfx}_topic.pinned, {$prfx}_topic.publish_delay, has_pinned_post,
                {$prfx}_forum.deleted forum_deleted, disable_ignore,
                {$prfx}_topic.user_id, {$prfx}_topic.author, {$prfx}_user.user_name, {$prfx}_topic.read_marker,
@@ -22,11 +23,11 @@ class MSSQL_ForumAPIManager extends ForumAPIManager
                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                left join {$prfx}_user on ({$prfx}_topic.user_id = {$prfx}_user.id)
                $where
-               order by {$prfx}_topic_statistics.last_message_date desc, {$prfx}_topic.id desc";
+               order by {$prfx}_topic_statistics.last_message_date $sort, {$prfx}_topic.id $sort";
     }
 
     //-----------------------------------------------------------------
-    function get_query_post_list($prfx, $where, $uid, $limit)
+    function get_query_post_list($prfx, $where, $uid, $limit, $sort)
     {
         return "select top $limit 
             {$prfx}_post.id, {$prfx}_post.creation_date, text_content, html_content,
@@ -48,6 +49,6 @@ class MSSQL_ForumAPIManager extends ForumAPIManager
             left join {$prfx}_post_rating on ({$prfx}_post_rating.post_id = {$prfx}_post.id and {$prfx}_post_rating.user_id = $uid)
             left join {$prfx}_post_statistics on ({$prfx}_post.id = {$prfx}_post_statistics.post_id)
             $where 
-            order by {$prfx}_post.creation_date desc, {$prfx}_post.id desc";
+            order by {$prfx}_post.creation_date $sort, {$prfx}_post.id $sort";
     } // get_query_post_list
 } // MSSQL_ForumAPIManager

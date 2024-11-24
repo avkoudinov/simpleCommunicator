@@ -90,7 +90,7 @@ function convert_spoiler_to_bbcode(quote, quote_level)
   return "\n\n[spoiler" + title + "]\n" + body + "\n[/spoiler]\n\n";
 } // convert_spoiler_to_bbcode
 //----------------------------------------------------------------------
-function convert_code_to_bbcode(code)
+function convert_code_to_bbcode(code, quote_level)
 {
   var lang = code.getAttribute('data-code');
   if(lang == '' || lang == 'nohighlight') lang = 'text';
@@ -320,6 +320,15 @@ function convert_nodes_to_bbcode(container, quote_level)
         break;
       }     
       
+      // check whether it is a code
+      var code = container.childNodes[i].getElementsByTagName('code');
+      if(code.length > 0 && code[0].classList.contains('hljs'))
+      {
+        container.childNodes[i].setAttribute("data-code", code[0].getAttribute("data-code"));
+        current_node = document.createTextNode(convert_code_to_bbcode(container.childNodes[i], quote_level));
+        break;
+      }
+
       // not matching, just remove the PRE tag
       //current_node = document.createTextNode(text);
       break;

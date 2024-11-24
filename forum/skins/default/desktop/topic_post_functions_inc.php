@@ -1202,38 +1202,8 @@ function post_message(action)
               return;
             }
 
-            var may_load_new_posts = false;
-            
-            var posts = document.getElementsByClassName("post_table");
-            var posts_count = posts.length;
-            
-            posts = document.getElementsByClassName("deleted_post");
-            posts_count -= posts.length;
-            
-            if(posts_count < posts_per_page)
-            {
-              may_load_new_posts = true;
-            }
-
-            var highlight_message = '';
-            if(response.return_post) 
-            {
-              highlight_message = response.return_post;
-            }
-            
             load_created_post(response.created_post, original_post, function() {
-              if(!is_last_page ||
-                 !may_load_new_posts ||
-                 in_search ||
-                 filtered_comment_posting ||
-                 all_page_mode 
-                ) 
-              {
-                Forum.show_sys_progress_indicator(false);
-                return;
-              }
-                
-              exec_load_new_posts(-2, response.target_url);
+              Forum.show_sys_progress_indicator(false);
             });
 
             return;
