@@ -1698,19 +1698,89 @@ abstract class ForumAPIManager
             return true;
         }
         
-        $limit = 0;
-        $time_to_next = 0;
+        $this->check_topic_limit($dbw, $fid);
         
-        if (!$this->check_topic_limit($fid, $limit, $time_to_next)) {
-            return false;
+        return true;
+    } // check_message_limit
+
+    //------------------------------------------------------
+    function check_topic_limit($dbw, $fid)
+    {
+        global $settings;
+        global $READ_MARKER;
+        
+        if (empty($settings["max_topics_day"])) {
+            return true;
         }
         
-        if ($time_to_next > 0) {
+        $limit = $settings["max_topics_day"];
+        $time_to_next = 0;
+        
+        if ($this->forum_manager->is_admin() || $this->forum_manager->is_forum_moderator($fid) || $this->forum_manager->is_privileged()) {
+            return true;
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        $fid = $dbw->escape($fid);
+        $uid = $this->forum_manager->get_user_id();
+        
+        $first_topic_date = time() - 24 * 3600;
+        $now = $dbw->format_datetime($first_topic_date);
+        
+        if (empty($uid)) {
+            // we use readmarker because it is a cookie and remains longer
+            $rm = $dbw->escape($READ_MARKER);
+            $query = "select count(*) cnt, min(creation_date) first_topic_date
+                from {$prfx}_topic
+                where read_marker = '$rm' and creation_date >= '$now' and publish_delay <> 1 and is_private < 1";
+        } elseif ($this->forum_manager->get_private_forum_id() == $fid) {
+            // we count topics for the private messages separately
+            $uid = $dbw->escape($uid);
+            $receiver_id = $dbw->escape(reqvar("receiver"));
+            if (empty($receiver_id) || !is_numeric($receiver_id)) {
+                $receiver_id = 0;
+            }
+            $query = "select count(*) cnt, min(creation_date) first_topic_date
+                from {$prfx}_topic
+                inner join {$prfx}_private_topics on ({$prfx}_topic.id = {$prfx}_private_topics.topic_id and participant_id = $receiver_id)
+                where
+                user_id = $uid and
+                creation_date >= '$now' and
+                publish_delay <> 1 and
+                is_private > 0";
+        } else {
+            // we do not count topics for the private messages and moderated forums
+            $uid = $dbw->escape($uid);
+            $query = "select count(*) cnt, min(creation_date) first_topic_date
+                from {$prfx}_topic where
+                user_id = $uid and
+                creation_date >= '$now' and
+                publish_delay <> 1 and
+                is_private < 1 and
+                not exists (select 1 from {$prfx}_forum_moderator where user_id = $uid and {$prfx}_forum_moderator.forum_id = {$prfx}_topic.forum_id)";
+        }
+        
+        if (!$dbw->execute_query($query)) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $cnt = 0;
+        if ($dbw->fetch_row()) {
+            $cnt = $dbw->field_by_name("cnt");
+            $first_topic_date = xstrtotime($dbw->field_by_name("first_topic_date"));
+        }
+        
+        $dbw->free_result();
+        
+        if ($cnt >= $settings["max_topics_day"]) {
+            $time_to_next = $first_topic_date - (time() - 24 * 3600);
+
             throw new ForumAPIException(sprintf(text("ErrTopicLimitExceeded"), $limit, format_duration($time_to_next)), ForumAPIException::ERR_CODE_ACCESS_ERROR);
         }
         
         return true;
-    } // check_message_limit
+    } // check_topic_limit
 
     //-----------------------------------------------------------------
     function check_blocked($dbw, $fid, $forced_guest_posting, $user_marker)
