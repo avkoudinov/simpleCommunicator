@@ -2015,11 +2015,14 @@ function focus_message_field()
 {
   var elm;
 
-  elm = document.getElementById('message');
+  elm = document.getElementById('post_message_table');
   if (elm)
   {
     elm.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
 
+    elm = document.getElementById('message');
+    if (!elm) return;
+      
     if(elm.value.length > 0)
       elm.setSelectionRange(elm.value.length, elm.value.length);
 
