@@ -132,9 +132,6 @@ define('YOUTUBE_API_KEY', '');
 define('VK_CLIENT_SECRET', '');
 define('VK_ACCESS_TOKEN', '');
 
-// The geo analytics key
-define('REVOLVERMAPS_KEY', '');
-
 // The email check key
 define('BLOCK_DISPOSABLE_EMAIL_KEY', '');
 

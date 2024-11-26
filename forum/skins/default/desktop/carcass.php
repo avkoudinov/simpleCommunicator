@@ -318,12 +318,6 @@ $main_menu_id = "main_menu";
 ?>
 </div>
 
-<?php if(defined('REVOLVERMAPS_KEY') && !empty(REVOLVERMAPS_KEY)): ?>
-<div style="display:none">
-<img src="//ra.revolvermaps.com/h/m/a/0/ff0000/128/0/<?php echo(REVOLVERMAPS_KEY); ?>.png?t=<?php echo(time()); ?>" alt="Map">
-</div>
-<?php endif; ?>
-
 <?php require_once $view_path . $view; ?>
 
 </div> <!-- content_wrap -->

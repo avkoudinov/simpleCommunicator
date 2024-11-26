@@ -351,23 +351,6 @@ $forum_selector_id = 1;
 <img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_monthly_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
-<?php if(defined('REVOLVERMAPS_KEY') && !empty(REVOLVERMAPS_KEY)): ?>
-<h3 class="profile_caption"><?php echo_html(text("VisitingGeography")); ?></h2>
-
-<div class="forum_activity_image_wrapper">
-<div style="position: relative; padding-top: 50%;">
-<div class="revolver_map_warning">
-<?php echo_html(text("RevolverMapWarning")); ?>
-</div>
-<iframe style="background: transparent none repeat scroll 0% 0% !important; position: absolute; left: 0px; top: 0px; height: 100%; width: 100%;" 
-scrolling="no" 
-allowtransparency="true" 
-src="//ra.revolvermaps.com/w/7/a/a2.php?i=<?php echo(REVOLVERMAPS_KEY); ?>&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" 
-frameborder="0"></iframe>
-</div>
-</div>
-<?php endif; ?>
-
 <div id="browser_statistics">
 
 <h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h2>

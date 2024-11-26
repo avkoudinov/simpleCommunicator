@@ -4965,19 +4965,6 @@ img.image_placeholder
   margin-bottom: 20px;
 }
 
-.revolver_map_warning
-{
-  box-sizing: border-box;
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  padding: 30px 30px 0px 30px;
-  text-align: center;
-  color: maroon;
-  font-weight: bold;
-  font-size: 30px;
-}
-
 .loading_placeholder
 {
   background-image: url('../images/loading-big.gif');
