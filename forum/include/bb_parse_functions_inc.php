@@ -404,6 +404,7 @@ function check_image_url(&$url, &$large_url)
     $ctx = stream_context_create([
         'http' => [
             'method' => "HEAD",
+            'timeout' => 10,
             'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\r\n" .
                         "Cache-Control: no-cache\r\n" .
                         "Accept: */*\r\n" .

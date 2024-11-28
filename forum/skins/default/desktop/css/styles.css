@@ -5113,9 +5113,8 @@ img.image_placeholder
 .message_text .thumb_gallery a.lightbox_image,
 .message_text .message_table td .thumb_gallery a.lightbox_image 
 {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
+  display: grid;
+  place-items: center;
   width: 140px;
   height: 140px;
   border: 1px solid gray;
@@ -5132,6 +5131,7 @@ img.image_placeholder
   width: 140px;
   height: 140px;
   margin: 0px 10px 10px 0px;
+  box-sizing: border-box;
 }
 
 .attachment_editable .thumb_gallery > .picture_wrapper,
@@ -5158,6 +5158,75 @@ img.image_placeholder
 .attachment_editable .message_table td .thumb_gallery img.image_placeholder
 {
   display: none;  
+}
+
+.thumb_gallery .short_video,
+.message_table td .thumb_gallery .short_video
+{
+  display: none;
+}
+
+.thumb_gallery video,
+.message_table td .thumb_gallery video
+{
+  display: none;
+}
+
+.post_preview_container .thumb_gallery .attachment_link,
+.message_text .thumb_gallery .attachment_link
+{
+  display: none;
+}
+
+.post_preview_container .thumb_gallery a.attachment_link:link,
+.message_text .thumb_gallery a.attachment_link:link,
+.post_preview_container .thumb_gallery a.attachment_link:visited,
+.message_text .thumb_gallery a.attachment_link:visited,
+.post_preview_container .thumb_gallery a.attachment_link:active,
+.message_text .thumb_gallery a.attachment_link:active,
+.post_preview_container .thumb_gallery a.attachment_link:hover,
+.message_text .thumb_gallery a.attachment_link:hover
+{
+  border: 1px solid gray;
+  float: left;
+  display: block;
+  width: 140px;
+  height: 140px;
+  padding: 0;
+  margin: 0px 10px 10px 0px;
+  color: transparent;
+  background: #eeeeee url(../images/video.png) no-repeat center center;
+  background-size: 80%;
+  box-sizing: border-box;
+}
+
+.post_preview_container .thumb_gallery .binary_attachment a:link,
+.message_text .thumb_gallery .binary_attachment a:link,
+.post_preview_container .thumb_gallery .binary_attachment a:visited,
+.message_text .thumb_gallery .binary_attachment a:visited,
+.post_preview_container .thumb_gallery .binary_attachment a:active,
+.message_text .thumb_gallery .binary_attachment a:active,
+.post_preview_container .thumb_gallery .binary_attachment a:hover,
+.message_text .thumb_gallery .binary_attachment a:hover
+{
+  border: 1px solid gray;
+  float: left;
+  display: block;
+  width: 140px;
+  height: 140px;
+  padding: 0;
+  margin: 0px 10px 10px 0px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  
+}
+
+.thumb_gallery .detailed_video,
+.message_table td .thumb_gallery .detailed_video
+{
+  display: none;
+  margin: 0;
 }
 
 .short_message,

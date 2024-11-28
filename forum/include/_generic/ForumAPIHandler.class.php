@@ -213,4 +213,10 @@ class ForumAPIHandler
       $this->api_manager->get_post($response_data["post"], $request_data);
     } // post_message
     //------------------------------------
+    function update_message(&$request_data, &$response_data)
+    {
+      $response_data["post"] = [];
+      $this->api_manager->update_message($response_data["post"], $request_data);
+    } // post_message
+    //------------------------------------
 } // ForumAPIHandler

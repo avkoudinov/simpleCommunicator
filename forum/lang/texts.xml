@@ -3578,6 +3578,13 @@
             <ua>Теми з ідентифікатором (%s) не існує!</ua>
         </text>
 
+        <text id="ErrPostDoesNotExist">
+            <en>Message with that ID (%s) does not exist!</en>
+            <de>Nachricht mit dieser ID (%s) existiert nicht!</de>
+            <ru>Сообщение с таким идентификатором (%s) не существует!</ru>
+            <ua>Повідомлення з ідентифікатором (%s) не існує!</ua>
+        </text>
+
         <text id="DeleteTopics">
             <en>Delete topics</en>
             <de>Themen löschen</de>
@@ -10396,6 +10403,13 @@
             <ua>Користувачі розблоковані в темі</ua>
         </text>
         
+        <text id="GeoStatistics">
+            <en>Geolocation statistics</en>
+            <de>Geolokalisierungsstatistik</de>
+            <ru>Статистика геолокации</ru>
+            <ua>Статистика геолокації</ua>
+        </text>
+
         <text id="Browsers">
             <en>Browsers</en>
             <de>Browsers</de>
@@ -10695,6 +10709,41 @@
             <de>Moderation der letzten Nachrichten</de>
             <ru>Модерация последних сообщений</ru>
             <ua>Модерація останніх повідомлень</ua>
+        </text>
+
+        <text id="Countries">
+            <en>Countries</en>
+            <de>Länder</de>
+            <ru>Страны</ru>
+            <ua>Країни</ua>
+        </text>
+
+        <text id="Cities">
+            <en>Cities</en>
+            <de>Städte</de>
+            <ru>Города</ru>
+            <ua>Города</ua>
+        </text>
+
+        <text id="Proxys">
+            <en>Proxys</en>
+            <de>Proxys</de>
+            <ru>Прокси</ru>
+            <ua>Проксі</ua>
+        </text>
+
+        <text id="IPTypes">
+            <en>IP types</en>
+            <de>IP-Typen</de>
+            <ru>Тип IP</ru>
+            <ua>Тип IP</ua>
+        </text>
+
+        <text id="Others">
+            <en>Others</en>
+            <de>Sonstige</de>
+            <ru>Прочие</ru>
+            <ua>Прочі</ua>
         </text>
 
     </texts>

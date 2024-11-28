@@ -1236,6 +1236,7 @@
   .forum_activity_image_wrapper
   {
     width: 770px;
+    margin-bottom: 20px;
   }
  
   .loading_placeholder
@@ -1968,6 +1969,27 @@
   {
     margin-right: 43px;
   }
+  
+  
+  .post_preview_container .thumb_gallery a.attachment_link:link,
+  .message_text .thumb_gallery a.attachment_link:link
+  {
+    border: 1px solid gray;
+    width: 200px;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .post_preview_container .thumb_gallery .binary_attachment a:link:link,
+  .message_text .thumb_gallery .binary_attachment a:link:link
+  {
+    border: 1px solid gray;
+    width: 200px;
+    height: 200px;
+  }
+
+  
   
   .post_image
   {

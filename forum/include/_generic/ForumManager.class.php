@@ -125,6 +125,7 @@ abstract class ForumManager
     
     //-----------------------------------------------------------------
     var $email_manager;
+    var $geoip_manager;
     var $attachment_manager;
     var $format_manager;
     var $job_manager;
@@ -148,6 +149,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function __construct()
     {
+        $this->geoip_manager = System::getClassInstance("GeoIPManager");
+
         $this->email_manager = System::getClassInstance("EmailManager");
         $this->email_manager->forum_manager = $this;
         
@@ -10040,6 +10043,165 @@ abstract class ForumManager
         
         return true;
     } // get_user_rating_info
+    
+    //-----------------------------------------------------------------
+    function get_geo_stat(&$country_stats, &$country_bot_stats, &$city_stats, &$proxy_stats, &$ip_type_stats)
+    {
+        start_action_time_measure();
+        
+        $rodbw = System::getRODBWorker();
+        if (!$rodbw) {
+            return false;
+        }
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+
+        $now = time();
+        
+        switch (reqvar("period")) {
+            case "last_month":
+                $start_date = xstrtotime("-1 month", $now);
+                break;
+            case "last_half_year":
+                $start_date = xstrtotime("-6 months", $now);
+                break;
+            case "last_year":
+                $start_date = xstrtotime("-1 year", $now);
+                break;
+            case "whole_period":
+                $start_date = 0;
+                break;
+            default:
+                $start_date = xstrtotime("-1 year", $now);
+                break;
+        }
+        
+        $start_date = $rodbw->format_datetime($start_date);
+        
+        $query = "select country, city, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' and country is not NULL and city is not NULL and bot is NULL and is_tor = 0 and is_proxy = 0
+                    group by country, city
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        $country_totals = [];
+        while ($rodbw->fetch_row()) {
+            if (empty($country_totals[$rodbw->field_by_name("country")])) {
+                $country_totals[$rodbw->field_by_name("country")] = 0;
+            }
+
+            if (empty($country_stats[$rodbw->field_by_name("country")])) {
+                $country_stats[$rodbw->field_by_name("country")] = 0;
+            }
+
+            $total += $rodbw->field_by_name("cnt");
+            $country_stats[$rodbw->field_by_name("country")] += $rodbw->field_by_name("cnt");
+
+            $country_totals[$rodbw->field_by_name("country")] += $rodbw->field_by_name("cnt");
+            $city_stats[$rodbw->field_by_name("country")][$rodbw->field_by_name("city")] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($city_stats as $country => $_country_city_stats) {
+            $country_stats[$country] = 100 * $country_stats[$country] / $total;
+
+            foreach ($_country_city_stats as $city => $val) {
+                $city_stats[$country][$city] = 100 * $val / $country_totals[$country];
+            }
+        }
+
+        $query = "select country, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' and country is not NULL and bot is not NULL
+                    group by country
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        while ($rodbw->fetch_row()) {
+            $total += $rodbw->field_by_name("cnt");
+            $country_bot_stats[$rodbw->field_by_name("country")] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($country_bot_stats as $country => $val) {
+            $country_bot_stats[$country] = 100 * $val / $total;
+        }
+
+        $query = "select is_tor, is_proxy, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' and bot is NULL
+                    group by is_tor, is_proxy
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        while ($rodbw->fetch_row()) {
+            $access_type = "Direct";
+            if ($rodbw->field_by_name("is_tor")) {
+                $access_type = "Tor";
+            } elseif ($rodbw->field_by_name("is_proxy")) {
+                $access_type = "Proxy";
+            }
+            
+            $total += $rodbw->field_by_name("cnt");
+            $proxy_stats[$access_type] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($proxy_stats as $access_type => $val) {
+            $proxy_stats[$access_type] = 100 * $val / $total;
+        }
+
+        $query = "select is_ipv6, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' 
+                    group by is_ipv6
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        while ($rodbw->fetch_row()) {
+            $ip_type = "IPv4";
+            if ($rodbw->field_by_name("is_ipv6")) {
+                $ip_type = "IPv6";
+            }
+            
+            $total += $rodbw->field_by_name("cnt");
+            $ip_type_stats[$ip_type] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($ip_type_stats as $ip_type => $val) {
+            $ip_type_stats[$ip_type] = 100 * $val / $total;
+        }
+
+        measure_action_time("get geo stat");
+        
+        return true;
+    }
     
     //-----------------------------------------------------------------
     function get_browser_stat(&$browser_stat, &$os_stat, &$bot_stat)
@@ -21984,8 +22146,6 @@ abstract class ForumManager
         }
         
         $is_adult_mod_action = "";
-        $is_adult_event_code = "";
-        $is_adult_email_template = "";
         if ($old_post_is_adult != $is_adult) {
             if ($old_post_is_adult == 0) {
                 $is_adult_mod_action = "convert_to_adult";
@@ -22113,17 +22273,18 @@ abstract class ForumManager
             }
         }
         
-        if ($subject_changed && empty($topic_publish_delay)) {
+        if ($subject_changed && empty($post_data["topic_private"]) && empty($topic_publish_delay)) {
             $mod_event["action"] = "change_topic";
             $mod_event["author_id"] = $post_data["topic_author_id"];
             $mod_event["author_name"] = $post_data["topic_author_name"];
+            $mod_event["read_marker"] = $READ_MARKER;
             $mod_event["comment"] = "MSG(PreviousName): " . $post_data["topic_name"]; // text("PreviousName")
             $mod_event["topic_name"] = $subject;
             $mod_event["topic_id"] = $tid;
             $mod_event["forum_name"] = $post_data["forum_name"];
             $mod_event["forum_id"] = $fid;
             
-            if (empty($post_data["topic_private"]) && !$this->log_moderator_event($dbw, $prfx, $mod_event)) {
+            if (!$this->log_moderator_event($dbw, $prfx, $mod_event)) {
                 $dbw->rollback_transaction();
                 return false;
             }
@@ -28195,6 +28356,7 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function track_hit($tid, $fid)
     {
+        global $settings;
         global $READ_MARKER;
         
         if (!empty($_SESSION["skip_next_hit"])) {
@@ -28490,6 +28652,8 @@ abstract class ForumManager
                 return false;
             }
         }
+        
+        $this->geoip_manager->check_ip($dbw, System::getIPAddress(), $bot);
 
         $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
           select '$dtnow', $uid, $fid, $bot_db

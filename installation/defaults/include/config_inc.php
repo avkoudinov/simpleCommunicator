@@ -132,6 +132,12 @@ define('YOUTUBE_API_KEY', '');
 define('VK_CLIENT_SECRET', '');
 define('VK_ACCESS_TOKEN', '');
 
+// GeoIP keys
+
+define('GETGEOAPI_API_LANGUAGE', 'ru');
+define('GETGEOAPI_API_KEYS', [
+]);
+
 // The email check key
 define('BLOCK_DISPOSABLE_EMAIL_KEY', '');
 
