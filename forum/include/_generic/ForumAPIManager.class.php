@@ -3780,8 +3780,6 @@ abstract class ForumAPIManager
         $plain_text = preg_replace("/[ \t]+/", " ", trim(strip_tags($html_message)));
         $plain_text = preg_replace("/[\n\r]+/", "\r\n", $plain_text);
         
-        $short_message = $message;
-        
         $content_changed = ($old_message != $message);
         
         $message = $dbw->quotes_or_null($message);
