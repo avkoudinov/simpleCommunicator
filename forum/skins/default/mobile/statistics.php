@@ -55,6 +55,62 @@ function load_browser_stats(load_browser_stat_button)
   return false;
 }
 
+var load_geo_stats_ajax = null;
+
+function load_geo_stats(load_browser_stat_button)
+{
+  if(load_browser_stat_button) load_browser_stat_button.classList.add("member_search_button_active");
+
+  if(!load_geo_stats_ajax)
+  {
+    load_geo_stats_ajax = new Forum.AJAX();
+
+    load_geo_stats_ajax.timeout = TIMEOUT;
+
+    load_geo_stats_ajax.beforestart = function() { break_check_new_messages(); };
+    load_geo_stats_ajax.aftercomplete = function(error) { 
+      activate_check_new_messages(); 
+      check_new_messages();
+    };
+
+    load_geo_stats_ajax.onload = function(text, xml)
+    {
+      if(text.trim() == '') 
+      {
+        if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+        return;
+      }
+
+      try
+      {
+        var elm = document.getElementById('geo_statistics');
+        if(elm) elm.innerHTML = text;
+      }
+      catch(err)
+      {
+      }
+
+      if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+    };
+
+    load_geo_stats_ajax.onerror = function(error, url, info)
+    {
+        if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+    };
+  } // init ajax
+
+  load_geo_stats_ajax.abort();
+  load_geo_stats_ajax.resetParams();
+
+  load_geo_stats_ajax.setPOST('hash', get_protection_hash());
+  load_geo_stats_ajax.setPOST('user_logged', user_logged);
+  load_geo_stats_ajax.setPOST('trace_sql', trace_sql);
+
+  load_geo_stats_ajax.request("ajax/load_geo_stats.php<?php echo($query_string); ?>");
+
+  return false;
+}
+
 function reload_statistics()
 {
   var form = document.getElementById("statistics_filter_form");
@@ -330,6 +386,19 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 <div class="forum_activity_image_wrapper">
 <img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_monthly_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
+
+
+<div id="geo_statistics">
+
+<h3 class="profile_caption"><?php echo_html(text("GeoStatistics")); ?></h2>
+
+<div class="browser_stat_wrapper">
+<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_geo_stats(this)">
+</div>
+
+</div>
+
+
 
 <div id="browser_statistics">
 

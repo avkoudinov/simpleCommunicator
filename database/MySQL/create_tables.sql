@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     03.11.2024 15:53:42                          */
+/* Created on:     28.11.2024 23:27:07                          */
 /*==============================================================*/
 
 
@@ -565,7 +565,6 @@ create table v1_forum_hits
    browser              varchar(250),
    os                   varchar(250),
    bot                  varchar(250),
-   processed            tinyint not null default 0,
    read_marker          varchar(255),
    statistics_request   int not null default 0,
    headers              text
@@ -609,14 +608,6 @@ create index v1_forum_hits_topic_idx on v1_forum_hits
 create index v1_forum_hits_ua_idx on v1_forum_hits
 (
    user_agent
-);
-
-/*==============================================================*/
-/* Index: v1_forum_hits_processed_idx                           */
-/*==============================================================*/
-create index v1_forum_hits_processed_idx on v1_forum_hits
-(
-   processed
 );
 
 /*==============================================================*/
@@ -1127,6 +1118,56 @@ create table v1_ip_blocked
 create unique index v1_ip_blocked_unq on v1_ip_blocked
 (
    ip
+);
+
+/*==============================================================*/
+/* Table: v1_ip_daily_statistics                                */
+/*==============================================================*/
+create table v1_ip_daily_statistics
+(
+   dt                   date not null,
+   ip                   varchar(250),
+   country_code         varchar(10),
+   country              varchar(250),
+   city                 varchar(250),
+   bot                  varchar(250),
+   is_tor               tinyint not null default 0,
+   is_proxy             tinyint not null default 0,
+   is_ipv6              tinyint not null default 0,
+   read_marker          varchar(255),
+   hits_count           int not null default 0
+);
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_dt_idx                         */
+/*==============================================================*/
+create index v1_ip_daily_statistics_dt_idx on v1_ip_daily_statistics
+(
+   dt
+);
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_ip_idx                         */
+/*==============================================================*/
+create index v1_ip_daily_statistics_ip_idx on v1_ip_daily_statistics
+(
+   ip
+);
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_country_idx                    */
+/*==============================================================*/
+create index v1_ip_daily_statistics_country_idx on v1_ip_daily_statistics
+(
+   country
+);
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_city_idx                       */
+/*==============================================================*/
+create index v1_ip_daily_statistics_city_idx on v1_ip_daily_statistics
+(
+   city
 );
 
 /*==============================================================*/

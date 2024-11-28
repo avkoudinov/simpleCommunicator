@@ -503,7 +503,6 @@ create table v1_forum_hits
    browser              varchar(250),
    os                   varchar(250),
    bot                  varchar(250),
-   processed            tinyint not null default 0,
    read_marker          varchar(255),
    statistics_request   int not null default 0,
    headers              text
@@ -542,13 +541,6 @@ $sql_cmds[] = '
 create index v1_forum_hits_ua_idx on v1_forum_hits
 (
    user_agent
-)
-';
-
-$sql_cmds[] = '
-create index v1_forum_hits_processed_idx on v1_forum_hits
-(
-   processed
 )
 ';
 
@@ -1001,6 +993,51 @@ $sql_cmds[] = '
 create unique index v1_ip_blocked_unq on v1_ip_blocked
 (
    ip
+)
+';
+
+$sql_cmds[] = '
+create table v1_ip_daily_statistics
+(
+   dt                   date not null,
+   ip                   varchar(250),
+   country_code         varchar(10),
+   country              varchar(250),
+   city                 varchar(250),
+   bot                  varchar(250),
+   is_tor               tinyint not null default 0,
+   is_proxy             tinyint not null default 0,
+   is_ipv6              tinyint not null default 0,
+   read_marker          varchar(255),
+   hits_count           int not null default 0
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_dt_idx on v1_ip_daily_statistics
+(
+   dt
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_ip_idx on v1_ip_daily_statistics
+(
+   ip
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_country_idx on v1_ip_daily_statistics
+(
+   country
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_city_idx on v1_ip_daily_statistics
+(
+   city
 )
 ';
 

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     03.11.2024 15:53:30                          */
+/* Created on:     28.11.2024 23:27:19                          */
 /*==============================================================*/
 
 
@@ -561,7 +561,6 @@ create table v1_forum_hits (
    browser              nvarchar(250)        null,
    os                   nvarchar(250)        null,
    bot                  nvarchar(250)        null,
-   processed            tinyint              not null default 0,
    read_marker          varchar(255)         null,
    statistics_request   int                  not null default 0,
    headers              text                 null
@@ -605,14 +604,6 @@ go
 /*==============================================================*/
 create index v1_forum_hits_ua_idx on v1_forum_hits (
 user_agent ASC
-)
-go
-
-/*==============================================================*/
-/* Index: v1_forum_hits_processed_idx                           */
-/*==============================================================*/
-create index v1_forum_hits_processed_idx on v1_forum_hits (
-processed ASC
 )
 go
 
@@ -1123,6 +1114,56 @@ go
 /*==============================================================*/
 create unique index v1_ip_blocked_unq on v1_ip_blocked (
 ip ASC
+)
+go
+
+/*==============================================================*/
+/* Table: v1_ip_daily_statistics                                */
+/*==============================================================*/
+create table v1_ip_daily_statistics (
+   dt                   date                 not null,
+   ip                   varchar(250)         null,
+   country_code         varchar(10)          null,
+   country              nvarchar(250)        null,
+   city                 nvarchar(250)        null,
+   bot                  nvarchar(250)        null,
+   is_tor               tinyint              not null default 0,
+   is_proxy             tinyint              not null default 0,
+   is_ipv6              tinyint              not null default 0,
+   read_marker          varchar(255)         null,
+   hits_count           int                  not null default 0
+)
+go
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_dt_idx                         */
+/*==============================================================*/
+create index v1_ip_daily_statistics_dt_idx on v1_ip_daily_statistics (
+dt ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_ip_idx                         */
+/*==============================================================*/
+create index v1_ip_daily_statistics_ip_idx on v1_ip_daily_statistics (
+ip ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_country_idx                    */
+/*==============================================================*/
+create index v1_ip_daily_statistics_country_idx on v1_ip_daily_statistics (
+country ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_city_idx                       */
+/*==============================================================*/
+create index v1_ip_daily_statistics_city_idx on v1_ip_daily_statistics (
+city ASC
 )
 go
 
