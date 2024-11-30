@@ -2469,6 +2469,17 @@
     left: -45px;
   }
   
+  .message_container_just_edited
+  {
+    margin-left: 50px;
+  }
+  
+  .message_container_just_edited .edit_indicator {
+    width: 40px;
+    height: 40px;
+    left: -45px;
+  }
+
   .message_table td .emb_wrapper,
   .message_table td .picture_wrapper,
   .message_table td .attachment_wrapper

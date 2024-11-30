@@ -1038,12 +1038,18 @@ function reload_post(post)
 
         if(post_node)
         {
+          post_node.classList.add("message_container_just_edited");
+
           // remove old possible transfer file
           var elm = document.getElementById('ajax_data');
           if(elm) elm.parentNode.removeChild(elm);
           
           post_node.innerHTML = text;
           
+          var edit_indicator = document.createElement("div");
+          edit_indicator.classList.add("edit_indicator");
+          post_node.prepend(edit_indicator);
+
           setTimeout(function () {
             init_citations();
             init_lightbox_images();
