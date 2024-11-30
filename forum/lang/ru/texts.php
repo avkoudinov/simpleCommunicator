@@ -43,6 +43,7 @@ $GLOBALS['DEF_TEXTS']['ru']['SearchPollsOnly'] = 'Искать только в �
 $GLOBALS['DEF_TEXTS']['ru']['SearchAttachmentsOnly'] = 'Сообщение содержит вложения';
 $GLOBALS['DEF_TEXTS']['ru']['SearchPicturesOnly'] = 'Сообщение содержит картинки';
 $GLOBALS['DEF_TEXTS']['ru']['SearchVideosOnly'] = 'Сообщение содержит видеоклипы';
+$GLOBALS['DEF_TEXTS']['ru']['SearchTelegramOnly'] = 'Сообщение содержит виджеты Telegram';
 $GLOBALS['DEF_TEXTS']['ru']['SearchAdultOnly'] = 'Сообщение содержит картинки или видео 18+';
 $GLOBALS['DEF_TEXTS']['ru']['MarkMessageAdult'] = 'Сообщение содержит картинки или видео 18+';
 $GLOBALS['DEF_TEXTS']['ru']['SearchAudioOnly'] = 'Сообщение содержит аудиоклипы';
@@ -1566,4 +1567,6 @@ $GLOBALS['DEF_TEXTS']['ru']['Cities'] = 'Города';
 $GLOBALS['DEF_TEXTS']['ru']['Proxys'] = 'Прокси';
 $GLOBALS['DEF_TEXTS']['ru']['IPTypes'] = 'Тип IP';
 $GLOBALS['DEF_TEXTS']['ru']['Others'] = 'Прочие';
+$GLOBALS['DEF_TEXTS']['ru']['ErrVideoError'] = 'Видео не существует или было удалено!';
+$GLOBALS['DEF_TEXTS']['ru']['ErrVideoInaccessible'] = 'Видео недоступно для встраивания или недоступно для вашей локации!';
 ?>

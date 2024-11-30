@@ -2682,10 +2682,11 @@ abstract class ForumAPIManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
             $dbw->rollback_transaction();
         }
@@ -2736,6 +2737,7 @@ abstract class ForumAPIManager
               searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
+              has_telegram = '$has_telegram',
               has_audio = '$has_audio',
               has_link = '$has_link',
               has_code = '$has_code'
@@ -3219,10 +3221,11 @@ abstract class ForumAPIManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             $dbw->rollback_transaction();
             return false;
         }
@@ -3242,6 +3245,7 @@ abstract class ForumAPIManager
                   has_attachment_ref = $has_attachment_ref,
                   has_picture = $has_picture, 
                   has_video = $has_video, 
+                  has_telegram = $has_telegram, 
                   has_audio = $has_audio, 
                   has_link = $has_link, 
                   has_code = $has_code 
@@ -3738,10 +3742,11 @@ abstract class ForumAPIManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
             $dbw->rollback_transaction();
         }
@@ -3864,6 +3869,7 @@ abstract class ForumAPIManager
               is_comment = '$is_comment',
               is_adult = '$is_adult',
               has_video = '$has_video',
+              has_telegram = '$has_telegram',
               has_audio = '$has_audio',
               has_link = '$has_link',
               has_code = '$has_code',

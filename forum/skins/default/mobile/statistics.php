@@ -387,6 +387,7 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 <img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_monthly_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
+<?php if (defined("GETGEOAPI_API_KEYS") && !empty(GETGEOAPI_API_KEYS) && empty($settings["hash_ip_addresses"])): ?>
 
 <div id="geo_statistics">
 
@@ -398,6 +399,7 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 
 </div>
 
+<?php endif; ?>
 
 
 <div id="browser_statistics">
