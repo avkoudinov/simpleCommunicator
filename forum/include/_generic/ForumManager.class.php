@@ -21504,10 +21504,11 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = "0";
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, "tmp")) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, "tmp")) {
             return false;
         }
         
@@ -22003,10 +22004,11 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $edited_post)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $edited_post)) {
             $dbw->rollback_transaction();
             return false;
         }
@@ -22024,6 +22026,7 @@ abstract class ForumManager
                   has_picture = $has_picture, 
                   has_video = $has_video, 
                   has_audio = $has_audio, 
+                  has_telegram = $has_telegram, 
                   has_link = $has_link, 
                   has_code = $has_code, 
                   is_comment = $is_comment, 
@@ -22103,6 +22106,7 @@ abstract class ForumManager
               has_picture = $has_picture,
               has_video = $has_video,
               has_audio = $has_audio,
+              has_telegram = $has_telegram, 
               has_link = $has_link,
               has_code = $has_code,
               self_edited = $self_edited,
@@ -23241,10 +23245,11 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $msg, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $msg, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             return false;
         }
         
@@ -23261,6 +23266,7 @@ abstract class ForumManager
               searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
+              has_telegram = '$has_telegram',
               has_audio = '$has_audio',
               has_link = '$has_link',
               has_code = '$has_code'
@@ -24097,11 +24103,12 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
         
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             $dbw->rollback_transaction();
             return false;
         }
@@ -24174,6 +24181,7 @@ abstract class ForumManager
               searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
+              has_telegram = '$has_telegram',
               has_audio = '$has_audio',
               has_link = '$has_link',
               has_code = '$has_code'
@@ -30641,6 +30649,9 @@ abstract class ForumManager
         if (!reqvar_empty("has_video")) {
             $hash .= "has_video=" . reqvar("has_video") . "&";
         }
+        if (!reqvar_empty("has_telegram")) {
+            $hash .= "has_telegram=" . reqvar("has_telegram") . "&";
+        }
         if (!reqvar_empty("thematic_only")) {
             $hash .= "thematic_only=" . reqvar("thematic_only") . "&";
         }
@@ -30991,6 +31002,14 @@ abstract class ForumManager
             $search_title .= text("SearchVideosOnly");
         }
         
+        if (!reqvar_empty("has_telegram")) {
+            if (!empty($search_title)) {
+                $search_title .= "; ";
+            }
+            
+            $search_title .= text("SearchTelegramOnly");
+        }
+
         if (!reqvar_empty("has_audio")) {
             if (!empty($search_title)) {
                 $search_title .= "; ";
@@ -39597,7 +39616,7 @@ abstract class ForumManager
             (reqvar("author_mode") == "last_posts" && !reqvar_empty("author")) ||
             (in_array(reqvar("author_mode"), array("author_likes", "author_liked", "author_dislikes", "author_disliked")) && !reqvar_empty("author")) ||
             (!reqvar_empty("author") && reqvar("stat") == "author_likes") || (!reqvar_empty("author") && reqvar("stat") == "author_liked") || (!reqvar_empty("author") && reqvar("stat") == "author_dislikes") || (!reqvar_empty("author") && reqvar("stat") == "author_disliked") ||
-            !reqvar_empty("has_attachment") || !reqvar_empty("has_picture") || !reqvar_empty("has_video") || !reqvar_empty("has_audio") || !reqvar_empty("has_adult") || !reqvar_empty("has_link") || !reqvar_empty("has_code") || !reqvar_empty("thematic_only") || !reqvar_empty("replies_to") ||
+            !reqvar_empty("has_attachment") || !reqvar_empty("has_picture") || !reqvar_empty("has_video") || !reqvar_empty("has_audio") || !reqvar_empty("has_telegram") || !reqvar_empty("has_adult") || !reqvar_empty("has_link") || !reqvar_empty("has_code") || !reqvar_empty("thematic_only") || !reqvar_empty("replies_to") ||
             !reqvar_empty("non_ignored_by_author") || !reqvar_empty("deleted_only") ||
             !reqvar_empty("rate_statistics") ||
             !empty($_REQUEST["tags"])
@@ -39698,6 +39717,13 @@ abstract class ForumManager
                 $hints["post"]["{$prfx}_post_creation_date_idx"] = "{$prfx}_post_creation_date_idx";
                 $hints["post"]["{$prfx}_post_has_audio_idx"] = "{$prfx}_post_has_audio_idx";
                 $post_part_where .= " and {$prfx}_post.has_audio = 1";
+                $other_post_conditions_exist = true;
+            }
+            //-------------------------------------------------------------------
+            if (!reqvar_empty("has_telegram")) {
+                $hints["post"]["{$prfx}_post_creation_date_idx"] = "{$prfx}_post_creation_date_idx";
+                $hints["post"]["{$prfx}_post_has_telegram_idx"] = "{$prfx}_post_has_telegram_idx";
+                $post_part_where .= " and {$prfx}_post.has_telegram = 1";
                 $other_post_conditions_exist = true;
             }
             //-------------------------------------------------------------------

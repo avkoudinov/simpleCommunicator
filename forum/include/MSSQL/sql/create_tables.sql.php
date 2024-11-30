@@ -1114,6 +1114,7 @@ create table v1_post (
    html_content         nvarchar(max)        null,
    searchable_content   nvarchar(max)        null,
    has_picture          tinyint              not null default 0,
+   has_telegram         tinyint              not null default 0,
    has_audio            tinyint              not null default 0,
    has_video            tinyint              not null default 0,
    has_link             tinyint              not null default 0,
@@ -1202,6 +1203,12 @@ pinned ASC
 $sql_cmds[] = '
 create index v1_post_user_marker_idx on v1_post (
 user_marker ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_post_has_telegram_idx on v1_post (
+has_telegram ASC
 )
 ';
 

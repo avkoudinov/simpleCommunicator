@@ -408,6 +408,7 @@ $forum_selector_id = 1;
 </div>
 
 
+<?php if (defined("GETGEOAPI_API_KEYS") && !empty(GETGEOAPI_API_KEYS) && empty($settings["hash_ip_addresses"])): ?>
 
 <div id="geo_statistics">
 
@@ -419,6 +420,7 @@ $forum_selector_id = 1;
 
 </div>
 
+<?php endif; ?>
 
 
 

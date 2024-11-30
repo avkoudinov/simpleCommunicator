@@ -316,6 +316,13 @@
             <ua>Повідомлення містить відеокліпи</ua>
         </text>
 
+        <text id="SearchTelegramOnly">
+            <en>Message has Telegram widgets</en>
+            <de>Die Nachricht hat Telegram-Widgets</de>
+            <ru>Сообщение содержит виджеты Telegram</ru>
+            <ua>Повідомлення містить віджети Telegram</ua>
+        </text>
+
         <text id="SearchAdultOnly">
             <en>Message has pictures or videos 18+</en>
             <de>Die Nachricht hat Bilder oder Videos 18+</de>
@@ -10744,6 +10751,20 @@
             <de>Sonstige</de>
             <ru>Прочие</ru>
             <ua>Прочі</ua>
+        </text>
+
+        <text id="ErrVideoError">
+            <en>The video does not exist or has been deleted!</en>
+            <de>Das Video existiert nicht oder wurde gelöscht!</de>
+            <ru>Видео не существует или было удалено!</ru>
+            <ua>Відео не існує або було видалено!</ua>
+        </text>
+
+        <text id="ErrVideoInaccessible">
+            <en>Video not available for embedding or not available for your location!</en>
+            <de>Das Video kann nicht eingebettet werden oder ist für Ihren Standort nicht verfügbar!</de>
+            <ru>Видео недоступно для встраивания или недоступно для вашей локации!</ru>
+            <ua>Відео недоступне для вбудовування або недоступне для вашої локації!</ua>
         </text>
 
     </texts>

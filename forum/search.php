@@ -77,6 +77,7 @@ $in_search = trim(reqvar("search_keys"), ":") != "" ||
     !reqvar_empty("has_picture") ||
     !reqvar_empty("has_video") ||
     !reqvar_empty("has_audio") ||
+    !reqvar_empty("has_telegram") ||
     !reqvar_empty("has_adult") ||
     !reqvar_empty("has_link") ||
     !reqvar_empty("has_code") ||

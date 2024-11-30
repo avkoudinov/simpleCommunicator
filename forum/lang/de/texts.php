@@ -43,6 +43,7 @@ $GLOBALS['DEF_TEXTS']['de']['SearchPollsOnly'] = 'Nur in Themen nur mit Umfragen
 $GLOBALS['DEF_TEXTS']['de']['SearchAttachmentsOnly'] = 'Die Nachricht hat Anhänge';
 $GLOBALS['DEF_TEXTS']['de']['SearchPicturesOnly'] = 'Die Nachricht hat Bildern';
 $GLOBALS['DEF_TEXTS']['de']['SearchVideosOnly'] = 'Die Nachricht hat Videos';
+$GLOBALS['DEF_TEXTS']['de']['SearchTelegramOnly'] = 'Die Nachricht hat Telegram-Widgets';
 $GLOBALS['DEF_TEXTS']['de']['SearchAdultOnly'] = 'Die Nachricht hat Bilder oder Videos 18+';
 $GLOBALS['DEF_TEXTS']['de']['MarkMessageAdult'] = 'Die Nachricht hat Bilder oder Videos 18+';
 $GLOBALS['DEF_TEXTS']['de']['SearchAudioOnly'] = 'Die Nachricht hat Audiodateien';
@@ -1559,4 +1560,6 @@ $GLOBALS['DEF_TEXTS']['de']['Cities'] = 'Städte';
 $GLOBALS['DEF_TEXTS']['de']['Proxys'] = 'Proxys';
 $GLOBALS['DEF_TEXTS']['de']['IPTypes'] = 'IP-Typen';
 $GLOBALS['DEF_TEXTS']['de']['Others'] = 'Sonstige';
+$GLOBALS['DEF_TEXTS']['de']['ErrVideoError'] = 'Das Video existiert nicht oder wurde gelöscht!';
+$GLOBALS['DEF_TEXTS']['de']['ErrVideoInaccessible'] = 'Das Video kann nicht eingebettet werden oder ist für Ihren Standort nicht verfügbar!';
 ?>

@@ -1614,10 +1614,10 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
         return $content;
     }
     
-    if (preg_match('/video(.*)$/i', $content, $matches)) {
+    if (preg_match('/\/video(.*)$/i', $content, $matches)) {
         $code = $matches[1];
     }
-    elseif (preg_match('/clip(.*)$/i', $content, $matches)) {
+    elseif (preg_match('/\/clip(.*)$/i', $content, $matches)) {
         $code = $matches[1];
     }
     elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/video(.*)$/i', $content, $matches)) {
@@ -1625,7 +1625,7 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
     }
     elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/clip(.*)$/i', $content, $matches)) {
         $code = $matches[2];
-    }
+    } 
     
     $bbcode_text = "[" . $name . "]" . $content . "[/" . $name . "]";
     
@@ -1634,13 +1634,13 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
 //------------------------------------------------------------------------------
 function check_vkvideo_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\/\/(m\\.)*vk\.com\/video(.*)(\\?.*)?$/i', $url, $matches)) {
+    if (preg_match('/https:\/\/(m\\.)*(vk\.com|vk\.ru|vkvideo\.ru)(.*\/)video(.*)(\\?.*)?$/i', $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: VK]\n\n";
             return true;
         }
         
-        $content = gen_vkvideo_html($matches[2], $url);
+        $content = gen_vkvideo_html($matches[4], $url);
         return true;
     }
     
@@ -2801,7 +2801,7 @@ function gen_vkvideo_html($code, $bbcode)
     $picture = "";
     $player = "";
     $has_error = false;
-    
+    $error_message = text("ErrVideoError");
     
     $style = "";
     
@@ -2845,6 +2845,7 @@ function gen_vkvideo_html($code, $bbcode)
             
             if (!empty($json["response"]["items"][0]["content_restricted"])) {
                 $has_error = true;
+                $error_message = text("ErrVideoInaccessible");
             }
             
             if (!empty($json["response"]["items"][0]["width"]) &&
@@ -2875,7 +2876,7 @@ function gen_vkvideo_html($code, $bbcode)
     if ($has_error) {
         $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
         $html .= "<div class='detailed_video'>";
-        $html .= "<img class='post_image' src='user_data/images/video_unaccessible.png' alt='" . escape_html($title) . "'>";
+        $html .= "<img class='post_image' src='user_data/images/video_unaccessible.png' title='" . escape_html($error_message) . "' alt='" . escape_html($error_message) . "'>";
         $html .= "</div>";
         $html .= "<a class='attachment_link' href='https://vk.com/video$code' target='_blank'>{{link}}</a>";
         $html .= "</div>";

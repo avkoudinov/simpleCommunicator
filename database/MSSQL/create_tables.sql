@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     28.11.2024 23:27:19                          */
+/* Created on:     30.11.2024 10:31:35                          */
 /*==============================================================*/
 
 
@@ -1427,6 +1427,7 @@ create table v1_post (
    html_content         nvarchar(max)        null,
    searchable_content   nvarchar(max)        null,
    has_picture          tinyint              not null default 0,
+   has_telegram         tinyint              not null default 0,
    has_audio            tinyint              not null default 0,
    has_video            tinyint              not null default 0,
    has_link             tinyint              not null default 0,
@@ -1537,6 +1538,14 @@ go
 /*==============================================================*/
 create index v1_post_user_marker_idx on v1_post (
 user_marker ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_post_has_telegram_idx                              */
+/*==============================================================*/
+create index v1_post_has_telegram_idx on v1_post (
+has_telegram ASC
 )
 go
 

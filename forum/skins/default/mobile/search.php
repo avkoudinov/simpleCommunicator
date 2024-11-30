@@ -1010,6 +1010,14 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
          </tr>
          <tr>
            <td>
+          <input type="checkbox" value="1" id="has_telegram" name="has_telegram" <?php echo_html(checked(reqvar("has_telegram"))); ?>> 
+           </td>
+           <td>
+          <label for="has_telegram"><?php echo_html(text("SearchTelegramOnly")); ?></label>
+           </td>
+         </tr>
+         <tr>
+           <td>
           <input type="checkbox" value="1" id="has_adult" name="has_adult" <?php echo_html(checked(reqvar("has_adult"))); ?>> 
            </td>
            <td>
