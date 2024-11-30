@@ -2316,6 +2316,24 @@ img.mourning_band
   background-size: 100%;
 }
 
+.message_container_just_edited
+{
+  margin-left: 120px;
+  position: relative;
+}
+
+.message_container_just_edited .edit_indicator {
+  width: 86px;
+  height: 86px;
+  position: absolute;
+  top: 0;
+  left: -100px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/edited.png);
+  background-size: 100%;
+}
+
 .message_table td .emb_wrapper,
 .message_table td .picture_wrapper,
 .message_table td .attachment_wrapper
