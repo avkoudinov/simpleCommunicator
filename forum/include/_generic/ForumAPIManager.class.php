@@ -2387,6 +2387,7 @@ abstract class ForumAPIManager
             $request_data["post_as_guest"] != $this->forum_manager->get_status_user_name()
         ) {
             $forced_guest_posting = true;
+            $_SESSION["guest_posting_mode"] = true;
         }    
         
         if ($this->forum_manager->is_master_admin()) {
@@ -2397,6 +2398,8 @@ abstract class ForumAPIManager
             $request_data["author"] = $this->forum_manager->get_user_name();
         } 
 
+        $_SESSION["last_posted_user"] = $request_data["author"];
+        
         $author = $dbw->quotes_or_null($request_data["author"]);
 
         $tor_check = $this->forum_manager->check_tor_ip($ip);
@@ -3886,8 +3889,6 @@ abstract class ForumAPIManager
         if (!$dbw->commit_transaction()) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
-
-        $this->forum_manager->track_hit($topic_id, $forum_id);
 
         $this->forum_manager->track_readmarker_activity();
 
