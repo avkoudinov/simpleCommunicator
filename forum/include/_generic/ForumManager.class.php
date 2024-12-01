@@ -6457,6 +6457,11 @@ abstract class ForumManager
         $_SESSION["guest_posting_mode"] = get_cookie("q_guest_posting_mode");
         if (!empty($_SESSION["guest_posting_mode"])) {
             $_SESSION["last_posted_user"] = get_cookie("q_last_guest_name");
+
+            if (!$dbw->execute_query("update {$prfx}_user set logout = 1 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
         }
         
         $block_reason = "";
@@ -28420,8 +28425,8 @@ abstract class ForumManager
             !empty($_SESSION["guest_posting_mode"]) && $this->get_last_posted_user_name() != $this->get_user_name()
         ) {
            $forced_guest_posting = true;
-        }        
-        
+        }  
+
         $uid = $dbw->escape($this->get_user_id());
         $guest_name = $this->get_user_name();
         
