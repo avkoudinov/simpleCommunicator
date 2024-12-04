@@ -2608,7 +2608,7 @@ abstract class ForumAPIManager
                 throw $ex;
             }
         } // new topic
-
+        
         $query = "insert into {$prfx}_post (topic_id, user_id, author, creation_date, read_marker, user_marker, ip, pinned, is_comment, is_adult, self_edited, user_agent, bb_parser_version)
               values ($tid, $uid, $author, '$now', '$rm', $user_marker, '$ip', $is_pinned, $is_comment, $is_adult, 1, $agent, $BB_PARSER_VERSION)";
         if (!$dbw->execute_query($query)) {
@@ -3378,6 +3378,8 @@ abstract class ForumAPIManager
 
         $_REQUEST["posts"] = $request_data["posts"];
 
+        $_SESSION["guest_posting_mode"] = true;
+        
         if(!$this->forum_manager->delete_restore_posts("delete_post"))
         {
             throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
@@ -3395,6 +3397,8 @@ abstract class ForumAPIManager
         }
 
         $_REQUEST["posts"] = $request_data["posts"];
+
+        $_SESSION["guest_posting_mode"] = true;
 
         if(!$this->forum_manager->delete_restore_posts("restore_post"))
         {

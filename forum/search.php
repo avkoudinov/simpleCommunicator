@@ -112,7 +112,7 @@ if (!reqvar_empty("quick_search") && trim($search_keys, ":") == "") {
     $do_search = false;
 }
 
-if (reqvar("author_mode") == "last_posts" || !reqvar_empty("rate_statistics"))
+if (reqvar("author_mode") == "last_posts" || reqvar("author_mode") == "last_replies" || !reqvar_empty("rate_statistics"))
 {
     $sort = "desc";
 } elseif (reqvar_empty("post_sort")) {
@@ -184,7 +184,7 @@ do {
         
         // this part comes only when the search was successful
         
-        if (!reqvar_empty("post_sort") && reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")) {
+        if (!reqvar_empty("post_sort") && reqvar("author_mode") != "last_posts" && reqvar("author_mode") != "last_replies" && reqvar_empty("rate_statistics")) {
             $search_params .= "&post_sort=" . urlencode(reqvar("post_sort"));
         }
         
@@ -201,6 +201,15 @@ do {
             exit;
         }
         
+        // the user wants last replies
+        if (reqvar("author_mode") == "last_replies") {
+            // we are in non-blocking readonly modus
+            save_session();
+            start_redirection_time_measure();
+            header("Location: search_topic.php?" . $search_params);
+            exit;
+        }
+
         // the user wants to combine all found posts in one virtual topic, redirect him to the topic view
         if (!reqvar_empty("post_list")) {
             // we are in non-blocking readonly modus

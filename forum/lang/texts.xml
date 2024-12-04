@@ -3122,7 +3122,7 @@
             <ru>Последние сообщения автора</ru>
             <ua>Останні повідомлення автора</ua>
         </text>
-        
+
         <text id="AuthorLastTopics">
             <en>Last topics of the autor</en>
             <de>Letzte Themen des Autors</de>
@@ -3137,6 +3137,13 @@
             <ua>Шукати останні повідомлення автора</ua>
         </text>
         
+        <text id="SearchAuthorLastReplies">
+            <en>Search last replies to the autor</en>
+            <de>Nach letzten Antworten an den Autor suchen</de>
+            <ru>Искать последние ответы автору</ru>
+            <ua>Шукати останні відповіді автору</ua>
+        </text>
+
         <text id="SearchAuthorLastTopics">
             <en>Search last topics of the autor</en>
             <de>Letzte Themen des Autors suchen</de>
@@ -9797,6 +9804,13 @@
             <de>Mathematische Formel</de>
             <ru>Математическая формула</ru>
             <ua>Математична формула</ua>
+        </text>
+
+        <text id="Widget">
+            <en>Widget</en>
+            <de>Widget</de>
+            <ru>Виджет</ru>
+            <ua>Віджет</ua>
         </text>
 
         <text id="Video">

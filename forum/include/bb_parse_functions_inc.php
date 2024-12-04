@@ -63,7 +63,7 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             break;
         
         case "telegram":
-            return "{$nl}[{{video}}: Telegram]{$nl2}";
+            return "{$nl}[{{widget}}: Telegram]{$nl2}";
             break;
         
         case "fbvideo":
@@ -792,6 +792,8 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
     
     $class_appendix = "";
     
+    $author_hash = md5($author);
+    
     if (!$is_simple_citation) {
         $rm = $fmanager->get_post_readmarker($citated);
         if (!empty($rm)) {
@@ -807,7 +809,7 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
             $class_appendix .= "{{user_ignored:$uid}} user_citation";
         }
         
-        $class_appendix .= " author_" . md5($author);
+        $class_appendix .= " author_" . $author_hash;
     }
     
     if (empty($author)) {
@@ -820,11 +822,13 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
     $is_adult = 0;
     $citated_txt = "";
     $citated_mid_appendix = "";
+    $fid = "";
+    $tid = "";
     if (!empty($citated)) {
         $citated_mid_appendix = ' data-cmid="' . $citated . '"';
         $citated_txt = "<div class='qcitated'>[cmid=" . $citated . "]</div>";
         
-        $date = $fmanager->get_post_date($citated, $is_adult);
+        $date = $fmanager->get_post_date($citated, $is_adult, $fid, $tid);
     } else {
         $class_appendix = "";
     }
@@ -839,6 +843,18 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
     $adult_class = "";
     if ($is_adult) {
         $adult_class = "adult_post";
+    }
+    
+    if (empty($content)) {
+        if (empty($author) && empty($citated)) {
+           return "";
+        } elseif (!empty($author) && !empty($citated)) {
+           return "<strong>{$author}#{$citated}</strong><br><br>\n\n";
+        } elseif (!empty($author)) {
+           return "<strong>{$author2}</strong><br><br>\n\n";
+        } else {
+           return "";
+        }
     }
     
     return "\n\n" . '<div class="quote_wrapper ' . $class_appendix . '" data-author="' . $author . '"' . $citated_mid_appendix . '><div class="quote_header"><div class="qauthor">' . $author2 . $citation_expander . $date2 . '</div><div class="qauthor_ignored">[{{ignored}}]</div>' . $citated_txt . '<div class="clear_both"></div></div><div class="quote ' . $adult_class . '" data-author="' . $author . '"' . $citated_mid_appendix . '>' . $content . '</div></div>' . "\n\n";
@@ -1724,7 +1740,7 @@ function check_telegram_url($url, &$content, $message_mode)
         }
         
         if ($message_mode != "message") {
-            $content = "\n[{{video}}: Telegram]\n\n";
+            $content = "\n[{{widget}}: Telegram]\n\n";
             return true;
         }
         
