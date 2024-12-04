@@ -5190,6 +5190,12 @@ img.image_placeholder
   display: none;
 }
 
+.thumb_gallery audio,
+.message_table td .thumb_gallery audio
+{
+  display: none;
+}
+
 .post_preview_container .thumb_gallery .attachment_link,
 .message_text .thumb_gallery .attachment_link
 {

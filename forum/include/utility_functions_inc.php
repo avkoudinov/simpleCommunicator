@@ -1722,6 +1722,7 @@ function postprocess_message(&$content, $lang = "", $html = true, $for_email = f
     $replacements["/{{animation}}/msi"] = text("Animation", $lang);
     $replacements["/{{table}}/msi"] = text("Table", $lang);
     $replacements["/{{video}}/msi"] = text("Video", $lang);
+    $replacements["/{{widget}}/msi"] = text("Widget", $lang);
     $replacements["/{{spoiler}}/msi"] = text("Spoiler", $lang);
     $replacements["/{{gallery}}/msi"] = text("Gallery", $lang);
     $replacements["/{{formula}}/msi"] = text("MathFormula", $lang);

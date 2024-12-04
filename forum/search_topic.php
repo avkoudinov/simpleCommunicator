@@ -283,7 +283,7 @@ if (!reqvar_empty("download") && $fmanager->is_logged_in()) {
     $pagination_info["page"] = reqvar("tpage");
 }
 
-if (reqvar("author_mode") == "last_posts" || !reqvar_empty("rate_statistics"))
+if (reqvar("author_mode") == "last_posts" || reqvar("author_mode") == "last_replies" || !reqvar_empty("rate_statistics"))
 {
     $sort = "desc";
 } elseif (reqvar("post_sort") == "desc") {
@@ -541,7 +541,7 @@ if (!reqvar_empty("news_digest")) { // News digest
     }
     
     $final_url = "search_topic.php?" . $search_params;
-    if (!reqvar_empty("post_sort") && reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")) {
+    if (!reqvar_empty("post_sort") && reqvar("author_mode") != "last_posts" && reqvar("author_mode") != "last_replies" && reqvar_empty("rate_statistics")) {
         $final_url .= "&post_sort=" . urlencode(reqvar("post_sort"));
     }
     if ($pagination_info["mode"] == "all") {

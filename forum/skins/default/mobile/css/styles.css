@@ -4680,9 +4680,6 @@ img.image_placeholder
   display: none;  
 }
 
-
-
-
 .thumb_gallery .short_video,
 .message_table td .thumb_gallery .short_video
 {
@@ -4691,6 +4688,12 @@ img.image_placeholder
 
 .thumb_gallery video,
 .message_table td .thumb_gallery video
+{
+  display: none;
+}
+
+.thumb_gallery audio,
+.message_table td .thumb_gallery audio
 {
   display: none;
 }
