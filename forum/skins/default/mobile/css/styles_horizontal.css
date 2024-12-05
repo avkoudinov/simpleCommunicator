@@ -1236,6 +1236,7 @@
   .forum_activity_image_wrapper
   {
     width: 770px;
+    margin-bottom: 20px;
   }
  
   .loading_placeholder
@@ -1249,12 +1250,6 @@
   {
     width: 770px;
     margin-bottom: 14px;
-  }
-
-  .revolver_map_warning
-  {
-    padding: 20px 40px 0px 40px;
-    font-size: 18px;
   }
 
   .topic_statistic_table td:first-child
@@ -1975,6 +1970,27 @@
     margin-right: 43px;
   }
   
+  
+  .post_preview_container .thumb_gallery a.attachment_link:link,
+  .message_text .thumb_gallery a.attachment_link:link
+  {
+    border: 1px solid gray;
+    width: 200px;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .post_preview_container .thumb_gallery .binary_attachment a:link:link,
+  .message_text .thumb_gallery .binary_attachment a:link:link
+  {
+    border: 1px solid gray;
+    width: 200px;
+    height: 200px;
+  }
+
+  
+  
   .post_image
   {
     min-width: 60px;
@@ -2453,6 +2469,17 @@
     left: -45px;
   }
   
+  .message_container_just_edited
+  {
+    margin-left: 50px;
+  }
+  
+  .message_container_just_edited .edit_indicator {
+    width: 40px;
+    height: 40px;
+    left: -45px;
+  }
+
   .message_table td .emb_wrapper,
   .message_table td .picture_wrapper,
   .message_table td .attachment_wrapper

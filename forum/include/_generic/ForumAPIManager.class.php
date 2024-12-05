@@ -899,9 +899,6 @@ abstract class ForumAPIManager
         
         $where .= $user_delayed_topic_appendix;
         
-        debug_message($this->get_query_topic_list($prfx, $where, $limit, $sort));
-        
-        
         if (!$rodbw->execute_query($this->get_query_topic_list($prfx, $where, $limit, $sort))) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
@@ -1698,19 +1695,89 @@ abstract class ForumAPIManager
             return true;
         }
         
-        $limit = 0;
-        $time_to_next = 0;
+        $this->check_topic_limit($dbw, $fid);
         
-        if (!$this->check_topic_limit($fid, $limit, $time_to_next)) {
-            return false;
+        return true;
+    } // check_message_limit
+
+    //------------------------------------------------------
+    function check_topic_limit($dbw, $fid)
+    {
+        global $settings;
+        global $READ_MARKER;
+        
+        if (empty($settings["max_topics_day"])) {
+            return true;
         }
         
-        if ($time_to_next > 0) {
+        $limit = $settings["max_topics_day"];
+        $time_to_next = 0;
+        
+        if ($this->forum_manager->is_admin() || $this->forum_manager->is_forum_moderator($fid) || $this->forum_manager->is_privileged()) {
+            return true;
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+        
+        $fid = $dbw->escape($fid);
+        $uid = $this->forum_manager->get_user_id();
+        
+        $first_topic_date = time() - 24 * 3600;
+        $now = $dbw->format_datetime($first_topic_date);
+        
+        if (empty($uid)) {
+            // we use readmarker because it is a cookie and remains longer
+            $rm = $dbw->escape($READ_MARKER);
+            $query = "select count(*) cnt, min(creation_date) first_topic_date
+                from {$prfx}_topic
+                where read_marker = '$rm' and creation_date >= '$now' and publish_delay <> 1 and is_private < 1";
+        } elseif ($this->forum_manager->get_private_forum_id() == $fid) {
+            // we count topics for the private messages separately
+            $uid = $dbw->escape($uid);
+            $receiver_id = $dbw->escape(reqvar("receiver"));
+            if (empty($receiver_id) || !is_numeric($receiver_id)) {
+                $receiver_id = 0;
+            }
+            $query = "select count(*) cnt, min(creation_date) first_topic_date
+                from {$prfx}_topic
+                inner join {$prfx}_private_topics on ({$prfx}_topic.id = {$prfx}_private_topics.topic_id and participant_id = $receiver_id)
+                where
+                user_id = $uid and
+                creation_date >= '$now' and
+                publish_delay <> 1 and
+                is_private > 0";
+        } else {
+            // we do not count topics for the private messages and moderated forums
+            $uid = $dbw->escape($uid);
+            $query = "select count(*) cnt, min(creation_date) first_topic_date
+                from {$prfx}_topic where
+                user_id = $uid and
+                creation_date >= '$now' and
+                publish_delay <> 1 and
+                is_private < 1 and
+                not exists (select 1 from {$prfx}_forum_moderator where user_id = $uid and {$prfx}_forum_moderator.forum_id = {$prfx}_topic.forum_id)";
+        }
+        
+        if (!$dbw->execute_query($query)) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $cnt = 0;
+        if ($dbw->fetch_row()) {
+            $cnt = $dbw->field_by_name("cnt");
+            $first_topic_date = xstrtotime($dbw->field_by_name("first_topic_date"));
+        }
+        
+        $dbw->free_result();
+        
+        if ($cnt >= $settings["max_topics_day"]) {
+            $time_to_next = $first_topic_date - (time() - 24 * 3600);
+
             throw new ForumAPIException(sprintf(text("ErrTopicLimitExceeded"), $limit, format_duration($time_to_next)), ForumAPIException::ERR_CODE_ACCESS_ERROR);
         }
         
         return true;
-    } // check_message_limit
+    } // check_topic_limit
 
     //-----------------------------------------------------------------
     function check_blocked($dbw, $fid, $forced_guest_posting, $user_marker)
@@ -2320,6 +2387,7 @@ abstract class ForumAPIManager
             $request_data["post_as_guest"] != $this->forum_manager->get_status_user_name()
         ) {
             $forced_guest_posting = true;
+            $_SESSION["guest_posting_mode"] = true;
         }    
         
         if ($this->forum_manager->is_master_admin()) {
@@ -2330,6 +2398,8 @@ abstract class ForumAPIManager
             $request_data["author"] = $this->forum_manager->get_user_name();
         } 
 
+        $_SESSION["last_posted_user"] = $request_data["author"];
+        
         $author = $dbw->quotes_or_null($request_data["author"]);
 
         $tor_check = $this->forum_manager->check_tor_ip($ip);
@@ -2538,7 +2608,7 @@ abstract class ForumAPIManager
                 throw $ex;
             }
         } // new topic
-
+        
         $query = "insert into {$prfx}_post (topic_id, user_id, author, creation_date, read_marker, user_marker, ip, pinned, is_comment, is_adult, self_edited, user_agent, bb_parser_version)
               values ($tid, $uid, $author, '$now', '$rm', $user_marker, '$ip', $is_pinned, $is_comment, $is_adult, 1, $agent, $BB_PARSER_VERSION)";
         if (!$dbw->execute_query($query)) {
@@ -2615,10 +2685,11 @@ abstract class ForumAPIManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
             $dbw->rollback_transaction();
         }
@@ -2669,6 +2740,7 @@ abstract class ForumAPIManager
               searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
+              has_telegram = '$has_telegram',
               has_audio = '$has_audio',
               has_link = '$has_link',
               has_code = '$has_code'
@@ -3003,6 +3075,22 @@ abstract class ForumAPIManager
 
         $post_id = $dbw->escape($request_data["post_id"]);
         
+        if (!$rodbw->execute_query("select topic_id from {$prfx}_post where id = $post_id")) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $topic_id = 0;
+        
+        if ($rodbw->fetch_row()) {
+            $topic_id = $rodbw->field_by_name("topic_id");
+        }
+        
+        $rodbw->free_result();
+        
+        if (empty($topic_id)) {
+            throw new ForumAPIException(sprintf(text("ErrPostDoesNotExist"), $request_data["post_id"]), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
         $has_attachment = 0;
         
         if (!$dbw->execute_query("select user_id, read_marker, has_attachment, text_content from {$prfx}_post where id = $post_id")) {
@@ -3136,10 +3224,11 @@ abstract class ForumAPIManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             $dbw->rollback_transaction();
             return false;
         }
@@ -3159,6 +3248,7 @@ abstract class ForumAPIManager
                   has_attachment_ref = $has_attachment_ref,
                   has_picture = $has_picture, 
                   has_video = $has_video, 
+                  has_telegram = $has_telegram, 
                   has_audio = $has_audio, 
                   has_link = $has_link, 
                   has_code = $has_code 
@@ -3288,6 +3378,8 @@ abstract class ForumAPIManager
 
         $_REQUEST["posts"] = $request_data["posts"];
 
+        $_SESSION["guest_posting_mode"] = true;
+        
         if(!$this->forum_manager->delete_restore_posts("delete_post"))
         {
             throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
@@ -3305,6 +3397,8 @@ abstract class ForumAPIManager
         }
 
         $_REQUEST["posts"] = $request_data["posts"];
+
+        $_SESSION["guest_posting_mode"] = true;
 
         if(!$this->forum_manager->delete_restore_posts("restore_post"))
         {
@@ -3342,6 +3436,10 @@ abstract class ForumAPIManager
         
         $rodbw->free_result();
 
+        if (empty($topic_id)) {
+            throw new ForumAPIException(sprintf(text("ErrPostDoesNotExist"), $request_data["post_id"]), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
         $this->check_access_to_topic($rodbw, $topic_id);
 
         $uid = $rodbw->escape($this->forum_manager->get_user_id());
@@ -3377,4 +3475,453 @@ abstract class ForumAPIManager
             unset($post["moderatable"]);
         }        
     }   
+
+     //-----------------------------------------------------------------
+     function update_message(&$post, &$request_data)
+     {
+        global $settings;
+        global $READ_MARKER;
+        global $BB_PARSER_VERSION;
+        
+        $_SESSION["api_posting"] = 1;
+        
+        if (empty($BB_PARSER_VERSION)) {
+            $BB_PARSER_VERSION = 1;
+        }
+        
+        if (empty($request_data["post_id"])) {
+            throw new ForumAPIException(text("ErrNoPostSelected"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            throw new ForumAPIException(text("ErrDbInaccessible"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $prfx = $dbw->escape(System::getDBPrefix());
+
+        $post_id = $dbw->escape($request_data["post_id"]);
+
+        if (!$dbw->execute_query("select topic_id, profiled_topic, {$prfx}_post.user_id, {$prfx}_post.author, html_content, last_updated, last_updated_by, 
+                                  {$prfx}_topic.name, {$prfx}_post.read_marker, {$prfx}_post.creation_date, post_user.user_name,
+                                  forum_id, {$prfx}_forum.name forum_name, is_comment, is_adult, is_private, 
+                                  topic_user.user_name topic_user_name, 
+                                  {$prfx}_topic.user_id topic_user_id,
+                                  {$prfx}_topic.creation_date topic_creation_date, 
+                                  {$prfx}_topic.author topic_author,
+                                  {$prfx}_topic.read_marker topic_read_marker
+                                  from {$prfx}_post 
+                                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                                  left join {$prfx}_user post_user on ({$prfx}_post.user_id = post_user.id)
+                                  left join {$prfx}_user topic_user on ({$prfx}_topic.user_id = topic_user.id)
+                                  where {$prfx}_post.id = $post_id")) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $old_message = "";
+        $forum_id = 0;
+        $forum_name = "";
+        $topic_id = 0;
+        $topic_private = 0;
+        $profiled_topic = 0;
+        $old_post_is_comment = 0;
+        $old_post_is_adult = 0;
+        $last_updated = 0;
+        $last_updated_by = "";
+        $post_user_id = "";
+        $post_read_marker = "";
+        $old_topic_name = "";
+        $post_author = "";
+        
+        $topic_author_id = 0;
+        $topic_author = "";
+        $topic_author_read_marker = "";
+        $is_first = false;
+        
+        if ($dbw->fetch_row()) {
+            $topic_id = $dbw->field_by_name("topic_id");
+            $topic_private = $dbw->field_by_name("is_private");
+            $forum_id = $dbw->field_by_name("forum_id");
+            $forum_name = $dbw->field_by_name("is_private") ? text("PrivateTopics") : $dbw->field_by_name("forum_name");
+            $profiled_topic = $dbw->field_by_name("profiled_topic");
+            $post_user_id = $dbw->field_by_name("user_id");
+            $old_message = $dbw->field_by_name("html_content");
+            $old_topic_name = $dbw->field_by_name("name");
+            $post_read_marker = $dbw->field_by_name("read_marker");
+            $post_author = $dbw->field_by_name("author");
+            $old_post_is_comment = $dbw->field_by_name("is_comment");
+            $old_post_is_adult = $dbw->field_by_name("is_adult");
+
+            $topic_author_id = $dbw->field_by_name("topic_user_id");
+            $topic_author = $dbw->field_by_name("topic_author");
+            $topic_author_read_marker = $dbw->field_by_name("topic_read_marker");
+            
+            $is_first = (xstrtotime($dbw->field_by_name("creation_date")) == xstrtotime($dbw->field_by_name("topic_creation_date")));
+
+            if ($dbw->field_by_name("last_updated")) {
+                $last_updated = xstrtotime($dbw->field_by_name("last_updated"));
+                $last_updated_by = $dbw->field_by_name("last_updated_by");
+            } else {
+                $last_updated = xstrtotime($dbw->field_by_name("creation_date"));
+                $last_updated_by = $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author");
+            }
+        }
+        
+        $dbw->free_result();
+        
+        if (empty($topic_id)) {
+            throw new ForumAPIException(sprintf(text("ErrPostDoesNotExist"), $request_data["post_id"]), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
+        $this->check_access_to_topic($dbw, $topic_id);
+
+        if ($post_user_id && $post_user_id != $this->forum_manager->get_user_id()) {
+            $dbw->free_result();
+            throw new ForumAPIException("You are not the author of this message ($request_data[post_id])!", ForumAPIException::ERR_CODE_ACCESS_ERROR);
+        }
+        
+        if (!$post_user_id && $post_read_marker != $READ_MARKER) {
+            $dbw->free_result();
+            throw new ForumAPIException("You are not the author of this message ($request_data[post_id])!", ForumAPIException::ERR_CODE_ACCESS_ERROR);
+        }
+
+        if (!$post_user_id) {
+            $_SESSION["guest_posting_mode"] = true;
+        }
+        
+        if (!$this->forum_manager->may_edit_message($request_data["post_id"])) {
+            throw new ForumAPIException(text("ErrEditTimeExpired"), ForumAPIException::ERR_CODE_ACCESS_ERROR);
+        }
+
+        $has_attachments = false;
+
+        if (!empty($request_data["attachments"])) {
+            if (count($request_data["attachments"]) > $this->forum_manager->get_attachments_per_post()) {
+                throw new ForumAPIException(sprintf(text("MaxAttachmentCount"), $this->forum_manager->get_attachments_per_post()), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
+            }
+          
+            $counter = 1;
+            foreach ($request_data["attachments"] as $attachment_data) {
+                if (empty($attachment_data["file_name"])) {
+                    throw new ForumAPIException("Name of the attachment (file_name) is not specified!", ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+                }
+
+                if (empty($attachment_data["mime_type"])) {
+                    throw new ForumAPIException("Mime type of the attachment (mime_type) is not specified!", ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+                }
+
+                if (empty($attachment_data["base64_contents"])) {
+                    throw new ForumAPIException("Contents of the attachment (base64_contents) is not specified!", ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+                }
+
+                $idx = ($counter == 1) ? "" : $counter;
+                $counter++;
+                
+                $attachment_base_name = session_id();
+                if (!empty($idx)) {
+                    $attachment_base_name .= "-" . $idx;
+                }
+                
+                $pi = pathinfo($attachment_data["file_name"]);
+                $attachment_extension = val_or_empty($pi['extension']);
+                
+                $attachment_name = $attachment_base_name;
+                if (!empty($attachment_extension)) {
+                    $attachment_name .= "." . strtolower($attachment_extension);
+                }
+
+                if (!file_put_contents(APPLICATION_ROOT . "tmp/" . $attachment_name, base64_decode($attachment_data["base64_contents"]))) {
+                    throw new ForumAPIException(sprintf(text("ErrFileUpload"), $attachment_data["file_name"]), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+                }
+
+                $_FILES["attachment$idx"]["type"] = $attachment_data["mime_type"];
+                $_FILES["attachment$idx"]["name"] = $attachment_data["file_name"];
+                $_FILES["attachment$idx"]["size"] = filesize(APPLICATION_ROOT . "tmp/" . $attachment_name);
+                $_FILES["attachment$idx"]["tmp_name"] = APPLICATION_ROOT . "tmp/" . $attachment_name;
+            }
+          
+            if (!$this->attachment_manager->handle_attachments()) {
+                throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+            }
+
+            $has_attachments = true;
+        }
+        
+        $subject = "";
+        if (!empty($request_data["subject"]) || (string)$request_data["subject"] === "0") {
+            $subject = trim($this->forum_manager->strip_subject($request_data["subject"]));
+
+            $symbols = "";
+            if (!$this->forum_manager->check_subject($request_data["subject"], $symbols)) {
+                $error = text("ErrStringContainsInvalidSymbols");
+                if (!empty($symbols)) $error .= "\n\n[" . $symbols . "]";
+                
+                throw new ForumAPIException($error, ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
+            }
+            
+            if (utf8_strlen($request_data["subject"]) > $settings["max_topic_name_symbols"]) {
+                throw new ForumAPIException(sprintf(text("ErrSubjectTooLong"), $settings["max_topic_name_symbols"]), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
+            }
+        }
+
+        $request_data["message"] = trim($request_data["message"] ?? "");
+
+        if (empty($request_data["message"]) && !$has_attachments) {
+            throw new ForumAPIException(text("ErrMessageEmpty"), ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+        }
+
+        $uid = $dbw->escape($this->forum_manager->get_user_id());
+        if (empty($uid)) {
+            $uid = "NULL";
+        }
+        
+        $now = $dbw->format_datetime(time());
+        
+        $rm = $dbw->escape($READ_MARKER);
+        
+        $user_marker = $dbw->quotes_or_null($request_data["api_token"]);
+        
+        if (!$dbw->start_transaction()) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $query = "delete from {$prfx}_attachment where post_id = $post_id";
+        if (!$dbw->execute_query($query)) {
+            $dbw->rollback_transaction();
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+
+        $message = $request_data["message"];
+        
+        $has_attachment = 0;
+        
+        // finalize attachments
+        
+        $message = preg_replace("/\\[attachment1\\]/", "[attachment=$post_id]", $message);
+        
+        $attachments_per_post = $this->forum_manager->get_attachments_per_post();
+        for ($i = 1; $i <= $attachments_per_post; $i++) {
+            $idx = ($i == 1) ? "" : $i;
+            
+            if (empty($_SESSION["last_attachment$idx"])) {
+                continue;
+            }
+            
+            $attachment_type = "";
+            $attachment_name = "";
+            $attachment_origin_name = "";
+            if ($this->attachment_manager->finalize_attachment($post_id, $attachment_name, $attachment_origin_name, $attachment_type, $idx)) {
+                if (stripos($message, "[attachment$idx]") === false && stripos($message, "[attachment$idx=$post_id]") === false) {
+                    $message .= "\n\n[attachment$idx]";
+                }
+                
+                $message = str_ireplace("[attachment$idx]", "[attachment$idx=$post_id]", $message);
+                
+                $attachment_name = $dbw->quotes_or_null($attachment_name);
+                $attachment_origin_name = $dbw->quotes_or_null(Emoji::Encode($attachment_origin_name));
+                $attachment_type = $dbw->escape($attachment_type);
+                
+                $idx_db = $dbw->escape($idx);
+                if (empty($idx_db)) {
+                    $idx_db = 1;
+                }
+                
+                $query = "insert into {$prfx}_attachment (post_id, nr, name, origin_name, type, user_id, last_post_id)
+                  values ($post_id, $idx_db, $attachment_name, $attachment_origin_name, '$attachment_type', $uid, $post_id)";
+                if (!$dbw->execute_query($query)) {
+                    $dbw->rollback_transaction();
+                    throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+                }
+                
+                $bin_str = str_repeat("0", $attachments_per_post);
+                $bin_str[$attachments_per_post - $i] = "1";
+                $has_attachment |= bindec($bin_str);
+            } else {
+                $dbw->rollback_transaction();
+                throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_PROCESSING_ERROR);
+            }
+        } // attachments
+        
+        $message = trim($message, "\r\n");
+
+        $html_message = "";
+        $has_picture = "0";
+        $has_video = "0";
+        $has_audio = "0";
+        $has_telegram = "0";
+        $has_link = "0";
+        $has_code = "0";
+        $has_attachment_ref = 0;
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+            throw new ForumAPIException(MessageHandler::getErrors(), ForumAPIException::ERR_CODE_INVALID_REQUEST_DATA);
+            $dbw->rollback_transaction();
+        }
+        
+        $query = "update {$prfx}_post set has_attachment = $has_attachment, has_attachment_ref = $has_attachment_ref where id = $post_id";
+        if (!$dbw->execute_query($query)) {
+            $dbw->rollback_transaction();
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+
+        $html_message = trim($html_message);
+        
+        $html_message_check = trim(strip_tags($html_message, "<img><audio><video><iframe>"));
+        if (empty($html_message_check) && (string)$html_message_check !== "0") {
+            $dbw->rollback_transaction();
+            throw new ForumAPIException(text("ErrMessageEmpty"), ForumAPIException::ERR_CODE_MISSING_REQUEST_DATA);
+        }
+        
+        $message = Emoji::Encode($message);
+        $html_message = Emoji::Encode($html_message);
+        
+        $citated_posts = array();
+        
+        if (!empty($request_data["citated_posts"])) {
+            $citated_posts = explode(",", trim($request_data["citated_posts"], ", "));
+        }
+        
+        // take possible pasted citations of the top level only into consideration
+        
+        $tmp_html = $html_message;
+        remove_nested_quotes($tmp_html, $tmp_html, 1);
+        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html, $matches)) {
+            $citated_posts = array_merge($citated_posts, $matches[1]);
+        }
+        
+        $plain_text = preg_replace("/[ \t]+/", " ", trim(strip_tags($html_message)));
+        $plain_text = preg_replace("/[\n\r]+/", "\r\n", $plain_text);
+        
+        $content_changed = ($old_message != $message);
+        
+        $message = $dbw->quotes_or_null($message);
+        $html_message = $dbw->quotes_or_null($html_message);
+        $plain_text = $dbw->quotes_or_null($plain_text);
+
+        $is_comment = 0;
+        if ($profiled_topic && empty($request_data["is_thematic"])) {
+            $is_comment = 1;
+        }
+        
+        $is_adult = empty($request_data["is_adult"]) ? 0 : 1;
+
+        $last_updated = $dbw->format_datetime($last_updated);
+        $last_updated_by = $dbw->quotes_or_null($last_updated_by);
+
+        $self_edited = "1";
+        
+        // topic name changed
+        
+        $subject_changed = (!empty($subject) && $old_topic_name != $subject);
+        
+        $subject_editable = false;
+        if ($this->forum_manager->is_admin() || $this->forum_manager->is_forum_moderator($forum_id) || $this->forum_manager->is_topic_moderator($topic_id) ||
+            (!empty($is_first) && !empty($topic_author_id) && $topic_author_id == $this->forum_manager->get_user_id()) ||
+            (!empty($is_first) && $topic_author_read_marker == $READ_MARKER)
+        ) {
+            $subject_editable = true;
+        }
+        
+        if (!$subject_editable) {
+            $subject_changed = false;
+        }
+        
+        if ($subject_changed) {
+            $subject_db = $dbw->quotes_or_null($subject);
+            $query = "update {$prfx}_topic set
+                name = $subject_db
+                where id = $topic_id";
+            if (!$dbw->execute_query($query)) {
+                $dbw->rollback_transaction();
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+
+            $mod_event["action"] = "change_topic";
+            $mod_event["author_id"] = $topic_author_id;
+            $mod_event["author_name"] = $topic_author;
+            $mod_event["read_marker"] = $READ_MARKER;
+            $mod_event["comment"] = "MSG(PreviousName): " . $old_topic_name; // text("PreviousName")
+            $mod_event["topic_name"] = $subject;
+            $mod_event["topic_id"] = $topic_id;
+            $mod_event["forum_name"] = $forum_name;
+            $mod_event["forum_id"] = $forum_id;
+            
+            if (empty($topic_private) && !$this->forum_manager->log_moderator_event($dbw, $prfx, $mod_event)) {
+                $dbw->rollback_transaction();
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+        } // topic update
+
+        if ($content_changed) {
+            $query = "insert into {$prfx}_post_history
+              (post_id, dt, author, self_edited, text_content, html_content)
+              select
+              id, '$last_updated', $last_updated_by, self_edited, text_content, html_content
+              from {$prfx}_post
+              where {$prfx}_post.id = $post_id
+             ";
+            if (!$dbw->execute_query($query)) {
+                $dbw->rollback_transaction();
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+        }
+        
+        $updated_by = $dbw->quotes_or_null($post_author);
+
+        $query = "update {$prfx}_post set
+              text_content = $message,
+              html_content = $html_message,
+              searchable_content = $plain_text,
+              has_picture = '$has_picture',
+              is_comment = '$is_comment',
+              is_adult = '$is_adult',
+              has_video = '$has_video',
+              has_telegram = '$has_telegram',
+              has_audio = '$has_audio',
+              has_link = '$has_link',
+              has_code = '$has_code',
+              self_edited = $self_edited,
+              last_updated = '$now',
+              last_updated_by = $last_updated_by
+              where id = $post_id";
+        
+        if (!$dbw->execute_query($query)) {
+            $dbw->rollback_transaction();
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        if (!$dbw->commit_transaction()) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+
+        $this->forum_manager->track_readmarker_activity();
+
+        $where = "where {$prfx}_post.id = $post_id";
+        
+        if (!$dbw->execute_query($this->forum_manager->get_query_topic_posts($prfx, $uid, $where, "", ""))) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $post_list = [];
+        $user_ids = [];
+        $this->forum_manager->collect_posts($dbw, $uid, $post_list, $user_ids);
+
+        $dbw->free_result();
+        
+        if (!empty($post_list)) {
+            $post = array_shift($post_list);
+
+            unset($post["creation_date_sec"]);
+            unset($post["user_marker"]);
+            unset($post["read_marker"]);
+            unset($post["user_agent"]);
+            unset($post["aname"]);
+            unset($post["ip"]);
+            unset($post["topic_creation_date_sec"]);
+            unset($post["topic_author_read_marker"]);
+            unset($post["self_edited"]);
+            unset($post["editable"]);
+            unset($post["moderatable"]);
+        }        
+     }
 } // ForumAPIManager

@@ -316,6 +316,13 @@
             <ua>Повідомлення містить відеокліпи</ua>
         </text>
 
+        <text id="SearchTelegramOnly">
+            <en>Message has Telegram widgets</en>
+            <de>Die Nachricht hat Telegram-Widgets</de>
+            <ru>Сообщение содержит виджеты Telegram</ru>
+            <ua>Повідомлення містить віджети Telegram</ua>
+        </text>
+
         <text id="SearchAdultOnly">
             <en>Message has pictures or videos 18+</en>
             <de>Die Nachricht hat Bilder oder Videos 18+</de>
@@ -3115,7 +3122,7 @@
             <ru>Последние сообщения автора</ru>
             <ua>Останні повідомлення автора</ua>
         </text>
-        
+
         <text id="AuthorLastTopics">
             <en>Last topics of the autor</en>
             <de>Letzte Themen des Autors</de>
@@ -3130,6 +3137,13 @@
             <ua>Шукати останні повідомлення автора</ua>
         </text>
         
+        <text id="SearchAuthorLastReplies">
+            <en>Search last replies to the autor</en>
+            <de>Nach letzten Antworten an den Autor suchen</de>
+            <ru>Искать последние ответы автору</ru>
+            <ua>Шукати останні відповіді автору</ua>
+        </text>
+
         <text id="SearchAuthorLastTopics">
             <en>Search last topics of the autor</en>
             <de>Letzte Themen des Autors suchen</de>
@@ -3576,6 +3590,13 @@
             <de>Thema mit dieser ID (%s) existiert nicht!</de>
             <ru>Тема с таким идентификатором (%s) не существует!</ru>
             <ua>Теми з ідентифікатором (%s) не існує!</ua>
+        </text>
+
+        <text id="ErrPostDoesNotExist">
+            <en>Message with that ID (%s) does not exist!</en>
+            <de>Nachricht mit dieser ID (%s) existiert nicht!</de>
+            <ru>Сообщение с таким идентификатором (%s) не существует!</ru>
+            <ua>Повідомлення з ідентифікатором (%s) не існує!</ua>
         </text>
 
         <text id="DeleteTopics">
@@ -9785,6 +9806,13 @@
             <ua>Математична формула</ua>
         </text>
 
+        <text id="Widget">
+            <en>Widget</en>
+            <de>Widget</de>
+            <ru>Виджет</ru>
+            <ua>Віджет</ua>
+        </text>
+
         <text id="Video">
             <en>Video</en>
             <de>Video</de>
@@ -10396,6 +10424,13 @@
             <ua>Користувачі розблоковані в темі</ua>
         </text>
         
+        <text id="GeoStatistics">
+            <en>Geolocation statistics</en>
+            <de>Geolokalisierungsstatistik</de>
+            <ru>Статистика геолокации</ru>
+            <ua>Статистика геолокації</ua>
+        </text>
+
         <text id="Browsers">
             <en>Browsers</en>
             <de>Browsers</de>
@@ -10695,6 +10730,55 @@
             <de>Moderation der letzten Nachrichten</de>
             <ru>Модерация последних сообщений</ru>
             <ua>Модерація останніх повідомлень</ua>
+        </text>
+
+        <text id="Countries">
+            <en>Countries</en>
+            <de>Länder</de>
+            <ru>Страны</ru>
+            <ua>Країни</ua>
+        </text>
+
+        <text id="Cities">
+            <en>Cities</en>
+            <de>Städte</de>
+            <ru>Города</ru>
+            <ua>Города</ua>
+        </text>
+
+        <text id="Proxys">
+            <en>Proxys</en>
+            <de>Proxys</de>
+            <ru>Прокси</ru>
+            <ua>Проксі</ua>
+        </text>
+
+        <text id="IPTypes">
+            <en>IP types</en>
+            <de>IP-Typen</de>
+            <ru>Тип IP</ru>
+            <ua>Тип IP</ua>
+        </text>
+
+        <text id="Others">
+            <en>Others</en>
+            <de>Sonstige</de>
+            <ru>Прочие</ru>
+            <ua>Прочі</ua>
+        </text>
+
+        <text id="ErrVideoError">
+            <en>The video does not exist or has been deleted!</en>
+            <de>Das Video existiert nicht oder wurde gelöscht!</de>
+            <ru>Видео не существует или было удалено!</ru>
+            <ua>Відео не існує або було видалено!</ua>
+        </text>
+
+        <text id="ErrVideoInaccessible">
+            <en>Video not available for embedding or not available for your location!</en>
+            <de>Das Video kann nicht eingebettet werden oder ist für Ihren Standort nicht verfügbar!</de>
+            <ru>Видео недоступно для встраивания или недоступно для вашей локации!</ru>
+            <ua>Відео недоступне для вбудовування або недоступне для вашої локації!</ua>
         </text>
 
     </texts>

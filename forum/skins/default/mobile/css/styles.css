@@ -2316,6 +2316,24 @@ img.mourning_band
   background-size: 100%;
 }
 
+.message_container_just_edited
+{
+  margin-left: 120px;
+  position: relative;
+}
+
+.message_container_just_edited .edit_indicator {
+  width: 86px;
+  height: 86px;
+  position: absolute;
+  top: 0;
+  left: -100px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/edited.png);
+  background-size: 100%;
+}
+
 .message_table td .emb_wrapper,
 .message_table td .picture_wrapper,
 .message_table td .attachment_wrapper
@@ -4615,9 +4633,8 @@ img.image_placeholder
 .message_text .thumb_gallery a.lightbox_image,
 .message_text .message_table td .thumb_gallery a.lightbox_image 
 {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
+  display: grid;
+  place-items: center;
   width: 236px;
   height: 236px;
   border: 2px solid gray;
@@ -4630,10 +4647,11 @@ img.image_placeholder
 .message_table td .thumb_gallery > .attachment_wrapper 
 {
   float: left;
-  display: block;
+  display: grid;
   width: 236px;
   height: 236px;
   margin: 0px 20px 20px 0px;
+  box-sizing: border-box;
 }
 
 .attachment_editable .thumb_gallery > .picture_wrapper,
@@ -4661,6 +4679,85 @@ img.image_placeholder
 {
   display: none;  
 }
+
+.thumb_gallery .short_video,
+.message_table td .thumb_gallery .short_video
+{
+  display: none;
+}
+
+.thumb_gallery video,
+.message_table td .thumb_gallery video
+{
+  display: none;
+}
+
+.thumb_gallery audio,
+.message_table td .thumb_gallery audio
+{
+  display: none;
+}
+
+.post_preview_container .thumb_gallery .attachment_link,
+.message_text .thumb_gallery .attachment_link
+{
+  display: none;
+}
+
+.post_preview_container .thumb_gallery a.attachment_link:link,
+.message_text .thumb_gallery a.attachment_link:link,
+.post_preview_container .thumb_gallery a.attachment_link:visited,
+.message_text .thumb_gallery a.attachment_link:visited,
+.post_preview_container .thumb_gallery a.attachment_link:active,
+.message_text .thumb_gallery a.attachment_link:active,
+.post_preview_container .thumb_gallery a.attachment_link:hover,
+.message_text .thumb_gallery a.attachment_link:hover
+{
+  border: 2px solid gray;
+  float: left;
+  display: grid;
+  width: 236px;
+  height: 236px;
+  padding: 0;
+  margin: 0px 10px 10px 0px;
+  color: transparent;
+  background: #eeeeee url(../images/video.png) no-repeat center center;
+  background-size: 80%;
+  box-sizing: border-box;
+}
+
+.post_preview_container .thumb_gallery .binary_attachment a:link,
+.message_text .thumb_gallery .binary_attachment a:link,
+.post_preview_container .thumb_gallery .binary_attachment a:visited,
+.message_text .thumb_gallery .binary_attachment a:visited,
+.post_preview_container .thumb_gallery .binary_attachment a:active,
+.message_text .thumb_gallery .binary_attachment a:active,
+.post_preview_container .thumb_gallery .binary_attachment a:hover,
+.message_text .thumb_gallery .binary_attachment a:hover
+{
+  border: 2px solid gray;
+  float: left;
+  width: 236px;
+  height: 236px;
+  padding: 0;
+  margin: 0px 10px 10px 0px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.thumb_gallery .detailed_video,
+.message_table td .thumb_gallery .detailed_video
+{
+  display: none;
+  margin: 0;
+}
+
+
+
+
+
+
 
 .short_message,
 .moderator_warning
@@ -4956,6 +5053,7 @@ img.image_placeholder
   background-size: 10%;
   width: 874px;
   margin: 0 auto;
+  margin-bottom: 40px;
 }
 
 .browser_stat_wrapper
@@ -4963,19 +5061,6 @@ img.image_placeholder
   width: 874px;
   margin: 0 auto;
   margin-bottom: 20px;
-}
-
-.revolver_map_warning
-{
-  box-sizing: border-box;
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  padding: 30px 30px 0px 30px;
-  text-align: center;
-  color: maroon;
-  font-weight: bold;
-  font-size: 30px;
 }
 
 .loading_placeholder

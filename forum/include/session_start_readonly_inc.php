@@ -53,8 +53,17 @@ function session_start_readonly()
     session_write_close();
     return false;
   }  
+  
+  $session_data = "";
 
-  $session_data = file_get_contents($session_path . '/sess_' . $session_name);
+  $fp = fopen($session_path . '/sess_' . $session_name, "r");
+  if (flock($fp, LOCK_SH)) {
+      $session_data = fread($fp, filesize($session_path . '/sess_' . $session_name));
+      flock($fp, LOCK_UN); 
+  }        
+
+  fclose($fp);
+
   if(empty($session_data))
   {
     session_start();

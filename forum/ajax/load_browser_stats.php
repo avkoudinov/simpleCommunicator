@@ -1,7 +1,7 @@
 <?php
 //-----------------------------------------------------------------------
 session_set_cookie_params(0, str_replace("ajax/" . basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]));
-require_once "../include/session_start_readonly_inc.php";
+require_once "../include/session_start_inc.php";
 
 $ajax_processing = true;
 
@@ -20,11 +20,11 @@ if(!$fmanager->check_hash())
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");
 
-$browser_stat = array();
-$os_stat = array();
-$bot_stat = array();
+$_SESSION["browser_stats"] = array();
+$_SESSION["os_stats"] = array();
+$_SESSION["bot_stats"] = array();
 
-if(!$fmanager->get_browser_stat($browser_stat, $os_stat, $bot_stat))
+if(!$fmanager->get_browser_stat($_SESSION["browser_stats"], $_SESSION["os_stats"], $_SESSION["bot_stats"]))
 {
     exit;
 }

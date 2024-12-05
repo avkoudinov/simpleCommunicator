@@ -503,7 +503,6 @@ create table v1_forum_hits
    browser              varchar(250),
    os                   varchar(250),
    bot                  varchar(250),
-   processed            tinyint not null default 0,
    read_marker          varchar(255),
    statistics_request   int not null default 0,
    headers              text
@@ -542,13 +541,6 @@ $sql_cmds[] = '
 create index v1_forum_hits_ua_idx on v1_forum_hits
 (
    user_agent
-)
-';
-
-$sql_cmds[] = '
-create index v1_forum_hits_processed_idx on v1_forum_hits
-(
-   processed
 )
 ';
 
@@ -1005,6 +997,51 @@ create unique index v1_ip_blocked_unq on v1_ip_blocked
 ';
 
 $sql_cmds[] = '
+create table v1_ip_daily_statistics
+(
+   dt                   date not null,
+   ip                   varchar(250),
+   country_code         varchar(10),
+   country              varchar(250),
+   city                 varchar(250),
+   bot                  varchar(250),
+   is_tor               tinyint not null default 0,
+   is_proxy             tinyint not null default 0,
+   is_ipv6              tinyint not null default 0,
+   read_marker          varchar(255),
+   hits_count           int not null default 0
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_dt_idx on v1_ip_daily_statistics
+(
+   dt
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_ip_idx on v1_ip_daily_statistics
+(
+   ip
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_country_idx on v1_ip_daily_statistics
+(
+   country
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_daily_statistics_city_idx on v1_ip_daily_statistics
+(
+   city
+)
+';
+
+$sql_cmds[] = '
 create table v1_ip_white_list
 (
    ip                   varchar(250) not null
@@ -1239,6 +1276,7 @@ create table v1_post
    searchable_content   mediumtext,
    has_picture          tinyint not null default 0,
    has_audio            tinyint not null default 0,
+   has_telegram         tinyint not null default 0,
    has_video            tinyint not null default 0,
    has_link             tinyint not null default 0,
    has_code             tinyint not null default 0,
@@ -1344,6 +1382,13 @@ $sql_cmds[] = '
 create index v1_post_user_marker_idx on v1_post
 (
    user_marker
+)
+';
+
+$sql_cmds[] = '
+create index v1_post_has_telegram_idx on v1_post
+(
+   has_telegram
 )
 ';
 

@@ -63,7 +63,7 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             break;
         
         case "telegram":
-            return "{$nl}[{{video}}: Telegram]{$nl2}";
+            return "{$nl}[{{widget}}: Telegram]{$nl2}";
             break;
         
         case "fbvideo":
@@ -396,6 +396,7 @@ function check_image_url(&$url, &$large_url)
     $ctx = stream_context_create([
         'http' => [
             'method' => "HEAD",
+            'timeout' => 10,
             'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\r\n" .
                         "Cache-Control: no-cache\r\n" .
                         "Accept: */*\r\n" .
@@ -791,6 +792,8 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
     
     $class_appendix = "";
     
+    $author_hash = md5($author);
+    
     if (!$is_simple_citation) {
         $rm = $fmanager->get_post_readmarker($citated);
         if (!empty($rm)) {
@@ -806,7 +809,7 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
             $class_appendix .= "{{user_ignored:$uid}} user_citation";
         }
         
-        $class_appendix .= " author_" . md5($author);
+        $class_appendix .= " author_" . $author_hash;
     }
     
     if (empty($author)) {
@@ -819,11 +822,13 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
     $is_adult = 0;
     $citated_txt = "";
     $citated_mid_appendix = "";
+    $fid = "";
+    $tid = "";
     if (!empty($citated)) {
         $citated_mid_appendix = ' data-cmid="' . $citated . '"';
         $citated_txt = "<div class='qcitated'>[cmid=" . $citated . "]</div>";
         
-        $date = $fmanager->get_post_date($citated, $is_adult);
+        $date = $fmanager->get_post_date($citated, $is_adult, $fid, $tid);
     } else {
         $class_appendix = "";
     }
@@ -838,6 +843,18 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
     $adult_class = "";
     if ($is_adult) {
         $adult_class = "adult_post";
+    }
+    
+    if (empty($content)) {
+        if (empty($author) && empty($citated)) {
+           return "";
+        } elseif (!empty($author) && !empty($citated)) {
+           return "<strong>{$author}#{$citated}</strong><br><br>\n\n";
+        } elseif (!empty($author)) {
+           return "<strong>{$author2}</strong><br><br>\n\n";
+        } else {
+           return "";
+        }
     }
     
     return "\n\n" . '<div class="quote_wrapper ' . $class_appendix . '" data-author="' . $author . '"' . $citated_mid_appendix . '><div class="quote_header"><div class="qauthor">' . $author2 . $citation_expander . $date2 . '</div><div class="qauthor_ignored">[{{ignored}}]</div>' . $citated_txt . '<div class="clear_both"></div></div><div class="quote ' . $adult_class . '" data-author="' . $author . '"' . $citated_mid_appendix . '>' . $content . '</div></div>' . "\n\n";
@@ -1613,10 +1630,10 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
         return $content;
     }
     
-    if (preg_match('/video(.*)$/i', $content, $matches)) {
+    if (preg_match('/\/video(.*)$/i', $content, $matches)) {
         $code = $matches[1];
     }
-    elseif (preg_match('/clip(.*)$/i', $content, $matches)) {
+    elseif (preg_match('/\/clip(.*)$/i', $content, $matches)) {
         $code = $matches[1];
     }
     elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/video(.*)$/i', $content, $matches)) {
@@ -1624,7 +1641,7 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
     }
     elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/clip(.*)$/i', $content, $matches)) {
         $code = $matches[2];
-    }
+    } 
     
     $bbcode_text = "[" . $name . "]" . $content . "[/" . $name . "]";
     
@@ -1633,13 +1650,13 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
 //------------------------------------------------------------------------------
 function check_vkvideo_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\/\/(m\\.)*vk\.com\/video(.*)(\\?.*)?$/i', $url, $matches)) {
+    if (preg_match('/https:\/\/(m\\.)*(vk\.com|vk\.ru|vkvideo\.ru)(.*\/)video(.*)(\\?.*)?$/i', $url, $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: VK]\n\n";
             return true;
         }
         
-        $content = gen_vkvideo_html($matches[2], $url);
+        $content = gen_vkvideo_html($matches[4], $url);
         return true;
     }
     
@@ -1723,7 +1740,7 @@ function check_telegram_url($url, &$content, $message_mode)
         }
         
         if ($message_mode != "message") {
-            $content = "\n[{{video}}: Telegram]\n\n";
+            $content = "\n[{{widget}}: Telegram]\n\n";
             return true;
         }
         
@@ -2800,7 +2817,7 @@ function gen_vkvideo_html($code, $bbcode)
     $picture = "";
     $player = "";
     $has_error = false;
-    
+    $error_message = text("ErrVideoError");
     
     $style = "";
     
@@ -2844,6 +2861,7 @@ function gen_vkvideo_html($code, $bbcode)
             
             if (!empty($json["response"]["items"][0]["content_restricted"])) {
                 $has_error = true;
+                $error_message = text("ErrVideoInaccessible");
             }
             
             if (!empty($json["response"]["items"][0]["width"]) &&
@@ -2874,7 +2892,7 @@ function gen_vkvideo_html($code, $bbcode)
     if ($has_error) {
         $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
         $html .= "<div class='detailed_video'>";
-        $html .= "<img class='post_image' src='user_data/images/video_unaccessible.png' alt='" . escape_html($title) . "'>";
+        $html .= "<img class='post_image' src='user_data/images/video_unaccessible.png' title='" . escape_html($error_message) . "' alt='" . escape_html($error_message) . "'>";
         $html .= "</div>";
         $html .= "<a class='attachment_link' href='https://vk.com/video$code' target='_blank'>{{link}}</a>";
         $html .= "</div>";

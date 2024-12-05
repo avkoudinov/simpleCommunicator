@@ -125,6 +125,7 @@ abstract class ForumManager
     
     //-----------------------------------------------------------------
     var $email_manager;
+    var $geoip_manager;
     var $attachment_manager;
     var $format_manager;
     var $job_manager;
@@ -148,6 +149,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function __construct()
     {
+        $this->geoip_manager = System::getClassInstance("GeoIPManager");
+
         $this->email_manager = System::getClassInstance("EmailManager");
         $this->email_manager->forum_manager = $this;
         
@@ -6454,6 +6457,11 @@ abstract class ForumManager
         $_SESSION["guest_posting_mode"] = get_cookie("q_guest_posting_mode");
         if (!empty($_SESSION["guest_posting_mode"])) {
             $_SESSION["last_posted_user"] = get_cookie("q_last_guest_name");
+
+            if (!$dbw->execute_query("update {$prfx}_user set logout = 1 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
         }
         
         $block_reason = "";
@@ -10040,6 +10048,165 @@ abstract class ForumManager
         
         return true;
     } // get_user_rating_info
+    
+    //-----------------------------------------------------------------
+    function get_geo_stat(&$country_stats, &$country_bot_stats, &$city_stats, &$proxy_stats, &$ip_type_stats)
+    {
+        start_action_time_measure();
+        
+        $rodbw = System::getRODBWorker();
+        if (!$rodbw) {
+            return false;
+        }
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+
+        $now = time();
+        
+        switch (reqvar("period")) {
+            case "last_month":
+                $start_date = xstrtotime("-1 month", $now);
+                break;
+            case "last_half_year":
+                $start_date = xstrtotime("-6 months", $now);
+                break;
+            case "last_year":
+                $start_date = xstrtotime("-1 year", $now);
+                break;
+            case "whole_period":
+                $start_date = 0;
+                break;
+            default:
+                $start_date = xstrtotime("-1 year", $now);
+                break;
+        }
+        
+        $start_date = $rodbw->format_datetime($start_date);
+        
+        $query = "select country, city, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' and country is not NULL and city is not NULL and bot is NULL and is_tor = 0 and is_proxy = 0
+                    group by country, city
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        $country_totals = [];
+        while ($rodbw->fetch_row()) {
+            if (empty($country_totals[$rodbw->field_by_name("country")])) {
+                $country_totals[$rodbw->field_by_name("country")] = 0;
+            }
+
+            if (empty($country_stats[$rodbw->field_by_name("country")])) {
+                $country_stats[$rodbw->field_by_name("country")] = 0;
+            }
+
+            $total += $rodbw->field_by_name("cnt");
+            $country_stats[$rodbw->field_by_name("country")] += $rodbw->field_by_name("cnt");
+
+            $country_totals[$rodbw->field_by_name("country")] += $rodbw->field_by_name("cnt");
+            $city_stats[$rodbw->field_by_name("country")][$rodbw->field_by_name("city")] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($city_stats as $country => $_country_city_stats) {
+            $country_stats[$country] = 100 * $country_stats[$country] / $total;
+
+            foreach ($_country_city_stats as $city => $val) {
+                $city_stats[$country][$city] = 100 * $val / $country_totals[$country];
+            }
+        }
+
+        $query = "select country, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' and country is not NULL and bot is not NULL
+                    group by country
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        while ($rodbw->fetch_row()) {
+            $total += $rodbw->field_by_name("cnt");
+            $country_bot_stats[$rodbw->field_by_name("country")] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($country_bot_stats as $country => $val) {
+            $country_bot_stats[$country] = 100 * $val / $total;
+        }
+
+        $query = "select is_tor, is_proxy, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' and bot is NULL
+                    group by is_tor, is_proxy
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        while ($rodbw->fetch_row()) {
+            $access_type = "Direct";
+            if ($rodbw->field_by_name("is_tor")) {
+                $access_type = "Tor";
+            } elseif ($rodbw->field_by_name("is_proxy")) {
+                $access_type = "Proxy";
+            }
+            
+            $total += $rodbw->field_by_name("cnt");
+            $proxy_stats[$access_type] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($proxy_stats as $access_type => $val) {
+            $proxy_stats[$access_type] = 100 * $val / $total;
+        }
+
+        $query = "select is_ipv6, count(*) cnt from
+                    {$prfx}_ip_daily_statistics
+                    where dt >= '$start_date' 
+                    group by is_ipv6
+                    order by cnt desc";
+        
+        if (!$rodbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
+            return false;
+        }
+        
+        $total = 0;
+        while ($rodbw->fetch_row()) {
+            $ip_type = "IPv4";
+            if ($rodbw->field_by_name("is_ipv6")) {
+                $ip_type = "IPv6";
+            }
+            
+            $total += $rodbw->field_by_name("cnt");
+            $ip_type_stats[$ip_type] = $rodbw->field_by_name("cnt");
+        }
+        
+        $rodbw->free_result();
+        
+        foreach ($ip_type_stats as $ip_type => $val) {
+            $ip_type_stats[$ip_type] = 100 * $val / $total;
+        }
+
+        measure_action_time("get geo stat");
+        
+        return true;
+    }
     
     //-----------------------------------------------------------------
     function get_browser_stat(&$browser_stat, &$os_stat, &$bot_stat)
@@ -13967,6 +14134,11 @@ abstract class ForumManager
         
         $dbw->free_result();
         
+        if (empty($topics)) {
+            MessageHandler::setError(sprintf(text("ErrPostDoesNotExist"), reset($_REQUEST["posts"])));
+            return false;
+        }
+
         $topic_in_list = $dbw->escape(implode(",", $topics));
         
         // simple user cannot delete the first post of the topic
@@ -21342,10 +21514,11 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = "0";
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, "tmp")) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, "tmp")) {
             return false;
         }
         
@@ -21474,7 +21647,7 @@ abstract class ForumManager
         if (time() - $post_time > (get_allow_edit_period() + 10 * 60)) {
             return false;
         }
-        
+
         if (!empty($post_user_id) && $post_user_id == $this->get_user_id()) {
             return true;
         }
@@ -21841,10 +22014,11 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $edited_post)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $edited_post)) {
             $dbw->rollback_transaction();
             return false;
         }
@@ -21862,6 +22036,7 @@ abstract class ForumManager
                   has_picture = $has_picture, 
                   has_video = $has_video, 
                   has_audio = $has_audio, 
+                  has_telegram = $has_telegram, 
                   has_link = $has_link, 
                   has_code = $has_code, 
                   is_comment = $is_comment, 
@@ -21941,6 +22116,7 @@ abstract class ForumManager
               has_picture = $has_picture,
               has_video = $has_video,
               has_audio = $has_audio,
+              has_telegram = $has_telegram, 
               has_link = $has_link,
               has_code = $has_code,
               self_edited = $self_edited,
@@ -21984,8 +22160,6 @@ abstract class ForumManager
         }
         
         $is_adult_mod_action = "";
-        $is_adult_event_code = "";
-        $is_adult_email_template = "";
         if ($old_post_is_adult != $is_adult) {
             if ($old_post_is_adult == 0) {
                 $is_adult_mod_action = "convert_to_adult";
@@ -22113,17 +22287,18 @@ abstract class ForumManager
             }
         }
         
-        if ($subject_changed && empty($topic_publish_delay)) {
+        if ($subject_changed && empty($post_data["topic_private"]) && empty($topic_publish_delay)) {
             $mod_event["action"] = "change_topic";
             $mod_event["author_id"] = $post_data["topic_author_id"];
             $mod_event["author_name"] = $post_data["topic_author_name"];
+            $mod_event["read_marker"] = $READ_MARKER;
             $mod_event["comment"] = "MSG(PreviousName): " . $post_data["topic_name"]; // text("PreviousName")
             $mod_event["topic_name"] = $subject;
             $mod_event["topic_id"] = $tid;
             $mod_event["forum_name"] = $post_data["forum_name"];
             $mod_event["forum_id"] = $fid;
             
-            if (empty($post_data["topic_private"]) && !$this->log_moderator_event($dbw, $prfx, $mod_event)) {
+            if (!$this->log_moderator_event($dbw, $prfx, $mod_event)) {
                 $dbw->rollback_transaction();
                 return false;
             }
@@ -23080,10 +23255,11 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
-        if (!$this->format_manager->format_message($dbw, $msg, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $msg, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             return false;
         }
         
@@ -23100,6 +23276,7 @@ abstract class ForumManager
               searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
+              has_telegram = '$has_telegram',
               has_audio = '$has_audio',
               has_link = '$has_link',
               has_code = '$has_code'
@@ -23936,11 +24113,12 @@ abstract class ForumManager
         $has_picture = "0";
         $has_video = "0";
         $has_audio = "0";
+        $has_telegram = "0";
         $has_link = "0";
         $has_code = "0";
         $has_attachment_ref = 0;
         
-        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_link, $has_code, $has_attachment_ref, $post_id)) {
+        if (!$this->format_manager->format_message($dbw, $message, $html_message, $has_picture, $has_video, $has_audio, $has_telegram, $has_link, $has_code, $has_attachment_ref, $post_id)) {
             $dbw->rollback_transaction();
             return false;
         }
@@ -24013,6 +24191,7 @@ abstract class ForumManager
               searchable_content = $plain_text,
               has_picture = '$has_picture',
               has_video = '$has_video',
+              has_telegram = '$has_telegram',
               has_audio = '$has_audio',
               has_link = '$has_link',
               has_code = '$has_code'
@@ -28195,6 +28374,7 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function track_hit($tid, $fid)
     {
+        global $settings;
         global $READ_MARKER;
         
         if (!empty($_SESSION["skip_next_hit"])) {
@@ -28250,8 +28430,8 @@ abstract class ForumManager
             !empty($_SESSION["guest_posting_mode"]) && $this->get_last_posted_user_name() != $this->get_user_name()
         ) {
            $forced_guest_posting = true;
-        }        
-        
+        }  
+
         $uid = $dbw->escape($this->get_user_id());
         $guest_name = $this->get_user_name();
         
@@ -28490,6 +28670,8 @@ abstract class ForumManager
                 return false;
             }
         }
+        
+        $this->geoip_manager->check_ip($dbw, System::getIPAddress(), $bot);
 
         $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id, bot)
           select '$dtnow', $uid, $fid, $bot_db
@@ -30477,6 +30659,9 @@ abstract class ForumManager
         if (!reqvar_empty("has_video")) {
             $hash .= "has_video=" . reqvar("has_video") . "&";
         }
+        if (!reqvar_empty("has_telegram")) {
+            $hash .= "has_telegram=" . reqvar("has_telegram") . "&";
+        }
         if (!reqvar_empty("thematic_only")) {
             $hash .= "thematic_only=" . reqvar("thematic_only") . "&";
         }
@@ -30668,6 +30853,9 @@ abstract class ForumManager
                 case "last_posts":
                     $search_title .= text("SearchAuthorLastMessages") . ": " . $author;
                     break;
+                case "last_replies":
+                    $search_title .= text("SearchAuthorLastReplies") . ": " . $author;
+                    break;
                 case "created_topic":
                     $search_title .= text("AuthorCreatedTopic") . ": " . $author;
                     break;
@@ -30719,7 +30907,7 @@ abstract class ForumManager
                     $search_title .= "; ";
                 }
                 
-                if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts") {
+                if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts" || reqvar("author_mode") == "last_replies") {
                     $search_title .= text("SearchMessagesCreated");
                 } else {
                     $search_title .= text("SearchTopicsCreated");
@@ -30827,6 +31015,14 @@ abstract class ForumManager
             $search_title .= text("SearchVideosOnly");
         }
         
+        if (!reqvar_empty("has_telegram")) {
+            if (!empty($search_title)) {
+                $search_title .= "; ";
+            }
+            
+            $search_title .= text("SearchTelegramOnly");
+        }
+
         if (!reqvar_empty("has_audio")) {
             if (!empty($search_title)) {
                 $search_title .= "; ";
@@ -33821,7 +34017,7 @@ abstract class ForumManager
     } // get_additional_post_data
     
     //-----------------------------------------------------------------
-    function get_post_date($pid, &$is_adult)
+    function get_post_date($pid, &$is_adult, &$fid, &$tid)
     {
         if (empty($pid) || !is_numeric($pid)) {
             return false;
@@ -33835,7 +34031,10 @@ abstract class ForumManager
         $prfx = $dbw->escape(System::getDBPrefix());
         $pid = $dbw->escape($pid);
         
-        $query = "select creation_date, is_adult from {$prfx}_post where id = $pid";
+        $query = "select {$prfx}_post.creation_date, is_adult, topic_id, forum_id
+                  from {$prfx}_post 
+                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                  where {$prfx}_post.id = $pid";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -33846,6 +34045,8 @@ abstract class ForumManager
         if ($dbw->fetch_row()) {
             $date = xstrtotime($dbw->field_by_name("creation_date"));
             $is_adult = $dbw->field_by_name("is_adult");
+            $tid = $dbw->field_by_name("topic_id");
+            $fid = $dbw->field_by_name("forum_id");
         }
         
         $dbw->free_result();
@@ -39162,7 +39363,7 @@ abstract class ForumManager
         if (reqvar_empty("include_ignored") && reqvar_empty("favourite_posts") && reqvar_empty("favourite_posts_only") &&
             !in_array(reqvar("author_mode"), array("ignoring", "moderating", "author_likes", "author_liked", "author_dislikes", "author_disliked")) &&
             !(in_array(reqvar("author_mode"), array("last_topics")) && $author_id == $current_uid) &&
-            !(in_array(reqvar("author_mode"), array("wrote_post", "last_posts")) && $author_id == $current_uid) &&
+            !(in_array(reqvar("author_mode"), array("wrote_post", "last_posts", "last_replies")) && $author_id == $current_uid) &&
             reqvar_empty("non_ignored_by_author") && reqvar_empty("replies_to") &&
             reqvar_empty("rate_statistics")
             ) {
@@ -39277,7 +39478,7 @@ abstract class ForumManager
             if (reqvar_empty("include_ignored") && 
                 !in_array(reqvar("author_mode"), array("ignoring", "moderating", "author_likes", "author_liked", "author_dislikes", "author_disliked")) &&
                 !(in_array(reqvar("author_mode"), array("last_topics")) && $author_id == $current_uid) &&
-                !(in_array(reqvar("author_mode"), array("wrote_post", "last_posts")) && $author_id == $current_uid) &&
+                !(in_array(reqvar("author_mode"), array("wrote_post", "last_posts", "last_replies")) && $author_id == $current_uid) &&
                 reqvar_empty("non_ignored_by_author") && reqvar_empty("replies_to") &&
                 reqvar_empty("rate_statistics")
                 ) {
@@ -39431,9 +39632,10 @@ abstract class ForumManager
         if ((!reqvar_empty("search_keys") && reqvar_empty("topics_only")) || (!reqvar_empty("ip")) || (!reqvar_empty("news_digest")) ||
             (reqvar("author_mode") == "wrote_post" && (!reqvar_empty("author") || !reqvar_empty("start_date") || !reqvar_empty("start_date"))) ||
             (reqvar("author_mode") == "last_posts" && !reqvar_empty("author")) ||
+            (reqvar("author_mode") == "last_replies" && !reqvar_empty("author")) ||
             (in_array(reqvar("author_mode"), array("author_likes", "author_liked", "author_dislikes", "author_disliked")) && !reqvar_empty("author")) ||
             (!reqvar_empty("author") && reqvar("stat") == "author_likes") || (!reqvar_empty("author") && reqvar("stat") == "author_liked") || (!reqvar_empty("author") && reqvar("stat") == "author_dislikes") || (!reqvar_empty("author") && reqvar("stat") == "author_disliked") ||
-            !reqvar_empty("has_attachment") || !reqvar_empty("has_picture") || !reqvar_empty("has_video") || !reqvar_empty("has_audio") || !reqvar_empty("has_adult") || !reqvar_empty("has_link") || !reqvar_empty("has_code") || !reqvar_empty("thematic_only") || !reqvar_empty("replies_to") ||
+            !reqvar_empty("has_attachment") || !reqvar_empty("has_picture") || !reqvar_empty("has_video") || !reqvar_empty("has_audio") || !reqvar_empty("has_telegram") || !reqvar_empty("has_adult") || !reqvar_empty("has_link") || !reqvar_empty("has_code") || !reqvar_empty("thematic_only") || !reqvar_empty("replies_to") ||
             !reqvar_empty("non_ignored_by_author") || !reqvar_empty("deleted_only") ||
             !reqvar_empty("rate_statistics") ||
             !empty($_REQUEST["tags"])
@@ -39505,7 +39707,7 @@ abstract class ForumManager
                 }
                 
                 $post_part_where .= $this->get_ignore_post_where_appendix($srdbw, $prfx, $mode);
-                $post_part_where .= $this->get_ignore_comment_where_appendix($srdbw, $prfx, reqvar_empty("replies_to") ? 0 : 1); // if we search for replies to a message, we show also comments event if not desired in normal mode
+                $post_part_where .= $this->get_ignore_comment_where_appendix($srdbw, $prfx, reqvar_empty("replies_to") && reqvar_empty("last_replies") ? 0 : 1); // if we search for replies to a message, we show also comments event if not desired in normal mode
             }
             //-------------------------------------------------------------------
             if (!reqvar_empty("has_attachment")) {
@@ -39534,6 +39736,13 @@ abstract class ForumManager
                 $hints["post"]["{$prfx}_post_creation_date_idx"] = "{$prfx}_post_creation_date_idx";
                 $hints["post"]["{$prfx}_post_has_audio_idx"] = "{$prfx}_post_has_audio_idx";
                 $post_part_where .= " and {$prfx}_post.has_audio = 1";
+                $other_post_conditions_exist = true;
+            }
+            //-------------------------------------------------------------------
+            if (!reqvar_empty("has_telegram")) {
+                $hints["post"]["{$prfx}_post_creation_date_idx"] = "{$prfx}_post_creation_date_idx";
+                $hints["post"]["{$prfx}_post_has_telegram_idx"] = "{$prfx}_post_has_telegram_idx";
+                $post_part_where .= " and {$prfx}_post.has_telegram = 1";
                 $other_post_conditions_exist = true;
             }
             //-------------------------------------------------------------------
@@ -39608,7 +39817,8 @@ abstract class ForumManager
             }
             //-------------------------------------------------------------------
             if ((reqvar("author_mode") == "wrote_post" && (!empty($author) || !empty($start_date) || !empty($end_date))) ||
-                (reqvar("author_mode") == "last_posts" && !empty($author))
+                (reqvar("author_mode") == "last_posts" && !empty($author)) ||
+                (reqvar("author_mode") == "last_replies" && !empty($author)) 
             ) {
                 if (reqvar("author_mode") == "last_posts") {
                     $hints["post"]["primary"] = "primary";
@@ -39628,13 +39838,29 @@ abstract class ForumManager
                         $hints["post"]["{$prfx}_post_user_id_idx"] = "{$prfx}_post_user_id_idx";
                     }
                 } elseif (!empty($author_id)) {
-                    $post_part_where .= " and {$prfx}_post.user_id = $author_id" . "\n";
+                    if (reqvar("author_mode") == "last_replies") {
+                        $post_part_where .= " and exists (select 1 from {$prfx}_post_hierarchy 
+                                                          where 
+                                                          (parent_post_id = $author_id) or
+                                                          (reply_post_id = {$prfx}_post.id and parent_post_id in (select id from {$prfx}_post where user_id = $author_id))
+                                                         )" . "\n";
+                    } else {
+                        $post_part_where .= " and {$prfx}_post.user_id = $author_id" . "\n";
+                    }
                     
                     if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts") {
                         $hints["post"]["{$prfx}_post_user_id_idx"] = "{$prfx}_post_user_id_idx";
                     }
                 } elseif (!empty($author)) {
-                    $post_part_where .= " and {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL" . "\n";
+                    if (reqvar("author_mode") == "last_replies") {
+                        $post_part_where .= " and exists (select 1 from {$prfx}_post_hierarchy 
+                                                          where 
+                                                          (parent_post_id = {$prfx}_post.id and parent_post_id in (select id from {$prfx}_post where {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL)) or
+                                                          (reply_post_id = {$prfx}_post.id and parent_post_id in (select id from {$prfx}_post where {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL))
+                                                         )" . "\n";
+                    } else {
+                        $post_part_where .= " and {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL" . "\n";
+                    }
 
                     if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts") {
                         $hints["post"]["{$prfx}_post_author_idx"] = "{$prfx}_post_author_idx";
@@ -39889,6 +40115,10 @@ abstract class ForumManager
                     $max_search_results = 1000;
                 }
                 
+                if (reqvar("author_mode") == "last_replies") {
+                    $max_search_results = 1000;
+                }
+
                 if (!reqvar_empty("rate_statistics")) {
                     $max_search_results = 5000;
                 }                
@@ -39901,7 +40131,7 @@ abstract class ForumManager
                 
                 $found_post_count = $srdbw->affected_count();
                 
-                if (reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics") && $found_post_count >= $max_search_results) {
+                if (reqvar("author_mode") != "last_posts" && reqvar("author_mode") != "last_replies" && reqvar_empty("rate_statistics") && $found_post_count >= $max_search_results) {
                     MessageHandler::setWarning(sprintf(text("MsgNotAllFoundPostsShown"), $found_post_count));
                 }
             }
