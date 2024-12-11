@@ -58,6 +58,8 @@ class ForumAPIHandler
         
             set_language($request_data["language"] ?? "");
             
+            $this->check_maintenance($request_data, $response_data);
+
             $this->check_token($request_data, $response_data);
             
             $rmethod->invokeArgs($this, [&$request_data, &$response_data]);
@@ -129,6 +131,8 @@ class ForumAPIHandler
         
             set_language($request_data["language"] ?? "");
             
+            $this->check_maintenance($request_data, $response_data);
+            
             $this->check_token($request_data, $response_data);
             
             $rmethod->invokeArgs($this, [&$request_data, &$response_data]);
@@ -150,6 +154,20 @@ class ForumAPIHandler
       
         $this->sendJsonResponse($response_data);
     } // handleRequest
+    //------------------------------------
+    protected function check_maintenance(&$request_data, &$response_data)
+    {
+        global $maintenance_until_sec;
+        global $time_zone_name;
+        
+        if (empty($maintenance_until_sec)) {
+            return;
+        }
+        
+        $maintenance_until = adjust_and_format_timezone($maintenance_until_sec, text("DateTimeFormat"));
+        
+        throw new ForumAPIException(preg_replace("/[ \n\t]+/", " ", sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name)), ForumAPIException::ERR_CODE_MAINTENANCE_ERROR);
+    } // check_maintenance
     //------------------------------------
     protected function check_token(&$request_data, &$response_data)
     {

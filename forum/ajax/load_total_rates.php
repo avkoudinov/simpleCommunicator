@@ -17,6 +17,10 @@ if (!$fmanager->check_hash()) {
     exit;
 }
 
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    exit;
+}
+
 $fmanager->track_hit("", "");
 
 if (!reqvar_empty("period")) {

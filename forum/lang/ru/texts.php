@@ -1326,7 +1326,8 @@ $GLOBALS['DEF_TEXTS']['ru']['MsgBulkDeleteConfirm'] = 'Вы уверены, чт
 $GLOBALS['DEF_TEXTS']['ru']['UserAgreement'] = 'Польз. соглашение';
 $GLOBALS['DEF_TEXTS']['ru']['Maintenance'] = 'Техническое обслуживание';
 $GLOBALS['DEF_TEXTS']['ru']['MaintenanceLink'] = 'Подробнее';
-$GLOBALS['DEF_TEXTS']['ru']['MaintenanceComment'] = 'Форум на обслуживании предположительно до %s (временная зона: %s).';
+$GLOBALS['DEF_TEXTS']['ru']['MaintenanceComment'] = 'Форум на обслуживании предположительно до %s 
+            (временная зона: %s).';
 $GLOBALS['DEF_TEXTS']['ru']['MaintenanceNotification'] = 'Форум будет на техническом обслуживании предположительно 
             
             с %s до %s 

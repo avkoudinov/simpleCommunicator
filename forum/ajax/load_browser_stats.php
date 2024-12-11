@@ -15,7 +15,11 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])) != "")
 //------------------------------------------------------------------
 if(!$fmanager->check_hash())
 {
-  exit;
+    exit;
+}
+//------------------------------------------------------------------
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    exit;
 }
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");
