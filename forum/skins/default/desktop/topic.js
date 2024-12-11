@@ -2049,7 +2049,7 @@ function focus_message_field()
   elm = document.getElementById('post_message_table');
   if (elm)
   {
-    elm.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    elm.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" });
 
     elm = document.getElementById('message');
     if (!elm) return;

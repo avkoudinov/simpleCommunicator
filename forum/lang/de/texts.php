@@ -1319,7 +1319,8 @@ $GLOBALS['DEF_TEXTS']['de']['MsgBulkDeleteConfirm'] = 'Sind Sie sicher, dass Sie
 $GLOBALS['DEF_TEXTS']['de']['UserAgreement'] = 'Benutzervereinbarung';
 $GLOBALS['DEF_TEXTS']['de']['Maintenance'] = 'Wartung';
 $GLOBALS['DEF_TEXTS']['de']['MaintenanceLink'] = 'Mehr Info';
-$GLOBALS['DEF_TEXTS']['de']['MaintenanceComment'] = 'Das Forum wird momentan gewartet, voraussichtlich bis %s (Zeitzone: %s).';
+$GLOBALS['DEF_TEXTS']['de']['MaintenanceComment'] = 'Das Forum wird momentan gewartet, voraussichtlich bis %s 
+            (Zeitzone: %s).';
 $GLOBALS['DEF_TEXTS']['de']['MaintenanceNotification'] = 'Das Forum wird voraussichtlich 
             
             von %s bis %s 
