@@ -2324,7 +2324,7 @@ tr.selected_row td.checkbox_selector
   margin: 10px 0px 10px 0px;
 }
 
-.attachment_editable .message_table td .attachment_wrapper
+.attachment_editable .message_table td .attachment_wrapper.own_attachment
 {
   margin-right: 25px;
 }
@@ -5154,8 +5154,8 @@ img.image_placeholder
 
 .attachment_editable .thumb_gallery > .picture_wrapper,
 .attachment_editable .message_table td .thumb_gallery > .picture_wrapper,
-.attachment_editable .thumb_gallery > .attachment_wrapper,
-.attachment_editable .message_table td .thumb_gallery > .attachment_wrapper 
+.attachment_editable .thumb_gallery > .own_attachment,
+.attachment_editable .message_table td .thumb_gallery > .own_attachment 
 {
   margin-right: 30px;
 }

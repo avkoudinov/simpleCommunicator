@@ -138,8 +138,11 @@ if (!reqvar_empty("debug_context")) {
     $_SESSION["debug_context"] = reqvar("debug_context");
 }
 
+$maintenance_until_sec = 0;
 if (empty($maintenance_until)) {
     unset($_SESSION["admdebug"]);
+} else {
+    $maintenance_until_sec = xstrtotime($maintenance_until);
 }
 
 if (empty($ajax_processing)) {

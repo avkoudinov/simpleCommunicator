@@ -111,6 +111,62 @@ function load_geo_stats(load_browser_stat_button)
   return false;
 }
 
+var load_city_geo_stats_ajax = null;
+
+function load_city_geo_stats(load_browser_stat_button)
+{
+  if(load_browser_stat_button) load_browser_stat_button.classList.add("member_search_button_active");
+
+  if(!load_city_geo_stats_ajax)
+  {
+    load_city_geo_stats_ajax = new Forum.AJAX();
+
+    load_city_geo_stats_ajax.timeout = TIMEOUT;
+
+    load_city_geo_stats_ajax.beforestart = function() { break_check_new_messages(); };
+    load_city_geo_stats_ajax.aftercomplete = function(error) { 
+      activate_check_new_messages(); 
+      check_new_messages();
+    };
+
+    load_city_geo_stats_ajax.onload = function(text, xml)
+    {
+      if(text.trim() == '') 
+      {
+        if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+        return;
+      }
+
+      try
+      {
+        var elm = document.getElementById('city_geo_statistics');
+        if(elm) elm.innerHTML = text;
+      }
+      catch(err)
+      {
+      }
+
+      if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+    };
+
+    load_city_geo_stats_ajax.onerror = function(error, url, info)
+    {
+        if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+    };
+  } // init ajax
+
+  load_city_geo_stats_ajax.abort();
+  load_city_geo_stats_ajax.resetParams();
+
+  load_city_geo_stats_ajax.setPOST('hash', get_protection_hash());
+  load_city_geo_stats_ajax.setPOST('user_logged', user_logged);
+  load_city_geo_stats_ajax.setPOST('trace_sql', trace_sql);
+
+  load_city_geo_stats_ajax.request("ajax/load_city_geo_stats.php<?php echo($query_string); ?>");
+
+  return false;
+}
+
 function reload_statistics()
 {
   var form = document.getElementById("statistics_filter_form");

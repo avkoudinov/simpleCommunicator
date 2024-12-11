@@ -18,6 +18,10 @@ if (!$fmanager->check_hash()) {
     exit;
 }
 
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    exit;
+}
+
 $hide_from_robots = 0;
 $tid = reqvar("tid");
 $fid = "";

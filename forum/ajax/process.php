@@ -15,6 +15,7 @@ $response['success'] = false;
 $show_messages = true;
 //-----------------------------------------------------------------------
 if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    MessageHandler::setWarning(sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name));
     MessageHandler::addMessagesToResponse($response);
     System::sendJSON($response);
     exit;

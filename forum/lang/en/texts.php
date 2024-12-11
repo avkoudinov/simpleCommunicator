@@ -1319,7 +1319,8 @@ $GLOBALS['DEF_TEXTS']['en']['MsgBulkDeleteConfirm'] = 'Are you sure to perform t
 $GLOBALS['DEF_TEXTS']['en']['UserAgreement'] = 'User agreement';
 $GLOBALS['DEF_TEXTS']['en']['Maintenance'] = 'Maintenance';
 $GLOBALS['DEF_TEXTS']['en']['MaintenanceLink'] = 'More';
-$GLOBALS['DEF_TEXTS']['en']['MaintenanceComment'] = 'The forum is currently under maintenance presumably until %s (time zone: %s).';
+$GLOBALS['DEF_TEXTS']['en']['MaintenanceComment'] = 'The forum is currently under maintenance presumably until%s 
+            (time zone: %s).';
 $GLOBALS['DEF_TEXTS']['en']['MaintenanceNotification'] = 'The forum will be on maintenance presumably 
             
             from %s to %s 

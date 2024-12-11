@@ -9109,10 +9109,14 @@
         </text>
 
         <text id="MaintenanceComment">
-            <en>The forum is currently under maintenance presumably until %s (time zone: %s).</en>
-            <de>Das Forum wird momentan gewartet, voraussichtlich bis %s (Zeitzone: %s).</de>
-            <ru>Форум на обслуживании предположительно до %s (временная зона: %s).</ru>
-            <ua>Форум на обслуговуванні імовірно до %s (часова зона: %s).</ua>
+            <en>The forum is currently under maintenance presumably until%s 
+            (time zone: %s).</en>
+            <de>Das Forum wird momentan gewartet, voraussichtlich bis %s 
+            (Zeitzone: %s).</de>
+            <ru>Форум на обслуживании предположительно до %s 
+            (временная зона: %s).</ru>
+            <ua>Форум на обслуговуванні імовірно до %s 
+            (часова зона: %s).</ua>
         </text>
 
         <text id="MaintenanceNotification">

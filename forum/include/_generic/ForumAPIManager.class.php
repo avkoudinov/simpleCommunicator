@@ -3075,17 +3075,17 @@ abstract class ForumAPIManager
 
         $post_id = $dbw->escape($request_data["post_id"]);
         
-        if (!$rodbw->execute_query("select topic_id from {$prfx}_post where id = $post_id")) {
+        if (!$dbw->execute_query("select topic_id from {$prfx}_post where id = $post_id")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
         $topic_id = 0;
         
-        if ($rodbw->fetch_row()) {
-            $topic_id = $rodbw->field_by_name("topic_id");
+        if ($dbw->fetch_row()) {
+            $topic_id = $dbw->field_by_name("topic_id");
         }
         
-        $rodbw->free_result();
+        $dbw->free_result();
         
         if (empty($topic_id)) {
             throw new ForumAPIException(sprintf(text("ErrPostDoesNotExist"), $request_data["post_id"]), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
