@@ -443,6 +443,17 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 <img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_monthly_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
+<div id="browser_statistics">
+
+<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h2>
+
+<div class="browser_stat_wrapper">
+<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_browser_stats(this)">
+</div>
+
+</div>
+
+
 <?php if (defined("GETGEOAPI_API_KEYS") && !empty(GETGEOAPI_API_KEYS) && empty($settings["hash_ip_addresses"])): ?>
 
 <div id="geo_statistics">
@@ -456,17 +467,6 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 </div>
 
 <?php endif; ?>
-
-
-<div id="browser_statistics">
-
-<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h2>
-
-<div class="browser_stat_wrapper">
-<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_browser_stats(this)">
-</div>
-
-</div>
 
 </div>
 

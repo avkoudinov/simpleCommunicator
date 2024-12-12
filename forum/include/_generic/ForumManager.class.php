@@ -10121,6 +10121,10 @@ abstract class ForumManager
                 $city_stats[$country][$city] = 100 * $val / $country_totals[$country];
             }
         }
+        
+        uksort($city_stats, function ($a, $b) {
+            return strnatcmp($a, $b);          
+        });
 
         $query = "select country, count(*) cnt from
                     {$prfx}_ip_daily_statistics
