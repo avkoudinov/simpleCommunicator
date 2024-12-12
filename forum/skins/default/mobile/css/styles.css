@@ -4644,7 +4644,9 @@ img.image_placeholder
 .thumb_gallery > .picture_wrapper,
 .message_table td .thumb_gallery > .picture_wrapper,
 .thumb_gallery > .attachment_wrapper,
-.message_table td .thumb_gallery > .attachment_wrapper 
+.message_table td .thumb_gallery > .attachment_wrapper, 
+.thumb_gallery > .emb_wrapper,
+.message_table td .thumb_gallery > .emb_wrapper  
 {
   float: left;
   display: grid;
@@ -4654,8 +4656,6 @@ img.image_placeholder
   box-sizing: border-box;
 }
 
-.attachment_editable .thumb_gallery > .picture_wrapper,
-.attachment_editable .message_table td .thumb_gallery > .picture_wrapper,
 .attachment_editable .thumb_gallery > .own_attachment,
 .attachment_editable .message_table td .thumb_gallery > .own_attachment 
 {
@@ -6544,6 +6544,8 @@ audio
   width: 648px;
   display: block;
   box-sizing: border-box;
+  height: 60px;
+  margin-bottom: 40px; 
 }
 
 video
