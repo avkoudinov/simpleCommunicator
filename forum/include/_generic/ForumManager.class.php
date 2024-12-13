@@ -10122,8 +10122,11 @@ abstract class ForumManager
             }
         }
         
-        uksort($city_stats, function ($a, $b) {
-            return strnatcmp($a, $b);          
+        uksort($city_stats, function ($a, $b) use ($country_stats) {
+            $c1 = $country_stats[$a] ?? 0;
+            $c2 = $country_stats[$b] ?? 0;
+            
+            return -1*($c1 <=> $c2);          
         });
 
         $query = "select country, count(*) cnt from
