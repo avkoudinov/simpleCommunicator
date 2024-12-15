@@ -10,6 +10,17 @@
   />
   
   <properties>
+  
+    <property
+    name="show_df_logotype" 
+    type="checkbox"
+    default = "0"
+    
+    ru="Показзывать логотип форума вместо названия"
+    ua="Показувати логотип форуму замість назви"
+    en="Display the forum logo instead of the forum name"
+    de="Forum-Logo anstelle des Forumsnamens anzeigen"
+    />
 
     <property
     name="pin_the_menu" 

@@ -24,7 +24,7 @@ function gen_message_image($text)
 {
   $text = utf8_to_nce(val_or_empty($text));
   
-  $graph = new CanvasGraph(598,200);	
+  $graph = new CanvasGraph(598,300);	
   $t1 = new Text($text);
   $t1->SetPos(0.5,0.5, "center", "center");
   

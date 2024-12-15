@@ -629,6 +629,13 @@
             <ua>повд.</ua>
         </text>
 
+        <text id="MyRepliesShort">
+            <en>repl.</en>
+            <de>Antw.</de>
+            <ru>отв.</ru>
+            <ua>відп.</ua>
+        </text>
+
         <text id="TopicAuthorMessages">
             <en>Topic author's messages</en>
             <de>Nachrichten des Thema-Autors</de>
@@ -8687,6 +8694,13 @@
             <ua>Статистика навантаження</ua>
         </text>
 
+        <text id="RedmarkerStatistics">
+            <en>Read marker statistics</en>
+            <de>Read-Marker-Statistik</de>
+            <ru>Статистика ридмаркеров</ru>
+            <ua>Статистика рідмаркерів</ua>
+        </text>
+
         <text id="Index">
             <en>Index</en>
             <de>Index</de>
@@ -8708,18 +8722,32 @@
             <ua>Кількість переглядів</ua>
         </text>
 
-        <text id="TopicRMCount">
-            <en>Topic read marker count</en>
-            <de>Anzahl der Themen-Read-Marker</de>
-            <ru>Количество ридмаркеров тем</ru>
-            <ua>Кількість рідмаркерів тем</ua>
+        <text id="TopicUniqueRMCount">
+            <en>Count of unique topic read markers</en>
+            <de>Anzahl der eindeutigen Themen-Read-Marker</de>
+            <ru>Количество уникальных ридмаркеров тем</ru>
+            <ua>Кількість унікальних рідмаркерів тем</ua>
         </text>
 
-        <text id="ForumRMCount">
-            <en>Forum read marker count</en>
-            <de>Anzahl der Forum-Read-Marker</de>
-            <ru>Количество ридмаркеров форумов</ru>
-            <ua>Кількість рідмаркерів форумів</ua>
+        <text id="ForumUniqueRMCount">
+            <en>Count of unique forum read markers</en>
+            <de>Anzahl der eindeutigen Forum-Read-Marker</de>
+            <ru>Количество уникальных ридмаркеров форумов</ru>
+            <ua>Кількість унікальних рідмаркерів форумів</ua>
+        </text>
+
+        <text id="TopicTotalRMCount">
+            <en>Total count of topic read markers</en>
+            <de>Gesamtzahl der Themen-Read-Marker</de>
+            <ru>Общее количество ридмаркеров тем</ru>
+            <ua>Загальна кількість рідмаркерів тем</ua>
+        </text>
+
+        <text id="ForumTotalRMCount">
+            <en>Total count of forum read markers</en>
+            <de>Gesamtzahl der Forum-Read-Marker</de>
+            <ru>Общее количество ридмаркеров форумов</ru>
+            <ua>Загальна кількість рідмаркерів форумів</ua>
         </text>
 
         <text id="ActualStatistics">

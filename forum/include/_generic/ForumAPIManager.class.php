@@ -3008,7 +3008,7 @@ abstract class ForumAPIManager
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
 
-        if (!$this->forum_manager->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users)) {
+        if (!$this->forum_manager->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users, $forced_guest_posting)) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
 

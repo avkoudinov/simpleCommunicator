@@ -32,7 +32,7 @@ $total_agents_hits_count = 0;
 $user_activity = array();
 $ip_activity = array();
 $agent_activity = array();
-if(!$fmanager->gen_load_statistics($user_activity, $ip_activity, $agent_activity, $total_user_hits_count, $total_ip_hits_count, $total_agents_hits_count))
+if(!$fmanager->gen_activity_statistics($user_activity, $ip_activity, $agent_activity, $total_user_hits_count, $total_ip_hits_count, $total_agents_hits_count))
 {
   header("location: " . $target_url);
   exit;
