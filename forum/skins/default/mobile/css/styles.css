@@ -2316,6 +2316,18 @@ img.mourning_band
   background-size: 100%;
 }
 
+.message_container_with_offset .comment_indicator {
+  width: 86px;
+  height: 86px;
+  position: absolute;
+  top: 0;
+  left: -105px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/comment.png);
+  background-size: 100%;
+}
+
 .message_container_just_edited
 {
   margin-left: 120px;
