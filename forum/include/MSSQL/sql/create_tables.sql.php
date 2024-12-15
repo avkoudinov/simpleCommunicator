@@ -926,7 +926,9 @@ create table v1_load_statistics (
    ip                   varchar(255)         null,
    exec_time            int                  not null,
    forum_rm_count       int                  not null default 0,
-   topic_rm_count       int                  not null default 0
+   topic_rm_count       int                  not null default 0,
+   total_forum_rm_count int                  not null default 0,
+   total_topic_rm_count int                  not null default 0
 )
 ';
 

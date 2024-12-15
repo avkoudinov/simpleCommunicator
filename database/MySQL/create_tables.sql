@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     30.11.2024 10:31:51                          */
+/* Created on:     15.12.2024 15:48:05                          */
 /*==============================================================*/
 
 
@@ -1190,7 +1190,9 @@ create table v1_load_statistics
    ip                   varchar(255),
    exec_time            int not null,
    forum_rm_count       int not null default 0,
-   topic_rm_count       int not null default 0
+   topic_rm_count       int not null default 0,
+   total_forum_rm_count int not null default 0,
+   total_topic_rm_count int not null default 0
 );
 
 /*==============================================================*/

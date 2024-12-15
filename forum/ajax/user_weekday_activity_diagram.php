@@ -28,7 +28,7 @@ function gen_message_image($text)
   $t1 = new Text($text);
   $t1->SetPos(0.5,0.5, "center", "center");
   
-  $t1->SetFont(FF_VERDANA,FS_NORMAL,14);
+  $t1->SetFont(FF_VERDANA,FS_NORMAL,10);
   $t1->SetColor("#C51C20");
   $graph->AddText($t1);
 

@@ -4,7 +4,7 @@
 
 <Workspace>
 	<Local Expanded="Yes" Name="Database Design">
-		<Model Expanded="Yes" ID="{01A20C32-100F-479B-8987-F351D562CEEC}" Name="mssql" Selected="Yes" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="MSSQL/MSSQL.pdm"/>
+		<Model Expanded="Yes" ID="{01A20C32-100F-479B-8987-F351D562CEEC}" Loaded="No" Name="mssql" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="MSSQL/MSSQL.pdm"/>
 		<Model Expanded="Yes" ID="{01A20C32-100F-479B-8987-F351D562CEEC}" Name="mysql" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="MySQL/MYSQL.pdm"/>
 	</Local>
 	<BrowserModule Name="Repository"/>

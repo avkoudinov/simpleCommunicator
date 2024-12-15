@@ -111,8 +111,10 @@ abstract class ForumManager
     
     abstract function get_query_clear_guest_viewed_topics($prfx);
     
-    abstract function gen_load_statistics(&$user_activity, &$ip_activity, &$agent_activity, &$total_user_hits_count, &$total_ip_hits_count, &$total_agents_hits_count);
+    abstract function gen_activity_statistics(&$user_activity, &$ip_activity, &$agent_activity, &$total_user_hits_count, &$total_ip_hits_count, &$total_agents_hits_count);
     
+    abstract function gen_load_statistics();
+
     abstract function get_reply_post_clause($dbw, $prfx, $parent_pid);
 
     abstract function get_hot_topic_clause($prfx, $start1, $start2);
@@ -24473,6 +24475,7 @@ abstract class ForumManager
         }
         
         $_SESSION["last_post_hash"] = $last_post_hash;
+        
         $_SESSION["last_posted_user"] = reqvar("author");
         
         if (empty($forced_guest_posting)) {
@@ -24514,7 +24517,10 @@ abstract class ForumManager
         }
         $response["target_url"] .= "&tid=$tid&msg=" . $return_post;
         
-        if (!$this->is_logged_in() || $forced_guest_posting) {
+        if (!empty($_SESSION["guest_posting_mode"]) && reqvar("author") == $this->get_status_user_name()) {
+            // reset the guest if the user posted under his login name in the guest posting mode
+            set_cookie("q_last_guest_name", "", time() + 90 * 24 * 3600);
+        } elseif (!$this->is_logged_in() || $forced_guest_posting) {
             set_cookie("q_last_guest_name", val_or_empty($_SESSION["last_posted_user"]), time() + 90 * 24 * 3600);
         }
         
@@ -24533,7 +24539,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$this->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users)) {
+        if (!$this->do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, $all_appealed_users, $appealed_users, $forced_guest_posting)) {
             return false;
         }
         
@@ -24541,10 +24547,17 @@ abstract class ForumManager
     } // post_message
     
     //-----------------------------------------------------------------
-    function do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, &$all_appealed_users, &$appealed_users)
+    function do_after_post_mailing($dbw, $prfx, $fid, $tid, $post_id, $is_private, $message, $citated_posts, $short_message, $search_words_appendix, &$all_appealed_users, &$appealed_users, $forced_guest_posting)
     {
         global $settings;
         
+        $current_user_name = $this->get_user_name();
+        $current_user_id = $this->get_user_id();
+        if ($forced_guest_posting) {
+            $current_user_name = reqvar("author");
+            $current_user_id = "";
+        }
+
         // get subscribed users
         // if a user ignores the current user or guests, do not notify him
         
@@ -24822,7 +24835,7 @@ abstract class ForumManager
                 continue;
             }
             
-            if ((!$this->is_logged_in() || $this->is_master_admin()) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
+            if ((!$this->is_logged_in() || $this->is_master_admin() || $forced_guest_posting) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
                 continue;
             }
             
@@ -24835,7 +24848,7 @@ abstract class ForumManager
             $params = array();
             
             $params["todo"] = 1;
-            $params["{author_name}"] = reqvar("author");
+            $params["{author_name}"] = $current_user_name;
             $params["{user_name}"] = $sinfo["name"];
             
             $params["{topic_id}"] = $tid;
@@ -24861,7 +24874,7 @@ abstract class ForumManager
             $params["{message}"] = $short_message;
             $this->format_manager->format_message_simple($dbw, $prfx, $params["{message}"], "short_message");
             
-            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params, $post_id);
+            $this->log_user_event($uid, $current_user_id, $current_user_name, $event_code, $params, $post_id);
             
             // to check if someone was not notified
             unset($all_appealed_users[$sinfo["name"]]);
@@ -24884,7 +24897,7 @@ abstract class ForumManager
                 continue;
             }
             
-            if ((!$this->is_logged_in() || $this->is_master_admin()) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
+            if ((!$this->is_logged_in() || $this->is_master_admin() || $forced_guest_posting) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
                 continue;
             }
             
@@ -24897,7 +24910,7 @@ abstract class ForumManager
             $params = array();
             
             $params["todo"] = 1;
-            $params["{author_name}"] = reqvar("author");
+            $params["{author_name}"] = $current_user_name;
             $params["{user_name}"] = $sinfo["name"];
             
             $params["{topic_id}"] = $tid;
@@ -24937,7 +24950,7 @@ abstract class ForumManager
                 $params["{message}"] = $short_message;
                 $this->format_manager->format_message_simple($dbw, $prfx, $params["{message}"], "short_message");
                 
-                $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params, $post_id);
+                $this->log_user_event($uid, $current_user_id, $current_user_name, $event_code, $params, $post_id);
             }
             
             if (!empty($sinfo["email"]) && !empty($sinfo["send_notifications"])) {
@@ -24954,7 +24967,7 @@ abstract class ForumManager
                 continue;
             }
             
-            if ((!$this->is_logged_in() || $this->is_master_admin()) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
+            if ((!$this->is_logged_in() || $this->is_master_admin() || $forced_guest_posting) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
                 continue;
             }
             
@@ -24967,7 +24980,7 @@ abstract class ForumManager
             $params = array();
             
             $params["todo"] = 1;
-            $params["{author_name}"] = reqvar("author");
+            $params["{author_name}"] = $current_user_name;
             $params["{user_name}"] = $sinfo["name"];
             
             $params["{topic_id}"] = $tid;
@@ -25005,7 +25018,7 @@ abstract class ForumManager
                 $params["{message}"] = $short_message;
                 $this->format_manager->format_message_simple($dbw, $prfx, $params["{message}"], "short_message");
                 
-                $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params, $post_id);
+                $this->log_user_event($uid, $current_user_id, $current_user_name, $event_code, $params, $post_id);
             }
             
             if (!empty($sinfo["email"]) && !empty($sinfo["send_notifications"])) {
@@ -25022,7 +25035,7 @@ abstract class ForumManager
                 continue;
             }
             
-            if ((!$this->is_logged_in() || $this->is_master_admin()) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
+            if ((!$this->is_logged_in() || $this->is_master_admin() || $forced_guest_posting) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
                 continue;
             }
             
@@ -25035,7 +25048,7 @@ abstract class ForumManager
             $params = array();
             
             $params["todo"] = 1;
-            $params["{author_name}"] = reqvar("author");
+            $params["{author_name}"] = $current_user_name;
             $params["{user_name}"] = $sinfo["name"];
             
             $params["{topic_id}"] = $tid;
@@ -25064,7 +25077,7 @@ abstract class ForumManager
             $params["{message}"] = $short_message;
             $this->format_manager->format_message_simple($dbw, $prfx, $params["{message}"], "short_message");
             
-            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params, $post_id);
+            $this->log_user_event($uid, $current_user_id, $current_user_name, $event_code, $params, $post_id);
             
             if (!empty($sinfo["email"]) && !empty($sinfo["send_notifications"])) {
                 $params["{message}"] = $short_message;
@@ -25082,7 +25095,7 @@ abstract class ForumManager
                 continue;
             }
             
-            if ((!$this->is_logged_in() || $this->is_master_admin()) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
+            if ((!$this->is_logged_in() || $this->is_master_admin() || $forced_guest_posting) && !empty($sinfo["ignores_all_guests"]) || !empty($sinfo["ignoring_me"])) {
                 continue;
             }
 
@@ -25144,7 +25157,7 @@ abstract class ForumManager
             $params = array();
             
             $params["todo"] = 1;
-            $params["{author_name}"] = reqvar("author");
+            $params["{author_name}"] = $current_user_name;
             $params["{user_name}"] = $sinfo["name"];
             
             $params["{topic_id}"] = $tid;
@@ -25173,7 +25186,7 @@ abstract class ForumManager
             $params["{message}"] = $short_message;
             $this->format_manager->format_message_simple($dbw, $prfx, $params["{message}"], "short_message");
             
-            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params, $post_id);
+            $this->log_user_event($uid, $current_user_id, $current_user_name, $event_code, $params, $post_id);
             
             if (!empty($sinfo["email"]) && !empty($sinfo["send_notifications"])) {
                 $params["{message}"] = $short_message;
@@ -34158,7 +34171,7 @@ abstract class ForumManager
     } // get_post_data
     
     //-----------------------------------------------------------------
-    function track_load_statistics($tmp, $topic_readmarker_count, $forum_readmarker_count)
+    function track_load_statistics($tmp, $topic_readmarker_count, $forum_readmarker_count, $total_topic_readmarker_count, $total_forum_readmarker_count)
     {
         $dbw = System::getDBWorker();
         if (!$dbw) {
@@ -34188,6 +34201,16 @@ abstract class ForumManager
             $forum_readmarker_count = 0;
         }
         
+        $total_topic_readmarker_count = $dbw->escape($total_topic_readmarker_count);
+        if (empty($total_topic_readmarker_count) || !is_numeric($total_topic_readmarker_count)) {
+            $total_topic_readmarker_count = 0;
+        }
+        
+        $total_forum_readmarker_count = $dbw->escape($total_forum_readmarker_count);
+        if (empty($total_forum_readmarker_count) || !is_numeric($total_forum_readmarker_count)) {
+            $total_forum_readmarker_count = 0;
+        }
+
         $url = val_or_empty($_SERVER['SCRIPT_NAME']);
         if (!empty($url)) {
             $url = basename($url);
@@ -34199,9 +34222,9 @@ abstract class ForumManager
         
         $ip = $dbw->quotes_or_null(System::getIPAddress());
         
-        $query = "insert into {$prfx}_load_statistics (dt, url, user_id, user_name, ip, exec_time, topic_rm_count, forum_rm_count)
+        $query = "insert into {$prfx}_load_statistics (dt, url, user_id, user_name, ip, exec_time, topic_rm_count, forum_rm_count, total_topic_rm_count, total_forum_rm_count)
               values
-              ('$now', '$url', $uid, $user_name, $ip, $tmp, $topic_readmarker_count, $forum_readmarker_count)";
+              ('$now', '$url', $uid, $user_name, $ip, $tmp, $topic_readmarker_count, $forum_readmarker_count, $total_topic_readmarker_count, $total_forum_readmarker_count)";
         
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -39261,8 +39284,8 @@ abstract class ForumManager
         $author = reqvar("author");
         
         if (!empty($author) && $author[0] != ":") {
-            $author = $srdbw->escape($this->display_name_to_name($author));
-            $query = "select id from {$prfx}_user where user_name = '$author'";
+            $author = $srdbw->quotes_or_null($this->display_name_to_name($author));
+            $query = "select id from {$prfx}_user where user_name = $author";
             if (!$srdbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
                 return false;
@@ -39275,9 +39298,9 @@ abstract class ForumManager
             $srdbw->free_result();
         } elseif (!empty($author) && $author[0] == ":") {
             // search posts of the author when he was a guest
-            $author = $srdbw->escape($this->display_name_to_name(ltrim($author, ":")));
+            $author = $srdbw->quotes_or_null($this->display_name_to_name(ltrim($author, ":")));
         } else {
-            $author = $srdbw->escape($this->display_name_to_name($author));
+            $author = $srdbw->quotes_or_null($this->display_name_to_name($author));
         }
         
         $any_guest = false;
@@ -39518,8 +39541,8 @@ abstract class ForumManager
         //---------------------------------------------------------------
         // author created the topic
         //---------------------------------------------------------------
-        if ((reqvar("author_mode") == "created_topic" && (!empty($author) || !empty($start_date) || !empty($end_date))) ||
-            (reqvar("author_mode") == "last_topics" && !empty($author))
+        if ((reqvar("author_mode") == "created_topic" && ($author != "NULL" || !empty($start_date) || !empty($end_date))) ||
+            (reqvar("author_mode") == "last_topics" && $author != "NULL")
         ) {
             $unseen_appendix = "";
             if (!reqvar_empty("unseen")) {
@@ -39536,8 +39559,8 @@ abstract class ForumManager
                 if ($author_id == $current_uid) {
                     $delayed_clause = "1 = 1";
                 }
-            } elseif (!empty($author)) {
-                $topic_part_where .= " and {$prfx}_topic.author = '$author' and {$prfx}_topic.user_id is NULL" . "\n";
+            } elseif ($author != "NULL") {
+                $topic_part_where .= " and {$prfx}_topic.author = $author and {$prfx}_topic.user_id is NULL" . "\n";
             }
             
             if (!reqvar_empty("unseen") && empty($subscribed_authors)) {
@@ -39555,14 +39578,14 @@ abstract class ForumManager
         //---------------------------------------------------------------
         // author participated in the topic
         //---------------------------------------------------------------
-        if (!empty($author) && reqvar("author_mode") == "participating") {
+        if ($author != "NULL" && reqvar("author_mode") == "participating") {
             if ($any_guest) {
                 $hints["post"]["primary"] = "primary";
                 $topic_part_where .= " and exists (select 1 from {$prfx}_post where {$prfx}_post.deleted <> 1 and {$prfx}_post.user_id is NULL and {$prfx}_topic.id = {$prfx}_post.topic_id)" . "\n";
             } elseif (empty($author_id)) {
                 $hints["post"]["primary"] = "primary";
                 $hints["post"]["{$prfx}_post_author_idx"] = "{$prfx}_post_author_idx";
-                $topic_part_where .= " and exists (select 1 from {$prfx}_post where {$prfx}_post.deleted <> 1 and {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL and {$prfx}_topic.id = {$prfx}_post.topic_id)" . "\n";
+                $topic_part_where .= " and exists (select 1 from {$prfx}_post where {$prfx}_post.deleted <> 1 and {$prfx}_post.author = $author and {$prfx}_post.user_id is NULL and {$prfx}_topic.id = {$prfx}_post.topic_id)" . "\n";
             } else {
                 $topic_part_where .= " and exists (select 1 from {$prfx}_topic_participants where user_id = $author_id and topic_id = {$prfx}_topic.id)" . "\n";
             }
@@ -39823,9 +39846,9 @@ abstract class ForumManager
                 $other_post_conditions_exist = true;
             }
             //-------------------------------------------------------------------
-            if ((reqvar("author_mode") == "wrote_post" && (!empty($author) || !empty($start_date) || !empty($end_date))) ||
-                (reqvar("author_mode") == "last_posts" && !empty($author)) ||
-                (reqvar("author_mode") == "last_replies" && !empty($author)) 
+            if ((reqvar("author_mode") == "wrote_post" && ($author != "NULL" || !empty($start_date) || !empty($end_date))) ||
+                (reqvar("author_mode") == "last_posts" && $author != "NULL") ||
+                (reqvar("author_mode") == "last_replies" && $author != "NULL") 
             ) {
                 if (reqvar("author_mode") == "last_posts") {
                     $hints["post"]["primary"] = "primary";
@@ -39846,30 +39869,30 @@ abstract class ForumManager
                     }
                 } elseif (!empty($author_id)) {
                     if (reqvar("author_mode") == "last_replies") {
-                        $post_part_where .= " and exists (select 1 from {$prfx}_post_hierarchy 
-                                                          where 
-                                                          (parent_post_id = $author_id) or
-                                                          (reply_post_id = {$prfx}_post.id and parent_post_id in (select id from {$prfx}_post where user_id = $author_id))
+                        $post_part_where .= " and exists (
+                                                          select 1 from {$prfx}_post_hierarchy
+                                                          inner join {$prfx}_post subpost on ({$prfx}_post_hierarchy.parent_post_id = subpost.id)
+                                                          where subpost.user_id = $author_id and ({$prfx}_post.id = reply_post_id or {$prfx}_post.id = parent_post_id)
                                                          )" . "\n";
                     } else {
                         $post_part_where .= " and {$prfx}_post.user_id = $author_id" . "\n";
                     }
                     
-                    if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts") {
+                    if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts" || reqvar("author_mode") == "last_replies") {
                         $hints["post"]["{$prfx}_post_user_id_idx"] = "{$prfx}_post_user_id_idx";
                     }
-                } elseif (!empty($author)) {
+                } elseif ($author != "NULL") {
                     if (reqvar("author_mode") == "last_replies") {
-                        $post_part_where .= " and exists (select 1 from {$prfx}_post_hierarchy 
-                                                          where 
-                                                          (parent_post_id = {$prfx}_post.id and parent_post_id in (select id from {$prfx}_post where {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL)) or
-                                                          (reply_post_id = {$prfx}_post.id and parent_post_id in (select id from {$prfx}_post where {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL))
+                        $post_part_where .= " and exists (
+                                                          select 1 from {$prfx}_post_hierarchy
+                                                          inner join {$prfx}_post subpost on ({$prfx}_post_hierarchy.parent_post_id = subpost.id)
+                                                          where subpost.author = $author and subpost.user_id is NULL and ({$prfx}_post.id = reply_post_id or {$prfx}_post.id = parent_post_id)
                                                          )" . "\n";
                     } else {
-                        $post_part_where .= " and {$prfx}_post.author = '$author' and {$prfx}_post.user_id is NULL" . "\n";
+                        $post_part_where .= " and {$prfx}_post.author = $author and {$prfx}_post.user_id is NULL" . "\n";
                     }
 
-                    if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts") {
+                    if (reqvar("author_mode") == "wrote_post" || reqvar("author_mode") == "last_posts" || reqvar("author_mode") == "last_replies") {
                         $hints["post"]["{$prfx}_post_author_idx"] = "{$prfx}_post_author_idx";
                     }
                 }
@@ -40123,7 +40146,7 @@ abstract class ForumManager
                 }
                 
                 if (reqvar("author_mode") == "last_replies") {
-                    $max_search_results = 1000;
+                    $max_search_results = 200;
                 }
 
                 if (!reqvar_empty("rate_statistics")) {
@@ -41110,8 +41133,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select
                              id, name
-                             from {$prfx}_forum_group
-                             
+                             from {$prfx}_forum_group                             
                              order by name")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -41124,6 +41146,72 @@ abstract class ForumManager
         }
         
         $dbw->free_result();
+
+        return true;
     } // get_forum_group_list
+    
+    //---------------------------------------------------------------
+    function reorder_last_replies(&$post_list, $target_author)
+    {
+        $srdbw = System::getSRDBWorker();
+        if (!$srdbw) {
+            return false;
+        }
+
+        $prfx = $srdbw->escape(System::getDBPrefix());
+
+        $in_list = implode(",", array_keys($post_list));
+        if (empty($in_list)) {
+            return true;
+        }
+
+        $qyery = "select parent_post_id, reply_post_id, author, user_name 
+                  from {$prfx}_post_hierarchy
+                  inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                  left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
+                  where reply_post_id in ($in_list)";
+        if (!$srdbw->execute_query($qyery)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return false;
+        }
+        
+        $post_hierarchy = [];
+        
+        while ($srdbw->fetch_row()) {
+            $reply_post_id = $srdbw->field_by_name("reply_post_id");
+            $parent_post_id = $srdbw->field_by_name("parent_post_id");
+            $author = $srdbw->field_by_name("user_name");
+            if (empty($author)) {
+                $author = $srdbw->field_by_name("author");
+            }
+            
+            if (empty($post_list[$parent_post_id])) {
+                continue;
+            }
+            
+            if ($author == $target_author) {
+                $post_list[$parent_post_id]["parent_post"] = 1;
+                
+                $post_hierarchy[$parent_post_id][] = $reply_post_id;
+            } 
+        }
+        
+        $srdbw->free_result();
+        
+        $reversed_keys = array_reverse(array_keys($post_hierarchy));
+        
+        $new_post_list = [];
+        foreach ($reversed_keys as $key)
+        {
+            $new_post_list[$key] = $post_list[$key];
+            foreach ($post_hierarchy[$key] as $reply_post_id) {
+                $new_post_list[$reply_post_id] = $post_list[$reply_post_id];
+            }
+        }
+        
+        $post_list = $new_post_list;
+        
+        return true;
+    } // reorder_last_replies
 } // class ForumManager
 ?>

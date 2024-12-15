@@ -67,7 +67,22 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
   $author = $fmanager->get_last_posted_user_name();
 }
 ?>
-<input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)">
+
+    <table class="aux_table" style="width: 100%">
+    <tr>
+    <td>
+    <input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)">
+    </td>
+
+    <?php if(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]) && !$fmanager->is_master_admin()): ?>
+    <td style="width: 1px">
+    <button class="me_button" onclick="set_to_me();" type="button"><?php echo_html(text("Me")); ?></button>
+    </td>
+    <?php endif; ?>
+
+    </tr>
+    </table>
+
 </td>
 </tr>
 

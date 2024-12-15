@@ -271,7 +271,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
 <div class="body_wrapper">
 
-<h3 class="profile_caption"><?php echo_html(text("ActualStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("ActualStatistics")); ?></h3>
 
 <table class="general_statistics_table">
 <tr>
@@ -340,7 +340,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
 </table>
 
-<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h3>
 
 <!-- BEGIN: header2 -->
 
@@ -431,13 +431,13 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 
 </table>
 
-<h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="<?php echo_text("DailyActivity"); ?>" src="ajax/forum_daily_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
-<h3 class="profile_caption"><?php echo_html(text("MonthlyActivity")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("MonthlyActivity")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_monthly_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
@@ -445,7 +445,7 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 
 <div id="browser_statistics">
 
-<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h3>
 
 <div class="browser_stat_wrapper">
 <input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_browser_stats(this)">
@@ -458,7 +458,7 @@ $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selecte
 
 <div id="geo_statistics">
 
-<h3 class="profile_caption"><?php echo_html(text("GeoStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("GeoStatistics")); ?></h3>
 
 <div class="browser_stat_wrapper">
 <input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_geo_stats(this)">

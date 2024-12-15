@@ -52,6 +52,12 @@ function confirm_post(form)
   return false;
 }
 
+function set_to_me() {
+  var elm = document.getElementById("author");
+  if (elm) elm.value = "<?php echo_js($fmanager->get_display_name($fmanager->get_user_name())); ?>";
+  return false;
+}
+
 function confirm_reset(form)
 {
   var elm;
@@ -411,6 +417,43 @@ writing_message = true;
 activate_auto_save();
 </script>
 
+<?php
+if($is_private == 2)
+{
+  $url = "new_topic.php?fid=private";
+}
+elseif($is_private == 1)
+{
+  $url = "new_topic.php?fid=private&receiver=" . xrawurlencode(reqvar("receiver"));
+}
+else
+{
+  $url = "new_topic.php?fid=$fid";
+}
+?>
+
+<!-- BEGIN: header3 -->
+
+<div class="header3">
+
+<div class="left_action_panel">
+<?php if(!empty($_SESSION["has_forums_with_user_guest_posting"]) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && !empty($forum_data["user_posting_as_guest"])): ?>
+<?php if(empty($_SESSION["guest_posting_mode"])): ?>
+<span class="separator">|</span> <a href="<?php echo($url); ?>&guest_posting_on=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOn")); ?></a>
+<?php else: ?>
+<span class="separator">|</span> <a href="<?php echo($url); ?>&guest_posting_off=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("GuestPostingModeOff")); ?></a>
+<?php endif; ?>
+<?php endif; ?>
+
+&nbsp;
+</div>
+
+<div class="clear_both"></div>
+
+</div>
+
+<!-- END: header3 -->
+
 <div class="content_area">
 
 <!-- BEGIN: forum_bar -->
@@ -529,25 +572,24 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
   $author = $fmanager->get_last_posted_user_name();
 }
 ?>
-<input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)">
-</td>
-</tr>
+
+    <table class="aux_table" style="width: 100%">
+    <tr>
+    <td>
+    <input type="text" id="author" name="author" value="<?php echo_html($fmanager->get_display_name($author)); ?>" <?php echo($read_only); ?> autocomplete="off" onkeypress="return handle_enter(event)">
+    </td>
+
+    <?php if(!empty($forum_data["user_posting_as_guest"]) && !empty($_SESSION["guest_posting_mode"]) && !$fmanager->is_master_admin()): ?>
+    <td style="width: 1px">
+    <button class="me_button" onclick="set_to_me();" type="button"><?php echo_html(text("Me")); ?></button>
+    </td>
+    <?php endif; ?>
+
+    </tr>
+    </table>
 
 <?php
 if(!$fmanager->is_logged_in()):
-
-if($is_private == 2)
-{
-  $url = "new_topic.php?fid=private";
-}
-elseif($is_private == 1)
-{
-  $url = "new_topic.php?fid=private&receiver=" . xrawurlencode(reqvar("receiver"));
-}
-else
-{
-  $url = "new_topic.php?fid=$fid";
-}
 ?>
 <tr id="enter_password_row">
 <td>&nbsp;</td>

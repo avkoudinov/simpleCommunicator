@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     30.11.2024 10:31:35                          */
+/* Created on:     15.12.2024 15:48:37                          */
 /*==============================================================*/
 
 
@@ -1186,7 +1186,9 @@ create table v1_load_statistics (
    ip                   varchar(255)         null,
    exec_time            int                  not null,
    forum_rm_count       int                  not null default 0,
-   topic_rm_count       int                  not null default 0
+   topic_rm_count       int                  not null default 0,
+   total_forum_rm_count int                  not null default 0,
+   total_topic_rm_count int                  not null default 0
 )
 go
 
