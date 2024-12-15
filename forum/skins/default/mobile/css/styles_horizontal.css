@@ -2469,6 +2469,12 @@
     left: -45px;
   }
   
+  .message_container_with_offset .comment_indicator {
+    width: 40px;
+    height: 40px;
+    left: -48px;
+  }
+
   .message_container_just_edited
   {
     margin-left: 50px;

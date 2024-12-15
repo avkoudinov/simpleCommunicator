@@ -2299,6 +2299,18 @@ tr.selected_row td.checkbox_selector
   background-size: 100%;
 }
 
+.message_container_with_offset .comment_indicator {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  left: -35px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../images/comment.png);
+  background-size: 100%;
+}
+
 .message_container_just_edited
 {
   margin-left: 40px;
