@@ -8,6 +8,10 @@ require_once "../include/session_start_readonly_inc.php";
 $ajax_processing = true;
 require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    exit;
+}
+//-----------------------------------------------------------------------
 if(!reqvar_empty("animated_gif")) $_REQUEST["animated"] = 1;
 
 $attachment_data = array();

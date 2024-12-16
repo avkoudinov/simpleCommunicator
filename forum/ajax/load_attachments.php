@@ -18,7 +18,9 @@ if (!$fmanager->check_hash()) {
 $response = array();
 $response['success'] = false;
 
-if (!$fmanager->is_logged_in()) {
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    MessageHandler::setWarning(sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name));
+} elseif (!$fmanager->is_logged_in()) {
     MessageHandler::setError(text("ErrActionNotAllowed"));
 } elseif ($fmanager->is_master_admin()) {
     MessageHandler::setWarning(text("MsgMasterAdminWarning"));
@@ -27,6 +29,7 @@ if (!$fmanager->is_logged_in()) {
 }
 
 //-----------------------------------------------------------------------
+MessageHandler::addMessagesToResponse($response);
 System::sendJSON($response);
 //-----------------------------------------------------------------------
 require_once "../include/final_inc.php";

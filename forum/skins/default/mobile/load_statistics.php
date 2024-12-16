@@ -45,7 +45,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
 <div class="body_wrapper">
 
-<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h3>
 
 <!-- BEGIN: header2 -->
 
@@ -71,13 +71,17 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
 <!-- END: header2 -->
 
-<h3 class="profile_caption"><?php echo_html(text("LoadStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("LoadStatistics")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <img id="forum_activity_image" class="forum_activity_image" title="<?php echo_text("LoadStatistics"); ?>" alt="&nbsp;" src="ajax/load_diagram.php?rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
-<h3 class="profile_caption"><?php echo_html(text("Members")); ?></h2>
+<div class="forum_activity_image_wrapper">
+<img id="readmarker_activity_image" class="forum_activity_image" title="<?php echo_text("LoadStatistics"); ?>" alt="&nbsp;" src="ajax/readmarker_diagram.php?rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+</div>
+
+<h3 class="profile_caption"><?php echo_html(text("Members")); ?></h3>
 
 <table class="load_statistic_table">
 
@@ -139,7 +143,7 @@ $width .= "px";
 
 <?php if($fmanager->is_admin()): ?>
 
-<h3 class="profile_caption"><?php echo_html(text("UserAgents")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("UserAgents")); ?></h3>
 
 <table class="load_statistic_table">
 
@@ -186,7 +190,7 @@ $width .= "px";
 
 </table>
 
-<h3 class="profile_caption"><?php echo_html(text("IPAddresses")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("IPAddresses")); ?></h3>
 
 <table class="load_statistic_table">
 
@@ -270,7 +274,7 @@ $width .= "px";
 </table>
 
 <a id="banned_ips"></a>
-<h3 class="profile_caption"><?php echo_html(text("BlockedIPAddresses")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("BlockedIPAddresses")); ?></h3>
 
 <table class="ip_table" style="margin-bottom: 0px">
 <tr>

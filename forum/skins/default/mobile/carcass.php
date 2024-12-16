@@ -349,6 +349,8 @@ elseif((basename($_SERVER["PHP_SELF"]) == "forum.php" || basename($_SERVER["PHP_
 
   / <a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=last_posts"><?php echo_html(text("MyMessagesShort")); ?></a>
 
+  / <a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($fmanager->get_user_name())); ?>&author_mode=last_replies"><?php echo_html(text("MyRepliesShort")); ?></a>
+
   <?php if(!empty($_SESSION["skin_properties"][$skin]["show_my_part_topics"])): ?>
   <br>
   <?php

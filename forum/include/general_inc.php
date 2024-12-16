@@ -120,11 +120,25 @@ if ($fmanager->check_hash()) {
     }
     if (!reqvar_empty("show_all_messages")) {
         unset($_SESSION["filtered_topics"][reqvar("tid")]);
+
+        $filtered_topics = "";
+        if (!empty($_SESSION["filtered_topics"])) {
+            $filtered_topics = implode("\n", $_SESSION["filtered_topics"]);
+        }
+        set_cookie("q_filtered_topics", $filtered_topics, time() + 90 * 24 * 3600);
+
         header("Location: " . $uri);
         exit;
     }
     if (!reqvar_empty("show_thematic_messages")) {
         $_SESSION["filtered_topics"][reqvar("tid")] = reqvar("tid");
+
+        $filtered_topics = "";
+        if (!empty($_SESSION["filtered_topics"])) {
+            $filtered_topics = implode("\n", $_SESSION["filtered_topics"]);
+        }
+        set_cookie("q_filtered_topics", $filtered_topics, time() + 90 * 24 * 3600);
+
         header("Location: " . $uri);
         exit;
     }
@@ -138,8 +152,11 @@ if (!reqvar_empty("debug_context")) {
     $_SESSION["debug_context"] = reqvar("debug_context");
 }
 
+$maintenance_until_sec = 0;
 if (empty($maintenance_until)) {
     unset($_SESSION["admdebug"]);
+} else {
+    $maintenance_until_sec = xstrtotime($maintenance_until);
 }
 
 if (empty($ajax_processing)) {

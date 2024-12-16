@@ -283,9 +283,11 @@ if (!reqvar_empty("download") && $fmanager->is_logged_in()) {
     $pagination_info["page"] = reqvar("tpage");
 }
 
-if (reqvar("author_mode") == "last_posts" || reqvar("author_mode") == "last_replies" || !reqvar_empty("rate_statistics"))
+if (reqvar("author_mode") == "last_posts" || !reqvar_empty("rate_statistics"))
 {
     $sort = "desc";
+} elseif (reqvar("author_mode") == "last_replies") {
+    $sort = "asc";
 } elseif (reqvar("post_sort") == "desc") {
     $sort = "desc";
 } else {
@@ -508,9 +510,20 @@ if (!reqvar_empty("news_digest")) { // News digest
         $_SESSION["ensure_anchor_visible"] = "top_new_message";
     }
 } else { // Normal search
+    if (reqvar("author_mode") == "last_replies") {
+        $pagination_info["mode"] = "all";
+    }
+
     if (!$fmanager->get_found_posts($search_hash, $tid, $post_list, $user_data, $pagination_info, $sort)) {
         header("location: search.php?" . $search_params . $search_topic_appendix);
         exit;
+    }
+    
+    if (reqvar("author_mode") == "last_replies") {
+        if (!$fmanager->reorder_last_replies($post_list, reqvar("author"))) {
+            header("location: search.php?" . $search_params . $search_topic_appendix);
+            exit;
+        }
     }
     
     $pagination_info["startmsg"] = $pagination_info["first_page_message"];

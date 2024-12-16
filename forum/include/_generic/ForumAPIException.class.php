@@ -3,6 +3,7 @@
 class ForumAPIException extends \Exception
 {
     const ERR_CODE_SYSTEM_ERROR = "system_error";
+    const ERR_CODE_MAINTENANCE_ERROR = "maintenance_error";
     const ERR_CODE_CONFIG_ERROR = "config_error";
     const ERR_CODE_PROCESSING_ERROR = "processing_error";
     const ERR_CODE_MISSING_REQUEST_DATA = "missing_request_data";

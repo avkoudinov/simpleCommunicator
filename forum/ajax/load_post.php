@@ -18,6 +18,10 @@ if (empty(reqvar("post")) || !is_numeric(reqvar("post"))) {
     exit;
 }
 
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    exit;
+}
+
 $user_data = array();
 $post_list = array();
 

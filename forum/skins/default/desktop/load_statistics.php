@@ -66,7 +66,7 @@ $forum_selector_id = 1;
 
 <div style="width: 940px; margin: 0 auto">
 
-<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h3>
 
 <form id="statistics_filter_form" action="load_statistics.php" method="post">
 <input type="hidden" name="apply_filter" value="1">
@@ -90,13 +90,19 @@ $forum_selector_id = 1;
 
 </form>
 
-<h3 class="profile_caption"><?php echo_html(text("LoadStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("LoadStatistics")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <img id="forum_activity_image" class="forum_activity_image" title="<?php echo_text("LoadStatistics"); ?>" alt="&nbsp;" src="ajax/load_diagram.php?rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
-<h3 class="profile_caption"><?php echo_html(text("Members")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("RedmarkerStatistics")); ?></h3>
+
+<div class="forum_activity_image_wrapper">
+<img id="readmarker_activity_image" class="forum_activity_image" title="<?php echo_text("LoadStatistics"); ?>" alt="&nbsp;" src="ajax/readmarker_diagram.php?rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
+</div>
+
+<h3 class="profile_caption"><?php echo_html(text("Members")); ?></h3>
 
 <table class="load_statistic_table">
 
@@ -158,7 +164,7 @@ $width .= "px";
 
 <?php if($fmanager->is_admin()): ?>
 
-<h3 class="profile_caption"><?php echo_html(text("UserAgents")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("UserAgents")); ?></h3>
 
 <table class="load_statistic_table">
 
@@ -205,7 +211,7 @@ $width .= "px";
 
 </table>
 
-<h3 class="profile_caption"><?php echo_html(text("IPAddresses")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("IPAddresses")); ?></h3>
 
 <table class="load_statistic_table">
 
@@ -285,7 +291,7 @@ $width .= "px";
 </table>
 
 <a id="banned_ips"></a>
-<h3 class="profile_caption"><?php echo_html(text("BlockedIPAddresses")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("BlockedIPAddresses")); ?></h3>
 
 <table class="ip_table2" style="width:100%">
 <tr>

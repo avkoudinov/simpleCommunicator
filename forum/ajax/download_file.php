@@ -42,6 +42,11 @@ do
 }
 while(false);
 
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    $success = false;
+    $error = sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name);
+}
+
 if($success)
 {
   $handle = fopen($file_path, "rb");

@@ -349,6 +349,11 @@ if ($pagination_info["mode"] == "gotolast") {
 
 $pagination_info["startmsg"] = $first_message;
 
+if (empty($pagination_info["startmsg"]) && $pagination_info["mode"] != "gotolast") {
+    header("location: " . $base_url . "&gotolast=1");
+    exit();
+}
+
 if ($pagination_info["mode"] == "topic_begin" ||
     $pagination_info["first_page_message"] == $pagination_info["first_topic_message"] ||
     $pagination_info["first_page_message"] == $pagination_info["first_topic_pinned_message"]

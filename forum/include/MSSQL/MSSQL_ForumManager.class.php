@@ -831,7 +831,7 @@ class MSSQL_ForumManager extends ForumManager
     function get_query_fill_search_posts($prfx, $session_id, $now, $search_hash, $topic_part_where, $post_part_where, $max_search_results, $order_by, &$hints)
     {
         return "insert into {$prfx}_found_post_cache (post_id, topic_id, session_id, dt, search_hash)
-                        select
+                        select top $max_search_results
                         {$prfx}_post.id, {$prfx}_post.topic_id, '$session_id', '$now', '$search_hash'
                         from {$prfx}_post
                         left join {$prfx}_post_statistics on ({$prfx}_post.id = {$prfx}_post_statistics.post_id)
@@ -1299,7 +1299,7 @@ class MSSQL_ForumManager extends ForumManager
     } // get_query_user_hour_posts
     
     //-----------------------------------------------------------------
-    function gen_load_statistics(&$user_activity, &$ip_activity, &$agent_activity, &$total_user_hits_count, &$total_ip_hits_count, &$total_agents_hits_count)
+    function gen_activity_statistics(&$user_activity, &$ip_activity, &$agent_activity, &$total_user_hits_count, &$total_ip_hits_count, &$total_agents_hits_count)
     {
         global $settings;
         
@@ -1469,11 +1469,55 @@ class MSSQL_ForumManager extends ForumManager
         
         $rodbw->free_result();
         
+        measure_action_time("get activity statistics");
+        
+        return true;
+    } // gen_activity_statistics
+    
+    //-----------------------------------------------------------------
+    function gen_load_statistics()
+    {
+        global $settings;
+        
+        start_action_time_measure();
+        
+        $rodbw = System::getRODBWorker();
+        if (!$rodbw) {
+            return false;
+        }
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+        
+        $now_rounded = mktime(date("H"), date("i"), 0, date("n"), date("j"), date("Y"));
+        
+        switch (val_or_empty($_SESSION["load_activity_period"])) {
+            case "last_10_minutes":
+                $start_date = xstrtotime("-10 minutes", $now_rounded);
+                break;
+            case "last_hour":
+                $start_date = xstrtotime("-1 hour", $now_rounded);
+                break;
+            case "last_day":
+                $start_date = xstrtotime("-1 day", $now_rounded);
+                break;
+            case "last_week":
+                $start_date = xstrtotime("-7 days", $now_rounded);
+                break;
+            default:
+                $start_date = xstrtotime("-1 day", $now_rounded);
+                break;
+        }
+        
+        $now = $rodbw->format_datetime(time());
+        $start_date = $rodbw->format_datetime($start_date);
+
         unset($_SESSION["load_hits"]);
         unset($_SESSION["exec_hits"]);
         unset($_SESSION["exec_times"]);
         unset($_SESSION["topic_rm_count"]);
         unset($_SESSION["forum_rm_count"]);
+        unset($_SESSION["total_topic_rm_count"]);
+        unset($_SESSION["total_forum_rm_count"]);
         
         if (!$rodbw->execute_query("select
                              datepart(minute, dt) mn,
@@ -1484,7 +1528,9 @@ class MSSQL_ForumManager extends ForumManager
                              count(*) hits_count,
                              avg(exec_time) exec_time,
                              max(topic_rm_count) topic_rm_count,
-                             max(forum_rm_count) forum_rm_count
+                             max(forum_rm_count) forum_rm_count,
+                             max(total_topic_rm_count) total_topic_rm_count,
+                             max(total_forum_rm_count) total_forum_rm_count
                              from
                              {$prfx}_load_statistics
                              where dt >= '$start_date' 
@@ -1509,6 +1555,9 @@ class MSSQL_ForumManager extends ForumManager
             
             $_SESSION["topic_rm_count"][$time] = round($rodbw->field_by_name("topic_rm_count"));
             $_SESSION["forum_rm_count"][$time] = round($rodbw->field_by_name("forum_rm_count"));
+
+            $_SESSION["total_topic_rm_count"][$time] = round($rodbw->field_by_name("total_topic_rm_count"));
+            $_SESSION["total_forum_rm_count"][$time] = round($rodbw->field_by_name("total_forum_rm_count"));
         }
         
         $rodbw->free_result();
@@ -1567,8 +1616,8 @@ class MSSQL_ForumManager extends ForumManager
         measure_action_time("get load statistics");
         
         return true;
-    } // gen_load_statistics
-    
+    } // gen_activity_statistics
+
     //-----------------------------------------------------------------
     function create_tmp_id_collector_table($dbw, $prfx)
     {

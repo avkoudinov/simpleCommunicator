@@ -738,10 +738,20 @@ if(!empty($pinfo["warn_year_interval"]))
 {
   echo "<div class='year_period_warning'>" . escape_html(text("OverYearInerval")) . "</div>";
 }
+
+$offset_class = "";
+$offset_indicator = "";
+if (!empty($topic_data["profiled_topic"]) && !empty($pinfo["is_comment"]))
+{
+  $offset_class = "message_container_with_offset";
+  $offset_indicator = '<div class="comment_indicator"></div>';
+}
 ?>
 
-<div class="message_container" id="post_<?php echo_html($pid); ?>">
+<div class="message_container <?php echo($offset_class); ?>" id="post_<?php echo_html($pid); ?>">
 <?php
+echo($offset_indicator);
+
 require "topic_message_tpl_inc.php";
 ?>
 </div>

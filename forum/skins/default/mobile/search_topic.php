@@ -233,7 +233,7 @@ $all_entry_post = $first_message;
     </span>
 <?php endif; ?>
 
-<?php if(reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")): ?>
+<?php if(reqvar("author_mode") != "last_posts" && reqvar("author_mode") != "last_replies" && reqvar_empty("replies_to") && reqvar_empty("rate_statistics")): ?>
 <?php
 $sort_url = preg_replace("/&post_sort=[^&]*/", "", $base_url);
 
@@ -273,9 +273,11 @@ else
     <div class="navigator_bar"><?php echo(build_page_navigator($base_url . "&tpage=$", $pagination_info, $all_entry_post)); ?></div>
     <?php endif; ?>
 <?php else: ?>
+    <?php if(reqvar("author_mode") != "last_replies"): ?>
     <div class="navigator_bar">
     <?php require "navigator_bar_inc.php"; ?>
     </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 <?php if(reqvar_empty("news_digest") && reqvar_empty("favourite_posts") && reqvar_empty("rate_statistics") && reqvar_empty("replies_to")): ?>
@@ -298,10 +300,22 @@ else
   <div class="scroll_down" onclick="window.scrollTo(0, 1000000);"></div>
   </div>
 
-<?php foreach($post_list as $pid => $pinfo): ?>
+<?php foreach($post_list as $pid => $pinfo): 
+$offset_class = "";
+$offset_indicator = "";
+if ((!reqvar_empty("replies_to") && reqvar("replies_to") != $pid) ||
+    (reqvar("author_mode") == "last_replies" && empty($pinfo["parent_post"])) 
+   )
+{
+  $offset_class = "message_container_with_offset";
+  $offset_indicator = '<div class="reply_indicator"></div>';
+}
+?>
 
-<div class="message_container" id="post_<?php echo_html($pid); ?>">
+<div id="post_<?php echo_html($pid); ?>" class="message_container <?php echo($offset_class); ?>">
 <?php
+echo($offset_indicator);
+
 require "topic_message_tpl_inc.php";
 ?>
 </div>
@@ -347,9 +361,11 @@ $all_entry_post = $last_message;
     <div class="navigator_bar"><?php echo(build_page_navigator($base_url . "&tpage=$", $pagination_info, $all_entry_post)); ?></div>
     <?php endif; ?>
 <?php else: ?>
+    <?php if(reqvar("author_mode") != "last_replies"): ?>
     <div class="navigator_bar">
     <?php require "navigator_bar_inc.php"; ?>
     </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 <?php if(reqvar_empty("news_digest") && reqvar_empty("favourite_posts") && reqvar_empty("rate_statistics") && reqvar_empty("replies_to")): ?>
@@ -477,7 +493,7 @@ if(!empty($fid) && !empty($_SESSION["ignored_forums"][$fid]) && !$is_private) $n
     </span>
 <?php endif; ?>
 
-<?php if(reqvar("author_mode") != "last_posts" && reqvar_empty("rate_statistics")): ?>
+<?php if(reqvar("author_mode") != "last_posts" && reqvar("author_mode") != "last_replies" && reqvar_empty("replies_to") && reqvar_empty("rate_statistics")): ?>
 <a href="<?php echo_html($sort_url); ?>" title="<?php echo_html($sort_title); ?>" class="sorter <?php echo($desc); ?>">&nbsp;</a>
 <?php endif; ?>
 

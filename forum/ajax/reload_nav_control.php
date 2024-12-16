@@ -8,23 +8,28 @@ require_once "../include/general_inc.php";
 //-----------------------------------------------------------------------
 if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])))
 {
-  exit;
+    exit;
 }
 //------------------------------------------------------------------
 if(reqvar_empty("topic") || reqvar_empty("ctrl") || reqvar_empty("base_url"))
 {
-  exit;
+    exit;
 }
-
+//------------------------------------------------------------------
 if(!$fmanager->check_hash())
 {
-  exit;
+    exit;
 }
-
+//------------------------------------------------------------------
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    exit;
+}
+//------------------------------------------------------------------
 if(!file_exists(APPLICATION_ROOT . $view_path . reqvar("ctrl") . "_inc.php"))
 {
-  exit;
+   exit;
 }
+//------------------------------------------------------------------
 
 $hide_from_robots = 0;
 $tid = reqvar("topic");

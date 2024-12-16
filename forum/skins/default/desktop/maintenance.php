@@ -19,7 +19,7 @@ $cache_appendix = "?v=" . $skin_version;
 <body>
 
 <div class="maintenance">
-<?php echo_html(sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name)); ?>
+<?php echo(nl2br(escape_html(sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name)))); ?>
 
     <?php if (!empty($maintenance_comment) && !empty($maintenance_link)): ?>
     <div class="maintenance_comment">

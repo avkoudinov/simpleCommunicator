@@ -1105,7 +1105,6 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
       <label for="last_posts"><?php echo_html(text("SearchAuthorLastMessages")); ?></label>
      </tr>
      
-     <!--
      <tr>
        <td>
       <input type="radio" id="last_replies" name="author_mode" value="last_replies" <?php echo_html(reqvar_radio_selected("author_mode", "last_replies")); ?>> 
@@ -1113,7 +1112,6 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
        <td>
       <label for="last_replies"><?php echo_html(text("SearchAuthorLastReplies")); ?></label>
      </tr>
-     -->
 
      <?php if(!empty($settings["rates_active"])): ?>
      <tr>

@@ -12,8 +12,6 @@ if(detect_bot(val_or_empty($_SERVER["HTTP_USER_AGENT"])))
   exit;
 }
 //------------------------------------------------------------------
-$fmanager->track_hit("", "");
-//------------------------------------------------------------------
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph.php");
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph_line.php");
 require_once(APPLICATION_ROOT . "jpgraph/jpgraph_date.php");
@@ -26,7 +24,7 @@ function gen_message_image($text)
 {
   $text = utf8_to_nce(val_or_empty($text));
   
-  $graph = new CanvasGraph(598,200);	
+  $graph = new CanvasGraph(598,300);	
   $t1 = new Text($text);
   $t1->SetPos(0.5,0.5, "center", "center");
   
@@ -36,6 +34,13 @@ function gen_message_image($text)
 
   $graph->Stroke();
 }
+
+if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
+    gen_message_image(sprintf(text("MaintenanceComment"), $maintenance_until, $time_zone_name));
+    exit;
+}
+
+$fmanager->track_hit("", "");
 
 if(!$fmanager->gen_user_daily_activity(reqvar("uid")))
 {
