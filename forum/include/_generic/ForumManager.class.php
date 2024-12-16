@@ -33461,6 +33461,10 @@ abstract class ForumManager
         global $view_path;
         global $settings;
         
+        if (empty($post_list)) {
+            return true;
+        }
+        
         $exts = AttachmentManager::get_picture_exts();
         
         $current_uid = $dbw->escape($this->get_user_id());
