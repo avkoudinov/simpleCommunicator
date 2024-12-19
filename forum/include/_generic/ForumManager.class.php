@@ -10116,6 +10116,8 @@ abstract class ForumManager
         
         $rodbw->free_result();
         
+        arsort($country_stats);
+        
         foreach ($city_stats as $country => $_country_city_stats) {
             $country_stats[$country] = 100 * $country_stats[$country] / $total;
 
