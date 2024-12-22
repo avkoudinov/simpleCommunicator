@@ -111,6 +111,62 @@ function load_geo_stats(load_browser_stat_button)
   return false;
 }
 
+var load_city_geo_stats_ajax = null;
+
+function load_city_geo_stats(load_browser_stat_button)
+{
+  if(load_browser_stat_button) load_browser_stat_button.classList.add("member_search_button_active");
+
+  if(!load_city_geo_stats_ajax)
+  {
+    load_city_geo_stats_ajax = new Forum.AJAX();
+
+    load_city_geo_stats_ajax.timeout = TIMEOUT;
+
+    load_city_geo_stats_ajax.beforestart = function() { break_check_new_messages(); };
+    load_city_geo_stats_ajax.aftercomplete = function(error) { 
+      activate_check_new_messages(); 
+      check_new_messages();
+    };
+
+    load_city_geo_stats_ajax.onload = function(text, xml)
+    {
+      if(text.trim() == '') 
+      {
+        if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+        return;
+      }
+
+      try
+      {
+        var elm = document.getElementById('city_geo_statistics');
+        if(elm) elm.innerHTML = text;
+      }
+      catch(err)
+      {
+      }
+
+      if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+    };
+
+    load_city_geo_stats_ajax.onerror = function(error, url, info)
+    {
+        if(load_browser_stat_button) load_browser_stat_button.classList.remove("member_search_button_active");
+    };
+  } // init ajax
+
+  load_city_geo_stats_ajax.abort();
+  load_city_geo_stats_ajax.resetParams();
+
+  load_city_geo_stats_ajax.setPOST('hash', get_protection_hash());
+  load_city_geo_stats_ajax.setPOST('user_logged', user_logged);
+  load_city_geo_stats_ajax.setPOST('trace_sql', trace_sql);
+
+  load_city_geo_stats_ajax.request("ajax/load_city_geo_stats.php<?php echo($query_string); ?>");
+
+  return false;
+}
+
 function reload_statistics()
 {
   var form = document.getElementById("statistics_filter_form");
@@ -236,7 +292,7 @@ $forum_selector_id = 1;
 
 <div style="width: 940px; margin: 0 auto">
 
-<h3 class="profile_caption"><?php echo_html(text("ActualStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("ActualStatistics")); ?></h3>
 
 <table class="general_statistics_table">
 <tr>
@@ -305,7 +361,7 @@ $forum_selector_id = 1;
 
 </table>
 
-<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("PeriodStatistics")); ?></h3>
 
 <form id="statistics_filter_form" action="statistics.php" method="post">
 <input type="hidden" name="apply_filter" value="1">
@@ -395,24 +451,33 @@ $forum_selector_id = 1;
 
 </table>
 
-<h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("DailyActivity")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <img class="forum_activity_image" title="<?php echo_text("DailyActivity"); ?>" alt="<?php echo_text("DailyActivity"); ?>" src="ajax/forum_daily_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
-<h3 class="profile_caption"><?php echo_html(text("MonthlyActivity")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("MonthlyActivity")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <img class="forum_activity_image" title="<?php echo_text("MonthlyActivity"); ?>" alt="<?php echo_text("MonthlyActivity"); ?>" src="ajax/forum_monthly_activity_diagram.php<?php echo($query_string); ?>&rnd=<?php echo(rand(1000, 9000)); ?>" onload="this.style.opacity = '1';">
 </div>
 
+<div id="browser_statistics">
+
+<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h3>
+
+<div class="browser_stat_wrapper">
+<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_browser_stats(this)">
+</div>
+
+</div>
 
 <?php if (defined("GETGEOAPI_API_KEYS") && !empty(GETGEOAPI_API_KEYS) && empty($settings["hash_ip_addresses"])): ?>
 
 <div id="geo_statistics">
 
-<h3 class="profile_caption"><?php echo_html(text("GeoStatistics")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("GeoStatistics")); ?></h3>
 
 <div class="browser_stat_wrapper">
 <input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_geo_stats(this)">
@@ -421,18 +486,6 @@ $forum_selector_id = 1;
 </div>
 
 <?php endif; ?>
-
-
-
-<div id="browser_statistics">
-
-<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?> / <?php echo_html(text("OperatingSystems")); ?> / <?php echo_html(text("Bots")); ?></h2>
-
-<div class="browser_stat_wrapper">
-<input type="button" class="standard_button load_user_rates" value="<?php echo_html(text("Show")); ?>" onclick="load_browser_stats(this)">
-</div>
-
-</div>
 
 </div>
 

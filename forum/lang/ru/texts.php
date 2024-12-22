@@ -87,6 +87,7 @@ $GLOBALS['DEF_TEXTS']['ru']['MyTopicsShort'] = 'Мои';
 $GLOBALS['DEF_TEXTS']['ru']['MyMessages'] = 'Мои сообщения';
 $GLOBALS['DEF_TEXTS']['ru']['MyMessagesShort'] = 'сообщ.';
 $GLOBALS['DEF_TEXTS']['ru']['MyMessagesShort2'] = 'сооб.';
+$GLOBALS['DEF_TEXTS']['ru']['MyRepliesShort'] = 'отв.';
 $GLOBALS['DEF_TEXTS']['ru']['TopicAuthorMessages'] = 'Сообщения автора темы';
 $GLOBALS['DEF_TEXTS']['ru']['AuthorMessagesInTopic'] = 'Сообщения автора в теме';
 $GLOBALS['DEF_TEXTS']['ru']['TopicNotIgnoredMessages'] = 'Сообщения авторов не в игноре';
@@ -1266,11 +1267,14 @@ $GLOBALS['DEF_TEXTS']['ru']['MsgTopicMovedFromForum'] = 'Тема была пе�
 $GLOBALS['DEF_TEXTS']['ru']['MsgUserNasNoRates'] = 'У пользователя нет оценок на модерируемых вами форумах.';
 $GLOBALS['DEF_TEXTS']['ru']['Statistics'] = 'Статистика';
 $GLOBALS['DEF_TEXTS']['ru']['LoadStatistics'] = 'Статистика нагрузки';
+$GLOBALS['DEF_TEXTS']['ru']['RedmarkerStatistics'] = 'Статистика ридмаркеров';
 $GLOBALS['DEF_TEXTS']['ru']['Index'] = 'Показатель';
 $GLOBALS['DEF_TEXTS']['ru']['Value'] = 'Значение';
 $GLOBALS['DEF_TEXTS']['ru']['HitsCount'] = 'Количество просмотров';
-$GLOBALS['DEF_TEXTS']['ru']['TopicRMCount'] = 'Количество ридмаркеров тем';
-$GLOBALS['DEF_TEXTS']['ru']['ForumRMCount'] = 'Количество ридмаркеров форумов';
+$GLOBALS['DEF_TEXTS']['ru']['TopicUniqueRMCount'] = 'Количество уникальных ридмаркеров тем';
+$GLOBALS['DEF_TEXTS']['ru']['ForumUniqueRMCount'] = 'Количество уникальных ридмаркеров форумов';
+$GLOBALS['DEF_TEXTS']['ru']['TopicTotalRMCount'] = 'Общее количество ридмаркеров тем';
+$GLOBALS['DEF_TEXTS']['ru']['ForumTotalRMCount'] = 'Общее количество ридмаркеров форумов';
 $GLOBALS['DEF_TEXTS']['ru']['ActualStatistics'] = 'Актуальная статистика';
 $GLOBALS['DEF_TEXTS']['ru']['Previous24'] = 'Пред. 24 часа';
 $GLOBALS['DEF_TEXTS']['ru']['Last10Minutes'] = 'Посл. 10 минут';
@@ -1326,7 +1330,8 @@ $GLOBALS['DEF_TEXTS']['ru']['MsgBulkDeleteConfirm'] = 'Вы уверены, чт
 $GLOBALS['DEF_TEXTS']['ru']['UserAgreement'] = 'Польз. соглашение';
 $GLOBALS['DEF_TEXTS']['ru']['Maintenance'] = 'Техническое обслуживание';
 $GLOBALS['DEF_TEXTS']['ru']['MaintenanceLink'] = 'Подробнее';
-$GLOBALS['DEF_TEXTS']['ru']['MaintenanceComment'] = 'Форум на обслуживании предположительно до %s (временная зона: %s).';
+$GLOBALS['DEF_TEXTS']['ru']['MaintenanceComment'] = 'Форум на обслуживании предположительно до %s 
+            (временная зона: %s).';
 $GLOBALS['DEF_TEXTS']['ru']['MaintenanceNotification'] = 'Форум будет на техническом обслуживании предположительно 
             
             с %s до %s 

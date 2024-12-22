@@ -1,4 +1,4 @@
-<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("Browsers")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <?php
@@ -25,7 +25,7 @@ $query_string = "?report1=browser_stats&title=" . urlencode(text("Browsers"));
 </table>
 </div>
 
-<h3 class="profile_caption"><?php echo_html(text("OperatingSystems")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("OperatingSystems")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <?php
@@ -51,7 +51,7 @@ $query_string = "?report1=os_stats&title=" . urlencode(text("OperatingSystems"))
 </table>
 </div>
 
-<h3 class="profile_caption"><?php echo_html(text("Bots")); ?></h2>
+<h3 class="profile_caption"><?php echo_html(text("Bots")); ?></h3>
 
 <div class="forum_activity_image_wrapper">
 <?php

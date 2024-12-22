@@ -87,6 +87,7 @@ $GLOBALS['DEF_TEXTS']['de']['MyTopicsShort'] = 'Meine';
 $GLOBALS['DEF_TEXTS']['de']['MyMessages'] = 'Meine Nachrichten';
 $GLOBALS['DEF_TEXTS']['de']['MyMessagesShort'] = 'Nachricht.';
 $GLOBALS['DEF_TEXTS']['de']['MyMessagesShort2'] = 'Nachr.';
+$GLOBALS['DEF_TEXTS']['de']['MyRepliesShort'] = 'Antw.';
 $GLOBALS['DEF_TEXTS']['de']['TopicAuthorMessages'] = 'Nachrichten des Thema-Autors';
 $GLOBALS['DEF_TEXTS']['de']['AuthorMessagesInTopic'] = 'Nachrichten des Autors im Thema';
 $GLOBALS['DEF_TEXTS']['de']['TopicNotIgnoredMessages'] = 'Nachrichten der nicht ignorierten Autoren';
@@ -1259,11 +1260,14 @@ $GLOBALS['DEF_TEXTS']['de']['MsgTopicMovedFromForum'] = 'Das Thema wurde vom For
 $GLOBALS['DEF_TEXTS']['de']['MsgUserNasNoRates'] = 'Der Benutzer hat keine Bewertungen auf Ihre zu moderierenden Foren.';
 $GLOBALS['DEF_TEXTS']['de']['Statistics'] = 'Statistik';
 $GLOBALS['DEF_TEXTS']['de']['LoadStatistics'] = 'Lastungs-Statistik';
+$GLOBALS['DEF_TEXTS']['de']['RedmarkerStatistics'] = 'Read-Marker-Statistik';
 $GLOBALS['DEF_TEXTS']['de']['Index'] = 'Index';
 $GLOBALS['DEF_TEXTS']['de']['Value'] = 'Wert';
 $GLOBALS['DEF_TEXTS']['de']['HitsCount'] = 'Hitsanzahl';
-$GLOBALS['DEF_TEXTS']['de']['TopicRMCount'] = 'Anzahl der Themen-Read-Marker';
-$GLOBALS['DEF_TEXTS']['de']['ForumRMCount'] = 'Anzahl der Forum-Read-Marker';
+$GLOBALS['DEF_TEXTS']['de']['TopicUniqueRMCount'] = 'Anzahl der eindeutigen Themen-Read-Marker';
+$GLOBALS['DEF_TEXTS']['de']['ForumUniqueRMCount'] = 'Anzahl der eindeutigen Forum-Read-Marker';
+$GLOBALS['DEF_TEXTS']['de']['TopicTotalRMCount'] = 'Gesamtzahl der Themen-Read-Marker';
+$GLOBALS['DEF_TEXTS']['de']['ForumTotalRMCount'] = 'Gesamtzahl der Forum-Read-Marker';
 $GLOBALS['DEF_TEXTS']['de']['ActualStatistics'] = 'Aktuelle Statistik';
 $GLOBALS['DEF_TEXTS']['de']['Previous24'] = 'Vorher. 24 Stunden';
 $GLOBALS['DEF_TEXTS']['de']['Last10Minutes'] = 'Letzte 10 Minuten';
@@ -1319,7 +1323,8 @@ $GLOBALS['DEF_TEXTS']['de']['MsgBulkDeleteConfirm'] = 'Sind Sie sicher, dass Sie
 $GLOBALS['DEF_TEXTS']['de']['UserAgreement'] = 'Benutzervereinbarung';
 $GLOBALS['DEF_TEXTS']['de']['Maintenance'] = 'Wartung';
 $GLOBALS['DEF_TEXTS']['de']['MaintenanceLink'] = 'Mehr Info';
-$GLOBALS['DEF_TEXTS']['de']['MaintenanceComment'] = 'Das Forum wird momentan gewartet, voraussichtlich bis %s (Zeitzone: %s).';
+$GLOBALS['DEF_TEXTS']['de']['MaintenanceComment'] = 'Das Forum wird momentan gewartet, voraussichtlich bis %s 
+            (Zeitzone: %s).';
 $GLOBALS['DEF_TEXTS']['de']['MaintenanceNotification'] = 'Das Forum wird voraussichtlich 
             
             von %s bis %s 

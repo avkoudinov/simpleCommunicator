@@ -38,6 +38,12 @@ function show_post_comment(title, author, pid, mode)
   return false;
 }
 
+function set_to_me() {
+  var elm = document.getElementById("author");
+  if (elm) elm.value = "<?php echo_js($fmanager->get_display_name($fmanager->get_user_name())); ?>";
+  return false;
+}
+
 function move_posts(action)
 {
   var new_topic = "";
