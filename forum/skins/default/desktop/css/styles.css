@@ -3326,6 +3326,11 @@ td.post_footer
   text-align: center;
 }
 
+.message_container_with_offset .navigation_arrows
+{
+  margin-right: 40px;
+}
+
 .navigation_arrows .scroll_up
 {
   background-image: url(../images/up.png);
@@ -5277,6 +5282,12 @@ img.image_placeholder
   width: 0; 
   min-width: 500px;
   word-wrap: break-word; 
+}
+
+.moderator_warning_container .moderator_warning
+{
+  margin: 0px auto 8px auto;
+  
 }
 
 .short_message
