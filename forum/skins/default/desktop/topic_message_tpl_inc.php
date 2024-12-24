@@ -206,6 +206,25 @@ else
 $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
 ?>
 
+<?php if(!empty($pinfo["is_system"])): // system post ?>
+
+<?php
+$warned_by = $fmanager->get_display_name($pinfo["last_warned_by"]);
+
+if(empty($pinfo["display_action_author"]) && (!$fmanager->is_moderator_log_visible() || (val_or_empty($settings["moderator_log"]) == "all_names_hidden" && !$fmanager->is_moderator())))
+{
+  $warned_by = text("Moderator");
+}
+?>
+
+<div class="moderator_warning_container">
+<div class="moderator_warning" id="modwarning_<?php echo_html($pid); ?>">
+<div id="modwarning_moderator_<?php echo_html($pid); ?>" class="moderator_name"><?php echo_html($warned_by); ?>:</div>
+<div id="modwarning_warning_<?php echo_html($pid); ?>"><?php echo($pinfo["last_warning"]); ?></div>
+</div>
+</div>
+
+<?php else: // system post ?>
 <table id="post_table_<?php echo_html($pid); ?>" data-pid="<?php echo_html($pid); ?>" class="post_table forum_<?php echo($pinfo["forum_id"]); ?> topic_<?php echo($pinfo["topic_id"]); ?> <?php echo($user_identifier_class); ?> <?php echo_html($pinned); ?> <?php echo_html($attachment_editable_class); ?> <?php if($post_ignored) echo "ignored_post"; ?> <?php if(!empty($pinfo["profiled_topic"])) echo(empty($pinfo["is_comment"]) ? "thematic_post" : "comment_post"); ?> <?php if(!empty($pinfo["is_adult"])) echo "adult_post"; ?>">
 <tr>
 
@@ -1483,6 +1502,8 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
   <div class="scroll_up" onclick="window.scrollTo(0, 0);"></div>
   <div class="scroll_down" onclick="window.scrollTo(0, 1000000);"></div>
   </div>
+
+<?php endif; // system post ?>
 
 <?php if(!empty($topic_data["thematic_only"]) && !empty($pinfo["has_comments"])): ?>
 <div class="other_new_messages_alertbox">
