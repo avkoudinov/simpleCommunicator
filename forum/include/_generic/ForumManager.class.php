@@ -116,6 +116,8 @@ abstract class ForumManager
     abstract function gen_load_statistics();
 
     abstract function get_reply_post_clause($dbw, $prfx, $parent_pid);
+    
+    abstract function get_last_replies_clause($srdbw, $prfx, $author_id, $author, $start_date, $end_date);
 
     abstract function get_hot_topic_clause($prfx, $start1, $start2);
 
@@ -39875,11 +39877,7 @@ abstract class ForumManager
                     }
                 } elseif (!empty($author_id)) {
                     if (reqvar("author_mode") == "last_replies") {
-                        $post_part_where .= " and exists (
-                                                          select 1 from {$prfx}_post_hierarchy
-                                                          inner join {$prfx}_post subpost on ({$prfx}_post_hierarchy.parent_post_id = subpost.id)
-                                                          where subpost.user_id = $author_id and ({$prfx}_post.id = reply_post_id or {$prfx}_post.id = parent_post_id)
-                                                         )" . "\n";
+                        $post_part_where .= $this->get_last_replies_clause($srdbw, $prfx, $author_id, "", $start_date, $end_date);
                     } else {
                         $post_part_where .= " and {$prfx}_post.user_id = $author_id" . "\n";
                     }
@@ -39889,11 +39887,7 @@ abstract class ForumManager
                     }
                 } elseif ($author != "NULL") {
                     if (reqvar("author_mode") == "last_replies") {
-                        $post_part_where .= " and exists (
-                                                          select 1 from {$prfx}_post_hierarchy
-                                                          inner join {$prfx}_post subpost on ({$prfx}_post_hierarchy.parent_post_id = subpost.id)
-                                                          where subpost.author = $author and subpost.user_id is NULL and ({$prfx}_post.id = reply_post_id or {$prfx}_post.id = parent_post_id)
-                                                         )" . "\n";
+                        $post_part_where .= $this->get_last_replies_clause($srdbw, $prfx, "", $author, $start_date, $end_date);
                     } else {
                         $post_part_where .= " and {$prfx}_post.author = $author and {$prfx}_post.user_id is NULL" . "\n";
                     }
@@ -40152,7 +40146,11 @@ abstract class ForumManager
                 }
                 
                 if (reqvar("author_mode") == "last_replies") {
-                    $max_search_results = 200;
+                    $max_search_results = 500;
+                }
+
+                if (!reqvar_empty("replies_to")) {
+                    $max_search_results = 500;
                 }
 
                 if (!reqvar_empty("rate_statistics")) {

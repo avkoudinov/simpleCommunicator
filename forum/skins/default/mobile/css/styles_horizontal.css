@@ -688,6 +688,11 @@
     margin-left: 20px;
   }
   
+  .message_container_with_offset .navigation_arrows
+  {
+    margin-right: 50px;
+  }
+
   .navigation_arrows_right .scroll_up
   {
     right: 30px;
@@ -2031,6 +2036,11 @@
     padding: 5px;
     border-width: 1px;
     margin: 5px 5px 5px 5px;
+  }
+  
+  .moderator_warning_container .moderator_warning
+  {
+    margin: 0px auto 10px auto;
   }
   
   .short_message,

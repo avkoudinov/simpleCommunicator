@@ -158,6 +158,8 @@ SimpleCalendar.string_to_time = function (str, format) {
     } else {
         dt.setSeconds(0);
     }
+    
+    dt.setMilliseconds(0);
 
     return dt;
 };
