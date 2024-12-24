@@ -39678,6 +39678,8 @@ abstract class ForumManager
             !reqvar_empty("rate_statistics") ||
             !empty($_REQUEST["tags"])
         ) {
+            $post_part_where = " and {$prfx}_post.is_system <> 1";
+            
             $other_post_conditions_exist = false;
             
             //-------------------------------------------------------------
