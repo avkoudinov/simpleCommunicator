@@ -1649,8 +1649,52 @@ class MSSQL_ForumManager extends ForumManager
             return "";
         }
         
-        return " and exists (select 1 from #tmp_children where {$prfx}_post.id = #tmp_children.id)";
+        return " and {$prfx}_post.id in (select id from #tmp_children)";
     } // get_reply_post_clause
+    
+    //-----------------------------------------------------------------
+    function get_last_replies_clause($srdbw, $prfx, $author_id, $author, $start_date, $end_date)
+    {
+        $query = "if object_id('tempdb..#tmp_children') is NULL create table #tmp_children(id integer)";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+
+        $query = "delete from #tmp_children";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+
+        if (!empty($author_id)) {
+            $query = "insert into #tmp_children (id)
+                      select parent_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.user_id = $author_id
+                      union
+                      select reply_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.user_id = $author_id
+                      ";
+        } else {
+            $query = "insert into #tmp_children (id)
+                      select parent_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.author = $author
+                      union
+                      select reply_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.author = $author
+                      ";
+        }
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+
+        return " and {$prfx}_post.id in (select id from #tmp_children)";
+    } // get_last_replies_clause
     
     //-----------------------------------------------------------------
     function get_query_rating_info($prfx, $where)

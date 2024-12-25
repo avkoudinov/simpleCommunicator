@@ -1717,9 +1717,66 @@ class MySQL_ForumManager extends ForumManager
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return "";
         }
-        
-        return " and exists (select 1 from tmp_children where {$prfx}_post.id = tmp_children.id)";
+
+        return " and {$prfx}_post.id in (select id from tmp_children)";
     } // get_reply_post_clause
+    
+    //-----------------------------------------------------------------
+    function get_last_replies_clause($srdbw, $prfx, $author_id, $author, $start_date, $end_date)
+    {
+        $query = "create temporary table if not exists tmp_children(id integer)";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+        
+        $query = "delete from tmp_children";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+        
+        $date_appendix = "";
+        if (!empty($start_date) && $start_date != "error") {
+            $date_appendix .= " and {$prfx}_post.creation_date >= '" . $srdbw->format_datetime($start_date) . "'";
+        }
+        
+        if (!empty($end_date) && $end_date != "error") {
+            $date_appendix .= " and {$prfx}_post.creation_date <= '" . $srdbw->format_datetime($end_date) . "'";
+        }
+      
+        if (!empty($author_id)) {
+            $query = "insert into tmp_children (id)
+                      select parent_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.user_id = $author_id
+                      $date_appendix
+                      union
+                      select reply_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.user_id = $author_id
+                      $date_appendix
+                      ";
+        } else {
+            $query = "insert into tmp_children (id)
+                      select parent_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.author = $author
+                      $date_appendix
+                      union
+                      select reply_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.author = $author
+                      $date_appendix
+                      ";
+        }
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+
+        return " and {$prfx}_post.id in (select id from tmp_children)";
+    } // get_last_replies_clause
     
     //-----------------------------------------------------------------
     function get_query_rating_info($prfx, $where)

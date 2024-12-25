@@ -725,6 +725,11 @@ input[type="button"].load_user_rates
   text-align: center;
 }
 
+.message_container_with_offset .navigation_arrows
+{
+  margin-right: 120px;
+}
+
 .scroll_down
 {
   background-image: url(../images/down.png);
@@ -4765,12 +4770,6 @@ img.image_placeholder
   margin: 0;
 }
 
-
-
-
-
-
-
 .short_message,
 .moderator_warning
 {
@@ -4783,6 +4782,11 @@ img.image_placeholder
   width: 0; 
   min-width: 600px;
   word-wrap: break-word; 
+}
+
+.moderator_warning_container .moderator_warning
+{
+  margin: 0px auto 24px auto;
 }
 
 .short_message
