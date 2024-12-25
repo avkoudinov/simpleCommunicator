@@ -310,6 +310,14 @@ if ((!reqvar_empty("replies_to") && reqvar("replies_to") != $pid) ||
   $offset_class = "message_container_with_offset";
   $offset_indicator = '<div class="reply_indicator"></div>';
 }
+
+if (reqvar("author_mode") == "last_replies" && !empty($pinfo["my_post"])) {
+  $offset_class .= " my_post";
+}
+
+if (!reqvar_empty("replies_to") && reqvar("replies_to") == $pid) {
+  $offset_class .= " my_post";
+}
 ?>
 
 <div id="post_<?php echo_html($pid); ?>" class="message_container <?php echo($offset_class); ?>">

@@ -40152,7 +40152,7 @@ abstract class ForumManager
                 }
 
                 if (!reqvar_empty("replies_to")) {
-                    $max_search_results = 500;
+                    $max_search_results = 250;
                 }
 
                 if (!reqvar_empty("rate_statistics")) {
@@ -40160,6 +40160,7 @@ abstract class ForumManager
                 }                
                 
                 $query = $this->get_query_fill_search_posts($prfx, $session_id, $now, $search_hash, $topic_part_where, $post_part_where, $max_search_results, $order_by, $hints);
+                
                 if (!$srdbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
                     return false;
@@ -41170,36 +41171,50 @@ abstract class ForumManager
         if (empty($in_list)) {
             return true;
         }
-
-        $qyery = "select parent_post_id, reply_post_id, author, user_name 
-                  from {$prfx}_post_hierarchy
-                  inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
-                  left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
-                  where reply_post_id in ($in_list)";
-        if (!$srdbw->execute_query($qyery)) {
+        
+        $query = "select {$prfx}_post.id, parent_post_id, author
+                  from {$prfx}_post
+                  left join {$prfx}_post_hierarchy on ({$prfx}_post_hierarchy.reply_post_id = {$prfx}_post.id)
+                  where {$prfx}_post.id in ($in_list)";
+        if (!$srdbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
             return false;
         }
         
+        $parent_mapping = [];
         $post_hierarchy = [];
         
         while ($srdbw->fetch_row()) {
-            $reply_post_id = $srdbw->field_by_name("reply_post_id");
+            $reply_post_id = $srdbw->field_by_name("id");
             $parent_post_id = $srdbw->field_by_name("parent_post_id");
-            $author = $srdbw->field_by_name("user_name");
-            if (empty($author)) {
-                $author = $srdbw->field_by_name("author");
+            
+            if (!empty($parent_post_id)) {
+                $parent_mapping[$reply_post_id] = $parent_post_id;
             }
             
+            if ($srdbw->field_by_name("author") == $target_author) {
+                $post_list[$reply_post_id]["my_post"] = 1;
+            }
+            
+            // it is not the answer
             if (empty($post_list[$parent_post_id])) {
+                $post_list[$reply_post_id]["parent_post"] = 1;
                 continue;
             }
             
-            if ($author == $target_author) {
-                $post_list[$parent_post_id]["parent_post"] = 1;
-                
+            if (empty($post_list[$parent_post_id]["parent_post"])) {
+               $parent_found = false;
+               while (!empty($parent_mapping[$parent_post_id])) {
+                   $parent_post_id = $parent_mapping[$parent_post_id];
+                   
+                   if (!empty($post_list[$parent_post_id]["parent_post"])) {
+                      $parent_found = true;
+                      $post_hierarchy[$parent_post_id][] = $reply_post_id;
+                   }
+               }
+            } else {
                 $post_hierarchy[$parent_post_id][] = $reply_post_id;
-            } 
+            }
         }
         
         $srdbw->free_result();
