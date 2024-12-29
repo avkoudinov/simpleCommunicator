@@ -819,6 +819,10 @@ function convert_nodes_to_bbcode(container, quote_level)
       current_node = document.createTextNode(convert_video_to_bbcode(container.childNodes[i]));
       break;
 
+      case 'TH':
+      current_node = document.createTextNode('');
+      break;
+
       case 'TD':
       if(!container.childNodes[i].classList.contains('csv_table_cell'))
       {
