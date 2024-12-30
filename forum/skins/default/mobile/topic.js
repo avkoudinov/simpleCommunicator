@@ -3157,6 +3157,13 @@ function set_current_post(pid)
     return false;
   }
   
+  var elm = document.getElementById('modwarning_' + pid);
+  if(elm) 
+  {
+    elm.scrollIntoView({block: "start", behavior: "auto"});
+    return false;
+  }
+
   var anchor = document.getElementById('post_anchor_' + pid);
   if(!anchor) 
   {
@@ -3170,7 +3177,7 @@ function set_current_post(pid)
     return false;
   }
 
-  var elm = document.getElementById('post_head_' + pid);
+  elm = document.getElementById('post_head_' + pid);
   if(!elm) 
   {
     debug_line("Post: " + pid + " not found");
