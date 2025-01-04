@@ -3391,7 +3391,7 @@ td.post_footer
 }
 
 .post_table th.current_post,
-.my_post .post_table th
+.my_post .post_table > tbody > tr > th
 {
   background-color:#04A038;
 }
