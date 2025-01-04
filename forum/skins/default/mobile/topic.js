@@ -1028,7 +1028,6 @@ function reload_post(post)
 
         if(post_node)
         {
-          post_node.classList.remove("message_container_with_offset");
           post_node.classList.add("message_container_just_edited");
 
           // remove old possible transfer file
@@ -1309,6 +1308,7 @@ function load_created_post(created_post, original_post, on_loaded)
           message_container.id = "post_" + load_created_post_ajax.created_post;
           message_container.classList.add("message_container");
           message_container.classList.add("message_container_with_offset");
+          message_container.classList.add("message_container_just_posted");
           
           var reply_indicator = document.createElement("div");
           reply_indicator.classList.add("reply_indicator");
@@ -1423,7 +1423,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
   posts = document.getElementsByClassName("deleted_post");
   posts_count -= posts.length;
   
-  posts = document.getElementsByClassName("message_container_with_offset");
+  posts = document.getElementsByClassName("message_container_just_posted");
   posts_count -= posts.length;
   
   if(posts_count < posts_per_page)
@@ -1602,7 +1602,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
   load_new_posts_ajax.highlight_message = highlight_message;
   load_new_posts_ajax.target_url = target_url;
   
-  var elms = document.querySelectorAll(".message_container_with_offset");
+  var elms = document.querySelectorAll(".message_container_just_posted");
   elms.forEach(elm => elm.remove());
 
   for(var p in params)
@@ -3131,28 +3131,34 @@ function restore_unposted_message()
 
 function set_current_post(pid)
 {
+  debug_line("Setting current post to " + pid, "posting");
+  
   if(!pid)
   {
-    debug_line("No current post to set");
+    debug_line("No current post to set", "posting");
     return false;
   }
   
-  var elm = document.getElementById('modwarning_' + pid);
-  if(elm) 
-  {
-    elm.scrollIntoView({block: "start", behavior: "auto"});
-    return false;
-  }
-
+  var elm;
+  
   var anchor = document.getElementById('post_anchor_' + pid);
   if(!anchor) 
   {
-    debug_line("Post: " + pid + " not found");
+    elm = document.getElementById('modwarning_' + pid);
+    if(elm) 
+    {
+      debug_line("System post: " + pid + " found. Scroll to it.", "posting");
+      elm.scrollIntoView({block: "start", behavior: "auto"});
+      return false;
+    }
+
+    debug_line("Post: " + pid + " not found", "posting");
     return false;
   }
   
   if (pid == "top_new_message") 
   {
+    debug_line("top_new_message", "posting");
     anchor.scrollIntoView({block: "start", behavior: "auto"});
     return false;
   }
@@ -3160,11 +3166,12 @@ function set_current_post(pid)
   elm = document.getElementById('post_head_' + pid);
   if(!elm) 
   {
-    debug_line("Post: " + pid + " not found");
+    debug_line("Post: " + pid + " not found", "posting");
+
     return false;
   }
 
-  debug_line("Current post " + pid + " set successfully");
+  debug_line("Current post " + pid + " set successfully", "posting");
 
   var current_posts = document.getElementsByClassName("current_post");
 
