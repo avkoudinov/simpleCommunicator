@@ -535,8 +535,6 @@ function profile_message($msg)
     if ((!file_exists($file) && is_writable($path)) || is_writable($file)) {
         file_put_contents($file, $msg . "\r\n", FILE_APPEND);
     }
-    
-    $profile_time = microtime(true);
 } // profile_message
 //------------------------------------------------------------------------------
 function extract_call_stack($btrace)
