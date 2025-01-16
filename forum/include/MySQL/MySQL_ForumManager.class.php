@@ -1301,14 +1301,14 @@ class MySQL_ForumManager extends ForumManager
         return "select users.user_id, min(vth.dt) as min_dt
                 from (
                     select user_id, topic_id, max(dt) as dt
-                    from v1_topic_view_history
+                    from {$prfx}_topic_view_history
                     group by user_id, topic_id
                     order by max(dt) desc
                     limit 300
                 ) vth
                 inner join (
                     select distinct user_id
-                    from v1_topic_view_history
+                    from {$prfx}_topic_view_history
                     where user_id is not NULL
                 ) users
                 on vth.user_id = users.user_id
@@ -1321,14 +1321,14 @@ class MySQL_ForumManager extends ForumManager
         return "select guests.guest_name, min(vth.dt) as min_dt
                 from (
                     select guest_name, topic_id, max(dt) as dt
-                    from v1_topic_view_history
+                    from {$prfx}_topic_view_history
                     group by guest_name, topic_id
                     order by max(dt) desc
                     limit 300
                 ) vth
                 join (
                     select distinct guest_name
-                    from v1_topic_view_history
+                    from {$prfx}_topic_view_history
                     where guest_name is not NULL
                 ) guests
                 on vth.guest_name = guests.guest_name
@@ -1730,12 +1730,36 @@ class MySQL_ForumManager extends ForumManager
             return "";
         }
         
+        $query = "create temporary table if not exists tmp_children_aux1(id integer)";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+
+        $query = "create temporary table if not exists tmp_children_aux2(id integer)";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+        
         $query = "delete from tmp_children";
         if (!$srdbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
             return "";
         }
         
+        $query = "delete from tmp_children_aux1";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+
+        $query = "delete from tmp_children_aux2";
+        if (!$srdbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+            return "";
+        }
+
         $date_appendix = "";
         if (!empty($start_date) && $start_date != "error") {
             $date_appendix .= " and {$prfx}_post.creation_date >= '" . $srdbw->format_datetime($start_date) . "'";
@@ -1747,32 +1771,152 @@ class MySQL_ForumManager extends ForumManager
       
         if (!empty($author_id)) {
             $query = "insert into tmp_children (id)
-                      select parent_post_id from {$prfx}_post_hierarchy
-                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
-                      where {$prfx}_post.user_id = $author_id
-                      $date_appendix
-                      union
                       select reply_post_id from {$prfx}_post_hierarchy
                       inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
                       where {$prfx}_post.user_id = $author_id
                       $date_appendix
+                      order by reply_post_id desc
+                      limit 250
                       ";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+            
+            $query = "insert into tmp_children_aux1 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children_aux2 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children (id)
+                      select reply_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.reply_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.user_id = $author_id and parent_post_id in (select id from tmp_children_aux1)
+                      and reply_post_id not in (select id from tmp_children_aux2)
+                      $date_appendix
+                      ";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "delete from tmp_children_aux1";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "delete from tmp_children_aux2";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children_aux1 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children_aux2 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children (id)
+                      select parent_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.user_id = $author_id
+                      and parent_post_id not in (select id from tmp_children_aux1)
+                      and reply_post_id in (select id from tmp_children_aux2)
+                      $date_appendix
+                      ";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
         } else {
+            $query = "insert into tmp_children (id)
+                      select reply_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.author = $author
+                      $date_appendix
+                      order by reply_post_id desc
+                      limit 250
+                      ";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children_aux1 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children_aux2 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children (id)
+                      select reply_post_id from {$prfx}_post_hierarchy
+                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.reply_post_id = {$prfx}_post.id)
+                      where {$prfx}_post.author = $author and parent_post_id in (select id from tmp_children_aux1)
+                      and reply_post_id not in (select id from tmp_children_aux2)
+                      $date_appendix
+                      ";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "delete from tmp_children_aux1";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "delete from tmp_children_aux2";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children_aux1 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
+            $query = "insert into tmp_children_aux2 (id) select id from tmp_children";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
+
             $query = "insert into tmp_children (id)
                       select parent_post_id from {$prfx}_post_hierarchy
                       inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
                       where {$prfx}_post.author = $author
-                      $date_appendix
-                      union
-                      select reply_post_id from {$prfx}_post_hierarchy
-                      inner join {$prfx}_post on ({$prfx}_post_hierarchy.parent_post_id = {$prfx}_post.id)
-                      where {$prfx}_post.author = $author
+                      and parent_post_id not in (select id from tmp_children_aux1)
+                      and reply_post_id in (select id from tmp_children_aux2)
                       $date_appendix
                       ";
-        }
-        if (!$srdbw->execute_query($query)) {
-            MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
-            return "";
+            if (!$srdbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $srdbw->get_last_error() . "\n\n" . $srdbw->get_last_query());
+                return "";
+            }
         }
 
         return " and {$prfx}_post.id in (select id from tmp_children)";

@@ -118,8 +118,13 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <?php echo(build_page_info($pagination_info, text("pages"))); ?>
 </div>
 
-<?php if($pagination_info["page_count"] > 1): ?>
-<div class="navigator_bar"><?php echo(build_page_navigator("users.php?upage=$", $pagination_info)); ?></div>
+<?php 
+if($pagination_info["page_count"] > 1): 
+$url = "users.php?upage=$";
+if (!reqvar_empty("sort")) $url .= "&sort=" . urlencode(reqvar("sort"));
+if (!reqvar_empty("user_name")) $url .= "&user_name=" . urlencode(reqvar("user_name"));
+?>
+<div class="navigator_bar"><?php echo(build_page_navigator($url, $pagination_info)); ?></div>
 <?php endif; ?>
 
 <div class="forum_action_bar">

@@ -250,6 +250,10 @@ function debug_message($msg)
         $callfile .= ":\n\n";
     }
     
+    if (defined('OMIT_FILE_NAMES_AND_LINES') && OMIT_FILE_NAMES_AND_LINES) {
+        $callfile = "";
+    }
+    
     if ((!file_exists($file) && is_writable($path)) || is_writable($file)) {
         file_put_contents($file, $callfile . $msg . "\r\n", FILE_APPEND);
     }
@@ -531,8 +535,6 @@ function profile_message($msg)
     if ((!file_exists($file) && is_writable($path)) || is_writable($file)) {
         file_put_contents($file, $msg . "\r\n", FILE_APPEND);
     }
-    
-    $profile_time = microtime(true);
 } // profile_message
 //------------------------------------------------------------------------------
 function extract_call_stack($btrace)
