@@ -49,6 +49,41 @@ SimpleCalendar.validate_date = function (day, month, year) {
     return true;
 };
 
+SimpleCalendar.get_current_time_zone_code = function () {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
+SimpleCalendar.get_current_date = function (config) {
+    var today_date = new Date();
+    
+    current_time_zone_offset = SimpleCalendar.get_time_zone_offset(today_date, SimpleCalendar.get_current_time_zone_code());
+    var target_time_zone_offset = SimpleCalendar.get_time_zone_offset(today_date, config.time_zone);
+    var today_date = new Date(today_date.getTime() - current_time_zone_offset + target_time_zone_offset);
+
+    return today_date;
+};
+
+SimpleCalendar.get_time_zone_offset = function (date, timeZone) {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: timeZone,
+        timeZoneName: 'shortOffset'
+    });
+
+    const parts = formatter.formatToParts(date);
+    const offsetPart = parts.find((part) => part.type === 'timeZoneName').value;
+
+    const match = offsetPart.match(/GMT([+-]?\d{1,2})(:(\d{2}))?/);
+
+    if (match) {
+        const hour = match[1];
+        const minute = match[3] || 0; 
+        
+        return (hour * 3600 + minute * 60) * 1000;
+    }
+
+    return 0;
+};
+
 SimpleCalendar.time_to_string = function (time, format) {
     if (!time) return "";
 
@@ -123,21 +158,28 @@ SimpleCalendar.string_to_time = function (str, format) {
 
     if (!date_ok && !time_ok) return null;
 
-    /*
-        alert(units[i_day] + "." + units[i_month] + "." + units[i_year] + " " +
-              units[i_hour] + ":" + units[i_minute] + ":" + units[i_second]
-             );
-    */
-
     var dt = new Date();
+
+    dt.setHours(0);
+    dt.setMinutes(0);
+    dt.setSeconds(0);
+    dt.setMilliseconds(0);
 
     if (date_ok) {
         if (!SimpleCalendar.validate_date(units[i_day], units[i_month], units[i_year])) return null;
 
+        // If we start setting with the day, it might not be possible
+        // to set the 29 of February, if the 29 of February of a leap year
+        // is chosen, but the current year is not a leap year.
+        
+        // So, we set first the month to January, because it always has 31 days.
         dt.setMonth(0);
-        dt.setDate(units[i_day]);
-        dt.setMonth(units[i_month] - 1);
+        // now we can surely set the desired year.
         dt.setFullYear(units[i_year]);
+        // now we can surely set the desired day.
+        dt.setDate(units[i_day]);
+        // now we can set the desired month.
+        dt.setMonth(units[i_month] - 1);
     }
 
     if (time_ok) {
@@ -158,8 +200,6 @@ SimpleCalendar.string_to_time = function (str, format) {
     } else {
         dt.setSeconds(0);
     }
-    
-    dt.setMilliseconds(0);
 
     return dt;
 };
@@ -395,11 +435,11 @@ SimpleCalendar.create_calendar = function (field, config) {
 };
 
 SimpleCalendar.set_date_from_field = function (field, config) {
-    var date = new Date();
+    var date = SimpleCalendar.get_current_date(config);
     if (field.value.trim()) {
         date = SimpleCalendar.string_to_time(field.value.trim(), config.format);
         if (date === null) {
-            date = new Date();
+            date = SimpleCalendar.get_current_date(config);
         } else {
             field.my_calendar.selected_date = date;
         }
@@ -410,14 +450,19 @@ SimpleCalendar.set_date_from_field = function (field, config) {
 
 SimpleCalendar.assign = function (field_ref, config) {
     if (!field_ref) return;
-
+    
     if (!config) config = {};
 
-    var date = new Date();
+    if (!config.time_zone) {
+        config.time_zone = SimpleCalendar.get_current_time_zone_code();
+    }
+
+    var date = SimpleCalendar.get_current_date(config);
 
     if (!config.format) config.format = "Y-m-d";
     if (!config.start_year) config.start_year = date.getFullYear() - 10;
     if (!config.end_year) config.end_year = date.getFullYear() + 10;
+
 
     if (!config.month_names) {
         config.month_names = new Array(
@@ -495,7 +540,7 @@ SimpleCalendar.hide_if_inactive = function (calendar) {
     if (SimpleCalendar.handler) SimpleCalendar.handler();
 };
 
-SimpleCalendar.getPreviousDay = function (date) {
+SimpleCalendar.get_previous_day = function (date) {
   var previousDay = new Date(date);
   
   if (date.getDate() === 1) {
@@ -508,7 +553,7 @@ SimpleCalendar.getPreviousDay = function (date) {
   return previousDay;
 };
 
-SimpleCalendar.getNextDay = function (date) {
+SimpleCalendar.get_next_day = function (date) {
   var nextDay = new Date(date);
 
   nextDay.setDate(date.getDate() + 1);
@@ -535,14 +580,13 @@ SimpleCalendar.set_date = function (calendar, date) {
         return;
     }
 
-    var today_date = new Date();
-    today_date = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate());
-
+    var today_date = SimpleCalendar.get_current_date(calendar.config);
+    
     var first_day_date = new Date(date.getFullYear(), date.getMonth(), 1);
     var first_day_of_week = first_day_date.getDay();
     if (first_day_of_week == 0) first_day_of_week = 7;
 
-    var other_month_date = SimpleCalendar.getPreviousDay(first_day_date);
+    var other_month_date = SimpleCalendar.get_previous_day(first_day_date);
 
     var current_date = new Date(other_month_date.getFullYear(), other_month_date.getMonth(), other_month_date.getDate() - first_day_of_week + 2, 0, 0, 0);
 
@@ -571,7 +615,7 @@ SimpleCalendar.set_date = function (calendar, date) {
             current_date.getDate() == calendar.selected_date.getDate()
         ) elms[i].classList.add('selected_date');
 
-        current_date = SimpleCalendar.getNextDay(current_date);
+        current_date = SimpleCalendar.get_next_day(current_date);
     }
 };
 
