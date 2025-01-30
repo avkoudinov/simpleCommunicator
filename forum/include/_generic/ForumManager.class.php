@@ -13790,6 +13790,7 @@ abstract class ForumManager
                                       ({$prfx}_topic.publish_delay <> 1 or {$prfx}_topic.user_id = {$prfx}_user.id) and
                                       ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = {$prfx}_user.id)) and
                                       (({$prfx}_forum.restricted_access in (0, 2) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1) or
+                                       {$prfx}_user.is_admin = 1 or
                                        {$prfx}_forum.id in (select forum_id from {$prfx}_forum_moderator where user_id = {$prfx}_user.id) or
                                        ({$prfx}_forum.id in (select forum_id from {$prfx}_forum_member where user_id = {$prfx}_user.id) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1)
                                       )")
@@ -22487,6 +22488,7 @@ abstract class ForumManager
                                       ({$prfx}_topic.publish_delay <> 1 or {$prfx}_topic.user_id = {$prfx}_user.id) and
                                       ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = {$prfx}_user.id)) and
                                       (({$prfx}_forum.restricted_access in (0, 2) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1) or
+                                       {$prfx}_user.is_admin = 1 or
                                        {$prfx}_forum.id in (select forum_id from {$prfx}_forum_moderator where user_id = {$prfx}_user.id) or
                                        ({$prfx}_forum.id in (select forum_id from {$prfx}_forum_member where user_id = {$prfx}_user.id) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1)
                                       )")
@@ -24468,6 +24470,7 @@ abstract class ForumManager
                                       ({$prfx}_topic.publish_delay <> 1 or {$prfx}_topic.user_id = {$prfx}_user.id) and
                                       ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = {$prfx}_user.id)) and
                                       (({$prfx}_forum.restricted_access in (0, 2) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1) or
+                                       {$prfx}_user.is_admin = 1 or
                                        {$prfx}_forum.id in (select forum_id from {$prfx}_forum_moderator where user_id = {$prfx}_user.id) or
                                        ({$prfx}_forum.id in (select forum_id from {$prfx}_forum_member where user_id = {$prfx}_user.id) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1)
                                       )")
