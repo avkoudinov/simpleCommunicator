@@ -3016,7 +3016,7 @@ abstract class ForumManager
             return false;
         }
         
-        if (!$dbw->execute_query("insert into $tmp_id_collector_table (id) select id from {$prfx}_post where $post_clause")) {
+        if (!$dbw->execute_query("insert into $tmp_id_collector_table (id) select id from {$prfx}_post where $post_date_clause $post_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -9529,7 +9529,9 @@ abstract class ForumManager
         
         $prfx = $dbw->escape(System::getDBPrefix());
         
-        if (!$dbw->execute_query($this->get_query_last_guest_activity($prfx, "where guest_name is NULL and user_id is NULL and bot is NULL"))) {
+        $start = $dbw->format_datetime(time() - 100 * 24 * 3600);
+        
+        if (!$dbw->execute_query($this->get_query_last_guest_activity($prfx, "where dt > '$start' and guest_name is NULL and user_id is NULL and bot is NULL"))) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -9541,7 +9543,7 @@ abstract class ForumManager
         
         $dbw->free_result();
         
-        profile_message($this->get_query_last_guest_activity($prfx, "where guest_name is NULL and user_id is NULL and bot is NULL"));
+        profile_message($this->get_query_last_guest_activity($prfx, "where dt > '$start' and guest_name is NULL and user_id is NULL and bot is NULL"));
         profile_point("Query executed");
         
         if (empty($guest_data["last_visit_date"])) {
