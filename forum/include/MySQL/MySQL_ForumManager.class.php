@@ -1696,7 +1696,7 @@ class MySQL_ForumManager extends ForumManager
             return "";
         }
         
-        if (!$dbw->execute_query("delete from tmp_id_collector")) {
+        if (!$dbw->execute_query("truncate table tmp_id_collector")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return "";
         }
