@@ -224,7 +224,7 @@ $current_group = $finfo["forum_group_name"];
 ?>
 
 <tr>
-<th class="subheader" colspan="<?php echo($colspan); ?>"><?php echo_html(empty($current_group) ? text("OtherForums") : $current_group); ?></th>
+<th class="subheader" style="cursor: pointer" colspan="<?php echo($colspan); ?>" onclick="document.location.href = '#<?php echo_html($finfo["forum_group_id"]); ?>';"><a class="jump_to_section" id="<?php echo_html($finfo["forum_group_id"]); ?>"></a><?php echo_html(empty($current_group) ? text("OtherForums") : $current_group); ?></th>
 </tr>
 
 <?php
