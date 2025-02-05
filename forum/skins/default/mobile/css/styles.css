@@ -1034,6 +1034,13 @@ textarea
   background-image: none;
   background-color: #909090;
   padding: 4px;
+  position: relative;
+}
+
+.forum_table th.subheader .jump_to_section
+{
+  position: absolute; 
+  top: -50px;
 }
 
 .post_table th.subheader,

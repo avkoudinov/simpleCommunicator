@@ -15,9 +15,6 @@ $title = text("AnonymActivity");
 $ogtitle = text("AnonymActivity");
 //------------------------------------------------------------------
 
-profile_message("-------------------");
-profile_message("Start getting anonym activity");
-
 $guest_data = array();
 if(!$fmanager->get_anonym_activity($guest_data))
 {
@@ -27,8 +24,6 @@ if(!$fmanager->get_anonym_activity($guest_data))
   header("location: " . $target_url);
   exit;
 }
-
-profile_point("get_anonym_activity executed");
 
 $title .= " - " . get_site_name(current_language());
 $ogtitle = $title;
@@ -49,8 +44,6 @@ $topic_ignorers = array();
 $topic_blocked_users = array();
 $fmanager->get_online_users($online_users, $forum_readers, $topic_readers, $topic_ignorers, $topic_blocked_users, "", "");
 
-profile_point("get_online_users executed");
-
 $read_topics = array();
 if(!$fmanager->get_guest_read_topics("", $read_topics))
 {
@@ -61,15 +54,10 @@ if(!$fmanager->get_guest_read_topics("", $read_topics))
   exit;
 }
 
-profile_point("get_guest_read_topics executed");
-
 //------------------------------------------------------------------
 $fmanager->track_hit("", "");
-
-profile_point("track_hit executed");
 //------------------------------------------------------------------
 require_once "include/check_new_inc.php";
-profile_point("check_new_inc executed");
 //------------------------------------------------------------------
 require_once "include/final_inc.php";
 //------------------------------------------------------------------
