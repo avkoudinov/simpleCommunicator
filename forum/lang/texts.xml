@@ -5307,6 +5307,90 @@
             <ua>Видалені Nоцінки користувача</ua>
         </text>
 
+        <text id="ActionUserActivated">
+            <en>User account activated</en>
+            <de>Benutzerkonto aktiviert</de>
+            <ru>Учетная запись пользователя активирована</ru>
+            <ua>Обліковий запис користувача активовано</ua>
+        </text>
+
+        <text id="ActionUserDeactivated">
+            <en>User account deactivated</en>
+            <de>Benutzerkonto deaktiviert</de>
+            <ru>Учетная запись пользователя дективирована</ru>
+            <ua>Обліковий запис користувача деактивовано</ua>
+        </text>
+
+        <text id="ActionUserApproved">
+            <en>User account approved</en>
+            <de>Benutzerkonto wurde genehmigt</de>
+            <ru>Учетная запись пользователя одобрена</ru>
+            <ua>Обліковий запис користувача схвалено</ua>
+        </text>
+
+        <text id="ActionUserDisapproved">
+            <en>User account disapproved</en>
+            <de>Benutzerkonto wurde abgelehnt</de>
+            <ru>Учетная запись пользователя отклонена</ru>
+            <ua>Обліковий запис користувача відхилено</ua>
+        </text>
+
+        <text id="ActionUserMadePrivileged">
+            <en>User made a privileged user</en>
+            <de>Der Benutzer zum privilegierten Benutzer gemacht</de>
+            <ru>Пользователь сделан привилегированным пользователем</ru>
+            <ua>Користувач зроблений привілейованим користувачем</ua>
+        </text>
+
+        <text id="ActionUserRevokedPrivileged">
+            <en>The user has been deprived of the privileged user</en>
+            <de>Dem Benutzer wurde der privilegierte Status eines Benutzers entzogen</de>
+            <ru>Пользователь лишен статуса привилегированного пользователя</ru>
+            <ua>Користувач позбавлений статусу привілейованого користувача</ua>
+        </text>
+
+        <text id="ActionUserMadePrivilegedTopicModerator">
+            <en>User made a privileged topic moderator</en>
+            <de>Benutzer wurde zum privilegierten Themenmoderator gemacht</de>
+            <ru>Пользователь сделан привилегированным модератором тем</ru>
+            <ua>Користувач зроблений привілейованим модератором тем</ua>
+        </text>
+
+        <text id="ActionUserRevokedPrivilegedTopicModerator">
+            <en>The user has been deprived of the privileged topic moderator status</en>
+            <de>Dem Benutzer wurde der privilegierte Status eines Themenmoderators entzogen</de>
+            <ru>Пользователь лишен статуса привилегированного модератора тем</ru>
+            <ua>Користувач позбавлений статусу привілейованого модератора тем</ua>
+        </text>
+
+        <text id="ActionUserAllowedGlobalBan">
+            <en>The user has been granted the right to globally ban users</en>
+            <de>Dem Benutzer wurde das Recht eingeräumt, Benutzer global zu blockieren</de>
+            <ru>Пользователю выдано право глобального бана пользователей</ru>
+            <ua>Користувачеві видано право глобального бана користувачів</ua>
+        </text>
+
+        <text id="ActionUserDisllowedGlobalBan">
+            <en>The user has been deprived of the right to globally ban users</en>
+            <de>Dem Benutzer wurde das Recht entzogen, Benutzer global zu blockieren</de>
+            <ru>Пользователь лишен права глобального бана пользователей</ru>
+            <ua>Користувач позбавлений права глобального бана користувачів</ua>
+        </text>
+
+        <text id="ActionUserAllowedSeeIP">
+            <en>The user is given the right to see IP addresses in moderated forums</en>
+            <de>Dem Benutzer wurde das Recht eingeräumt, IP-Adressen in moderierten Foren zu sehen</de>
+            <ru>Пользователю дано право видеть IP адреса в модерируемых форумах</ru>
+            <ua>Користувачеві надано право бачити IP адреси в модерованих форумах</ua>
+        </text>
+
+        <text id="ActionUserDisallowedSeeIP">
+            <en>The user is deprived of the right to see IP addresses in moderated forums</en>
+            <de>Dem Benutzer wird das Recht entzogen, IP-Adressen in moderierten Foren zu sehen</de>
+            <ru>Пользователь лишен права видеть IP адреса в модерируемых форумах</ru>
+            <ua>Користувач позбавлений права бачити IP адреси в модерованих форумах</ua>
+        </text>
+
         <text id="MondayShort">
             <en>Mo</en>
             <de>Mo</de>
@@ -8349,6 +8433,175 @@
             <de>Das Thema {source_topic} auf dem Forum {source_forum} wurde in das Thema {target_topic} auf dem Forum {target_forum} verschoben. Die erste Nachricht des verschobenen Thema ist {message}.</de>
             <ru>Тема {source_topic} на форуме {source_forum} объединена с темой {target_topic} на форуме {target_forum}. Первое сообщение перенесенной темы {message}.</ru>
             <ua>Тема {source_topic} на форумі {source_forum} об'єднана з темою {target_topic} на форумі {target_forum}. Перше повідомлення перенесеної теми {message}.</ua>
+        </text>
+
+        <text id="MsgEventUserActivated">
+            <en>The administrator {author} has activated your user account.</en>
+            <de>Der Administrator {author} hat Ihr Benutzerkonto aktiviert.</de>
+            <ru>Администратор {author} активировал вашу учетную запись.</ru>
+            <ua>Адміністратор {author} активував ваш обліковий запис.</ua>
+        </text>
+
+        <text id="MsgEventUserActivatedAnonym">
+            <en>Your user account has been activated.</en>
+            <de>Ihr Benutzerkonto wurde aktiviert.</de>
+            <ru>Ваша учетная запись была активирована.</ru>
+            <ua>Ваш обліковий запис був активований.</ua>
+        </text>
+
+        <text id="MsgEventUserDeactivated">
+            <en>The administrator {author} has deactivated your user account.</en>
+            <de>Der Administrator {author} hat Ihr Benutzerkonto deaktiviert.</de>
+            <ru>Администратор {author} деактивировал вашу учетную запись.</ru>
+            <ua>Адміністратор {author} деактивував ваш обліковий запис.</ua>
+        </text>
+
+        <text id="MsgEventUserDeactivatedAnonym">
+            <en>Your user account has been deactivated.</en>
+            <de>Ihr Benutzerkonto wurde deaktiviert.</de>
+            <ru>Ваша учетная запись была активирована.</ru>
+            <ua>Ваш обліковий запис був деактивований.</ua>
+        </text>
+
+        <text id="MsgEventUserApproved">
+            <en>The administrator {author} has approved your user account.</en>
+            <de>Der Administrator {author} hat Ihr Benutzerkonto genehmigt.</de>
+            <ru>Администратор {author} одобрил вашу учетную запись.</ru>
+            <ua>Адміністратор {author} схвалив ваш обліковий запис.</ua>
+        </text>
+
+        <text id="MsgEventUserApprovedAnonym">
+            <en>Your user account has been approved.</en>
+            <de>Ihr Benutzerkonto wurde genehmigt.</de>
+            <ru>Ваша учетная запись была одобрена.</ru>
+            <ua>Ваш обліковий запис був схвалено.</ua>
+        </text>
+
+        <text id="MsgEventUserDisapproved">
+            <en>The administrator {author} has disapproved your user account.</en>
+            <de>Der Administrator {author} hat Ihr Benutzerkonto abgelehnt.</de>
+            <ru>Администратор {author} отклонил одобрение вашей учетной записи.</ru>
+            <ua>Адміністратор {author} відхилив схвалення вашого облікового запису.</ua>
+        </text>
+
+        <text id="MsgEventUserDisapprovedAnonym">
+            <en>Your user account has been disapproved.</en>
+            <de>Ihr Benutzerkonto wurde abgelehnt.</de>
+            <ru>Ваша учетная запись была отклонена.</ru>
+            <ua>Ваш обліковий запис було відхилено.</ua>
+        </text>
+        
+        
+        <text id="MsgEventUserMadePrivileged">
+            <en>Administrator {author} has granted you privileged user status.</en>
+            <de>Administrator {author} hat Ihnen den Status eines privilegierten Benutzers gewährt.</de>
+            <ru>Администратор {author} выдал вам статус привилегированного пользователя.</ru>
+            <ua>Адміністратор {author} видав вам статус привілейованого користувача.</ua>
+        </text>
+
+        <text id="MsgEventUserMadePrivilegedAnonym">
+            <en>You have been granted privileged user status.</en>
+            <de>Ihnen wurde der Status eines privilegierten Benutzers gewährt.</de>
+            <ru>Вам выдан статус привилегированного пользователя.</ru>
+            <ua>Вам видано статус привілейованого користувача.</ua>
+        </text>
+
+        <text id="MsgEventUserRevokedPrivileged">
+            <en>Administrator {author} has taken away your privileged user status</en>
+            <de>Administrator {author} hat Ihnen den Status eines privilegierten Benutzers entzogen.</de>
+            <ru>Администратор {author} забрал у вас статус привилегированного пользователя.</ru>
+            <ua>Адміністратор {author} забрав у вас статус привілейованого користувача.</ua>
+        </text>
+
+        <text id="MsgEventUserRevokedPrivilegedAnonym">
+            <en>Your privileged user status has been taken away.</en>
+            <de>Ihnen wurde der Status eines privilegierten Benutzers entzogen.</de>
+            <ru>У вас отнят статус привилегированного пользователя.</ru>
+            <ua>У вас відібрано статус привілейованого користувача.</ua>
+        </text>
+
+        <text id="MsgEventUserMadePrivilegedTopicModerator">
+            <en>Administrator {author} has granted you privileged topic moderator status.</en>
+            <de>Administrator {author} hat Ihnen den Status eines privilegierten Themenmoderators gewährt.</de>
+            <ru>Администратор {author} выдал вам статус привилегированного модератора тем.</ru>
+            <ua>Адміністратор {author} видав вам статус привілейованого модератора тем.</ua>
+        </text>
+
+        <text id="MsgEventUserMadePrivilegedTopicModeratorAnonym">
+            <en>You have been granted privileged topic moderator status.</en>
+            <de>Ihnen wurde der Status eines privilegierten Themenmoderators gewährt.</de>
+            <ru>Вам выдан статус привилегированного модератора тем.</ru>
+            <ua>Вам видано статус привілейованого модератора тем.</ua>
+        </text>
+
+        <text id="MsgEventUserRevokedPrivilegedTopicModerator">
+            <en>Administrator {author} has taken away your status as a privileged topic moderator.</en>
+            <de>Administrator {author} hat Ihnen den Status eines privilegierten Themenmoderators entzogen.</de>
+            <ru>Администратор {author} забрал у вас статус привилегированного модератора тем.</ru>
+            <ua>Адміністратор {author} забрав у вас статус привілейованого модератора тем.</ua>
+        </text>
+
+        <text id="MsgEventUserRevokedPrivilegedTopicModeratorAnonym">
+            <en>Your privileged topic moderator status has been taken away.</en>
+            <de>Ihnen wurde der Status eines privilegierten Themenmoderators entzogen.</de>
+            <ru>У вас отнят статус привилегированного модератора тем.</ru>
+            <ua>У вас відібрано статус привілейованого модератора тем.</ua>
+        </text>
+        
+        <text id="MsgEventUserAllowedGlobalBan">
+            <en>Administrator {author} has granted you the right to globally ban the users.</en>
+            <de>Administrator {author} hat Ihnen das Recht eingeräumt, die Benutzer global zu blockieren.</de>
+            <ru>Администратор {author} выдал вам право глобального бана пользователей.</ru>
+            <ua>Адміністратор {author} видав вам право глобального бану користувачів.</ua>
+        </text>
+
+        <text id="MsgEventUserAllowedGlobalBanAnonym">
+            <en>You have been granted the right to globally ban users.</en>
+            <de>Ihnen wurde das Recht gewährt, die Benutzer global zu blockieren.</de>
+            <ru>Вам выдано право глобального бана пользователей.</ru>
+            <ua>Вам видано право глобального бану користувачів.</ua>
+        </text>
+
+        <text id="MsgEventUserDisllowedGlobalBan">
+            <en>Administrator {author} has taken away your right to globally ban the users.</en>
+            <de>Administrator {author} hat Ihnen das Recht entzogen, die Benutzer global zu blockieren.</de>
+            <ru>Администратор {author} забрал у вас право глобального бана пользователей.</ru>
+            <ua>Адміністратор {author} забрав у вас право глобального бану користувачів.</ua>
+        </text>
+
+        <text id="MsgEventUserDisllowedGlobalBanAnonym">
+            <en>Your right to global ban users has been taken away.</en>
+            <de>Ihnen wurde das Recht entzogen, die Benutzer global zu blockieren.</de>
+            <ru>У вас отнято право глобального бана пользователей.</ru>
+            <ua>У вас забрано право глобального бану користувачів.</ua>
+        </text>
+        
+        <text id="MsgEventUserAllowedSeeIP">
+            <en>Administrator {author} has granted you the right to see IP addresses in moderated forums.</en>
+            <de>Administrator {author} hat Ihnen das Recht eingeräumt, IP-Adressen in moderierten Foren zu sehen.</de>
+            <ru>Администратор {author} выдал вам право видеть IP адреса в модерируемых форумах.</ru>
+            <ua>Адміністратор {author} видав вам право бачити IP адреси в модерованих форумах.</ua>
+        </text>
+
+        <text id="MsgEventUserAllowedSeeIPAnonym">
+            <en>The user is given the right to see IP addresses in moderated forums.</en>
+            <de>Dem Benutzer wurde das Recht eingeräumt, IP-Adressen in moderierten Foren zu sehen.</de>
+            <ru>Вам дано право видеть IP адреса в модерируемых форумах.</ru>
+            <ua>Вам надано право бачити IP адреси в модерованих форумах.</ua>
+        </text>
+
+        <text id="MsgEventUserDisallowedSeeIP">
+            <en>Administrator {author} has taken away your right to see IP addresses in moderated forums.</en>
+            <de>Administrator {author} hat Ihnen das Recht entzogen, IP-Adressen in moderierten Foren zu sehen.</de>
+            <ru>Администратор {author} забрал у вас право видеть IP адреса в модерируемых форумах.</ru>
+            <ua>Адміністратор {author} забрав у вас право бачити IP адреси в модерованих форумах.</ua>
+        </text>
+
+        <text id="MsgEventUserDisallowedSeeIPAnonym">
+            <en>Your right to see IP addresses in moderated forums has been taken away.</en>
+            <de>Ihnen wurde das Recht entzogen, IP-Adressen in moderierten Foren zu sehen.</de>
+            <ru>У вас отнято право видеть IP адреса в модерируемых форумах.</ru>
+            <ua>У вас забрано право бачити IP адреси в модерованих форумах.</ua>
         </text>
 
         <text id="MsgEventUserBlocked">

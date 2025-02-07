@@ -1,4 +1,4 @@
 <?php
-define('VERSION', '2.0.37');
-define('RELEASE_DATE', '05.02.2025');
+define('VERSION', '2.0.38');
+define('RELEASE_DATE', '07.02.2025');
 ?>
