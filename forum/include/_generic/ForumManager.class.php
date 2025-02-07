@@ -401,6 +401,31 @@ abstract class ForumManager
                 return text("ActionAdministratorMade");
             case "revoke_administrator":
                 return text("ActionAdministratorRevoked");
+                
+            case "activate_user":
+                return text("ActionUserActivated");
+            case "deactivate_user":
+                return text("ActionUserDeactivated");
+            case "approve_user":
+                return text("ActionUserApproved");
+            case "disaprove_user":
+                return text("ActionUserDisapproved");
+            case "make_privileged":
+                return text("ActionUserMadePrivileged");
+            case "revoke_privileged":
+                return text("ActionUserRevokedPrivileged");
+            case "make_privileged_topic_moderator":
+                return text("ActionUserMadePrivilegedTopicModerator");
+            case "revoke_privileged_topic_moderator":
+                return text("ActionUserRevokedPrivilegedTopicModerator");
+            case "allow_global_ban":
+                return text("ActionUserAllowedGlobalBan");
+            case "disallow_global_ban":
+                return text("ActionUserDisllowedGlobalBan");
+            case "allow_see_ip":
+                return text("ActionUserAllowedSeeIP");
+            case "disallow_see_ip":
+                return text("ActionUserDisallowedSeeIP");
             
             case "open_forum":
                 return text("ActionForumOpened");
@@ -11243,7 +11268,8 @@ abstract class ForumManager
         }
         
         // old approval state and name
-        if (!$dbw->execute_query("select user_name, approved, email_changed, is_admin, last_host, interface_language from {$prfx}_user where id = $uid")) {
+        if (!$dbw->execute_query("select user_name, approved, activated, privileged, privileged_topic_moderator, email_changed, 
+                                  is_admin, show_ip, global_ban_allowed, last_host, interface_language from {$prfx}_user where id = $uid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -11251,15 +11277,28 @@ abstract class ForumManager
         $last_host = "";
         $lng = current_language();
         $old_approved = "0";
+        $old_activated = "0";
         $old_user_name = "0";
         $old_is_admin = "0";
-        $email_changed = 0;
+        $old_privileged = "0";
+        $old_privileged_topic_moderator = "0";
+        $old_global_ban_allowed = "0";
+        $old_show_ip = "0";
+        $email_changed = "0";
+
         while ($dbw->fetch_row()) {
             $last_host = $dbw->field_by_name("last_host");
-            $old_approved = $dbw->field_by_name("approved");
             $lng = $dbw->field_by_name("interface_language");
+
+            $old_approved = $dbw->field_by_name("approved");
+            $old_activated = $dbw->field_by_name("activated");
+            $old_privileged = $dbw->field_by_name("privileged");
+            $old_privileged_topic_moderator = $dbw->field_by_name("privileged_topic_moderator");
             $old_user_name = $dbw->field_by_name("user_name");
             $old_is_admin = $dbw->field_by_name("is_admin");
+            $old_show_ip = $dbw->field_by_name("show_ip");
+            $old_global_ban_allowed = $dbw->field_by_name("global_ban_allowed");
+
             $email_changed = $dbw->field_by_name("email_changed");
         }
         
@@ -11276,9 +11315,6 @@ abstract class ForumManager
         $signature = $dbw->quotes_or_null(Emoji::Encode(reqvar("signature")));
         $info = $dbw->quotes_or_null(Emoji::Encode(reqvar("info")));
         
-        $activated = reqvar_empty("activated") ? "0" : "1";
-        $approved = reqvar_empty("approved") ? "0" : "1";
-        
         $now = $dbw->format_datetime(time());
         
         if (!reqvar_empty("password")) {
@@ -11290,28 +11326,20 @@ abstract class ForumManager
                                     logout = 1,";
         }
         
-        $is_admin = "0";
+        $activated = reqvar_empty("activated") ? "0" : "1";
+        $approved = reqvar_empty("approved") ? "0" : "1";
+
+        $is_admin = $old_is_admin;
         if ($this->is_master_admin()) {
             $is_admin = reqvar_empty("is_admin") ? "0" : "1";
             
-            $additional_updates .= "IS_ADMIN = $is_admin,";
+            $additional_updates .= "is_admin = $is_admin,";
         }
         
-        if ($this->is_admin()) {
-            $privileged = reqvar_empty("privileged") ? "0" : "1";
-            $privileged_topic_moderator = reqvar_empty("privileged_topic_moderator") ? "0" : "1";
-            
-            $additional_updates .= "privileged = $privileged,";
-            $additional_updates .= "privileged_topic_moderator = $privileged_topic_moderator,";
-            
-            $global_ban_allowed = reqvar_empty("global_ban_allowed") ? "0" : "1";
-            
-            $additional_updates .= "GLOBAL_BAN_ALLOWED = $global_ban_allowed,";
-            
-            $show_ip = reqvar_empty("show_ip") ? "0" : "1";
-            
-            $additional_updates .= "SHOW_IP = $show_ip,";
-        }
+        $privileged = reqvar_empty("privileged") ? "0" : "1";
+        $privileged_topic_moderator = reqvar_empty("privileged_topic_moderator") ? "0" : "1";
+        $global_ban_allowed = reqvar_empty("global_ban_allowed") ? "0" : "1";
+        $show_ip = reqvar_empty("show_ip") ? "0" : "1";
         
         if (!$dbw->start_transaction()) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -11344,7 +11372,11 @@ abstract class ForumManager
               info = $info,
               activated = $activated,
               $activation_sql
-              approved = $approved
+              approved = $approved,
+              privileged = $privileged,
+              privileged_topic_moderator = $privileged_topic_moderator,
+              global_ban_allowed = $global_ban_allowed,
+              show_ip = $show_ip
               where id = $uid";
         
         if (!$dbw->execute_query($query)) {
@@ -11369,6 +11401,102 @@ abstract class ForumManager
             }
         }
         
+        if ($approved != $old_approved) {
+            $event_data["author_id"] = $uid;
+            $event_data["author_name"] = reqvar("user_name");
+            
+            if ($old_approved == "0") {
+                $event_data["action"] = "approve_user";
+            } else {
+                $event_data["action"] = "disaprove_user";
+            }
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+        }
+
+        if ($activated != $old_activated) {
+            $event_data["author_id"] = $uid;
+            $event_data["author_name"] = reqvar("user_name");
+            
+            if ($old_activated == "0") {
+                $event_data["action"] = "activate_user";
+            } else {
+                $event_data["action"] = "deactivate_user";
+            }
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+        }
+
+        if ($privileged != $old_privileged) {
+            $event_data["author_id"] = $uid;
+            $event_data["author_name"] = reqvar("user_name");
+            
+            if ($old_privileged == "0") {
+                $event_data["action"] = "make_privileged";
+            } else {
+                $event_data["action"] = "revoke_privileged";
+            }
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+        }
+
+        if ($privileged_topic_moderator != $old_privileged_topic_moderator) {
+            $event_data["author_id"] = $uid;
+            $event_data["author_name"] = reqvar("user_name");
+            
+            if ($old_privileged_topic_moderator == "0") {
+                $event_data["action"] = "make_privileged_topic_moderator";
+            } else {
+                $event_data["action"] = "revoke_privileged_topic_moderator";
+            }
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+        }
+
+        if ($global_ban_allowed != $old_global_ban_allowed) {
+            $event_data["author_id"] = $uid;
+            $event_data["author_name"] = reqvar("user_name");
+            
+            if ($old_global_ban_allowed == "0") {
+                $event_data["action"] = "allow_global_ban";
+            } else {
+                $event_data["action"] = "disallow_global_ban";
+            }
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+        }
+
+        if ($show_ip != $old_show_ip) {
+            $event_data["author_id"] = $uid;
+            $event_data["author_name"] = reqvar("user_name");
+            
+            if ($old_show_ip == "0") {
+                $event_data["action"] = "allow_see_ip";
+            } else {
+                $event_data["action"] = "disallow_see_ip";
+            }
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+        }
+
         if ($old_user_name != reqvar("user_name")) {
             if (!$dbw->execute_query("update {$prfx}_topic set author = $user_name where user_id = $uid")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -11462,8 +11590,12 @@ abstract class ForumManager
             $params["{old_user_name}"] = $old_user_name;
             $params["{new_user_name}"] = reqvar("user_name");
             
-            $email_template = "email_user_renamed.txt";
-            $event_code = "MsgEventNickRenamed";
+            $anonym_appendix = "";
+            $anonym_appendix2 = "";
+            $this->get_anonym_appendixes($uid, $anonym_appendix, $anonym_appendix2);
+
+            $email_template = "email_user_renamed{$anonym_appendix}.txt";
+            $event_code = "MsgEventNickRenamed{$anonym_appendix2}";
             
             $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
             
@@ -11508,6 +11640,94 @@ abstract class ForumManager
             }
         }
         
+        $anonym_appendix = "";
+        $anonym_appendix2 = "";
+        $this->get_anonym_appendixes($uid, $anonym_appendix, $anonym_appendix2);
+
+        $params["{administrator_name}"] = $this->get_user_name();
+        
+        if ($activated != $old_activated) {
+            if ($old_activated == "0") {
+                $email_template = "email_activate_user{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserActivated{$anonym_appendix2}";
+            } else {
+                $email_template = "email_deactivate_user{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserDeactivated{$anonym_appendix2}";
+            }
+            
+            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
+            
+            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
+        }
+
+        if ($approved != $old_approved) {
+            if ($old_approved == "0") {
+                $event_code = "MsgEventUserApproved{$anonym_appendix2}";
+            } else {
+                $email_template = "email_disaprove_user{$anonym_appendix}.txt";
+                $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
+                $event_code = "MsgEventUserDisapproved{$anonym_appendix2}";
+            }
+            
+            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
+        }
+
+        if ($privileged != $old_privileged) {
+            if ($old_privileged == "0") {
+                $email_template = "email_make_privileged{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserMadePrivileged{$anonym_appendix2}";
+            } else {
+                $email_template = "email_revoke_privileged{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserRevokedPrivileged{$anonym_appendix2}";
+            }
+            
+            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
+            
+            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
+        }
+
+        if ($privileged_topic_moderator != $old_privileged_topic_moderator) {
+            if ($old_privileged_topic_moderator == "0") {
+                $email_template = "email_make_privileged{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserMadePrivilegedTopicModerator{$anonym_appendix2}";
+            } else {
+                $email_template = "email_revoke_privileged{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserRevokedPrivilegedTopicModerator{$anonym_appendix2}";
+            }
+            
+            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
+            
+            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
+        }
+
+        if ($global_ban_allowed != $old_global_ban_allowed) {
+            if ($old_global_ban_allowed == "0") {
+                $email_template = "email_allow_global_ban{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserAllowedGlobalBan{$anonym_appendix2}";
+            } else {
+                $email_template = "email_disallow_global_ban{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserDisllowedGlobalBan{$anonym_appendix2}";
+            }
+            
+            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
+            
+            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
+        }
+
+        if ($show_ip != $old_show_ip) {
+            if ($old_show_ip == "0") {
+                $email_template = "email_allow_see_ip{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserAllowedSeeIP{$anonym_appendix2}";
+            } else {
+                $email_template = "email_disallow_see_ip{$anonym_appendix}.txt";
+                $event_code = "MsgEventUserDisallowedSeeIP{$anonym_appendix2}";
+            }
+            
+            $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
+            
+            $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
+        }
+
         return true;
     } // save_user
     
@@ -31336,6 +31556,19 @@ abstract class ForumManager
         $action_list["revoke_forum_moderator"] = text("ActionForumModeratorRevoked");
         $action_list["make_administrator"] = text("ActionAdministratorMade");
         $action_list["revoke_administrator"] = text("ActionAdministratorRevoked");
+
+        $action_list["activate_user"] = text("ActionUserActivated");
+        $action_list["deactivate_user"] = text("ActionUserDeactivated");
+        $action_list["approve_user"] = text("ActionUserApproved");
+        $action_list["disaprove_user"] = text("ActionUserDisapproved");
+        $action_list["make_privileged"] = text("ActionUserMadePrivileged");
+        $action_list["revoke_privileged"] = text("ActionUserRevokedPrivileged");
+        $action_list["make_privileged_topic_moderator"] = text("ActionUserMadePrivilegedTopicModerator");
+        $action_list["revoke_privileged_topic_moderator"] = text("ActionUserRevokedPrivilegedTopicModerator");
+        $action_list["allow_global_ban"] = text("ActionUserAllowedGlobalBan");
+        $action_list["disallow_global_ban"] = text("ActionUserDisllowedGlobalBan");
+        $action_list["allow_see_ip"] = text("ActionUserAllowedSeeIP");
+        $action_list["disallow_see_ip"] = text("ActionUserDisallowedSeeIP");
 
         $action_list["block_ip"] = text("ActionIPBlocked");
         $action_list["unblock_ip"] = text("ActionIPUnblocked");
