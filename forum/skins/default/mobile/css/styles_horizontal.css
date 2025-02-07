@@ -1647,6 +1647,11 @@
     padding: 5px;
   }
 
+  .forum_table th.subheader .jump_to_section
+  {
+    top: -30px;
+  }
+
   .post_table th,
   .post_table td
   {

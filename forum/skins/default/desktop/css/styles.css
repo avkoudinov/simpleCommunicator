@@ -1305,6 +1305,13 @@ textarea
   background-color: #909090;
   padding: 2px;
   text-align: left;
+  position: relative;
+}
+
+.topic_table th.subheader .jump_to_section
+{
+  position: absolute; 
+  top: -50px;
 }
 
 .form_table th.subheader,
