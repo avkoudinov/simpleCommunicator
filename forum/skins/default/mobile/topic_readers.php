@@ -1,3 +1,25 @@
+<script>
+function expand_statistics_list(elm)
+{
+  var parent_table = elm.parentNode;
+  if(!parent_table) return;
+  parent_table = parent_table.parentNode;
+  if(!parent_table) return;
+  parent_table = parent_table.parentNode;
+  if(!parent_table) return;
+  
+  var elms = parent_table.getElementsByClassName("statistics_row_hidden");
+  for(var i = elms.length-1; i >= 0; i--)
+  {
+    elms[i].classList.remove("statistics_row_hidden");
+  }
+  
+  elm = elm.parentNode;
+  if(elm) elm = elm.parentNode;
+  if(elm) elm = elm.style.display = "none";
+}
+</script>
+
 <!-- BEGIN: forum_bar -->
 
 <div class="forum_bar">
