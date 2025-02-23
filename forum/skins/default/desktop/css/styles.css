@@ -2343,9 +2343,18 @@ tr.selected_row td.checkbox_selector
   margin: 10px 0px 10px 0px;
 }
 
-.attachment_editable .message_table td .attachment_wrapper.own_attachment
+.attachment_editable .message_table td .attachment_wrapper.own_attachment,
+.attachment_moderatable .message_table td .attachment_wrapper
 {
   margin-right: 25px;
+}
+
+.attachment_editable .thumb_gallery > .attachment_wrapper.own_attachment,
+.attachment_editable .message_table td .thumb_gallery > .attachment_wrapper,
+.attachment_moderatable .thumb_gallery > .attachment_wrapper,
+.attachment_moderatable .message_table td .thumb_gallery > .attachment_wrapper 
+{
+  margin-right: 30px;
 }
 
 .message_table td .post_image
@@ -4201,7 +4210,8 @@ a.user_appeal:hover
 }
 
 .popup_author_actions_menu,
-.popup_topic_actions_menu
+.popup_topic_actions_menu,
+.popup_forum_actions_menu
 {
   color: black;
   display: none;
@@ -4225,6 +4235,7 @@ a.user_appeal:hover
 .popup_moderator_menu a,
 .popup_author_actions_menu a,
 .popup_topic_actions_menu a,
+.popup_forum_actions_menu a,
 .moderator_post_more_actions a
 {
   display: block;
@@ -4234,6 +4245,7 @@ a.user_appeal:hover
 .popup_moderator_menu a:hover,
 .popup_author_actions_menu a:hover,
 .popup_topic_actions_menu a:hover,
+.popup_forum_actions_menu a:hover,
 .moderator_post_more_actions a:hover
 {
   background-color: #DDDDDD;
@@ -5177,12 +5189,6 @@ img.image_placeholder
   height: 140px;
   margin: 0px 10px 10px 0px;
   box-sizing: border-box;
-}
-
-.attachment_editable .thumb_gallery > .own_attachment,
-.attachment_editable .message_table td .thumb_gallery > .own_attachment 
-{
-  margin-right: 30px;
 }
 
 .thumb_gallery img.post_image,

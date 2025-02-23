@@ -216,6 +216,10 @@ elseif (!reqvar_empty("forum_user_action")) {
     $response['target_url'] = "";
     
     $response['success'] = $fmanager->do_forum_user_action(reqvar("forum"), reqvar("forum_user_action"), $response);
+    
+    if ($response['success'] && !empty($response['target_url'])) {
+        $show_messages = false;
+    }
 } //---------------------------------------------------------------------
 elseif (!reqvar_empty("mark_read_action")) {
     switch (reqvar("mark_read_action")) {
@@ -234,7 +238,12 @@ elseif (!reqvar_empty("mark_read_action")) {
             break;
         
         case "mark_forums_read":
-            $response['success'] = $fmanager->mark_forums_read();
+            if (empty($_REQUEST["forums"])) {
+                $response['success'] = $fmanager->mark_forums_read();
+            } else {
+                $response['success'] = $fmanager->mark_forum_read("");
+            }
+
             if ($response['success']) {
                 $show_messages = false;
                 $response['target_url'] = "forums.php";

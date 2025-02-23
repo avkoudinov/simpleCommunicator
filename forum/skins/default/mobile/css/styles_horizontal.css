@@ -527,6 +527,7 @@
   .voted_users,
   .popup_moderator_menu,
   .popup_topic_actions_menu,
+  .popup_forum_actions_menu,
   .popup_author_actions_menu,
   .moderator_post_more_actions,
   .post_id_info_actions,
@@ -602,6 +603,7 @@
   .user_notes img.close_cross,
   .popup_moderator_menu img,
   .popup_topic_actions_menu img,
+  .popup_forum_actions_menu img,
   .popup_author_actions_menu img,
   .moderator_post_more_actions img,
   .post_id_info_actions img,
@@ -1974,8 +1976,16 @@
     margin: 0px 10px 10px 0px;
   }
 
-  .attachment_editable .thumb_gallery > .own_attachment,
-  .attachment_editable .message_table td .thumb_gallery > .own_attachment 
+  .attachment_editable .message_table td .attachment_wrapper.own_attachment,
+  .attachment_moderatable .message_table td .attachment_wrapper
+  {
+    margin-right: 36px;
+  }
+
+  .attachment_editable .thumb_gallery > .attachment_wrapper.own_attachment,
+  .attachment_editable .message_table td .thumb_gallery > .attachment_wrapper,
+  .attachment_moderatable .thumb_gallery > .attachment_wrapper,
+  .attachment_moderatable .message_table td .thumb_gallery > .attachment_wrapper 
   {
     margin-right: 43px;
   }
@@ -2508,11 +2518,6 @@
     margin: 10px 0px 10px 0px;
   }
   
-  .attachment_editable .message_table td .attachment_wrapper.own_attachment
-  {
-    margin-right: 36px;
-  }
-
   .message_table td .post_image
   {
     max-width: 280px;

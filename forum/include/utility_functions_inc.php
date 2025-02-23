@@ -364,7 +364,7 @@ function shrink_spaces(&$text, $omit_colon = false)
     $text = preg_replace("/\\s+/u", " ", $text);
     $text = trim($text);
     
-    $chars = ";,.-_";
+    $chars = ",.-_";
     if (empty($omit_colon)) {
         $chars .= ":";
     }
