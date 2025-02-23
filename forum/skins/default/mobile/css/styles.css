@@ -691,6 +691,12 @@ input[type="button"].load_user_rates
   background-color: #EEEEEE;
 }
 
+.forum_table th:nth-child(1),
+.forum_table td:nth-child(1)
+{
+  width: 18px;
+}
+
 .forum_info
 {
   margin-top: 15px;
@@ -2365,11 +2371,6 @@ img.mourning_band
   margin: 20px 0px 20px 0px;
 }
 
-.attachment_editable .message_table td .attachment_wrapper.own_attachment
-{
-  margin-right: 77px;
-}
-
 .message_table td .post_image
 {
   max-width: 320px;
@@ -3880,7 +3881,8 @@ a.user_appeal:hover
 }
 
 .popup_author_actions_menu,
-.popup_topic_actions_menu
+.popup_topic_actions_menu,
+.popup_forum_actions_menu
 {
   color: black;
   display: none;
@@ -3901,7 +3903,8 @@ a.user_appeal:hover
           box-shadow: 8px 8px 13px gray;
 }
 
-.popup_topic_actions_menu a:link
+.popup_topic_actions_menu a:link,
+.popup_forum_actions_menu a:link
 {
   display: block;
 }
@@ -4681,8 +4684,16 @@ img.image_placeholder
   box-sizing: border-box;
 }
 
-.attachment_editable .thumb_gallery > .own_attachment,
-.attachment_editable .message_table td .thumb_gallery > .own_attachment 
+.attachment_editable .message_table td .attachment_wrapper.own_attachment,
+.attachment_moderatable .message_table td .attachment_wrapper
+{
+  margin-right: 77px;
+}
+
+.attachment_editable .thumb_gallery > .attachment_wrapper.own_attachment,
+.attachment_editable .message_table td .thumb_gallery > .attachment_wrapper,
+.attachment_moderatable .thumb_gallery > .attachment_wrapper,
+.attachment_moderatable .message_table td .thumb_gallery > .attachment_wrapper 
 {
   margin-right: 88px;
 }
