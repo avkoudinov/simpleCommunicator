@@ -3364,14 +3364,14 @@
         <text id="NotApproved">
             <en>Not approved</en>
             <de>Nicht bestätigt</de>
-            <ru>Неодобрен</ru>
+            <ru>Не одобрен</ru>
             <ua>Не схвалений</ua>
         </text>
 
         <text id="notApproved">
             <en>not approved</en>
             <de>nicht bestätigt</de>
-            <ru>неодобрен</ru>
+            <ru>не одобрен</ru>
             <ua>не схвалений</ua>
         </text>
 
