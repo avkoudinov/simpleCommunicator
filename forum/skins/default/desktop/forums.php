@@ -1,4 +1,5 @@
 <script>
+var selected_forums = {};
 
 function confirm_action(msg, fname, params)
 {
@@ -8,6 +9,8 @@ function confirm_action(msg, fname, params)
     do_action(params);
     return false;
   }
+
+  hide_all_popups();
 
   var mbuttons = [
     {
@@ -30,10 +33,153 @@ function confirm_action(msg, fname, params)
   return false;
 }
 
+function hide_all_popups()
+{
+  Forum.hide_sys_bubblebox();
+
+  var elms = document.getElementsByClassName("popup_forum_actions_menu");
+  for(var i = 0; i < elms.length; i++)
+  {
+    elms[i].style.display = "none";
+  }
+}
+
+function show_forum_actions_menu(fid)
+{
+  hide_all_popups();
+
+  var count = Forum.objectPropertiesCount(selected_forums);
+
+  if(count == 0) return false;
+
+  var elms = document.getElementsByClassName("selected_forums_count");
+  for(var i = 0; i < elms.length; i++)
+  {
+    elms[i].innerHTML = count;
+  }
+
+  var elm = document.getElementById("popup_forum_actions_menu_" + fid);
+  if(!elm) return false;
+
+  elm.style.display = "block";
+
+  return false;
+}
+
+function select_all()
+{
+  var th = document.getElementById("all_checkbox_selector");
+  if(th) th.classList.add('selected_all_checkbox_selector');
+  
+  var elms = document.getElementsByClassName("checkbox_selector");
+  for(var i = 0; i < elms.length; i++)
+  {
+    fid = elms[i].getAttribute("data-fid");
+    if(!fid) continue;
+    
+    if(!elms[i].parentNode.classList.contains('selected_row'))
+    {
+      elms[i].parentNode.classList.add('selected_row');
+      selected_forums[fid] = 1;
+    }
+  }
+  
+  var count = Forum.objectPropertiesCount(selected_forums);
+
+  if(count == 0) return false;
+
+  var elms = document.getElementsByClassName("selected_forums_count");
+  for(var i = 0; i < elms.length; i++)
+  {
+    elms[i].innerHTML = count;
+  }
+  
+  return false;
+}
+
+function unselect_all()
+{
+  var th = document.getElementById("all_checkbox_selector");
+  if(th) th.classList.remove('selected_all_checkbox_selector');
+  
+  var elms = document.getElementsByClassName("checkbox_selector");
+  for(var i = 0; i < elms.length; i++)
+  {
+    fid = elms[i].getAttribute("data-fid");
+    if(!fid) continue;
+    
+    if(elms[i].parentNode.classList.contains('selected_row'))
+    {
+      elms[i].parentNode.classList.remove('selected_row');
+      delete selected_forums[fid];
+    }
+  }
+  
+  hide_all_popups();
+  
+  return false;
+}
+
+function toggle_all_selection(th)
+{
+  var selected = false;
+  var fid = "";
+  var first_fid = "";
+  
+  if(th.classList.contains('selected_all_checkbox_selector'))
+  {
+    th.classList.remove('selected_all_checkbox_selector');
+  }
+  else
+  {
+    th.classList.add('selected_all_checkbox_selector');
+    selected = true;
+  }
+  
+  var elms = document.getElementsByClassName("checkbox_selector");
+  for(var i = 0; i < elms.length; i++)
+  {
+    fid = elms[i].getAttribute("data-fid");
+    if(!fid) continue;
+    
+    if(!first_fid) first_fid = fid;
+    
+    if(selected)
+    {
+      elms[i].parentNode.classList.add('selected_row');
+      selected_forums[fid] = 1;
+    }
+    else
+    {
+      elms[i].parentNode.classList.remove('selected_row');
+      delete selected_forums[fid];
+    }
+  }
+  
+  if(first_fid) show_forum_actions_menu(first_fid);
+}
+
+function toggle_selection(td, fid)
+{
+  if(td.parentNode.classList.contains('selected_row'))
+  {
+    td.parentNode.classList.remove('selected_row');
+    delete selected_forums[fid];
+  }
+  else
+  {
+    td.parentNode.classList.add('selected_row');
+    selected_forums[fid] = 1;
+  }
+}
+
+
 var action_ajax = null;
 
 function do_action(params)
 {
+  hide_all_popups();
+
   Forum.show_sys_progress_indicator(true);
 
   if(!action_ajax)
@@ -83,6 +229,14 @@ function do_action(params)
     if(!Object.prototype.hasOwnProperty.call(params, p)) continue;
 
     action_ajax.setPOST(p, params[p]);
+  }
+
+  var i = 0;
+  for(var f in selected_forums)
+  {
+    if(!Object.prototype.hasOwnProperty.call(selected_forums, f)) continue;
+
+    action_ajax.setPOST("forums[" + (i++) + "]", f);
   }
 
   action_ajax.setPOST('hash', get_protection_hash());
@@ -182,7 +336,7 @@ $forum_selector_id = 1;
 
 <table class="topic_table">
 <tr>
-<th></th>
+<th id="all_checkbox_selector" class="all_checkbox_selector" onclick="toggle_all_selection(this)"><div>&nbsp;</div></th>
 <th class="topic_name_col"><?php echo_html(text("Name")); ?></th>
 <th class="author_col"><?php echo_html(text("LastAuthor")); ?></th>
 <th class="date_col"><?php echo_html(text("LastMessage")); ?></th>
@@ -233,9 +387,28 @@ endif;
 
 
 <tr class="<?php echo_html($deleted); ?>">
-<td></td>
+<td class="checkbox_selector" data-fid="<?php echo_html($fid); ?>" onclick="toggle_selection(this, '<?php echo_html($fid); ?>'); show_forum_actions_menu('<?php echo_html($fid); ?>')"><div>&nbsp;</div></td>
 
 <td class="topic_name_col">
+
+  <div style="position:relative;" id="popup_container_<?php echo_html($fid); ?>">
+  <div class="popup_forum_actions_menu" id="popup_forum_actions_menu_<?php echo_html($fid); ?>">
+
+      <div style="position: absolute;right:2px;top:2px;cursor:pointer" onclick="hide_all_popups();"><img src="<?php echo($view_path); ?>images/cross.png" alt="<?php echo_html(text("Close")); ?>"></div>
+
+      <span style="font-weight: bold"><?php echo_html(text("MsgForumsSelected")); ?>: <span class="selected_forums_count">0</span></span>
+      
+      <a href="forums.php" onclick='return select_all()'><?php echo_html(text("SelectAll")); ?></a>
+      <a href="forums.php" onclick='return unselect_all()'><?php echo_html(text("ResetSelection")); ?></a>
+      
+      <a href="forums.php" onclick='return confirm_action("<?php echo_js(text("MsgConfirmForumsIgnore"), true); ?>", "", { forum_user_action: "add_to_ignored" })'><?php echo_html(text("AddForumsToIgnoredForums")); ?></a>
+      <a href="forums.php" onclick='return do_action({ forum_user_action: "remove_from_ignored" })'><?php echo_html(text("RemoveForumsFromIgnoredForums")); ?></a>
+
+      <a href="forums.php" onclick='return do_action({ mark_read_action: "mark_forums_read" })'><?php echo_html(text("MarkRead")); ?></a>
+
+  </div>
+  </div>
+
 
   <table class="forum_aux_table">
   <tr>

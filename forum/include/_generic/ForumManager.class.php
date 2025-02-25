@@ -5626,7 +5626,6 @@ abstract class ForumManager
             "." => "",
             "," => "",
             ":" => "",
-            ";" => "",
             "!" => "",
             "?" => "",
             "~" => "",
@@ -13305,7 +13304,7 @@ abstract class ForumManager
     {
         global $settings;
         
-        if (empty($fid) || !is_numeric($fid)) {
+        if (empty($_REQUEST["forums"]) && (empty($fid) || !is_numeric($fid))) {
             MessageHandler::setError(text("ErrNoForumSelected"));
             return false;
         }
@@ -13320,24 +13319,35 @@ abstract class ForumManager
         $fid = $dbw->escape($fid);
         $uid = $dbw->escape($this->get_user_id());
         
-        $dummy = false;
-        if (!$this->has_access_to_forum($fid, $dummy, false)) {
-            MessageHandler::setError(text("ErrActionNotAllowed") . "333");
-            return false;
-        }
-
         if (empty($uid)) {
             return $this->do_forum_guest_action($fid, $action, $response);
         }
         
+        if (empty($_REQUEST["forums"])) { 
+            $single_forum = true;
+            $_REQUEST["forums"][] = $fid;
+        } else {
+            $single_forum = false;
+        }
+
+        $dummy = false;
+        foreach ($_REQUEST["forums"] as $fid) {
+            if (!$this->has_access_to_forum($fid, $dummy, false)) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                return false;
+            }
+        }
+
         if (!$dbw->start_transaction()) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
-
+        
+        $in_list = $dbw->escape(implode(",", $_REQUEST["forums"]));
+        
         if ($action == "add_to_ignored" || $action == "remove_from_ignored") {
             if (!$dbw->execute_query("delete from {$prfx}_ignored_forums
-                               where user_id = $uid and forum_id = $fid")) {
+                               where user_id = $uid and forum_id in ($in_list)")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
                 return false;
@@ -13349,15 +13359,22 @@ abstract class ForumManager
                 return false;
             }
             
-            $imsg = text("MsgForumRemovedFromIgnored");
-            $response['convert_action_link'] = "add_to_ignored";
+            if ($single_forum) {
+                $imsg = text("MsgForumRemovedFromIgnored");
+                $response['convert_action_link'] = "add_to_ignored";
+            } else {
+                $imsg = text("MsgForumsRemovedFromIgnored");
+                $response['target_url'] = "forums.php";
+            }
         }
         
         if ($action == "add_to_ignored") {
             if (!$dbw->execute_query("insert into {$prfx}_ignored_forums
                                (user_id, forum_id)
-                               values
-                               ($uid, $fid)")) {
+                               select
+                               $uid, id
+                               from {$prfx}_forum where name <> 'PRIVATE_MESSAGES' and id in ($in_list)
+                               and not exists (select 1 from {$prfx}_ignored_forums where user_id = $uid and forum_id = {$prfx}_forum.id)")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 $dbw->rollback_transaction();
                 return false;
@@ -13369,8 +13386,13 @@ abstract class ForumManager
                 return false;
             }
             
-            $imsg = text("MsgForumAddedToIgnored");
-            $response['convert_action_link'] = "remove_from_ignored";
+            if ($single_forum) {
+                $imsg = text("MsgForumAddedToIgnored");
+                $response['convert_action_link'] = "remove_from_ignored";
+            } else {
+                $imsg = text("MsgForumsAddedToIgnored");
+                $response['target_url'] = "forums.php";
+            }
         }
 
         if (!$dbw->commit_transaction()) {
@@ -13379,7 +13401,7 @@ abstract class ForumManager
         }
 
         MessageHandler::setInfo($imsg);
-
+        
         return true;
     } // do_forum_user_action
     
@@ -13389,27 +13411,56 @@ abstract class ForumManager
         global $settings;
         global $READ_MARKER;
         
-        if (empty($fid) || !is_numeric($fid)) {
+        if (empty($_REQUEST["forums"]) && (empty($fid) || !is_numeric($fid))) {
             MessageHandler::setError(text("ErrNoForumSelected"));
             return false;
         }
 
+        if (empty($_REQUEST["forums"])) {
+            $single_forum = true;
+            $_REQUEST["forums"][] = $fid;
+        } else {
+            $single_forum = false;
+        }
+
+        $dummy = false;
+        foreach ($_REQUEST["forums"] as $fid) {
+            if (!$this->has_access_to_forum($fid, $dummy, false)) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                return false;
+            }
+        }
+
         if ($action == "remove_from_ignored") {
-            unset($_SESSION["ignored_forums"][$fid]);
+            foreach ($_REQUEST["forums"] as $fid) {
+                unset($_SESSION["ignored_forums"][$fid]);
+            }
             
             // invalidate new info cache
             $this->new_checker->invalidate_new_messages_cache();
             
-            $imsg = text("MsgForumRemovedFromIgnored");
-            $response['convert_action_link'] = "add_to_ignored";
+            if ($single_forum) {
+                $imsg = text("MsgForumRemovedFromIgnored");
+                $response['convert_action_link'] = "add_to_ignored";
+            } else {
+                $imsg = text("MsgForumsRemovedFromIgnored");
+                $response['target_url'] = "forums.php";
+            }
         } elseif ($action == "add_to_ignored") {
-            $_SESSION["ignored_forums"][$fid] = $fid;
+            foreach ($_REQUEST["forums"] as $fid) {
+                $_SESSION["ignored_forums"][$fid] = $fid;
+            }
             
             // invalidate new info cache
             $this->new_checker->invalidate_new_messages_cache();
             
-            $imsg = text("MsgForumAddedToIgnored");
-            $response['convert_action_link'] = "remove_from_ignored";
+            if ($single_forum) {
+                $imsg = text("MsgForumAddedToIgnored");
+                $response['convert_action_link'] = "remove_from_ignored";
+            } else {
+                $imsg = text("MsgForumsAddedToIgnored");
+                $response['target_url'] = "forums.php";
+            }
         }
         
         $this->update_user_cookies();
@@ -30091,7 +30142,7 @@ abstract class ForumManager
     {
         global $READ_MARKER;
         
-        if (empty($fid) || !is_numeric($fid)) {
+        if (empty($_REQUEST["forums"]) && (empty($fid) || !is_numeric($fid))) {
             MessageHandler::setError(text("ErrNoForumSelected"));
             return false;
         }
@@ -30108,6 +30159,13 @@ abstract class ForumManager
         
         $now = $dbw->format_datetime(time());
         
+        if (!empty($_REQUEST["forums"])) { // forums selected explicitly
+            $in_list = $dbw->escape(implode(",", $_REQUEST["forums"]));
+            $where_appendix = "forum_id in ($in_list)";
+        } else {
+            $where_appendix = "forum_id = $fid";
+        }
+        
         if (!$dbw->start_transaction()) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -30115,7 +30173,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("delete from {$prfx}_topic_read_markers
                              where read_marker = '$rm' and
-                             topic_id in (select id from {$prfx}_topic where forum_id = $fid)")) {
+                             topic_id in (select id from {$prfx}_topic where $where_appendix)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             $dbw->rollback_transaction();
             return false;
@@ -30128,7 +30186,7 @@ abstract class ForumManager
         
         $query = "update {$prfx}_forum_read_markers
                       set first_read_date = '$now', ip = '$ip'
-                      where forum_id = $fid and read_marker = '$rm'
+                      where $where_appendix and read_marker = '$rm'
                       ";
         
         if (!$dbw->execute_query($query)) {
@@ -30147,7 +30205,11 @@ abstract class ForumManager
             return false;
         }
         
-        MessageHandler::setInfo(text("MsgForumMarkedRead"));
+        if (!empty($fid)) {
+            MessageHandler::setInfo(text("MsgForumMarkedRead"));
+        } else {
+            MessageHandler::setInfo(text("MsgForumsMarkedRead"));
+        }
         
         return true;
     } // mark_forum_read

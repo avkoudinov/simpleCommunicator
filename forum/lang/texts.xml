@@ -1779,6 +1779,27 @@
             <ua>Ви упевнені, що бажаєте ігнорувати даний форум?</ua>
         </text>
 
+        <text id="AddForumsToIgnoredForums">
+            <en>Ignore forums</en>
+            <de>Foren ignorieren</de>
+            <ru>Игнорировать форумы</ru>
+            <ua>Ігнорувати форуми</ua>
+        </text>
+
+        <text id="RemoveForumsFromIgnoredForums">
+            <en>Don't ignore forums</en>
+            <de>Foren nicht ignorieren</de>
+            <ru>Не игнорировать форумы</ru>
+            <ua>Не ігнорувати форуми</ua>
+        </text>
+
+        <text id="MsgConfirmForumsIgnore">
+            <en>Are you sure to ignore the selected forums?</en>
+            <de>Sind Sie sicher, dass Sie die ausgewählten Foren ignorieren möchten?</de>
+            <ru>Вы уверены, что хотите игнорировать выбранные форумы?</ru>
+            <ua>Ви впевнені, що хочете ігнорувати обрані форуми?</ua>
+        </text>
+
         <text id="Subscription">
             <en>Subscription</en>
             <de>Abonnement</de>
@@ -3343,14 +3364,14 @@
         <text id="NotApproved">
             <en>Not approved</en>
             <de>Nicht bestätigt</de>
-            <ru>Неодобрен</ru>
+            <ru>Не одобрен</ru>
             <ua>Не схвалений</ua>
         </text>
 
         <text id="notApproved">
             <en>not approved</en>
             <de>nicht bestätigt</de>
-            <ru>неодобрен</ru>
+            <ru>не одобрен</ru>
             <ua>не схвалений</ua>
         </text>
 
@@ -4157,6 +4178,20 @@
             <de>Forum wird nicht mehr ignoriert.</de>
             <ru>Форум больше не игнорируется.</ru>
             <ua>Форум більше не ігнорується.</ua>
+        </text>
+
+        <text id="MsgForumsAddedToIgnored">
+            <en>The forums are now ignored and the checking of the new messages will be no more perforemd.</en>
+            <de>Die Foren werden nun ignoriert und die Überprüfung der neuen Nachrichten wird nicht mehr durchgeführt werden.</de>
+            <ru>Форумы теперь игнорируются, и проверка новых сообщений больше не будет осуществляться.</ru>
+            <ua>Форуми тепер ігноруються, і перевірка нових повідомлень більше не буде виконуватися.</ua>
+        </text>
+
+        <text id="MsgForumsRemovedFromIgnored">
+            <en>The forums are no more ignored.</en>
+            <de>Foren werden nicht mehr ignoriert.</de>
+            <ru>Форумы больше не игнорируется.</ru>
+            <ua>Форуми більше не ігноруються.</ua>
         </text>
 
         <text id="MsgTopicSubscribed">
@@ -9536,6 +9571,13 @@
             <de>Themen ausgewählt</de>
             <ru>Выбрано тем</ru>
             <ua>Вибрано тем</ua>
+        </text>
+
+        <text id="MsgForumsSelected">
+            <en>Forums selected</en>
+            <de>Foren ausgewählt</de>
+            <ru>Выбрано форумов</ru>
+            <ua>Вибрано форумів</ua>
         </text>
 
         <text id="GoToMessage">
