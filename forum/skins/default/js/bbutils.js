@@ -387,6 +387,21 @@ function convert_nodes_to_bbcode(container, quote_level)
         current_node = document.createTextNode('');
         break;
       }            
+      if(container.childNodes[i].classList.contains('navigation_arrows'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('scroll_up'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }            
+      if(container.childNodes[i].classList.contains('scroll_down'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
       if(container.childNodes[i].classList.contains('tag'))
       {
         current_node = document.createTextNode('');
