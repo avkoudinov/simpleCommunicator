@@ -1438,6 +1438,9 @@ function load_new_posts(topic, forum, highlight_message, target_url)
   posts = document.getElementsByClassName("message_container_just_posted");
   posts_count -= posts.length;
   
+  posts = document.getElementsByClassName("moderator_warning_container");
+  posts_count += posts.length;
+  
   if(posts_count < posts_per_page)
   {
     may_load_new_posts = true;
@@ -1451,6 +1454,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
   }
   
   debug_line("Trying to load new posts, message to be highlighted: " + highlight_message + ", target_url: " + target_url, "posting");
+  debug_line("Posts count: " + posts_count + ", Posts per page: " + posts_per_page + ", Posts until the end: " + posts_until_end, "posting");
   
   if(!may_load_new_posts)
   {
