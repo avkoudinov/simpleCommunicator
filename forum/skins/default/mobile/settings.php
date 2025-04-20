@@ -546,6 +546,16 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
+<td style="vertical-align: top"><?php echo_html(text("WhiteIPAddresses")); ?>:</td>
+</tr>
+<tr>
+<td>
+<textarea id="white_ip_addresses" name="white_ip_addresses" spellcheck="false"><?php echo_html($settings["white_ip_addresses"]); ?></textarea>
+<div class="field_comment"><?php echo_html(text("IPListComment")); ?></div>
+</td>
+</tr>
+
+<tr>
 <td style="vertical-align: top"><?php echo_html(text("ImageUrlBlackList")); ?>:</td>
 </tr>
 <tr>
