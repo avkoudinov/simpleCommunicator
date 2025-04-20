@@ -6112,6 +6112,13 @@
             <ua>Заблоковані IP адреси</ua>
         </text>
         
+        <text id="WhiteIPAddresses">
+            <en>White IP addresses</en>
+            <de>Weiße IP-Adressen</de>
+            <ru>Белые IP адреса</ru>
+            <ua>Білі IP адреси</ua>
+        </text>
+
         <text id="OtherAuthors">
             <en>Other authors</en>
             <de>Andere Autoren</de>
@@ -10525,6 +10532,13 @@
             <ua>Ви ігноруєте даного користувача і не можете виставляти йому оцінки!</ua>
         </text>
         
+        <text id="ErrPrivateMessageIgnoredUsers">
+            <en>You are ignoring this user, and therefore, you cannot send him private messages!</en>
+            <de>Sie ignorieren diesen Benutzer und deshalb können Sie ihm keine privaten Nachrichten senden!</de>
+            <ru>Вы игнорируете данного пользователя, и поэтому не можете отправлять ему личные сообщения!</ru>
+            <ua>Ви ігноруєте цього користувача, і тому не можете надсилати йому особисті повідомлення!</ua>
+        </text>
+
         <text id="ErrRatingRecentlyIgnoredUsers">
             <en>You have recently excluded this user from the ignore list. You will be able to rate his messages in: %s.</en>
             <de>Sie haben den Benutzer aus der Ignorier-Liste ausgetragen. Sie können seine Nachrichten berwerten in: %s.</de>

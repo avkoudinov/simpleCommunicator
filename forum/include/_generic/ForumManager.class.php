@@ -5091,6 +5091,11 @@ abstract class ForumManager
             $settings["blocked_ip_addresses"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/ip_black_list.txt"));
         }
 
+        $settings["white_ip_addresses"] = "";
+        if (file_exists(APPLICATION_ROOT . "user_data/config/ip_white_list.txt")) {
+            $settings["white_ip_addresses"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/ip_white_list.txt"));
+        }
+
         $settings["blocked_email_domains"] = "";
         if (file_exists(APPLICATION_ROOT . "user_data/config/email_black_list.txt")) {
             $settings["blocked_email_domains"] = trim(file_get_contents(APPLICATION_ROOT . "user_data/config/email_black_list.txt"));
@@ -5393,6 +5398,12 @@ abstract class ForumManager
 
         if (file_put_contents(APPLICATION_ROOT . "user_data/config/ip_black_list.txt", reqvar("blocked_ip_addresses")) === false) {
             MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/ip_black_list.txt"), sys_get_last_error());
+            $dbw->rollback_transaction();
+            return false;
+        }
+
+        if (file_put_contents(APPLICATION_ROOT . "user_data/config/ip_white_list.txt", reqvar("white_ip_addresses")) === false) {
+            MessageHandler::setError(sprintf(text("ErrWritingFile"), "user_data/config/ip_white_list.txt"), sys_get_last_error());
             $dbw->rollback_transaction();
             return false;
         }
@@ -7801,11 +7812,18 @@ abstract class ForumManager
             return true;
         }
         
-        $dbw = System::getDBWorker();
-        if (!$dbw) {
-            return false;
+        if (file_exists(APPLICATION_ROOT . "user_data/config/ip_white_list.txt")) {
+            $ip_white_list = file_get_contents(APPLICATION_ROOT . "user_data/config/ip_white_list.txt");
+            
+            $ip_white_list = preg_split("/[\n\r]+/", $ip_white_list, -1, PREG_SPLIT_NO_EMPTY);
+            
+            foreach ($ip_white_list as $ip_sample) {
+                if (strpos($ip, $ip_sample) === 0) {
+                    return true;
+                }
+            }
         }
-        
+
         if (file_exists(APPLICATION_ROOT . "user_data/config/ip_black_list.txt")) {
             $ip_black_list = file_get_contents(APPLICATION_ROOT . "user_data/config/ip_black_list.txt");
             
@@ -7816,6 +7834,11 @@ abstract class ForumManager
                     exit("<h3>Your IP address '$ip' is blacklisted! Connect the administrator of the server!</h3>");
                 }
             }
+        }
+        
+        $dbw = System::getDBWorker();
+        if (!$dbw) {
+            return false;
         }
         
         $prfx = $dbw->escape(System::getDBPrefix());
@@ -8492,6 +8515,8 @@ abstract class ForumManager
         
         $user_data["registration_date"] = "";
         $user_data["last_visit_date"] = "";
+        $user_data["registration_date_int"] = "0";
+        $user_data["last_visit_date_int"] = "0";
         $user_data["ip"] = "";
         $user_data["last_ip"] = "";
         $user_data["ip_blocked"] = "";
@@ -8653,7 +8678,9 @@ abstract class ForumManager
             }
             
             $user_data["registration_date"] = smart_date2(xstrtotime($dbw->field_by_name("registration_date")));
+            $user_data["registration_date_int"] = adjust_timezone(xstrtotime($dbw->field_by_name("registration_date")));
             $user_data["last_visit_date"] = smart_date2(xstrtotime($dbw->field_by_name("last_visit_date")));
+            $user_data["last_visit_date_int"] = adjust_timezone(xstrtotime($dbw->field_by_name("last_visit_date")));
             
             $user_data["online"] = (xstrtotime($dbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $dbw->field_by_name("logout") == 0);
             
@@ -9153,8 +9180,24 @@ abstract class ForumManager
             !empty($_SESSION["ignored_new_guests"][$READ_MARKER]) &&
             $user_data["read_marker"] != $READ_MARKER) {
             $user_data["ignoring_me"] = 3;
-        }        
+        } 
+
+        if (!empty($user_data["moderator"])) {
+            foreach ($user_data["moderator"] as $fid => $dummy) {
+                if (!$this->has_access_to_forum($fid, $dummy, false)) {
+                    unset($user_data["moderator"][$fid]);
+                }
+            }
+        }
         
+        if (!empty($user_data["forum_access"])) {
+            foreach ($user_data["forum_access"] as $fid => $dummy) {
+                if (!$this->has_access_to_forum($fid, $dummy, false)) {
+                    unset($user_data["forum_access"][$fid]);
+                }
+            }
+        }
+
         measure_action_time("get user data");
         
         return true;
@@ -24024,6 +24067,11 @@ abstract class ForumManager
             
             if (!empty($receiver_data["ignoring_me"])) {
                 MessageHandler::setError(sprintf(text("ErrUserIgnored"), $receiver_data["user_name"]));
+                return false;
+            }
+
+            if (!empty($receiver_data["ignored"])) {
+                MessageHandler::setError(sprintf(text("ErrPrivateMessageIgnoredUsers"), $receiver_data["user_name"]));
                 return false;
             }
         }
