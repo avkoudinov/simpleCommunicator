@@ -504,6 +504,8 @@ if(!empty($user_data["avatar"]))
 
     <div class='moderator_of_forums'><?php echo_html(text("ModeratorOfForums")); ?>:</div>
     <?php foreach($user_data["moderator"] as $fid => $fname):
+    
+    
     $not_preferred = "";
     if(!empty($_SESSION["ignored_forums"][$fid])) $not_preferred = "not_preferred";
     ?>
@@ -600,6 +602,29 @@ if(!empty($user_data["avatar"]))
 
 </td>
 </tr>
+
+<?php if (!empty($user_data["forum_access"])): ?>
+
+<tr>
+<td colspan="2"></td>
+</tr>
+
+<tr>
+<td><?php echo_html(text("AccessToRestrictedForums")); ?>:</td>
+<td>
+
+<?php foreach($user_data["forum_access"] as $fid => $fname):
+$not_preferred = "";
+if(!empty($_SESSION["ignored_forums"][$fid])) $not_preferred = "not_preferred";
+?>
+<a href="forum.php?fid=<?php echo_html($fid); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($fname); ?></a><br>
+<?php endforeach; ?>
+
+</td>
+</tr>
+
+<?php endif; ?>
+
 
 <tr>
 <td colspan="2"></td>
@@ -983,7 +1008,7 @@ if(!empty($moderator_caption))
 <td><a href="search.php?do_search=1&author=<?php echo_html(xrawurlencode($user_data["user_name"])); ?>&author_mode=moderating"><?php echo_html(text("ModeratedTopics")); ?></a></td>
 </tr>
 
-<?php if(empty($settings["archive_mode"]) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && empty($user_data["my_profile"]) && empty($user_data["no_private_messages"]) && empty($user_data["ignoring_me"])): ?>
+<?php if(empty($settings["archive_mode"]) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && empty($user_data["my_profile"]) && empty($user_data["no_private_messages"]) && empty($user_data["ignoring_me"]) && empty($user_data["ignored"])): ?>
 <tr>
 <td></td>
 <td><a href="new_topic.php?fid=private&receiver=<?php echo_html($user_data["id"]); ?>"><?php echo_html(text("SendPersonalMessage")); ?></a></td>

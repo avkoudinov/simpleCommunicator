@@ -757,15 +757,16 @@ abstract class ForumAPIManager
                 "description" => $rodbw->field_by_name("description"),
                 "forum_group_id" => $rodbw->field_by_name("forum_group_id"),
                 "forum_group_name" => $rodbw->field_by_name("forum_group_name"),
-                "last_message_date" => smart_date2(xstrtotime($rodbw->field_by_name("last_message_date"))),
+                "last_message_date_text" => smart_date2(xstrtotime($rodbw->field_by_name("last_message_date"))),
+                "last_message_date" => adjust_timezone(xstrtotime($rodbw->field_by_name("last_message_date"))),
                 "topic_count" => $topic_count,
                 "last_author" => $last_author,
                 "last_author_id" => $last_author_id,
                 "last_author_online" => $last_author_online,
                 "last_author_ignored" => $last_author_ignored,
-                "closed" => $rodbw->field_by_name("closed"),
-                "disable_ignore" => $rodbw->field_by_name("disable_ignore"),
-                "deleted" => $deleted,
+                "closed" => $rodbw->field_by_name("closed") ? true : false,
+                "disable_ignore" => $rodbw->field_by_name("disable_ignore") ? true : false,
+                "deleted" => $deleted ? true : false,
                 "in_ignored" => !empty($_SESSION["ignored_forums"][$fid]),
                 "topics_with_new_count" => 0
             );
@@ -930,24 +931,26 @@ abstract class ForumAPIManager
             
             $topic_list[$tid] = array(
                 "name" => $rodbw->field_by_name("name"),
-                "creation_date" => smart_date2(xstrtotime($rodbw->field_by_name("creation_date"))),
-                "last_message_date" => smart_date2(xstrtotime($rodbw->field_by_name("last_message_date"))),
+                "creation_date_text" => smart_date2(xstrtotime($rodbw->field_by_name("creation_date"))),
+                "creation_date" => adjust_timezone(xstrtotime($rodbw->field_by_name("creation_date"))),
+                "last_message_date_text" => smart_date2(xstrtotime($rodbw->field_by_name("last_message_date"))),
+                "last_message_date" => adjust_timezone(xstrtotime($rodbw->field_by_name("last_message_date"))),
                 "post_count" => $post_count,
                 "hits_count" => $rodbw->field_by_name("hits_count"),
                 "bot_hits_count" => $rodbw->field_by_name("bot_hits_count"),
-                "has_pinned_post" => $rodbw->field_by_name("has_pinned_post"),
-                "pinned" => $rodbw->field_by_name("pinned") || !empty($_SESSION["pinned_topics"][$tid]),
-                "is_poll" => $rodbw->field_by_name("is_poll"),
-                "is_blocked" => $rodbw->field_by_name("no_guests") && !$this->forum_manager->is_logged_in(),
-                "profiled_topic" => $rodbw->field_by_name("profiled_topic"),
-                "publish_delay" => $rodbw->field_by_name("publish_delay"),
-                "closed" => $rodbw->field_by_name("closed"),
-                "deleted" => $rodbw->field_by_name("deleted") || $rodbw->field_by_name("forum_deleted"),
+                "has_pinned_post" => $rodbw->field_by_name("has_pinned_post") ? true : false,
+                "pinned" => !empty($rodbw->field_by_name("pinned")) || !empty($_SESSION["pinned_topics"][$tid]),
+                "is_poll" => !empty($rodbw->field_by_name("is_poll")),
+                "is_blocked" => !empty($rodbw->field_by_name("no_guests")) && !$this->forum_manager->is_logged_in(),
+                "profiled_topic" => !empty($rodbw->field_by_name("profiled_topic")),
+                "publish_delay" => !empty($rodbw->field_by_name("publish_delay")),
+                "closed" => !empty($rodbw->field_by_name("closed")),
+                "deleted" => !empty($rodbw->field_by_name("deleted")) || !empty($rodbw->field_by_name("forum_deleted")),
                 "forum_id" => $forum_id,
                 "forum_name" => $forum_name,
                 "user_id" => $user_id,
                 "author" => $author,
-                "online" => $online,
+                "author_online" => $online,
                 "author_ignored" => $author_ignored
             );
         }
@@ -1247,6 +1250,20 @@ abstract class ForumAPIManager
         $rodbw->free_result();
         
         foreach ($post_list as &$post_data) {
+            $post_data["creation_date_text"] = $post_data["creation_date"];
+            $post_data["creation_date"] = $post_data["creation_date_sec"];
+            
+            $post_data["deleted"] = !empty($post_data["deleted"]);
+            $post_data["pinned"] = !empty($post_data["pinned"]);
+            $post_data["is_comment"] = !empty($post_data["is_comment"]);
+            $post_data["is_adult"] = !empty($post_data["is_adult"]);
+            $post_data["has_attachment"] = !empty($post_data["has_attachment"]);
+            $post_data["no_private_messages"] = !empty($post_data["no_private_messages"]);
+            $post_data["disable_ignore"] = !empty($post_data["disable_ignore"]);
+            $post_data["topic_private"] = !empty($post_data["topic_private"]);
+            $post_data["profiled_topic"] = !empty($post_data["profiled_topic"]);
+            $post_data["stringent_rules"] = !empty($post_data["stringent_rules"]);
+            
             unset($post_data["creation_date_sec"]);
             unset($post_data["read_marker"]);
             unset($post_data["user_marker"]);
@@ -3325,6 +3342,26 @@ abstract class ForumAPIManager
         }
 
         $user_data = $tmp;
+        
+        $user_data["approved"] = !empty($user_data["approved"]);
+        $user_data["activated"] = !empty($user_data["activated"]);
+        $user_data["is_admin"] = !empty($user_data["is_admin"]);
+        $user_data["ignore_new_guests"] = !empty($user_data["ignore_new_guests"]);
+        $user_data["ignore_guests_blacklist"] = !empty($user_data["ignore_guests_blacklist"]);
+        $user_data["ignored_guests_whitelist"] = !empty($user_data["ignored_guests_whitelist"]);
+        $user_data["blocked"] = !empty($user_data["blocked"]);
+        $user_data["rating_blocked"] = !empty($user_data["rating_blocked"]);
+        $user_data["ignores_all_guests"] = !empty($user_data["ignores_all_guests"]);
+        $user_data["self_blocked"] = !empty($user_data["self_blocked"]);
+
+        $user_data["registration_date_text"] = $user_data["registration_date"];
+        $user_data["last_visit_date_text"] = $user_data["last_visit_date"];
+
+        $user_data["registration_date"] = $user_data["registration_date_int"];
+        $user_data["last_visit_date"] = $user_data["last_visit_date_int"];
+
+        unset($user_data["registration_date_int"]);
+        unset($user_data["last_visit_date_int"]);
 
         unset($user_data["user_login"]);
         unset($user_data["user_email"]);
@@ -3461,6 +3498,20 @@ abstract class ForumAPIManager
         
         if (!empty($post_list)) {
             $post = array_shift($post_list);
+
+            $post["creation_date_text"] = $post["creation_date"];
+            $post["creation_date"] = $post["creation_date_sec"];
+            
+            $post["deleted"] = !empty($post["deleted"]);
+            $post["pinned"] = !empty($post["pinned"]);
+            $post["is_comment"] = !empty($post["is_comment"]);
+            $post["is_adult"] = !empty($post["is_adult"]);
+            $post["has_attachment"] = !empty($post["has_attachment"]);
+            $post["no_private_messages"] = !empty($post["no_private_messages"]);
+            $post["disable_ignore"] = !empty($post["disable_ignore"]);
+            $post["topic_private"] = !empty($post["topic_private"]);
+            $post["profiled_topic"] = !empty($post["profiled_topic"]);
+            $post["stringent_rules"] = !empty($post["stringent_rules"]);
 
             unset($post["creation_date_sec"]);
             unset($post["user_marker"]);

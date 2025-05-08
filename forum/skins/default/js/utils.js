@@ -2694,6 +2694,10 @@ function switch_skin(skin)
         {
           var url = window.location.href.replace(/(\?|&)(mobile|tablet|desktop)=[^&]*/, "");
           
+          url = url.replace(/#.*/, "");
+          
+          console.log(url);
+          
           delay_redirect(url);
           return;
         }

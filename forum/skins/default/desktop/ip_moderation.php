@@ -638,6 +638,29 @@ echo $ip;
 </td>
 </tr>
 
+<?php if (!empty($user_data["forum_access"])): ?>
+
+<tr>
+<td colspan="2"></td>
+</tr>
+
+<tr>
+<td><?php echo_html(text("AccessToRestrictedForums")); ?>:</td>
+<td>
+
+<?php foreach($user_data["forum_access"] as $fid => $fname):
+$not_preferred = "";
+if(!empty($_SESSION["ignored_forums"][$fid])) $not_preferred = "not_preferred";
+?>
+<a href="forum.php?fid=<?php echo_html($fid); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($fname); ?></a><br>
+<?php endforeach; ?>
+
+</td>
+</tr>
+
+<?php endif; ?>
+
+
 <tr>
 <td colspan="2"></td>
 </tr>
