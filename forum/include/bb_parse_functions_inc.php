@@ -2957,7 +2957,9 @@ function gen_vkvideo_html($code, $bbcode)
     
     $html = "<div class='media_wrapper' data-bbcode='" . escape_html($bbcode) . "'><div class='short_video'><a class='vkvideo_short_container' href='https://vk.com/video$code' target='blank' onclick='return show_embedded_video(this)'>" . escape_html($title) . "</a></div>";
     $html .= "<div class='vkvideo_container detailed_video' $style>";
-    $html .= "<iframe src='$player' width='100%' height='100%' frameborder='0' allowfullscreen></iframe>";
+    
+    $html .= "<iframe src='$player' width='100%' height='100%' allow='autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;' frameborder='0' allowfullscreen></iframe>";
+    
     $html .= "</div>";
     $html .= "<a class='attachment_link' href='https://vk.com/video$code' target='_blank'>{{link}}</a>";
     $html .= "</div>";

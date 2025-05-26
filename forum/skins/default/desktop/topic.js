@@ -4274,8 +4274,8 @@ function changeChatAvatar() {
     if(!v.dataset.uid || !v.dataset.ext) return true;
     img = document.createElement('img');
     img.src = /^a_/.test(v.dataset.uid)
-    ? 'https://news.kroleg.keenetic.pro/pic/avatars/' + v.dataset.uid
-    : 'https://kroleg.keenetic.pro/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
+    ? 'https://news.nosql.ru/pic/avatars/' + v.dataset.uid
+    : 'https://chat.nosql.ru/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
     img.onload = function() {
       var img = v.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.avatar_container').querySelector('img');
 
