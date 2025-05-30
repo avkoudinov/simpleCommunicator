@@ -4245,7 +4245,7 @@ function changeChatNick(v, parNode, news)
   uMessage,
   chatLink;
 
-  parNode.querySelector('.author_name').querySelector('a').innerText = v.innerText.replace(/:$/, '');
+  parNode.querySelector('.author_container').querySelector('a').innerText = v.innerText.replace(/:$/, '');
 
   chatLink = document.createElement('a');
   chatLink.innerText = 'Сообщение из чата Кролега';
