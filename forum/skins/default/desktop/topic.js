@@ -4266,6 +4266,7 @@ function getChatAuthor(pid, author) {
   : { author: author, krolegPipe: false };
 } // getChatAuthor
 
+
 function changeChatAvatar() {
   var
    img,
@@ -4274,6 +4275,7 @@ function changeChatAvatar() {
    chatArray = document.querySelectorAll('.kroleg_pipe');
 
   chatArray.forEach((v) => {
+//    if(!v.dataset.uid || !v.dataset.ext) return true;
     if(!v.dataset.uid) return true;
     news = /^a_/.test(v.dataset.uid);
     img = document.createElement('img');
@@ -4282,34 +4284,37 @@ function changeChatAvatar() {
      : 'https://chat.nosql.ru/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
 
     img.onload = function() {
-      parNode = v.parentNode.parentNode.parentNode.parentNode.parentNode;
+     parNode = v.parentNode.parentNode.parentNode.parentNode;
 
-      var
-       img = parNode.querySelector('.avatar_container').querySelector('img');
+     var
+      img = parNode.parentNode.querySelector('.avatar_container').querySelector('img');
 
-      changeChatNick(v, parNode, news);
+     changeChatNick(v, parNode, news);
 
-      img.src = this.src;
-      img.className = 'kroleg_pipe';
+     img.src = this.src;
+     img.className = 'kroleg_pipe';
     };
 
     img.onerror = function() {
-      parNode = v.parentNode.parentNode.parentNode.parentNode.parentNode;
-      changeChatNick(v, parNode, news);
-    };
+     parNode = v.parentNode.parentNode.parentNode.parentNode.parentNode;
+     changeChatNick(v, parNode, news);
+   };
+
   });
 }
 
-function changeChatNick(v, parNode, news) 
-{
+function changeChatNick(v, parNode, news) {
   var
-  uMessage,
-  chatLink;
+   uMessage,
+   chatLink,
+   chNick = parNode.querySelector('.author_name')
+    ? parNode.querySelector('.author_name').querySelector('a')
+    : parNode.querySelector('.author_cell').querySelectorAll('a')[1];
 
-  parNode.querySelector('.author_name').querySelector('a').innerText = v.innerText.replace(/:$/, '');
+  chNick.innerText = v.innerText.replace(/:$/, '');
 
   chatLink = document.createElement('a');
-  chatLink.innerText = 'Сообщение из чата Кролега';
+  chatLink.innerText = 'Сообщение из ' + (news ? 'Кроленьюсов' : 'чата Кролега');
   chatLink.href = 'https://' + (news ? 'news' : 'chat') + '.nosql.ru/';
   chatLink.target = '_blank';
   chatLink.style.fontSize = '11px';
@@ -4323,7 +4328,7 @@ function changeChatNick(v, parNode, news)
 
   v.remove();
 }
-
+ 
 function insertAfter(referenceNode, newNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }

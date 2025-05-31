@@ -4213,6 +4213,7 @@ function changeChatAvatar() {
    chatArray = document.querySelectorAll('.kroleg_pipe');
 
   chatArray.forEach((v) => {
+//    if(!v.dataset.uid || !v.dataset.ext) return true;
     if(!v.dataset.uid) return true;
     news = /^a_/.test(v.dataset.uid);
     img = document.createElement('img');
@@ -4221,46 +4222,23 @@ function changeChatAvatar() {
      : 'https://chat.nosql.ru/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
 
     img.onload = function() {
-      parNode = v.parentNode.parentNode.parentNode.parentNode.parentNode;
+     parNode = v.parentNode.parentNode.parentNode.parentNode;
 
-      var
-       img = parNode.querySelector('.avatar_container').querySelector('img');
+     var
+      img = parNode.parentNode.querySelector('.avatar_container').querySelector('img');
 
-      changeChatNick(v, parNode, news);
+     changeChatNick(v, parNode, news);
 
-      img.src = this.src;
-      img.className = 'kroleg_pipe';
+     img.src = this.src;
+     img.className = 'kroleg_pipe';
     };
 
     img.onerror = function() {
-      parNode = v.parentNode.parentNode.parentNode.parentNode.parentNode;
-      changeChatNick(v, parNode, news);
-    };
+     parNode = v.parentNode.parentNode.parentNode.parentNode.parentNode;
+     changeChatNick(v, parNode, news);
+   };
+
   });
-}
-
-function changeChatNick(v, parNode, news) 
-{
-  var
-  uMessage,
-  chatLink;
-
-  parNode.querySelector('.author_container').querySelector('a').innerText = v.innerText.replace(/:$/, '');
-
-  chatLink = document.createElement('a');
-  chatLink.innerText = 'Сообщение из чата Кролега';
-  chatLink.href = 'https://' + (news ? 'news' : 'chat') + '.nosql.ru/';
-  chatLink.target = '_blank';
-  chatLink.style.fontSize = '11px';
-  chatLink.style.color = '#434595';
-
-  uMessage = document.createElement('div');
-  uMessage.className = 'user_message';
-  uMessage.append(chatLink);
-
-  insertAfter(parNode.querySelector('.user_info'), uMessage);
-
-  v.remove();
 }
 
 function insertAfter(referenceNode, newNode) {
