@@ -4241,6 +4241,32 @@ function changeChatAvatar() {
   });
 }
 
+function changeChatNick(v, parNode, news) {
+  var
+   uMessage,
+   chatLink,
+   chNick = parNode.querySelector('.author_name')
+    ? parNode.querySelector('.author_name').querySelector('a')
+    : parNode.querySelector('.author_cell').querySelectorAll('a')[1];
+
+  chNick.innerText = v.innerText.replace(/:$/, '');
+
+  chatLink = document.createElement('a');
+  chatLink.innerText = 'Сообщение из ' + (news ? 'Кроленьюсов' : 'чата Кролега');
+  chatLink.href = 'https://' + (news ? 'news' : 'chat') + '.nosql.ru/';
+  chatLink.target = '_blank';
+  chatLink.style.fontSize = '11px';
+  chatLink.style.color = '#434595';
+
+  uMessage = document.createElement('div');
+  uMessage.className = 'user_message';
+  uMessage.append(chatLink);
+
+  insertAfter(parNode.querySelector('.user_info'), uMessage);
+
+  v.style.display = 'none';
+}
+
 function insertAfter(referenceNode, newNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }

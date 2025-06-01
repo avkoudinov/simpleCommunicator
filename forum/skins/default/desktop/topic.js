@@ -4326,7 +4326,7 @@ function changeChatNick(v, parNode, news) {
 
   insertAfter(parNode.querySelector('.user_info'), uMessage);
 
-  v.remove();
+  v.style.display = 'none';
 }
  
 function insertAfter(referenceNode, newNode) {
