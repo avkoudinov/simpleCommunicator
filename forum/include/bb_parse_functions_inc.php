@@ -752,12 +752,22 @@ function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $con
         return true;
     }
     
+    $src = "user_data/images/img_injection_warning.png";
+    
+    return "<div class='picture_wrapper'><a href='$src' class='lightbox_image' target='_blank'><img class='post_image' src='$src' alt='{{picture}}'></a></div>";
+} // bb_process_kroleg_pipe
+//------------------------------------------------------------------------------
+function bb_process_kroleg_pipe_old($bbcode, $action, $name, $default, $params, $content) {
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
     $color = $params['color'] ?? '#fff';
     $uid = $params['uid'] ?? '0';
     $ext = $params['ext'] ?? 'jpg';
     
-return "<span class='kroleg_pipe' style='color: {$color};' data-uid='{$uid}' data-ext='{$ext}'>{$content}</span>\n\n";
-} // bb_process_kroleg_pipe
+    return "<span class='kroleg_pipe' style='color: {$color};' data-uid='{$uid}' data-ext='{$ext}'>{$content}</span>\n\n";
+} // bb_process_kroleg_pipe_old
 //------------------------------------------------------------------------------
 function bb_process_fixed($bbcode, $action, $name, $default, $params, $content)
 {
