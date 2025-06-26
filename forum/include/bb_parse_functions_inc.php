@@ -747,7 +747,7 @@ function bb_process_ascii_art($bbcode, $action, $name, $default, $params, $conte
     return "<pre class='ascii_art' data-fsize='{$fsize}' data-bg='{$bg}' style=\"background-color: {$bg}; font-size: {$fsize}px; line-height: {$fsize}px;\">{$content}</pre>\n\n";
 } // bb_process_ascii_art
 //------------------------------------------------------------------------------
-function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $content) {
+function bb_process_kroleg_pipe_protection($bbcode, $action, $name, $default, $params, $content) {
     if ($action == BBCODE_CHECK) {
         return true;
     }
@@ -757,7 +757,7 @@ function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $con
     return "<div class='picture_wrapper'><a href='$src' class='lightbox_image' target='_blank'><img class='post_image' src='$src' alt='{{picture}}'></a></div>";
 } // bb_process_kroleg_pipe
 //------------------------------------------------------------------------------
-function bb_process_kroleg_pipe_old($bbcode, $action, $name, $default, $params, $content) {
+function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $content) {
     if ($action == BBCODE_CHECK) {
         return true;
     }
