@@ -758,6 +758,11 @@ require "topic_message_tpl_inc.php";
 
 <?php endforeach; ?>
 
+<script>
+var page_last_author = "<?php echo_js(val_or_empty($pinfo["author"])); ?>";
+var page_last_posting_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
+</script>
+
 </div> <!-- foreach post -->
 
 <?php if(count($post_list) == 0): ?>
