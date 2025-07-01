@@ -192,6 +192,12 @@ class ForumAPIHandler
       $this->api_manager->get_user_data($response_data["user_data"], $request_data);
     } // get_post_list
     //------------------------------------
+    function get_topic_data(&$request_data, &$response_data)
+    {
+      $response_data["topic_data"] = [];
+      $this->api_manager->get_topic_data($response_data["topic_data"], $request_data);
+    } // get_post_list
+    //------------------------------------
     function get_post_list(&$request_data, &$response_data)
     {
       $response_data["post_list"] = [];

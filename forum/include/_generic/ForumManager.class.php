@@ -4990,11 +4990,11 @@ abstract class ForumManager
                 $settings["max_att_size_audiovideo"] = $settings["max_att_size"];
             }
             
-            if (!$for_edit && $this->is_admin() && $settings["max_att_size"] !== "") {
+            if (!$for_edit && ($this->is_admin() || ($this->is_topic_moderator(reqvar("tid")) && !empty($_SESSION["privileged_topic_moderator"]))) && $settings["max_att_size"] !== "") {
                 $settings["max_att_size"] *= 4;
             }
             
-            if (!$for_edit && $this->is_admin() && $settings["max_att_size_audiovideo"] !== "") {
+            if (!$for_edit && ($this->is_admin() || ($this->is_topic_moderator(reqvar("tid")) && !empty($_SESSION["privileged_topic_moderator"]))) && $settings["max_att_size_audiovideo"] !== "") {
                 $settings["max_att_size_audiovideo"] *= 4;
             }
             

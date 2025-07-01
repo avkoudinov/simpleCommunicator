@@ -752,7 +752,7 @@ function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $con
         return true;
     }
     
-    if (!in_array(val_or_empty($_SESSION["user_id"]), [292, 699])) {
+    if (!in_array(val_or_empty($_SESSION["user_id"]), [292, 699, 262941, 263736])) {
         $src = "user_data/images/img_injection_warning.png";
         
         return "<div class='picture_wrapper'><a href='$src' class='lightbox_image' target='_blank'><img class='post_image' src='$src' alt='{{picture}}'></a></div>";

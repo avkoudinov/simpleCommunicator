@@ -4218,7 +4218,7 @@ function changeChatAvatar() {
     news = /^a_/.test(v.dataset.uid);
     img = document.createElement('img');
     img.src = news
-     ? 'https://news.nosql.ru/pic/avatars/' + v.dataset.uid
+     ? 'https://' + location.host + '/pic/avatars/' + v.dataset.uid
      : 'https://chat.nosql.ru/pic/avatars/p_' + v.dataset.uid + '.' + v.dataset.ext;
 
     img.onload = function() {
