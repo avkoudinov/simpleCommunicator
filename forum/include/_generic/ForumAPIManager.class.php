@@ -3309,6 +3309,67 @@ abstract class ForumAPIManager
     }
     
     //-----------------------------------------------------------------
+    function get_topic_data(&$topic_data, &$request_data)
+    {
+        global $settings;
+        global $READ_MARKER;
+        
+        if (empty($request_data["topic_id"])) {
+            throw new ForumAPIException(sprintf(text("ErrTopicDoesNotExist"), "-"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+        
+        if (!is_numeric($request_data["topic_id"])) {
+            throw new ForumAPIException(sprintf(text("ErrTopicDoesNotExist"), $request_data["topic_id"]), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+        }
+
+        $rodbw = System::getRODBWorker();
+        if (!$rodbw) {
+            throw new ForumAPIException(text("ErrDbInaccessible"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $prfx = $rodbw->escape(System::getDBPrefix());
+
+        $topic_id = $rodbw->escape($request_data["topic_id"]);
+
+        $this->check_access_to_topic($rodbw, $topic_id);
+
+        $uid = $rodbw->escape($this->forum_manager->get_user_id());
+        if (empty($uid)) {
+            $uid = 0;
+        }
+
+        $where = "where {$prfx}_post.id = (select max(id) from {$prfx}_post where deleted = 0 and topic_id = $topic_id)";
+        
+        if (!$rodbw->execute_query($this->forum_manager->get_query_topic_posts($prfx, $uid, $where, "", ""))) {
+            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+        }
+        
+        $post_list = [];
+        $user_ids = [];
+        $this->forum_manager->collect_posts($rodbw, $uid, $post_list, $user_ids);
+
+        $rodbw->free_result();
+        
+        if (!empty($post_list)) {
+            $post = array_shift($post_list);
+
+            $topic_data["last_author"] = $post["author"];
+            $topic_data["last_author_id"] = $post["user_id"];
+            $topic_data["page_last_posting_time"] = $post["creation_date_sec"];
+            
+            $topic_data["last_pipe_author"] = "";
+            $topic_data["last_pipe_author_id"] = "";
+
+            if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $post["text_content"], $matches)) {
+                $topic_data["last_pipe_author"] = $matches[1];
+                $topic_data["last_pipe_author_id"] = $matches[2];
+            }
+        }        
+
+        return true;
+    }
+
+    //-----------------------------------------------------------------
     function get_user_data(&$user_data, &$request_data)
     {
         global $settings;
