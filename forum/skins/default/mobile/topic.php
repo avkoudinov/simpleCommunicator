@@ -472,7 +472,7 @@ require_once "topic_post_functions_inc.php";
 
 <?php if($fmanager->is_topic_moderator($tid)): ?>
 
-  <?php if(empty($forum_data["no_guests"])): ?>
+  <?php if(empty($forum_data["no_guests"]) || !empty($forum_data["user_posting_as_guest"])): ?>
   <?php if(empty($topic_data["no_guests"])): ?>
   <br> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmDisallowGuests"), true); ?>", { topic_action: "disallow_guests", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("DisallowGuests")); ?></a>
   <?php else: ?>
@@ -757,11 +757,6 @@ require "topic_message_tpl_inc.php";
 </div>
 
 <?php endforeach; ?>
-
-<script>
-var page_last_author = "<?php echo_js(val_or_empty($pinfo["author"])); ?>";
-var page_last_posting_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
-</script>
 
 </div> <!-- foreach post -->
 
