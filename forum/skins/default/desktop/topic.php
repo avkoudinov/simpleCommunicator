@@ -791,8 +791,10 @@ require "topic_message_tpl_inc.php";
 
 <script>
 var page_last_author = "<?php echo_js(val_or_empty($pinfo["author"])); ?>";
-var page_last_author_id = "<?php echo_js(val_or_empty($pinfo["post_id"])); ?>";
-var page_last_posting_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
+var page_last_author_id = "<?php echo_js(val_or_empty($pinfo["user_id"])); ?>";
+var page_last_post_id = <?php echo_js($pinfo["post_id"] ?? 0); ?>;
+var page_last_post_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
+var page_last_post_editable = <?php echo_js($pinfo["editable"] ?? 0); ?>;
 
 <?php
 $page_last_pipe_author = "";
@@ -801,6 +803,8 @@ $page_last_pipe_author_id = "";
 if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
     $page_last_pipe_author = $matches[1];
     $page_last_pipe_author_id = $matches[2];
+} elseif (preg_match("/\[kroleg-pipe\]([^\[\]]+)\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
+    $page_last_pipe_author = $matches[1];
 }
 ?>
 
