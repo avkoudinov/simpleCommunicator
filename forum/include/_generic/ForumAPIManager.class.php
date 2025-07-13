@@ -3353,6 +3353,9 @@ abstract class ForumAPIManager
         if (!empty($post_list)) {
             $post = array_shift($post_list);
 
+            $topic_data["last_post_id"] = $post["post_id"];
+            $topic_data["last_post_editable"] = $post["editable"];            
+
             $topic_data["last_author"] = $post["author"];
             $topic_data["last_author_id"] = $post["user_id"];
             $topic_data["page_last_posting_time"] = $post["creation_date_sec"];
