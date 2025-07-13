@@ -3578,7 +3578,7 @@ abstract class ForumManager
             $topic_data["in_favourites"] = true;
         }
         
-        if (!empty($_SESSION["ignored_topics"][$tid])) {
+        if (!empty($_SESSION["ignored_topics"][$tid]) || !empty($_SESSION["ignored_topics_archive"][$tid])) {
             $topic_data["in_ignored"] = true;
         }
         
@@ -3945,7 +3945,13 @@ abstract class ForumManager
         }
         
         if (!empty($_SESSION["ignored_topics"])) {
-            $ignored_in_list = $rodbw->escape(implode(",", $_SESSION["ignored_topics"]));
+            if (!empty($_SESSION["ignored_topics_archive"])) {
+                $total_list = array_merge($_SESSION["ignored_topics"], $_SESSION["ignored_topics_archive"]);
+            } else {
+                $total_list = $_SESSION["ignored_topics"];
+            }
+            
+            $ignored_in_list = $rodbw->escape(implode(",", $total_list));
             $where .= " and {$prfx}_topic.id in ($ignored_in_list)";
             
             if (!$rodbw->execute_query("select count(*) cnt from
@@ -4089,8 +4095,14 @@ abstract class ForumManager
         $rodbw->free_result();
         
         if (!empty($_SESSION["ignored_topics"])) {
-            $in_list = $rodbw->escape(implode(",", $_SESSION["ignored_topics"]));
-            $where .= " and {$prfx}_topic.id in ($in_list)";
+            if (!empty($_SESSION["ignored_topics_archive"])) {
+                $total_list = array_merge($_SESSION["ignored_topics"], $_SESSION["ignored_topics_archive"]);
+            } else {
+                $total_list = $_SESSION["ignored_topics"];
+            }
+            
+            $ignored_in_list = $rodbw->escape(implode(",", $total_list));
+            $where .= " and {$prfx}_topic.id in ($ignored_in_list)";
             
             if (!$rodbw->execute_query("select count(*) cnt from
                            {$prfx}_topic
@@ -4283,11 +4295,17 @@ abstract class ForumManager
                 $where .= " and {$prfx}_topic.deleted = 0";
             }
             
-            $in_list = $rodbw->escape(implode(",", $_SESSION["ignored_topics"]));
+            if (!empty($_SESSION["ignored_topics_archive"])) {
+                $total_list = array_merge($_SESSION["ignored_topics"], $_SESSION["ignored_topics_archive"]);
+            } else {
+                $total_list = $_SESSION["ignored_topics"];
+            }
+            
+            $ignored_in_list = $rodbw->escape(implode(",", $total_list));
             
             if (!$rodbw->execute_query("select count(*) cnt from
                            {$prfx}_topic
-                           $where and {$prfx}_topic.id in ($in_list)
+                           $where and {$prfx}_topic.id in ($ignored_in_list)
                            ")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
                 return false;
@@ -6714,6 +6732,21 @@ abstract class ForumManager
         
         $dbw->free_result();
         
+        $_SESSION["ignored_topics_archive"] = array();
+        
+        $query = "select topic_id from {$prfx}_ignored_topics_archive where user_id = $uid";
+        
+        if (!$dbw->execute_query($query)) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        while ($dbw->fetch_row()) {
+            $_SESSION["ignored_topics_archive"][$dbw->field_by_name("topic_id")] = $dbw->field_by_name("topic_id");
+        }
+        
+        $dbw->free_result();
+
         // pinned topics
         
         $_SESSION["pinned_topics"] = array();
@@ -12861,6 +12894,7 @@ abstract class ForumManager
                     $_SESSION["ignored_topics"][$tid] = $tid;
                 } else {
                     unset($_SESSION["ignored_topics"][$tid]);
+                    unset($_SESSION["ignored_topics_archive"][$tid]);
                 }
             }
             
@@ -12910,6 +12944,13 @@ abstract class ForumManager
                 return false;
             }
             
+            if (!$dbw->execute_query("delete from {$prfx}_ignored_topics_archive
+                               where user_id = $uid and topic_id in ($in_list)")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+
             $info = text("MsgTopicsRemovedFromIgnored");
         }
         
@@ -13104,6 +13145,13 @@ abstract class ForumManager
                 return false;
             }
             
+            if (!$dbw->execute_query("delete from {$prfx}_ignored_topics_archive
+                               where user_id = $uid and topic_id = $tid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+
             // invalidate new info cache
             if (!$this->new_checker->invalidate_new_messages_cache()) {
                 $dbw->rollback_transaction();
@@ -36762,7 +36810,12 @@ abstract class ForumManager
             
             $query = "select id topic_id from {$prfx}_topic where id in ($ignored_in_list) and id in ($in_list)";
         } else {
-            $query = "select topic_id from {$prfx}_ignored_topics where user_id = $uid and topic_id in ($in_list)";
+            $query = "select topic_id from {$prfx}_ignored_topics 
+                      where user_id = $uid and topic_id in ($in_list)
+                      union 
+                      select topic_id from {$prfx}_ignored_topics_archive 
+                      where user_id = $uid and topic_id in ($in_list)
+                      ";
         }
         
         if (!$rodbw->execute_query($query)) {
@@ -38337,7 +38390,14 @@ abstract class ForumManager
         $author_id = 0;
         
         if (!empty($_SESSION["ignored_topics"])) {
-            $ignored_in_list = $srdbw->escape(implode(",", $_SESSION["ignored_topics"]));
+            if (!empty($_SESSION["ignored_topics_archive"])) {
+                $total_list = array_merge($_SESSION["ignored_topics"], $_SESSION["ignored_topics_archive"]);
+            } else {
+                $total_list = $_SESSION["ignored_topics"];
+            }
+            
+            $ignored_in_list = $srdbw->escape(implode(",", $total_list));
+
             $where .= " and {$prfx}_found_topic_cache.topic_id in ($ignored_in_list)";
             
             if (!$srdbw->execute_query("select count(*) cnt from {$prfx}_found_topic_cache $where")) {
@@ -38802,7 +38862,12 @@ abstract class ForumManager
             
             $query = "select id topic_id from {$prfx}_topic where id in ($ignored_in_list) and id in ($in_list)";
         } else {
-            $query = "select topic_id from {$prfx}_ignored_topics where user_id = $uid and topic_id in ($in_list)";
+            $query = "select topic_id from {$prfx}_ignored_topics 
+                      where user_id = $uid and topic_id in ($in_list)
+                      union 
+                      select topic_id from {$prfx}_ignored_topics_archive 
+                      where user_id = $uid and topic_id in ($in_list)
+                      ";
         }
         
         if (!$srdbw->execute_query($query)) {
