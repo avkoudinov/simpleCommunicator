@@ -4323,7 +4323,7 @@ function changeChatAvatar() {
   uMessage.className = 'user_message';
   uMessage.append(chatLink);
 
-  insertAfter(parNode.querySelector('.user_info'), uMessage);
+  insertAfter(parNode.querySelector('.user_info') || parNode.querySelector('.member_status'), uMessage);
 
   v.className = 'kroleg_pipe processed'
  }
