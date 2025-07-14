@@ -4267,7 +4267,7 @@ function changeChatAvatar() {
  }
 
 function insertAfter(referenceNode, newNode) {
-  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+ if(referenceNode) referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 var kroleg_post_message_ajax = null;
