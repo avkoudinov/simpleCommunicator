@@ -57,8 +57,9 @@ function session_start_readonly()
   $session_data = "";
 
   $fp = fopen($session_path . '/sess_' . $session_name, "r");
-  if (flock($fp, LOCK_SH)) {
-      $session_data = fread($fp, filesize($session_path . '/sess_' . $session_name));
+  $ln = filesize($session_path . '/sess_' . $session_name);
+  if (flock($fp, LOCK_SH) && !empty($ln)) {
+      $session_data = fread($fp, $ln);
       flock($fp, LOCK_UN); 
   }        
 

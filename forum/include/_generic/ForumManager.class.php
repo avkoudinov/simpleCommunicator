@@ -3944,7 +3944,7 @@ abstract class ForumManager
             $forum_data["topic_count"]++;
         }
         
-        if (!empty($_SESSION["ignored_topics"])) {
+        if (!empty($_SESSION["ignored_topics"]) || !empty($_SESSION["ignored_topics_archive"])) {
             if (!empty($_SESSION["ignored_topics_archive"])) {
                 $total_list = array_merge($_SESSION["ignored_topics"], $_SESSION["ignored_topics_archive"]);
             } else {
@@ -4094,7 +4094,7 @@ abstract class ForumManager
         
         $rodbw->free_result();
         
-        if (!empty($_SESSION["ignored_topics"])) {
+        if (!empty($_SESSION["ignored_topics"]) || !empty($_SESSION["ignored_topics_archive"])) {
             if (!empty($_SESSION["ignored_topics_archive"])) {
                 $total_list = array_merge($_SESSION["ignored_topics"], $_SESSION["ignored_topics_archive"]);
             } else {
@@ -4288,7 +4288,7 @@ abstract class ForumManager
 
         // statistics, use rodbw
         
-        if (!empty($_SESSION["ignored_topics"])) {
+        if (!empty($_SESSION["ignored_topics"]) || !empty($_SESSION["ignored_topics_archive"])) {
             $where = "where forum_id = $fid";
             
             if (empty($_SESSION["show_deleted"]) || (!$this->is_forum_moderator($fid) && !$this->is_admin())) {
@@ -38389,7 +38389,7 @@ abstract class ForumManager
         $pagination_info["ignored_count"] = 0;
         $author_id = 0;
         
-        if (!empty($_SESSION["ignored_topics"])) {
+        if (!empty($_SESSION["ignored_topics"]) || !empty($_SESSION["ignored_topics_archive"])) {
             if (!empty($_SESSION["ignored_topics_archive"])) {
                 $total_list = array_merge($_SESSION["ignored_topics"], $_SESSION["ignored_topics_archive"]);
             } else {
