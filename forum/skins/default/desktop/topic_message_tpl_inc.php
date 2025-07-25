@@ -83,7 +83,7 @@ if (!empty($user_data[$pinfo["user_id"]]["ignored"]) || !empty($pinfo["guest_ign
     $post_ignored = 1;
 }
 
-if(stripos($pinfo["text_content"], "[/kroleg-pipe]") !== false && !empty($_SESSION["skin_properties"][$skin]["show_df_logotype_dedoforum"]))
+if(stripos($pinfo["text_content"], "[/kroleg-pipe]") !== false && !empty($_SESSION["skin_properties"][$skin]["ignore_kroleg_pipe_posts"]))
 {
     $may_rate = false;
     $may_answer = false;
