@@ -10863,7 +10863,7 @@ abstract class ForumManager
             
             while ($dbw->fetch_row()) {
                 $events[] = array(
-                    "action" => "ignore_user",
+                    "action" => "unignore_user",
                     "author_id" => $dbw->field_by_name("id"),
                     "author_name" => $dbw->field_by_name("user_name")
                 );
