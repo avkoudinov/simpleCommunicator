@@ -83,8 +83,8 @@
     type="checkbox"
     default = "0"
     
-    ru="Игнорировать сообщения из трубы кролека"
-    ua="Ігнорувати повідомлення з труби кролека"
+    ru="Игнорировать сообщения из Трубы Кролега"
+    ua="Ігнорувати повідомлення з Труби Кролега"
     en="Ignore messages from the kroleg pipe"
     de="Nachrichten aus dem Kroleg-Pipe ignorieren"
     />
