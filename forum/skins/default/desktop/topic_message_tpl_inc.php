@@ -83,6 +83,14 @@ if (!empty($user_data[$pinfo["user_id"]]["ignored"]) || !empty($pinfo["guest_ign
     $post_ignored = 1;
 }
 
+if(stripos($pinfo["text_content"], "[/kroleg-pipe]") !== false && !empty($_SESSION["skin_properties"][$skin]["show_df_logotype_dedoforum"]))
+{
+    $may_rate = false;
+    $may_answer = false;
+    $citatable = "";
+    $post_ignored = 1;
+}
+
 if (!reqvar_empty("favourite_posts") || !reqvar_empty("favourite_posts_only") || !reqvar_empty("include_ignored") ||
     (in_array(reqvar("author_mode"), array("author_liked", "author_disliked", "last_posts", "wrote_post")) && !reqvar_empty("author")) ||
     (!reqvar_empty("replies_to") && !empty($pinfo["profiled_topic"]))

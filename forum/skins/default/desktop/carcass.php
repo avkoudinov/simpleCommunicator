@@ -241,7 +241,11 @@ if(file_exists($view_path . "lang/" . current_language() . "/title.html"))
   $ftitle = str_ireplace("{site_name}", get_site_name(current_language()), $ftitle);
 }
 
-if(!empty($_SESSION["skin_properties"][$skin]["show_df_logotype"]))
+if(!empty($_SESSION["skin_properties"][$skin]["show_df_logotype_dedoforum"]))
+{
+  $ftitle = "<img src='{$view_path}images/dedoforum_logo.png' srcset='{$view_path}images/dedoforum_logo.svg' title='" . escape_html($ftitle) . "' alt='" . escape_html($ftitle) . "'>";
+}
+elseif(!empty($_SESSION["skin_properties"][$skin]["show_df_logotype"]))
 {
   $ftitle = "<img src='{$view_path}images/forum_logo.png' srcset='{$view_path}images/forum_logo.svg' title='" . escape_html($ftitle) . "' alt='" . escape_html($ftitle) . "'>";
 }
