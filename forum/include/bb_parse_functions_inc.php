@@ -3720,33 +3720,6 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
     }
 } // parse_bb_code
 //------------------------------------------------------------------------------
-function parse_ascii_art(&$text)
-{
-    $bbcode = new BBCode;
-    $bbcode->ClearRules();
-    $bbcode->SetLimit(200000);
-    $bbcode->SetIgnoreNewlines(true);
-    $bbcode->RemoveRule('wiki');
-    $bbcode->ClearSmileys();
-    
-    $bbcode->AddRule('color', [
-        'mode' => 4,
-        'allow' => ['_default' => '/^#?[a-z0-9._ -]+$/i'],
-        'template' => '<span style="color:{$_default/tw}">{$_content/v}</span>',
-        'class' => 'inline',
-        'allow_in' => ['listitem', 'block', 'columns', 'inline', 'link']
-    ]);
-    
-    $text = preg_replace('/\]([\[]+)\[/', ']{[', $text);
-    $text = preg_replace('/\]([\]]+)\[/', ']}[', $text);
-    
-    $text = html_entity_decode($text);
-    
-    tags_to_lowercase($text);
-    
-    $text = $bbcode->Parse($text);
-} // parse_ascii_art
-//------------------------------------------------------------------------------
 function parse_bb_code_simple(&$text, $mode = "email")
 {
     $bbcode = new BBCode;

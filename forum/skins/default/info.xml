@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description>
-  <version>25.07.24</version>
+  <version>25.07.25</version>
   
   <caption 
   ru="Синий минималистичеcкий"
@@ -16,7 +16,7 @@
     type="checkbox"
     default = "0"
     
-    ru="Показзывать логотип форума вместо названия"
+    ru="Показывать логотип форума вместо названия"
     ua="Показувати логотип форуму замість назви"
     en="Display the forum logo instead of the forum name"
     de="Forum-Logo anstelle des Forumsnamens anzeigen"

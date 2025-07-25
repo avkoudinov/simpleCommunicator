@@ -309,17 +309,6 @@ function convert_nodes_to_bbcode(container, quote_level)
         break;
       }     
 
-      if(container.childNodes[i].classList.contains('ascii_art'))
-      {
-        text = convert_nodes_to_bbcode(container.childNodes[i], quote_level);
-        
-        var bg = container.childNodes[i].getAttribute("data-bg");
-        var fsize = container.childNodes[i].getAttribute("data-fsize");
-        
-        current_node = document.createTextNode("\n\n[ascii-art bg=" + bg + " fsize=" + fsize + "]" + text + "[/ascii-art]\n\n");
-        break;
-      }     
-      
       // check whether it is a code
       var code = container.childNodes[i].getElementsByTagName('code');
       if(code.length > 0 && code[0].classList.contains('hljs'))
