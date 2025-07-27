@@ -852,21 +852,6 @@ abstract class ForumAPIManager
 
         $where = "where {$prfx}_topic.forum_id = $fid";
         
-        if (!empty($request_data["continue_at"])) {
-            $start_timestamp = xstrtotime($request_data["continue_at"]);
-            if ($start_timestamp === false) {
-                throw new ForumAPIException(sprintf(text("ErrWrongDateFormat"), "2024-11-30 12:44:53"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
-            }
-
-            $start_timestamp = $rodbw->format_datetime($start_timestamp);
-            
-            if ($sort == "desc") {
-                $where .= " and {$prfx}_topic_statistics.last_message_date < '$start_timestamp'";
-            } else {
-                $where .= " and {$prfx}_topic_statistics.last_message_date > '$start_timestamp'";
-            }
-        }        
-
         $uid = $rodbw->escape($this->forum_manager->get_user_id());
         if (empty($uid)) {
             $uid = 0;
@@ -886,6 +871,26 @@ abstract class ForumAPIManager
             
             $where = "where exists (select 1 from {$prfx}_private_topics where {$prfx}_private_topics.topic_id = {$prfx}_topic.id and {$prfx}_private_topics.participant_id = $uid)
                        and ({$prfx}_topic.deleted <> 1 $delete_appendix)";
+        }
+
+        if (!empty($request_data["continue_at"])) {
+            $start_timestamp = xstrtotime($request_data["continue_at"]);
+            if ($start_timestamp === false) {
+                throw new ForumAPIException(sprintf(text("ErrWrongDateFormat"), "2024-11-30 12:44:53"), ForumAPIException::ERR_CODE_NOT_FOUND_ERROR);
+            }
+
+            $start_timestamp = $rodbw->format_datetime($start_timestamp);
+            
+            if ($sort == "desc") {
+                $where .= " and {$prfx}_topic_statistics.last_message_date < '$start_timestamp'";
+            } else {
+                $where .= " and {$prfx}_topic_statistics.last_message_date > '$start_timestamp'";
+            }
+        } 
+
+        if (!empty($request_data["subject"])) {
+            $subject = $rodbw->escape($request_data["subject"]);
+            $where .= " and {$prfx}_topic.name = '$subject'";
         }
 
         $where .= $this->forum_manager->get_ignore_topic_where_appendix($rodbw, $prfx, 0);

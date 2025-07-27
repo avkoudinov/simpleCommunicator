@@ -426,6 +426,8 @@ function check_image_url(&$url, &$large_url)
         $headers[strtolower($name)] = $value;
     }
     
+    //debug_message($headers);
+    
     $src_type = "";
     $src_length = 0;
     

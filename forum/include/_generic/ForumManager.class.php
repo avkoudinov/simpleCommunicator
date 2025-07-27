@@ -23528,10 +23528,12 @@ abstract class ForumManager
     function check_subject($subject, &$symbols)
     {
         if ($symbols = Emoji::HasEmoji($subject)) {
-            return false;
+            if (!preg_match("/[|]+/", $symbols)) {
+                return false;
+            }
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\\\\\/\*\+<>—~&#–§№\$€₽¥¥£Ұ₴°\"\'“”‘’«»„“0-9，（＾ω＾）ｖ。]+/u", $subject, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\\\\\/\*\+<>—~&#–§№\$€₽¥∞£Ұ₴°\"\'“”‘’«»„“0-9，（＾ω＾）ｖ。]+/u", $subject, $matches)) {
             $symbols = $matches[0];
 
             trace_message_to_file(date("d.m.Y, H:i") . ": the string [$subject] contains the prohibited symbols [$symbols]", "symbols.log");
