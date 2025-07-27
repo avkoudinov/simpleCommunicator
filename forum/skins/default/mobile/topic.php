@@ -470,7 +470,7 @@ require_once "topic_post_functions_inc.php";
 
 <br><a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return select_blocked_users()'><?php echo_html(text("ManageMembers")); ?></a>
 
-<?php if($fmanager->is_topic_moderator($tid)): ?>
+<?php if($fmanager->is_topic_moderator($tid) && !($fmanager->is_admin() || $fmanager->is_forum_moderator($fid))): ?>
 
   <?php if(empty($forum_data["no_guests"]) || !empty($forum_data["user_posting_as_guest"])): ?>
   <?php if(empty($topic_data["no_guests"])): ?>
@@ -539,7 +539,7 @@ require_once "topic_post_functions_inc.php";
   <br> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return do_action({ topic_action: "blog_topic_off", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("TurnBlogModeOff")); ?></a>
   <?php endif; ?>
 
-  <?php if(empty($forum_data["no_guests"])): ?>
+  <?php if(empty($forum_data["no_guests"]) || !empty($forum_data["user_posting_as_guest"])): ?>
 
   <?php if(empty($topic_data["no_guests"])): ?>
   <br> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmDisallowGuests"), true); ?>", { topic_action: "disallow_guests", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("DisallowGuests")); ?></a>
