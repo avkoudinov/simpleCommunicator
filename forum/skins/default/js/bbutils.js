@@ -843,10 +843,18 @@ function convert_nodes_to_bbcode(container, quote_level)
       {
         current_node = document.createTextNode('');
       }
+      if(!container.childNodes[i].classList.contains('message_action_cell'))
+      {
+        current_node = document.createTextNode('');
+      }
       break;
   
       case 'TH':
       if(!container.childNodes[i].classList.contains('csv_table_cell'))
+      {
+        current_node = document.createTextNode('');
+      }
+      if(!container.childNodes[i].classList.contains('message_action_cell'))
       {
         current_node = document.createTextNode('');
       }
