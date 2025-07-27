@@ -212,6 +212,11 @@ else
 }
 
 $user_identifier_class .= " author_post_" . md5($pinfo["author"]);
+
+if(stripos($pinfo["text_content"], "[/kroleg-pipe]") !== false)
+{
+  $user_identifier_class .= " kroleg_pipe_post";
+}
 ?>
 
 <?php if(!empty($pinfo["is_system"])): // system post ?>
