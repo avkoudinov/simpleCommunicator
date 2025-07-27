@@ -434,6 +434,8 @@ function check_image_url(&$url, &$large_url)
         $headers[strtolower($name)] = $value;
     }
     
+    //debug_message($headers);
+    
     $src_type = "";
     $src_length = 0;
     
@@ -724,6 +726,33 @@ function bb_process_bold_simple($bbcode, $action, $name, $default, $params, $con
     return preg_replace("/#\d+$/", "", $content);
 } // bb_process_bold_simple
 //------------------------------------------------------------------------------
+function parse_ascii_art(&$text)
+{
+    $bbcode = new BBCode;
+    $bbcode->ClearRules();
+    $bbcode->SetLimit(200000);
+    $bbcode->SetIgnoreNewlines(true);
+    $bbcode->RemoveRule('wiki');
+    $bbcode->ClearSmileys();
+    
+    $bbcode->AddRule('color', [
+        'mode' => 4,
+        'allow' => ['_default' => '/^#?[a-z0-9._ -]+$/i'],
+        'template' => '<span style="color:{$_default/tw}">{$_content/v}</span>',
+        'class' => 'inline',
+        'allow_in' => ['listitem', 'block', 'columns', 'inline', 'link']
+    ]);
+    
+    $text = preg_replace('/\]([\[]+)\[/', ']{[', $text);
+    $text = preg_replace('/\]([\]]+)\[/', ']}[', $text);
+    
+    $text = html_entity_decode($text);
+    
+    tags_to_lowercase($text);
+    
+    $text = $bbcode->Parse($text);
+} // parse_ascii_art
+//------------------------------------------------------------------------------
 function bb_process_ascii_art($bbcode, $action, $name, $default, $params, $content)
 {
     if ($action == BBCODE_CHECK) {
@@ -748,11 +777,14 @@ function bb_process_ascii_art($bbcode, $action, $name, $default, $params, $conte
 } // bb_process_ascii_art
 //------------------------------------------------------------------------------
 function bb_process_kroleg_pipe($bbcode, $action, $name, $default, $params, $content) {
+    global $fmanager;
+
     if ($action == BBCODE_CHECK) {
         return true;
     }
     
-    if (!in_array(val_or_empty($_SESSION["user_id"]), [292, 699, 262941, 263736]) && empty($_SESSION["api_posting"])) {
+    if (!in_array(val_or_empty($_SESSION["user_id"]), [292, 699, 262941, 263736]) && empty($_SESSION["api_posting"]) &&
+        !$fmanager->is_admin() && !$fmanager->is_moderator()) {
         $src = "user_data/images/img_injection_warning.png";
         
         return "<div class='picture_wrapper'><a href='$src' class='lightbox_image' target='_blank'><img class='post_image' src='$src' alt='{{picture}}'></a></div>";
@@ -3792,33 +3824,6 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
         $has_code = 1;
     }
 } // parse_bb_code
-//------------------------------------------------------------------------------
-function parse_ascii_art(&$text)
-{
-    $bbcode = new BBCode;
-    $bbcode->ClearRules();
-    $bbcode->SetLimit(200000);
-    $bbcode->SetIgnoreNewlines(true);
-    $bbcode->RemoveRule('wiki');
-    $bbcode->ClearSmileys();
-    
-    $bbcode->AddRule('color', [
-        'mode' => 4,
-        'allow' => ['_default' => '/^#?[a-z0-9._ -]+$/i'],
-        'template' => '<span style="color:{$_default/tw}">{$_content/v}</span>',
-        'class' => 'inline',
-        'allow_in' => ['listitem', 'block', 'columns', 'inline', 'link']
-    ]);
-    
-    $text = preg_replace('/\]([\[]+)\[/', ']{[', $text);
-    $text = preg_replace('/\]([\]]+)\[/', ']}[', $text);
-    
-    $text = html_entity_decode($text);
-    
-    tags_to_lowercase($text);
-    
-    $text = $bbcode->Parse($text);
-} // parse_ascii_art
 //------------------------------------------------------------------------------
 function parse_bb_code_simple(&$text, $mode = "email")
 {

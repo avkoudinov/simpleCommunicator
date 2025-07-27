@@ -23528,7 +23528,9 @@ abstract class ForumManager
     function check_subject($subject, &$symbols)
     {
         if ($symbols = Emoji::HasEmoji($subject)) {
-            return false;
+            if (!preg_match("/[|]+/", $symbols)) {
+                return false;
+            }
         }
         
         if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\\\\\/\*\+<>—~&#–§№\$€₽¥¥£Ұ₴°\"\'“”‘’«»„“0-9，（＾ω＾）ｖ。]+/u", $subject, $matches)) {
