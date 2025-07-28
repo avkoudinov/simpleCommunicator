@@ -3060,6 +3060,28 @@ abstract class ForumAPIManager
             unset($post["self_edited"]);
             unset($post["editable"]);
             unset($post["moderatable"]);
+
+            $post_id = $dbw->escape($post["post_id"]);
+            
+            $query = "select nr, origin_name, type, deleted, post_id
+                  from
+                  {$prfx}_attachment
+                  where post_id = $post_id";
+            if (!$dbw->execute_query($query)) {
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+            
+            while ($dbw->fetch_row()) {
+                $post["attachments"][] = [
+                  "attachment_id" => $dbw->field_by_name("post_id"),
+                  "nr" => $dbw->field_by_name("nr"),
+                  "file_name" => $dbw->field_by_name("origin_name"),
+                  "mime_type" => $dbw->field_by_name("type"),
+                  "deleted" => $dbw->field_by_name("deleted")
+                ];
+            }
+            
+            $dbw->free_result();
         }        
     }
 
@@ -3310,6 +3332,26 @@ abstract class ForumAPIManager
             unset($post["self_edited"]);
             unset($post["editable"]);
             unset($post["moderatable"]);
+
+            $post_id = $dbw->escape($post["post_id"]);
+            
+            $query = "select nr, origin_name, type, deleted, post_id
+                  from
+                  {$prfx}_attachment
+                  where post_id = $post_id";
+            if (!$dbw->execute_query($query)) {
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+            
+            while ($dbw->fetch_row()) {
+                $post["attachments"][] = [
+                  "attachment_id" => $dbw->field_by_name("post_id"),
+                  "nr" => $dbw->field_by_name("nr"),
+                  "file_name" => $dbw->field_by_name("origin_name"),
+                  "mime_type" => $dbw->field_by_name("type"),
+                  "deleted" => $dbw->field_by_name("deleted")
+                ];
+            }
         }        
     }
     
@@ -3593,6 +3635,28 @@ abstract class ForumAPIManager
             unset($post["self_edited"]);
             unset($post["editable"]);
             unset($post["moderatable"]);
+
+            $post_id = $rodbw->escape($post["post_id"]);
+            
+            $query = "select nr, origin_name, type, deleted, post_id
+                  from
+                  {$prfx}_attachment
+                  where post_id = $post_id";
+            if (!$rodbw->execute_query($query)) {
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+            
+            while ($rodbw->fetch_row()) {
+                $post["attachments"][] = [
+                  "attachment_id" => $rodbw->field_by_name("post_id"),
+                  "nr" => $rodbw->field_by_name("nr"),
+                  "file_name" => $rodbw->field_by_name("origin_name"),
+                  "mime_type" => $rodbw->field_by_name("type"),
+                  "deleted" => $rodbw->field_by_name("deleted")
+                ];
+            }
+            
+            $rodbw->free_result();
         }        
     }   
 
@@ -4042,6 +4106,28 @@ abstract class ForumAPIManager
             unset($post["self_edited"]);
             unset($post["editable"]);
             unset($post["moderatable"]);
+
+            $post_id = $dbw->escape($post["post_id"]);
+            
+            $query = "select nr, origin_name, type, deleted, post_id
+                  from
+                  {$prfx}_attachment
+                  where post_id = $post_id";
+            if (!$dbw->execute_query($query)) {
+                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
+            }
+            
+            while ($dbw->fetch_row()) {
+                $post["attachments"][] = [
+                  "attachment_id" => $dbw->field_by_name("post_id"),
+                  "nr" => $dbw->field_by_name("nr"),
+                  "file_name" => $dbw->field_by_name("origin_name"),
+                  "mime_type" => $dbw->field_by_name("type"),
+                  "deleted" => $dbw->field_by_name("deleted")
+                ];
+            }
+            
+            $dbw->free_result();
         }        
      }
 } // ForumAPIManager

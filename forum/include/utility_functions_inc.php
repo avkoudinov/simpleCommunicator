@@ -2269,27 +2269,23 @@ function get_cookie($name)
 //------------------------------------------------------
 function set_cookie($name, $value = "", $expires = 0)
 {
+    global $COOKIE_SET;
+    
     if (empty($name)) {
         return false;
     }
     
-    $params = array("httponly" => "true", "samesite" => "lax", "path" => System::getSessionCookiePath());
-    
-    if (version_compare(phpversion(), "7.3") < 0) {
-        $path = "";
-        if (!empty($params["path"])) {
-            $path = $params["path"];
+    if (!empty($COOKIE_SET[$name])) {
+        if (get_cookie($name) === $value) {
+            return true;
         }
-        
-        if (!empty($params["samesite"])) {
-            $path = rtrim($path, "/");
-            
-            $path .= "/; samesite=" . $params["samesite"];
-        }
-        
-        $_COOKIE[$name] = $value;
-        return setcookie($name, $value, $expires, $path);
     }
+    
+    debug_message("set_cookie $name: " . $value . ", path: " . System::getSessionCookiePath());
+    
+    $COOKIE_SET[$name] = 1;
+    
+    $params = array("httponly" => "true", "samesite" => "lax", "path" => System::getSessionCookiePath());
     
     $params["expires"] = $expires;
     
@@ -2303,6 +2299,7 @@ function set_cookie($name, $value = "", $expires = 0)
      */
     
     $_COOKIE[$name] = $value;
+    
     return setcookie($name, $value, $params);
 } // set_cookie
 //------------------------------------------------------
