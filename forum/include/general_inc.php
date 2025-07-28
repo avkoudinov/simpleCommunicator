@@ -72,9 +72,6 @@ if (empty($READ_MARKER)) {
     $READ_MARKER = System::generateReadmarker();
 }
 
-// 90 days
-set_cookie("q_read_marker", $READ_MARKER, time() + 90 * 24 * 3600);
-
 $target_url = val_or_empty($_SESSION["last_url"]);
 if (empty($target_url) || $target_url == val_or_empty($_SERVER["REQUEST_URI"])) {
     $target_url = "forums.php";

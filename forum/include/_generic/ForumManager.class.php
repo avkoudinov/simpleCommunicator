@@ -5945,7 +5945,6 @@ abstract class ForumManager
         $captcha_verified = !empty($_SESSION[$READ_MARKER]["captcha_verified"]);
         
         $READ_MARKER = System::generateHash(reqvar("user_login"), SALT_KEY);
-        set_cookie("q_read_marker", $READ_MARKER, time() + 90 * 24 * 3600);
         
         $_SESSION[$READ_MARKER]["captcha_verified"] = $captcha_verified;
         
@@ -6237,7 +6236,6 @@ abstract class ForumManager
             }
             
             $READ_MARKER = System::generateHash("admin", SALT_KEY);
-            set_cookie("q_read_marker", $READ_MARKER, time() + 90 * 24 * 3600);
 
             $this->update_user_cookies();
             
@@ -6499,9 +6497,6 @@ abstract class ForumManager
         
         if ($dbw->field_by_name("read_marker")) {
             $READ_MARKER = $dbw->field_by_name("read_marker");
-            
-            // 90 days
-            set_cookie("q_read_marker", $READ_MARKER, time() + 90 * 24 * 3600);
         }
         
         $dbw->free_result();
@@ -24880,10 +24875,6 @@ abstract class ForumManager
         $response["created_post"] = $post_id;
         $response["return_post"] = $return_post;
         
-        if (!empty($post_attachments)) {
-            $response["post_attachments"] = $post_attachments;
-        }
-        
         $response["target_url"] = "topic.php?fid=$fid";
         if (!reqvar_empty("fpage")) {
             $response["target_url"] .= "&fpage=" . reqvar("fpage");
@@ -32210,12 +32201,16 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function update_user_cookies()
     {
+        global $READ_MARKER;
+        
         // we store the last guest name to the cookie only if the user is not logged
         
         if (!$this->is_logged_in()) {
             set_cookie("q_last_guest_name", val_or_empty($_SESSION["user_name"]), time() + 90 * 24 * 3600);
         }
         
+        set_cookie("q_read_marker", $READ_MARKER, time() + 90 * 24 * 3600);
+
         // we store the settings for all - guests and users, so that if the user loggs out,
         // he keeps the settings.
         
@@ -35500,7 +35495,6 @@ abstract class ForumManager
         
         if (!empty($data["read_marker"])) {
             $READ_MARKER = $data["read_marker"];
-            set_cookie("q_read_marker", $READ_MARKER, time() + 90 * 24 * 3600);
         }
         
         MessageHandler::setInfo(text("MsgProfileImportSuccess"));

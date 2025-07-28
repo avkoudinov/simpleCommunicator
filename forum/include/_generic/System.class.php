@@ -293,17 +293,16 @@ class System
     //-----------------------------------------------------------------
     static function getSessionCookiePath()
     {
-        if (defined('HOME_DIRECTORY') && HOME_DIRECTORY != '') {
+        $qparams = session_get_cookie_params();
+        if (!empty($qparams["path"])) {
+            $path = $qparams["path"];
+        } elseif (defined('HOME_DIRECTORY') && HOME_DIRECTORY != '') {
             $path = HOME_DIRECTORY;
         } else {
             $path = ini_get("session.cookie_path");
         }
     
-        $path = rtrim($path, "/");
-        
-        if (empty($path)) {
-            $path = "/";
-        }
+        $path = rtrim($path, "/") . "/";
         
         return $path;
     } // getSessionCookiePath
