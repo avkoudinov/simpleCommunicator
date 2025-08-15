@@ -2026,18 +2026,15 @@ function focus_message_field()
 {
   var elm;
 
-  elm = document.getElementById('post_message_table');
+  elm = document.getElementById('message');
   if (elm)
   {
-    elm.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" });
-
-    elm = document.getElementById('message');
-    if (!elm) return;
-      
-    if(elm.value.length > 0)
-      elm.setSelectionRange(elm.value.length, elm.value.length);
-
     elm.focus();
+
+    setTimeout(function () {
+      elm.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" });
+      elm.scrollBy(0, 100);      
+    }, 100);
   }
 }
 
