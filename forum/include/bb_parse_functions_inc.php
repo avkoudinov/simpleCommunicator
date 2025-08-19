@@ -1041,7 +1041,7 @@ function bb_process_table($bbcode, $action, $name, $default, $params, $content)
     
     $first = true;
     foreach ($rows as $row) {
-        $cells = str_getcsv($row, $delimiter);
+        $cells = str_getcsv($row, $delimiter, "\"", "\\");
         
         $tag = "td";
         if ($first) {
@@ -2524,10 +2524,10 @@ function remove_nested_spoilers_bb(&$input, &$output, $limit)
 //------------------------------------------------------------------------------
 
 if (!function_exists("str_getcsv")) {
-    function str_getcsv($string)
+    function str_getcsv($string, $separator = ",", $enclosure = "\"", $escape = "\\")
     {
         $fh = fopen('php://temp', 'r+');
-        fwrite($fh, $string);
+        fwrite($fh, $string, $separator, $enclosure, $escape);
         rewind($fh);
         
         $row = fgetcsv($fh);
@@ -3698,7 +3698,7 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
         $rows = preg_split("/[\r\n]+/", $contents, -1, PREG_SPLIT_NO_EMPTY);
         
         foreach ($rows as $row) {
-            $codes = str_getcsv($row);
+            $codes = str_getcsv($row, ",", "\"", "\\");
             if (empty($codes[0]) || empty($codes[1]) || empty($smileys[$codes[1]])) {
                 continue;
             }
@@ -4278,7 +4278,7 @@ function parse_bb_code_simple(&$text, $mode = "email")
             $rows = preg_split("/[\r\n]+/", $contents, -1, PREG_SPLIT_NO_EMPTY);
             
             foreach ($rows as $row) {
-                $codes = str_getcsv($row);
+                $codes = str_getcsv($row, ",", "\"", "\\");
                 if (empty($codes[0]) || empty($codes[1]) || empty($smileys[$codes[1]])) {
                     continue;
                 }
