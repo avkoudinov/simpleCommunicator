@@ -755,6 +755,16 @@ function convert_nodes_to_bbcode(container, quote_level)
 
       case 'A':
       text = convert_nodes_to_bbcode(container.childNodes[i], quote_level);
+      if(container.childNodes[i].classList.contains('post_action_command'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
+      if(container.childNodes[i].classList.contains('moderator_link'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
       if(container.childNodes[i].classList.contains('attachment_link'))
       {
         current_node = document.createTextNode('');

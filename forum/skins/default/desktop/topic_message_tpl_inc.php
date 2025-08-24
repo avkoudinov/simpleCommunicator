@@ -1222,18 +1222,18 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
   <div class="user_post_actions">
 
   <?php if($may_write && $may_answer): ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_answer=" . $pid . "&answer_author=" . xrawurlencode($pinfo["author"])); ?>" class="answer" onclick='return answer_to_author("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["author"], true); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("Answer")); ?></a>
+  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_answer=" . $pid . "&answer_author=" . xrawurlencode($pinfo["author"])); ?>" class="post_action_command answer" onclick='return answer_to_author("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["author"], true); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("Answer")); ?></a>
   <?php endif; ?>
 
   <?php if($may_answer):  
   $citate_caption = text("Citate");
   if(empty($may_write)) $citate_caption = text("CitateForCopy");
   ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_citate=" . $pid); ?>" onclick='return citate_post("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html($citate_caption); ?></a>
+  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_citate=" . $pid); ?>" class="post_action_command" onclick='return citate_post("<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html($citate_caption); ?></a>
   <?php endif; // may_answer ?>
   
   <?php if($may_write): ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_write=" . $pid); ?>" onclick='return new_message("", "<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("NewMessage")); ?></a> 
+  <span class="separator">|</span> <a href="<?php echo($message_url . "&do_write=" . $pid); ?>" class="post_action_command" onclick='return new_message("", "<?php echo_html($pid); ?>", "<?php echo_js($pinfo["topic_id"], true); ?>", "<?php echo_js(postprocess_message($pinfo["topic_name"]), true); ?>", "<?php echo($pinfo["profiled_topic"]); ?>", <?php echo(!empty($pinfo["stringent_rules"]) ? 1 : 0); ?>);'><?php echo_html(text("NewMessage")); ?></a> 
   <?php endif; // may write ?>
 
   <?php
@@ -1243,11 +1243,11 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
      (val_or_empty($pinfo["topic_private"]) == 0 || (val_or_empty($pinfo["topic_private"]) == 2 && !$fmanager->is_topic_moderator($pinfo["topic_id"])))
     ):
   ?>
-  <span class="separator">|</span> <a href="<?php echo($message_url); ?>" onclick='return show_post_comment("<?php echo_js(text("Complain"), true); ?>", "<?php echo_js($fmanager->get_display_name($pinfo["author"]), true); ?>", "<?php echo_js($pid); ?>", "complain")'><?php echo_html(text("Complain")); ?></a>
+  <span class="separator">|</span> <a  class="post_action_command" href="<?php echo($message_url); ?>" onclick='return show_post_comment("<?php echo_js(text("Complain"), true); ?>", "<?php echo_js($fmanager->get_display_name($pinfo["author"]), true); ?>", "<?php echo_js($pid); ?>", "complain")'><?php echo_html(text("Complain")); ?></a>
   <?php endif; ?>
   
   <?php if(!empty($pinfo["replies"])): ?>
-  <span class="separator">|</span> <a href="search.php?do_search=1&replies_to=<?php echo_html($pid); ?>&author_mode=wrote_post" target="_blank"><?php echo_html(text("Answers")); ?></a>
+  <span class="separator">|</span> <a  class="post_action_command" href="search.php?do_search=1&replies_to=<?php echo_html($pid); ?>&author_mode=wrote_post" target="_blank"><?php echo_html(text("Answers")); ?></a>
   <?php endif; ?>
 
   <?php if(!empty($in_search)): ?>
@@ -1259,7 +1259,7 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
     if(!reqvar_empty("with_morphology")) $search_keys_appendix .= "&with_morphology=1";
   }
   ?>
-  | <a href="topic.php?fid=<?php echo_html($pinfo["forum_id_for_url"]); ?>&tid=<?php echo_html($pinfo["topic_id"]); ?>&from_search=1<?php echo($search_keys_appendix); ?>&msg=<?php echo_html($pid); ?>" ><?php echo_html(text("GotoTopic")); ?></a> 
+  | <a  class="post_action_command" href="topic.php?fid=<?php echo_html($pinfo["forum_id_for_url"]); ?>&tid=<?php echo_html($pinfo["topic_id"]); ?>&from_search=1<?php echo($search_keys_appendix); ?>&msg=<?php echo_html($pid); ?>" ><?php echo_html(text("GotoTopic")); ?></a> 
   <?php endif; ?>
 
   &nbsp;
