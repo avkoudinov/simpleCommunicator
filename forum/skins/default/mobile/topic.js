@@ -2043,7 +2043,14 @@ function focus_message_field()
   elm = document.getElementById('message');
   if (elm)
   {
+    // This is a livehack against a strange bug of the textarea. 
+    // If you focus the textarea programmatically, and then pate a large text there.
+    // It does not get scrollable. 
+    
+    var orig_text = elm.value;
+    elm.value += "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
     elm.focus();
+    elm.value = orig_text;
 
     setTimeout(function () {
       elm.scrollIntoView({ behavior: "instant", block: "nearest", inline: "nearest" });
