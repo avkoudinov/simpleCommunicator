@@ -84,6 +84,10 @@ function exec_reload_online_users()
 
 <?php
 require_once "topic_post_functions_inc.php";
+
+require_once "topic_lookup_inc.php";
+require_once "tag_editor_inc.php";
+require_once "topic_post_objects_inc.php";
 ?>
 
 <?php if($fmanager->is_logged_in() && reqvar_empty("news_digest") && reqvar_empty("rate_statistics")): ?>
@@ -724,10 +728,5 @@ if($rcnt > 0)
 unset($_SESSION["ensure_anchor_visible"]);
 ?>
 
-<?php
-require_once "topic_lookup_inc.php";
-require_once "tag_editor_inc.php";
-require_once "topic_post_objects_inc.php";
-?>
 
 

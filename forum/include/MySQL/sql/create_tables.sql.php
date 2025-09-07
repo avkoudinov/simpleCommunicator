@@ -2115,6 +2115,8 @@ create table v1_user
    logout               tinyint not null default 0,
    last_logout_date     datetime,
    last_events_view_date datetime,
+   video_audio_blocked  tinyint not null default 0,
+   attachments_blocked  tinyint not null default 0,
    rating_blocked       tinyint not null default 0,
    time_zone            varchar(255),
    privileged           tinyint not null default 0,

@@ -335,6 +335,10 @@ function select_blocked_users()
 
 <?php
 require_once "topic_post_functions_inc.php";
+
+require_once "topic_lookup_inc.php";
+require_once "tag_editor_inc.php";
+require_once "topic_post_objects_inc.php";
 ?>
 
 <!-- BEGIN: header2 -->
@@ -940,12 +944,6 @@ if(!empty($topic_data["new_messages_count"])) $display = "";
 </div>
 
 <!-- END: forum_bar -->
-
-<?php
-require_once "topic_lookup_inc.php";
-require_once "tag_editor_inc.php";
-require_once "topic_post_objects_inc.php";
-?>
 
 <div id="search_member_area" class="search_member_area">
 

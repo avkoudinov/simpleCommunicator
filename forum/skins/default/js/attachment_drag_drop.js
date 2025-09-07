@@ -186,7 +186,7 @@ function delete_attachment_from_buffer(index)
   release_attachment_buffer_slot(index);
 }
 
-Forum.addXEvent(window, 'load', function () {
+Forum.addXEvent(window, 'DOMContentLoaded', function () {
   var drag_drop_zone = document.getElementById("drag_drop_zone");
   
   drag_drop_zone.addEventListener('dragenter', function (ev) {
