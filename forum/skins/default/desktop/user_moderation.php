@@ -750,7 +750,45 @@ if(!empty($user_data["forum_blocked"])):
       <?php endif; ?>
     <?php endif; ?>
     
+    <?php if(empty($user_data["attachments_blocked"])): ?>
+     <tr>
+       <td>
+    <input type="checkbox" id="disallow_attachments" name="disallow_attachments"> 
+       </td>
+       <td>
+    <label for="disallow_attachments"><?php echo_html(text("DisallowAttachments")); ?></label>
+       </td>
+     </tr>
+    <?php else: ?>
+     <tr>
+       <td>
+    <input type="checkbox" id="allow_attachments" name="allow_attachments"> 
+       </td>
+       <td>
+    <label for="allow_attachments"><?php echo_html(text("AllowAttachments")); ?></label>
+       </td>
+     </tr>
+    <?php endif; ?>
     
+    <?php if(empty($user_data["video_audio_blocked"])): ?>
+     <tr>
+       <td>
+    <input type="checkbox" id="disallow_video_audio" name="disallow_video_audio"> 
+       </td>
+       <td>
+    <label for="disallow_video_audio"><?php echo_html(text("DisallowVideoAudio")); ?></label>
+       </td>
+     </tr>
+    <?php else: ?>
+     <tr>
+       <td>
+    <input type="checkbox" id="allow_video_audio" name="allow_video_audio"> 
+       </td>
+       <td>
+    <label for="allow_video_audio"><?php echo_html(text("AllowVideoAudio")); ?></label>
+       </td>
+     </tr>
+    <?php endif; ?>
     
    </table>
 </td>

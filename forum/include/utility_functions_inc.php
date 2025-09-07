@@ -2281,8 +2281,6 @@ function set_cookie($name, $value = "", $expires = 0)
         }
     }
     
-    debug_message("set_cookie $name: " . $value . ", path: " . System::getSessionCookiePath());
-    
     $COOKIE_SET[$name] = 1;
     
     $params = array("httponly" => "true", "samesite" => "lax", "path" => System::getSessionCookiePath());

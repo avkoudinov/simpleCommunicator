@@ -334,6 +334,17 @@ abstract class ForumManager
                 return text("ActionRatingDisallowed");
             case "allow_rating":
                 return text("ActionRatingAllowed");
+
+            case "disallow_attachments":
+                return text("ActionAttachmentsDisallowed");
+            case "allow_attachments":
+                return text("ActionAttachmentsAllowed");
+
+            case "disallow_video_audio":
+                return text("ActionVideoAudioDisallowed");
+            case "allow_video_audio":
+                return text("ActionVideoAudioAllowed");
+
             case "block_user":
                 return text("ActionUserBlocked");
             case "unblock_user":
@@ -4672,7 +4683,7 @@ abstract class ForumManager
         
         $new_moderators = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language, last_host
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language, last_host
                              from {$prfx}_user
                              where id in ($in_list) and
                              id not in (select user_id from {$prfx}_forum_moderator where forum_id = $fid union select -1 from {$prfx}_dual)
@@ -4686,7 +4697,7 @@ abstract class ForumManager
             $new_moderators[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -4698,7 +4709,7 @@ abstract class ForumManager
         
         $removed_moderators = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language, last_host
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language, last_host
                              from {$prfx}_user
                              where id not in ($in_list) and
                              id in (select user_id from {$prfx}_forum_moderator where forum_id = $fid union select -1 from {$prfx}_dual)
@@ -4712,7 +4723,7 @@ abstract class ForumManager
             $removed_moderators[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -4749,7 +4760,7 @@ abstract class ForumManager
         
         $existing_moderators = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language, last_host
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language, last_host
                              from {$prfx}_user
                              where
                              id in (select user_id from {$prfx}_forum_moderator where forum_id = $fid)
@@ -4763,7 +4774,7 @@ abstract class ForumManager
             $existing_moderators[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -6065,7 +6076,7 @@ abstract class ForumManager
         
         $registration_subscribers = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, interface_language, last_host, send_notifications
+        if (!$dbw->execute_query("select id, email, user_name, interface_language, last_host, send_notifications, activated, approved
                              from {$prfx}_user
                              where notify_about_new_users = 1")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -6077,7 +6088,7 @@ abstract class ForumManager
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
                 "last_host" => $dbw->field_by_name("last_host"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
         }
@@ -6360,9 +6371,9 @@ abstract class ForumManager
             }
         }
         
-        if (!$dbw->execute_query("select login, user_name, email, turnoff_events, no_private_messages, send_notifications, donot_hide_adult_pictures,
+        if (!$dbw->execute_query("select login, user_name, email, turnoff_events, no_private_messages, send_notifications, activated, approved, donot_hide_adult_pictures,
                              donot_notify_on_rates, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, skin, self_blocked,
-                             custom_css, custom_smiles, skin_properties, time_zone, interface_language, read_marker, activated, approved, rating_blocked, is_admin, privileged, last_logout_date,
+                             custom_css, custom_smiles, skin_properties, time_zone, interface_language, read_marker, activated, approved, rating_blocked, video_audio_blocked, attachments_blocked, is_admin, privileged, last_logout_date,
                              privileged_topic_moderator, global_ban_allowed, show_ip, ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist, blocked, block_expires, block_reason, password_hash
                              from {$prfx}_user
                              where id = $uid")) {
@@ -6438,6 +6449,8 @@ abstract class ForumManager
         $_SESSION["show_ip"] = $dbw->field_by_name("show_ip");
         
         $_SESSION["rating_blocked"] = $dbw->field_by_name("rating_blocked");
+        $_SESSION["video_audio_blocked"] = $dbw->field_by_name("video_audio_blocked");
+        $_SESSION["attachments_blocked"] = $dbw->field_by_name("attachments_blocked");
         
         $_SESSION["user_login"] = $dbw->field_by_name("login");
         $_SESSION["user_name"] = $dbw->field_by_name("user_name");
@@ -6445,7 +6458,7 @@ abstract class ForumManager
         
         $_SESSION["turnoff_events"] = $dbw->field_by_name("turnoff_events");
         $_SESSION["no_private_messages"] = $dbw->field_by_name("no_private_messages");
-        $_SESSION["send_notifications"] = $dbw->field_by_name("send_notifications");
+        $_SESSION["send_notifications"] = $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved");
         $_SESSION["donot_notify_on_rates"] = $dbw->field_by_name("donot_notify_on_rates");
         
         $_SESSION["hide_pictures"] = $dbw->field_by_name("hide_pictures");
@@ -7197,6 +7210,8 @@ abstract class ForumManager
         unset($_SESSION["privileged_topic_moderator"]);
         unset($_SESSION["global_ban_allowed"]);
         unset($_SESSION["rating_blocked"]);
+        unset($_SESSION["video_audio_blocked"]);
+        unset($_SESSION["attachments_blocked"]);
         
         unset($_SESSION["forum_member"]);
         unset($_SESSION["forum_moderator"]);
@@ -7377,7 +7392,7 @@ abstract class ForumManager
             $this->email_manager->send_email($settings["default_sender"], $params["{user_email}"], "email_many_failed_logins.txt", $params, $lng);
         }
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                            from {$prfx}_user
                            where is_admin = 1 and login <> 'demoadmin'
                            ")) {
@@ -7391,7 +7406,7 @@ abstract class ForumManager
             $administrators[$dbw->field_by_name("id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -8581,7 +8596,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select
                              id, login, user_name, email, hide_email, message, homepage, signature, api_active, api_token, activated, approved, hidden,
-                             rating_blocked, is_admin, privileged_topic_moderator, privileged, global_ban_allowed, show_ip, location, info, skin, interface_language, notify_citation,
+                             rating_blocked, attachments_blocked, video_audio_blocked, is_admin, privileged_topic_moderator, privileged, global_ban_allowed, show_ip, location, info, skin, interface_language, notify_citation,
                              notify_about_new_users, notify_on_words, words_to_notify, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, no_private_messages,
                              ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist, 
                              last_host, send_notifications, donot_notify_on_rates, turnoff_events, turnoff_personal_appeals,
@@ -8644,6 +8659,8 @@ abstract class ForumManager
             $user_data["approved"] = $dbw->field_by_name("approved");
             $user_data["hidden"] = $dbw->field_by_name("hidden");
             $user_data["rating_blocked"] = $dbw->field_by_name("rating_blocked");
+            $user_data["attachments_blocked"] = $dbw->field_by_name("attachments_blocked");
+            $user_data["video_audio_blocked"] = $dbw->field_by_name("video_audio_blocked");
             $user_data["time_zone"] = $dbw->field_by_name("time_zone");
             if (empty($user_data["time_zone"]) || !in_array($user_data["time_zone"], $GLOBALS['time_zones'])) {
                 $user_data["time_zone"] = TIME_ZONE;
@@ -11600,7 +11617,7 @@ abstract class ForumManager
         
         $existing_administrators = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language, last_host
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language, last_host
                              from {$prfx}_user
                              where id <> $uid and is_admin = 1
                             ")) {
@@ -11613,7 +11630,7 @@ abstract class ForumManager
             $existing_administrators[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -11719,10 +11736,10 @@ abstract class ForumManager
         if ($activated != $old_activated) {
             if ($old_activated == "0") {
                 $email_template = "email_activate_user{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserActivated{$anonym_appendix2}";
+                $event_code = "MsgEventUserActivated{$anonym_appendix2}"; // text("MsgEventUserActivated") text("MsgEventUserActivatedAnonym")
             } else {
                 $email_template = "email_deactivate_user{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserDeactivated{$anonym_appendix2}";
+                $event_code = "MsgEventUserDeactivated{$anonym_appendix2}"; // text("MsgEventUserDeactivated") text("MsgEventUserDeactivatedAnonym")
             }
             
             $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
@@ -11732,11 +11749,11 @@ abstract class ForumManager
 
         if ($approved != $old_approved) {
             if ($old_approved == "0") {
-                $event_code = "MsgEventUserApproved{$anonym_appendix2}";
+                $event_code = "MsgEventUserApproved{$anonym_appendix2}"; // text("MsgEventUserApproved") text("MsgEventUserApprovedAnonym")
             } else {
                 $email_template = "email_disaprove_user{$anonym_appendix}.txt";
                 $this->email_manager->send_email($settings["default_sender"], reqvar("user_email"), $email_template, $params, $lng);
-                $event_code = "MsgEventUserDisapproved{$anonym_appendix2}";
+                $event_code = "MsgEventUserDisapproved{$anonym_appendix2}"; // text("MsgEventUserDisapproved") text("MsgEventUserDisapprovedAnonym")
             }
             
             $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
@@ -11745,10 +11762,10 @@ abstract class ForumManager
         if ($privileged != $old_privileged) {
             if ($old_privileged == "0") {
                 $email_template = "email_make_privileged{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserMadePrivileged{$anonym_appendix2}";
+                $event_code = "MsgEventUserMadePrivileged{$anonym_appendix2}"; // text("MsgEventUserMadePrivileged")  text("MsgEventUserMadePrivilegedAnonym")
             } else {
                 $email_template = "email_revoke_privileged{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserRevokedPrivileged{$anonym_appendix2}";
+                $event_code = "MsgEventUserRevokedPrivileged{$anonym_appendix2}"; // text("MsgEventUserRevokedPrivileged")  text("MsgEventUserRevokedPrivilegedAnonym")
             }
             
             $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
@@ -11759,10 +11776,10 @@ abstract class ForumManager
         if ($privileged_topic_moderator != $old_privileged_topic_moderator) {
             if ($old_privileged_topic_moderator == "0") {
                 $email_template = "email_make_privileged{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserMadePrivilegedTopicModerator{$anonym_appendix2}";
+                $event_code = "MsgEventUserMadePrivilegedTopicModerator{$anonym_appendix2}"; // text("MsgEventUserMadePrivilegedTopicModerator") text("MsgEventUserMadePrivilegedTopicModeratorAnonym")
             } else {
                 $email_template = "email_revoke_privileged{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserRevokedPrivilegedTopicModerator{$anonym_appendix2}";
+                $event_code = "MsgEventUserRevokedPrivilegedTopicModerator{$anonym_appendix2}"; // text("MsgEventUserRevokedPrivilegedTopicModerator") text("MsgEventUserRevokedPrivilegedTopicModeratorAnonym")
             }
             
             $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
@@ -11773,10 +11790,10 @@ abstract class ForumManager
         if ($global_ban_allowed != $old_global_ban_allowed) {
             if ($old_global_ban_allowed == "0") {
                 $email_template = "email_allow_global_ban{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserAllowedGlobalBan{$anonym_appendix2}";
+                $event_code = "MsgEventUserAllowedGlobalBan{$anonym_appendix2}"; // text("MsgEventUserAllowedGlobalBan") text("MsgEventUserAllowedGlobalBanAnonym")
             } else {
                 $email_template = "email_disallow_global_ban{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserDisllowedGlobalBan{$anonym_appendix2}";
+                $event_code = "MsgEventUserDisllowedGlobalBan{$anonym_appendix2}"; // text("MsgEventUserDisllowedGlobalBan") text("MsgEventUserDisllowedGlobalBanAnonym")
             }
             
             $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
@@ -11787,10 +11804,10 @@ abstract class ForumManager
         if ($show_ip != $old_show_ip) {
             if ($old_show_ip == "0") {
                 $email_template = "email_allow_see_ip{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserAllowedSeeIP{$anonym_appendix2}";
+                $event_code = "MsgEventUserAllowedSeeIP{$anonym_appendix2}"; // text("MsgEventUserAllowedSeeIP") text("MsgEventUserAllowedSeeIPAnonym")
             } else {
                 $email_template = "email_disallow_see_ip{$anonym_appendix}.txt";
-                $event_code = "MsgEventUserDisallowedSeeIP{$anonym_appendix2}";
+                $event_code = "MsgEventUserDisallowedSeeIP{$anonym_appendix2}"; // text("MsgEventUserDisallowedSeeIP") text("MsgEventUserDisallowedSeeIPAnonym")
             }
             
             $this->log_user_event($uid, $this->get_user_id(), $this->get_user_name(), $event_code, $params);
@@ -11953,7 +11970,7 @@ abstract class ForumManager
         if (!empty($topics_with_no_posts_list)) {
             if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                              {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name,
-                             email, user_name, author, last_host, send_notifications
+                             email, user_name, author, last_host, send_notifications, activated, approved
                              from
                              {$prfx}_topic
                              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -11976,7 +11993,7 @@ abstract class ForumManager
                     "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                     "author_email" => $dbw->field_by_name("email"),
                     "last_host" => $dbw->field_by_name("last_host"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "action" => "delete_topic",
                     "comment" => reqvar("comment")
                 );
@@ -12154,7 +12171,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                              {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name, is_private,
-                             email, user_name, author, last_host, send_notifications, interface_language
+                             email, user_name, author, last_host, send_notifications, activated, approved, interface_language
                              from
                              {$prfx}_topic
                              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -12175,7 +12192,7 @@ abstract class ForumManager
                 "author_id" => $dbw->field_by_name("user_id"),
                 "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                 "author_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "action" => $action
@@ -12186,7 +12203,7 @@ abstract class ForumManager
         
         // get list of the subscribers
         
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_subscription
                              inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
                              where topic_id in ($topic_in_list)")) {
@@ -12198,7 +12215,7 @@ abstract class ForumManager
             $topic_notifications[$dbw->field_by_name("topic_id")]["subscribers"][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -12208,7 +12225,7 @@ abstract class ForumManager
         
         // get list of the moderators
         
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_moderator
                              inner join {$prfx}_user on ({$prfx}_topic_moderator.user_id = {$prfx}_user.id)
                              where topic_id in ($topic_in_list)")) {
@@ -12220,7 +12237,7 @@ abstract class ForumManager
             $topic_notifications[$dbw->field_by_name("topic_id")]["moderators"][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -12230,7 +12247,7 @@ abstract class ForumManager
         
         // get list of the participants
         
-        if (!$dbw->execute_query("select participant_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select participant_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_private_topics
                              inner join {$prfx}_user on ({$prfx}_private_topics.participant_id = {$prfx}_user.id)
                              where topic_id in ($topic_in_list)")) {
@@ -12242,7 +12259,7 @@ abstract class ForumManager
             $topic_notifications[$dbw->field_by_name("topic_id")]["participants"][$dbw->field_by_name("participant_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -12594,7 +12611,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                              {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name, is_private,
-                             email, user_name, author, last_host, send_notifications, interface_language
+                             email, user_name, author, last_host, send_notifications, activated, approved, interface_language
                              from
                              {$prfx}_topic
                              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -12614,7 +12631,7 @@ abstract class ForumManager
                 "author_id" => $dbw->field_by_name("user_id"),
                 "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                 "author_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "action" => $action,
@@ -12760,7 +12777,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                              {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name, is_private,
-                             email, user_name, author, last_host, send_notifications, interface_language
+                             email, user_name, author, last_host, send_notifications, activated, approved, interface_language
                              from
                              {$prfx}_topic
                              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -12785,7 +12802,7 @@ abstract class ForumManager
                 "author_id" => $dbw->field_by_name("user_id"),
                 "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                 "author_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "action" => $single_action,
@@ -13627,7 +13644,7 @@ abstract class ForumManager
         
         // get moderators
         
-        if (!$dbw->execute_query("select user_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_forum_moderator
                              inner join {$prfx}_user on ({$prfx}_forum_moderator.user_id = {$prfx}_user.id)
                              where forum_id in (select forum_id from {$prfx}_topic where id = $tid)
@@ -13642,7 +13659,7 @@ abstract class ForumManager
             $moderators[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -13652,7 +13669,7 @@ abstract class ForumManager
         
         // forum has no moderators, send to the administrators
         if (empty($moderators)) {
-            if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+            if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                                from {$prfx}_user
                                where is_admin = 1
                                ")) {
@@ -13666,7 +13683,7 @@ abstract class ForumManager
                 $moderators[$dbw->field_by_name("id")] = array(
                     "name" => $dbw->field_by_name("user_name"),
                     "email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language")
                 );
@@ -13838,7 +13855,7 @@ abstract class ForumManager
             // user subscribed to own messages
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
@@ -13881,7 +13898,7 @@ abstract class ForumManager
                 $own_post_citation_subscribers[$dbw->field_by_name("user_id")] = array(
                     "name" => $dbw->field_by_name("user_name"),
                     "email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -13893,7 +13910,7 @@ abstract class ForumManager
             // user subscribed to a message
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post_subscription.user_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
@@ -13933,7 +13950,7 @@ abstract class ForumManager
                 $other_post_citation_subscribers[$dbw->field_by_name("user_id")] = array(
                     "name" => $dbw->field_by_name("user_name"),
                     "email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -13954,7 +13971,7 @@ abstract class ForumManager
         $word_subscribers = array();
         
         if (!$dbw->execute_query("select {$prfx}_user.id user_id,
-                                      email, user_name, last_host, send_notifications, interface_language, words_to_notify,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language, words_to_notify,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
@@ -13996,7 +14013,7 @@ abstract class ForumManager
             $word_subscribers[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist"),
@@ -14028,7 +14045,7 @@ abstract class ForumManager
                 $in_list = trim($in_list, ", ");
                 
                 if (!$dbw->execute_query("select {$prfx}_user.id as user_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       {$prfx}_ignored_topics.topic_id topic_ignored, ignore_guests_whitelist
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.user_name in ($in_list) and {$prfx}_user.turnoff_personal_appeals = 0)
@@ -14060,7 +14077,7 @@ abstract class ForumManager
                     $appealed_users[$dbw->field_by_name("user_id")] = array(
                         "name" => $dbw->field_by_name("user_name"),
                         "email" => $dbw->field_by_name("email"),
-                        "send_notifications" => $dbw->field_by_name("send_notifications"),
+                        "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                         "last_host" => $dbw->field_by_name("last_host"),
                         "interface_language" => $dbw->field_by_name("interface_language"),
                         "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -14456,7 +14473,7 @@ abstract class ForumManager
         if (!$dbw->execute_query("select {$prfx}_post.id, forum_id, topic_id, {$prfx}_topic.name topic_name, is_private,
                              {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author,
                              {$prfx}_post.read_marker, {$prfx}_post.pinned, is_private, {$prfx}_post.creation_date, text_content,
-                             last_host, time_zone, send_notifications, interface_language, publish_delay, is_system
+                             last_host, time_zone, send_notifications, activated, approved, interface_language, publish_delay, is_system
                              from
                              {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -14491,7 +14508,7 @@ abstract class ForumManager
                 "author_email" => $dbw->field_by_name("email"),
                 "author_time_zone" => $dbw->field_by_name("time_zone") ? $dbw->field_by_name("time_zone") : TIME_ZONE,
                 "last_host" => $dbw->field_by_name("last_host"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "post_date" => xstrtotime($dbw->field_by_name("creation_date")),
                 "short_message" => $dbw->field_by_name("text_content"),
@@ -14628,7 +14645,7 @@ abstract class ForumManager
         if (!empty($topics_with_no_posts_list)) {
             if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                                {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name,
-                               is_private, publish_delay, email, user_name, author, last_host, send_notifications, interface_language
+                               is_private, publish_delay, email, user_name, author, last_host, send_notifications, activated, approved, interface_language
                                from
                                {$prfx}_topic
                                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -14650,7 +14667,7 @@ abstract class ForumManager
                     "author_id" => $dbw->field_by_name("user_id"),
                     "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                     "author_email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "action" => "delete_topic",
@@ -14839,7 +14856,7 @@ abstract class ForumManager
         
         $event_data = array();
         
-        if (!$dbw->execute_query("select id, user_name, email, last_host, send_notifications, interface_language from {$prfx}_user where id = $uid")) {
+        if (!$dbw->execute_query("select id, user_name, email, last_host, send_notifications, activated, approved, interface_language from {$prfx}_user where id = $uid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -14850,7 +14867,7 @@ abstract class ForumManager
             $event_data["author_id"] = $dbw->field_by_name("id");
             $event_data["author_name"] = $dbw->field_by_name("user_name");
             $event_data["author_email"] = $dbw->field_by_name("email");
-            $event_data["send_notifications"] = $dbw->field_by_name("send_notifications");
+            $event_data["send_notifications"] = $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved");
             $event_data["last_host"] = $dbw->field_by_name("last_host");
             $event_data["interface_language"] = $dbw->field_by_name("interface_language");
         }
@@ -14940,7 +14957,7 @@ abstract class ForumManager
         
         $affected_users_in_list = implode(", ", array_keys($affected_users));
         $query = "select
-                {$prfx}_user.id, email, user_name, donot_notify_on_rates, last_host, send_notifications, interface_language
+                {$prfx}_user.id, email, user_name, donot_notify_on_rates, last_host, send_notifications, activated, approved, interface_language
                 from {$prfx}_user
                 where id in ($affected_users_in_list)
                 ";
@@ -14956,7 +14973,7 @@ abstract class ForumManager
             
             $affected_users[$author_id]["user_name"] = $dbw->field_by_name("user_name");
             $affected_users[$author_id]["user_email"] = $dbw->field_by_name("email");
-            $affected_users[$author_id]["send_notifications"] = $dbw->field_by_name("send_notifications");
+            $affected_users[$author_id]["send_notifications"] = $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved");
             $affected_users[$author_id]["last_host"] = $dbw->field_by_name("last_host");
             $affected_users[$author_id]["donot_notify_on_rates"] = $dbw->field_by_name("donot_notify_on_rates");
             $affected_users[$author_id]["interface_language"] = $dbw->field_by_name("interface_language");
@@ -15103,7 +15120,7 @@ abstract class ForumManager
         }
         
         if (!$dbw->execute_query("select forum_id, topic_id,
-                             {$prfx}_post.user_id, user_name, email, {$prfx}_post.author, last_host, send_notifications, interface_language,
+                             {$prfx}_post.user_id, user_name, email, {$prfx}_post.author, last_host, send_notifications, activated, approved, interface_language,
                              {$prfx}_post.read_marker, {$prfx}_topic.name topic_name, is_private,
                              {$prfx}_forum.name forum_name
                              from
@@ -15176,7 +15193,7 @@ abstract class ForumManager
                         "author_id" => $dbw->field_by_name("user_id"),
                         "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                         "author_email" => $dbw->field_by_name("email"),
-                        "send_notifications" => $dbw->field_by_name("send_notifications"),
+                        "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                         "last_host" => $dbw->field_by_name("last_host"),
                         "interface_language" => $dbw->field_by_name("interface_language"),
                         "action" => $action,
@@ -15198,7 +15215,7 @@ abstract class ForumManager
                         "author_id" => $dbw->field_by_name("user_id"),
                         "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                         "author_email" => $dbw->field_by_name("email"),
-                        "send_notifications" => $dbw->field_by_name("send_notifications"),
+                        "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                         "last_host" => $dbw->field_by_name("last_host"),
                         "interface_language" => $dbw->field_by_name("interface_language"),
                         "action" => $action,
@@ -15219,7 +15236,7 @@ abstract class ForumManager
                         "author_email" => $dbw->field_by_name("email"),
                         "forum_id" => $dbw->field_by_name("forum_id"),
                         "forum_name" => $dbw->field_by_name("forum_name"),
-                        "send_notifications" => $dbw->field_by_name("send_notifications"),
+                        "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                         "last_host" => $dbw->field_by_name("last_host"),
                         "interface_language" => $dbw->field_by_name("interface_language"),
                         "action" => $action,
@@ -15233,7 +15250,7 @@ abstract class ForumManager
                         "author_id" => $dbw->field_by_name("user_id"),
                         "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                         "author_email" => $dbw->field_by_name("email"),
-                        "send_notifications" => $dbw->field_by_name("send_notifications"),
+                        "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                         "last_host" => $dbw->field_by_name("last_host"),
                         "interface_language" => $dbw->field_by_name("interface_language"),
                         "action" => $action,
@@ -15287,11 +15304,11 @@ abstract class ForumManager
         if ($action == "restore_posts_in_topic_from") {
             $event_data["action"] = "bulk_restore_posts";
           
-            if (!$dbw->execute_query("select {$prfx}_user.id, email, user_name, last_host, send_notifications, interface_language, is_admin, count(*) cnt, min({$prfx}_post.id) first_post
+            if (!$dbw->execute_query("select {$prfx}_user.id, email, user_name, last_host, send_notifications, activated, approved, interface_language, is_admin, count(*) cnt, min({$prfx}_post.id) first_post
                                  from {$prfx}_post
                                  inner join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
                                  $posts_where and {$prfx}_post.deleted = 1
-                                 group by {$prfx}_user.id, email, user_name, last_host, send_notifications, interface_language, is_admin
+                                 group by {$prfx}_user.id, email, user_name, last_host, send_notifications, activated, approved, interface_language, is_admin
                                  ")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                 return false;
@@ -15307,7 +15324,7 @@ abstract class ForumManager
                 $affected_users[$dbw->field_by_name("id")] = array(
                     "user_name" => $dbw->field_by_name("user_name"),
                     "user_email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "post_count" => $dbw->field_by_name("cnt"),
@@ -15433,7 +15450,7 @@ abstract class ForumManager
         if (!empty($topics_with_no_posts_list)) {
             if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                                {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name, is_private,
-                               email, user_name, author, last_host, send_notifications
+                               email, user_name, author, last_host, send_notifications, activated, approved
                                from
                                {$prfx}_topic
                                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -15454,7 +15471,7 @@ abstract class ForumManager
                     "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                     "author_email" => $dbw->field_by_name("email"),
                     "last_host" => $dbw->field_by_name("last_host"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "action" => "delete_topic",
                     "comment" => reqvar("comment")
                 );
@@ -15932,7 +15949,7 @@ abstract class ForumManager
         
         $existing_moderators = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language, last_host
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language, last_host
                              from {$prfx}_user
                              where
                              id in (select user_id from {$prfx}_topic_moderator where topic_id = $tid) 
@@ -15946,7 +15963,7 @@ abstract class ForumManager
             $existing_moderators[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -16916,7 +16933,7 @@ abstract class ForumManager
         if (!$dbw->execute_query("select {$prfx}_post.id, forum_id, topic_id, {$prfx}_topic.name topic_name,
                              {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author,
                              is_private, {$prfx}_post.creation_date, text_content, {$prfx}_post.read_marker,
-                             {$prfx}_post.pinned, last_host, time_zone, send_notifications, interface_language
+                             {$prfx}_post.pinned, last_host, time_zone, send_notifications, activated, approved, interface_language
                              from
                              {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -16950,7 +16967,7 @@ abstract class ForumManager
                 "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                 "author_email" => $dbw->field_by_name("email"),
                 "author_time_zone" => $dbw->field_by_name("time_zone") ? $dbw->field_by_name("time_zone") : TIME_ZONE,
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "post_date" => xstrtotime($dbw->field_by_name("creation_date")),
@@ -17183,7 +17200,7 @@ abstract class ForumManager
         }
         
         if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.creation_date, forum_id, topic_id, {$prfx}_topic.name topic_name,
-                             {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications,
+                             {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications, activated, approved,
                              donot_notify_on_rates, time_zone, interface_language, text_content,
                              {$prfx}_ignored_users.user_id rater_ignored, is_private
                              from
@@ -17232,7 +17249,7 @@ abstract class ForumManager
             $forum_id_for_url = $dbw->field_by_name("is_private") ? "private" : $forum_id;
             $forum_name = $dbw->field_by_name("is_private") ? text("PrivateTopics") : $dbw->field_by_name("forum_name");
             
-            $send_notifications = $dbw->field_by_name("send_notifications");
+            $send_notifications = $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved");
             $last_host = $dbw->field_by_name("last_host");
             $donot_notify_on_rates = $dbw->field_by_name("donot_notify_on_rates");
             
@@ -17558,7 +17575,7 @@ abstract class ForumManager
         $dbw->free_result();
         
         if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.creation_date, forum_id, topic_id, {$prfx}_topic.name topic_name,
-                             {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications,
+                             {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications, activated, approved,
                              donot_notify_on_rates, time_zone, interface_language, text_content,
                              {$prfx}_ignored_users.user_id rater_ignored, is_private
                              from
@@ -17605,7 +17622,7 @@ abstract class ForumManager
             $forum_id_for_url = $dbw->field_by_name("is_private") ? "private" : $forum_id;
             $forum_name = $dbw->field_by_name("is_private") ? text("PrivateTopics") : $dbw->field_by_name("forum_name");
             
-            $send_notifications = $dbw->field_by_name("send_notifications");
+            $send_notifications = $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved");
             $last_host = $dbw->field_by_name("last_host");
             $donot_notify_on_rates = $dbw->field_by_name("donot_notify_on_rates");
             $lng = $dbw->field_by_name("interface_language");
@@ -17909,7 +17926,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                              {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name,
-                             email, user_name, author, last_host, send_notifications, interface_language
+                             email, user_name, author, last_host, send_notifications, activated, approved, interface_language
                              from
                              {$prfx}_topic
                              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -17932,7 +17949,7 @@ abstract class ForumManager
                 "author_id" => $dbw->field_by_name("user_id"),
                 "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                 "author_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "action" => "move_topic",
@@ -17958,7 +17975,7 @@ abstract class ForumManager
         
         $topic_subscribers = array();
         
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_subscription
                              inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
                              where topic_id in ($in_list)")) {
@@ -17970,7 +17987,7 @@ abstract class ForumManager
             $topic_subscribers[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -17982,7 +17999,7 @@ abstract class ForumManager
         
         $moderators = array();
         
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_moderator
                              inner join {$prfx}_user on ({$prfx}_topic_moderator.user_id = {$prfx}_user.id)
                              where topic_id in ($in_list)")) {
@@ -17994,7 +18011,7 @@ abstract class ForumManager
             $moderators[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -18322,7 +18339,7 @@ abstract class ForumManager
 
             // get list of the subscribers of the target topic            
             
-            if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+            if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                                  from {$prfx}_topic_subscription
                                  inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
                                  where topic_id = $target_topic")) {
@@ -18334,7 +18351,7 @@ abstract class ForumManager
                 $target_subscribers[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
                     "user_name" => $dbw->field_by_name("user_name"),
                     "user_email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language")
                 );
@@ -18377,7 +18394,7 @@ abstract class ForumManager
         
         $topic_subscribers = array();
         
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_subscription
                              inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
                              where topic_id in ($in_list)")) {
@@ -18389,7 +18406,7 @@ abstract class ForumManager
             $topic_subscribers[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -18401,7 +18418,7 @@ abstract class ForumManager
         
         $moderators = array();
         
-        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_moderator
                              inner join {$prfx}_user on ({$prfx}_topic_moderator.user_id = {$prfx}_user.id)
                              where topic_id in ($in_list)")) {
@@ -18413,7 +18430,7 @@ abstract class ForumManager
             $moderators[$dbw->field_by_name("topic_id")][$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -18426,7 +18443,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                              {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name, is_private,
-                             email, user_name, author, last_host, send_notifications, interface_language
+                             email, user_name, author, last_host, send_notifications, activated, approved, interface_language
                              from
                              {$prfx}_topic
                              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -18459,7 +18476,7 @@ abstract class ForumManager
                 "author_id" => $dbw->field_by_name("user_id"),
                 "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                 "author_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "action" => "merge_topic"
@@ -19281,7 +19298,7 @@ abstract class ForumManager
         
         $target_subscribers = array();
         
-        if (!$dbw->execute_query("select user_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_subscription
                              inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
                              where topic_id = $target_topic")) {
@@ -19294,7 +19311,7 @@ abstract class ForumManager
             $target_subscribers[$dbw->field_by_name("user_id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -19304,7 +19321,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_post.id, forum_id, topic_id, {$prfx}_topic.name topic_name, is_private,
                              {$prfx}_topic.closed topic_closed, {$prfx}_forum.closed forum_closed, {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author,
-                             {$prfx}_post.creation_date, text_content, last_host, send_notifications, interface_language, is_system
+                             {$prfx}_post.creation_date, text_content, last_host, send_notifications, activated, approved, interface_language, is_system
                              from
                              {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -19394,7 +19411,7 @@ abstract class ForumManager
                         "author_id" => $author_id,
                         "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                         "author_email" => $dbw->field_by_name("email"),
-                        "send_notifications" => $dbw->field_by_name("send_notifications"),
+                        "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                         "last_host" => $dbw->field_by_name("last_host"),
                         "interface_language" => $dbw->field_by_name("interface_language"),
                         "post_date" => adjust_and_format_timezone(xstrtotime($dbw->field_by_name("creation_date")), text("DateTimeFormat")),
@@ -19498,7 +19515,7 @@ abstract class ForumManager
         if (!empty($topics_with_no_posts_list)) {
             if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                                {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name,
-                               email, user_name, author, last_host, send_notifications
+                               email, user_name, author, last_host, send_notifications, activated, approved
                                from
                                {$prfx}_topic
                                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -19519,7 +19536,7 @@ abstract class ForumManager
                     "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                     "author_email" => $dbw->field_by_name("email"),
                     "last_host" => $dbw->field_by_name("last_host"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "action" => "delete_topic"
                 );
             }
@@ -20631,7 +20648,7 @@ abstract class ForumManager
             $mail_job["event_code"] = "MsgEventProfileHidden{$anonym_appendix2}";
             
             $mail_job["receiver"] = $user_data["user_email"];
-            $mail_job["send_notifications"] = $user_data["send_notifications"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
             $mail_job["last_host"] = $user_data["last_host"];
             $mail_job["interface_language"] = $user_data["interface_language"];
             $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -20672,7 +20689,7 @@ abstract class ForumManager
             $mail_job["event_code"] = "MsgEventProfileOpened{$anonym_appendix2}";
             
             $mail_job["receiver"] = $user_data["user_email"];
-            $mail_job["send_notifications"] = $user_data["send_notifications"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
             $mail_job["last_host"] = $user_data["last_host"];
             $mail_job["interface_language"] = $user_data["interface_language"];
             $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -20719,7 +20736,7 @@ abstract class ForumManager
             $mail_job["event_code"] = "MsgEventRatingDisallowed{$anonym_appendix2}";
             
             $mail_job["receiver"] = $user_data["user_email"];
-            $mail_job["send_notifications"] = $user_data["send_notifications"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
             $mail_job["last_host"] = $user_data["last_host"];
             $mail_job["interface_language"] = $user_data["interface_language"];
             $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -20760,7 +20777,7 @@ abstract class ForumManager
             $mail_job["event_code"] = "MsgEventRatingAllowed{$anonym_appendix2}";
             
             $mail_job["receiver"] = $user_data["user_email"];
-            $mail_job["send_notifications"] = $user_data["send_notifications"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
             $mail_job["last_host"] = $user_data["last_host"];
             $mail_job["interface_language"] = $user_data["interface_language"];
             $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -20773,6 +20790,182 @@ abstract class ForumManager
             $mail_jobs[] = $mail_job;
             
             $messages[text("MsgRatingAllowed")] = text("MsgRatingAllowed");
+        }
+        //---------------------------------------------------------------
+        if (!reqvar_empty("disallow_attachments")) {
+            if (!empty($user_data["moderator"]) || !empty($user_data["is_admin"])) {
+                MessageHandler::setError(text("ErrModeratorBlockNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$this->global_ban_allowed()) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$dbw->execute_query("update {$prfx}_user set attachments_blocked = 1 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $event_data["action"] = "disallow_attachments";
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $mail_job = array();
+            
+            $mail_job["email_template"] = "email_attachments_disallowed{$anonym_appendix}.txt";
+            $mail_job["event_code"] = "MsgEventAttachmentsDisallowed{$anonym_appendix2}"; // text("MsgEventAttachmentsDisallowed") text("MsgEventAttachmentsDisallowedAnonym")
+            
+            $mail_job["receiver"] = $user_data["user_email"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
+            $mail_job["last_host"] = $user_data["last_host"];
+            $mail_job["interface_language"] = $user_data["interface_language"];
+            $mail_job["author_time_zone"] = $user_data["time_zone"];
+            
+            $mail_job["params"]["{user_name}"] = $user_data["user_name"];
+            $mail_job["params"]["{moderator_name}"] = $this->get_user_name();
+            $mail_job["params"]["{site_url}"] = get_host_address($user_data["last_host"]) . get_url_path();
+            $mail_job["params"]["{comment}"] = $comment;
+            
+            $mail_jobs[] = $mail_job;
+            
+            $messages[text("MsgAttachmentsDisallowed")] = text("MsgAttachmentsDisallowed");
+        }
+        //---------------------------------------------------------------
+        if (!reqvar_empty("allow_attachments")) {
+            if (!$this->global_ban_allowed()) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$dbw->execute_query("update {$prfx}_user set attachments_blocked = 0 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $event_data["action"] = "allow_attachments";
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $mail_job = array();
+            
+            $mail_job["email_template"] = "email_attachments_allowed{$anonym_appendix}.txt";
+            $mail_job["event_code"] = "MsgEventAttachmentsAllowed{$anonym_appendix2}";  // text("MsgEventAttachmentsAllowed") text("MsgEventAttachmentsAllowedAnonym")
+            
+            $mail_job["receiver"] = $user_data["user_email"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
+            $mail_job["last_host"] = $user_data["last_host"];
+            $mail_job["interface_language"] = $user_data["interface_language"];
+            $mail_job["author_time_zone"] = $user_data["time_zone"];
+            
+            $mail_job["params"]["{user_name}"] = $user_data["user_name"];
+            $mail_job["params"]["{moderator_name}"] = $this->get_user_name();
+            $mail_job["params"]["{site_url}"] = get_host_address($user_data["last_host"]) . get_url_path();
+            $mail_job["params"]["{comment}"] = $comment;
+            
+            $mail_jobs[] = $mail_job;
+            
+            $messages[text("MsgAttachmentsAllowed")] = text("MsgAttachmentsAllowed");
+        }
+        //---------------------------------------------------------------
+        if (!reqvar_empty("disallow_video_audio")) {
+            if (!empty($user_data["moderator"]) || !empty($user_data["is_admin"])) {
+                MessageHandler::setError(text("ErrModeratorBlockNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$this->global_ban_allowed()) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$dbw->execute_query("update {$prfx}_user set video_audio_blocked = 1 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $event_data["action"] = "disallow_video_audio";
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $mail_job = array();
+            
+            $mail_job["email_template"] = "email_video_audio_disallowed{$anonym_appendix}.txt";
+            $mail_job["event_code"] = "MsgEventVideoAudioDisallowed{$anonym_appendix2}"; // text("MsgEventVideoAudioDisallowed")  text("MsgEventVideoAudioDisallowedAnonym")
+            
+            $mail_job["receiver"] = $user_data["user_email"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
+            $mail_job["last_host"] = $user_data["last_host"];
+            $mail_job["interface_language"] = $user_data["interface_language"];
+            $mail_job["author_time_zone"] = $user_data["time_zone"];
+            
+            $mail_job["params"]["{user_name}"] = $user_data["user_name"];
+            $mail_job["params"]["{moderator_name}"] = $this->get_user_name();
+            $mail_job["params"]["{site_url}"] = get_host_address($user_data["last_host"]) . get_url_path();
+            $mail_job["params"]["{comment}"] = $comment;
+            
+            $mail_jobs[] = $mail_job;
+            
+            $messages[text("MsgVideoAudioDisallowed")] = text("MsgVideoAudioDisallowed"); // text("MsgEventVideoAudioAllowed")  text("MsgEventVideoAudioAllowedAnonym")
+        }
+        //---------------------------------------------------------------
+        if (!reqvar_empty("allow_video_audio")) {
+            if (!$this->global_ban_allowed()) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            if (!$dbw->execute_query("update {$prfx}_user set video_audio_blocked = 0 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $event_data["action"] = "allow_video_audio";
+            
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+            
+            $mail_job = array();
+            
+            $mail_job["email_template"] = "email_video_audio_allowed{$anonym_appendix}.txt";
+            $mail_job["event_code"] = "MsgEventVideoAudioAllowed{$anonym_appendix2}";
+            
+            $mail_job["receiver"] = $user_data["user_email"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
+            $mail_job["last_host"] = $user_data["last_host"];
+            $mail_job["interface_language"] = $user_data["interface_language"];
+            $mail_job["author_time_zone"] = $user_data["time_zone"];
+            
+            $mail_job["params"]["{user_name}"] = $user_data["user_name"];
+            $mail_job["params"]["{moderator_name}"] = $this->get_user_name();
+            $mail_job["params"]["{site_url}"] = get_host_address($user_data["last_host"]) . get_url_path();
+            $mail_job["params"]["{comment}"] = $comment;
+            
+            $mail_jobs[] = $mail_job;
+            
+            $messages[text("MsgVideoAudioAllowed")] = text("MsgVideoAudioAllowed");
         }
         //---------------------------------------------------------------
         if (!reqvar_empty("block_user")) {
@@ -20810,7 +21003,7 @@ abstract class ForumManager
             $mail_job = array();
             
             $mail_job["receiver"] = $user_data["user_email"];
-            $mail_job["send_notifications"] = $user_data["send_notifications"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
             $mail_job["last_host"] = $user_data["last_host"];
             $mail_job["interface_language"] = $user_data["interface_language"];
             $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -21019,7 +21212,7 @@ abstract class ForumManager
             $mail_job["event_code"] = "MsgEventUserUnblocked{$anonym_appendix2}";
             
             $mail_job["receiver"] = $user_data["user_email"];
-            $mail_job["send_notifications"] = $user_data["send_notifications"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
             $mail_job["last_host"] = $user_data["last_host"];
             $mail_job["interface_language"] = $user_data["interface_language"];
             $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -21048,7 +21241,7 @@ abstract class ForumManager
                 $mail_job["event_code"] = "MsgEventUserForumUnblocked{$anonym_appendix2}";
                 
                 $mail_job["receiver"] = $user_data["user_email"];
-                $mail_job["send_notifications"] = $user_data["send_notifications"];
+                $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
                 $mail_job["last_host"] = $user_data["last_host"];
                 $mail_job["interface_language"] = $user_data["interface_language"];
                 $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -21138,7 +21331,7 @@ abstract class ForumManager
             
             $mail_job = array();
             $mail_job["receiver"] = $user_data["user_email"];
-            $mail_job["send_notifications"] = $user_data["send_notifications"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
             $mail_job["last_host"] = $user_data["last_host"];
             $mail_job["interface_language"] = $user_data["interface_language"];
             $mail_job["author_time_zone"] = $user_data["time_zone"];
@@ -22391,6 +22584,18 @@ abstract class ForumManager
             return false;
         }
         
+        if (!empty($_SESSION["attachments_blocked"]) && !empty($has_attachment)) {
+            MessageHandler::setWarning(text("ErrAttachmentsBlocked"));
+            $dbw->rollback_transaction();
+            return false;
+        }
+        
+        if (!empty($_SESSION["video_audio_blocked"]) && (!empty($has_video) || !empty($has_audio))) {
+            MessageHandler::setWarning(text("ErrVideoAudioBlocked"));
+            $dbw->rollback_transaction();
+            return false;
+        }
+
         $is_comment = 0;
         if ($profiled_topic && reqvar_empty("is_thematic")) {
             $is_comment = 1;
@@ -22726,7 +22931,7 @@ abstract class ForumManager
             $dbw->free_result();
             
             if (!$dbw->execute_query("select {$prfx}_user.id as user_id, {$prfx}_post.topic_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       {$prfx}_ignored_topics.topic_id topic_ignored, ignore_guests_whitelist
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.user_name in ($in_list) and {$prfx}_user.turnoff_personal_appeals = 0)
@@ -22761,7 +22966,7 @@ abstract class ForumManager
                 $appealed_users[$dbw->field_by_name("user_id")] = array(
                     "name" => $dbw->field_by_name("user_name"),
                     "email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -22992,7 +23197,7 @@ abstract class ForumManager
             // user subscribed to own messages
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
@@ -23035,7 +23240,7 @@ abstract class ForumManager
                     "citated_post" => $dbw->field_by_name("id"),
                     "citated_topic" => $dbw->field_by_name("citated_topic_id"),
                     "citated_forum" => $dbw->field_by_name("citated_forum_id"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -23047,7 +23252,7 @@ abstract class ForumManager
             // user subscribed to a message
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post_subscription.user_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
@@ -23087,7 +23292,7 @@ abstract class ForumManager
                     "citated_post" => $dbw->field_by_name("id"),
                     "citated_topic" => $dbw->field_by_name("citated_topic_id"),
                     "citated_forum" => $dbw->field_by_name("citated_forum_id"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -23108,7 +23313,7 @@ abstract class ForumManager
         $word_subscribers = array();
         
         if (!$dbw->execute_query("select {$prfx}_user.id user_id, {$prfx}_post.topic_id,
-                                      email, user_name, last_host, send_notifications, interface_language, words_to_notify,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language, words_to_notify,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
@@ -23152,7 +23357,7 @@ abstract class ForumManager
             $word_subscribers[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist"),
@@ -24524,6 +24729,18 @@ abstract class ForumManager
             }
         }
         
+        if (!empty($_SESSION["attachments_blocked"]) && !empty($has_attachment)) {
+            MessageHandler::setWarning(text("ErrAttachmentsBlocked"));
+            $dbw->rollback_transaction();
+            return false;
+        }
+        
+        if (!empty($_SESSION["video_audio_blocked"]) && (!empty($has_video) || !empty($has_audio))) {
+            MessageHandler::setWarning(text("ErrVideoAudioBlocked"));
+            $dbw->rollback_transaction();
+            return false;
+        }
+
         $html_message = trim($html_message);
         
         $html_message_check = trim(strip_tags($html_message, "<img><audio><video><iframe>"));
@@ -24715,7 +24932,7 @@ abstract class ForumManager
             $dbw->free_result();
             
             if (!$dbw->execute_query("select {$prfx}_user.id as user_id, {$prfx}_post.topic_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       {$prfx}_ignored_topics.topic_id topic_ignored, ignore_guests_whitelist
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.user_name in ($in_list) and {$prfx}_user.turnoff_personal_appeals = 0)
@@ -24750,7 +24967,7 @@ abstract class ForumManager
                 $appealed_users[$dbw->field_by_name("user_id")] = array(
                     "name" => $dbw->field_by_name("user_name"),
                     "email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -24801,7 +25018,7 @@ abstract class ForumManager
             
             if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                                  {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name, is_private,
-                                 email, user_name, author, last_host, send_notifications, interface_language
+                                 email, user_name, author, last_host, send_notifications, activated, approved, interface_language
                                  from
                                  {$prfx}_topic
                                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -24822,7 +25039,7 @@ abstract class ForumManager
                     "author_id" => $dbw->field_by_name("user_id"),
                     "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                     "author_email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "action" => "disallow_guests"
@@ -24926,7 +25143,7 @@ abstract class ForumManager
         // if a user ignores the current user or guests, do not notify him
         
         if (!$dbw->execute_query("select {$prfx}_topic_subscription.user_id, 
-                             email, user_name, last_host, send_notifications, interface_language,
+                             email, user_name, last_host, send_notifications, activated, approved, interface_language,
                              ignore_guests_whitelist, {$prfx}_ignored_topics.topic_id topic_ignored
                              from {$prfx}_topic_subscription
                              inner join {$prfx}_user on ({$prfx}_topic_subscription.user_id = {$prfx}_user.id)
@@ -24953,7 +25170,7 @@ abstract class ForumManager
             $topic_subscribers[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -24976,7 +25193,7 @@ abstract class ForumManager
             // user subscribed to own messages
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id, 
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
@@ -25025,7 +25242,7 @@ abstract class ForumManager
                     "citated_post" => $dbw->field_by_name("id"),
                     "citated_topic" => $dbw->field_by_name("citated_topic_id"),
                     "citated_forum" => $dbw->field_by_name("citated_forum_id"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -25037,7 +25254,7 @@ abstract class ForumManager
             // user subscribed to a message
             
             if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post_subscription.user_id,
-                                      email, user_name, last_host, send_notifications, interface_language,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
                                       from {$prfx}_post
@@ -25078,7 +25295,7 @@ abstract class ForumManager
                     "citated_post" => $dbw->field_by_name("id"),
                     "citated_topic" => $dbw->field_by_name("citated_topic_id"),
                     "citated_forum" => $dbw->field_by_name("citated_forum_id"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language"),
                     "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist")
@@ -25099,7 +25316,7 @@ abstract class ForumManager
         $word_subscribers = array();
         
         if (!$dbw->execute_query("select {$prfx}_user.id user_id, {$prfx}_post.topic_id,
-                                      email, user_name, last_host, send_notifications, interface_language, words_to_notify,
+                                      email, user_name, last_host, send_notifications, activated, approved, interface_language, words_to_notify,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
                                       inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
@@ -25143,7 +25360,7 @@ abstract class ForumManager
             $word_subscribers[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "ignores_all_guests" => $dbw->field_by_name("ignore_guests_whitelist"),
@@ -25686,7 +25903,7 @@ abstract class ForumManager
         
         // get forum moderators
         
-        if (!$dbw->execute_query("select user_id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select user_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_forum_moderator
                              inner join {$prfx}_user on ({$prfx}_forum_moderator.user_id = {$prfx}_user.id)
                              where forum_id in (select forum_id from {$prfx}_topic where id in (select topic_id from {$prfx}_post where id = $pid))
@@ -25706,7 +25923,7 @@ abstract class ForumManager
             $moderators[$dbw->field_by_name("user_id")] = array(
                 "name" => $dbw->field_by_name("user_name"),
                 "email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -25716,7 +25933,7 @@ abstract class ForumManager
         
         // forum has no moderators, send to the administrators
         if (empty($moderators)) {
-            if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+            if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                                from {$prfx}_user
                                where is_admin = 1
                                ")) {
@@ -25730,7 +25947,7 @@ abstract class ForumManager
                 $moderators[$dbw->field_by_name("id")] = array(
                     "name" => $dbw->field_by_name("user_name"),
                     "email" => $dbw->field_by_name("email"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "last_host" => $dbw->field_by_name("last_host"),
                     "interface_language" => $dbw->field_by_name("interface_language")
                 );
@@ -25958,7 +26175,7 @@ abstract class ForumManager
         
         if (!$dbw->execute_query("select {$prfx}_post.id, topic_id, forum_id,
                              {$prfx}_post.read_marker, {$prfx}_post.user_id, {$prfx}_topic.name topic_name, is_private, text_content,
-                             {$prfx}_forum.name forum_name, {$prfx}_user.user_name, email, {$prfx}_post.author, last_host, send_notifications, interface_language,
+                             {$prfx}_forum.name forum_name, {$prfx}_user.user_name, email, {$prfx}_post.author, last_host, send_notifications, activated, approved, interface_language,
                              is_system
                              from {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -25981,7 +26198,7 @@ abstract class ForumManager
                 "forum_name" => $dbw->field_by_name("forum_name"),
                 "author_id" => $dbw->field_by_name("user_id"),
                 "author_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
@@ -27178,7 +27395,7 @@ abstract class ForumManager
         
         $participants = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_user
                              where id <> $uid and
                              id in (select participant_id from {$prfx}_private_topics where topic_id = $tid)
@@ -27191,7 +27408,7 @@ abstract class ForumManager
             $participants[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -27309,7 +27526,7 @@ abstract class ForumManager
         
         $new_members = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_user
                              where id in ($in_list) and id <> $uid and
                              id not in (select participant_id from {$prfx}_private_topics where topic_id = $tid union select -1 from {$prfx}_dual)
@@ -27322,7 +27539,7 @@ abstract class ForumManager
             $new_members[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -27375,7 +27592,7 @@ abstract class ForumManager
         
         $removed_members = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_user
                              where id not in ($in_list) and id <> $uid and
                              id in (select participant_id from {$prfx}_private_topics where topic_id = $tid union select -1 from {$prfx}_dual)
@@ -27388,7 +27605,7 @@ abstract class ForumManager
             $removed_members[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -27468,7 +27685,7 @@ abstract class ForumManager
         
         $participants = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_user
                              where id not in ($added_list) and id <> $uid and
                              id in (select participant_id from {$prfx}_private_topics where topic_id = $tid)
@@ -27481,7 +27698,7 @@ abstract class ForumManager
             $participants[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -27738,7 +27955,7 @@ abstract class ForumManager
         
         $new_blocked_members = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_user
                              where id in ($in_list) and id <> $uid and
                              id not in (select user_id from {$prfx}_topic_blocked where topic_id = $tid union select -1 from {$prfx}_dual)
@@ -27751,7 +27968,7 @@ abstract class ForumManager
             $new_blocked_members[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -27763,7 +27980,7 @@ abstract class ForumManager
         
         $unblocked_members = array();
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_user
                              where id not in ($in_list) and id <> $uid and
                              id in (select user_id from {$prfx}_topic_blocked where topic_id = $tid union select -1 from {$prfx}_dual)
@@ -27776,7 +27993,7 @@ abstract class ForumManager
             $unblocked_members[$dbw->field_by_name("id")] = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -28038,7 +28255,7 @@ abstract class ForumManager
         
         // get user info
         
-        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, interface_language
+        if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_user
                              where id = $uid
                             ")) {
@@ -28052,7 +28269,7 @@ abstract class ForumManager
             $user_info = array(
                 "user_email" => $dbw->field_by_name("email"),
                 "user_name" => $dbw->field_by_name("user_name"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
             );
@@ -31638,6 +31855,11 @@ abstract class ForumManager
             $action_list["allow_rating"] = text("ActionRatingAllowed");
         }
 
+        $action_list["disallow_attachments"] = text("ActionAttachmentsDisallowed");
+        $action_list["allow_attachments"] = text("ActionAttachmentsAllowed");
+        $action_list["disallow_video_audio"] = text("ActionVideoAudioDisallowed");
+        $action_list["allow_video_audio"] = text("ActionVideoAudioAllowed");
+
         $action_list["change_post"] = text("ActionPostChanged");
         $action_list["move_post"] = text("ActionPostsMoved");
         $action_list["pin_post"] = text("ActionPostPinned");
@@ -33366,11 +33588,11 @@ abstract class ForumManager
         
         $affected_users = array();
         
-        if (!$dbw->execute_query("select {$prfx}_user.id, email, user_name, last_host, send_notifications, interface_language, is_admin, count(*) cnt
+        if (!$dbw->execute_query("select {$prfx}_user.id, email, user_name, last_host, send_notifications, activated, approved, interface_language, is_admin, count(*) cnt
                              from {$prfx}_post
                              inner join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
                              where $where and {$prfx}_user.id in ($user_in_list)
-                             group by {$prfx}_user.id, email, user_name, last_host, send_notifications, interface_language, is_admin
+                             group by {$prfx}_user.id, email, user_name, last_host, send_notifications, activated, approved, interface_language, is_admin
                              ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -33386,7 +33608,7 @@ abstract class ForumManager
             $affected_users[$dbw->field_by_name("id")] = array(
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language"),
                 "post_count" => $dbw->field_by_name("cnt")
@@ -33562,7 +33784,7 @@ abstract class ForumManager
         if (!empty($topics_with_no_posts_list)) {
             if (!$dbw->execute_query("select {$prfx}_topic.id, user_id, forum_id,
                              {$prfx}_forum.name forum_name, {$prfx}_topic.name topic_name,
-                             email, user_name, author, last_host, send_notifications
+                             email, user_name, author, last_host, send_notifications, activated, approved
                              from
                              {$prfx}_topic
                              inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -33585,7 +33807,7 @@ abstract class ForumManager
                     "author_name" => $dbw->field_by_name("user_name") ? $dbw->field_by_name("user_name") : $dbw->field_by_name("author"),
                     "author_email" => $dbw->field_by_name("email"),
                     "last_host" => $dbw->field_by_name("last_host"),
-                    "send_notifications" => $dbw->field_by_name("send_notifications"),
+                    "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                     "action" => "delete_topic",
                     "comment" => reqvar("comment")
                 );
@@ -37987,8 +38209,11 @@ abstract class ForumManager
             'MsgEventProfileHidden',
             'MsgEventProfileHiddenAnonym',
             'MsgEventRatingDisallowed',
-            'MsgEventRatingDisallowedAnonym'
-        
+            'MsgEventRatingDisallowedAnonym',
+            'MsgEventAttachmentsDisallowed',
+            'MsgEventAttachmentsDisallowedAnonym',
+            'MsgEventVideoAudioDisallowed',
+            'MsgEventVideoAudioDisallowedAnonym'
         );
         
         $non_moderator_events = array('MsgEventMessageLiked', 'MsgEventMessageDisliked', 'MsgEventMessageDislikedAnonym', 'MsgEventLikeRevoked', 'MsgEventDislikeRevoked', 'MsgEventDislikeRevokedAnonym', 'MsgEventNewMessageInTopic', 'MsgEventNewPrivateMessage', 'MsgEventCitatedMessageInTopic', 'MsgEventUserRegistered', 'MsgEventWordsMentionedInTopic', 'MsgEventCitatedSubscribedMessageInTopic', 'MsgEventAttentionAsked');

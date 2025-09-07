@@ -4817,6 +4817,90 @@
             <ua>Заборонити виставляти оцінки</ua>
         </text>
 
+        <text id="AllowAttachments">
+            <en>Allow attachments</en>
+            <de>Anhänge erlauben</de>
+            <ru>Разрешить вложения</ru>
+            <ua>Дозволити вкладення</ua>
+        </text>
+
+        <text id="DisallowAttachments">
+            <en>Disallow attachments</en>
+            <de>Anhänge verbieten</de>
+            <ru>Запретить вложения</ru>
+            <ua>Заборонити вкладення</ua>
+        </text>
+
+        <text id="AllowVideoAudio">
+            <en>Allow audio and video plugins</en>
+            <de>Audio- und Video-Plugins erlauben</de>
+            <ru>Разрешить вставку аудио и видео</ru>
+            <ua>Дозволити вставку аудіо та відео</ua>
+        </text>
+
+        <text id="DisallowVideoAudio">
+            <en>Disallow message rating</en>
+            <de>Nachrichtenbewertung verbieten</de>
+            <ru>Запретить вставку аудио и видео</ru>
+            <ua>Заборонити вставку аудіо та відео</ua>
+        </text>
+
+        <text id="MsgVideoAudioDisallowed">
+            <en>The audio and video plugin has been disallowed for this user.</en>
+            <de>Die Einpluggen von Video und Audio wurde dem Benutzer verboten.</de>
+            <ru>Вставка аудио и видео данным пользователем запрещена.</ru>
+            <ua>Вставка аудіо та відео цим користувачем заборонено.</ua>
+        </text>
+
+        <text id="MsgVideoAudioAllowed">
+            <en>The audio and video plugin has been allowed for this user.</en>
+            <de>Die Einpluggen von Video und Audio wurde dem Benutzer erlaubt.</de>
+            <ru>Вставка аудио и видео данным пользователем разрешена.</ru>
+            <ua>Вставка аудіо та відео цим користувачем дозволене.</ua>
+        </text>
+
+        <text id="MsgEventVideoAudioDisallowed">
+            <en>The moderator {author} has disallowed you to plugin audio and video.</en>
+            <de>Der Moderator {author} hat Ihnen das Einpluggen von Video und Audio verboten.</de>
+            <ru>Модератор {author} запретил вам вставлять аудио и видео.</ru>
+            <ua>Модератор {author} заборонив вам вставляти відео та аудіо.</ua>
+        </text>
+
+        <text id="MsgEventVideoAudioDisallowedAnonym">
+            <en>You have been disallowed to plugin audio and video.</en>
+            <de>Ihnen wurde das Einpluggen von Video und Audio verboten.</de>
+            <ru>Для вас установлен запрет на вставку аудио и видео.</ru>
+            <ua>Для вас встановлена заборона на вставку аудіо та відео.</ua>
+        </text>
+
+        <text id="MsgEventVideoAudioAllowed">
+            <en>The moderator {author} has allowed you to plugin audio and video.</en>
+            <de>Der Moderator {author} hat Ihnen das Einpluggen von Video und Audio erlaubt.</de>
+            <ru>Модератор {author} снял с вас вставку аудио и видео.</ru>
+            <ua>Модератор {author} зняв з вас заборону на вставку аудіо та відео.</ua>
+        </text>
+
+        <text id="MsgEventVideoAudioAllowedAnonym">
+            <en>You have been allowed to plugin audio and video.</en>
+            <de>Ihnen wurde das Einpluggen von Video und Audio erlaubt.</de>
+            <ru>С вас снят запрет на вставку аудио и видео.</ru>
+            <ua>З вас знята заборона на вставку аудіо та відео.</ua>
+        </text>
+
+        <text id="ActionVideoAudioDisallowed">
+            <en>The audio and video plugin has been disallowed</en>
+            <de>Die Einpluggen von Video und Audio wurde verboten</de>
+            <ru>Вставка аудио и видео запрещена</ru>
+            <ua>Вставка аудіо та відео заборонене</ua>
+        </text>
+
+        <text id="ActionVideoAudioAllowed">
+            <en>The audio and video plugin has been allowed</en>
+            <de>Die Einpluggen von Video und Audio wurde erlaubt</de>
+            <ru>Вставка аудио и видео разрешена</ru>
+            <ua>Вставка аудіо та відео дозволене</ua>
+        </text>
+
         <text id="PutToIgnoreList">
             <en>Put to the ignore list</en>
             <de>In die Ignorier-Liste eintragen</de>
@@ -5852,6 +5936,20 @@
             <ua>Вам заборонено оцінювати повідомлення!</ua>
         </text>
 
+        <text id="ErrAttachmentsBlocked">
+            <en>You are disallowed to post attachments!</en>
+            <de>Ihnen ist verboten, die Anhänge zu post!</de>
+            <ru>Вам запрещено отправлять вложения!</ru>
+            <ua>Вам заборонено відправляти вкладення!</ua>
+        </text>
+
+        <text id="ErrVideoAudioBlocked">
+            <en>You are disallowed to plugin video and audio!</en>
+            <de>Ihnen ist verboten, Videos und Audiodateien einzufügen!</de>
+            <ru>Вам запрещено вставлять видео и аудио!</ru>
+            <ua>Вам заборонено вставляти відео та аудіо!</ua>
+        </text>
+
         <text id="ActionRatingDisallowed">
             <en>The message rating has been disallowed</en>
             <de>Die Nachrichtenbewertung wurde verboten</de>
@@ -5864,6 +5962,63 @@
             <de>Die Nachrichtenbewertung wurde erlaubt</de>
             <ru>Выставление оценок разрешено</ru>
             <ua>Виставляння оцінок дозволене</ua>
+        </text>
+
+
+        <text id="MsgAttachmentsDisallowed">
+            <en>The attachment posting has been disallowed for this user.</en>
+            <de>Die Anhang-Veröffentlichung wurde dem Benutzer verboten.</de>
+            <ru>Отправка вложений данным пользователем запрещена.</ru>
+            <ua>Відправлення вкладень цим користувачем заборонено.</ua>
+        </text>
+
+        <text id="MsgAttachmentsAllowed">
+            <en>The attachment posting has been allowed for this user.</en>
+            <de>Die Anhang-Veröffentlichung wurde dem Benutzer erlaubt.</de>
+            <ru>Отправка вложений данным пользователем разрешена.</ru>
+            <ua>Відправлення вкладень цим користувачем дозволене.</ua>
+        </text>
+
+        <text id="MsgEventAttachmentsDisallowed">
+            <en>The moderator {author} has disallowed you to post attachments.</en>
+            <de>Der Moderator {author} hat Ihnen die Anhang-Veröffentlichung verboten.</de>
+            <ru>Модератор {author} запретил вам отправлять вложения.</ru>
+            <ua>Модератор {author} заборонив вам оцінювати повідомленя.</ua>
+        </text>
+
+        <text id="MsgEventAttachmentsDisallowedAnonym">
+            <en>You have been disallowed to post attachments.</en>
+            <de>Ihnen wurde die Anhang-Veröffentlichung verboten.</de>
+            <ru>Для вас установлен запрет на отправку вложений.</ru>
+            <ua>Для вас встановлена заборона на відправлення вкладень.</ua>
+        </text>
+
+        <text id="MsgEventAttachmentsAllowed">
+            <en>The moderator {author} has allowed you to post attachments.</en>
+            <de>Der Moderator {author} hat Ihnen die Anhang-Veröffentlichung erlaubt.</de>
+            <ru>Модератор {author} снял с вас запрет на отправку вложений.</ru>
+            <ua>Модератор {author} зняв з вас заборону на відправлення вкладень.</ua>
+        </text>
+
+        <text id="MsgEventAttachmentsAllowedAnonym">
+            <en>You have been allowed to post attachments.</en>
+            <de>Ihnen wurde die Anhang-Veröffentlichung erlaubt.</de>
+            <ru>С вас снят запрет на отправку вложений.</ru>
+            <ua>З вас знята заборона на відправлення вкладень.</ua>
+        </text>
+
+        <text id="ActionAttachmentsDisallowed">
+            <en>The attachment posting has been disallowed</en>
+            <de>Die Anhang-Veröffentlichung wurde verboten</de>
+            <ru>Отправка вложений запрещена</ru>
+            <ua>Відправлення вкладень заборонене</ua>
+        </text>
+
+        <text id="ActionAttachmentsAllowed">
+            <en>The attachment posting has been allowed</en>
+            <de>Die Anhang-Veröffentlichung wurde erlaubt</de>
+            <ru>Отправка вложений разрешена</ru>
+            <ua>Відправлення вкладень дозволене</ua>
         </text>
 
         <text id="ErrModeratorBlockNotAllowed">
@@ -6551,13 +6706,6 @@
             <de>Aktivität pro Stunde des Tages (%s Tage)</de>
             <ru>Активность по часам дня (%s дней)</ru>
             <ua>Активність по годинах дня (%s днів)</ua>
-        </text>
-
-        <text id="VisitingGeography">
-            <en>Visiting geography</en>
-            <de>Besuchsgeographie</de>
-            <ru>География посещений</ru>
-            <ua>Географія відвідувань</ua>
         </text>
 
         <text id="ForumActivity">
@@ -10826,13 +10974,6 @@
             <de>Anhang wurde nicht gefunden!</de>
             <ru>Вложение не неайдено!</ru>
             <ua>Вкладення не неайдено!</ua>
-        </text>
-
-        <text id="RevolverMapWarning">
-            <en>If the visit map does not load, unblock the address 'ra.revolvermaps.com' in your blocker!</en>
-            <de>Wenn die Karte der Besuche nicht geladen wird, entsperren Sie die Adresse 'ra.revolvermaps.com' in Ihrem Blocker!</de>
-            <ru>Если карта посещений не загружается, разблокируйте адрес 'ra.revolvermaps.com' в вашем блокере!</ru>
-            <ua>Якщо карта відвідувань не завантажується, розблокуйте адреса 'ra.revolvermaps.com' в вашому блокувальників!</ua>
         </text>
 
         <text id="ForDays">

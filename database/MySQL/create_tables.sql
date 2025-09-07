@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      mysql 5.0                                    */
-/* Created on:     15.12.2024 15:48:05                          */
+/* Created on:     07.09.2025 15:43:55                          */
 /*==============================================================*/
 
 
@@ -2361,6 +2361,8 @@ create table v1_user
    logout               tinyint not null default 0,
    last_logout_date     datetime,
    last_events_view_date datetime,
+   video_audio_blocked  tinyint not null default 0,
+   attachments_blocked  tinyint not null default 0,
    rating_blocked       tinyint not null default 0,
    time_zone            varchar(255),
    privileged           tinyint not null default 0,

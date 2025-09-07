@@ -1876,6 +1876,8 @@ create table v1_user (
    last_logout_date     datetime             null,
    last_events_view_date datetime             null,
    rating_blocked       tinyint              not null default 0,
+   video_audio_blocked  tinyint              not null default 0,
+   attachments_blocked  tinyint              not null default 0,
    time_zone            varchar(255)         null,
    privileged           tinyint              not null default 0,
    privileged_topic_moderator tinyint              not null default 0,

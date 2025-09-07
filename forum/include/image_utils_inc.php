@@ -213,7 +213,7 @@ function check_image_rotation($src, $target)
             break;
         
         default:
-            trigger_error("rotate_image: Unknown orientation " . $orientation, E_USER_ERROR);
+            trigger_error("rotate_image: Unknown orientation " . $orientation, E_ERROR);
     }
     
     return $result;
