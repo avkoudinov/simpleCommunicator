@@ -177,7 +177,7 @@ class MSSQL_DBWorker extends DBWorker
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "conn_err";
             
-            trigger_error($this->last_error, E_ERROR);
+            trigger_error($this->last_error, E_USER_WARNING);
             return false;
         }
         
@@ -260,7 +260,7 @@ class MSSQL_DBWorker extends DBWorker
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "query_err";
             
-            trigger_error($this->last_error . "\n\n" . $this->last_query, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             return false;
         }
         
@@ -359,7 +359,7 @@ class MSSQL_DBWorker extends DBWorker
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "query_err";
             
-            trigger_error($this->last_error . "\n\n" . $this->last_query, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             return false;
         }
         
@@ -414,7 +414,7 @@ class MSSQL_DBWorker extends DBWorker
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "query_err";
             
-            trigger_error($this->last_error . "\n\n" . $this->last_query, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             return false;
         }
         
@@ -649,7 +649,7 @@ class MSSQL_DBWorker extends DBWorker
                 $this->last_error = $this->sys_get_errors();
                 $this->last_error_id = "query_err";
                 
-                trigger_error($this->last_error, E_ERROR);
+                trigger_error($this->last_error, E_USER_WARNING);
                 return false;
             }
             
@@ -667,7 +667,7 @@ class MSSQL_DBWorker extends DBWorker
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "query_err";
             
-            trigger_error($this->last_error, E_ERROR);
+            trigger_error($this->last_error, E_USER_WARNING);
             return false;
         }
         
@@ -720,7 +720,7 @@ class MSSQL_DBWorker extends DBWorker
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "result_err";
             
-            trigger_error($this->last_error, E_ERROR);
+            trigger_error($this->last_error, E_USER_WARNING);
             return false;
         }
         
