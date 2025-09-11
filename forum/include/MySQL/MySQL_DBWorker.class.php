@@ -148,7 +148,7 @@ class MySQL_DBWorker extends DBWorker
         if (!@$this->mysqli->select_db($this->db_name)) {
             $this->last_error = $this->mysqli->error;
             $this->last_error_id = "db_err";
-            trigger_error($this->last_error, E_ERROR);
+            trigger_error($this->last_error, E_USER_WARNING);
             return false;
         }
         
@@ -221,7 +221,7 @@ class MySQL_DBWorker extends DBWorker
                 trace_case(trim($lock_dump), "locks");
             }
     
-            trigger_error($this->last_error . "\n\n" . $query_string, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $query_string, E_USER_WARNING);
             
             return false;
         }
@@ -298,7 +298,7 @@ class MySQL_DBWorker extends DBWorker
         if (!$this->statement) {
             $this->last_error = $this->mysqli->error;
             $this->last_error_id = "query_err";
-            trigger_error($this->last_error . "\n\n" . $query_string, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $query_string, E_USER_WARNING);
             
             return false;
         }
@@ -360,7 +360,7 @@ class MySQL_DBWorker extends DBWorker
         if (!call_user_func_array(array($this->statement, 'bind_param'), $parameters)) {
             $this->last_error = "Number of elements in type definition string doesn't match number of bind variables.";
             $this->last_error_id = "query_err";
-            trigger_error($this->last_error . "\n\n" . $this->last_query, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             
             return false;
         }
@@ -368,7 +368,7 @@ class MySQL_DBWorker extends DBWorker
         if (!$this->statement->execute()) {
             $this->last_error = $this->statement->error;
             $this->last_error_id = "query_err";
-            trigger_error($this->last_error . "\n\n" . $this->last_query, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             
             return false;
         }
@@ -376,7 +376,7 @@ class MySQL_DBWorker extends DBWorker
         if (!$this->statement->store_result()) {
             $this->last_error = $this->statement->error;
             $this->last_error_id = "query_err";
-            trigger_error($this->last_error . "\n\n" . $this->last_query, E_ERROR);
+            trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             
             return false;
         }
@@ -549,7 +549,7 @@ class MySQL_DBWorker extends DBWorker
             if (!call_user_func_array(array($this->statement, 'bind_result'), $params)) {
                 $this->last_error = $this->statement->error;
                 $this->last_error_id = "query_err";
-                trigger_error($this->last_error . "\n\n" . $this->last_query, E_ERROR);
+                trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
                 
                 return false;
             }
@@ -671,7 +671,7 @@ class MySQL_DBWorker extends DBWorker
             $this->last_error = $this->mysqli->error;
             $this->last_error_id = "result_err";
             
-            trigger_error($this->last_error, E_ERROR);
+            trigger_error($this->last_error, E_USER_WARNING);
             return null;
         }
         

@@ -37692,7 +37692,7 @@ abstract class ForumManager
             }
             
             if (is_numeric($pagination_info["startmsg"])) {
-                if (empty($pagination_info["offset"])) {
+                if (empty($pagination_info["offset"]) || !is_numeric($pagination_info["offset"])) {
                     $limit = $posts_per_page;
                     
                     $order_by = "order by {$prfx}_post.id asc";
@@ -39551,7 +39551,7 @@ abstract class ForumManager
             if ($pagination_info["startmsg"] == "first") {
                 $order_by = $this->build_order_by($prfx, "asc", $order);
                 
-                if (empty($pagination_info["offset"])) {
+                if (empty($pagination_info["offset"]) || !is_numeric($pagination_info["offset"])) {
                     $pagination_info["offset"] = 1;
                 }
                 
@@ -39572,7 +39572,7 @@ abstract class ForumManager
                 // we get the posts from the end in reverse order
                 $order_by = $this->build_order_by($prfx, "desc", $order);
                 
-                if (empty($pagination_info["offset"])) {
+                if (empty($pagination_info["offset"]) || !is_numeric($pagination_info["offset"])) {
                     $pagination_info["offset"] = -1;
                 }
                 
