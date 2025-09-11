@@ -160,7 +160,10 @@ class BBCodeLexer
             return $this->token;
         }
         while (true) {
-            if ($this->ptr >= count($this->input)) {
+            $cnt = 0;
+            if (!empty($this->input)) $cnt = count($this->input);
+            
+            if ($this->ptr >= $cnt) {
                 $this->text = "";
                 $this->tag = false;
                 return $this->token = BBCODE_EOI;
