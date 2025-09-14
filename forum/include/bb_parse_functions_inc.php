@@ -147,7 +147,7 @@ function bb_process_quote_simple($bbcode, $action, $name, $default, $params, $co
     
     $author = trim($default);
     
-    if (preg_match("/(.*)(#\\d+)/", $author, $matches)) {
+    if (preg_match("/(.*)(#\\d+)/", $author ?? "", $matches)) {
         $author = $matches[1];
     }
     
@@ -196,7 +196,7 @@ function bb_process_spoiler_simple($bbcode, $action, $name, $default, $params, $
     
     $author = trim($default);
     
-    if (preg_match("/(.*)(#\\d+)/", $author, $matches)) {
+    if (preg_match("/(.*)(#\\d+)/", $author ?? "", $matches)) {
         $author = $matches[1];
     }
     
@@ -313,8 +313,8 @@ function bb_process_url($bbcode, $action, $name, $default, $params, $content)
     $content = preg_replace("/^(<br \/>\s*)+/u", "", trim($content));
     $content = preg_replace("/(<br \/>\s*)+$/u", "", trim($content));
     
-    if (preg_match("/.*\\[attachment(\\d*)=([^\\]]+)\\].*/i", $content, $matches) ||
-        preg_match("/.*<div class='picture_wrapper'>.*/i", $content, $matches)
+    if (preg_match("/.*\\[attachment(\\d*)=([^\\]]+)\\].*/i", $content ?? "", $matches) ||
+        preg_match("/.*<div class='picture_wrapper'>.*/i", $content ?? "", $matches)
     ) {
         $link_appendix = "";
         if (!empty($default) && is_string($default)) {
@@ -420,7 +420,7 @@ function check_image_url(&$url, &$large_url)
     ]);
 
     $url_to_check = $url;
-    if (!preg_match("/^http/", $url_to_check)) {
+    if (!preg_match("/^http/", $url_to_check ?? "")) {
         $url_to_check = get_host_address() . get_url_path() . $url;   
     }
     
@@ -466,7 +466,7 @@ function check_image_url(&$url, &$large_url)
     {
       /*
       $url_to_check = $url;
-      if (!preg_match("/^http/", $url_to_check)) {
+      if (!preg_match("/^http/", $url_to_check ?? "")) {
           $url_to_check = get_host_address() . get_url_path() . $url;   
       }
 
@@ -549,7 +549,7 @@ function bb_process_img($bbcode, $action, $name, $default, $params, $content)
         $src = trim($content);
     }
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src ?? "", $matches)) {
         return $content;
     }
     
@@ -647,7 +647,7 @@ function bb_process_anim($bbcode, $action, $name, $default, $params, $content)
     $wrapper_end = "";
     $att_pict_appendix = "";
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src ?? "", $matches)) {
         $appx = "&amp;rnd=" . time();
         
         $idx = $matches[1];
@@ -704,7 +704,7 @@ function bb_process_smile($bbcode, $action, $name, $default, $params, $content)
         return "[smile]" . escape_html(urldecode($src)) . "[/smile]";
     }
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src ?? "", $matches)) {
       return $src;
     }
     
@@ -865,7 +865,7 @@ function bb_process_quote($bbcode, $action, $name, $default, $params, $content)
     $author = trim($default);
     
     $is_simple_citation = true;
-    if (preg_match("/(.*)(#\\d+)((:\\d+)?)/", $author, $matches)) {
+    if (preg_match("/(.*)(#\\d+)((:\\d+)?)/", $author ?? "", $matches)) {
         $is_simple_citation = false;
         $author = $matches[1];
         $citated = trim($matches[2], '#');
@@ -955,7 +955,7 @@ function bb_remove_quotes($bbcode, $action, $name, $default, $params, $content)
     $default = str_replace("___:DQT:___", "\"", $default);
     
     $author = trim($default);
-    if (preg_match("/(.*)(#\\d+)((:\\d+)?)/", $author, $matches)) {
+    if (preg_match("/(.*)(#\\d+)((:\\d+)?)/", $author ?? "", $matches)) {
         return "\n\n";
     }
     
@@ -1140,7 +1140,7 @@ function bb_process_table($bbcode, $action, $name, $default, $params, $content)
             parse_bb_code($cell, $cell, $has_link, $has_code, $bbcode->post_id);
             
             $colspan = "";
-            if (preg_match("/(.*)::(\\d+)/", $cell, $matches) && $matches[2] > 1) {
+            if (preg_match("/(.*)::(\\d+)/", $cell ?? "", $matches) && $matches[2] > 1) {
                 $colspan = "colspan='$matches[2]'";
                 $cell = $matches[1];
             }
@@ -1169,7 +1169,7 @@ function bb_process_audio($bbcode, $action, $name, $default, $params, $content)
         return $alternative_code;
     }
 
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src ?? "", $matches)) {
         return $content;
     }
     
@@ -1202,7 +1202,7 @@ function bb_process_video($bbcode, $action, $name, $default, $params, $content)
         return $alternative_code;
     }
 
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $src ?? "", $matches)) {
         return $content;
     }
     
@@ -1233,7 +1233,7 @@ function bb_process_youtube($bbcode, $action, $name, $default, $params, $content
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
@@ -1241,26 +1241,26 @@ function bb_process_youtube($bbcode, $action, $name, $default, $params, $content
     
     $content = str_replace("&amp;", "&", $content);
 
-    if (preg_match("~https?://youtu.be/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $content, $matches)) {
+    if (preg_match("~https?://youtu.be/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $content ?? "", $matches)) {
         $code = $matches[1];
         $appendix = val_or_empty($matches[3]);
-    } elseif (preg_match("~https?://youtu.be/([^&?]+).*~", $content, $matches)) {
+    } elseif (preg_match("~https?://youtu.be/([^&?]+).*~", $content ?? "", $matches)) {
         $code = $matches[1];
-    } elseif (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*?~", $content, $matches)) {
+    } elseif (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*?~", $content ?? "", $matches)) {
         $code = $matches[1];
         $appendix = val_or_empty($matches[3]);
-    } elseif (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*~", $content, $matches)) {
+    } elseif (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*~", $content ?? "", $matches)) {
         $code = $matches[1];
-    } elseif (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $content, $matches)) {
+    } elseif (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $content ?? "", $matches)) {
         $code = $matches[2];
-    } elseif (preg_match("~https?://([^/]*youtube.com|youtu.be)/live/([^&?]+).*~", $content, $matches)) {
+    } elseif (preg_match("~https?://([^/]*youtube.com|youtu.be)/live/([^&?]+).*~", $content ?? "", $matches)) {
         $code = $matches[2];
-    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $content, $matches)) {
+    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $content ?? "", $matches)) {
         $code = $matches[1];
         $appendix = val_or_empty($matches[3]);
-    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*~", $content, $matches)) {
+    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*~", $content ?? "", $matches)) {
         $code = $matches[1];
-    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?((?:t|start|time_continue)=[^&]+).*?&v=([^&?]+).*~", $content, $matches)) {
+    } elseif (preg_match("~https?://[^/]*youtube.com/watch\?((?:t|start|time_continue)=[^&]+).*?&v=([^&?]+).*~", $content ?? "", $matches)) {
         $code = $matches[2];
         $appendix = val_or_empty($matches[1]);
     }
@@ -1282,7 +1282,7 @@ function check_youtube_url($url, &$content, $message_mode)
         $apikey = YOUTUBE_API_KEY;
     }
     
-    if (preg_match("~https?://youtu.be/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $url, $matches)) {
+    if (preg_match("~https?://youtu.be/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1292,7 +1292,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
     
-    if (preg_match("~https?://youtu.be/([^&?]+).*~", $url, $matches)) {
+    if (preg_match("~https?://youtu.be/([^&?]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1302,7 +1302,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
 
-    if (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*?~", $url, $matches)) {
+    if (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*?~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1312,7 +1312,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
 
-    if (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*~", $url, $matches)) {
+    if (preg_match("~https?://[^/]*youtube.com/embed/([^&?]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1322,7 +1322,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
 
-    if (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $url, $matches)) {
+    if (preg_match("~https?://([^/]*youtube.com|youtu.be)/shorts/([^&?]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1332,7 +1332,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
 
-    if (preg_match("~https?://([^/]*youtube.com|youtu.be)/live/([^&?]+).*~", $url, $matches)) {
+    if (preg_match("~https?://([^/]*youtube.com|youtu.be)/live/([^&?]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1342,7 +1342,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
 
-    if (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $url, $matches)) {
+    if (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*(&|\?)((?:t|start|time_continue)=[^&]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1352,7 +1352,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
 
-    if (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*~", $url, $matches)) {
+    if (preg_match("~https?://[^/]*youtube.com/watch\?v=([^&?]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1362,7 +1362,7 @@ function check_youtube_url($url, &$content, $message_mode)
         return true;
     }
 
-    if (preg_match("~https?://[^/]*youtube.com/watch\?((?:t|start|time_continue)=[^&]+).*?&v=([^&?]+).*~", $url, $matches)) {
+    if (preg_match("~https?://[^/]*youtube.com/watch\?((?:t|start|time_continue)=[^&]+).*?&v=([^&?]+).*~", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: YouTube]\n\n";
             return true;
@@ -1390,9 +1390,9 @@ function bb_process_gmap($bbcode, $action, $name, $default, $params, $content)
     
     $coordinates = html_entity_decode($content);
     
-    if (preg_match('/([^\/]+(N|S))(\+| +)([^\/]+(E|W))/i', $coordinates, $matches)) {
+    if (preg_match('/([^\/]+(N|S))(\+| +)([^\/]+(E|W))/i', $coordinates ?? "", $matches)) {
         $coordinates = urldecode($matches[1] . "," . $matches[4]);
-    } elseif (preg_match('/@([^\/,]+),([^\/,]+)/i', $coordinates, $matches)) {
+    } elseif (preg_match('/@([^\/,]+),([^\/,]+)/i', $coordinates ?? "", $matches)) {
         $coordinates = urldecode($matches[1] . "," . $matches[2]);
     }
     
@@ -1410,13 +1410,13 @@ function bb_process_instagram($bbcode, $action, $name, $default, $params, $conte
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/https:\\/\\/www\\.instagram\\.com\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $content, $matches)) {
+    if (preg_match('/https:\\/\\/www\\.instagram\\.com\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $content ?? "", $matches)) {
         $code = $matches[2];
-    } elseif (preg_match('/https:\\/\\/www\\.instagram\\.com\\/[^\\/]+\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $content, $matches)) {
+    } elseif (preg_match('/https:\\/\\/www\\.instagram\\.com\\/[^\\/]+\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $content ?? "", $matches)) {
         $code = $matches[2];
     }
     
@@ -1427,7 +1427,7 @@ function bb_process_instagram($bbcode, $action, $name, $default, $params, $conte
 //------------------------------------------------------------------------------
 function check_instagram_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\\/\\/www\\.instagram\\.com\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/www\\.instagram\\.com\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Instagram]\n\n";
             return true;
@@ -1435,7 +1435,7 @@ function check_instagram_url($url, &$content, $message_mode)
         
         $content = gen_instagram_html($matches[2], $url);
         return true;
-    } elseif (preg_match('/https:\\/\\/www\\.instagram\\.com\\/[^\\/]+\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $url, $matches)) {
+    } elseif (preg_match('/https:\\/\\/www\\.instagram\\.com\\/[^\\/]+\\/([^\\/&\\?]+)\\/([^\\/&\\?]+)\\/?/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Instagram]\n\n";
             return true;
@@ -1457,13 +1457,13 @@ function bb_process_reddit($bbcode, $action, $name, $default, $params, $content)
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
     // https://www.reddit.com/r/OnePunchMan/comments/tge72l/how_to_kill_mosquitoes_serious_edition/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     
-    if (preg_match('/(https:\\/\\/www\\.reddit\\.com\\/.*\\/).*/i', $content, $matches)) {
+    if (preg_match('/(https:\\/\\/www\\.reddit\\.com\\/.*\\/).*/i', $content ?? "", $matches)) {
         $code = $matches[1];
     }
     
@@ -1476,7 +1476,7 @@ function check_reddit_url($url, &$content, $message_mode)
 {
     // https://www.reddit.com/r/OnePunchMan/comments/tge72l/how_to_kill_mosquitoes_serious_edition/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     
-    if (preg_match('/(https:\\/\\/www\\.reddit\\.com\\/.*\\/).*/i', $url, $matches)) {
+    if (preg_match('/(https:\\/\\/www\\.reddit\\.com\\/.*\\/).*/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Reddit]\n\n";
             return true;
@@ -1499,11 +1499,11 @@ function bb_process_tiktok($bbcode, $action, $name, $default, $params, $content)
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/https:\\/\\/www\\.tiktok\\.com\\/.*video\\/(\\d+).*/i', $content, $matches)) {
+    if (preg_match('/https:\\/\\/www\\.tiktok\\.com\\/.*video\\/(\\d+).*/i', $content ?? "", $matches)) {
         $code = $matches[1];
     }
     
@@ -1514,7 +1514,7 @@ function bb_process_tiktok($bbcode, $action, $name, $default, $params, $content)
 //------------------------------------------------------------------------------
 function check_tiktok_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\\/\\/www\\.tiktok\\.com\\/.*video\\/(\\d+).*/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/www\\.tiktok\\.com\\/.*video\\/(\\d+).*/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: TikTok]\n\n";
             return true;
@@ -1536,11 +1536,11 @@ function bb_process_radikal($bbcode, $action, $name, $default, $params, $content
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/https:\\/\\/radikal\\.ru\\/video\\/([^\\/]+)\\/?/i', $content, $matches)) {
+    if (preg_match('/https:\\/\\/radikal\\.ru\\/video\\/([^\\/]+)\\/?/i', $content ?? "", $matches)) {
         $code = $matches[1];
     }
     
@@ -1551,7 +1551,7 @@ function bb_process_radikal($bbcode, $action, $name, $default, $params, $content
 //------------------------------------------------------------------------------
 function check_radikal_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\\/\\/radikal\\.ru\\/video\\/([^\\/]+)\\/?/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/radikal\\.ru\\/video\\/([^\\/]+)\\/?/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Radikal]\n\n";
             return true;
@@ -1573,7 +1573,7 @@ function bb_process_plvideo($bbcode, $action, $name, $default, $params, $content
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
@@ -1588,7 +1588,7 @@ function bb_process_plvideo($bbcode, $action, $name, $default, $params, $content
 //------------------------------------------------------------------------------
 function check_plvideo_url($url, &$content, $message_mode)
 {
-    if (preg_match("~https://plvideo.ru/(watch\\?v=|shorts/)(.+)~i", $url, $matches)) {
+    if (preg_match("~https://plvideo.ru/(watch\\?v=|shorts/)(.+)~i", $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Plvideo]\n\n";
             return true;
@@ -1611,17 +1611,17 @@ function bb_process_vimeo($bbcode, $action, $name, $default, $params, $content)
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
     $start = 0;
     
-    if (preg_match('/https:\\/\\/player\\.vimeo\\.com\\/video\\/(.*)$/i', $content, $matches)) {
+    if (preg_match('/https:\\/\\/player\\.vimeo\\.com\\/video\\/(.*)$/i', $content ?? "", $matches)) {
         $code = $matches[1];
-    } elseif (preg_match('/https:\\/\\/vimeo\\.com\\/channels\\/staffpicks\\/(.*)$/i', $content, $matches)) {
+    } elseif (preg_match('/https:\\/\\/vimeo\\.com\\/channels\\/staffpicks\\/(.*)$/i', $content ?? "", $matches)) {
         $code = $matches[1];
-    } elseif (preg_match('/https:\\/\\/vimeo\\.com\\/([^#]*)(#at=(.*))?$/i', $content, $matches)) {
+    } elseif (preg_match('/https:\\/\\/vimeo\\.com\\/([^#]*)(#at=(.*))?$/i', $content ?? "", $matches)) {
         $code = $matches[1];
         $start = val_or_empty($matches[3]);
     }
@@ -1633,7 +1633,7 @@ function bb_process_vimeo($bbcode, $action, $name, $default, $params, $content)
 //------------------------------------------------------------------------------
 function check_vimeo_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\\/\\/vimeo\\.com\\/([A-z0-9=\-]+?)(\\#at=(.*))?$/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/vimeo\\.com\\/([A-z0-9=\-]+?)(\\#at=(.*))?$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Vimeo]\n\n";
             return true;
@@ -1655,16 +1655,16 @@ function bb_process_rutube($bbcode, $action, $name, $default, $params, $content)
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
     $start = 0;
     
-    if (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*bmstart=(\\d+).*/i', $content, $matches)) {
+    if (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*bmstart=(\\d+).*/i', $content ?? "", $matches)) {
         $code = $matches[1];
         $start = val_or_empty($matches[2]);
-    } elseif (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*$/i', $content, $matches)) {
+    } elseif (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*$/i', $content ?? "", $matches)) {
         $code = $matches[1];
     }
     
@@ -1675,7 +1675,7 @@ function bb_process_rutube($bbcode, $action, $name, $default, $params, $content)
 //------------------------------------------------------------------------------
 function check_rutube_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*bmstart=(\\d+).*/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*bmstart=(\\d+).*/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: RuTube]\n\n";
             return true;
@@ -1685,7 +1685,7 @@ function check_rutube_url($url, &$content, $message_mode)
         return true;
     }
     
-    if (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*$/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/rutube\\.ru\\/video\\/([^\\/\\?]+).*$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: RuTube]\n\n";
             return true;
@@ -1707,20 +1707,20 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/\/video(.*)$/i', $content, $matches)) {
+    if (preg_match('/\/video(.*)$/i', $content ?? "", $matches)) {
         $code = $matches[1];
     }
-    elseif (preg_match('/\/clip(.*)$/i', $content, $matches)) {
+    elseif (preg_match('/\/clip(.*)$/i', $content ?? "", $matches)) {
         $code = $matches[1];
     }
-    elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/video(.*)$/i', $content, $matches)) {
+    elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/video(.*)$/i', $content ?? "", $matches)) {
         $code = $matches[2];
     }
-    elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/clip(.*)$/i', $content, $matches)) {
+    elseif (preg_match('/https:\/\/(m\\.)*vk\.com\/clip(.*)$/i', $content ?? "", $matches)) {
         $code = $matches[2];
     } 
     
@@ -1731,7 +1731,7 @@ function bb_process_vkvideo($bbcode, $action, $name, $default, $params, $content
 //------------------------------------------------------------------------------
 function check_vkvideo_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\/\/(m\\.)*(vk\.com|vk\.ru|vkvideo\.ru)(.*\/)video(.*)(\\?.*)?$/i', $url, $matches)) {
+    if (preg_match('/https:\/\/(m\\.)*(vk\.com|vk\.ru|vkvideo\.ru)(.*\/)video(.*)(\\?.*)?$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: VK]\n\n";
             return true;
@@ -1741,7 +1741,7 @@ function check_vkvideo_url($url, &$content, $message_mode)
         return true;
     }
     
-    if (preg_match('/https:\/\/(m\\.)*vk\.com\/clip(.*)(\\?.*)?$/i', $url, $matches)) {
+    if (preg_match('/https:\/\/(m\\.)*vk\.com\/clip(.*)(\\?.*)?$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: VK]\n\n";
             return true;
@@ -1763,11 +1763,11 @@ function bb_process_coub($bbcode, $action, $name, $default, $params, $content)
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/http(s)?:\\/\\/coub\\.com\\/view\\/([^\\/\\?]+)$/i', $content, $matches)) {
+    if (preg_match('/http(s)?:\\/\\/coub\\.com\\/view\\/([^\\/\\?]+)$/i', $content ?? "", $matches)) {
         $code = $matches[2];
     }
     
@@ -1778,7 +1778,7 @@ function bb_process_coub($bbcode, $action, $name, $default, $params, $content)
 //------------------------------------------------------------------------------
 function check_coub_url($url, &$content, $message_mode)
 {
-    if (preg_match('/http(s)?:\\/\\/coub\\.com\\/view\\/([^\\/\\?]+)$/i', $url, $matches)) {
+    if (preg_match('/http(s)?:\\/\\/coub\\.com\\/view\\/([^\\/\\?]+)$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Coub]\n\n";
             return true;
@@ -1800,11 +1800,11 @@ function bb_process_telegram($bbcode, $action, $name, $default, $params, $conten
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/(https:\\/\\/)?t\\.me\\/(.+?)(\?.*?)?$/i', $content, $matches)) {
+    if (preg_match('/(https:\\/\\/)?t\\.me\\/(.+?)(\?.*?)?$/i', $content ?? "", $matches)) {
         $code = $matches[2];
     }
     
@@ -1815,7 +1815,7 @@ function bb_process_telegram($bbcode, $action, $name, $default, $params, $conten
 //------------------------------------------------------------------------------
 function check_telegram_url($url, &$content, $message_mode)
 {
-    if (preg_match('/https:\\/\\/t\\.me\\/(.+?\\/.+?)(\?.*?)?$/i', $url, $matches)) {
+    if (preg_match('/https:\\/\\/t\\.me\\/(.+?\\/.+?)(\?.*?)?$/i', $url ?? "", $matches)) {
         if (strpos($matches[1], "addstickers") !== false) {
             return false;
         }
@@ -1841,15 +1841,15 @@ function bb_process_fbvideo($bbcode, $action, $name, $default, $params, $content
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/video\\.php\\?v=([^\\/\\?]+)$/i', $content, $matches)) {
+    if (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/video\\.php\\?v=([^\\/\\?]+)$/i', $content ?? "", $matches)) {
         $code = $matches[2];
-    } elseif (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/.+\\/videos\\/([^\\/\\?]+)\\/.*$/i', $content, $matches)) {
+    } elseif (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/.+\\/videos\\/([^\\/\\?]+)\\/.*$/i', $content ?? "", $matches)) {
         $code = $matches[2];
-    } elseif (preg_match('/http(s)?:\\/\\/www.facebook\\.com\\/watch\\/\\?v=(\d+)/i', $content, $matches)) {
+    } elseif (preg_match('/http(s)?:\\/\\/www.facebook\\.com\\/watch\\/\\?v=(\d+)/i', $content ?? "", $matches)) {
         $code = $matches[2];
     }
     
@@ -1860,7 +1860,7 @@ function bb_process_fbvideo($bbcode, $action, $name, $default, $params, $content
 //------------------------------------------------------------------------------
 function check_fbvideo_url($url, &$content, $message_mode)
 {
-    if (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/video\\.php\\?v=([^\\/\\?]+)$/i', $url, $matches)) {
+    if (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/video\\.php\\?v=([^\\/\\?]+)$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Facebook]\n\n";
             return true;
@@ -1868,7 +1868,7 @@ function check_fbvideo_url($url, &$content, $message_mode)
         
         $content = gen_fbvideo_html($matches[2], $url);
         return true;
-    } elseif (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/.+\\/videos\\/([^\\/\\?]+)\\/.*$/i', $url, $matches)) {
+    } elseif (preg_match('/http(s)?:\\/\\/www\\.facebook\\.com\\/.+\\/videos\\/([^\\/\\?]+)\\/.*$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Facebook]\n\n";
             return true;
@@ -1876,7 +1876,7 @@ function check_fbvideo_url($url, &$content, $message_mode)
         
         $content = gen_fbvideo_html($matches[2], $url);
         return true;
-    } elseif (preg_match('/http(s)?:\\/\\/www.facebook\\.com\\/watch\\/\\?v=(\d+)/i', $url, $matches)) {
+    } elseif (preg_match('/http(s)?:\\/\\/www.facebook\\.com\\/watch\\/\\?v=(\d+)/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}: Facebook]\n\n";
             return true;
@@ -1898,11 +1898,11 @@ function bb_process_twitter($bbcode, $action, $name, $default, $params, $content
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
-    if (preg_match('/http(s)?:\\/\\/twitter.com\\/.+\\/status\\/(\d+)(.*?)?$/i', $content, $matches)) {
+    if (preg_match('/http(s)?:\\/\\/twitter.com\\/.+\\/status\\/(\d+)(.*?)?$/i', $content ?? "", $matches)) {
         $code = $matches[2];
     }
     
@@ -1920,7 +1920,7 @@ function bb_process_dzen($bbcode, $action, $name, $default, $params, $content)
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
@@ -1938,7 +1938,7 @@ function bb_process_rambler($bbcode, $action, $name, $default, $params, $content
     $content = trim($content);
     $code = $content;
     
-    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code, $matches)) {
+    if (preg_match("/\\[attachment(\\d*)=([^\\]]+)\\]/i", $code ?? "", $matches)) {
         return $content;
     }
     
@@ -1949,7 +1949,7 @@ function bb_process_rambler($bbcode, $action, $name, $default, $params, $content
 //------------------------------------------------------------------------------
 function check_video_url($url, &$content, $message_mode)
 {
-    if (preg_match('/.*\\.mp4$/i', $url, $matches)) {
+    if (preg_match('/.*\\.mp4$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{video}}]\n\n";
             return true;
@@ -1980,7 +1980,7 @@ function check_video_url($url, &$content, $message_mode)
 //------------------------------------------------------------------------------
 function check_audio_url($url, &$content, $message_mode)
 {
-    if (preg_match('/.*\\.mp3$/i', $url, $matches)) {
+    if (preg_match('/.*\\.mp3$/i', $url ?? "", $matches)) {
         if ($message_mode != "message") {
             $content = "\n[{{audio}}]\n\n";
             return true;
@@ -2010,17 +2010,17 @@ function check_own_url($url, &$content, $message_mode)
         return false;
     }
     
-    if (preg_match("/view_profile\\.php\\?uid=(\\d+)$/", $url, $matches)) {
+    if (preg_match("/view_profile\\.php\\?uid=(\\d+)$/", $url ?? "", $matches)) {
         $content = "[uid=$matches[1]]";
         return true;
     }
     
-    if (preg_match("/&msg=(\\d+)$/", $url, $matches)) {
+    if (preg_match("/&msg=(\\d+)$/", $url ?? "", $matches)) {
         $content = "[mid=$matches[1]]";
         return true;
     }
 
-    if (preg_match("/\?event=(\\d+)$/", $url, $matches)) {
+    if (preg_match("/\?event=(\\d+)$/", $url ?? "", $matches)) {
         $content = "[mevt=$matches[1]]";
         return true;
     }
@@ -2223,7 +2223,7 @@ function split_by_bracket($str, &$chunks)
         return;
     }
     
-    if (preg_match("~(.+?)(\\[/.*)~i", $str, $matches)) {
+    if (preg_match("~(.+?)(\\[/.*)~i", $str ?? "", $matches)) {
         $chunks = array($matches[1], $matches[2]);
         return true;
     }
@@ -2245,15 +2245,15 @@ function fix_links(&$text)
 {
     $re = "~(\()?((?:https?|ftp)+://[^<>\"[:space:]]+[^\\.,\"[:space:]])(?(1)(\)))~x";
     
-    $text = preg_replace_callback($re, "fix_links_callback", $text);
+    $text = preg_replace_callback($re, "fix_links_callback", $text ?? "");
 } // fix_links
 //------------------------------------------------------------------------------
 function fix_quot(&$text)
 {
     $matches = array();
     
-    $open_cnt = preg_match_all("/\\[quote?(=[^\\]]+)?\\]/", $text, $matches);
-    $close_cnt = preg_match_all("/\\[\\/quote\\]/", $text, $matches);
+    $open_cnt = preg_match_all("/\\[quote?(=[^\\]]+)?\\]/", $text ?? "", $matches);
+    $close_cnt = preg_match_all("/\\[\\/quote\\]/", $text ?? "", $matches);
     
     $missing_cnt = $open_cnt - $close_cnt;
     
@@ -2329,7 +2329,7 @@ function remove_nested_quotes(&$input, &$output, $limit)
         return true;
     }
     
-    if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output, $matches, PREG_OFFSET_CAPTURE)) {
+    if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output ?? "", $matches, PREG_OFFSET_CAPTURE)) {
         return true;
     }
     
@@ -2408,7 +2408,7 @@ function remove_nested_spoilers(&$input, &$output, $limit)
         return true;
     }
     
-    if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output, $matches, PREG_OFFSET_CAPTURE)) {
+    if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output ?? "", $matches, PREG_OFFSET_CAPTURE)) {
         return true;
     }
     
@@ -2488,7 +2488,7 @@ function remove_nested_quotes_bb(&$input, &$output, $limit)
         return true;
     }
     
-    if (!preg_match_all('/(\[quote[^\[\]]*\]|\[\/quote\])/i', $output, $matches, PREG_OFFSET_CAPTURE)) {
+    if (!preg_match_all('/(\[quote[^\[\]]*\]|\[\/quote\])/i', $output ?? "", $matches, PREG_OFFSET_CAPTURE)) {
         return true;
     }
     
@@ -2630,7 +2630,7 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
     $picture = "";
     $start = 0;
     
-    if (preg_match("/t=((\\d+)h)?((\\d+)m)?((\\d+)s)?/", $appendix, $matches)) {
+    if (preg_match("/t=((\\d+)h)?((\\d+)m)?((\\d+)s)?/", $appendix ?? "", $matches)) {
         if (!empty($matches[2])) {
             $start += 3600 * $matches[2];
         }
@@ -2642,19 +2642,19 @@ function gen_youtube_html($code, $apikey, $appendix, $bbcode)
         }
     }
     
-    if (preg_match("/t=(\\d+)/", $appendix, $matches)) {
+    if (preg_match("/t=(\\d+)/", $appendix ?? "", $matches)) {
         if (!empty($matches[1])) {
             $start += $matches[1];
         }
     }
     
-    if (preg_match("/time_continue=(\\d+)/", $appendix, $matches)) {
+    if (preg_match("/time_continue=(\\d+)/", $appendix ?? "", $matches)) {
         if (!empty($matches[1])) {
             $start += $matches[1];
         }
     }
     
-    if (preg_match("/start=(\\d+)/", $appendix, $matches)) {
+    if (preg_match("/start=(\\d+)/", $appendix ?? "", $matches)) {
         if (!empty($matches[1])) {
             $start += $matches[1];
         }
@@ -3122,7 +3122,7 @@ function gen_fbvideo_html($code, $bbcode)
             if (!empty($json["html"])) {
                 $real_html = $json["html"];
                 
-                if (preg_match("/.*<a href=\"https:\\/\\/www.facebook.com\\/.+\\/videos\\/[^\\/]+\\/\">([^<>]+)<\\/a>.*/", $json["html"], $macthes)) {
+                if (preg_match("/.*<a href=\"https:\\/\\/www.facebook.com\\/.+\\/videos\\/[^\\/]+\\/\">([^<>]+)<\\/a>.*/", $json["html"] ?? "", $macthes)) {
                     $title = $macthes[1];
                 }
             }
@@ -3184,7 +3184,7 @@ function gen_twitter_html($code, $bbcode)
         $json = json_decode($response, true);
         if ($json) {
             if (!empty($json["html"])) {
-                if (preg_match("/.*<p[^<>]+>(.+)<\\/p>.*/s", $json["html"], $macthes)) {
+                if (preg_match("/.*<p[^<>]+>(.+)<\\/p>.*/s", $json["html"] ?? "", $macthes)) {
                     $title = strip_tags($macthes[1]);
                 }
             }
@@ -3781,7 +3781,7 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
             continue;
         }
         
-        if (!preg_match("/.+\.(jpg|jpeg|gif|png|webp)$/i", $file)) {
+        if (!preg_match("/.+\.(jpg|jpeg|gif|png|webp)$/i", $file ?? "")) {
             continue;
         }
         
@@ -4381,7 +4381,7 @@ function parse_bb_code_simple(&$text, $mode = "email")
                 continue;
             }
             
-            if (!preg_match("/.+\.(jpg|jpeg|gif|png|webp)$/i", $file)) {
+            if (!preg_match("/.+\.(jpg|jpeg|gif|png|webp)$/i", $file ?? "")) {
                 continue;
             }
             
