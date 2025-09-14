@@ -602,4 +602,27 @@ function create_latex_png($formula, $density, $out_file)
     @shell_exec('rm -f ' . $temp_dir . $hash . '.* 2>&1');
 } // create_latex_png
 //-------------------------------------------------------------------
+function detect_file_mime_type($fpath) {
+    if (!function_exists("finfo_open")) {
+        return false;
+    }
+    
+    if (!file_exists($fpath)) {
+        return false;
+    }
+    
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
+    $mime_type = finfo_file($finfo, $fpath);
+
+    // Close the resource
+    finfo_close($finfo);
+
+    if (empty($mime_type)) {
+        return false;
+    }
+
+    return $mime_type;
+} // detect_file_mime_type
+//-------------------------------------------------------------------
 ?>

@@ -5905,7 +5905,7 @@ abstract class ForumManager
         // check the email
         
         $domain = strtolower(reqvar("user_email"));
-        if (preg_match("/[^@]+@(.*)/", $domain, $matches)) {
+        if (preg_match("/[^@]+@(.*)/", $domain ?? "", $matches)) {
             $domain = $matches[1];
         }
         if (!$this->check_email_domain($domain)) {
@@ -10467,6 +10467,12 @@ abstract class ForumManager
             return false;
         }
         
+        if (strlen(reqvar("custom_css")) > 2000) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 2000));
+            MessageHandler::setErrorElement("custom_css");
+            return false;
+        }
+
         if (reqvar_empty("user_email")) {
             MessageHandler::setError(text("ErrEmailEmpty"));
             MessageHandler::setErrorElement("user_email");
@@ -10486,7 +10492,7 @@ abstract class ForumManager
         }
         
         $domain = strtolower(reqvar("user_email"));
-        if (preg_match("/[^@]+@(.*)/", $domain, $matches)) {
+        if (preg_match("/[^@]+@(.*)/", $domain ?? "", $matches)) {
             $domain = $matches[1];
         }
         if (!$this->check_email_domain($domain)) {
@@ -13805,14 +13811,14 @@ abstract class ForumManager
             
             $tmp_html = $dbw->field_by_name("html_content");
             remove_nested_quotes($tmp_html, $tmp_html, 1);
-            if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html, $matches)) {
+            if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html ?? "", $matches)) {
                 $posts[$dbw->field_by_name("id")]["contained_citated_posts"] = $matches[1];
                 
                 $all_citated_posts = array_merge($all_citated_posts, $matches[1]);
             }
             
             $posts[$dbw->field_by_name("id")]["appealed_users"] = array();
-            if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html, $matches)) {
+            if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html ?? "", $matches)) {
                 $posts[$dbw->field_by_name("id")]["appealed_users"] = $matches[2];
                 $appealed_users += $matches[2];
             }
@@ -14176,7 +14182,7 @@ abstract class ForumManager
                 // If the phrase is only a part of a nick - we do not notify.
                 // If the phrase is exactly a nick - we DO notify.
                 
-                if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text, $matches, PREG_SET_ORDER)) {
+                if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text ?? "", $matches, PREG_SET_ORDER)) {
                     foreach ($matches as $match_set) {
                         $nick_name = "";
                         if (!empty($match_set[2])) {
@@ -14210,7 +14216,7 @@ abstract class ForumManager
                 
                 $pattern = "/" . trim($pattern, "|") . "/miu";
                 
-                if (!preg_match_all($pattern, $word_check_text, $matches)) {
+                if (!preg_match_all($pattern, $word_check_text ?? "", $matches)) {
                     continue;
                 }
                 
@@ -20035,6 +20041,16 @@ abstract class ForumManager
             MessageHandler::setWarning(text("MsgDemoMode"));
             return true;
         }
+
+        if (empty($_SESSION["approved"])) {
+            MessageHandler::setWarning(text("ErrAccountNotApproved"));
+            return true;
+        }
+        
+        if (empty($_SESSION["activated"])) {
+            MessageHandler::setWarning(text("ErrAccountNotActivated"));
+            return true;
+        }
         
         if (empty($uid) || !is_numeric($uid)) {
             MessageHandler::setError(text("ErrNoUserSelected"));
@@ -22552,7 +22568,7 @@ abstract class ForumManager
         } // attachments
         
         // update last post for the attachments
-        if (!empty($post_user_id) && preg_match_all("/\[attachment(\d*)=(\d+)\]/", $message, $matches, PREG_SET_ORDER)) {
+        if (!empty($post_user_id) && preg_match_all("/\[attachment(\d*)=(\d+)\]/", $message ?? "", $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $idx = $dbw->escape($match[1]);
                 if (empty($idx)) {
@@ -22888,22 +22904,22 @@ abstract class ForumManager
         
         $tmp_html = $html_message;
         remove_nested_quotes($tmp_html, $tmp_html, 1);
-        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html, $matches)) {
+        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html ?? "", $matches)) {
             $citated_posts = array_merge($citated_posts, $matches[1]);
         }
         
-        if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html, $matches)) {
+        if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html ?? "", $matches)) {
             $new_appealed_users = $matches[2];
         }
         
         // exclude the already existing citations from redundant notification
         
         remove_nested_quotes($old_html_content, $tmp_html, 1);
-        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html, $matches)) {
+        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html ?? "", $matches)) {
             $citated_posts = array_diff($citated_posts, $matches[1]);
         }
         
-        if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html, $matches)) {
+        if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html ?? "", $matches)) {
             $new_appealed_users = array_diff($new_appealed_users, $matches[2]);
         }
         
@@ -23600,7 +23616,7 @@ abstract class ForumManager
             // If the phrase is only a part of a nick - we do not notify.
             // If the phrase is exactly a nick - we DO notify.
             
-            if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text, $matches, PREG_SET_ORDER)) {
+            if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text ?? "", $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match_set) {
                     $nick_name = "";
                     if (!empty($match_set[2])) {
@@ -23623,14 +23639,14 @@ abstract class ForumManager
             $existing_entries = array();
             
             $matches = array();
-            if (preg_match_all($pattern, $word_check_text, $matches)) {
+            if (preg_match_all($pattern, $word_check_text ?? "", $matches)) {
                 $existing_entries = $matches[0];
             }
             
             $word_check_text = $message;
             remove_post_citations($word_check_text, $word_check_text);
             
-            if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text, $matches, PREG_SET_ORDER)) {
+            if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text ?? "", $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match_set) {
                     $nick_name = "";
                     if (!empty($match_set[2])) {
@@ -23651,7 +23667,7 @@ abstract class ForumManager
             }
             
             $matches = array();
-            if (!preg_match_all($pattern, $word_check_text, $matches)) {
+            if (!preg_match_all($pattern, $word_check_text ?? "", $matches)) {
                 continue;
             }
             
@@ -23728,12 +23744,12 @@ abstract class ForumManager
     function check_subject($subject, &$symbols)
     {
         if ($symbols = Emoji::HasEmoji($subject)) {
-            if (!preg_match("/[|]+/", $symbols)) {
+            if (!preg_match("/[|]+/", $symbols ?? "")) {
                 return false;
             }
         }
         
-        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\\\\\/\*\+<>—~&#–§№\$€₽¥∞£Ұ₴°\"\'“”‘’«»„“0-9，（＾ω＾）ｖ。]+/u", $subject, $matches)) {
+        if (preg_match("/[^\p{L} _\-\.\(\)\[\]\{\}\!?,:;\$%&@~`|\\\\\/\*\+<>—~&#–§№\$€₽¥∞£Ұ₴°\"\'“”‘’«»„“0-9，（＾ω＾）ｖ。]+/u", $subject ?? "", $matches)) {
             $symbols = $matches[0];
 
             trace_message_to_file(date("d.m.Y, H:i") . ": the string [$subject] contains the prohibited symbols [$symbols]", "symbols.log");
@@ -24712,7 +24728,7 @@ abstract class ForumManager
         }
         
         // update last post for the attachments
-        if ($uid != "NULL" && preg_match_all("/\[attachment(\d*)=(\d+)\]/", $message, $matches, PREG_SET_ORDER)) {
+        if ($uid != "NULL" && preg_match_all("/\[attachment(\d*)=(\d+)\]/", $message ?? "", $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $idx = $dbw->escape($match[1]);
                 if (empty($idx)) {
@@ -24765,7 +24781,7 @@ abstract class ForumManager
         
         $tmp_html = $html_message;
         remove_nested_quotes($tmp_html, $tmp_html, 1);
-        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html, $matches)) {
+        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html ?? "", $matches)) {
             $citated_posts = array_merge($citated_posts, $matches[1]);
         }
         
@@ -24910,7 +24926,7 @@ abstract class ForumManager
         
         $all_appealed_users = array();
         $appealed_users = array();
-        if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html, $matches)) {
+        if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html ?? "", $matches)) {
             $in_list = "";
             
             foreach ($matches[2] as $user) {
@@ -25698,7 +25714,7 @@ abstract class ForumManager
             // If the phrase is only a part of a nick - we do not notify.
             // If the phrase is exactly a nick - we DO notify.
             
-            if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text, $matches, PREG_SET_ORDER)) {
+            if (preg_match_all("~(\[b\](.+?)(#\d+)?\[/b\]|\[quote=(.+?)(#\d+)?\])~u", $word_check_text ?? "", $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match_set) {
                     $nick_name = "";
                     if (!empty($match_set[2])) {
@@ -25731,7 +25747,7 @@ abstract class ForumManager
             }
             
             $pattern = "/" . trim($pattern, "|") . "/miu";
-            if (!preg_match_all($pattern, $word_check_text, $matches)) {
+            if (!preg_match_all($pattern, $word_check_text ?? "", $matches)) {
                 continue;
             }
             
@@ -31698,7 +31714,7 @@ abstract class ForumManager
             foreach ($_REQUEST["forums"] as $fid) {
                 if ($fid == "private") {
                     $search_title .= text("PrivateTopics");
-                } elseif (preg_match("/g(\\d*)/", $fid, $matches)) {                 
+                } elseif (preg_match("/g(\\d*)/", $fid ?? "", $matches)) {                 
                     $search_title .= (empty($matches[1]) ? text("OtherForums") : val_or_empty($forum_group_list[$matches[1]])) . ", ";
                 } elseif (!empty($forum_list[$fid]["name"])) {
                     $search_title .= val_or_empty($forum_list[$fid]["name"]) . ", ";
@@ -32442,7 +32458,10 @@ abstract class ForumManager
         set_cookie("q_hide_user_avatars", val_or_empty($_SESSION["hide_user_avatars"]), time() + 90 * 24 * 3600);
         set_cookie("q_hide_ignored", val_or_empty($_SESSION["hide_ignored"]), time() + 90 * 24 * 3600);
         set_cookie("q_skin", val_or_empty($_SESSION["skin"]), time() + 90 * 24 * 3600);
+        
+        // It might be too large
         set_cookie("q_custom_css", val_or_empty($_SESSION["custom_css"]), time() + 90 * 24 * 3600);
+        
         set_cookie("q_interface_language", current_language(), time() + 90 * 24 * 3600);
         set_cookie("q_time_zone", val_or_empty($_SESSION["time_zone"]), time() + 90 * 24 * 3600);
         
@@ -32844,6 +32863,12 @@ abstract class ForumManager
         
         if ($this->is_logged_in() && !$this->is_master_admin() && empty($_SESSION["guest_posting_mode"])) {
             return true;
+        }
+        
+        if (strlen(reqvar("custom_css")) > 2000) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 2000));
+            MessageHandler::setErrorElement("custom_css");
+            return false;
         }
 
         if (!empty($_FILES["avatar"]["name"]) && reqvar_empty("user_name", true)) {
@@ -33557,9 +33582,9 @@ abstract class ForumManager
         $guests = array();
         
         foreach ($_REQUEST["selected_users"] as $val) {
-            if (preg_match("/g:(.+)/", $val, $matches)) {
+            if (preg_match("/g:(.+)/", $val ?? "", $matches)) {
                 $guests[] = $dbw->escape($matches[1]);
-            } elseif (preg_match("/u:(\d+)/", $val, $matches)) {
+            } elseif (preg_match("/u:(\d+)/", $val ?? "", $matches)) {
                 $users[] = $dbw->escape($matches[1]);
             }
         }
@@ -40107,7 +40132,7 @@ abstract class ForumManager
                     continue;
                 } // private
                 
-                if (preg_match("/g(\\d+)/", $fid, $matches)) {
+                if (preg_match("/g(\\d+)/", $fid ?? "", $matches)) {
                     if (!empty($forum_where)) {
                         $forum_where .= " or ";
                     }
