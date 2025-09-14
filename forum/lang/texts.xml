@@ -2346,6 +2346,13 @@
             <ua>Ім'я користувача не повинне перевищувати %s символів!</ua>
         </text>
 
+        <text id="ErrUserCSSTooLong">
+            <en>The custom CSS is too large. It cannot contain more than %s characters!</en>
+            <de>Das benutzerdefinierte CSS ist zu groß. Es darf nicht mehr als %s Zeichen enthalten!</de>
+            <ru>Пользовательский CSS слишком большой. Он не может содержать более %s символов!</ru>
+            <ua>Налаштований CSS занадто великий. Він не може містити більше %s символів!</ua>
+        </text>
+
         <text id="ErrEmailTooLong">
             <en>Email cannot contain more than %s characters!</en>
             <de>E-Mail kann höchstens %s Zeichen beinhalten!</de>

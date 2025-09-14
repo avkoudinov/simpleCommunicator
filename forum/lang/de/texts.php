@@ -334,6 +334,7 @@ $GLOBALS['DEF_TEXTS']['de']['ErrUserNameEmpty'] = 'Benutzername ist nicht angege
 $GLOBALS['DEF_TEXTS']['de']['ErrEmailEmpty'] = 'E-Mail ist nicht angegeben!';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserLoginTooLong'] = 'Login kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrUserNameTooLong'] = 'Benutzername kann höchstens %s Zeichen beinhalten!';
+$GLOBALS['DEF_TEXTS']['de']['ErrUserCSSTooLong'] = 'Das benutzerdefinierte CSS ist zu groß. Es darf nicht mehr als %s Zeichen enthalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrEmailTooLong'] = 'E-Mail kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccess'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt! 
 
