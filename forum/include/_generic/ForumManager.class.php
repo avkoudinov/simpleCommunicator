@@ -10467,6 +10467,12 @@ abstract class ForumManager
             return false;
         }
         
+        if (strlen(reqvar("custom_css")) > 2000) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 2000));
+            MessageHandler::setErrorElement("custom_css");
+            return false;
+        }
+
         if (reqvar_empty("user_email")) {
             MessageHandler::setError(text("ErrEmailEmpty"));
             MessageHandler::setErrorElement("user_email");
@@ -32452,7 +32458,10 @@ abstract class ForumManager
         set_cookie("q_hide_user_avatars", val_or_empty($_SESSION["hide_user_avatars"]), time() + 90 * 24 * 3600);
         set_cookie("q_hide_ignored", val_or_empty($_SESSION["hide_ignored"]), time() + 90 * 24 * 3600);
         set_cookie("q_skin", val_or_empty($_SESSION["skin"]), time() + 90 * 24 * 3600);
+        
+        // It might be too large
         set_cookie("q_custom_css", val_or_empty($_SESSION["custom_css"]), time() + 90 * 24 * 3600);
+        
         set_cookie("q_interface_language", current_language(), time() + 90 * 24 * 3600);
         set_cookie("q_time_zone", val_or_empty($_SESSION["time_zone"]), time() + 90 * 24 * 3600);
         
@@ -32854,6 +32863,12 @@ abstract class ForumManager
         
         if ($this->is_logged_in() && !$this->is_master_admin() && empty($_SESSION["guest_posting_mode"])) {
             return true;
+        }
+        
+        if (strlen(reqvar("custom_css")) > 2000) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 2000));
+            MessageHandler::setErrorElement("custom_css");
+            return false;
         }
 
         if (!empty($_FILES["avatar"]["name"]) && reqvar_empty("user_name", true)) {

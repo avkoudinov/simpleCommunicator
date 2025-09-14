@@ -334,6 +334,7 @@ $GLOBALS['DEF_TEXTS']['ru']['ErrUserNameEmpty'] = 'Не задано имя по
 $GLOBALS['DEF_TEXTS']['ru']['ErrEmailEmpty'] = 'Не задан электронный адрес!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrUserLoginTooLong'] = 'Логин не должен превышать %s символов!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrUserNameTooLong'] = 'Имя пользователя не должно превышать %s символов!';
+$GLOBALS['DEF_TEXTS']['ru']['ErrUserCSSTooLong'] = 'Пользовательский CSS слишком большой. Он не может содержать более %s символов!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrEmailTooLong'] = 'Длина электронного адреса не должна превышать %s символов!';
 $GLOBALS['DEF_TEXTS']['ru']['MsgRegistrationSuccess'] = 'Ваша учетная запись успешно создана! 
 

@@ -334,6 +334,7 @@ $GLOBALS['DEF_TEXTS']['ua']['ErrUserNameEmpty'] = 'Не задано ім\'я к
 $GLOBALS['DEF_TEXTS']['ua']['ErrEmailEmpty'] = 'Не задано електронну адресу!';
 $GLOBALS['DEF_TEXTS']['ua']['ErrUserLoginTooLong'] = 'Логін не повинен перевищувати %s символів!';
 $GLOBALS['DEF_TEXTS']['ua']['ErrUserNameTooLong'] = 'Ім\'я користувача не повинне перевищувати %s символів!';
+$GLOBALS['DEF_TEXTS']['ua']['ErrUserCSSTooLong'] = 'Налаштований CSS занадто великий. Він не може містити більше %s символів!';
 $GLOBALS['DEF_TEXTS']['ua']['ErrEmailTooLong'] = 'Довжина електронної адреси не повинна перевищувати %s символів!';
 $GLOBALS['DEF_TEXTS']['ua']['MsgRegistrationSuccess'] = 'Ваш обліковий запис успішно створено! 
 
