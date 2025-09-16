@@ -11860,7 +11860,7 @@ abstract class ForumManager
         
         $event_data = array();
         
-        if (!$dbw->execute_query("select id, user_name, email, send_notifications, interface_language, last_host from {$prfx}_user where id = $uid")) {
+        if (!$dbw->execute_query("select id, user_name, email, send_notifications, activated, approved, interface_language, last_host from {$prfx}_user where id = $uid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
@@ -11873,7 +11873,7 @@ abstract class ForumManager
             $event_data["author_id"] = $dbw->field_by_name("id");
             $event_data["author_name"] = $dbw->field_by_name("user_name");
             $event_data["author_email"] = $dbw->field_by_name("email");
-            $event_data["send_notifications"] = $dbw->field_by_name("send_notifications");
+            $event_data["send_notifications"] = $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved");
             $event_data["last_host"] = $dbw->field_by_name("last_host");
             $event_data["interface_language"] = $dbw->field_by_name("interface_language");
         }
@@ -11903,7 +11903,7 @@ abstract class ForumManager
         $affected_users = array();
         
         $query = "select
-                {$prfx}_user.id, email, user_name, last_host, donot_notify_on_rates, send_notifications, interface_language, count(*) cnt
+                {$prfx}_user.id, email, user_name, last_host, donot_notify_on_rates, send_notifications, activated, approved, interface_language, count(*) cnt
                 from {$prfx}_post
                 inner join {$prfx}_post_rating on ({$prfx}_post_rating.post_id = {$prfx}_post.id)
                 inner join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
@@ -11921,7 +11921,7 @@ abstract class ForumManager
                 "user_name" => $dbw->field_by_name("user_name"),
                 "user_email" => $dbw->field_by_name("email"),
                 "cnt" => $dbw->field_by_name("cnt"),
-                "send_notifications" => $dbw->field_by_name("send_notifications"),
+                "send_notifications" => $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved"),
                 "donot_notify_on_rates" => $dbw->field_by_name("donot_notify_on_rates"),
                 "last_host" => $dbw->field_by_name("last_host"),
                 "interface_language" => $dbw->field_by_name("interface_language")
@@ -25924,7 +25924,7 @@ abstract class ForumManager
                              inner join {$prfx}_user on ({$prfx}_forum_moderator.user_id = {$prfx}_user.id)
                              where forum_id in (select forum_id from {$prfx}_topic where id in (select topic_id from {$prfx}_post where id = $pid))
                              union
-                             select user_id, email, user_name, last_host, send_notifications, interface_language
+                             select user_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
                              from {$prfx}_topic_moderator
                              inner join {$prfx}_user on ({$prfx}_topic_moderator.user_id = {$prfx}_user.id)
                              where topic_id in (select topic_id from {$prfx}_post where id = $pid)
