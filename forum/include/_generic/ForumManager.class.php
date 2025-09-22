@@ -10467,8 +10467,8 @@ abstract class ForumManager
             return false;
         }
         
-        if (strlen(reqvar("custom_css")) > 2000) {
-            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 2000));
+        if (strlen(reqvar("custom_css")) > 3000) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 3000));
             MessageHandler::setErrorElement("custom_css");
             return false;
         }
@@ -23223,6 +23223,7 @@ abstract class ForumManager
                                       inner join {$prfx}_topic citated_topic on ({$prfx}_post.topic_id = citated_topic.id)
                                       left join {$prfx}_ignored_topics on ({$prfx}_user.id = {$prfx}_ignored_topics.user_id and {$prfx}_ignored_topics.topic_id = $tid)
                                       where {$prfx}_post.id in ($in_list) and
+                                      {$prfx}_user.approved = 1 and {$prfx}_user.activated = 1 and
                                       ({$prfx}_topic.publish_delay <> 1 or {$prfx}_topic.user_id = {$prfx}_user.id) and
                                       ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = {$prfx}_user.id)) and
                                       (({$prfx}_forum.restricted_access in (0, 2) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1) or
@@ -23279,6 +23280,7 @@ abstract class ForumManager
                                       inner join {$prfx}_topic citated_topic on ({$prfx}_post.topic_id = citated_topic.id)
                                       left join {$prfx}_ignored_topics on ({$prfx}_user.id = {$prfx}_ignored_topics.user_id and {$prfx}_ignored_topics.topic_id = $tid)
                                       where {$prfx}_post.id in ($in_list) and
+                                      {$prfx}_user.approved = 1 and {$prfx}_user.activated = 1 and
                                       ({$prfx}_topic.publish_delay <> 1 or {$prfx}_topic.user_id = {$prfx}_user.id) and
                                       ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = {$prfx}_user.id)) and
                                       (({$prfx}_forum.restricted_access in (0, 2) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1) or
@@ -23332,7 +23334,7 @@ abstract class ForumManager
                                       email, user_name, last_host, send_notifications, activated, approved, interface_language, words_to_notify,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
-                                      inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
+                                      inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1 and {$prfx}_user.approved = 1 and {$prfx}_user.activated = 1)
                                       inner join {$prfx}_topic on ({$prfx}_topic.id = {$prfx}_post.topic_id)
                                       inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                                       left join {$prfx}_ignored_topics on ({$prfx}_user.id = {$prfx}_ignored_topics.user_id and {$prfx}_ignored_topics.topic_id = $tid)
@@ -25219,6 +25221,7 @@ abstract class ForumManager
                                       inner join {$prfx}_topic citated_topic on ({$prfx}_post.topic_id = citated_topic.id)
                                       left join {$prfx}_ignored_topics on ({$prfx}_user.id = {$prfx}_ignored_topics.user_id and {$prfx}_ignored_topics.topic_id = $tid)
                                       where {$prfx}_post.id in ($in_list) and
+                                      {$prfx}_user.approved = 1 and {$prfx}_user.activated = 1 and
                                       ({$prfx}_topic.publish_delay <> 1 or {$prfx}_topic.user_id = {$prfx}_user.id) and
                                       ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = {$prfx}_user.id)) and
                                       (({$prfx}_forum.restricted_access in (0, 2) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1) or
@@ -25281,6 +25284,7 @@ abstract class ForumManager
                                       inner join {$prfx}_topic citated_topic on ({$prfx}_post.topic_id = citated_topic.id)
                                       left join {$prfx}_ignored_topics on ({$prfx}_user.id = {$prfx}_ignored_topics.user_id and {$prfx}_ignored_topics.topic_id = $tid)
                                       where {$prfx}_post.id in ($in_list) and
+                                      {$prfx}_user.approved = 1 and {$prfx}_user.activated = 1 and
                                       ({$prfx}_topic.publish_delay <> 1 or {$prfx}_topic.user_id = {$prfx}_user.id) and
                                       ({$prfx}_topic.is_private < 1 or {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = {$prfx}_user.id)) and
                                       (({$prfx}_forum.restricted_access in (0, 2) and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1) or
@@ -25335,7 +25339,7 @@ abstract class ForumManager
                                       email, user_name, last_host, send_notifications, activated, approved, interface_language, words_to_notify,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored
                                       from {$prfx}_post
-                                      inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1)
+                                      inner join {$prfx}_user on ({$prfx}_user.notify_on_words = 1 and {$prfx}_user.approved = 1 and {$prfx}_user.activated = 1)
                                       inner join {$prfx}_topic on ({$prfx}_topic.id = {$prfx}_post.topic_id)
                                       inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                                       left join {$prfx}_ignored_topics on ({$prfx}_user.id = {$prfx}_ignored_topics.user_id and {$prfx}_ignored_topics.topic_id = $tid)
@@ -25829,6 +25833,16 @@ abstract class ForumManager
             return false;
         }
         
+        if (empty($_SESSION["approved"])) {
+            MessageHandler::setWarning(text("ErrAccountNotApproved"));
+            return true;
+        }
+        
+        if (empty($_SESSION["activated"])) {
+            MessageHandler::setWarning(text("ErrAccountNotActivated"));
+            return true;
+        }
+
         if (reqvar_empty("post_comment", true)) {
             MessageHandler::setError(text("ErrMessageEmpty"));
             MessageHandler::setErrorElement("post_comment");
@@ -32865,8 +32879,8 @@ abstract class ForumManager
             return true;
         }
         
-        if (strlen(reqvar("custom_css")) > 2000) {
-            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 2000));
+        if (strlen(reqvar("custom_css")) > 3000) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 3000));
             MessageHandler::setErrorElement("custom_css");
             return false;
         }
