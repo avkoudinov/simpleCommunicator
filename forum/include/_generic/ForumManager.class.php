@@ -7183,9 +7183,10 @@ abstract class ForumManager
     {
         $_SESSION["user_name"] = "";
         $_SESSION["last_posted_user"] = "";
+        set_cookie("q_last_guest_name", "", time());
         
         $this->update_user_cookies();
-        
+
         return true;
     } // clear_profile_data
     
@@ -20042,16 +20043,6 @@ abstract class ForumManager
             return true;
         }
 
-        if (empty($_SESSION["approved"])) {
-            MessageHandler::setWarning(text("ErrAccountNotApproved"));
-            return true;
-        }
-        
-        if (empty($_SESSION["activated"])) {
-            MessageHandler::setWarning(text("ErrAccountNotActivated"));
-            return true;
-        }
-        
         if (empty($uid) || !is_numeric($uid)) {
             MessageHandler::setError(text("ErrNoUserSelected"));
             return false;
@@ -20079,6 +20070,16 @@ abstract class ForumManager
         
         // user ignore
         
+        if (empty($_SESSION["approved"])) {
+            MessageHandler::setWarning(text("ErrAccountNotApproved"));
+            return true;
+        }
+        
+        if (empty($_SESSION["activated"])) {
+            MessageHandler::setWarning(text("ErrAccountNotActivated"));
+            return true;
+        }
+
         $dbw = System::getDBWorker();
         if (!$dbw) {
             return false;
@@ -32611,6 +32612,7 @@ abstract class ForumManager
         }
         
         $_SESSION["ignore_new_guests"] = get_cookie("q_ignore_new_guests");
+        $_SESSION["custom_css"] = get_cookie("q_custom_css");
         $_SESSION["ignore_guests_blacklist"] = get_cookie("q_ignore_guests_blacklist");
         $_SESSION["ignore_guests_whitelist"] = get_cookie("q_ignore_guests_whitelist");
         
