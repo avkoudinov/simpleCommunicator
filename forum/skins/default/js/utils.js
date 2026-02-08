@@ -830,12 +830,25 @@ Forum.swap_preview_image = function(img_link)
 
   if(lbox.classList) lbox.classList.remove('_sys_image_preview_stop_animation');
   
-  setTimeout(async function() {
-    await fetch(img_link.getAttribute('href'), {cache: 'no-cache'});
-
-    img.src = img_link.getAttribute('href');
-  }, 300);
-} // swap_preview_image
+  setTimeout(function() {
+    var newSrc = img_link.getAttribute('href');
+    
+    var tempImg = new Image();
+    
+    tempImg.onload = function() {
+      img.src = newSrc;
+      img.parentNode.classList.remove("loading_in_progress");
+    };
+    
+    tempImg.onerror = function() {
+      img.parentNode.classList.remove("loading_in_progress");
+    };
+    
+    if(newSrc.indexOf("?") == -1) newSrc += "?t=" + Date.now();
+    else                          newSrc += "&t=" + Date.now();
+    
+    tempImg.src = newSrc;
+  }, 300);} // swap_preview_image
 // --------------------------------------------------------
 Forum.show_image_preview = function(img_link)
 {

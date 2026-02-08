@@ -325,16 +325,47 @@ function expand_statistics_list(elm)
 
 function skin_changed(new_skin)
 {
-  var properties = document.getElementsByClassName("skin_property");
+  var properties = document.getElementsByClassName("skin_property_row");
   for(var i = 0; i < properties.length; i++)
   {
-    properties[i].style.display = (properties[i].classList.contains("skin_property_" + new_skin)) ? "table-row" : "none";
+    properties[i].style.display = (properties[i].classList.contains("skin_property_row_" + new_skin)) ? "table-row" : "none";
   }
+}
+
+function sync_skin_properties()
+{
+  const selectedSkin = document.getElementById('skin').value;
+  
+  const currentSkinProperties = {};
+  const currentSkinCheckboxes = document.querySelectorAll(
+      `.skin_property[data-skin-name="${selectedSkin}"]`
+  );
+  
+  currentSkinCheckboxes.forEach(checkbox => {
+      const propertyName = checkbox.getAttribute('data-property-name');
+      currentSkinProperties[propertyName] = checkbox.checked;
+  });
+  
+  const allSkinCheckboxes = document.querySelectorAll('.skin_property');
+  
+  allSkinCheckboxes.forEach(checkbox => {
+      const skinName = checkbox.getAttribute('data-skin-name');
+      const propertyName = checkbox.getAttribute('data-property-name');
+      
+      if (skinName === selectedSkin) {
+          return;
+      }
+      
+      if (propertyName in currentSkinProperties) {
+          checkbox.checked = currentSkinProperties[propertyName];
+      }
+  });
 }
 
 Forum.addXEvent(window, 'DOMContentLoaded', function () { 
   handle_adult_checkbox();
-  show_hide_ignore_guests_area();
+  show_hide_ignore_guests_area();  
+  sync_skin_properties();
 });
 </script>
 
@@ -531,7 +562,7 @@ if(!empty($user_data["avatar"]))
 
 <?php foreach($property_list as $skin => $properties): ?>
 
-<tr class="skin_property skin_property_<?php echo_html($skin); ?>" style="display: <?php echo($skin == $user_data["skin"] ? "table-row" : "none"); ?>">
+<tr class="skin_property_row skin_property_row_<?php echo_html($skin); ?>" style="display: <?php echo($skin == $user_data["skin"] ? "table-row" : "none"); ?>">
 <td><?php echo_html(text("SkinSettings")); ?>:</td>
 <td>
 <?php foreach($properties as $property): ?>
@@ -540,7 +571,7 @@ if(!empty($user_data["avatar"]))
      <td>
      <!-- this live hack is because of placeholders -->
      <input type="hidden" name="skin_properties_placeholders[<?php echo_html($skin); ?>][<?php echo_html($property["name"]); ?>]" value="">
-     <input type="checkbox" id="skin_properties_<?php echo_html($skin); ?>_<?php echo_html($property["name"]); ?>" name="skin_properties[<?php echo_html($skin); ?>][<?php echo_html($property["name"]); ?>]" value="1" <?php echo_html(checked(val_or_empty($user_data["skin_properties"][$skin][$property["name"]]))); ?>>
+     <input type="checkbox" class="skin_property" data-skin-name="<?php echo_html($skin); ?>" data-property-name="<?php echo_html($property["name"]); ?>" id="skin_properties_<?php echo_html($skin); ?>_<?php echo_html($property["name"]); ?>" name="skin_properties[<?php echo_html($skin); ?>][<?php echo_html($property["name"]); ?>]" value="1" <?php echo_html(checked(val_or_empty($user_data["skin_properties"][$skin][$property["name"]]))); ?> onchange="sync_skin_properties()">
      </td>
      <td>
      <label for="skin_properties_<?php echo_html($skin); ?>_<?php echo_html($property["name"]); ?>"><?php echo_html($property["caption"]); ?></label>

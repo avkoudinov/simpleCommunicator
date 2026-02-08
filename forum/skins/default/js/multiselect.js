@@ -5,15 +5,20 @@ function mustAdjustMultiSelect()
   //if(/mobile.*firefox/.test(window.navigator.userAgent.toLowerCase())) return false;
 
   //if(/edge/.test(window.navigator.userAgent.toLowerCase())) return false;
-  
-  if(/(iphone|ipod|ipad|android|iemobile|blackberry|bada)/.test(window.navigator.userAgent.toLowerCase())) return true;
+
+  if(/(iphone|ipod|ipad|android|iemobile|blackberry|bada)/.test(window.navigator.userAgent.toLowerCase())) 
+  {
+    //alert("must adjust: " + window.navigator.userAgent);
+    return true;
+  }
   
   if(/Version\/13.+safari/i.test(window.navigator.userAgent.toLowerCase())) 
   {
-    //alert(window.navigator.userAgent);
+    //alert("must not adjust: " + window.navigator.userAgent);
     return false;
   }
 
+  //alert("must not adjust: " + window.navigator.userAgent);
   return false;
 }
 
