@@ -18053,7 +18053,7 @@ abstract class ForumManager
         // text("MsgTopicMovedFromForum")
         foreach ($topics as $tid => $tdata) {
             $dummy = "";
-            if (!$this->post_sys_message($dbw, $tid, "MSG(MsgTopicMovedFromForum\t$tdata[source_forum_name])", $dummy)) {
+            if (!$this->post_sys_message($dbw, $tid, "MSG(MsgTopicMovedFromForum\t$tdata[source_forum_name]\t$tdata[forum_name])", $dummy)) {
                 $dbw->rollback_transaction();
                 return false;
             }
@@ -22035,6 +22035,21 @@ abstract class ForumManager
         $_SESSION["last_edit_hash"] = $message;
         $_SESSION["last_edit_post"] = $pid;
         
+        if (!$dbw->execute_query("select parent_post_id
+                             from {$prfx}_post_hierarchy
+                             where reply_post_id = $pid")) {
+            MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+            return false;
+        }
+        
+        $response["citated_post"] = "";
+
+        while ($dbw->fetch_row()) {
+            $response["citated_post"] .= $dbw->field_by_name("parent_post_id") . ",";
+        }
+
+        $dbw->free_result();
+        
         return true;
     } // get_message_for_edit
     
@@ -22457,7 +22472,7 @@ abstract class ForumManager
             return false;
         }
         
-        if ($this->check_blocked($fid)) {
+        if ($this->check_blocked($fid, $forced_guest_posting)) {
             return false;
         }
         
@@ -22913,17 +22928,24 @@ abstract class ForumManager
             $new_appealed_users = $matches[2];
         }
         
-        // exclude the already existing citations from redundant notification
+        // post hierarchy
         
-        remove_nested_quotes($old_html_content, $tmp_html, 1);
-        if (preg_match_all("/data-cmid=\"(\d+)\"/", $tmp_html ?? "", $matches)) {
-            $citated_posts = array_diff($citated_posts, $matches[1]);
+        if (!empty($citated_posts)) {
+            $in_list = $dbw->escape(implode(", ", $citated_posts));
+            
+            $query = "insert into {$prfx}_post_hierarchy
+              (parent_post_id, reply_post_id)
+              select id, $edited_post from {$prfx}_post
+              where id in ($in_list)
+              and not exists (select 1 from {$prfx}_post_hierarchy where parent_post_id = {$prfx}_post.id and reply_post_id = $edited_post)";
+            
+            if (!$dbw->execute_query($query)) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
         }
-        
-        if (preg_match_all("/(@|%)([^%@\r\n\t]+?)\\1/iu", $tmp_html ?? "", $matches)) {
-            $new_appealed_users = array_diff($new_appealed_users, $matches[2]);
-        }
-        
+
         $all_appealed_users = array();
         $appealed_users = array();
         if (!empty($new_appealed_users)) {
@@ -24231,7 +24253,7 @@ abstract class ForumManager
         $author = $dbw->quotes_or_null(reqvar("author"));
 
         $tor_check = $this->check_tor_ip($ip);
-        if (!$this->is_logged_in() && ($tor_check == "tor_block_write" || $tor_check == "tor_block_read")) {
+        if ((!$this->is_logged_in() || $forced_guest_posting) && ($tor_check == "tor_block_write" || $tor_check == "tor_block_read")) {
             MessageHandler::setError(text("ErrTorNodeBlocked"));
             return false;
         }
@@ -24295,7 +24317,7 @@ abstract class ForumManager
             return false;
         }
         
-        if ($this->check_blocked($fid)) {
+        if ($this->check_blocked($fid, $forced_guest_posting)) {
             return false;
         }
         
@@ -24822,7 +24844,7 @@ abstract class ForumManager
             
             $query = "insert into {$prfx}_post_hierarchy
               (parent_post_id, reply_post_id)
-              select id, $post_id from  {$prfx}_post
+              select id, $post_id from {$prfx}_post
               where id in ($in_list)";
             if (!$dbw->execute_query($query)) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -26460,9 +26482,9 @@ abstract class ForumManager
     } // is_blocked_in_topic
     
     //-----------------------------------------------------------------
-    function check_blocked($fid)
+    function check_blocked($fid, $forced_guest_posting = false)
     {
-        if ($this->is_admin()) {
+        if (!$forced_guest_posting && $this->is_admin()) {
             return false;
         }
         
@@ -26536,7 +26558,7 @@ abstract class ForumManager
             }
         }
         
-        if ($this->is_moderator()) {
+        if (!$forced_guest_posting && $this->is_moderator()) {
             return false;
         }
         
@@ -26612,7 +26634,7 @@ abstract class ForumManager
             
             // restrictions
             
-            if (!empty($privileged)) {
+            if (!$forced_guest_posting && !empty($privileged)) {
                 return false;
             }
             
@@ -26622,8 +26644,7 @@ abstract class ForumManager
                 return false;
             }
             
-            if (!$dbw->execute_query("select no_guests, restricted_access, access_duration, access_message_count,
-                               protected_by_password, password
+            if (!$dbw->execute_query("select no_guests, restricted_access, access_duration, access_message_count
                                from {$prfx}_forum
                                where id = $fid")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -26632,12 +26653,10 @@ abstract class ForumManager
             
             $access_duration = 0;
             $access_message_count = 0;
-            $protected_by_password = false;
             
             if ($dbw->fetch_row()) {
-                $protected_by_password = $dbw->field_by_name("protected_by_password");
-                
-                if (($dbw->field_by_name("no_guests") || $dbw->field_by_name("restricted_access") == 2) && $dbw->field_by_name("protected_by_password") == 0) {
+                // if guests not allowed or access only for registered
+                if (($dbw->field_by_name("no_guests") || $dbw->field_by_name("restricted_access") == 2)) {
                     $access_duration = $dbw->field_by_name("access_duration");
                     $access_message_count = $dbw->field_by_name("access_message_count");
                 }
@@ -26680,13 +26699,32 @@ abstract class ForumManager
                 return true;
             }
             
+            if (!$forced_guest_posting) return false;
+        } // if logged user
+        
+        // password protected forums
+        
+        if (!empty($fid)) {
+            if (!$dbw->execute_query("select protected_by_password, password
+                               from {$prfx}_forum
+                               where id = $fid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                return false;
+            }
+            
+            $protected_by_password = false;
+            
+            if ($dbw->fetch_row()) {
+                $protected_by_password = $dbw->field_by_name("protected_by_password");
+            }
+            
+            $dbw->free_result();
+
             if ($protected_by_password && empty($_SESSION["verified_protected_forums"][$fid])) {
                 MessageHandler::setError(sprintf(text("ErrForumNotAccessible"), $forum_name));
                 return true;
             }
-            
-            return false;
-        } // if logged user
+        }
         
         // guests and IP
         $ip = $dbw->escape(System::getIPAddress());

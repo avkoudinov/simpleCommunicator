@@ -883,6 +883,13 @@ function edit_message(params, response)
     elm.defaultValue = elm.value;
   }
 
+  elm = document.getElementById('citated_post');
+  if(elm)
+  {
+    elm.value = response.citated_post;
+    elm.defaultValue = elm.value;
+  }
+
   elm = document.getElementById('edit_mode');
   if(elm) 
   {
