@@ -23,13 +23,17 @@ function user_esc_handler()
 <table class="aux_table">
 <tr>
 <td>
-<input type="text" class="search_field" id="user_name" name="user_name" autocomplete="off" placeholder="<?php echo_html(text("SearchUser")); ?>" value="<?php echo_html(reqvar("user_name")); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_users', this, event)" onblur="lookup_delayed_hide(this.id)">
+<input type="text" class="search_field" id="user_name" name="user_name" autocomplete="off" placeholder="<?php echo_html(text("SearchUser")); ?>" value="<?php echo_html(reqvar("user_name")); ?>" 
+           onkeypress="return lookup_handle_enter(this.id, event)" 
+           onkeyup="return lookup_entries('search_users', this, event)" 
+           onblur="lookup_delayed_hide(this.id)">
   <div class="field_lookup_area" style="display:none">
   <select id="user_name_lookup" size="10" 
+           data-hide-on-show="field_lookup_area"
            onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('user_name') }" 
            onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('user_name') }" 
-
-           onkeypress="return lookup_handle_enter('user_name', event)" onblur="user_esc_handler()"
+           onkeypress="return lookup_handle_enter('user_name', event)" 
+           onblur="user_esc_handler()"
            >
   </select>
   </div>

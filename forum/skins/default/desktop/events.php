@@ -188,13 +188,16 @@ function user_esc_handler()
 <?php echo_html(text("Author")); ?>:
 </td>
 <td>
-  <input type="text" class="filter_field" id="author_name" name="author_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["author_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)">
+  <input type="text" class="filter_field" id="author_name" name="author_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["event_log_filter"]["author_name"])); ?>" 
+           onkeypress="return lookup_handle_enter(this.id, event)" 
+           onkeyup="return lookup_entries('search_authors', this, event)" 
+           onblur="lookup_delayed_hide(this.id)">
   <div style="position: relative">
   <div class="field_lookup_area" style="display:none">
   <select id="author_name_lookup" size="10" 
+           data-hide-on-show="field_lookup_area"
            onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('author_name') }" 
-           onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('author_name') }" 
-
+           onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('author_name') }"
            onkeypress="return lookup_handle_enter('author_name', event)" onblur="user_esc_handler()"
            >
   </select>

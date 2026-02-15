@@ -104,15 +104,21 @@ function user_esc_handler()
 <?php echo_html(text("Moderator")); ?> / <?php echo_html(text("Author")); ?>:
 </td>
 <td>
-  <input type="text" class="filter_field" id="moderator_name" name="moderator_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["moderator_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)">
+  <input type="text" class="filter_field" id="moderator_name" name="moderator_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["moderator_name"])); ?>" 
+           onkeypress="return lookup_handle_enter(this.id, event)" 
+           onkeyup="return lookup_entries('search_authors', this, event)" 
+           onblur="lookup_delayed_hide(this.id)">
+  <div style="position: relative">
   <div class="field_lookup_area" style="display:none">
   <select id="moderator_name_lookup" size="10" 
+           data-hide-on-show="field_lookup_area"
            onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('moderator_name') }" 
-           onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('moderator_name') }" 
-
-           onkeypress="return lookup_handle_enter('moderator_name', event)" onblur="user_esc_handler()"
+           onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('moderator_name') }"
+           onkeypress="return lookup_handle_enter('moderator_name', event)" 
+           onblur="user_esc_handler()"
            >
   </select>
+  </div>
   </div>
 </td>
 
@@ -134,15 +140,21 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
 <?php echo_html(text("Author") . " / " . text("IPAddress")); ?>:
 </td>
 <td>
-  <input type="text" class="filter_field" id="user_name" name="user_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["user_name"])); ?>" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)">
+  <input type="text" class="filter_field" id="user_name" name="user_name" autocomplete="off" value="<?php echo_html(val_or_empty($_SESSION["moderator_log_filter"]["user_name"])); ?>" 
+           onkeypress="return lookup_handle_enter(this.id, event)" 
+           onkeyup="return lookup_entries('search_authors', this, event)" 
+           onblur="lookup_delayed_hide(this.id)">
+  <div style="position: relative">
   <div class="field_lookup_area" style="display:none">
   <select id="user_name_lookup" size="10" 
+           data-hide-on-show="field_lookup_area"
            onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('user_name') }" 
-           onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('user_name') }" 
-
-           onkeypress="return lookup_handle_enter('user_name', event)" onblur="user_esc_handler()"
+           onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('user_name') }"
+           onkeypress="return lookup_handle_enter('user_name', event)" 
+           onblur="user_esc_handler()"
            >
   </select>
+  </div>
   </div>
 </td>
 

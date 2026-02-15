@@ -1103,12 +1103,15 @@ require_once "topic_lookup_inc.php";
 
 &nbsp;&nbsp;<?php echo_html(text("Forum")); ?>:
   <div class="select_container">
-      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>" onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' })" onkeyup="return filter_entries(this, event)" onfocus="reset_forum_selector(this.id);">
+      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>" 
+         onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' })" 
+         onkeyup="return filter_entries(this, event)" 
+         onfocus="reset_forum_selector(this.id);">
 
       <select id="forum_selector_move_lookup" size="15"
+         data-hide-on-show="forum_selection_area"
          onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' }); }" 
-         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum_if_active('forum_selector_move', { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' }); }" 
-
+         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' }); }" 
          onkeypress="return forum_move_handle_enter('forum_selector_move', event, { topic_action: 'move_topics', forum: '<?php echo_js($fid); ?>' })"
       >
 

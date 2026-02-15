@@ -635,6 +635,7 @@ $GLOBALS['DEF_TEXTS']['ua']['CitateShort'] = 'Цитув.';
 $GLOBALS['DEF_TEXTS']['ua']['CitateForCopy'] = 'Цитувати для копіювання';
 $GLOBALS['DEF_TEXTS']['ua']['Citation'] = 'Цитата';
 $GLOBALS['DEF_TEXTS']['ua']['Spoiler'] = 'Спойлер';
+$GLOBALS['DEF_TEXTS']['ua']['AI'] = 'ШІ';
 $GLOBALS['DEF_TEXTS']['ua']['Code'] = 'Код';
 $GLOBALS['DEF_TEXTS']['ua']['Complain'] = 'Поскаржитися';
 $GLOBALS['DEF_TEXTS']['ua']['ComplainShort'] = 'Поскар.';

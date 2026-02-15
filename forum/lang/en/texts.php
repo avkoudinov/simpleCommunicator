@@ -635,6 +635,7 @@ $GLOBALS['DEF_TEXTS']['en']['CitateShort'] = 'Citate';
 $GLOBALS['DEF_TEXTS']['en']['CitateForCopy'] = 'Citate for copy';
 $GLOBALS['DEF_TEXTS']['en']['Citation'] = 'Citation';
 $GLOBALS['DEF_TEXTS']['en']['Spoiler'] = 'Spoiler';
+$GLOBALS['DEF_TEXTS']['en']['AI'] = 'AI';
 $GLOBALS['DEF_TEXTS']['en']['Code'] = 'Code';
 $GLOBALS['DEF_TEXTS']['en']['Complain'] = 'Complain';
 $GLOBALS['DEF_TEXTS']['en']['ComplainShort'] = 'Compl.';
