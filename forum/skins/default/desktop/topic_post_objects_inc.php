@@ -182,6 +182,7 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[url=]','[/url]', 0)" tabindex="-1">URL</button></div>
 
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[ai=]','[/ai]', 0)" tabindex="-1">AI</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
 
 <div class="toolbar_button_wrapper">
@@ -288,9 +289,9 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 &nbsp;&nbsp;<?php echo_html(text("Author")); ?>:
   <div class="select_container">
     <select id="author_lookup" size="10"
+    data-hide-on-show="appeal_author_selection_area"
     onclick="if(!mustAdjustMultiSelect()) { insert_appeal_author(false) }"
     onchange="if(mustAdjustMultiSelect()) { insert_appeal_author(true) }"
-
     onkeypress="return handle_appeal_author_enter(event)"
     >
     </select>

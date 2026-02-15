@@ -512,12 +512,15 @@ require_once "topic_post_objects_inc.php";
 
   &nbsp;&nbsp;<?php echo_html(text("Forum")); ?>:
     <div class="select_container">
-      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>" onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })" onkeyup="return filter_entries(this, event)" onfocus="reset_forum_selector(this.id);">
+      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>" 
+         onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })" 
+         onkeyup="return filter_entries(this, event)" 
+         onfocus="reset_forum_selector(this.id);">
 
       <select id="forum_selector_move_lookup" size="15"
+         data-hide-on-show="forum_selection_area"
          onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
-         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum_if_active('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
-
+         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
          onkeypress="return forum_move_handle_enter('forum_selector_move', event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })"
       >
 
@@ -680,7 +683,7 @@ $all_entry_post = $first_message;
 
 </div>
 
-<div class="forum_bar">
+<div class="forum_bar forum_bar_breakable">
 
 <div class="navigator_bar">
 <?php require "navigator_bar_inc.php"; ?>
@@ -813,7 +816,7 @@ endif;
 
 <!-- BEGIN: forum_bar -->
 
-<div class="forum_bar">
+<div class="forum_bar forum_bar_breakable">
 
 <?php
 $all_entry_post = $last_message;

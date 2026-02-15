@@ -1,11 +1,16 @@
-<input type="text" class="search_field" id="forum_selector<?php echo($forum_selector_id); ?>" autocomplete="off" placeholder="<?php echo_html(text("GotoForum")); ?>" onkeypress="return forum_lookup_handle_enter(this.id, event)" onkeyup="return filter_entries(this, event)" onfocus="reset_forum_selector(this.id); show_lookup_list(this.id);" onblur="lookup_delayed_hide(this.id); this.value = '';">
+<input type="text" class="search_field" id="forum_selector<?php echo($forum_selector_id); ?>" autocomplete="off" placeholder="<?php echo_html(text("GotoForum")); ?>" 
+     onkeypress="return forum_lookup_handle_enter(this.id, event)" 
+     onkeyup="return filter_entries(this, event)" 
+     onfocus="reset_forum_selector(this.id); show_lookup_list(this.id);" 
+     onblur="lookup_delayed_hide(this.id); this.value = '';">
 
 <div class="field_lookup_area field_lookup_area<?php echo($forum_selector_id); ?>" style="display:none">
 <select id="forum_selector<?php echo($forum_selector_id); ?>_lookup" size="15"
+   data-hide-on-show="field_lookup_area"
    onclick="if(!mustAdjustMultiSelect()) { lookup_goto_forum('forum_selector<?php echo($forum_selector_id); ?>'); }" 
-   onchange="if(mustAdjustMultiSelect()) { lookup_goto_forum_if_active('forum_selector<?php echo($forum_selector_id); ?>'); }" 
-
-   onkeypress="return forum_lookup_handle_enter('forum_selector<?php echo($forum_selector_id); ?>', event)" onblur="lookup_delayed_hide('forum_selector<?php echo($forum_selector_id); ?>');"
+   onchange="if(mustAdjustMultiSelect()) { lookup_goto_forum('forum_selector<?php echo($forum_selector_id); ?>'); }"
+   onkeypress="return forum_lookup_handle_enter('forum_selector<?php echo($forum_selector_id); ?>', event)" 
+   onblur="lookup_delayed_hide('forum_selector<?php echo($forum_selector_id); ?>');"
 >
 <option value="new_messages.php"><?php echo_html(text("NewMessages")); ?></option>
 

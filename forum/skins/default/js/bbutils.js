@@ -73,7 +73,12 @@ function convert_spoiler_to_bbcode(quote, quote_level)
   var titles = quote.getElementsByClassName('spoiler_header');
   if(titles.length > 0)
   {
-    title = titles[0].innerHTML;
+    var as = titles[0].getElementsByTagName('A');
+    
+    if (as.length > 0)
+      title = as[0].href;
+    else  
+      title = titles[0].innerHTML;
   }
   
   var body = "";
@@ -89,6 +94,34 @@ function convert_spoiler_to_bbcode(quote, quote_level)
   
   return "\n\n[spoiler" + title + "]\n" + body + "\n[/spoiler]\n\n";
 } // convert_spoiler_to_bbcode
+//----------------------------------------------------------------------
+function convert_ai_to_bbcode(quote, quote_level)
+{
+  var title = "";
+  var titles = quote.getElementsByClassName('ai_header');
+  if(titles.length > 0)
+  {
+    var as = titles[0].getElementsByTagName('A');
+    
+    if (as.length > 0)
+      title = as[0].href;
+    else  
+      title = titles[0].innerHTML;
+  }
+  
+  var body = "";
+  var bodies = quote.getElementsByClassName('ai');
+  if(bodies.length > 0)
+  {
+    body = convert_nodes_to_bbcode(bodies[0], quote_level);
+  }
+  
+  if(body == "") return "";
+  
+  if(title != "") title = "=" + title;
+  
+  return "\n\n[ai" + title + "]\n" + body + "\n[/ai]\n\n";
+} // convert_ai_to_bbcode
 //----------------------------------------------------------------------
 function convert_code_to_bbcode(code, quote_level)
 {
@@ -455,6 +488,11 @@ function convert_nodes_to_bbcode(container, quote_level)
         current_node = document.createTextNode('');
         break;
       }
+      if(container.childNodes[i].classList.contains('ai_expander'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }
       if(container.childNodes[i].classList.contains('tags_list'))
       {
         current_node = document.createTextNode('');
@@ -475,10 +513,21 @@ function convert_nodes_to_bbcode(container, quote_level)
         current_node = document.createTextNode('');
         break;
       }      
+      if(container.childNodes[i].classList.contains('ai_header'))
+      {
+        current_node = document.createTextNode('');
+        break;
+      }      
       if(container.childNodes[i].classList.contains('spoiler'))
       {
         text = convert_nodes_to_bbcode(container.childNodes[i], quote_level);
         current_node = document.createTextNode("\n\n[spoiler]\n" + text + "\n[/spoiler]\n\n");
+        break;
+      }      
+      if(container.childNodes[i].classList.contains('ai'))
+      {
+        text = convert_nodes_to_bbcode(container.childNodes[i], quote_level);
+        current_node = document.createTextNode("\n\n[ai]\n" + text + "\n[/ai]\n\n");
         break;
       }      
       if(container.childNodes[i].classList.contains('post_id_info'))
@@ -542,6 +591,11 @@ function convert_nodes_to_bbcode(container, quote_level)
       if(container.childNodes[i].classList.contains('spoiler_wrapper'))
       {
         current_node = document.createTextNode(convert_spoiler_to_bbcode(container.childNodes[i], quote_level));
+        break;
+      }
+      if(container.childNodes[i].classList.contains('ai_wrapper'))
+      {
+        current_node = document.createTextNode(convert_ai_to_bbcode(container.childNodes[i], quote_level));
         break;
       }
       if(container.childNodes[i].classList.contains('code_wrapper'))

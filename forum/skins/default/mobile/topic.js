@@ -2349,6 +2349,7 @@ function process_selection()
       {
         if((selection_parent.classList.contains("quote_wrapper")) ||
            selection_parent.classList.contains("spoiler_wrapper") ||
+           selection_parent.classList.contains("ai_wrapper") ||
            selection_parent.classList.contains("media_wrapper") ||
            selection_parent.classList.contains("code_wrapper") ||
            selection_parent.tagName == 'CODE' ||
@@ -2439,6 +2440,29 @@ function process_selection()
       spoiler_wrapper.classList.add('spoiler_wrapper');
       spoiler_wrapper.appendChild(parent_tag_container.childNodes[0].cloneNode(true));
       tmp.classList.add('spoiler');
+      spoiler_wrapper.appendChild(tmp);
+      selection_container.appendChild(spoiler_wrapper);
+    }
+  }
+  else if(parent_tag_container && parent_tag_container.classList.contains("ai_wrapper"))
+  {
+    var tmp = document.createElement('div');
+    extract_selection_nodes(tmp);
+
+    if(tmp.childNodes.length == 2 &&
+       tmp.childNodes[0].classList && tmp.childNodes[0].classList.contains('ai_header') &&
+       tmp.childNodes[1].classList && tmp.childNodes[1].classList.contains('ai')
+      )
+    {
+      tmp.classList.add('ai_wrapper');
+      selection_container.appendChild(tmp);
+    }
+    else
+    {
+      var spoiler_wrapper = document.createElement('div');
+      spoiler_wrapper.classList.add('ai_wrapper');
+      spoiler_wrapper.appendChild(parent_tag_container.childNodes[0].cloneNode(true));
+      tmp.classList.add('ai');
       spoiler_wrapper.appendChild(tmp);
       selection_container.appendChild(spoiler_wrapper);
     }
@@ -3290,6 +3314,53 @@ function expand_citate(event)
   }
 }
 
+function remove_ai_expander(quote)
+{
+  quote.style.maxHeight = 'none';
+  quote.style.opacity = '1.0';
+  
+  var cnt = quote.childNodes.length;
+
+  if(cnt == 0) return;
+  
+  for(var i = cnt-1; i >= 0; i--)
+  {
+    if(quote.childNodes[i].classList && quote.childNodes[i].classList.contains('ai_expander')) 
+    {
+      quote.removeChild(quote.childNodes[i]);
+    }
+  }
+}
+
+function expand_ai_citate(event)
+{
+  event = event || window.event;
+
+  if(event.preventDefault)
+    event.preventDefault();
+  else
+    event.returnValue = false;
+
+  var _parent = this.parentNode;
+  while(_parent)
+  {
+    if(_parent.classList.contains('ai'))
+    {
+      remove_ai_expander(_parent);
+    }
+
+    if(_parent.classList.contains('message_text'))
+    {
+      _parent.style.maxHeight = 'none';
+
+      _parent.nextElementSibling.style.display = 'none';
+      break;
+    }
+    
+    _parent = _parent.parentNode;
+  }
+}
+
 function init_more_buttons()
 {
   var _parent;
@@ -3315,6 +3386,33 @@ function init_more_buttons()
         child = document.createElement("div");
         child.innerHTML = "...";
         Forum.addXEvent(child, 'click', expand_citate);
+        elm.appendChild(child);
+        post_citates[i].appendChild(elm);
+        post_citates[i].expander_added = 1;
+        post_citates[i].style.opacity = '1.0';
+      }
+    }
+  }
+  
+  post_citates = document.getElementsByClassName("ai");
+
+  if(post_citates.length >= 0)
+  {
+    for(var i = 0; i < post_citates.length; i++)
+    {
+      _parent = post_citates[i].parentNode;
+
+      var maxHeight = parseInt(getComputedStyle(post_citates[i]).maxHeight);
+
+      if(post_citates[i].scrollHeight > post_citates[i].offsetHeight-5 &&
+         post_citates[i].scrollHeight > maxHeight-5 &&
+         !post_citates[i].expander_added)
+      {
+        elm = document.createElement("div");
+        elm.classList.add("ai_expander");
+        child = document.createElement("div");
+        child.innerHTML = "...";
+        Forum.addXEvent(child, 'click', expand_ai_citate);
         elm.appendChild(child);
         post_citates[i].appendChild(elm);
         post_citates[i].expander_added = 1;

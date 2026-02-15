@@ -1101,8 +1101,8 @@ textarea
   background-color: #F0F0F0;
   cursor: pointer;
   min-width: 62px;
-  font-size: 28px;
-  padding: 5px;
+  font-size: 25px;
+  padding: 6px;
   height: 65px;
 }
 
@@ -1716,7 +1716,7 @@ select.search_tags_select
 
 .post_message_table
 {
-  width: 890px;
+  width: 906px;
   margin: 0 auto;
   margin-top: 60px;
   margin-bottom: 58px;
@@ -4138,7 +4138,7 @@ a.more_users:link
 .field_lookup_area2
 {
   box-shadow: 10px -10px 10px gray;
-  margin-top: -333px;
+  margin-top: -332px;
 }
 
 .field_lookup_area select
@@ -4609,6 +4609,12 @@ img.image_placeholder
 
 .quote .post_image,
 .hide_adult_picture_mode .quote.adult_post .post_image
+{
+  max-width: 300px;
+}
+
+.ai .post_image,
+.hide_adult_picture_mode .ai.adult_post .post_image
 {
   max-width: 300px;
 }
@@ -5446,6 +5452,11 @@ td.install_langs
   font-weight: bold;
 }
 
+.ai_header a:link
+{
+  font-weight: bold;
+}
+
 .spoiler_header_opened
 {
   background-image: url('../images/minus.png');
@@ -5469,6 +5480,19 @@ td.install_langs
 .quote_wrapper
 {
   margin: 40px 0px 40px 0px;
+}
+
+.ai_wrapper
+{
+  margin: 40px 0px 40px 0px;
+}
+
+.ai_header
+{
+  background-color: #DDDDDD;
+  border: 2px solid gray;
+  padding: 10px;
+  font-weight: bold;
 }
 
 .code_header,
@@ -5582,7 +5606,38 @@ a.reference_link:hover
   opacity: 1.0;
 }
 
-.post_preview_container .quote
+.post_preview_container .quote,
+.post_preview_container .ai
+{
+  max-height: none !important;
+  opacity: 1.0 !important;
+}
+
+.ai
+{
+  background-color: #DCE5DC;
+  border: 2px solid gray;
+  border-top: 0;
+  padding: 12px;
+  margin: 0px 0px 0px 0px;
+  max-height: 2400px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ai > .ai_wrapper > .ai .ai_wrapper > .ai
+{
+  max-height: 34px;
+  opacity: 0.0;
+}
+
+.ai > .ai_wrapper > .ai .ai_wrapper > .ai .ai_wrapper > .ai
+{
+  max-height: none;
+  opacity: 1.0;
+}
+
+.post_preview_container .ai
 {
   max-height: none !important;
   opacity: 1.0 !important;
@@ -5598,6 +5653,29 @@ a.reference_link:hover
 }
 
 .citate_expander div
+{
+  border: 2px solid gray;
+  height: 30px;
+  width: 90px;
+  background-color: #eeeeee;
+  text-align: center;
+  font-size: 50px;
+  line-height: 0px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.ai_expander
+{
+  position: absolute;
+  bottom: 0px;
+  background-color: #DCE5DC;
+  width: 100%;
+  z-index: 10500;
+}
+
+.ai_expander div
 {
   border: 2px solid gray;
   height: 30px;
@@ -5703,9 +5781,15 @@ strong.strongly_ignored_author > .invisible_author
 .spoiler .quote_wrapper,
 .spoiler .code_wrapper,
 .spoiler .spoiler_wrapper,
+.spoiler .ai_wrapper,
 .quote .quote_wrapper,
 .quote .code_wrapper,
-.quote .spoiler_wrapper
+.quote .spoiler_wrapper,
+.quote .ai_wrapper,
+.ai .quote_wrapper,
+.ai .code_wrapper,
+.ai .spoiler_wrapper,
+.ai .ai_wrapper
 {
   margin: 25px 0px 25px 0px;
 }
@@ -5892,7 +5976,7 @@ a.go_to_last:hover
   min-width: 200px;
   max-width: 985px;
   font-size: 30px;
-  word-wrap: break-word; 
+  word-wrap: anywhere; 
 }
 
 .not_preferred,
@@ -7400,3 +7484,26 @@ label.rules_agreemnt
 {
   display: none;
 }
+
+
+/* iPad Mini, Air, Pro 11" */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .search_table {
+    width: 90%;
+  }  
+}
+
+/* iPad Pro 12.9" */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) {
+  .search_table {
+    width: 90%;
+  }  
+}
+
+/* Любой планшет вертикально */
+@media (min-width: 600px) and (max-width: 1280px) and (orientation: portrait) {
+  .search_table {
+    width: 90%;
+  }  
+}
+

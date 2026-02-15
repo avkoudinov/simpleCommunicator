@@ -4348,6 +4348,13 @@
             <ua>Спойлер</ua>
         </text>
 
+        <text id="AI">
+            <en>AI</en>
+            <de>KI</de>
+            <ru>ИИ</ru>
+            <ua>ШІ</ua>
+        </text>
+
         <text id="Code">
             <en>Code</en>
             <de>Code</de>

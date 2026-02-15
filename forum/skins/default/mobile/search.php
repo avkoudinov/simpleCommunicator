@@ -473,7 +473,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
 <!-- BEGIN: forum_bar -->
 
-<div class="forum_bar">
+<div class="forum_bar forum_bar_breakable">
   
   <?php if (empty($pagination_info["all"]) && $pagination_info["page_count"] > 1): ?>
       <div class="navigator_bar"><?php echo(build_page_navigator($base_url . "&spage=$", $pagination_info)); ?></div>
@@ -749,7 +749,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
   <!-- BEGIN: forum_bar -->
 
-  <div class="forum_bar">
+  <div class="forum_bar forum_bar_breakable">
       
       <?php if (empty($pagination_info["all"]) && $pagination_info["page_count"] > 1): ?>
           <div class="navigator_bar"><?php echo(build_page_navigator($base_url . "&spage=$", $pagination_info)); ?></div>
@@ -1163,13 +1163,17 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
           <table class="aux_table">
           <tr>
           <td style="position: relative">
-          <input type="text" id="author" name="author" maxlength="250" value="<?php echo_html(reqvar("author")); ?>" autocomplete="off" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="return lookup_entries('search_authors', this, event)" onblur="lookup_delayed_hide(this.id)">
+          <input type="text" id="author" name="author" maxlength="250" value="<?php echo_html(reqvar("author")); ?>" autocomplete="off" 
+                      onkeypress="return lookup_handle_enter(this.id, event)" 
+                      onkeyup="return lookup_entries('search_authors', this, event)" 
+                      onblur="lookup_delayed_hide(this.id)">
           <div class="field_lookup_area" style="display:none">
               <select id="author_lookup" size="10"
+                      data-hide-on-show="field_lookup_area"
                       onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('author') }"
                       onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('author') }"
-
-                      onkeypress="return lookup_handle_enter('author', event)" onblur="user_esc_handler()"
+                      onkeypress="return lookup_handle_enter('author', event)" 
+                      onblur="user_esc_handler()"
               >
               </select>
           </div>
@@ -1200,15 +1204,19 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
           
           <div class="field_caption"><?php echo_html(text("Topic")); ?>:</div>
           <input type="hidden" id="tid" name="tid" value="<?php echo_html(reqvar("tid")); ?>">
-          <input type="text" id="topic_name" value="<?php echo_html(val_or_empty($topic_name)); ?>" autocomplete="off" onkeypress="return lookup_handle_enter(this.id, event)" onkeyup="reset_topic_on_search(); return lookup_entries('search_topics', this, event);" onblur="reset_topic_if_not_found(); lookup_delayed_hide('topic_name');">
+          <input type="text" id="topic_name" value="<?php echo_html(val_or_empty($topic_name)); ?>" autocomplete="off" 
+                      onkeypress="return lookup_handle_enter(this.id, event)" 
+                      onkeyup="reset_topic_on_search(); return lookup_entries('search_topics', this, event);" 
+                      onblur="reset_topic_if_not_found(); lookup_delayed_hide('topic_name');">
 
           <div style="position: relative">
           <div class="field_lookup_area topic_lookup_area" style="display:none">
               <select id="topic_name_lookup" size="10"
+                      data-hide-on-show="field_lookup_area"
                       onclick="if(!mustAdjustMultiSelect()) { lookup_apply_selection('topic_name') }"
                       onchange="if(mustAdjustMultiSelect()) { lookup_apply_selection_if_active('topic_name') }"
-
-                      onkeypress="return lookup_handle_enter('topic_name', event)" onblur="user_esc_handler()"
+                      onkeypress="return lookup_handle_enter('topic_name', event)" 
+                      onblur="user_esc_handler()"
               >
               </select>
           </div>
