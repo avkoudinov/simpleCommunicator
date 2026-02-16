@@ -243,7 +243,11 @@ function subject_lookup_apply_selection_if_active(eid)
 
   if(!lst) return;
 
-  if(document.activeElement != lst) return;
+  var option_selector_overlay_active = false;
+  option_selector_overlay = document.querySelector(".option_selector_overlay");
+  if (option_selector_overlay && option_selector_overlay.classList.contains("active")) option_selector_overlay_active = true;  
+
+  if(document.activeElement != lst && !option_selector_overlay_active) return;
   
   goto_topic(lst.value, Forum.selectedText(lst));
 }
@@ -620,7 +624,10 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 <?php if($is_private > 0): ?>
 <input type="text" id="subject" name="subject" value="" autocomplete="off" onkeypress="return handle_enter(event)">
 <?php else: ?>
-<input type="text" id="subject" name="subject" value="" autocomplete="off" onkeypress="return handle_enter(event)" onkeyup="return lookup_existing_topics(this, event, '<?php echo_html($fid); ?>');" onblur="lookup_delayed_hide('subject');">
+<input type="text" id="subject" name="subject" value="" autocomplete="off" 
+onkeypress="return handle_enter(event)" 
+onkeyup="return lookup_existing_topics(this, event, '<?php echo_html($fid); ?>');" 
+onblur="lookup_delayed_hide('subject');">
 
 <div style="position: relative">
 <div class="field_lookup_area topic_lookup_area" style="display:none">
@@ -628,9 +635,9 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
   <?php echo_html(text("TopicsExistWarning")); ?>  
   </div>
   <select id="subject_lookup" size="10"
+      data-hide-on-show="field_lookup_area"
       onclick="if(!mustAdjustMultiSelect()) { subject_lookup_apply_selection('subject') }"
       onchange="if(mustAdjustMultiSelect()) { subject_lookup_apply_selection_if_active('subject') }"
-
       onkeypress="return subject_lookup_handle_enter('subject', event)" onblur="user_esc_handler()"
   >
   </select>
@@ -858,6 +865,7 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 <td class="toolbar">
 
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[ai=]','[/ai]', 0)" tabindex="-1">AI</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
 
 <div class="toolbar_button_wrapper">
@@ -931,9 +939,9 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 &nbsp;&nbsp;<?php echo_html(text("Author")); ?>:
   <div class="select_container">
     <select id="author_lookup" size="10"
+    data-hide-on-show="appeal_author_selection_area"
     onclick="if(!mustAdjustMultiSelect()) { insert_appeal_author(false) }"
     onchange="if(mustAdjustMultiSelect()) { insert_appeal_author(true) }"
-
     onkeypress="return handle_appeal_author_enter(event)"
     >
     </select>

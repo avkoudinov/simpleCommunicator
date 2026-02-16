@@ -1079,7 +1079,7 @@ $aname_appendix = "";
 if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
   $aname_appendix .= "&aname=" . $user_data["aname"];
 ?>
-<a href="ip_moderation.php?type=user_ips&user=<?php echo(xrawurlencode($user_data["user_name"])); ?><?php echo($aname_appendix); ?>" class="moderator_link"><?php echo_html(text("ShowAuthorIPs")); ?></a> 
+<a href="ip_moderation.php?type=user_ips&user=<?php echo(xrawurlencode($user_data["user_name"])); ?><?php echo($aname_appendix); ?>" class="moderator_link"><?php echo_html(text("ShowMyIPs")); ?></a> 
 </td>
 </tr>
 

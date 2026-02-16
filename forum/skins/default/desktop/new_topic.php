@@ -25,6 +25,12 @@ var topic_id = '';
 var final_url = '<?php echo_js($final_url); ?>';
 var ensure_anchor_visible = '';
 
+function set_to_me() {
+  var elm = document.getElementById("author");
+  if (elm) elm.value = "<?php echo_js($fmanager->get_display_name($fmanager->get_user_name())); ?>";
+  return false;
+}
+
 function confirm_post(form)
 {
   var poll_elm = document.getElementById('poll');
@@ -49,12 +55,6 @@ function confirm_post(form)
 
   Forum.show_user_msgbox(msg_Warning, "<?php echo_js(text("PollConfirmation")); ?>", 'icon-warning.gif', mbuttons, false);
 
-  return false;
-}
-
-function set_to_me() {
-  var elm = document.getElementById("author");
-  if (elm) elm.value = "<?php echo_js($fmanager->get_display_name($fmanager->get_user_name())); ?>";
   return false;
 }
 
@@ -211,7 +211,7 @@ function show_attachment_gallery()
 function goto_topic(tid, subject)
 {
   if(!tid) return;
-  
+
   var form = document.getElementById('post_form');
   if(!form) return;
 
@@ -243,7 +243,11 @@ function subject_lookup_apply_selection_if_active(eid)
 
   if(!lst) return;
 
-  if(document.activeElement != lst) return;
+  var option_selector_overlay_active = false;
+  option_selector_overlay = document.querySelector(".option_selector_overlay");
+  if (option_selector_overlay && option_selector_overlay.classList.contains("active")) option_selector_overlay_active = true;  
+
+  if(document.activeElement != lst && !option_selector_overlay_active) return;
   
   goto_topic(lst.value, Forum.selectedText(lst));
 }
@@ -383,7 +387,7 @@ function post_message(action)
   formData.append('user_logged', user_logged);  
   formData.append('user_marker', user_marker);
   formData.append(action, "1");
-  
+
   for(var i = 1; i <= ATTACHMENTS_PER_POST; i++)
   {
     index = i;
@@ -425,7 +429,7 @@ if($is_private == 2)
 elseif($is_private == 1)
 {
   $url = "new_topic.php?fid=private&receiver=" . xrawurlencode(reqvar("receiver"));
-}
+} 
 else
 {
   $url = "new_topic.php?fid=$fid";
@@ -636,9 +640,9 @@ if(!$fmanager->is_logged_in()):
   <?php echo_html(text("TopicsExistWarning")); ?>  
   </div>
   <select id="subject_lookup" size="10"
+      data-hide-on-show="appeal_author_selection_area"
       onclick="if(!mustAdjustMultiSelect()) { subject_lookup_apply_selection('subject') }"
-      onchange="if(mustAdjustMultiSelect()) { subject_lookup_apply_selection_if_active('subject') }"
-
+      onchange="if(mustAdjustMultiSelect()) { subject_lookup_apply_selection('subject') }"
       onkeypress="return subject_lookup_handle_enter('subject', event)" onblur="user_esc_handler()"
   >
   </select>
@@ -862,6 +866,7 @@ if(!$fmanager->is_logged_in()):
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[url=]','[/url]', 0)" tabindex="-1">URL</button></div>
 
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[ai=]','[/ai]', 0)" tabindex="-1">AI</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
 
 <div class="toolbar_button_wrapper">

@@ -186,7 +186,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 
 <!-- END: forum_bar -->
 
-<form action="settings.php" id="main_form" method="post" onsubmit="return save_data();">
+<form action="forum_goups.php" id="main_form" method="post" onsubmit="return save_data();">
 
 <table id="forum_goup_table" class="form_table forum_group_table">
 

@@ -46,6 +46,10 @@ function bb_word($bbcode, $action, $name, $default, $params, $content)
             return "{$nl}[{{spoiler}}]{$nl2}";
             break;
         
+        case "ai":
+            return "{$nl}[{{ai}}]{$nl2}";
+            break;
+
         case "audio":
             return "{$nl}[{{audio}}]{$nl2}";
             break;
@@ -174,6 +178,55 @@ function bb_process_quote_simple($bbcode, $action, $name, $default, $params, $co
         return "<div class='block_wrapper citation'>" . $content . "</div>";
     }
 } // bb_process_quote_simple
+//------------------------------------------------------------------------------
+function bb_process_ai_simple($bbcode, $action, $name, $default, $params, $content)
+{
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
+    // restore replaced quotes
+    
+    $default = str_replace("___:QT:___", "'", $default);
+    $default = str_replace("___:DQT:___", "\"", $default);
+    
+    $author = trim($default);
+    
+    if (preg_match("/(.*)(#\\d+)/", $author ?? "", $matches)) {
+        $author = $matches[1];
+    }
+    
+    if ($bbcode->message_mode != "email") {
+        $content = HtmlHelper::cut(trim($content), 250);
+        
+        $content = str_replace("<br>", "<br />", $content);
+    } else {
+        $content = spec_cut(trim($content), 250);
+    }
+
+    if (empty($author)) {
+        if ($bbcode->message_mode != "email") {
+            $content = "{{ai}}:<br />" . trim($content);
+        } else {
+            $content = "[{{ai}}:\n" . trim($content) . "]";
+        }
+    } else {
+        $author = ($author == "admin") ? "{{admin}}" : $author;
+        
+        if ($bbcode->message_mode != "email") {
+            $author = escape_html($author);
+            $content = "{{ai}} - $author:<br />" . $content;
+        } else {
+            $content = "[{{ai}} - $author:\n" . $content . "]";
+        }
+    }
+    
+    if ($bbcode->message_mode == "email") {
+        return "\n\n" . $content . "\n\n";
+    } else {
+        return "<div class='block_wrapper citation'>" . $content . "</div>";
+    }
+} // bb_process_ai_simple
 //------------------------------------------------------------------------------
 function bb_process_spoiler_simple($bbcode, $action, $name, $default, $params, $content)
 {
@@ -908,6 +961,28 @@ function bb_process_spoiler($bbcode, $action, $name, $default, $params, $content
     
     return "\n\n" . '<div class="spoiler_wrapper"><div class="spoiler_header" onclick="toggle_spoiler(this)">' . $author2 . '</div><div class="spoiler">' . $content . '</div></div>' . "\n\n";
 } // bb_process_spoiler
+//------------------------------------------------------------------------------
+function bb_process_ai($bbcode, $action, $name, $default, $params, $content)
+{
+    if ($action == BBCODE_CHECK) {
+        return true;
+    }
+    
+    // restore replaced quotes
+    
+    $default = str_replace("___:QT:___", "'", $default);
+    $default = str_replace("___:DQT:___", "\"", $default);
+    
+    $author = trim($default);
+    if (empty($author)) {
+        $author2 = escape_html("{{ai}}");
+    } else {
+        $author2 = make_links($author);
+        $author = escape_html($author);
+    }    
+    
+    return "\n\n" . '<div class="ai_wrapper"><div class="ai_header">' . $author2 . '</div><div class="ai">' . $content . '</div></div>' . "\n\n";
+} // bb_process_ai
 //------------------------------------------------------------------------------
 function bb_process_list($bbcode, $action, $name, $default, $params, $content)
 {
@@ -2396,6 +2471,86 @@ function remove_nested_spoilers(&$input, &$output, $limit)
     //debug_message("-------------------");
 } // remove_nested_spoilers
 //------------------------------------------------------------------------------
+function remove_nested_ais(&$input, &$output, $limit)
+{
+    $output = $input;
+    
+    //debug_message("-------------------");
+    //debug_message($input);
+    //debug_message("====");
+    
+    if ($limit < 1) {
+        return true;
+    }
+    
+    if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output ?? "", $matches, PREG_OFFSET_CAPTURE)) {
+        return true;
+    }
+    
+    //debug_message(print_r($matches, true));
+    
+    $nest_level = 0;
+    $cut_start_position = false;
+    $inner_div_count = array();
+    $offset_through_removing = 0;
+    
+    foreach ($matches[0] as $token) {
+        if (strpos($token[0], '<div') !== false) {
+            if (strpos($token[0], 'class="ai"') !== false) {
+                $nest_level++;
+                //debug_message("nest_level increased to:" . $nest_level);
+                
+                // nest level riched the limit
+                // define the cut start position
+                if ($nest_level == $limit && $cut_start_position === false) {
+                    $cut_start_position = $token[1] + strlen($token[0]) - $offset_through_removing;
+                    //debug_message("cut_start_position:" . $cut_start_position);
+                }
+            }
+            
+            if (empty($inner_div_count[$nest_level])) {
+                $inner_div_count[$nest_level] = 0;
+            }
+            
+            $inner_div_count[$nest_level]++;
+            //debug_message("inner_div_count[$nest_level] increased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
+        }
+        
+        if (strpos($token[0], '</div>') !== false) {
+            if (empty($inner_div_count[$nest_level])) {
+                $inner_div_count[$nest_level] = 0;
+            }
+            
+            $inner_div_count[$nest_level]--;
+            //debug_message("inner_div_count[$nest_level] decreased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
+            
+            if ($inner_div_count[$nest_level] == 0 && $nest_level > 0) {
+                // the matching closing div is found
+                if ($nest_level == $limit && $cut_start_position !== false) {
+                    $cut_end_position = $token[1] - $offset_through_removing;
+                    //debug_message("cut_end_position:" . $cut_end_position);
+                    
+                    // do replacement
+                    $replacement = "...";
+                    $remove_length = $cut_end_position - $cut_start_position;
+                    $output = substr_replace($output, $replacement, $cut_start_position, $remove_length);
+                    $offset_through_removing += $remove_length - strlen($replacement);
+                    
+                    $cut_start_position = false;
+                }
+                
+                $nest_level--;
+                //debug_message("nest_level decreased to:" . $nest_level);
+            }
+        }
+    } // foreach
+    
+    //debug_message("====");
+    //debug_message($output);
+    //debug_message("-------------------");
+} // remove_nested_ais
+
+//------------------------------------------------------------------------------
 function remove_nested_quotes_bb(&$input, &$output, $limit)
 {
     $output = $input;
@@ -2521,6 +2676,70 @@ function remove_nested_spoilers_bb(&$input, &$output, $limit)
     //debug_message($output);
     //debug_message("-------------------");
 } // remove_nested_spoilers_bb
+//------------------------------------------------------------------------------
+
+function remove_nested_ais_bb(&$input, &$output, $limit)
+{
+    $output = $input;
+    
+    //debug_message("-------------------");
+    //debug_message("BEFORE:");
+    //debug_message($input);
+    //debug_message("====");
+    
+    if ($limit < 1) {
+        return true;
+    }
+    
+    if (!preg_match_all('/(\[ai[^\[\]]*\]|\[\/ai\])/i', $output, $matches, PREG_OFFSET_CAPTURE)) {
+        return true;
+    }
+    
+    $nest_level = 0;
+    $cut_start_position = false;
+    $offset_through_removing = 0;
+    
+    foreach ($matches[0] as $token) {
+        if (strpos($token[0], '[ai') !== false) {
+            $nest_level++;
+            //debug_message("nest_level increased to:" . $nest_level);
+            
+            // nest level riched the limit
+            // define the cut start position
+            if ($nest_level == $limit && $cut_start_position === false) {
+                $cut_start_position = $token[1] - $offset_through_removing;
+                //debug_message("cut_start_position:" . $cut_start_position);
+            }
+        }
+        
+        if (strpos($token[0], '[/ai]') !== false) {
+            
+            if ($nest_level > 0) {
+                // the matching closing div is found
+                if ($nest_level == $limit && $cut_start_position !== false) {
+                    $cut_end_position = $token[1] + strlen($token[0]) - $offset_through_removing;
+                    //debug_message("cut_end_position:" . $cut_end_position);
+                    
+                    // do replacement
+                    $replacement = "...";
+                    $remove_length = $cut_end_position - $cut_start_position;
+                    $output = substr_replace($output, $replacement, $cut_start_position, $remove_length);
+                    $offset_through_removing += $remove_length - strlen($replacement);
+                    
+                    $cut_start_position = false;
+                }
+                
+                $nest_level--;
+                //debug_message("nest_level decreased to:" . $nest_level);
+            }
+        }
+    } // foreach
+    
+    //debug_message("====");
+    //debug_message("AFTER:");
+    //debug_message($output);
+    //debug_message("-------------------");
+} // remove_nested_ais_bb
 //------------------------------------------------------------------------------
 
 if (!function_exists("str_getcsv")) {
@@ -3384,6 +3603,17 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
             'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
         ));
     //----------------------------------------------
+    $bbcode->AddRule('ai',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'after_tag' => 'a',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_ai',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
     $bbcode->AddRule('list',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
@@ -3739,6 +3969,7 @@ function parse_bb_code_simple(&$text, $mode = "email")
 
     remove_nested_quotes_bb($text, $text, 2);
     remove_nested_spoilers_bb($text, $text, 2);
+    remove_nested_ais_bb($text, $text, 2);
     
     //----------------------------------------------
     // BB tags are ignored (stripped)
@@ -4026,6 +4257,17 @@ function parse_bb_code_simple(&$text, $mode = "email")
             'after_tag' => 'a',
             'before_endtag' => 'a',
             'method' => 'bb_process_quote_simple',
+            'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
+        ));
+    //----------------------------------------------
+    $bbcode->AddRule('ai',
+        array(
+            'mode' => BBCODE_MODE_CALLBACK,
+            'before_tag' => 'a',
+            'after_endtag' => 'a',
+            'after_tag' => 'a',
+            'before_endtag' => 'a',
+            'method' => 'bb_process_ai_simple',
             'allow_in' => array('listitem', 'block', 'columns', 'inline', 'link')
         ));
     //----------------------------------------------

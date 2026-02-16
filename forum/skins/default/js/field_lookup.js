@@ -290,12 +290,18 @@ function lookup_delayed_hide(eid)
 
 function lookup_apply_selection_if_active(eid)
 {
+  console.log("lookup_apply_selection_if_active");
+
   var elm = document.getElementById(eid);
   var lst = document.getElementById(eid + "_lookup");
 
   if(!elm || !lst) return;
+  
+  var option_selector_overlay_active = false;
+  option_selector_overlay = document.querySelector(".option_selector_overlay");
+  if (option_selector_overlay && option_selector_overlay.classList.contains("active")) option_selector_overlay_active = true;  
 
-  if(document.activeElement != lst) return;
+  if(document.activeElement != lst && !option_selector_overlay_active) return;
     
   elm.value = lst.value;
 
@@ -504,7 +510,11 @@ function insert_appeal_author(only_if_active)
   var message = document.getElementById("message");
   if(!message) return false;
   
-  if(only_if_active && document.activeElement != lst) return false;
+  var option_selector_overlay_active = false;
+  option_selector_overlay = document.querySelector(".option_selector_overlay");
+  if (option_selector_overlay && option_selector_overlay.classList.contains("active")) option_selector_overlay_active = true;  
+
+  if(only_if_active && document.activeElement != lst && !option_selector_overlay_active) return false;
 
   hide_appeal_authors_lookup();
   

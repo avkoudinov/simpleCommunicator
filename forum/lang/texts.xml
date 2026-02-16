@@ -4348,6 +4348,13 @@
             <ua>Спойлер</ua>
         </text>
 
+        <text id="AI">
+            <en>AI</en>
+            <de>KI</de>
+            <ru>ИИ</ru>
+            <ua>ШІ</ua>
+        </text>
+
         <text id="Code">
             <en>Code</en>
             <de>Code</de>
@@ -4486,6 +4493,13 @@
             <de>IP-Adressen des Autoren anzeigen</de>
             <ru>Показать IP адреса автора</ru>
             <ua>Показати IP адреси автора</ua>
+        </text>
+
+        <text id="ShowMyIPs">
+            <en>Show my IP addresses</en>
+            <de>Meine IP-Adressen anzeigen</de>
+            <ru>Показать мои IP адреса</ru>
+            <ua>Показати мої IP адреси</ua>
         </text>
 
         <text id="ShowMembersOfAuthorIPs">
@@ -9117,10 +9131,10 @@
         </text>
 
         <text id="MsgTopicMovedFromForum">
-            <en>The topic has been moved from the forum '%s'.</en>
-            <de>Das Thema wurde vom Forum '%s' verschoben.</de>
-            <ru>Тема была перенесена из форума '%s'.</ru>
-            <ua>Тема була перенесена з форуму '%s'.</ua>
+            <en>The topic has been moved from the forum '%s' to the forum '%s'.</en>
+            <de>Das Thema wurde vom Forum '%s' ins Forum '%s' verschoben.</de>
+            <ru>Тема была перенесена из форума '%s' в форум '%s'.</ru>
+            <ua>Тема була перенесена з форуму '%s' до форуму '%s'.</ua>
         </text>
 
         <text id="MsgUserNasNoRates">
