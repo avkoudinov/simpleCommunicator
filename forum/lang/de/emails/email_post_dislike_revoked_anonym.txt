@@ -1,21 +1,21 @@
-Отмена дизлайка на ваше сообщение на форуме '{site_name}' 
+Ein Dislike auf Ihren Beitrag im Forum '{site_name}' wurde widerrufen 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме: 
+Im Forum: 
 
 {forum_name}
 {forum_url}
 
-отменен дизлайк на ваше сообщение от {post_date} в теме:
+Ein Dislike auf Ihren Beitrag vom {post_date} wurde im Thema widerrufen:
 
 {topic_name}
 {post_url}
 
-Краткий текст сообщения:
+Kurzer Nachrichtentext:
 
 {message}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

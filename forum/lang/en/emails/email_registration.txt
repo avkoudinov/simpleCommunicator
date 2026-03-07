@@ -1,21 +1,21 @@
-Регистрация на форуме '{site_name}'
+Registration on the forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Вы получили это сообщение потому, что зарегистрировались на форуме '{site_name}':
+You received this message because you registered on the forum '{site_name}':
 
 {site_url}
 
-Данные вашей учетной записи:
+Your account details:
 
-Логин: {user_login}
-Имя пользователя: {user_name}
-Электронный адрес: {user_email}
+Login: {user_login}
+Username: {user_name}
+Email address: {user_email}
 
-Чтобы завершить процесс регистрации, пожалуйста, перейдите по следующей ссылке для активации вашей учетной записи:
+To complete the registration process, please follow the link below to activate your account:
 
 {activation_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

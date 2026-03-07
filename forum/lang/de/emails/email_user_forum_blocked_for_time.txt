@@ -1,16 +1,16 @@
-Ваша учетная запись на форуме '{site_name}' ограничена на создание сообщений
+Ihr Konto im Forum '{site_name}' wurde mit Schreibverbot belegt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша учетная запись была ограничена модератором '{moderator_name}' до {block_expires} на создание сообщений на форуме:
+Ihr Konto wurde vom Moderator '{moderator_name}' bis {block_expires} im Forum mit Schreibverbot belegt:
 
 {forum_name}
 {forum_url}
 
-Причина блокировки:
+Grund für die Sperrung:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

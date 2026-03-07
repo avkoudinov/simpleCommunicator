@@ -1,6 +1,6 @@
 Neuer Benutzer im Forum '{site_name}'
 
-Liebe(r) {subscriber_name},
+Sehr geehrte(r) {subscriber_name},
 
 Ein neuer Benutzer hat sich im Forum registriert:
 
@@ -9,4 +9,4 @@ Profil: {user_url}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

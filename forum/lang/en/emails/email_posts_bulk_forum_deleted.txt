@@ -1,18 +1,18 @@
-Ваши сообщения на форуме '{site_name}' удалены
+Your posts on the forum '{site_name}' have been deleted
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваши {count} сообщений на форуме: 
+Your {count} posts in the forum: 
 
 {forum_name}
 {forum_url}
 
-были удалены модератором '{moderator_name}' путем пакетного удаления.
+have been deleted by moderator '{moderator_name}' via bulk deletion.
 
-Причина удаления:
+Reason for deletion:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

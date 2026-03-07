@@ -1,14 +1,14 @@
-У вас отнято право глобального бана пользователей на форуме '{site_name}'
+Your right to globally ban users on the forum '{site_name}' has been revoked
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-На форуме '{site_name}'
+On the forum '{site_name}'
 
 {site_url}
 
-у вас отнято право глобального бана пользователей.
+your right to globally ban users has been revoked.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration
 

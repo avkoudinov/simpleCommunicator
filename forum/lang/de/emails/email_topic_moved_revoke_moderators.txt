@@ -1,24 +1,24 @@
-Перенос модерируемой темы в другой форум на '{site_name}' 
+Moderiertes Thema in ein anderes Forum verschoben auf '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Тема, в которой вы были модератором:
+Das Thema, in dem Sie Moderator waren:
 
 {topic_name}
 {topic_url}
 
-была перенесена модератором '{moderator_name}' из форума:
+wurde vom Moderator '{moderator_name}' aus dem Forum verschoben:
 
 {source_forum_name}
 {source_forum_url}
 
-в форум:
+in das Forum:
 
 {target_forum_name}
 {target_forum_url}
 
-Обратитесь к модераторам данного форума для получения модераторских прав на тему.
+Bitte wenden Sie sich an die Moderatoren dieses Forums, um Moderationsrechte für das Thema zu erhalten.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

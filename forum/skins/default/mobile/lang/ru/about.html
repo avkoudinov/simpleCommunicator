@@ -1,4 +1,3 @@
-<div class="help">
 <h1 style="margin-top: 0px; text-align: center">О форуме simpleCommunicator</h1>
 
 <h2>Лицензия</h2>
@@ -15,7 +14,7 @@
 <h2>Загрузка и установка</h2>
 
 <p>Версия: <?php echo(VERSION); ?><br>
-Релиз: <?php echo(RELEASE_DATE); ?></p>
+Релиз: <?php echo(date(text("DateFormat"), xstrtotime(RELEASE_DATE))); ?></p>
 
 <p><a href="https://github.com/avkoudinov/simpleCommunicator">Форум simpleCommunicator на GitHub</a></p>
 
@@ -318,4 +317,3 @@
   <li>Поиск в удалённых темах и удалённых сообщениях (для модераторов).</li> 
 </ul>
 
-</div>

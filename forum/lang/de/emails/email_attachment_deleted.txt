@@ -1,8 +1,8 @@
-Ihr Anhang wurde im Forum '{site_name}' gelöscht
+Ihr Anhang im Forum '{site_name}' wurde gelöscht
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ihr Anhang in der Nachricht vom {post_date} im Thema:
+Ihr Anhang in der Nachricht vom {post_date} im Thema: 
 
 {topic_name}
 {post_url}
@@ -14,10 +14,10 @@ Im Forum:
 
 wurde vom Moderator '{moderator_name}' gelöscht.
 
-Kurznachrichtentext:
+Kurzer Nachrichtentext:
 
 {message}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

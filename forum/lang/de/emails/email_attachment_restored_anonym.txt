@@ -1,8 +1,8 @@
-Ihr Anhang wurde im Forum '{site_name}' wiederhergestellt
+Ihr Anhang im Forum '{site_name}' wurde wiederhergestellt
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ihr Anhang in der Nachricht vom {post_date} im Thema:
+Ihr Anhang in der Nachricht vom {post_date} im Thema: 
 
 {topic_name}
 {post_url}
@@ -14,10 +14,10 @@ Im Forum:
 
 wurde wiederhergestellt.
 
-Kurznachrichtentext:
+Kurzer Nachrichtentext:
 
 {message}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

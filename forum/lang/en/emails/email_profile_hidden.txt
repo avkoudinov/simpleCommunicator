@@ -1,15 +1,15 @@
-Ваш профиль на форуме '{site_name}' скрыт
+Your profile on the forum '{site_name}' has been hidden
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Модератор '{moderator_name}' скрыл ваш профиль для просмотра на форуме '{site_name}'
+Moderator '{moderator_name}' has hidden your profile from public view on the forum '{site_name}'
 
 {site_url}
 
-Причина:
+Reason:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

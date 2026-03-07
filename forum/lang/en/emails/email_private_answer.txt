@@ -1,23 +1,23 @@
-Новое сообщение в приватной теме на форуме '{site_name}' 
+New message in a private topic on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-В приватной теме:
+In the private topic:
 
 {topic_name}
 
-пользователь '{author_name}' написал новое сообщение:
+user '{author_name}' has written a new message:
 
 {post_url}
 
-Если вы не хотите сбрасывать метку новых сообщений, чтобы не терять информацию о возможных непрочитанных сообщениях до данного сообщения, используйте данную ссылку для перехода на сообщение:
+If you do not want to reset the new posts marker to avoid losing information about possible unread posts before this post, use this link to navigate to the post:
 
 {post_url_unread}
 
-Краткий текст сообщения:
+Brief post text:
 
 {message}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

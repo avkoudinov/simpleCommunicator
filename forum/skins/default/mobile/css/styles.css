@@ -1473,6 +1473,12 @@ td.admin_actions
   width: 870px;
 }
 
+.settings_subheader
+{
+  color: #333;
+  font-weight: 600;
+}
+
 .settings_table #protected_guests,
 .settings_table #blocked_email_domains
 {
@@ -6428,13 +6434,6 @@ a.not_preferred:hover
           box-shadow: 8px 8px 13px gray;
 }
 
-._sys_lightbox_toolbar input[type=button]
-{
-  margin-top: 14px;
-  margin-left: 12px;
-  cursor: pointer;
-}
-
 ._sys_lightbox_head
 {
   background-color:#5182B5;
@@ -6492,6 +6491,27 @@ a.not_preferred:hover
 ._sys_lightbox_toolbar div
 {
   padding: 0px 14px 14px 0px;
+}
+
+._sys_lightbox_toolbar input[type=button]
+{
+  margin-top: 14px;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+._sys_lightbox_toolbar .consent_buttons
+{
+  display: flex;
+  flex-direction: column;
+  padding: 12px 12px;
+  gap: 12px;
+}
+
+._sys_lightbox_toolbar input[type=button].consent_button {
+    margin: 0;
+    width: 100%;
+    min-width: unset;
 }
 
 ._sys_lightbox_loading
@@ -7483,6 +7503,18 @@ label.rules_agreemnt
 #drag_drop_zone h6
 {
   display: none;
+}
+
+.consent_dialog
+{
+  padding: 12px;
+  display: none;
+}
+
+._sys_lightbox_toolbar input[type=button].consent_button
+{
+  display: inline-block;
+  width: 100%;
 }
 
 

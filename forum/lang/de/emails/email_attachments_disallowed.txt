@@ -1,15 +1,15 @@
-Установлен запрет на отправку вложений на форуме '{site_name}' 
+Eine Anhangsbeschränkung wurde im Forum '{site_name}' gesetzt 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Модератор '{moderator_name}' установил для вас запрет на отправку вложений на форуме '{site_name}'
+Moderator '{moderator_name}' hat eine Anhangsbeschränkung für Sie im Forum '{site_name}' gesetzt
 
 {site_url}
 
-Причина:
+Grund:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

@@ -1,16 +1,16 @@
-Удаление участников из приватной темы на форуме '{site_name}' 
+Teilnehmer wurden aus einem privaten Thema im Forum '{site_name}' entfernt 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Пользователь '{author_name}' удалил участников:
+Benutzer '{author_name}' hat die Teilnehmer entfernt:
 
 {removed_names} 
 
-из приватной темы с вашим участием:
+aus dem privaten Thema, an dem Sie teilnehmen:
 
 {topic_name}
 {topic_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

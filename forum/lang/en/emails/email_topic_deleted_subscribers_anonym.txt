@@ -1,19 +1,19 @@
-Удаление темы на форуме '{site_name}'
+Topic deleted on the forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Тема, на которую вы подписаны:
+The topic you are subscribed to:
 
 {topic_name}
 {topic_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-была удалена.
+has been deleted.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

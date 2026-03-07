@@ -1,16 +1,16 @@
-Отзыв прав на модерирование темы на форуме '{site_name}' 
+Moderationsrechte für ein Thema entzogen im Forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Вы были лишены права на модерирование темы:
+Ihnen wurden die Moderationsrechte für das Thema entzogen:
 
 {topic_name}
 {topic_url}
 
-Причина:
+Grund:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

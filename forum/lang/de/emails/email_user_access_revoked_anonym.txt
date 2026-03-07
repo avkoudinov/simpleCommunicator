@@ -1,16 +1,16 @@
-Отнят доступ в закрытый форум на форуме '{site_name}'
+Zugang zu einem geschlossenen Forum wurde entzogen im Forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-У вас был отнят доступ в закрытый форум:
+Ihr Zugang zu einem geschlossenen Forum wurde entzogen:
 
 {forum_name}
 {forum_url}
 
-Причина блокировки:
+Grund für die Sperrung:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

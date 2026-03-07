@@ -1,20 +1,20 @@
-Your post on forum '{site_name}' has been deleted
+Your post on the forum '{site_name}' has been deleted
 
 Dear {user_name},
 
-Your message from {post_date} in the topic:
+Your post dated {post_date} in the topic: 
 
 {topic_name}
 {post_url}
 
-On the forum:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-was deleted by the moderator '{moderator_name}'.
+has been deleted by moderator '{moderator_name}'.
 
-Short message text:
+Brief post text:
 
 {message}
 
@@ -22,6 +22,6 @@ Reason for deletion:
 
 {comment}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

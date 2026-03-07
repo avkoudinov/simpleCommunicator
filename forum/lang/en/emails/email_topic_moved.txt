@@ -1,22 +1,22 @@
-Ваша тема на форуме '{site_name}' перенесена в другой форум
+Your topic on the forum '{site_name}' has been moved to another forum
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша тема: 
+Your topic: 
 
 {topic_name}
 {topic_url}
 
-была перенесена модератором '{moderator_name}' из форума:
+has been moved by moderator '{moderator_name}' from the forum:
 
 {source_forum_name}
 {source_forum_url}
 
-в форум:
+to the forum:
 
 {target_forum_name}
 {target_forum_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

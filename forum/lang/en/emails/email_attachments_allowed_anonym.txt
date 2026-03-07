@@ -1,15 +1,15 @@
-Снят запрет на отправку вложений на форуме '{site_name}' 
+Attachment restriction has been lifted on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-С вас снят запрет на отправку вложений на форуме '{site_name}'
+The attachment restriction has been lifted for you on the forum '{site_name}'
 
 {site_url}
 
-Комментарий модератора:
+Moderator's comment:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

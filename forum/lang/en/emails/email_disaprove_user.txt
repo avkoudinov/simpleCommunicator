@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' не одобрена
+Your account on the forum '{site_name}' has not been approved
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Одобрение вашей учетной записи на форуме '{site_name}'
+The approval of your account on the forum '{site_name}'
 
 {site_url}
 
-было отменено администратором '{administrator_name}'.
+has been cancelled by the administrator '{administrator_name}'.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

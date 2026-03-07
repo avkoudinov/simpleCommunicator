@@ -1,18 +1,18 @@
-Ваши сообщения на подфоруме {forum_name} форума '{site_name}' удалены
+Your posts in the subforum {forum_name} of the forum '{site_name}' have been deleted
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Все ваши сообщения на форуме:
+All your posts in the forum:
 
 {forum_name}
 {forum_url}
 
-были удалены модератором.
+have been deleted by a moderator.
 
-Причина удаления:
+Reason for deletion:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

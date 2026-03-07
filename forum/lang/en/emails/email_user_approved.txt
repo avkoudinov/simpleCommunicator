@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' одобрена
+Your account on the forum '{site_name}' has been approved
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша учетная запись на форуме '{site_name}'
+Your account on the forum '{site_name}'
 
 {site_url}
 
-была одобрена администрацией.
+has been approved by the administration.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

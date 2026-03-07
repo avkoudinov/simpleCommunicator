@@ -1,14 +1,14 @@
-Вам выдано право видеть IP адреса в модерируемых форумах '{site_name}'
+You have been granted the right to view IP addresses in moderated forums '{site_name}'
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-На форуме '{site_name}'
+On the forum '{site_name}'
 
 {site_url}
 
-вам выдано право видеть IP адреса в модерируемых форумах.
+you have been granted the right to view IP addresses in moderated forums.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration
 

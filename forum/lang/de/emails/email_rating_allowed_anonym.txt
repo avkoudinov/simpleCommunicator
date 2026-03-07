@@ -1,15 +1,15 @@
-Снят запрет на оценку сообщений на форуме '{site_name}' 
+Die Beschränkung zur Bewertung von Beiträgen im Forum '{site_name}' wurde aufgehoben 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-С вас снят запрет на оценку сообщений на форуме '{site_name}'
+Die Beschränkung zur Bewertung von Beiträgen wurde für Sie im Forum '{site_name}' aufgehoben
 
 {site_url}
 
-Комментарий модератора:
+Kommentar des Moderators:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

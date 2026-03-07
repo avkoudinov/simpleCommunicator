@@ -1,21 +1,21 @@
-Отмена дизлайка на ваше сообщение на форуме '{site_name}' 
+A dislike on your post on the forum '{site_name}' has been revoked 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-На форуме: 
+On the forum: 
 
 {forum_name}
 {forum_url}
 
-пользователь '{rated_user_name}' отменил свой дизлайк на ваше сообщение от {post_date} в теме:
+user '{rated_user_name}' has revoked their dislike on your post dated {post_date} in the topic:
 
 {topic_name}
 {post_url}
 
-Краткий текст сообщения:
+Brief post text:
 
 {message}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

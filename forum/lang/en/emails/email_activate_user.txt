@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' активирована
+Your account on the forum '{site_name}' has been activated
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша учетная запись на форуме '{site_name}'
+Your account on the forum '{site_name}'
 
 {site_url}
 
-была активирована администратором '{administrator_name}'.
+has been activated by the administrator '{administrator_name}'.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

@@ -115,7 +115,7 @@ abstract class ForumManager
     
     abstract function gen_load_statistics();
 
-    abstract function get_reply_post_clause($dbw, $prfx, $parent_pid);
+    abstract function get_reply_post_clause($dbw, $prfx, $parent_pid, $deep);
     
     abstract function get_last_replies_clause($srdbw, $prfx, $author_id, $author, $start_date, $end_date);
 
@@ -4947,6 +4947,7 @@ abstract class ForumManager
         $settings["celebration_active"] = "";
         $settings["mourning_active"] = "";
         $settings["archive_mode"] = "";
+        $settings["request_cookie_consent"] = "";
         $settings["hash_ip_addresses"] = "";
         
         $dbw = System::getDBWorker();
@@ -4963,7 +4964,7 @@ abstract class ForumManager
                              max_att_size, max_att_size_audiovideo, max_messages_minute, max_messages_hour, max_messages_day, 
                              max_topics_day, min_search_interval, max_rates_hour,
                              max_topic_name_symbols, max_user_name_symbols, hide_users_from_robots,
-                             celebration_active, mourning_active, snow_effect, archive_mode, hash_ip_addresses
+                             celebration_active, mourning_active, snow_effect, archive_mode, request_cookie_consent, hash_ip_addresses
                              from {$prfx}_settings")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -4995,6 +4996,7 @@ abstract class ForumManager
             $settings["mourning_active"] = $dbw->field_by_name("mourning_active");
             $settings["snow_effect"] = $dbw->field_by_name("snow_effect");
             $settings["archive_mode"] = $dbw->field_by_name("archive_mode");
+            $settings["request_cookie_consent"] = $dbw->field_by_name("request_cookie_consent");
             $settings["hash_ip_addresses"] = $dbw->field_by_name("hash_ip_addresses");
             
             $settings["skin"] = $dbw->field_by_name("skin");
@@ -5340,6 +5342,7 @@ abstract class ForumManager
         $mourning_active = reqvar_empty("mourning_active") ? "0" : "1";
         $snow_effect = reqvar_empty("snow_effect") ? "0" : "1";
         $archive_mode = reqvar_empty("archive_mode") ? "0" : "1";
+        $request_cookie_consent = reqvar_empty("request_cookie_consent") ? "0" : "1";
         $hash_ip_addresses = reqvar_empty("hash_ip_addresses") ? "0" : "1";
         
         if (!$dbw->start_transaction()) {
@@ -5378,6 +5381,7 @@ abstract class ForumManager
                              snow_effect = $snow_effect,
                              mourning_active = $mourning_active,
                              archive_mode = $archive_mode,
+                             request_cookie_consent = $request_cookie_consent,
                              hash_ip_addresses = $hash_ip_addresses
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -40524,7 +40528,7 @@ abstract class ForumManager
             }
             //-------------------------------------------------------------------
             if (!reqvar_empty("replies_to")) {
-                $post_part_where .= $this->get_reply_post_clause($srdbw, $prfx, reqvar("replies_to"));
+                $post_part_where .= $this->get_reply_post_clause($srdbw, $prfx, reqvar("replies_to"), empty($_SESSION["deep_replies"]) ? 0 : 1);
                 $other_post_conditions_exist = true;
             }
             //-------------------------------------------------------------------

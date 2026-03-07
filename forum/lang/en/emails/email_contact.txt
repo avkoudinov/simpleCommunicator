@@ -1,6 +1,6 @@
-New request via the contact form on the forum '{site_name}'
+New inquiry via the contact form on the forum '{site_name}'
 
-A new request has been received on the forum '{site_name}'
+A new inquiry has been received on the forum '{site_name}'
 
 {site_url}
 
@@ -16,6 +16,6 @@ Message:
 
 {message}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

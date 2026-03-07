@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     07.09.2025 15:42:45                          */
+/* Created on:     07.03.2026 19:30:17                          */
 /*==============================================================*/
 
 
@@ -1941,7 +1941,8 @@ create table v1_settings (
    snow_effect          tinyint              not null default 0,
    hide_users_from_robots tinyint              not null default 0,
    archive_mode         tinyint              not null default 0,
-   hash_ip_addresses    tinyint              not null default 0
+   hash_ip_addresses    tinyint              not null default 0,
+   request_cookie_consent tinyint              not null default 0
 )
 go
 
@@ -2634,7 +2635,8 @@ go
 
 
 create procedure v1_deep_collect_replies
-  @oid integer
+  @oid integer,
+  @deep integer
 as
 begin
    set nocount on
@@ -2649,7 +2651,7 @@ begin
      where parent_post_id in (select id from #tmp_children)
      and reply_post_id not in (select id from #tmp_children)
      
-     if(@@rowcount = 0) break
+     if(@@rowcount = 0 or @deep = 0) break
    end
    
 end

@@ -1,12 +1,12 @@
-Выход участника из приватной темы на форуме '{site_name}' 
+Ein Teilnehmer hat das private Thema im Forum '{site_name}' verlassen 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Пользователь '{author_name}' вышел из приватной темы с вашим участием:
+Benutzer '{author_name}' hat das private Thema, an dem Sie teilnehmen, verlassen:
 
 {topic_name}
 {topic_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

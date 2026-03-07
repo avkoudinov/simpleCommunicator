@@ -1,19 +1,19 @@
-Ваша тема на форуме '{site_name}' восстановлена
+Ihr Thema im Forum '{site_name}' wurde wiederhergestellt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша тема: 
+Ihr Thema: 
 
 {topic_name}
 {topic_url}
 
-На форуме:
+Im Forum:
 
 {forum_name}
 {forum_url}
 
-была восстановлена.
+wurde wiederhergestellt.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

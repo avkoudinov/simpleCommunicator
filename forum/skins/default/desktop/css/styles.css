@@ -2204,7 +2204,7 @@ img.special_links
 .text_content
 {
   margin: 30px auto;
-  width: 980px;
+  max-width: 980px;
   border: 1px solid #eeeeee;
   background-color: #eeeeee;
   padding: 6px;
@@ -6303,11 +6303,9 @@ strong.strongly_ignored_author > .invisible_author
 
 .result_example .code_header
 {
-  width: 950px;
 }
 .result_example .code
 {
-  width: 958px;
 }
 
 .code_highlight
@@ -7920,6 +7918,12 @@ a.coub_short_container
 #drag_drop_zone h5,
 #drag_drop_zone h6
 {
+  display: none;
+}
+
+.consent_dialog
+{
+  padding: 5px;
   display: none;
 }
 

@@ -289,9 +289,9 @@ if(!reqvar_empty("fpage"))
 
 <div class="header3">
 
-<?php if($fmanager->is_moderator()): ?>
-
 <div class="left_action_panel">
+
+<?php if($fmanager->is_moderator()): ?>
 
 <?php if(empty($_SESSION["show_deleted"])): ?>
 <a href="<?php echo($base_url); ?>?show_deleted=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("DisplayDeleted")); ?></a>
@@ -299,9 +299,9 @@ if(!reqvar_empty("fpage"))
 <a href="<?php echo($base_url); ?>?hide_deleted=1<?php echo($fpage_appendix); ?>&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("HideDeleted")); ?></a>
 <?php endif; ?>
 
-</div>
-
 <?php endif; ?>
+
+</div>
 
 <div class="right_action_panel">
 <?php

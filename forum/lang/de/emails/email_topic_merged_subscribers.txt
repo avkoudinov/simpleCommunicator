@@ -1,33 +1,33 @@
-Тема на форуме '{site_name}' объединена с другой темой
+Ein Thema im Forum '{site_name}' wurde mit einem anderen Thema zusammengeführt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Вы подписаны на уведомления о новых сообщениях в теме:
+Sie haben Benachrichtigungen über neue Beiträge im Thema abonniert:
 
 {source_topic_name}
 {source_topic_url}
 
-На форуме: 
+Im Forum: 
 
 {source_forum_name}
 {source_forum_url}
 
-Данная тема была объединена модератором '{moderator_name}' с темой:
+Dieses Thema wurde vom Moderator '{moderator_name}' mit dem Thema zusammengeführt:
 
 {target_topic_name}
 {target_topic_url}
 
-На форуме:
+Im Forum:
 
 {target_forum_name}
 {target_forum_url}
 
-Первое cообщение перенесенной темы:
+Erster Beitrag des zusammengeführten Themas:
 
 {first_post_url}
 
-Если вы хотите получать уведомления о новых сообщениях в целевой теме, зайдите в нее и нажмите "Подписаться на уведомления".
+Wenn Sie Benachrichtigungen über neue Beiträge im Zielthema erhalten möchten, besuchen Sie es und klicken Sie auf "Benachrichtigungen abonnieren".
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

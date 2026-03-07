@@ -1,22 +1,22 @@
 Neuer Benutzer im Forum '{site_name}'
 
-Liebe(r) {administrator_name},
+Sehr geehrte(r) {administrator_name},
 
-Sie haben diese Nachricht erhalten, weil Sie der Administrator des Forums '{site_name}' sind:
+Sie haben diese Nachricht erhalten, weil Sie Administrator des Forums '{site_name}' sind:
 
 {site_url}
 
 Ein neuer Benutzer hat sich im Forum registriert:
 
-Login: {user_login}
+Anmeldename: {user_login}
 Benutzername: {user_name}
 E-Mail-Adresse: {user_email}
 IP-Adresse: {ip} - {ip_link}
 
-Sein Konto muss vom Administrator genehmigt werden. Sie können Ihre Kontodaten unter folgendem Link anzeigen und genehmigen:
+Sein Konto muss von einem Administrator genehmigt werden. Die Kontodaten können Sie unter folgendem Link einsehen und genehmigen:
 
 {user_edit_url}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

@@ -1,14 +1,14 @@
-Открытие приватной темы на форуме '{site_name}'
+Privates Thema wieder geöffnet im Forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Приватная тема, в которой вы являетесь участником:
+Das private Thema, an dem Sie teilnehmen:
 
 {topic_name}
 {topic_url}
 
-была открыта модератором '{moderator_name}'.
+wurde vom Moderator '{moderator_name}' wieder geöffnet.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

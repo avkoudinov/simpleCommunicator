@@ -1,22 +1,22 @@
-Пользователь сменил электронный адрес на форуме '{site_name}'
+A user changed their email address on the forum '{site_name}'
 
-Уважаемый(ая) {administrator_name},
+Dear {administrator_name},
 
-Вы получили это сообщение потому, что являетесь администратором форума '{site_name}':
+You received this message because you are an administrator of the forum '{site_name}':
 
 {site_url}
 
-На форуме пользователь сменил электронный адрес:
+A user on the forum has changed their email address:
 
-Логин: {user_login}
-Имя пользователя: {user_name}
-Электронный адрес: {user_email}
-IP-адрес: {ip} - {ip_link}
+Login: {user_login}
+Username: {user_name}
+Email address: {user_email}
+IP address: {ip} - {ip_link}
 
-Его учетная запись должна быть одобрена администратором. Посмотреть данные учетной записи и одобрить её вы можете по следующей ссылке:
+Their account must be approved by an administrator. You can view the account details and approve it at the following link:
 
 {user_edit_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration
