@@ -1,23 +1,23 @@
-Изменение вашего сообщения на форуме '{site_name}'
+Ihr Beitrag im Forum '{site_name}' wurde geändert
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваше сообщение от {post_date} в теме: 
+Ihr Beitrag vom {post_date} im Thema: 
 
 {topic_name}
 {post_url}
 
-На форуме:
+Im Forum:
 
 {forum_name}
 {forum_url}
 
-было изменено на не 18+ модератором '{moderator_name}'.
+wurde vom Moderator '{moderator_name}' als nicht-18+ markiert.
 
-Краткий текст сообщения:
+Kurzer Nachrichtentext:
 
 {message}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

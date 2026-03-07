@@ -3845,10 +3845,10 @@
         </text>
 
         <text id="ReadmarkerModeration">
-            <en>Read marker moderation</en>
-            <de>Read-Marker-Moderation</de>
-            <ru>Модерация рид-маркеров</ru>
-            <ua>Модерація рід-маркерів</ua>
+            <en>Moderation of read marker (guest tokens)</en>
+            <de>Moderation von Read-Marker (Gast-Tokens)</de>
+            <ru>Модерация рид-маркеров (гостевых тоукенов)</ru>
+            <ua>Модерація рід-маркерів (гостьових токенів)</ua>
         </text>
 
         <text id="ReadmarkersNotFound">
@@ -9418,10 +9418,10 @@
         </text>
 
         <text id="ModerateTheReadMarker">
-            <en>Moderate the author's read marker</en>
-            <de>Den Author-Read-Marker moderieren</de>
-            <ru>Модерировать ридмаркер автора</ru>
-            <ua>Модерувати рідмаркер автора</ua>
+            <en>Moderate the author's read marker (guest token)</en>
+            <de>Den Author-Read-Marker (Gast-Token) moderieren</de>
+            <ru>Модерировать ридмаркер автора (гостевой тоукен)</ru>
+            <ua>Модерувати рідмаркер автора (гостьовий тоукен)</ua>
         </text>
 
         <text id="ErrReadMarkerEmpty">
@@ -9582,8 +9582,29 @@
         <text id="UserAgreement">
             <en>User agreement</en>
             <de>Benutzervereinbarung</de>
-            <ru>Польз. соглашение</ru>
+            <ru>Пользовательское соглашение</ru>
             <ua>Угода з користувачем</ua>
+        </text>
+
+        <text id="UserAgreementShort">
+            <en>User agreement</en>
+            <de>Benutzervereinb.</de>
+            <ru>Польз. соглашение</ru>
+            <ua>Угода з користув.</ua>
+        </text>
+
+        <text id="PrivacyPolicy">
+            <en>Privacy policy</en>
+            <de>Datenschutzbestimmungen</de>
+            <ru>Политика конфиденциальности</ru>
+            <ua>Політика конфіденційності</ua>
+        </text>
+
+        <text id="PrivacyPolicyShort">
+            <en>Privacy policy</en>
+            <de>Datenschutzbest.</de>
+            <ru>Полит. конфиден.</ru>
+            <ua>Політ. конфід.</ua>
         </text>
 
         <text id="Maintenance">
@@ -11283,6 +11304,76 @@
             <ru>Видео недоступно для встраивания или недоступно для вашей локации!</ru>
             <ua>Відео недоступне для вбудовування або недоступне для вашої локації!</ua>
         </text>
+
+        <text id="GeneralSettings">
+            <en>General settings</en>
+            <de>Allgemeine Einstellungen</de>
+            <ru>Общие настройки</ru>
+            <ua>Загальні налаштування</ua>
+        </text>
+
+        <text id="RequestCookieConsent">
+            <en>Request consent to use cookies</en>
+            <de>Запитувати згоду на використання файлів cookie</de>
+            <ru>Запрашивать согласие на использование файлов cookie</ru>
+            <ua>Запитувати згоду на використання файлів cookie</ua>
+        </text>
+
+      <text id="DataConsent">
+          <en>Consent to data processing</en>
+          <de>Einwilligung zur Datenverarbeitung</de>
+          <ru>Согласие на обработку данных</ru>
+          <ua>Згода на обробку даних</ua>
+      </text>
+
+      <text id="StatisticsCollection">
+          <en>Statistics collection</en>
+          <de>Statistikerhebung</de>
+          <ru>Сбор статистики</ru>
+          <ua>Збір статистики</ua>
+      </text>
+
+      <text id="Marketing">
+          <en>Marketing</en>
+          <de>Marketing</de>
+          <ru>Маркетинг</ru>
+          <ua>Маркетинг</ua>
+      </text>
+
+      <text id="Personalization">
+          <en>Personalization</en>
+          <de>Personalisierung</de>
+          <ru>Персонализация</ru>
+          <ua>Персоналізація</ua>
+      </text>
+      
+      <text id="AcceptSelected">
+          <en>Accept selected</en>
+          <de>Ausgewählte akzeptieren</de>
+          <ru>Принять выбранные</ru>
+          <ua>Прийняти вибрані</ua>
+      </text>
+
+      <text id="AcceptOnlyRequired">
+          <en>Accept only required</en>
+          <de>Nur erforderliche akzeptieren</de>
+          <ru>Принять только необходимые</ru>
+          <ua>Прийняти лише необхідні</ua>
+      </text>
+
+      <text id="ShowAllReplies">
+          <en>Show all replies</en>
+          <de>Показать все ответы</de>
+          <ru>Показать все ответы</ru>
+          <ua>Показати всі відповіді</ua>
+      </text>
+
+      <text id="ShowDirectReplies">
+          <en>Show direct replies only</en>
+          <de>Nur direkte Antworten anzeigen</de>
+          <ru>Показать только прямые ответы</ru>
+          <ua>Показати лише прямі відповіді</ua>
+      </text>
 
     </texts>
 </document>

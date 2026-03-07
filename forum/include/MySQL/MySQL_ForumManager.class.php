@@ -1705,7 +1705,7 @@ class MySQL_ForumManager extends ForumManager
     } // create_tmp_id_collector_table
 
     //-----------------------------------------------------------------
-    function get_reply_post_clause($dbw, $prfx, $parent_pid)
+    function get_reply_post_clause($dbw, $prfx, $parent_pid, $deep)
     {
         $query = "create temporary table if not exists tmp_children(id integer)";
         if (!$dbw->execute_query($query)) {
@@ -1713,7 +1713,7 @@ class MySQL_ForumManager extends ForumManager
             return "";
         }
         
-        if (!$dbw->execute_procedure("{$prfx}_deep_collect_replies", $parent_pid)) {
+        if (!$dbw->execute_procedure("{$prfx}_deep_collect_replies", $parent_pid, $deep)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return "";
         }

@@ -1,31 +1,31 @@
-Перенос сообщений из другой темы в подписанную тему на форуме '{site_name}' 
+Beiträge aus einem anderen Thema wurden in Ihr abonniertes Thema im Forum '{site_name}' verschoben 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Вы подписаны на уведомления о новых сообщениях в теме:
+Sie haben Benachrichtigungen über neue Beiträge im Thema abonniert:
 
 {target_topic_name}
 {target_topic_url}
 
-На форуме:
+Im Forum:
 
 {target_forum_name}
 {target_forum_url}
 
-Модератор '{moderator_name}' перенес в данную тему {moved_count} сообщений из темы:
+Moderator '{moderator_name}' hat {moved_count} Beiträge aus dem Thema in dieses Thema verschoben:
 
 {source_topic_name}
 {source_topic_url}
 
-На форуме:
+Im Forum:
 
 {source_forum_name}
 {source_forum_url}
 
-Первое перенесенное cообщение:
+Erster verschobener Beitrag:
 
 {first_post_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

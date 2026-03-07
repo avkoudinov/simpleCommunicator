@@ -1,23 +1,23 @@
-Ваше сообщение на форуме '{site_name}' изменено
+Your post on the forum '{site_name}' has been edited
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваше сообщение от {post_date} в теме: 
+Your post dated {post_date} in the topic: 
 
 {topic_name}
 {post_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-было изменено модератором '{moderator_name}'.
+has been edited by moderator '{moderator_name}'.
 
-Краткий текст сообщения:
+Brief post text:
 
 {message}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

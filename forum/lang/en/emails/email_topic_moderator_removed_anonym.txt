@@ -1,20 +1,20 @@
-Удаление модератора в модерируемой вами теме на форуме '{site_name}' 
+Moderator removed from the topic you moderate on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-В теме, где вы являетесь модератором: 
+In the topic where you are a moderator: 
 
 {topic_name}
 {topic_url}
 
-отняты модераторские права у пользователя:
+moderator rights have been revoked from the user:
 
 {topic_moderator_name}
 
-Причина:
+Reason:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

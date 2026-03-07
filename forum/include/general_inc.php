@@ -83,6 +83,8 @@ if ($fmanager->check_hash()) {
         $uri = $target_url;
     }
     
+    $uri = preg_replace("/show_deep_replies=\\d&?/", "", $uri);
+    $uri = preg_replace("/show_direct_replies=\\d&?/", "", $uri);
     $uri = preg_replace("/show_deleted=\\d&?/", "", $uri);
     $uri = preg_replace("/hide_deleted=\\d&?/", "", $uri);
     $uri = preg_replace("/guest_posting_on=\\d&?/", "", $uri);
@@ -92,6 +94,16 @@ if ($fmanager->check_hash()) {
     $uri = preg_replace("/hash=.+&?/", "", $uri);
     $uri = rtrim($uri, "&?");
     
+    if (!reqvar_empty("show_deep_replies")) {
+        $_SESSION["deep_replies"] = 1;
+        header("Location: " . $uri);
+        exit;
+    }
+    if (!reqvar_empty("show_direct_replies")) {
+        $_SESSION["deep_replies"] = 0;
+        header("Location: " . $uri);
+        exit;
+    }
     if (!reqvar_empty("show_deleted")) {
         $_SESSION["show_deleted"] = 1;
         header("Location: " . $uri);

@@ -1,31 +1,31 @@
-Ваша тема на форуме '{site_name}' объединена с другой темой
+Your topic on the forum '{site_name}' has been merged with another topic
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша тема: 
+Your topic: 
 
 {source_topic_name}
 {source_topic_url}
 
-На форуме: 
+In the forum: 
 
 {source_forum_name}
 {source_forum_url}
 
-была объединена модератором '{moderator_name}' с темой:
+has been merged by moderator '{moderator_name}' with the topic:
 
 {target_topic_name}
 {target_topic_url}
 
-На форуме:
+In the forum:
 
 {target_forum_name}
 {target_forum_url}
 
-Первое cообщение перенесенной темы:
+First post of the merged topic:
 
 {first_post_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

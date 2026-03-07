@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' одобрена
+Ihr Konto im Forum '{site_name}' wurde genehmigt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша учетная запись на форуме '{site_name}'
+Ihr Konto im Forum '{site_name}'
 
 {site_url}
 
-была одобрена администрацией.
+wurde von der Verwaltung genehmigt.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

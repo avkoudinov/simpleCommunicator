@@ -1,11 +1,11 @@
-Erteilung von Administratorrechten an '{site_name}'
+Administratorrechte vergeben auf '{site_name}'
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-Der Foreneigentümer hat Ihnen Administratorrechte für '{site_name}' erteilt:
+Der Forumseigentümer hat Ihnen Administratorrechte auf '{site_name}' erteilt:
 
 {site_url}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

@@ -1,13 +1,13 @@
-У вас отнят статус привилегированного пользователя на форуме '{site_name}'
+Ihr Status als privilegierter Benutzer im Forum '{site_name}' wurde entzogen
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме '{site_name}'
+Im Forum '{site_name}'
 
 {site_url}
 
-администратор '{administrator_name}' забрал у вас статус привилегированного пользователя.
+hat Administrator '{administrator_name}' Ihnen den Status eines privilegierten Benutzers entzogen.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

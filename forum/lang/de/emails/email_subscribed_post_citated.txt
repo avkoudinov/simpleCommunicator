@@ -1,34 +1,34 @@
-На сообщение, на которое вы подписаны, написали ответ или процитировали на форуме '{site_name}' 
+Auf einen Beitrag, den Sie abonniert haben, wurde im Forum '{site_name}' geantwortet oder zitiert 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме: 
+Im Forum: 
 
 {forum_name}
 {forum_url}
 
-в теме:
+im Thema:
 
 {topic_name}
 
-участник '{author_name}' ответил или процитировал сообщение, на которое вы подписаны.
+hat Mitglied '{author_name}' den Beitrag, den Sie abonniert haben, beantwortet oder zitiert.
 
-Адрес сообщения, на которое вы подписаны:
+Adresse des abonnierten Beitrags:
 
 {citated_post_url}
 
-Адрес нового сообщения:
+Adresse des neuen Beitrags:
 
 {post_url}
 
-Если вы не хотите сбрасывать метку новых сообщений, чтобы не терять информацию о возможных непрочитанных сообщениях до данного сообщения, используйте данную ссылку для перехода на сообщение:
+Wenn Sie die Markierung neuer Beiträge nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Beiträge vor dieser Nachricht zu verlieren, verwenden Sie diesen Link zur Nachricht:
 
 {post_url_unread}
 
-Краткий текст ответа:
+Kurzer Antworttext:
 
 {message}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

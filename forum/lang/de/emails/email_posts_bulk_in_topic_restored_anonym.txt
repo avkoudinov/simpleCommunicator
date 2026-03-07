@@ -1,23 +1,23 @@
-Ваши сообщения восстановлены в теме на форуме "{site_name}"
+Ihre Beiträge wurden im Thema im Forum "{site_name}" wiederhergestellt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваши {count} сообщений в теме: 
+Ihre {count} Beiträge im Thema: 
 
 {topic_name}
 {topic_url}
 
-На форуме:
+Im Forum:
 
 {forum_name}
 {forum_url}
 
-были восстановлены путем пакетного восстановления.
+wurden per Massenwiederherstellung wiederhergestellt.
 
-Причина:
+Grund:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

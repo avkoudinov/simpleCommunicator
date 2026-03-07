@@ -1,13 +1,13 @@
-У вас отнято право видеть IP адреса в модерируемых форумах на форуме '{site_name}'
+Your right to view IP addresses in moderated forums on '{site_name}' has been revoked
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-На форуме '{site_name}'
+On the forum '{site_name}'
 
 {site_url}
 
-администратор '{administrator_name}' забрал у вас право видеть IP адреса в модерируемых форумах.
+administrator '{administrator_name}' has revoked your right to view IP addresses in moderated forums.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

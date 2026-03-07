@@ -1,8 +1,8 @@
-Bewertungen für Ihre Nachrichten im Forum '{site_name}' entfernt
+Bewertungen auf Ihre Beiträge im Forum '{site_name}' wurden gelöscht
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-{count} Bewertungen für Ihre Nachrichten im Forum '{site_name}' wurden gelöscht
+{count} Bewertungen auf Ihre Beiträge im Forum '{site_name}' wurden gelöscht
 
 {site_url}
 

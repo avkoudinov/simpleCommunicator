@@ -1,15 +1,15 @@
-Ваш профиль на форуме '{site_name}' открыт
+Ihr Profil im Forum '{site_name}' ist jetzt öffentlich sichtbar
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваш профиль был открыт для просмотра на форуме '{site_name}'
+Ihr Profil wurde im Forum '{site_name}' für andere sichtbar gemacht
 
 {site_url}
 
-Комментарий модератора:
+Kommentar des Moderators:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

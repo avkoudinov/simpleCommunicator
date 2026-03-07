@@ -1,21 +1,21 @@
-Название вашей темы на форуме '{site_name}' изменено
+The title of your topic on the forum '{site_name}' has been changed
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Название вашей темы: 
+The title of your topic: 
 
 {topic_name}
 {topic_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-было изменено на
+has been changed to
 
 {new_topic_name}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

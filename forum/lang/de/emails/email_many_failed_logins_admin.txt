@@ -1,8 +1,8 @@
-Mehrere erfolglose Versuche, sich im Forum '{site_name}' mit dem Login eines Benutzers anzumelden
+Mehrfache fehlgeschlagene Anmeldeversuche im Forum '{site_name}' mit dem Benutzernamen eines Benutzers
 
-Liebe(r) {admin_name},
+Sehr geehrte(r) {admin_name},
 
-Es gab mehrere erfolglose Versuche, sich unter dem Login '{user_login}' des Benutzers '{user_name}' im Forum '{site_name}' anzumelden.
+Mehrfache fehlgeschlagene Anmeldeversuche wurden im Forum '{site_name}' mit dem Benutzernamen '{user_login}' des Benutzers '{user_name}' erkannt.
 
 {site_url}
 
@@ -12,4 +12,4 @@ von der IP-Adresse:
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

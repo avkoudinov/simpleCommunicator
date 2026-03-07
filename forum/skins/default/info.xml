@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description>
-  <version>15.02.26</version>
+  <version>08.03.2026</version>
   
   <caption 
   ru="Синий минималистичеcкий"
@@ -20,6 +20,17 @@
     ua="Показувати логотип форуму замість назви"
     en="Display the forum logo instead of the forum name"
     de="Forum-Logo anstelle des Forumsnamens anzeigen"
+    />
+
+    <property
+    name="show_df_logotype_dedoforum" 
+    type="checkbox"
+    default = "0"
+    
+    ru="Показзывать старый логотип дедофорума"
+    ua="Показати старий логотип дедофоруму"
+    en="Display the old logo of the dedoforum"
+    de="Das alte Logo von Dedoforum anzeigen"
     />
 
     <property

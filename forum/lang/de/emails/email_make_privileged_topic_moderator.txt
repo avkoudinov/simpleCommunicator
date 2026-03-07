@@ -1,13 +1,13 @@
-Вам выдан статус привилегированного модератора тем на форуме '{site_name}'
+Ihnen wurde der Status eines privilegierten Themenmoderators im Forum '{site_name}' verliehen
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме '{site_name}'
+Im Forum '{site_name}'
 
 {site_url}
 
-администратор '{administrator_name}' выдал вам статус привилегированного модератора тем.
+hat Administrator '{administrator_name}' Ihnen den Status eines privilegierten Themenmoderators verliehen.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

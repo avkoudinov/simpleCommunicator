@@ -1,25 +1,25 @@
-Вам выдано предупреждение форуме '{site_name}' 
+You have received a warning on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Модератор '{moderator_name}' выдал вам предупреждение на ваше сообщение в теме:
+Moderator '{moderator_name}' has issued you a warning for your post in the topic:
 
 {topic_name}
 {post_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-Предупреждение:
+Warning:
 
 {comment}
 
-Краткий текст сообщения:
+Brief post text:
 
 {message}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

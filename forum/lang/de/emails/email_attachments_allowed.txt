@@ -1,15 +1,15 @@
-Снят запрет на отправку вложений на форуме '{site_name}' 
+Die Anhangsbeschränkung im Forum '{site_name}' wurde aufgehoben 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Модератор '{moderator_name}' снял с вас запрет на отправку вложений на форуме '{site_name}'
+Moderator '{moderator_name}' hat die Anhangsbeschränkung für Sie im Forum '{site_name}' aufgehoben
 
 {site_url}
 
-Комментарий модератора:
+Kommentar des Moderators:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

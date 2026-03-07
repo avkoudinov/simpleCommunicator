@@ -1,21 +1,21 @@
-Ваша учетная запись на форуме '{site_name}' разблокирована на создание сообщений в теме
+Your account on the forum '{site_name}' has been unrestricted from posting in the topic
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша учетная запись была разблокирована модератором '{moderator_name}' на создание сообщений в теме:
+Your account has been unrestricted by moderator '{moderator_name}' from posting in the topic:
 
 {topic_name}
 {topic_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-Комментарий модератора:
+Moderator's comment:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

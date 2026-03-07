@@ -1,18 +1,18 @@
-Ваши сообщения на подфоруме {forum_name} форума '{site_name}' удалены
+Ihre Beiträge im Unterforum {forum_name} des Forums '{site_name}' wurden gelöscht
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Все ваши сообщения на форуме:
+Alle Ihre Beiträge im Forum:
 
 {forum_name}
 {forum_url}
 
-были удалены модератором '{moderator_name}'.
+wurden vom Moderator '{moderator_name}' gelöscht.
 
-Причина удаления:
+Grund für die Löschung:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

@@ -1,21 +1,21 @@
-Вашему сообщению поставлен дизлайк на форуме '{site_name}' 
+Ihr Beitrag hat einen Dislike im Forum '{site_name}' erhalten 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме: 
+Im Forum: 
 
 {forum_name}
 {forum_url}
 
-пользователь '{rated_user_name}' поставил дизлайк на ваше сообщение от {post_date} в теме:
+hat Benutzer '{rated_user_name}' Ihren Beitrag vom {post_date} im Thema mit einem Dislike bewertet:
 
 {topic_name}
 {post_url}
 
-Краткий текст сообщения:
+Kurzer Nachrichtentext:
 
 {message}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

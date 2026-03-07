@@ -1241,6 +1241,112 @@ Forum.show_attachment_gallery = function(title_text, buttons)
   lbox.style.display = "table";
 }
 // --------------------------------------------------------
+Forum.handle_consent_dialog = function()
+{
+  const excludedPages = ['privacy_policy.php', 'user_agreement.php'];
+  const url = window.location.href;
+
+  if (!excludedPages.some(page => url.includes(page)) && Forum.getCookie("q_consent_necessary") != "1") {
+      Forum.show_consent_dialog();
+  }
+}
+// --------------------------------------------------------
+Forum.aux_show_consent_dialog = function(width)
+{
+  var lbox = document.getElementById("sys_lightbox");
+  if(!lbox) return;
+
+  var title = document.getElementById("sys_lightbox_title");
+  if(title) title.innerHTML = Forum.escape_html(msg_DataConsent);
+
+  var head = document.getElementById("sys_lightbox_head");
+  var body = document.getElementById("sys_lightbox_body");
+  var toolbar = document.getElementById("sys_lightbox_toolbar");
+  var elm = document.getElementById("consent_dialog");
+
+  Forum.last_element_parent = null;
+
+  if(body && head && toolbar && elm)
+  {
+    var buttons = [
+      {
+        caption: msg_AcceptSelected,
+        addClass: "consent_button",
+        handler: function() { 
+          Forum.setCookie("q_consent_necessary", "1", 90);
+
+          var chbx = document.getElementById("statistics_cookies");
+          if (chbx) Forum.setCookie("q_consent_statistics", chbx.checked ? "1" : "0", 90);
+          
+          chbx = document.getElementById("marketing_cookies");
+          if (chbx) Forum.setCookie("q_consent_marketing", chbx.checked ? "1" : "0", 90);
+          
+          Forum.hide_sys_lightbox();
+        }
+      },
+      {
+        caption: msg_AcceptOnlyRequired,
+        addClass: "consent_button",
+        handler: function() { 
+          Forum.setCookie("q_consent_necessary", "1", 90);
+          Forum.setCookie("q_consent_statistics", "0", 90);
+          Forum.setCookie("q_consent_marketing", "0", 90);
+          
+          Forum.hide_sys_lightbox();
+        }
+      }
+    ];
+
+    Forum.last_element_parent = elm.parentNode;
+
+    head.style.width = width;
+    body.style.width = width;
+    toolbar.style.width = width;
+    
+    body.style.height = "auto";
+
+    toolbar.style.display = "block";
+
+    elm.style.display = "block";
+    body.appendChild(elm);
+
+    var button_container = document.createElement("div");
+    button_container.classList.add("consent_buttons");
+    
+    toolbar.appendChild(button_container);
+
+    for(var i = 0; i < buttons.length; i++)
+    {
+      elm = document.createElement("input");
+      elm.type = "button";
+      elm.className = "standard_button";
+      if(buttons[i].addClass) elm.className += " " + buttons[i].addClass;
+      elm.value = buttons[i].caption;
+      if(buttons[i].handler) elm.onclick = buttons[i].handler;
+
+      button_container.appendChild(elm);
+    }
+  }
+  
+  if (Forum.getCookie("q_consent_necessary"))
+  {
+    // consent given, read settings
+    elm = document.getElementById("statistics_cookies");
+    if (elm) elm.checked = Forum.getCookie("q_consent_statistics") == "1";
+
+    elm = document.getElementById("marketing_cookies");
+    if (elm) elm.checked = Forum.getCookie("q_consent_marketing") == "1";
+  }
+  else
+  {
+    // consent not given, use defaults
+    elm = document.getElementById("statistics_cookies");
+    if (elm) elm.checked = true;
+  }
+
+  lbox.style.display = "table";
+}
+// --------------------------------------------------------
 Forum.show_topic_selector = function(title_text, buttons, show_new_topic, merge_modus, width)
 {
   var lbox = document.getElementById("sys_lightbox");
@@ -2741,6 +2847,26 @@ function switch_skin(skin)
 
   return false;
 } // switch_skin
+// --------------------------------------------------------
+Forum.setCookie = function (name, value, days, path = "/") {
+    let expires = "";
+    if (days) {
+        expires = "; Max-Age=" + days * 24 * 3600;
+    }
+
+    document.cookie = name + "=" + (value || "") + expires + "; sameSite=strict; path=" + path;
+}
+// --------------------------------------------------------
+Forum.getCookie = function (name) {
+    let nameEQ = name + "=";
+    let c, ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
 // --------------------------------------------------------
 var tab_left = false;
 function signal_new(state)

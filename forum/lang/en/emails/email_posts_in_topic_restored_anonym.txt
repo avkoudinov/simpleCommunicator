@@ -1,23 +1,23 @@
-Ваши сообщения восстановлены в теме на форуме "{site_name}"
+Your posts have been restored in the topic on the forum "{site_name}"
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Все ваши сообщения в теме: 
+All your posts in the topic: 
 
 {topic_name}
 {topic_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-были восстановлены.
+have been restored.
 
-Причина:
+Reason:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' удалена
+Ihr Konto im Forum '{site_name}' wurde gelöscht
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша учетная запись на форуме '{site_name}'
+Ihr Konto im Forum '{site_name}'
 
 {site_url}
 
-была удалена модератором '{moderator_name}'.
+wurde vom Moderator '{moderator_name}' gelöscht.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

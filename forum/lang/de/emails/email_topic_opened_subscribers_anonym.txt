@@ -1,19 +1,19 @@
-Открытие темы на форуме '{site_name}'
+Thema wieder geöffnet im Forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Тема, на которую вы подписаны:
+Das Thema, das Sie abonniert haben:
 
 {topic_name}
 {topic_url}
 
-На форуме:
+Im Forum:
 
 {forum_name}
 {forum_url}
 
-была открыта.
+wurde wieder geöffnet.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

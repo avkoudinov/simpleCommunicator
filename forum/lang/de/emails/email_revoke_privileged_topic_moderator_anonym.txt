@@ -1,14 +1,14 @@
-У вас отнят статус привилегированного модератора тем на форуме '{site_name}'
+Ihr Status als privilegierter Themenmoderator im Forum '{site_name}' wurde entzogen
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме '{site_name}'
+Im Forum '{site_name}'
 
 {site_url}
 
-у вас отнят статус привилегированного модератора тем.
+wurde Ihnen der Status eines privilegierten Themenmoderators entzogen.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung
 

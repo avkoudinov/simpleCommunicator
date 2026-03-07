@@ -1,12 +1,12 @@
-Удаление из приватной темы на форуме '{site_name}' 
+Entfernung aus einem privaten Thema im Forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Пользователь '{author_name}' удалил вас из приватной темы:
+Benutzer '{author_name}' hat Sie aus dem privaten Thema entfernt:
 
 {topic_name}
 {topic_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

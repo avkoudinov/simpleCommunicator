@@ -1,16 +1,16 @@
-Предоставлен доступ в закрытый форум на форуме '{site_name}' 
+Zugang zu einem geschlossenen Forum wurde gewährt im Forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Вам был дан доступ в закрытый форум:
+Ihnen wurde Zugang zu einem geschlossenen Forum gewährt:
 
 {forum_name}
 {forum_url}
 
-Комментарий модератора:
+Kommentar des Moderators:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

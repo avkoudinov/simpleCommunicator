@@ -1,18 +1,18 @@
-Ваши сообщения на форуме '{site_name}' удалены
+Ihre Beiträge im Forum '{site_name}' wurden gelöscht
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваши {count} сообщений на форуме: 
+Ihre {count} Beiträge im Forum: 
 
 {forum_name}
 {forum_url}
 
-были удалены путем пакетного удаления.
+wurden per Massenlöschung gelöscht.
 
-Причина удаления:
+Grund für die Löschung:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

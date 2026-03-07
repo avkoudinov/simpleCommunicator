@@ -1,8 +1,8 @@
-There was a complaint about a message on the forum area you are moderating '{site_name}'
+A complaint has been submitted about a post in your moderated forum section on '{site_name}' 
 
 Dear {user_name},
 
-On the forum:
+On the forum: 
 
 {forum_name}
 {forum_url}
@@ -11,13 +11,13 @@ in the topic:
 
 {topic_name}
 
-the user '{notifier}' complained about the message.
+user '{notifier}' has filed a complaint about a post.
 
-Violator:
+Violator: 
 
 {violator}
 
-Short message text:
+Brief post text:
 
 {message}
 
@@ -25,14 +25,14 @@ Complaint:
 
 {comment}
 
-Message address:
+Post address:
 
 {post_url}
 
-If you do not want to reset the mark of new messages, in order not to lose information about possible unread messages before this message, use this link to go to the message:
+If you do not want to reset the new posts marker to avoid losing information about possible unread posts before this post, use this link to navigate to the post:
 
 {post_url_unread}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

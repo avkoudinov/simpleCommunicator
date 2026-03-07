@@ -1,23 +1,23 @@
-Ваше удаленное сообщение на форуме '{site_name}' восстановлено
+Your deleted post on the forum '{site_name}' has been restored
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваше сообщение от {post_date} в теме: 
+Your post dated {post_date} in the topic: 
 
 {topic_name}
 {post_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-было восстановлено.
+has been restored.
 
-Краткий текст сообщения:
+Brief post text:
 
 {message}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration
