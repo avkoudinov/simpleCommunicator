@@ -289,7 +289,7 @@ class MSSQL_ForumManager extends ForumManager
            from
            (select
            row_number() over(order by $order_by) nr,
-           id, user_name, activated, approved, hidden,
+           id, user_name, activated, approved, privileged, hidden,
            blocked, self_blocked, block_expires,
            registration_date, last_visit_date, logout,
            
@@ -1621,7 +1621,7 @@ class MSSQL_ForumManager extends ForumManager
     //-----------------------------------------------------------------
     function create_tmp_id_collector_table($dbw, $prfx)
     {
-        $query = "if object_id('tempdb..#tmp_id_collector') is NULL create table #tmp_id_collector(id integer)";
+        $query = "if object_id('tempdb..#tmp_id_collector') is NULL create table #tmp_id_collector(id integer, index idx_tmp_id (id))";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return "";

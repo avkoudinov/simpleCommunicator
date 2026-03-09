@@ -1690,7 +1690,7 @@ class MySQL_ForumManager extends ForumManager
     //-----------------------------------------------------------------
     function create_tmp_id_collector_table($dbw, $prfx)
     {
-        $query = "create temporary table if not exists tmp_id_collector(id integer)";
+        $query = "create temporary table if not exists tmp_id_collector(id integer, index idx_tmp_id (id))";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return "";

@@ -2942,56 +2942,78 @@ abstract class ForumManager
             return false;
         }
         
+        profile_message("topic cascade delete started");
+
         if (!$dbw->execute_query("insert into $tmp_id_collector_table (id) select id from {$prfx}_topic where $topic_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("topics to be deleted collected");
+
         if (!$dbw->execute_query("delete from {$prfx}_poll_user_answers where option_id in (select id from {$prfx}_poll_options where topic_id in (select id from $tmp_id_collector_table))")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("topic poll answers deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_poll_options where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("topic poll options deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_statistics where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("topic statistics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_moderator where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("topic moderators deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_favourite_topics where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("favourites topic deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_subscription where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("topic subscriptions deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_pinned_topics where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("pinned topics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_ignored_topics where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("ignored topics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_blocked where topic_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("blocked topics deleted");
+
         // $tmp_id_collector_table is not allowed because it is also used for cascade_delete_post
         if (!$this->cascade_delete_post($dbw, "topic_id in (select id from {$prfx}_topic where $topic_clause)", $post_date_clause)) {
             return false;
@@ -3002,6 +3024,8 @@ abstract class ForumManager
             return false;
         }
         
+        profile_point("topics deleted");
+
         return true;
     } // cascade_delete_topic
     
@@ -3015,60 +3039,83 @@ abstract class ForumManager
             return false;
         }
         
+        profile_message("post cascade delete started");
+
         if (!$dbw->execute_query("insert into $tmp_id_collector_table (id) select id from {$prfx}_post where $post_date_clause $post_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("posts to delete collected");
+
         if (!$dbw->execute_query("delete from {$prfx}_post_rating where post_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("post ratings deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_favourite_posts where post_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("favourite posts deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_user_tag_post where post_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
-        if (!$dbw->execute_query("delete from {$prfx}_post_history where post_id in (select id from $tmp_id_collector_table)")) {
+        profile_point("post user tags deleted");
+
+        if (!$dbw->execute_query("delete from {$prfx}_post_history where exists (select 1 from $tmp_id_collector_table where id = post_id)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("post history deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_post_statistics where post_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("post statistics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_attachment where post_id in (select id from $tmp_id_collector_table)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
 
+        profile_point("post attachments deleted");
+
         // unset flag HAS_PINNED_POST for topics where pinned post was deleted
         $query = "update {$prfx}_topic set has_pinned_post = 0
-                  where id in (select topic_id from {$prfx}_post where pinned = 1 and id in (select id from $tmp_id_collector_table))";
+                  where has_pinned_post = 1 and exists (select 1 from {$prfx}_post where pinned = 1 and {$prfx}_topic.id = {$prfx}_post.topic_id and exists (select 1 from $tmp_id_collector_table where {$prfx}_post.id = $tmp_id_collector_table.id))";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("post pinned unset: " . $query);
+
         if (!$dbw->execute_query("delete from {$prfx}_post where $post_date_clause $post_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("posts deleted: " . "delete from {$prfx}_post where $post_date_clause $post_clause");
+
         return true;
     } // cascade_delete_post
     
     //-----------------------------------------------------------------
     function cascade_delete_user($dbw, $user_clause, $uid)
     {
+        profile_message("-----------------------------");
+        profile_message("starting cascade delete");
+        
         $prfx = $dbw->escape(System::getDBPrefix());
         
         if (!$dbw->execute_query("delete from {$prfx}_user_comment where user_id in (select id from {$prfx}_user where $user_clause) or commented_user_id in (select id from {$prfx}_user where $user_clause)")) {
@@ -3076,117 +3123,163 @@ abstract class ForumManager
             return false;
         }
         
+        profile_point("user comment deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_ignored_forums where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user ignored forums deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_forum_blocked where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("forum blocked deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_forum_member where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("forum members deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_forum_moderator where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("forum moderators deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_ignored_guests where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user ignored guests deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_ignored_users where user_id in (select id from {$prfx}_user where $user_clause) or ignored_user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
-        if (!$dbw->execute_query("delete from {$prfx}_events where event_time >= (select registration_date from {$prfx}_user where id = $uid) and user_id in (select id from {$prfx}_user where $user_clause)")) {
+        profile_point("user ignored users deleted");
+
+        if (!$dbw->execute_query("delete from {$prfx}_events where event_time >= (select registration_date from {$prfx}_user where id = $uid) and exists (select 1 from {$prfx}_user where $user_clause and {$prfx}_user.id = {$prfx}_events.user_id)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user events deleted");
+
         $now = $dbw->format_datetime(time() - 24*3600);
         if (!$dbw->execute_query("delete from {$prfx}_forum_hits where dt > '$now' and user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
 
+        profile_point("user forum hits deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_user_tags where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user tags deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_favourite_posts where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user favorites posts deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_post_rating where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user rating deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_moderator where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user topic moderators deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_participants where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user topic participants deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_favourite_topics where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user topic participants deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_subscription where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user subscriptions deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_pinned_topics where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user pinned topics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_ignored_topics where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user ignored topics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_private_topics where participant_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user private topics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_blocked where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user blocked topics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_poll_user_answers where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user poll answers deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_user_statistics where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user statistics deleted");
+
         if (!$dbw->execute_query("delete from {$prfx}_topic_view_history where user_id in (select id from {$prfx}_user where $user_clause)")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user view history deleted");
+
         if (!$this->cascade_delete_post($dbw, "user_id in (select id from {$prfx}_user where $user_clause)", "creation_date >= (select registration_date from {$prfx}_user where id = $uid) and")) {
             return false;
         }
@@ -3194,12 +3287,15 @@ abstract class ForumManager
         if (!$this->cascade_delete_topic($dbw, "user_id in (select id from {$prfx}_user where $user_clause)", "creation_date >= (select registration_date from {$prfx}_user where id = $uid) and")) {
             return false;
         }
-        
+
         if (!$dbw->execute_query("delete from {$prfx}_user where $user_clause")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
         }
         
+        profile_point("user deleted");
+
+        // zzz
         return true;
     } // cascade_delete_user
     
@@ -11913,7 +12009,7 @@ abstract class ForumManager
                 inner join {$prfx}_post_rating on ({$prfx}_post_rating.post_id = {$prfx}_post.id)
                 inner join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
                 where {$prfx}_post_rating.user_id = $uid
-                group by {$prfx}_user.id, email, user_name, last_host, donot_notify_on_rates, send_notifications, interface_language
+                group by {$prfx}_user.id, email, user_name, last_host, donot_notify_on_rates, send_notifications, activated, approved, interface_language
                 ";
         
         if (!$dbw->execute_query($query)) {
