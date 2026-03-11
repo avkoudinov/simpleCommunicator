@@ -1,21 +1,21 @@
-Ваша учетная запись на форуме '{site_name}' ограничена на создание сообщений в теме
+Your account on the forum '{site_name}' has been restricted from posting in the topic
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша учетная запись была ограничена на создание сообщений в теме:
+Your account has been restricted from posting in the topic:
 
 {topic_name}
 {topic_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-Причина блокировки:
+Reason for restriction:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

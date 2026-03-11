@@ -1,31 +1,31 @@
-Ваша тема на форуме '{site_name}' объединена с другой темой
+Ihr Thema im Forum '{site_name}' wurde mit einem anderen Thema zusammengeführt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша тема: 
+Ihr Thema: 
 
 {source_topic_name}
 {source_topic_url}
 
-На форуме: 
+Im Forum: 
 
 {source_forum_name}
 {source_forum_url}
 
-была объединена модератором '{moderator_name}' с темой:
+wurde vom Moderator '{moderator_name}' mit dem Thema zusammengeführt:
 
 {target_topic_name}
 {target_topic_url}
 
-На форуме:
+Im Forum:
 
 {target_forum_name}
 {target_forum_url}
 
-Первое cообщение перенесенной темы:
+Erster Beitrag des zusammengeführten Themas:
 
 {first_post_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

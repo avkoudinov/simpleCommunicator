@@ -1,12 +1,12 @@
 Neue Anfrage über das Kontaktformular im Forum '{site_name}'
 
-Eine neue Anfrage im Forum '{site_name}' ist eingegangen
+Eine neue Anfrage ist im Forum '{site_name}' eingegangen
 
-{Seiten-URL}
+{site_url}
 
 Zeit: {time}
 IP-Adresse: {ip} - {ip_link}
-Fingerprint: {user_marker} 
+Fingerabdruck: {user_marker} 
 
 Absender: {email}
 
@@ -18,4 +18,4 @@ Nachricht:
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

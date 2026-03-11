@@ -1713,6 +1713,7 @@ create table v1_settings
    snow_effect          tinyint not null default 0,
    hide_users_from_robots tinyint not null default 0,
    archive_mode         tinyint not null default 0,
+   request_cookie_consent tinyint not null default 0,
    hash_ip_addresses    tinyint not null default 0
 )
 ';
@@ -2344,7 +2345,7 @@ create index v1_user_tags_user_id_idx on v1_user_tags
 ';
 
 $sql_cmds[] = '
-create procedure v1_deep_collect_replies(in p_oid integer)
+create procedure v1_deep_collect_replies(in p_oid integer, in p_deep integer)
 
 deterministic
 sql security invoker
@@ -2386,7 +2387,7 @@ begin
      insert into tmp_del_items3 (id)
      select id from tmp_children;
      
-   until @affected_cnt = 0
+   until @affected_cnt = 0 or p_deep = 0
    end repeat;
    
 end;

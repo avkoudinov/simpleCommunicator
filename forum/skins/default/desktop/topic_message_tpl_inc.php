@@ -1470,15 +1470,15 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
         <?php endif; ?>
       <?php endif; ?>
 
-      <?php if($fmanager->is_admin()): ?>
-        <a href="rm_moderation.php?search_key=<?php echo(xrawurlencode($pinfo["read_marker"])); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ModerateTheReadMarker")); ?></a>
-      <?php endif; ?>
-      
       <?php if($fmanager->may_see_ip() && ($fmanager->is_admin() || $fmanager->is_forum_moderator($pinfo["forum_id"]))): ?>
         <a href="ip_moderation.php?type=moderation&ip=<?php echo(xrawurlencode($pinfo["ip"])); ?>&author=<?php echo(xrawurlencode($pinfo["author"])); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ModerateIP")); ?></a>
         <a href="ip_moderation.php?type=ip_users&ip=<?php echo(xrawurlencode($pinfo["ip"])); ?>&author=<?php echo(xrawurlencode($pinfo["author"])); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ShowMembersOfIP")); ?></a>
         <a href="ip_moderation.php?type=user_ips&user=<?php echo(xrawurlencode($pinfo["author"])); ?><?php echo($aname_appendix); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ShowAuthorIPs")); ?></a>
         <a href="ip_moderation.php?type=other_users&user=<?php echo(xrawurlencode($pinfo["author"])); ?><?php echo($aname_appendix); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ShowMembersOfAuthorIPs")); ?></a>
+
+        <?php if($fmanager->is_admin()): ?>
+          <a href="rm_moderation.php?search_key=<?php echo(xrawurlencode($pinfo["read_marker"])); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ModerateTheReadMarker")); ?></a>
+        <?php endif; ?>
 
         <a href="ip_moderation.php?type=um_moderation&ip=<?php echo(xrawurlencode($pinfo["user_marker"])); ?>&author=<?php echo(xrawurlencode($pinfo["author"])); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ModerateFingerPrint")); ?></a>
         <a href="ip_moderation.php?type=um_users&ip=<?php echo(xrawurlencode($pinfo["user_marker"])); ?>&author=<?php echo(xrawurlencode($pinfo["author"])); ?>" class="moderator_link" onclick="hide_all_popups()"><?php echo_html(text("ShowMembersOfFingerPrint")); ?></a>

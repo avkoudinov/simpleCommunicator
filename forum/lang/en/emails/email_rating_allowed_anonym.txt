@@ -1,15 +1,15 @@
-Снят запрет на оценку сообщений на форуме '{site_name}' 
+The restriction on rating posts has been lifted on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-С вас снят запрет на оценку сообщений на форуме '{site_name}'
+The post rating restriction has been lifted for you on the forum '{site_name}'
 
 {site_url}
 
-Комментарий модератора:
+Moderator's comment:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

@@ -1,15 +1,15 @@
-Снят запрет на вставку видео и аудио на форуме '{site_name}' 
+Das Verbot zum Einbetten von Video und Audio im Forum '{site_name}' wurde aufgehoben 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Модератор '{moderator_name}' снял с вас запрет на вставку видео и аудио на форуме '{site_name}'
+Moderator '{moderator_name}' hat das Verbot zum Einbetten von Video und Audio für Sie im Forum '{site_name}' aufgehoben
 
 {site_url}
 
-Комментарий модератора:
+Kommentar des Moderators:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

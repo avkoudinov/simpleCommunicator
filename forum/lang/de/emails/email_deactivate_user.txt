@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' деактивирована
+Ihr Konto im Forum '{site_name}' wurde deaktiviert
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша учетная запись на форуме '{site_name}'
+Ihr Konto im Forum '{site_name}'
 
 {site_url}
 
-была деактивирована администратором '{administrator_name}'.
+wurde vom Administrator '{administrator_name}' deaktiviert.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

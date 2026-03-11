@@ -1,31 +1,31 @@
-Ваши сообщения на форуме '{site_name}' перенесены в другую тему
+Ihre Beiträge im Forum '{site_name}' wurden in ein anderes Thema verschoben
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-{moved_count} ваших сообщений в теме: 
+{moved_count} Ihrer Beiträge im Thema: 
 
 {source_topic_name}
 {source_topic_url}
 
-На форуме: 
+Im Forum: 
 
 {source_forum_name}
 {source_forum_url}
 
-было перенесено в тему:
+wurden in das Thema verschoben:
 
 {target_topic_name}
 {target_topic_url}
 
-На форуме:
+Im Forum:
 
 {target_forum_name}
 {target_forum_url}
 
-Первое перенесенное cообщение:
+Erster verschobener Beitrag:
 
 {first_post_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

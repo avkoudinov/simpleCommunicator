@@ -1,17 +1,17 @@
-Ваша учетная запись на форуме '{site_name}' разблокирована
+Ihr Konto im Forum '{site_name}' wurde entsperrt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша учетная запись на форуме '{site_name}'
+Ihr Konto im Forum '{site_name}'
 
 {site_url}
 
-была разблокирована.
+wurde entsperrt.
 
-Комментарий модератора:
+Kommentar des Moderators:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

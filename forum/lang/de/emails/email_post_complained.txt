@@ -1,23 +1,23 @@
-Es gab eine Beschwerde über eine Nachricht im Forumbereich vom '{site_name}', den Sie moderieren
+Eine Beschwerde über einen Beitrag in Ihrem moderierten Forumsbereich auf '{site_name}' wurde eingereicht 
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-Im Forum:
+Im Forum: 
 
 {forum_name}
 {forum_url}
 
-im Betreff:
+im Thema:
 
 {topic_name}
 
-Benutzer '{notifier}' hat sich über die Nachricht beschwert.
+hat Benutzer '{notifier}' eine Beschwerde über einen Beitrag eingereicht.
 
-Verletzer:
+Verletzer: 
 
 {violator}
 
-Kurznachrichtentext:
+Kurzer Nachrichtentext:
 
 {message}
 
@@ -25,14 +25,14 @@ Beschwerde:
 
 {comment}
 
-Nachrichtenadresse:
+Adresse der Nachricht:
 
 {post_url}
 
-Wenn Sie die Markierung neuer Nachrichten nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Nachrichten vor dieser Nachricht zu verlieren, verwenden Sie diesen Link, um zur Nachricht zu gelangen:
+Wenn Sie die Markierung neuer Beiträge nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Beiträge vor dieser Nachricht zu verlieren, verwenden Sie diesen Link zur Nachricht:
 
 {post_url_unread}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

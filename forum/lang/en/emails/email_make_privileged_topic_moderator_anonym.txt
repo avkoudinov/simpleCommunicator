@@ -1,14 +1,14 @@
-Вам выдан статус привилегированного модератора тем на форуме '{site_name}'
+You have been granted privileged topic moderator status on the forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-На форуме '{site_name}'
+On the forum '{site_name}'
 
 {site_url}
 
-вам выдан статус привилегированного модератора тем.
+you have been granted privileged topic moderator status.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration
 

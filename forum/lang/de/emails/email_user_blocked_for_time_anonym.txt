@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' заблокирована
+Ihr Konto im Forum '{site_name}' wurde gesperrt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша учетная запись была заблокирована до {block_expires}.
+Ihr Konto wurde bis {block_expires} gesperrt.
 
-Причина блокировки:
+Grund für die Sperrung:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

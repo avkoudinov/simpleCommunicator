@@ -1,12 +1,12 @@
-Granting rights to moderate a topic on '{site_name}'
+Topic moderation rights granted on the forum '{site_name}'
 
 Dear {user_name},
 
-Moderator '{moderator_name}' has granted you moderation rights on the topic:
+Moderator '{moderator_name}' has granted you moderation rights for the topic:
 
 {topic_name}
 {topic_url}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

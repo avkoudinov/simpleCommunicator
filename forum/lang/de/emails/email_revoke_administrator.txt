@@ -1,11 +1,11 @@
-Отзыв прав администратора на '{site_name}' 
+Administratorrechte entzogen auf '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Владелец форума забрал у вас права администратора на '{site_name}':
+Der Forumseigentümer hat Ihnen die Administratorrechte auf '{site_name}' entzogen:
 
 {site_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

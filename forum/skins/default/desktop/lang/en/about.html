@@ -1,44 +1,38 @@
-<div class="help">
-<h1 style="margin-top: 0px; text-align: center">О форуме simpleCommunicator</h1>
+<h1 style="margin-top: 0px; text-align: center">About simpleCommunicator forum</h1>
 
-<h2>Лицензия</h2>
+<h2>License</h2>
 
-<p>Эта программа является свободным программным обеспечением. Вы можете распространять и/или модифицировать её согласно 
-условиям Стандартной Общественной Лицензии GNU, опубликованной Фондом Свободного Программного Обеспечения, версии 3 или, 
-по вашему желанию, любой более поздней версии.</p>
+<p>This program is free software. You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 
-<p>
-Эта программа распространяется в надежде, что она будет полезной, но БЕЗ ВСЯКИХ ГАРАНТИЙ, в том числе подразумеваемых 
-гарантий ТОВАРНОГО СОСТОЯНИЯ ПРИ ПРОДАЖЕ и ГОДНОСТИ ДЛЯ ОПРЕДЕЛЁННОГО ПРИМЕНЕНИЯ. Смотрите Стандартную Общественную 
-Лицензию GNU для получения дополнительной информации.</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 
-<h2>Загрузка и установка</h2>
+<h2>Download and Installation</h2>
 
-<p>Версия: <?php echo(VERSION); ?><br>
-Релиз: <?php echo(RELEASE_DATE); ?></p>
+<p>Version: <?php echo(VERSION); ?><br>
+Release: <?php echo(date(text("DateFormat"), xstrtotime(RELEASE_DATE))); ?></p>
 
-<p><a href="https://github.com/avkoudinov/simpleCommunicator">Форум simpleCommunicator на GitHub</a></p>
+<p><a href="https://github.com/avkoudinov/simpleCommunicator">simpleCommunicator forum on GitHub</a></p>
 
 <ol>
-<li>Распакуйте архив и скопируйте файлы в целевую директорию веб-сервера.</li>
-<li>Откройте URL-адрес в браузере. Установка начнётся автоматически.</li>
-<li>Выполните шаги установки.</li>
-<li>Прочитайте раздел "Помощь" после установки.</li>
+<li>Unpack the archive and copy the files to the target directory of the web server.</li>
+<li>Open the URL in your browser. Installation will start automatically.</li>
+<li>Follow the installation steps.</li>
+<li>Read the "Help" section after installation.</li>
 </ol>
 
-<h2>Техническая информация и системные требования</h2>
+<h2>Technical Information and System Requirements</h2>
 
-<p>Форум может быть установлен практически на любом хостинге. Программное обеспечение форума предъявляет минимальные требования к конфигурации сервера и настройкам прикладного программного обеспечения.</p>
+<p>The forum can be installed on almost any hosting. The forum software has minimal requirements for server configuration and application software settings.</p>
 
 <ul>
-<li>Работает на версии PHP 8.x или выше.</li>
-<li>Поддерживает системы управления базами данных:
+<li>Runs on PHP version 8.x or higher.</li>
+<li>Supports database management systems:
     <ul>
-    <li>MySQL 8.0.x или выше,</li>
-    <li>Microsoft SQL Server 2005 или выше.</li>
+    <li>MySQL 8.0.x or higher,</li>
+    <li>Microsoft SQL Server 2005 or higher.</li>
     </ul>
 </li>
-<li>Работает в браузерах:
+<li>Works in browsers:
     <ul>
     <li>Edge;</li>
     <li>Firefox;</li>
@@ -49,273 +43,269 @@
 </li>
 </ul>
 
-<h2>Преимущества</h2>
+<h2>Advantages</h2>
 
-<p>Форум прост в реализации и удобен в использовании.</p>
+<p>The forum is simple to implement and easy to use.</p>
 
-<p>Поддерживаются скины, временные зоны и разные языки интерфейса, в том числе и для гостей.</p>
+<p>Skins, time zones, and different interface languages are supported, including for guests.</p>
 
-<p>Скины адаптируются к девайсу — десктоп или мобильное устройство.</p>
+<p>Skins adapt to the device — desktop or mobile device.</p>
 
-<p>Интерфейс форума интуитивно понятен и не требует изучения документации.</p>
+<p>The forum interface is intuitive and does not require studying documentation.</p>
 
-<p>Функционал форума не перегружен, но при этом поддерживаются все основные функции, ожидаемые пользователями от форума.</p>
+<p>The forum functionality is not overloaded, yet it supports all the main features expected by users from a forum.</p>
 
-<p>Для осуществления многих действий используется технология отправки данных в фоновом процессе AJAX, что обеспечивает
-высокую скорость и позволяет избежать ненужных обновлений страницы.</p>
+<p>AJAX background data transmission technology is used for many actions, ensuring high speed and avoiding unnecessary page refreshes.</p>
 
-<p>Ключевыми моментами удобного интерфейса являются:
+<p>Key points of the user-friendly interface are:
 
 <ul>
-<li>Доступность и наглядность опций для выполнения необходимых команд в зависимости от контекста.</li>
-<li>Быстрота выполнения команд.</li>
-<li>Использование "легких" элементов и функций — лайтбоксы, асинхронная отправка.</li>
-<li>Поддержка стандартных интуитивных команд и горячих клавиш — Ctrl + Enter,  Ctrl + ←, Ctrl + →, Escape, Tab и т.д.</li>
-<li>«Умная» фокусировка, избавляющая от необходимости избыточных движений и кликов мышью.</li>
-<li>«Запоминание» и автоматическое восстановление местоположений, что избавляет от необходимости повторного выполнения навигации к необходимому месту.</li>
-<li>Удобный механизм перехода после отправки сообщения — на предыдущих страницах осуществляется переход к следующему после того сообщения, на которое был дан ответ, таким образом можно читать, отправлять сообщения и продолжать чтение. Если сообщение отправляется на последней странице темы, то подгружаются новые сообщения, если они есть.</li>
-<li>При переходе между страницами темы неотправленное сообщение не теряется, а мигрирует на новую страницу, где можно продолжить цитировать сообщения и отвечать на них.</li>
-<li>Автоповорот картинок на основе информации EXIF и сжатие до веб-оптимизированного размера.</li>
+<li>Accessibility and visibility of options for performing necessary commands depending on the context.</li>
+<li>Speed of command execution.</li>
+<li>Use of "light" elements and functions — lightboxes, asynchronous sending.</li>
+<li>Support for standard intuitive commands and hotkeys — Ctrl + Enter, Ctrl + ←, Ctrl + →, Escape, Tab, etc.</li>
+<li>"Smart" focusing, eliminating the need for excessive movements and mouse clicks.</li>
+<li>"Remembering" and automatic restoration of locations, eliminating the need for repeated navigation to the required place.</li>
+<li>Convenient transition mechanism after sending a message — on previous pages, a transition is made to the next message after the one being replied to, allowing the user to read, send messages, and continue reading. If a message is sent on the last page of a topic, new messages are loaded if they exist.</li>
+<li>When moving between topic pages, an unsent message is not lost but migrates to the new page, where you can continue quoting and replying to messages.</li>
+<li>Auto-rotation of images based on EXIF information and compression to a web-optimized size.</li>
 </ul>
 
-<p>Пользователь не всегда может чётко осознать и озвучить свои критерии и пожелания, но именно вышеперечисленные нюансы создают у него положительные ощущения комфорта и удобства при работе с приложением.
-</p>
+<p>A user may not always clearly realize and articulate their criteria and wishes, but it is the above-mentioned nuances that create a positive sense of comfort and convenience when working with the application.</p>
 
-<p>Поддерживаются языки интерфейса — русский, английский, немецкий и украинский. Легко добавить переводы для других языков.</p>
+<p>Interface languages supported are Russian, English, German, and Ukrainian. It is easy to add translations for other languages.</p>
 
-<p>Форум отличается высокой производительностью, благодаря тому, что количество сообщений и тем выставляются во время их создания и при отображении списков тем и сообщений нет необходимости использовать ресурсоёмкие агрегационные функции. Пересчёт количества необходим только в случае нестандартных операций, таких как удаление или перенос тем и сообщений.</p>
+<p>The forum features high performance because the number of messages and topics is set during their creation, and there is no need to use resource-intensive aggregation functions when displaying lists of topics and messages. Recalculation of the quantity is only necessary in case of non-standard operations, such as deleting or moving topics and messages.</p>
 
-<p>Поддерживается распределение нагрузки путём разделения базы данных в архитектурной схеме master для записи и slave1...slaveN для чтения и поиска.</p>
+<p>Load balancing is supported by splitting the database into a master scheme for writing and slave1...slaveN for reading and searching.</p>
 
-<h2>Ключевые функции</h2>
+<h2>Key Features</h2>
 
 <ul>
-  <li>Поддержка лайков и дизлайков.</li>
-  <li>Приватные сообщения и приватные групповые темы с модерированием.</li>
-  <li>Лог личных событий для пользователей.</li>
-  <li>Лог модераторских действий.</li>
-  <li>Статистика по пользователям и форумам.</li>
-  <li>Показ пользователей, гостей и ботов, читавших тему, подфорум или просто находящихся на сайте. Клик на имени бота показывает его профиль и последние посещённые им темы.</li>
-  <li>Группировка тем с новыми сообщениями — по подфоруму, своих, со своим участием, тем из списка избранных.</li>
-  <li>Дайджест новых сообщений.</li>
-  <li>Возможность отобразить найденные сообщения в виде общей виртуальной темы или для каждой темы показать только сообщения, удовлетворяющие критериям поиска.</li>
+<li>Support for likes and dislikes.</li>
+<li>Private messages and private group topics with moderation.</li>
+<li>Log of personal events for users.</li>
+<li>Log of moderator actions.</li>
+<li>Statistics for users and forums.</li>
+<li>Display of users, guests, and bots who have read a topic, subforum, or are simply on the site. Clicking on a bot's name shows its profile and the last topics it visited.</li>
+<li>Grouping topics with new messages — by subforum, own, with own participation, topics from the favorites list.</li>
+<li>Digest of new messages.</li>
+<li>Ability to display found messages as a common virtual topic or show only messages meeting the search criteria for each topic.</li>
 </ul>
 
-<h2>Гибкие общие настройки</h2>
+<h2>Flexible General Settings</h2>
 
 <ul>
-  <li>Включение/отключение требования одобрения учётных записей администратором.</li>
-  <li>Включение/отключение отображения онлайн статуса участников и посещённых ими тем.</li>
-  <li>Включение/отключение выставления оценок, можно включить только лайки, можно сделать дизлайки анонимными.</li>
-  <li>Настройка различных ограничений — на размер вложений, на количество тем в сутки, на количество сообщений в минуту и т.п.</li>
-  <li>Защита гостевых ников завсегдатаев от кражи путём регистрации.</li>
-  <li>Защита от регистрации фейковых и спам-акаунтов через временные email-адреса.</li>
-  <li>Ведение модераторского лога. Возможность настроить уровень видимости модераторского лога — только администраторам, только модераторам, всем, всем, но не показывать имена модераторов.</li>
-  <li>Настраиваемый список смайлов и комбинаций символов для их вставки. Возможность категоризировать смайлы.</li>
-  <li>Включение режима праздника или траура. Появляется картинка-индикатор, при клике на которую показываются либо праздничные картинки, либо фотография умершего участника.</li>
-  <li>Возможность переводить форум в режим обслуживания с указанием планируемого времени завершения, а также заранее уведомлять посетителей о планируемом обслуживании с указанием планируемого времени начала и завершения.</li>
+<li>Enable/disable requirement for account approval by an administrator.</li>
+<li>Enable/disable display of online status of participants and the topics they visited.</li>
+<li>Enable/disable rating; you can enable only likes, or make dislikes anonymous.</li>
+<li>Configure various restrictions — on attachment size, number of topics per day, number of messages per minute, etc.</li>
+<li>Protection of regular guests' nicknames from theft through registration.</li>
+<li>Protection against registration of fake and spam accounts via temporary email addresses.</li>
+<li>Moderator log maintenance. Ability to configure the visibility level of the moderator log — only for administrators, only for moderators, for everyone, or for everyone but without showing moderators' names.</li>
+<li>Customizable list of emojis and character combinations for inserting them. Ability to categorize emojis.</li>
+<li>Enable holiday or mourning mode. An indicator image appears; clicking it shows either holiday pictures or a photograph of a deceased participant.</li>
+<li>Ability to put the forum into maintenance mode with an estimated completion time, as well as notify visitors in advance of planned maintenance with estimated start and end times.</li>
 </ul>
 
-<h2>Гибкие настройки для отдельных форумов</h2>
+<h2>Flexible Settings for Individual Forums</h2>
 
 <ul>
-<li>Поддержка закрытых форумов, с доступом только для определённых участников или только для зарегистрированных участников.</li>
-<li>Поддержка закрытых форумов, защищённых паролем.</li>
-<li>Возможность привязать право писать сообщения на форуме к возрасту ника (подразумевается возраст ника с момента регистрации на форуме) и количеству сообщений.</li>
-<li>Возможность запретить гостей на форуме.</li>
-<li>Возможность включить ограниченный режим для гостей, тогда смогут писать только гости с возрастом токена более N часов или те, чей IP-адрес в белом списке.</li>
-<li>Возможность запретить или разрешить авторам редактирование собственных сообщений.</li>
-<li>Возможность отметить форум как форум с более строгими особенными правилами, чтобы при написании сообщений участникам выдавалось об этом предупреждение.</li>
+<li>Support for closed forums, with access only for specific participants or only for registered participants.</li>
+<li>Support for closed forums protected by a password.</li>
+<li>Ability to link the right to post messages on the forum to the age of the nickname (meaning the age of the nickname since registration on the forum) and the number of messages.</li>
+<li>Ability to ban guests on the forum.</li>
+<li>Ability to enable limited mode for guests, where only guests with a token age of more than N hours or those whose IP address is on the whitelist can post.</li>
+<li>Ability to prohibit or allow authors to edit their own messages.</li>
+<li>Ability to mark a forum as a forum with stricter special rules so that participants are given a warning when writing messages.</li>
 </ul>
 
-<h2>Функциональные возможности для администраторов</h2>
+<h2>Functional Capabilities for Administrators</h2>
 
 <ul>
-<li>Назначение модераторов форумов.</li>
-<li>Возможность вручную активировать или одобрить учётную запись зарегистрированного пользователя.</li>
-<li>Возможность удалить учётную запись зарегистрированного пользователя.</li>
-<li>Возможность сделать пользователя привилегированным, на которого не будут действовать ограничения.</li>
-<li>Возможность сделать пользователя привилегированным модертаором тем, на которого не будут действовать ограничения по модерированию тем.</li>
-<li>Возможность запретить пользователю отправлять приватные сообщения.</li>
-<li>Возможность запретить модератору форума осуществлять глобальные модераторские операции — глобальный бан, сокрытие профиля участников, запрет выставления оценок.</li>
-<li>Возможность запретить модератору форума видеть IP-адреса и фингерпринты участников.</li>
-<li>Возможность удалить токен (ридмаркер) гостя, если он выждал время и вышел, чтобы продолжить нарушения при включённом ограниченном режиме для гостей.</li>
-<li>Возможность управлять белым списком IP-адресов, на которые не действует ограниченный режим для гостей.</li>
-<li>Возможность управлять списком IP-адресов бразура TOR — заблокировать все или заблокировать или разрешить отдельные на запись или чтение.</li>
-<li>Бан участника в связи со смертью или утратой ника — в таком случае запрещается вход в аккаунт, а не только написание сообщений из-под него.</li>
+<li>Assignment of forum moderators.</li>
+<li>Ability to manually activate or approve the account of a registered user.</li>
+<li>Ability to delete a registered user's account.</li>
+<li>Ability to make a user privileged, exempting them from restrictions.</li>
+<li>Ability to make a user a privileged topic moderator, exempting them from topic moderation restrictions.</li>
+<li>Ability to prohibit a user from sending private messages.</li>
+<li>Ability to prohibit a forum moderator from performing global moderation operations — global ban, hiding participant profiles, prohibiting rating.</li>
+<li>Ability to prohibit a forum moderator from seeing IP addresses and fingerprints of participants.</li>
+<li>Ability to delete a guest's token (read marker) if they waited out the time and logged out to continue violations while limited mode for guests is enabled.</li>
+<li>Ability to manage a whitelist of IP addresses exempt from limited mode for guests.</li>
+<li>Ability to manage the list of TOR browser IP addresses — block all or block/allow individual ones for writing or reading.</li>
+<li>Banning a participant due to death or loss of nickname — in this case, logging into the account is prohibited, not just posting messages from it.</li>
 </ul>
 
-<h2>Функциональные возможности для модераторов форумов</h2>
+<h2>Functional Capabilities for Forum Moderators</h2>
 
 <ul>
-  <li>Быстрый выбор тем для закрытия, удаления, слияния и переноса в другой форум.</li>
-  <li>Быстрый выбор сообщений для удаления и переноса в другую или новую тему.</li>
-  <li>Прикрепление тем и сообщений в шапку, закрытие и открытие тем.</li>
-  <li>Возможность удалить все сообщения выбранного пользователя или гостя одним кликом в теме, форуме, во всех форумах, последние N в форуме.</li>
-  <li>Возможность удалить аватар гостя.</li>
-  <li>Возможность просматривать и восстанавливать удалённые сообщения, вложения, темы и форумы.</li>
-  <li>Эффективное удаление флуда с помощью специального инструмента, дающего возможность удалить сообщения на форуме за определённый период для всех гостей или участников по возрасту учётной записи.</li>
-  <li>Временные баны с автоматическим разбаном.</li>
-  <li>Возможность забанить пользователей только в определённом форуме или в определённой теме.</li>
-  <li>Возможность назначить пользователя модератором определённой темы в подконтрольном форуме.</li>
-  <li>Возможность дать доступ пользователю и отнять доступ в подконтрольный закрытый форум.</li>
-  <li>Возможность скрыть профиль пользователя (при наличии разрешения на глобальные модераторские операции).</li>
-  <li>Возможность запретить пользователю выставлять оценки (при наличии разрешения на глобальные модераторские операции).</li>
-  <li>Возможность пакетно удалять оценки пользователя в подконтрольном форуме.</li>
-  <li>Блокировка IP-адресов и фингерпринтов, в том числе и временная, с автоматическим разбаном (при наличии разрешения видеть IP-адреса).</li>
+<li>Quick selection of topics for closing, deleting, merging, and moving to another forum.</li>
+<li>Quick selection of messages for deletion and moving to another or a new topic.</li>
+<li>Pinning topics and messages to the header, closing and opening topics.</li>
+<li>Ability to delete all messages of a selected user or guest with one click in a topic, forum, all forums, or the last N in a forum.</li>
+<li>Ability to delete a guest's avatar.</li>
+<li>Ability to view and restore deleted messages, attachments, topics, and forums.</li>
+<li>Effective flood removal using a special tool that allows deleting messages on the forum for a certain period for all guests or participants by account age.</li>
+<li>Temporary bans with automatic unban.</li>
+<li>Ability to ban users only in a specific forum or a specific topic.</li>
+<li>Ability to assign a user as a moderator of a specific topic in a controlled forum.</li>
+<li>Ability to grant and revoke access to a controlled closed forum for a user.</li>
+<li>Ability to hide a user profile (if global moderation operations are permitted).</li>
+<li>Ability to prohibit a user from rating (if global moderation operations are permitted).</li>
+<li>Ability to batch delete a user's ratings in a controlled forum.</li>
+<li>Blocking IP addresses and fingerprints, including temporary blocking with automatic unban (if permission to see IP addresses is granted).</li>
 </ul>
 
-<h2>Функциональные возможности для модераторов тем</h2>
+<h2>Functional Capabilities for Topic Moderators</h2>
 
 <ul>
-  <li>Быстрый выбор сообщений для удаления и переноса в другую или новую тему.</li>
-  <li>Прикрепление сообщений в шапку.</li>
-  <li>Возможность удалить все сообщения выбранного пользователя или гостя одним кликом в теме.</li>
-  <li>Возможность просматривать и восстанавливать удалённые сообщения и вложения.</li>
-  <li>Возможность забанить пользователей только в теме.</li>
-  <li>Возможность запретить и разрешить гостей в теме.</li>
+<li>Quick selection of messages for deletion and moving to another or a new topic.</li>
+<li>Pinning messages to the header.</li>
+<li>Ability to delete all messages of a selected user or guest with one click in a topic.</li>
+<li>Ability to view and restore deleted messages and attachments.</li>
+<li>Ability to ban users only in the topic.</li>
+<li>Ability to prohibit or allow guests in the topic.</li>
 </ul>
 
-<h2>Функциональные возможности для пользователей</h2>
+<h2>Functional Capabilities for Users</h2>
 
 <ul>
-<li>Избранные темы и сообщения.</li> 
-<li>Возможность создавать собственные теги и помечать ими сообщения, чтобы потом эффективно находить эти сообщения через поиск по тегам.</li>
-<li>Прикрепление тем только для себя.</li>
-<li>Редактирование собственных сообщений в течении N минут — как для зарегистрированных участников, так и для анонимных участников в пределах текущей сессии.</li> 
-<li>Возможность переголосовать в течении N минут.</li> 
-<li>Галерея вложений для повторного использования. Возможность пометить вложения как фавориты, которые будут всегда наверху для быстрого выбора.</li>
-<li>Игнор-лист пользователей, игнор сообщений анонимных пользователей (всех или отдельных, чёрный или белый список) и игнор неинтересных тем (для них не сообщается о появлении новых сообщений). При игноре участников скрываются даже их цитаты в сообщениях других неигнорируемых пользователей. Два режима игнора — сильный и слабый. При сильном игноре сообщения и темы исключаются полностью из выдачи, при слабом игноре текст сообщений просто скрыт, но можно показать его.</li>
-<li>Предпочитаемые форумы (чтобы отображались темы с новыми сообщениями только из данных форумов).</li>
-<li>Профильные темы с разделением сообщений на тематические и комментарии. Возможность включить показ только тематических сообщений.</li>
-<li>Возможность пометить сообщения 18+, если они содержат картинки или видеоклипы сексуального и/или шокирующего содержания. В таких сообщениях картинки приглушены, а видеоклипы свёрнуты и читатель может решить, показать картинку или нет.</li>
+<li>Favorite topics and messages.</li>
+<li>Ability to create own tags and mark messages with them to effectively find these messages later through tag search.</li>
+<li>Pinning topics only for oneself.</li>
+<li>Editing own messages within N minutes — for both registered participants and anonymous participants within the current session.</li>
+<li>Ability to re-vote within N minutes.</li>
+<li>Gallery of attachments for reuse. Ability to mark attachments as favorites to always keep them at the top for quick selection.</li>
+<li>User ignore list, ignoring messages from anonymous users (all or individual, black or white list), and ignoring uninteresting topics (notifications about new messages are not sent for them). When participants are ignored, even their quotes in messages of other non-ignored users are hidden. Two ignore modes — strong and weak. In strong ignore, messages and topics are completely excluded from the feed; in weak ignore, message text is simply hidden but can be shown.</li>
+<li>Preferred forums (to display topics with new messages only from these forums).</li>
+<li>Profile topics with separation of messages into thematic ones and comments. Ability to show only thematic messages.</li>
+<li>Ability to mark messages as 18+ if they contain images or video clips of a sexual and/or shocking nature. In such messages, images are dimmed and video clips are collapsed, allowing the reader to decide whether to show the image or not.</li>
 
-<li>Широкие возможности для подписки:
-  <ul>
-  <li>Подписка на новые сообщения в теме.</li>
-  <li>Подписка на цитирование и ответы на свои посты.</li>
-  <li>Подписка на цитирование и ответы на любой чужой пост, ответы на который интересуют.</li>
-  <li>Подписка на новые сообщения пользователя или гостя.</li>
-  <li>Подписка на упоминание слов с учётом морфологии.</li>
-  <li>Подписка на уведомления о новых зарегистрированных пользователях.</li>
-  </ul>
+<li>Broad subscription options:
+    <ul>
+    <li>Subscription to new messages in a topic.</li>
+    <li>Subscription to quotes and replies to your own posts.</li>
+    <li>Subscription to quotes and replies to any other post of interest.</li>
+    <li>Subscription to new messages from a user or guest.</li>
+    <li>Subscription to mentions of words considering morphology.</li>
+    <li>Subscription to notifications about new registered users.</li>
+    </ul>
 </li>
 
-<li>Поддержка приватных сообщений. Приватные сообщения реализованы в виде приватных тем в специальном форуме. Участники приватной темы могут вести общение как в обычной форумной теме и могут покинуть приватную тему, в том числе и автор темы.</li> 
-<li>Создание приватных тем с собственным модераторством. В таких темах автор может добавлять и удалять участников, удалять и редактировать сообщения. Приглашённые участники могут покинуть такую тему, в то время как сам автор не может. Однако он может удалить её (и при необходимости восстановить). При удалении доступ в тему для приглашённых участников пропадает.</li>
-<li>Поддержка персональных обращений к участнику для привлечения его внимания к своему сообщению.</li> 
-<li>Создание тем опросов. Поддерживаются открытые опросы, где можно увидеть, как проголосовал каждый участник, а также опросы с отложенной публикацией, когда результаты становятся видны только после публикации.</li>
-<li>Создание тем с отложенной публикацией. Пока такая тема не опубликована, она видна только автору. Он может спокойно подготовить её, редактирвоать и удалять сообщения, и потом опубликовать её. Полезная функция для тем-отчетов о поездках и т.п.</li>
-<li>Отображение тем с новыми сообщениями в виртуальном форуме «Темы с новыми сообщениями». Прямой переход к первому новому сообщению в теме. Детальный показ количества новых сообщений в темах и количества тем с новыми сообщениями в форумах. Цветовая дифференциация тем: уже посещённые ранее темы с новыми сообщениями и ни разу не посещённые темы с новыми сообщениями.</li>
-<li>Дайджест новых сообщений — виртуальная тема из новых сообщений, максимально 5 из каждой темы с новыми сообщениями — удобная альтернатива классическому подходу к чтению новых сообщений путём входа в каждую тему с новыми сообщениями.</li>
-<li>Возможность просматривать свои удалённые сообщения и вложения.</li>
-<li>Уведомление и отображение событий для пользователей — о выставленных лайках, удалённых или перенесённых сообщениях, предупреждениях и блокировках модератором и т.п. Фильтрация событий. Маркер отработанных и неотработанных событий.</li>
-<li>Автоматическое уменьшение ширины и высоты картинок до размера экрана и функция просмотра крупным планом. Обработка картинки перед загрузкой — попытка сжать до допустимых размеров и повернуть на нужный угол, если угол неправильный. </li>
-<li>Защита пользователей от слишком длинных сообщений. Длинное сообщение автоматически обрезается и появляется кнопка для разворачивания.</li>
-<li>Преобразование звуковых файлов в формат mp3, поддерживаемый встроенным аудиоплеером браузеров.</li>
-<li>Включение встроенного видеоплеера браузера для видео-файлов в формате mp4.</li>
-<li>Вставка внешних видео в виде статических картинок с возможностью проиграть видео либо прямо на странице, либо перейти на страинцу видеохостинга. Данное решение избавляет от задержек загрузки страницы из-за вставленных активных объектов, при этом функциональность не страдает.</li> 
-<li>Вставка анимированных gif и webp картинок без немедленной загрузки. Из анимированной картинки извлекается первый фрейм, на нем рисуется кнопка запуска. Загрузка и анимация начинается только при нажатии на неё. Данное решение избавляет от задержек загрузки и подвисания браузера из-за вставленных массивных анимированных картинок.</li>
+<li>Support for private messages. Private messages are implemented as private topics in a special forum. Participants in a private topic can communicate like in a regular forum topic and can leave the private topic, including the author.</li>
+<li>Creation of private topics with own moderation. In such topics, the author can add and remove participants, delete and edit messages. Invited participants can leave such a topic, while the author cannot. However, they can delete it (and restore it if necessary). Upon deletion, access to the topic for invited participants disappears.</li>
+<li>Support for personal mentions of a participant to draw their attention to your message.</li>
+<li>Creation of poll topics. Open polls (where you can see how each participant voted) and polls with delayed publication (where results are visible only after publication) are supported.</li>
+<li>Creation of topics with delayed publication. Until such a topic is published, it is visible only to the author. They can prepare it, edit and delete messages, and then publish it. A useful feature for trip report topics, etc.</li>
+<li>Display of topics with new messages in a virtual forum "Topics with new messages". Direct transition to the first new message in a topic. Detailed display of the number of new messages in topics and the number of topics with new messages in forums. Color differentiation of topics: previously visited topics with new messages and never-before-visited topics with new messages.</li>
+<li>Digest of new messages — a virtual topic made of new messages, max 5 from each topic with new messages — a convenient alternative to the classic approach of reading new messages by entering each topic.</li>
+<li>Ability to view your own deleted messages and attachments.</li>
+<li>Notification and display of events for users — about likes received, deleted or moved messages, warnings and blocks by a moderator, etc. Event filtering. Marker for processed and unprocessed events.</li>
+<li>Automatic reduction of image width and height to screen size and zoom-in function. Image processing before upload — attempting to compress to acceptable sizes and rotate to the correct angle if incorrect.</li>
+<li>Protection of users from overly long messages. A long message is automatically trimmed, and an expand button appears.</li>
+<li>Conversion of audio files to mp3 format supported by built-in browser audio players.</li>
+<li>Enabling the built-in browser video player for mp4 video files.</li>
+<li>Insertion of external videos as static images with the ability to play the video either directly on the page or go to the video hosting page. This solution eliminates page loading delays due to inserted active objects without compromising functionality.</li>
+<li>Insertion of animated gif and webp images without immediate loading. The first frame is extracted from the animated image, and a start button is drawn on it. Loading and animation begin only when clicked. This solution eliminates loading delays and browser hangs due to inserted massive animated images.</li>
 </ul>
 
-<h2>Гибкие настройки для пользователей</h2>
+<h2>Flexible Settings for Users</h2>
 
 <ul>
-    <li>Возможность загрузить аватар и фотографию.</li>        
-    <li>Возможность отключить показ картинок в сообщениях. В таком случае в сообщении показывается просто иконка, при клике на которую картинка открывается крупным планом.</li>
-    <li>Возможность загрузить собственные смайлы и вставлять их в сообщения наряду с системными смайлами.</li>        
-    <li>Возможность отключить развёртывание видеоклипов. В таком случае показывается только название и конпка запуска.</li>
-    <li>Возможность отключить уведомления по электронной почте.</li>        
-    <li>Возможность отключить события.</li>        
-    <li>Возможность отключить приватные сообщения.</li>        
-    <li>Возможность отключить персональные обращения.</li>        
-    <li>Возможность отключить потдверждения операций.</li>        
-    <li>Возможность отключить приглушение контента 18+ по умолчанию.</li>        
-    <li>Выбор языка интерфейса, скина и временной зоны.</li>        
-    <li>Возможность подгрузить свой CSS для адаптации выбранного скина.</li>        
-    <li>Возможность заблокировать свой профиль на выбранное время.</li>        
-    <li>Возможность отключить показ индивидуальной информации всех участников или отдельных участников в сообщениях — аватара, автоподписи, статусного сообщения, поля «откуда».</li>        
+<li>Ability to upload an avatar and a photo.</li>
+<li>Ability to disable showing images in messages. In this case, just an icon is shown; clicking it opens the image in full view.</li>
+<li>Ability to upload own emojis and insert them into messages alongside system emojis.</li>
+<li>Ability to disable expanding video clips. In this case, only the title and start button are shown.</li>
+<li>Ability to disable email notifications.</li>
+<li>Ability to disable events.</li>
+<li>Ability to disable private messages.</li>
+<li>Ability to disable personal mentions.</li>
+<li>Ability to disable operation confirmations.</li>
+<li>Ability to disable 18+ content dimming by default.</li>
+<li>Selection of interface language, skin, and time zone.</li>
+<li>Ability to upload own CSS to adapt the selected skin.</li>
+<li>Ability to block your profile for a selected time.</li>
+<li>Ability to disable showing individual information of all participants or specific participants in messages — avatar, signature, status message, "location" field.</li>
 </ul>
 
-<h2>Гибкие настройки для гостей</h2>
+<h2>Flexible Settings for Guests</h2>
 
-<p>Широкий функционал для гостей, поддерживаетcя большинство опций зарегистрированных пользователей.</p>
+<p>Broad functionality for guests, most options for registered users are supported.</p>
 
 <ul>
-    <li>Возможность загрузить аватар.</li>        
-    <li>Возможность отключить показ картинок в сообщениях. В таком случае в сообщении показывается просто иконка, при клике на которую картинка открывается крупным планом.</li>
-    <li>Возможность отключить развёртывание видеоклипов. В таком случае показывается только название и конпка запуска.</li>
-    <li>Возможность отключить потдверждения операций.</li>        
-    <li>Возможность отключить приглушение контента 18+ по умолчанию.</li>        
-    <li>Выбор языка интерфейса, скина и временной зоны.</li>        
-    <li>Возможность подгрузить свой CSS для адаптации выбранного скина.</li>        
-    <li>Возможность отключить показ индивидуальной информации всех участников или отдельных участников в сообщениях — аватара, автоподписи, статусного сообщения, поля «откуда».</li>        
-    <li>Экспорт/импорт настроек для синхронизации между разными компьютерами и девайсами.</li>        
-    <li>Избранные темы и сообщения.</li> 
-    <li>Прикрепление тем только для себя.</li>
+<li>Ability to upload an avatar.</li>
+<li>Ability to disable showing images in messages. In this case, just an icon is shown; clicking it opens the image in full view.</li>
+<li>Ability to disable expanding video clips. In this case, only the title and start button are shown.</li>
+<li>Ability to disable operation confirmations.</li>
+<li>Ability to disable 18+ content dimming by default.</li>
+<li>Selection of interface language, skin, and time zone.</li>
+<li>Ability to upload own CSS to adapt the selected skin.</li>
+<li>Ability to disable showing individual information of all participants or specific participants in messages — avatar, signature, status message, "location" field.</li>
+<li>Export/import of settings for synchronization between different computers and devices.</li>
+<li>Favorite topics and messages.</li>
+<li>Pinning topics only for oneself.</li>
 </ul>
 
 
-<h2>Статистика по пользователям</h2>
+<h2>Statistics for Users</h2>
 
 <ul>
-     <li>Показ различной статистической информации в профиле пользователя — дата регистрации, последняя активность, количество сообщений, лайков, дизлайков, среднее количество сообщений и просмотров в день по итогам недели, время онлайн в день и общее время онлайн.</li>        
-     <li>Контекстные опции для поиска последних сообщений, тем, вложений пользователя, а также модерируемых и игнорируемых им тем.</li>        
-     <li>Контекстные опции для просмотра модераторского лога и модерирования пользователя.</li>        
-     <li>Показ недавних прочитанных тем.</li>        
-     <li>Активность (просмотры и сообщения) пользователя за определённый период.</li>        
-     <li>Активность (просмотры и сообщения) пользователя по часам по временной зоне просматриваемого пользователя, либо просматривающего пользователя.</li>        
-     <li>Информация об игноре и скрытии профиля — кто игнорирует пользователя, кого игнорирует пользователь, кто скрывает его профиль, чей профиль скрывает он.</li>        
-     <li>Просмотр статистики оценок — кто лайкал/дизлайкал автора, кого лайкал/дизлайкал автор, сообщения пользователя с лайками/дизлайками других пользователей, сообщения пользователей с лайками/дизлайками данного пользователя, сообщения данного пользователя с лайками/дизлайками других пользователей. Клик на оценки вызывает подборку сообщений с данными оценками.</li>        
-     <li>Аналитика для модераторов по IP-адресам для выявления клонов. Показ списка IP-адресов, под которыми оставлял сообщения данный участник. Показ участников, оставлявших сообщения под данным IP-адресом. Показ участников, оставлявших сообщения под теми же IP-адресами, под которыми оставлял сообщения данный участник.</li>
+<li>Display of various statistical information in the user profile — registration date, last activity, number of messages, likes, dislikes, average number of messages and views per day based on the week, time online per day, and total time online.</li>
+<li>Contextual options for finding a user's latest messages, topics, attachments, as well as topics moderated and ignored by them.</li>
+<li>Contextual options for viewing the moderator log and moderating the user.</li>
+<li>Display of recently read topics.</li>
+<li>User activity (views and messages) for a specific period.</li>
+<li>User activity (views and messages) by hour according to the time zone of either the viewed user or the viewing user.</li>
+<li>Information about ignoring and profile hiding — who ignores the user, whom the user ignores, who hides their profile, whose profile they hide.</li>
+<li>Viewing rating statistics — who liked/disliked the author, whom the author liked/disliked, user messages with likes/dislikes from other users, users' messages with likes/dislikes from this user, this user's messages with likes/dislikes from other users. Clicking on ratings triggers a selection of messages with those ratings.</li>
+<li>Analytics for moderators by IP addresses to identify clones. Displaying a list of IP addresses used by this participant to post messages. Showing participants who posted messages under a given IP address. Showing participants who posted messages under the same IP addresses as this participant.</li>
 </ul>
 
-<h2>Статистика по гостям</h2>
+<h2>Statistics for Guests</h2>
 
 <ul>
-     <li>Последняя активность.</li>        
-     <li>Контекстные опции для поиска последних сообщений, тем, вложений пользователя, а также модерируемых и игнорируемых им тем.</li>        
-     <li>Контекстные опции для просмотра модераторского лога и модерирования пользователя.</li>        
-     <li>Показ недавних прочитанных тем.</li>        
-     <li>Аналитика для модераторов по IP-адресам для выявления клонов. Показ списка IP-адресов, под которыми оставлял сообщения данный участник. Показ участников, оставлявших сообщения под данным IP-адресом. Показ участников, оставлявших сообщения под теми же IP-адресами, под которыми оставлял сообщения данный участник.</li>
+<li>Last activity.</li>
+<li>Contextual options for finding a user's latest messages, topics, attachments, as well as topics moderated and ignored by them.</li>
+<li>Contextual options for viewing the moderator log and moderating the user.</li>
+<li>Display of recently read topics.</li>
+<li>Analytics for moderators by IP addresses to identify clones. Displaying a list of IP addresses used by this participant to post messages. Showing participants who posted messages under a given IP address. Showing participants who posted messages under the same IP addresses as this participant.</li>
 </ul>
 
-<h2>Статистика по ботам</h2>
+<h2>Statistics for Bots</h2>
 
 <ul>
-     <li>Последняя активность.</li>
-     <li>Показ недавно прочитанных тем.</li>
+<li>Last activity.</li>
+<li>Display of recently read topics.</li>
 </ul>
 
-<h2>Статистика по форумам</h2>
+<h2>Statistics for Forums</h2>
 
-<p>Показ статистической информации за выбранный период времени и за последние 24 часа и предыдущие 24 часа:</p>
+<p>Display of statistical information for a selected period, the last 24 hours, and the previous 24 hours:</p>
 
 <ul>
-  <li>Новые зарегистрированные пользователи.</li> 
-  <li>Количество пользователей, посетивших форум (бывших онлайн).</li> 
-  <li>Количество написанных сообщений.</li> 
-  <li>Количество созданных тем.</li> 
-  <li>Количество просмотров.</li> 
-  <li>Среднее количество сообщений в день.</li> 
-  <li>Количество поставленных оценок. Клик на оценки вызывает подборку сообщений с данными оценками.</li> 
-  <li>Активность (просмотры и сообщения).</li>        
-  <li>География посещений и текущей активности.</li> 
-  <li>Статистика по браузерам, операционным системам и ботам. Клик на имени бота показывает его профиль и последние посещённые им темы.</li> 
+<li>New registered users.</li>
+<li>Number of users who visited the forum (were online).</li>
+<li>Number of messages posted.</li>
+<li>Number of topics created.</li>
+<li>Number of views.</li>
+<li>Average number of messages per day.</li>
+<li>Number of ratings given. Clicking on ratings triggers a selection of messages with those ratings.</li>
+<li>Activity (views and messages).</li>
+<li>Geography of visits and current activity.</li>
+<li>Statistics on browsers, operating systems, and bots. Clicking on a bot's name shows its profile and the last topics it visited.</li>
 </ul>
 
-<h2>Мощный и гибкий поиск</h2>
+<h2>Powerful and Flexible Search</h2>
 
 <ul>
-  <li>Поиск пользователей. Сортировка пользователей по рейтингу, количеству сообщений и активности.</li> 
-  <li>Поиск сообщений с вложением, с картинками, с аудио и видео, со ссылками, с примерами программного кода, с содержимым 18+.</li> 
-  <li>Поиск в избранных темах и сообщениях.</li>
-  <li>Поиск в личных сообщениях.</li> 
-  <li>Поиск в определённой теме.</li> 
-  <li>Возможность отфильтрованного отображения только сообщений, удовлетворяющих критериям поиска, в пределах многостраничной темы — только сообщения автора темы, только свои сообщения в теме, только картинки, только видео, только тематические.</li> 
-  <li>Возможность отобразить найденные сообщения в виде общей виртуальной темы или для каждой темы показать только сообщения, удовлетворяющие критериям поиска.</li>
-  <li>Поиск по тегам. Пользователь может создавать теги и помечать ими сообщения.</li> 
-  <li>Поиск в удалённых темах и удалённых сообщениях (для модераторов).</li> 
+<li>User search. Sorting users by rating, number of messages, and activity.</li>
+<li>Search for messages with attachments, images, audio and video, links, code examples, 18+ content.</li>
+<li>Search in favorite topics and messages.</li>
+<li>Search in private messages.</li>
+<li>Search in a specific topic.</li>
+<li>Ability to display only messages meeting the search criteria within a multi-page topic — only messages from the topic author, only own messages in the topic, only images, only videos, only thematic ones.</li>
+<li>Ability to display found messages as a common virtual topic or show only messages meeting the search criteria for each topic.</li>
+<li>Search by tags. A user can create tags and mark messages with them.</li>
+<li>Search in deleted topics and deleted messages (for moderators).</li>
 </ul>
-
-</div>

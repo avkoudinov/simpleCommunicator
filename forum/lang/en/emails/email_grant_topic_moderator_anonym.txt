@@ -1,12 +1,12 @@
-Выдача прав на модерирование темы на форуме '{site_name}'
+Topic moderation rights granted on the forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Вам выданы права на модерирование темы:
+You have been granted moderation rights for the topic:
 
 {topic_name}
 {topic_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

@@ -2,10 +2,10 @@ Your posts on the forum '{site_name}' have been deleted
 
 Dear {user_name},
 
-Moderator '{moderator_name}' has deleted the last {count} of your posts on forum '{site_name}'
+Moderator '{moderator_name}' has deleted your last {count} posts on the forum '{site_name}'
 
 {site_url}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

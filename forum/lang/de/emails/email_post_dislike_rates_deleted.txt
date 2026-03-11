@@ -1,8 +1,8 @@
-Bewertungen für Ihre Nachrichten im Forum '{site_name}' gelöscht
+Bewertungen auf Ihre Beiträge im Forum '{site_name}' wurden gelöscht
 
-Sehr geehrter {user_name},
+Sehr geehrte(r) {user_name},
 
-Moderator '{moderator_name}' hat {count} Bewertungen für Ihre Nachrichten im Forum '{site_name}' gelöscht.
+Moderator '{moderator_name}' hat {count} Bewertungen auf Ihre Beiträge im Forum '{site_name}' gelöscht
 
 {site_url}
 

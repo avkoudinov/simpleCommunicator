@@ -1,11 +1,11 @@
-Удалены оценки на ваши сообщения на форуме '{site_name}'
+Ratings on your posts on the forum '{site_name}' have been deleted
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Удалены {count} оценок пользователя '{rated_user_name}' на ваши сообщения на форуме '{site_name}'
+{count} ratings by user '{rated_user_name}' on your posts on the forum '{site_name}' have been deleted
 
 {site_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

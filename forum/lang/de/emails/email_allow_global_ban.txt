@@ -1,13 +1,13 @@
-Вам выдано право глобального бана пользователей на форуме '{site_name}'
+Ihnen wurde das Recht zum globalen Sperren von Benutzern im Forum '{site_name}' erteilt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме '{site_name}'
+Im Forum '{site_name}'
 
 {site_url}
 
-администратор '{administrator_name}' выдал вам право глобального бана пользователей.
+hat Administrator '{administrator_name}' Ihnen das Recht zum globalen Sperren von Benutzern erteilt.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

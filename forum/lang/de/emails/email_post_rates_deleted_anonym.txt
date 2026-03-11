@@ -1,11 +1,11 @@
-Удалены оценки на ваши сообщения на форуме '{site_name}'
+Bewertungen auf Ihre Beiträge im Forum '{site_name}' wurden gelöscht
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Удалены {count} оценок пользователя '{rated_user_name}' на ваши сообщения на форуме '{site_name}'
+{count} Bewertungen des Benutzers '{rated_user_name}' auf Ihre Beiträge im Forum '{site_name}' wurden gelöscht
 
 {site_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

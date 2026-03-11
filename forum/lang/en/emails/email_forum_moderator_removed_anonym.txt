@@ -1,16 +1,16 @@
-Removing a moderator in the forum of '{site_name}' you are moderating 
+Moderator removed from the forum section you moderate on '{site_name}' 
 
 Dear {user_name},
 
-On the forum where you are the moderator:
+In the forum where you are a moderator: 
 
 {forum_name}
 {forum_url}
 
-the moderator rights were taken away from the user:
+moderator rights have been revoked from the user:
 
 {moderator_name}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

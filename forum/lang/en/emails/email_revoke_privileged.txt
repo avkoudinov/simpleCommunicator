@@ -1,13 +1,13 @@
-У вас отнят статус привилегированного пользователя на форуме '{site_name}'
+Your privileged user status on the forum '{site_name}' has been revoked
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-На форуме '{site_name}'
+On the forum '{site_name}'
 
 {site_url}
 
-администратор '{administrator_name}' забрал у вас статус привилегированного пользователя.
+administrator '{administrator_name}' has revoked your privileged user status.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

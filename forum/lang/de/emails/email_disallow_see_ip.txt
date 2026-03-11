@@ -1,13 +1,13 @@
-У вас отнято право видеть IP адреса в модерируемых форумах на форуме '{site_name}'
+Ihr Recht, IP-Adressen in moderierten Foren im Forum '{site_name}' einzusehen, wurde entzogen
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-На форуме '{site_name}'
+Im Forum '{site_name}'
 
 {site_url}
 
-администратор '{administrator_name}' забрал у вас право видеть IP адреса в модерируемых форумах.
+hat Administrator '{administrator_name}' Ihnen das Recht entzogen, IP-Adressen in moderierten Foren einzusehen.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

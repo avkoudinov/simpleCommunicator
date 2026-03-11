@@ -1,16 +1,16 @@
-Приглашение в приватную тему новых участников на форуме '{site_name}' 
+Neue Teilnehmer wurden in ein privates Thema im Forum '{site_name}' eingeladen 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Пользователь '{author_name}' пригласил новых участников:
+Benutzer '{author_name}' hat neue Teilnehmer eingeladen:
 
 {invited_names} 
 
-в приватную тему с вашим участием:
+in das private Thema, an dem Sie teilnehmen:
 
 {topic_name}
 {topic_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

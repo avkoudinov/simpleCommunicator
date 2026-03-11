@@ -1,15 +1,15 @@
-Установлен запрет на вставку видео и аудио на форуме '{site_name}' 
+Ein Verbot zum Einbetten von Video und Audio wurde im Forum '{site_name}' gesetzt 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Модератор '{moderator_name}' установил для вас запрет на вставку видео и аудио на форуме '{site_name}'
+Moderator '{moderator_name}' hat ein Verbot zum Einbetten von Video und Audio für Sie im Forum '{site_name}' gesetzt
 
 {site_url}
 
-Причина:
+Grund:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

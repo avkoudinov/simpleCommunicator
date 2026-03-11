@@ -1,13 +1,13 @@
-Ваша учетная запись на форуме '{site_name}' не одобрена
+Ihr Konto im Forum '{site_name}' wurde nicht genehmigt
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Одобрение вашей учетной записи на форуме '{site_name}'
+Die Genehmigung Ihres Kontos im Forum '{site_name}'
 
 {site_url}
 
-было отменено.
+wurde widerrufen.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

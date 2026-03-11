@@ -1,12 +1,12 @@
-Отзыв прав на модерирование форума на '{site_name}' 
+Forum moderation rights revoked on '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Вы были лишены права на модерирование форума:
+You have been stripped of moderation rights for the forum:
 
 {forum_name}
 {forum_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

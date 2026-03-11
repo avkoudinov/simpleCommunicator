@@ -1,19 +1,19 @@
-Ваша ник на форуме '{site_name}' переименован
+Ihr Benutzername im Forum '{site_name}' wurde geändert
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваш ник на форуме '{site_name}'
+Ihr Benutzername im Forum '{site_name}'
 
 {site_url}
 
-был переименован администратором '{administrator_name}' с
+wurde vom Administrator '{administrator_name}' geändert von
 
 {old_user_name}
 
-в
+in
 
 {new_user_name}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

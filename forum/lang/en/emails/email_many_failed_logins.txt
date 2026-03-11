@@ -1,15 +1,15 @@
-Multiple unsuccessful attempts to enter the forum '{site_name}' using your login name
+Multiple failed login attempts on the forum '{site_name}' using your login
 
 Dear {user_name},
 
-There have been multiple unsuccessful attempts to enter the forum '{site_name}'
+Multiple failed login attempts have been detected on the forum '{site_name}' 
 
 {site_url}
 
-under your login name '{user_login}' from the IP address:
+using your login '{user_login}' from the IP address:
 
 {ip} - {ip_link}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

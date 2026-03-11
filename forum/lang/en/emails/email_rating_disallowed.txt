@@ -1,15 +1,15 @@
-Установлен запрет на оценку сообщений на форуме '{site_name}' 
+A restriction on rating posts has been set on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Модератор '{moderator_name}' установил для вас запрет на оценку сообщений на форуме '{site_name}'
+Moderator '{moderator_name}' has set a post rating restriction for you on the forum '{site_name}'
 
 {site_url}
 
-Причина:
+Reason:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

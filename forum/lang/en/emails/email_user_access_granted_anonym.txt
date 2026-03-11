@@ -1,16 +1,16 @@
-Предоставлен доступ в закрытый форум на форуме '{site_name}' 
+Access to a restricted forum has been granted on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Вам был дан доступ в закрытый форум:
+You have been granted access to a restricted forum:
 
 {forum_name}
 {forum_url}
 
-Комментарий модератора:
+Moderator's comment:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

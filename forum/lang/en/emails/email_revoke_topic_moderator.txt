@@ -1,16 +1,16 @@
-Отзыв прав на модерирование темы на форуме '{site_name}' 
+Topic moderation rights revoked on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Модератор '{moderator_name}' забрал у вас права на модерирование темы:
+Moderator '{moderator_name}' has revoked your moderation rights for the topic:
 
 {topic_name}
 {topic_url}
 
-Причина:
+Reason:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

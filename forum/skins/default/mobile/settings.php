@@ -282,7 +282,7 @@ if($fmanager->demo_mode())
 ?>
 
 <tr>
-<td style="vertical-align: top"><?php echo_html(text("Notifications")); ?>*:</td>
+<td style="vertical-align: top" class="settings_subheader"><?php echo_html(text("Notifications")); ?>*:</td>
 </tr>
 <tr>
 <td>
@@ -322,7 +322,29 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td><?php echo_html(text("SpecialMode")); ?>:</td>
+<td class="settings_subheader"><?php echo_html(text("GeneralSettings")); ?>:</td>
+</tr>
+<tr>
+<td>
+   <table class="checkbox_table">
+   <tr>
+     <td>
+     <input type="checkbox" id="request_cookie_consent" name="request_cookie_consent" <?php echo_html(checked($settings["request_cookie_consent"])); ?>> 
+     </td>
+     <td>
+     <label for="request_cookie_consent"><?php echo_html(text("RequestCookieConsent")); ?></label>
+     </td>
+   </tr>
+   </table>
+</td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+
+<tr>
+<td class="settings_subheader"><?php echo_html(text("SpecialMode")); ?>:</td>
 </tr>
 <tr>
 <td>
@@ -368,7 +390,7 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td style="vertical-align: top"><?php echo_html(text("Registration")); ?>:</td>
+<td style="vertical-align: top" class="settings_subheader"><?php echo_html(text("Registration")); ?>:</td>
 </tr>
 <tr>
 <td>
@@ -398,7 +420,7 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td><?php echo_html(text("SearchRobots")); ?>:</td>
+<td class="settings_subheader"><?php echo_html(text("SearchRobots")); ?>:</td>
 </tr>
 <tr>
 <td>
@@ -420,7 +442,7 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td><?php echo_html(text("OnlineStatus")); ?>:</td>
+<td class="settings_subheader"><?php echo_html(text("OnlineStatus")); ?>:</td>
 </tr>
 <tr>
 <td>
@@ -442,7 +464,7 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td style="vertical-align: top"><?php echo_html(text("Rates")); ?>:</td>
+<td style="vertical-align: top" class="settings_subheader"><?php echo_html(text("Rates")); ?>:</td>
 </tr>
 <tr>
 <td>
@@ -480,7 +502,7 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
-<td style="vertical-align: top"><?php echo_html(text("Restrictions")); ?>:</td>
+<td style="vertical-align: top" class="settings_subheader"><?php echo_html(text("Restrictions")); ?>:</td>
 </tr>
 <tr>
 <td>

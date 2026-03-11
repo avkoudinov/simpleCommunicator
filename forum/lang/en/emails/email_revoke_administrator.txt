@@ -1,11 +1,11 @@
-Отзыв прав администратора на '{site_name}' 
+Administrator rights revoked on '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Владелец форума забрал у вас права администратора на '{site_name}':
+The forum owner has revoked your administrator rights on '{site_name}':
 
 {site_url}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

@@ -1,14 +1,14 @@
-Восстановление приватной темы на форуме '{site_name}'
+Private topic restored on the forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Приватная тема, в которой вы являетесь участником:
+The private topic in which you are a participant:
 
 {topic_name}
 {topic_url}
 
-была восстановлена.
+has been restored.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

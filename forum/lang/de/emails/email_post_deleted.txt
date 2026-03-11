@@ -1,8 +1,8 @@
-Ihre Nachricht im Forum '{site_name}' wurde gelöscht
+Ihr Beitrag im Forum '{site_name}' wurde gelöscht
 
 Sehr geehrte(r) {user_name},
 
-Ihre Nachricht vom {post_date} im Thema:
+Ihr Beitrag vom {post_date} im Thema: 
 
 {topic_name}
 {post_url}
@@ -18,7 +18,7 @@ Kurzer Nachrichtentext:
 
 {message}
 
-Grund für das Löschen:
+Grund für die Löschung:
 
 {comment}
 

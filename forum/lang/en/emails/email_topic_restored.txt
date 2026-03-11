@@ -1,19 +1,19 @@
-Ваша тема на форуме '{site_name}' восстановлена
+Your topic on the forum '{site_name}' has been restored
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша тема: 
+Your topic: 
 
 {topic_name}
 {topic_url}
 
-На форуме:
+In the forum:
 
 {forum_name}
 {forum_url}
 
-была восстановлена модератором '{moderator_name}'.
+has been restored by moderator '{moderator_name}'.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

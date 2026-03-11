@@ -1,12 +1,12 @@
-Приглашение в приватную тему на форуме '{site_name}' 
+Einladung in ein privates Thema im Forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Пользователь '{author_name}' пригласил вас в приватную тему:
+Benutzer '{author_name}' hat Sie in das private Thema eingeladen:
 
 {topic_name}
 {topic_url}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

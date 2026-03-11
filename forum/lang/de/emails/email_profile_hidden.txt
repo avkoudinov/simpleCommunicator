@@ -1,15 +1,15 @@
-Ваш профиль на форуме '{site_name}' скрыт
+Ihr Profil im Forum '{site_name}' wurde ausgeblendet
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Модератор '{moderator_name}' скрыл ваш профиль для просмотра на форуме '{site_name}'
+Moderator '{moderator_name}' hat Ihr Profil im Forum '{site_name}' für andere ausgeblendet
 
 {site_url}
 
-Причина:
+Grund:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

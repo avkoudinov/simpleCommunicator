@@ -1,25 +1,25 @@
 Verdacht auf DOS-Angriff im Forum '{site_name}'
 
-Liebe(r) {administrator_name},
+Sehr geehrte(r) {administrator_name},
 
-Sie haben diese Nachricht erhalten, weil Sie der Administrator des Forums '{site_name}' sind:
+Sie haben diese Nachricht erhalten, weil Sie Administrator des Forums '{site_name}' sind:
 
 {site_url}
 
-DOS-Angriff von IP-Adresse wurde im Forum verhindert:
+Ein DOS-Angriff von der IP-Adresse wurde im Forum abgewehrt:
 
 {ip} - {ip_link}
 
-{hits} Anfragen ({atype}) wurden von dieser IP-Adresse in {check_period} Sekunden gesendet.
+Von dieser IP-Adresse wurden {hits} Anfragen ({atype}) innerhalb von {check_period} Sekunde(n) gestellt.
 
 Gesamtzahl der Angriffe: {total_attacks}
-Erster Angriff: {first_attack}
+Erster Angriff: {first_attack} 	
 Letzter Angriff: {last_attack}
 
-Anzeigen der Statistik:
+Statistik anzeigen:
 
 {statistics_url}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

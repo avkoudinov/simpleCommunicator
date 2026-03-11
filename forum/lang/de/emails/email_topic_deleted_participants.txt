@@ -1,14 +1,14 @@
-Удаление приватной темы на форуме '{site_name}'
+Privates Thema gelöscht im Forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Приватная тема, в которой вы являетесь участником:
+Das private Thema, an dem Sie teilnehmen:
 
 {topic_name}
 {topic_url}
 
-была удалена модератором '{moderator_name}'.
+wurde vom Moderator '{moderator_name}' gelöscht.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

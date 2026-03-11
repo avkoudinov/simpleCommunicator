@@ -1,17 +1,17 @@
-Новое личное сообщение на форуме '{site_name}' 
+New private message on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Пользователь '{author_name}' отправил вам личное сообщение:
+User '{author_name}' has sent you a private message:
 
 {topic_name}
 
 {post_url}
 
-Краткий текст сообщения:
+Brief message text:
 
 {message}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

@@ -1,19 +1,19 @@
-Удаление темы на форуме '{site_name}'
+Thema gelöscht im Forum '{site_name}'
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Тема, в которой вы являетесь модератором:
+Das Thema, in dem Sie Moderator sind:
 
 {topic_name}
 {topic_url}
 
-На форуме:
+Im Forum:
 
 {forum_name}
 {forum_url}
 
-была удалена модератором '{moderator_name}'.
+wurde vom Moderator '{moderator_name}' gelöscht.
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

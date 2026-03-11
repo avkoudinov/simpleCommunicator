@@ -1,8 +1,8 @@
-Your message was answered on the forum '{site_name}'
+A reply has been posted to your message on the forum '{site_name}' 
 
 Dear {user_name},
 
-On the forum:
+On the forum: 
 
 {forum_name}
 {forum_url}
@@ -11,24 +11,24 @@ in the topic:
 
 {topic_name}
 
-the member '{author_name}' replied to your message.
+member '{author_name}' has replied to your post.
 
-Your message address:
+Address of your post:
 
 {citated_post_url}
 
-New message address:
+Address of the new post:
 
 {post_url}
 
-If you do not want to reset the mark of new messages, in order not to lose information about possible unread messages before this message, use this link to go to the message:
+If you do not want to reset the new posts marker to avoid losing information about possible unread posts before this post, use this link to navigate to the post:
 
 {post_url_unread}
 
-Short answer text:
+Brief reply text:
 
 {message}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

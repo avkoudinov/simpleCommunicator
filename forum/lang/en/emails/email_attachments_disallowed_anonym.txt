@@ -1,15 +1,15 @@
-Установлен запрет на отправку вложений на форуме '{site_name}' 
+Attachment restriction has been set on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Для вас установлен запрет на отправку вложений на форуме '{site_name}'
+An attachment restriction has been set for you on the forum '{site_name}'
 
 {site_url}
 
-Причина:
+Reason:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

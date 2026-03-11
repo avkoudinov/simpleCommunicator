@@ -1,21 +1,21 @@
-There was a request for moderator rights on a topic in the forum you are moderating '{site_name}'
+A request for topic moderation rights in your moderated forum section on '{site_name}' 
 
 Dear {moderator_name},
 
-On the forum:
+On the forum: 
 
 {forum_name}
 {forum_url}
 
-the user '{user_name}' has asked for moderator rights on the topic he created:
+user '{user_name}' has requested moderation rights for the topic they created:
 
 {topic_name}
 {topic_url}
 
-Short message text:
+Brief post text:
 
 {message}
 
-Yours faithfully,
+Best regards,
 
-Forum administration
+Forum Administration

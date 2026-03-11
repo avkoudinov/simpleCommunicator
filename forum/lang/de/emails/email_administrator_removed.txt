@@ -1,11 +1,11 @@
-Entfernen des Administrators im Forum '{site_name}'
+Administrator entfernt im Forum '{site_name}' 
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-Im Forum '{site_name}', in dem Sie Administrator sind, hat der Eigentümer des Forums die Administratorrechte vom Benutzer entfernt:
+Im Forum '{site_name}', in dem Sie Administrator sind, hat der Forumseigentümer dem Benutzer die Administratorrechte entzogen:
 
 {administrator_name}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

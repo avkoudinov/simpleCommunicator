@@ -1,16 +1,16 @@
-Новый модератор в модерируемой вами теме на форуме '{site_name}' 
+New moderator in the topic you moderate on the forum '{site_name}' 
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-В теме, где вы являетесь модератором: 
+In the topic where you are a moderator: 
 
 {topic_name}
 {topic_url}
 
-был добавлен новый модератор:
+a new moderator has been added:
 
 {topic_moderator_name}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

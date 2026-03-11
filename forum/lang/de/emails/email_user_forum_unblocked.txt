@@ -1,16 +1,16 @@
-Ваша учетная запись на форуме '{site_name}' разблокирована на создание сообщений
+Das Schreibverbot für Ihr Konto im Forum '{site_name}' wurde aufgehoben
 
-Уважаемый(ая) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ваша учетная запись была разблокирована модератором '{moderator_name}' на создание сообщений на форуме:
+Das Schreibverbot für Ihr Konto wurde vom Moderator '{moderator_name}' im Forum aufgehoben:
 
 {forum_name}
 {forum_url}
 
-Комментарий модератора:
+Kommentar des Moderators:
 
 {comment}
 
-С уважением,
+Mit freundlichen Grüßen,
 
-Администрация форума
+Forumsverwaltung

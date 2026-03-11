@@ -166,7 +166,7 @@
   .title img
   {
     display: block;
-    height: 42px;
+    height: 36px;
     margin-top: 2px;
   }
 
@@ -3614,5 +3614,22 @@
   #debug_console_output
   {
     font-size: 20px;
+  }
+
+  .consent_dialog
+  {
+    padding: 7px;
+  }
+
+  ._sys_lightbox_toolbar .consent_buttons
+  {
+    display: block;
+    padding: 7px 0px 7px 7px;
+  }
+
+  ._sys_lightbox_toolbar input[type=button].consent_button {
+      margin-right: 7px;
+      width: auto;
+      min-width: unset;
   }
 }

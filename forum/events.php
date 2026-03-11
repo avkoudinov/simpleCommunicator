@@ -50,9 +50,11 @@ if (!reqvar_empty("apply_filter")) {
     exit;
 }
 
-$param_string = "";
-if(!reqvar_empty("filter")) $param_string = "filter=" . xrawurlencode(reqvar("filter"));
+$fmanager->track_hit("", "");
+
+$param_string = $fmanager->build_elog_paramter_string();
 if(!empty($param_string)) $param_string = "?" . $param_string;
+
 
 $base_url = "events.php{$param_string}";
 //------------------------------------------------------------------
@@ -91,7 +93,6 @@ $filter_list["dislikes"] = text("Dislikes");
 $filter_list["replies"] = text("Answers");
 
 //------------------------------------------------------------------
-$fmanager->track_hit("", "");
 
 $online_users = array();
 $forum_readers = array();

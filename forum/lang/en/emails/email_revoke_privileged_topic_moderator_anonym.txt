@@ -1,14 +1,14 @@
-У вас отнят статус привилегированного модератора тем на форуме '{site_name}'
+Your privileged topic moderator status on the forum '{site_name}' has been revoked
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-На форуме '{site_name}'
+On the forum '{site_name}'
 
 {site_url}
 
-у вас отнят статус привилегированного модератора тем.
+your privileged topic moderator status has been revoked.
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration
 

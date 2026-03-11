@@ -1,12 +1,12 @@
-Erteilung von Rechten zum Moderieren eines Forenthemas auf '{site_name}'
+Moderationsrechte für ein Thema vergeben im Forum '{site_name}'
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-Ihnen wurden Moderationsrechte auf das Thema gewährt:
+Ihnen wurden Moderationsrechte für das Thema erteilt:
 
 {topic_name}
 {topic_url}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

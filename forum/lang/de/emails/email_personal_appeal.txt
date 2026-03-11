@@ -1,8 +1,8 @@
-Im Forum '{site_name}' wurde um Ihre Aufmerksamkeit gebeten
+Sie wurden im Forum '{site_name}' um Ihre Aufmerksamkeit gebeten
 
-Liebe(r) {user_name},
+Sehr geehrte(r) {user_name},
 
-Im Forum:
+Im Forum: 
 
 {forum_name}
 {forum_url}
@@ -11,18 +11,18 @@ im Thema:
 
 {topic_name}
 
-der Teilnehmer '{author_name}' hat in einer Nachricht um Ihre Aufmerksamkeit gebeten:
+hat Mitglied '{author_name}' Sie in der Nachricht um Ihre Aufmerksamkeit gebeten:
 
 {post_url}
 
-Wenn Sie die Markierung neuer Nachrichten nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Nachrichten vor dieser Nachricht zu verlieren, verwenden Sie diesen Link, um zur Nachricht zu gelangen:
+Wenn Sie die Markierung neuer Beiträge nicht zurücksetzen möchten, um keine Informationen über mögliche ungelesene Beiträge vor dieser Nachricht zu verlieren, verwenden Sie diesen Link zur Nachricht:
 
 {post_url_unread}
 
-Kurznachrichtentext:
+Kurzer Nachrichtentext:
 
 {message}
 
 Mit freundlichen Grüßen,
 
-Forumverwaltung
+Forumsverwaltung

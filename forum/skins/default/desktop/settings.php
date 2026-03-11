@@ -332,6 +332,29 @@ if($fmanager->demo_mode())
 </tr>
 
 <tr>
+<td style="vertical-align: top"><?php echo_html(text("GeneralSettings")); ?>:</td>
+<td>
+
+   <table class="checkbox_table">
+   <tr>
+     <td>
+     <input type="checkbox" id="request_cookie_consent" name="request_cookie_consent" <?php echo_html(checked($settings["request_cookie_consent"])); ?>> 
+     </td>
+     <td>
+     <label for="request_cookie_consent"><?php echo_html(text("RequestCookieConsent")); ?></label>
+     </td>
+   </tr>
+   </table>
+
+</td>
+</tr>
+
+
+<tr>
+<td colspan="2"></td>
+</tr>
+
+<tr>
 <td style="vertical-align: top"><?php echo_html(text("SpecialMode")); ?>:</td>
 <td>
 

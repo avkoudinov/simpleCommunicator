@@ -1,17 +1,17 @@
-Ваша учетная запись на форуме '{site_name}' заблокирована
+Your account on the forum '{site_name}' has been blocked
 
-Уважаемый(ая) {user_name},
+Dear {user_name},
 
-Ваша учетная запись на форуме '{site_name}'
+Your account on the forum '{site_name}'
 
 {site_url}
 
-была заблокирована.
+has been blocked.
 
-Причина блокировки:
+Reason for blocking:
 
 {comment}
 
-С уважением,
+Best regards,
 
-Администрация форума
+Forum Administration

@@ -127,6 +127,10 @@ def_js_message("MaxAttachmentCount");
 def_js_message("ErrNoImagesInClipboard");
 
 def_js_message("ConvertingHEICtoJPG");
+
+def_js_message("DataConsent");
+def_js_message("AcceptSelected");
+def_js_message("AcceptOnlyRequired");
 ?>
 
 <?php
@@ -149,6 +153,11 @@ var previous_session_cookie = localStorage.getItem('session_cookie');
 localStorage.setItem('session_id', session_id);
 localStorage.setItem('session_start_time', session_start_time);
 localStorage.setItem('session_cookie', session_cookie);
+
+Forum.show_consent_dialog = function()
+{
+  Forum.aux_show_consent_dialog("700px");
+};
 
 function confirm_logout()
 {
@@ -334,7 +343,10 @@ $main_menu_id = "main_menu_bottom";
 
   <div class="footer">
   
-    <div style="position:absolute;top:5px;left:5px;color:white;font-size:10px"><a href="user_agreement.php"><?php echo_html(text("UserAgreement")); ?></a></div>
+    <div style="position:absolute;top:5px;left:5px;color:white;font-size:10px">
+    <a href="user_agreement.php"><?php echo_html(text("UserAgreementShort")); ?></a>&nbsp;&nbsp;
+    <a href="privacy_policy.php"><?php echo_html(text("PrivacyPolicyShort")); ?></a>&nbsp;&nbsp;
+    </div>
     
     <?php 
     $footer = "";
@@ -513,6 +525,10 @@ messages.ERROR_ELEMENT = "<?php echo_js($MSG_ERROR_ELEMENT); ?>";
 Forum.addXEvent(window, 'DOMContentLoaded', function () { 
   browser_class(navigator.userAgent);
   Forum.handle_response_messages(messages); 
+  
+  <?php if(!empty($settings["request_cookie_consent"])): ?>
+  Forum.handle_consent_dialog();
+  <?php endif; ?>
 });
 
 var load_time = document.getElementById("load_time");
@@ -533,6 +549,11 @@ if(load_time)
 <?php
 require_once "custom_body.php";
 ?>
+
+<?php
+require_once "consent_dialog_inc.php";
+?>
+
 
 </body>
 
