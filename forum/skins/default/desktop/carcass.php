@@ -232,6 +232,10 @@ if(empty($_SESSION["donot_hide_adult_pictures"])) $body_class .= " hide_adult_pi
 ?>
 <body class="desktop <?php echo($body_class); ?>">
 
+<?php
+require_once "custom_body_top.php";
+?>
+
 <div class="container">
 
 <div class="content_wrap">
@@ -547,13 +551,12 @@ if(load_time)
 </div>
 
 <?php
-require_once "custom_body.php";
-?>
-
-<?php
 require_once "consent_dialog_inc.php";
 ?>
 
+<?php
+require_once "custom_body_bottom.php";
+?>
 
 </body>
 

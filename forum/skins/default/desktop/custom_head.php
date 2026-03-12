@@ -1,1 +1,3 @@
-<!-- write your adjustments here -->
+<!-- begin: custom_head -->
+
+<!-- end: custom_head -->
