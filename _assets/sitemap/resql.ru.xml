@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+   <url>
+
+      <loc>https://resql.ru/</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+   <url>
+
+      <loc>https://resql.ru/sqlru.php</loc>
+
+      <changefreq>monthly</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+   <url>
+
+      <loc>https://resql.ru/forum/</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+ 
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=4</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=7</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=8</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=10</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=11</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=12</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=13</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=14</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=15</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=16</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=17</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=18</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+     <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=19</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=20</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=21</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=22</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=23</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=24</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=25</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=26</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=27</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=28</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+     <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=29</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=30</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+     <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=31</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=32</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=33</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=34</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=35</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=36</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=37</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=38</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=39</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=40</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+ 
+     <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=41</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=42</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=43</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=44</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=45</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=46</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=47</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=48</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=49</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=50</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+     <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=51</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=52</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=53</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=54</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=55</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=56</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=57</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+       <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=58</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=59</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+   <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=60</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+   </url>
+   
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=61</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=64</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+	
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=66</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=68</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+	
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=69</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=70</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=71</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=72</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=82</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+    <url>
+
+      <loc>https://resql.ru/forum/forum.php?fid=83</loc>
+
+      <changefreq>always</changefreq>
+
+      <priority>1.0</priority>
+
+    </url>
+
+</urlset>

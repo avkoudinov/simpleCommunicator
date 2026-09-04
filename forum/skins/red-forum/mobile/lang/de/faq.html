@@ -1,0 +1,99 @@
+<h1 style="margin-top: 0px; text-align: center">Häufig gestellte Fragen (FAQ)</h1>
+
+<ul>
+<li><a href="#feature_list">Wo finde ich die vollständige Liste der unterstützten Forenfunktionen?</a></li>
+<li><a href="#requirements">Wo finde ich die technischen Anforderungen der Foren-Engine und den Quellcode?</a></li>
+<li><a href="#activation_mail">Was tun, wenn die E-Mail mit dem Aktivierungslink nicht ankommt?</a></li>
+<li><a href="#message_editing">Die Möglichkeit, eigene Beiträge zu bearbeiten, ist verschwunden</a></li>
+<li><a href="#ip_visibility">Wer kann die IP-Adressen sehen?</a></li>
+<li><a href="#crawlers">Inhalt an Suchmaschinen übermitteln</a></li>
+<li><a href="#private">Wie privat sind „Private Themen“?</a></li>
+</ul>
+
+<hr>
+
+<a id="feature_list"></a>
+<h3>Wo finde ich die vollständige Liste der unterstützten Forenfunktionen?</h3>
+
+<p>Die vollständige Liste der Forenfunktionen finden Sie hier:</p>
+
+<p><a href="about.php" target="_blank">Über das simpleCommunicator Forum</a></p>
+
+<hr>
+
+<a id="requirements"></a>
+<h3>Wo finde ich die technischen Anforderungen der Foren-Engine und den Quellcode?</h3>
+
+<p>Die technischen Anforderungen der Engine und den Download-Link finden Sie hier:</p>
+
+<p><a href="about.php" target="_blank">Über das simpleCommunicator Forum</a></p>
+
+<hr>
+
+<a id="activation_mail"></a>
+<h3>Was tun, wenn die E-Mail mit dem Aktivierungslink nicht ankommt?</h3>
+
+<p>Prüfen Sie Ihren Spam-Ordner; möglicherweise ist die E-Mail dort gelandet.</p>
+
+<p>Falls die E-Mail auch dort nicht zu finden ist, kontaktieren Sie den Administrator auf einem der folgenden Wege:</p>
+
+<ul>
+<li>über das <a href="contact.php">Kontaktformular</a></li>
+</ul>
+
+<hr>
+
+<a id="message_editing"></a>
+<h3>Die Möglichkeit, eigene Beiträge zu bearbeiten, ist verschwunden</h3>
+
+<p>Das Bearbeiten eines eigenen Beitrags ist innerhalb von 10 Minuten nach dessen Erstellung möglich.</p>
+
+<hr>
+
+<a id="ip_visibility"></a>
+<h3>Wer kann die IP-Adressen sehen?</h3>
+
+<ul>
+<li>Der Themen-Moderator sieht keine IP-Adressen.</li>
+<li>Der Foren-Moderator sieht IP-Adressen nur in dem ihm unterstellten Forum.</li>
+<li>Der Administrator sieht IP-Adressen in allen Foren.</li>
+</ul>
+
+<hr>
+
+<a id="crawlers"></a>
+<h3>Inhalt an Suchmaschinen übermitteln</h3>
+
+<p>Aufgrund der spezifischen Natur der Inhalte werden die meisten Foren nicht an Suchbots zur Indexierung übermittelt. Suchbots werden anhand offiziell bekannter User-Agent-Signaturen identifiziert, daher gibt es keine hundertprozentige Garantie, dass der Inhalt von absolut keinem System indexiert wird. Tests in den Suchmaschinen Yandex und Google zeigen jedoch, dass diese die vor Indexierung geschützten Foren nicht erfassen.</p>
+
+<p>Das Erscheinen von Suchbots in der Zeile „Benutzer online“ bedeutet nicht, dass sie gerade dieses spezifische Forum lesen. Diese Zeile zeigt die Besucher der gesamten Ressource an. Ein Forum wird nur dann von Suchmaschinen indexiert, wenn Suchbots in den Zeilen „Thema gelesen“ oder „Forum gelesen“ angezeigt werden.</p>
+
+<hr>
+
+<a id="private"></a>
+<h3>Wie privat sind „Private Themen“?</h3>
+
+<p>Private Nachrichten sind als private Themen in einem speziellen Forum implementiert. Die Teilnehmer eines privaten Themas können wie in einem normalen Forenthema kommunizieren и können das Thema jederzeit verlassen, dies gilt auch für den Autor des Themas.</p>
+
+<p>Es gibt zwei Arten von privaten Themen:</p>
+
+<ul>
+<li>Private Themen für die 1-zu-1-Kommunikation, bei denen niemand Teilnehmer hinzufügen oder entfernen kann und jeder das Thema verlassen kann. Diese werden durch das Schreiben einer privaten Nachricht an einen anderen Teilnehmer erstellt.</li>
+<li>Private Themen mit eigener Moderation. In diesen Themen kann der Autor Teilnehmer hinzufügen oder entfernen sowie Beiträge löschen und bearbeiten. Eingeladene Teilnehmer können ein solches Thema verlassen, während der Autor dies nicht kann. Der Autor kann es jedoch löschen (und bei Bedarf wiederherstellen). Beim Löschen verlieren die eingeladenen Teilnehmer den Zugriff auf das Thema. Solche Themen werden durch das Erstellen eines Themas im virtuellen Forum „Private Nachrichten“ erstellt.</li>
+</ul>
+
+<p>Wenn ein Teilnehmer keine privaten Nachrichten erhalten möchte, kann er diese Funktion in den Profileinstellungen deaktivieren. In bereits erstellten privaten Themen kann er jedoch weiterhin kommunizieren und auch selbst private Nachrichten an andere Teilnehmer schreiben.</p>
+
+<p>Wenn ein Teilnehmer keine Nachrichten in bereits bestehenden privaten Themen erhalten möchte, kann er diese Themen verlassen oder auf die Ignorierliste setzen.</p>
+
+<p>Falls Sie in privaten Themen belästigt werden, jemand Ihnen unerwünschte Nachrichten schickt oder Sie hartnäckig in Themen einlädt, die Sie bereits verlassen haben — informieren Sie bitte die Administration, idealerweise mit Screenshots als Beleg. Administratoren haben keinen Lesezugriff auf private Nachrichten, können aber die Funktion zum Schreiben privater Nachrichten für bestimmte Benutzer sperren.</p>
+
+<ol>
+<li>In anderen Foren gibt es Schnittstellen, mit denen Administratoren private Nachrichten lesen können; in diesem Forum fehlt eine solche Schnittstelle. Technisch gesehen besteht jedoch natürlich die Möglichkeit, private Nachrichten mittels SQL-Abfragen direkt aus der Datenbank auszulesen.</li>
+<li>Der Administrator liest keine privaten Themen, an denen er nicht beteiligt ist, und kommt Aufforderungen anderer Teilnehmer, den Inhalt solcher Themen preiszugeben, nicht nach. Wer das nicht glaubt — nun gut, das Gegenteil lässt sich unmöglich beweisen. Gehen Sie daher bei der Nutzung privater Nachrichten davon aus, dass der Administrator sie theoretisch lesen könnte.</li>
+<li>Der Zugriff auf das Benutzerkonto, das Forenprofil und private Nachrichten kann durch Angreifer erfolgen, wenn Schwachstellen in der Foren-Webanwendung, dem Webserver oder dem Betriebssystem ausgenutzt werden, bei Infektion des Endgeräts mit Schadsoftware oder wenn der Benutzer selbst seine Zugangsdaten oder das Gerät verliert.</li>
+<li>Gehen Sie bei der Kommunikation mit Teilnehmern davon aus, dass deren private Gespräche mit Ihnen von deren Verwandten oder anderen Personen gelesen werden könnten, die direkten Zugriff auf das Endgerät haben.</li>
+<li>Ein Teilnehmer kann eigenständig private Korrespondenz veröffentlichen oder Zugangsdaten an Dritte weitergeben. Solche Präzedenzfälle gab es bereits und kann es wieder geben.</li>
+<li>Im Falle einer potenziellen Übergabe des Forums an einen Nachfolger — und dementsprechend bei der Nutzung privater Nachrichten unter einem neuen Administrator — müssen Sie selbst entscheiden, ob Sie diesem vertrauen oder nicht.</li>
+<li>Bei Bedarf и gemäß der Gesetzgebung der Russischen Föderation können Strafverfolgungsbehörden Zugriff auf die personenbezogenen Daten eines Teilnehmers und dessen private Nachrichten erhalten.</li>
+</ol>

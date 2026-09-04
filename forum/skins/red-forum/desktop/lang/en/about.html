@@ -1,0 +1,311 @@
+<h1 style="margin-top: 0px; text-align: center">About simpleCommunicator forum</h1>
+
+<h2>License</h2>
+
+<p>This program is free software. You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+
+<h2>Download and Installation</h2>
+
+<p>Version: <?php echo(VERSION); ?><br>
+Release: <?php echo(date(text("DateFormat"), xstrtotime(RELEASE_DATE))); ?></p>
+
+<p><a href="https://github.com/avkoudinov/simpleCommunicator">simpleCommunicator forum on GitHub</a></p>
+
+<ol>
+<li>Unpack the archive and copy the files to the target directory of the web server.</li>
+<li>Open the URL in your browser. Installation will start automatically.</li>
+<li>Follow the installation steps.</li>
+<li>Read the "Help" section after installation.</li>
+</ol>
+
+<h2>Technical Information and System Requirements</h2>
+
+<p>The forum can be installed on almost any hosting. The forum software has minimal requirements for server configuration and application software settings.</p>
+
+<ul>
+<li>Runs on PHP version 8.x or higher.</li>
+<li>Supports database management systems:
+    <ul>
+    <li>MySQL 8.0.x or higher,</li>
+    <li>Microsoft SQL Server 2005 or higher.</li>
+    </ul>
+</li>
+<li>Works in browsers:
+    <ul>
+    <li>Edge;</li>
+    <li>Firefox;</li>
+    <li>Safari;</li>
+    <li>Chrome;</li>
+    <li>Opera.</li>
+    </ul>
+</li>
+</ul>
+
+<h2>Advantages</h2>
+
+<p>The forum is simple to implement and easy to use.</p>
+
+<p>Skins, time zones, and different interface languages are supported, including for guests.</p>
+
+<p>Skins adapt to the device — desktop or mobile device.</p>
+
+<p>The forum interface is intuitive and does not require studying documentation.</p>
+
+<p>The forum functionality is not overloaded, yet it supports all the main features expected by users from a forum.</p>
+
+<p>AJAX background data transmission technology is used for many actions, ensuring high speed and avoiding unnecessary page refreshes.</p>
+
+<p>Key points of the user-friendly interface are:
+
+<ul>
+<li>Accessibility and visibility of options for performing necessary commands depending on the context.</li>
+<li>Speed of command execution.</li>
+<li>Use of "light" elements and functions — lightboxes, asynchronous sending.</li>
+<li>Support for standard intuitive commands and hotkeys — Ctrl + Enter, Ctrl + ←, Ctrl + →, Escape, Tab, etc.</li>
+<li>"Smart" focusing, eliminating the need for excessive movements and mouse clicks.</li>
+<li>"Remembering" and automatic restoration of locations, eliminating the need for repeated navigation to the required place.</li>
+<li>Convenient transition mechanism after sending a message — on previous pages, a transition is made to the next message after the one being replied to, allowing the user to read, send messages, and continue reading. If a message is sent on the last page of a topic, new messages are loaded if they exist.</li>
+<li>When moving between topic pages, an unsent message is not lost but migrates to the new page, where you can continue quoting and replying to messages.</li>
+<li>Auto-rotation of images based on EXIF information and compression to a web-optimized size.</li>
+</ul>
+
+<p>A user may not always clearly realize and articulate their criteria and wishes, but it is the above-mentioned nuances that create a positive sense of comfort and convenience when working with the application.</p>
+
+<p>Interface languages supported are Russian, English, German, and Ukrainian. It is easy to add translations for other languages.</p>
+
+<p>The forum features high performance because the number of messages and topics is set during their creation, and there is no need to use resource-intensive aggregation functions when displaying lists of topics and messages. Recalculation of the quantity is only necessary in case of non-standard operations, such as deleting or moving topics and messages.</p>
+
+<p>Load balancing is supported by splitting the database into a master scheme for writing and slave1...slaveN for reading and searching.</p>
+
+<h2>Key Features</h2>
+
+<ul>
+<li>Support for likes and dislikes.</li>
+<li>Private messages and private group topics with moderation.</li>
+<li>Log of personal events for users.</li>
+<li>Log of moderator actions.</li>
+<li>Statistics for users and forums.</li>
+<li>Display of users, guests, and bots who have read a topic, subforum, or are simply on the site. Clicking on a bot's name shows its profile and the last topics it visited.</li>
+<li>Grouping topics with new messages — by subforum, own, with own participation, topics from the favorites list.</li>
+<li>Digest of new messages.</li>
+<li>Ability to display found messages as a common virtual topic or show only messages meeting the search criteria for each topic.</li>
+</ul>
+
+<h2>Flexible General Settings</h2>
+
+<ul>
+<li>Enable/disable requirement for account approval by an administrator.</li>
+<li>Enable/disable display of online status of participants and the topics they visited.</li>
+<li>Enable/disable rating; you can enable only likes, or make dislikes anonymous.</li>
+<li>Configure various restrictions — on attachment size, number of topics per day, number of messages per minute, etc.</li>
+<li>Protection of regular guests' nicknames from theft through registration.</li>
+<li>Protection against registration of fake and spam accounts via temporary email addresses.</li>
+<li>Moderator log maintenance. Ability to configure the visibility level of the moderator log — only for administrators, only for moderators, for everyone, or for everyone but without showing moderators' names.</li>
+<li>Customizable list of emojis and character combinations for inserting them. Ability to categorize emojis.</li>
+<li>Enable holiday or mourning mode. An indicator image appears; clicking it shows either holiday pictures or a photograph of a deceased participant.</li>
+<li>Ability to put the forum into maintenance mode with an estimated completion time, as well as notify visitors in advance of planned maintenance with estimated start and end times.</li>
+</ul>
+
+<h2>Flexible Settings for Individual Forums</h2>
+
+<ul>
+<li>Support for closed forums, with access only for specific participants or only for registered participants.</li>
+<li>Support for closed forums protected by a password.</li>
+<li>Ability to link the right to post messages on the forum to the age of the nickname (meaning the age of the nickname since registration on the forum) and the number of messages.</li>
+<li>Ability to ban guests on the forum.</li>
+<li>Ability to enable limited mode for guests, where only guests with a token age of more than N hours or those whose IP address is on the whitelist can post.</li>
+<li>Ability to prohibit or allow authors to edit their own messages.</li>
+<li>Ability to mark a forum as a forum with stricter special rules so that participants are given a warning when writing messages.</li>
+</ul>
+
+<h2>Functional Capabilities for Administrators</h2>
+
+<ul>
+<li>Assignment of forum moderators.</li>
+<li>Ability to manually activate or approve the account of a registered user.</li>
+<li>Ability to delete a registered user's account.</li>
+<li>Ability to make a user privileged, exempting them from restrictions.</li>
+<li>Ability to make a user a privileged topic moderator, exempting them from topic moderation restrictions.</li>
+<li>Ability to prohibit a user from sending private messages.</li>
+<li>Ability to prohibit a forum moderator from performing global moderation operations — global ban, hiding participant profiles, prohibiting rating.</li>
+<li>Ability to prohibit a forum moderator from seeing IP addresses and fingerprints of participants.</li>
+<li>Ability to delete a guest's token (read marker) if they waited out the time and logged out to continue violations while limited mode for guests is enabled.</li>
+<li>Ability to manage a whitelist of IP addresses exempt from limited mode for guests.</li>
+<li>Ability to manage the list of TOR browser IP addresses — block all or block/allow individual ones for writing or reading.</li>
+<li>Banning a participant due to death or loss of nickname — in this case, logging into the account is prohibited, not just posting messages from it.</li>
+</ul>
+
+<h2>Functional Capabilities for Forum Moderators</h2>
+
+<ul>
+<li>Quick selection of topics for closing, deleting, merging, and moving to another forum.</li>
+<li>Quick selection of messages for deletion and moving to another or a new topic.</li>
+<li>Pinning topics and messages to the header, closing and opening topics.</li>
+<li>Ability to delete all messages of a selected user or guest with one click in a topic, forum, all forums, or the last N in a forum.</li>
+<li>Ability to delete a guest's avatar.</li>
+<li>Ability to view and restore deleted messages, attachments, topics, and forums.</li>
+<li>Effective flood removal using a special tool that allows deleting messages on the forum for a certain period for all guests or participants by account age.</li>
+<li>Temporary bans with automatic unban.</li>
+<li>Ability to ban users only in a specific forum or a specific topic.</li>
+<li>Ability to assign a user as a moderator of a specific topic in a controlled forum.</li>
+<li>Ability to grant and revoke access to a controlled closed forum for a user.</li>
+<li>Ability to hide a user profile (if global moderation operations are permitted).</li>
+<li>Ability to prohibit a user from rating (if global moderation operations are permitted).</li>
+<li>Ability to batch delete a user's ratings in a controlled forum.</li>
+<li>Blocking IP addresses and fingerprints, including temporary blocking with automatic unban (if permission to see IP addresses is granted).</li>
+</ul>
+
+<h2>Functional Capabilities for Topic Moderators</h2>
+
+<ul>
+<li>Quick selection of messages for deletion and moving to another or a new topic.</li>
+<li>Pinning messages to the header.</li>
+<li>Ability to delete all messages of a selected user or guest with one click in a topic.</li>
+<li>Ability to view and restore deleted messages and attachments.</li>
+<li>Ability to ban users only in the topic.</li>
+<li>Ability to prohibit or allow guests in the topic.</li>
+</ul>
+
+<h2>Functional Capabilities for Users</h2>
+
+<ul>
+<li>Favorite topics and messages.</li>
+<li>Ability to create own tags and mark messages with them to effectively find these messages later through tag search.</li>
+<li>Pinning topics only for oneself.</li>
+<li>Editing own messages within N minutes — for both registered participants and anonymous participants within the current session.</li>
+<li>Ability to re-vote within N minutes.</li>
+<li>Gallery of attachments for reuse. Ability to mark attachments as favorites to always keep them at the top for quick selection.</li>
+<li>User ignore list, ignoring messages from anonymous users (all or individual, black or white list), and ignoring uninteresting topics (notifications about new messages are not sent for them). When participants are ignored, even their quotes in messages of other non-ignored users are hidden. Two ignore modes — strong and weak. In strong ignore, messages and topics are completely excluded from the feed; in weak ignore, message text is simply hidden but can be shown.</li>
+<li>Preferred forums (to display topics with new messages only from these forums).</li>
+<li>Profile topics with separation of messages into thematic ones and comments. Ability to show only thematic messages.</li>
+<li>Ability to mark messages as 18+ if they contain images or video clips of a sexual and/or shocking nature. In such messages, images are dimmed and video clips are collapsed, allowing the reader to decide whether to show the image or not.</li>
+
+<li>Broad subscription options:
+    <ul>
+    <li>Subscription to new messages in a topic.</li>
+    <li>Subscription to quotes and replies to your own posts.</li>
+    <li>Subscription to quotes and replies to any other post of interest.</li>
+    <li>Subscription to new messages from a user or guest.</li>
+    <li>Subscription to mentions of words considering morphology.</li>
+    <li>Subscription to notifications about new registered users.</li>
+    </ul>
+</li>
+
+<li>Support for private messages. Private messages are implemented as private topics in a special forum. Participants in a private topic can communicate like in a regular forum topic and can leave the private topic, including the author.</li>
+<li>Creation of private topics with own moderation. In such topics, the author can add and remove participants, delete and edit messages. Invited participants can leave such a topic, while the author cannot. However, they can delete it (and restore it if necessary). Upon deletion, access to the topic for invited participants disappears.</li>
+<li>Support for personal mentions of a participant to draw their attention to your message.</li>
+<li>Creation of poll topics. Open polls (where you can see how each participant voted) and polls with delayed publication (where results are visible only after publication) are supported.</li>
+<li>Creation of topics with delayed publication. Until such a topic is published, it is visible only to the author. They can prepare it, edit and delete messages, and then publish it. A useful feature for trip report topics, etc.</li>
+<li>Display of topics with new messages in a virtual forum "Topics with new messages". Direct transition to the first new message in a topic. Detailed display of the number of new messages in topics and the number of topics with new messages in forums. Color differentiation of topics: previously visited topics with new messages and never-before-visited topics with new messages.</li>
+<li>Digest of new messages — a virtual topic made of new messages, max 5 from each topic with new messages — a convenient alternative to the classic approach of reading new messages by entering each topic.</li>
+<li>Ability to view your own deleted messages and attachments.</li>
+<li>Notification and display of events for users — about likes received, deleted or moved messages, warnings and blocks by a moderator, etc. Event filtering. Marker for processed and unprocessed events.</li>
+<li>Automatic reduction of image width and height to screen size and zoom-in function. Image processing before upload — attempting to compress to acceptable sizes and rotate to the correct angle if incorrect.</li>
+<li>Protection of users from overly long messages. A long message is automatically trimmed, and an expand button appears.</li>
+<li>Conversion of audio files to mp3 format supported by built-in browser audio players.</li>
+<li>Enabling the built-in browser video player for mp4 video files.</li>
+<li>Insertion of external videos as static images with the ability to play the video either directly on the page or go to the video hosting page. This solution eliminates page loading delays due to inserted active objects without compromising functionality.</li>
+<li>Insertion of animated gif and webp images without immediate loading. The first frame is extracted from the animated image, and a start button is drawn on it. Loading and animation begin only when clicked. This solution eliminates loading delays and browser hangs due to inserted massive animated images.</li>
+</ul>
+
+<h2>Flexible Settings for Users</h2>
+
+<ul>
+<li>Ability to upload an avatar and a photo.</li>
+<li>Ability to disable showing images in messages. In this case, just an icon is shown; clicking it opens the image in full view.</li>
+<li>Ability to upload own emojis and insert them into messages alongside system emojis.</li>
+<li>Ability to disable expanding video clips. In this case, only the title and start button are shown.</li>
+<li>Ability to disable email notifications.</li>
+<li>Ability to disable events.</li>
+<li>Ability to disable private messages.</li>
+<li>Ability to disable personal mentions.</li>
+<li>Ability to disable operation confirmations.</li>
+<li>Ability to disable 18+ content dimming by default.</li>
+<li>Selection of interface language, skin, and time zone.</li>
+<li>Ability to upload own CSS to adapt the selected skin.</li>
+<li>Ability to block your profile for a selected time.</li>
+<li>Ability to disable showing individual information of all participants or specific participants in messages — avatar, signature, status message, "location" field.</li>
+</ul>
+
+<h2>Flexible Settings for Guests</h2>
+
+<p>Broad functionality for guests, most options for registered users are supported.</p>
+
+<ul>
+<li>Ability to upload an avatar.</li>
+<li>Ability to disable showing images in messages. In this case, just an icon is shown; clicking it opens the image in full view.</li>
+<li>Ability to disable expanding video clips. In this case, only the title and start button are shown.</li>
+<li>Ability to disable operation confirmations.</li>
+<li>Ability to disable 18+ content dimming by default.</li>
+<li>Selection of interface language, skin, and time zone.</li>
+<li>Ability to upload own CSS to adapt the selected skin.</li>
+<li>Ability to disable showing individual information of all participants or specific participants in messages — avatar, signature, status message, "location" field.</li>
+<li>Export/import of settings for synchronization between different computers and devices.</li>
+<li>Favorite topics and messages.</li>
+<li>Pinning topics only for oneself.</li>
+</ul>
+
+
+<h2>Statistics for Users</h2>
+
+<ul>
+<li>Display of various statistical information in the user profile — registration date, last activity, number of messages, likes, dislikes, average number of messages and views per day based on the week, time online per day, and total time online.</li>
+<li>Contextual options for finding a user's latest messages, topics, attachments, as well as topics moderated and ignored by them.</li>
+<li>Contextual options for viewing the moderator log and moderating the user.</li>
+<li>Display of recently read topics.</li>
+<li>User activity (views and messages) for a specific period.</li>
+<li>User activity (views and messages) by hour according to the time zone of either the viewed user or the viewing user.</li>
+<li>Information about ignoring and profile hiding — who ignores the user, whom the user ignores, who hides their profile, whose profile they hide.</li>
+<li>Viewing rating statistics — who liked/disliked the author, whom the author liked/disliked, user messages with likes/dislikes from other users, users' messages with likes/dislikes from this user, this user's messages with likes/dislikes from other users. Clicking on ratings triggers a selection of messages with those ratings.</li>
+<li>Analytics for moderators by IP addresses to identify clones. Displaying a list of IP addresses used by this participant to post messages. Showing participants who posted messages under a given IP address. Showing participants who posted messages under the same IP addresses as this participant.</li>
+</ul>
+
+<h2>Statistics for Guests</h2>
+
+<ul>
+<li>Last activity.</li>
+<li>Contextual options for finding a user's latest messages, topics, attachments, as well as topics moderated and ignored by them.</li>
+<li>Contextual options for viewing the moderator log and moderating the user.</li>
+<li>Display of recently read topics.</li>
+<li>Analytics for moderators by IP addresses to identify clones. Displaying a list of IP addresses used by this participant to post messages. Showing participants who posted messages under a given IP address. Showing participants who posted messages under the same IP addresses as this participant.</li>
+</ul>
+
+<h2>Statistics for Bots</h2>
+
+<ul>
+<li>Last activity.</li>
+<li>Display of recently read topics.</li>
+</ul>
+
+<h2>Statistics for Forums</h2>
+
+<p>Display of statistical information for a selected period, the last 24 hours, and the previous 24 hours:</p>
+
+<ul>
+<li>New registered users.</li>
+<li>Number of users who visited the forum (were online).</li>
+<li>Number of messages posted.</li>
+<li>Number of topics created.</li>
+<li>Number of views.</li>
+<li>Average number of messages per day.</li>
+<li>Number of ratings given. Clicking on ratings triggers a selection of messages with those ratings.</li>
+<li>Activity (views and messages).</li>
+<li>Geography of visits and current activity.</li>
+<li>Statistics on browsers, operating systems, and bots. Clicking on a bot's name shows its profile and the last topics it visited.</li>
+</ul>
+
+<h2>Powerful and Flexible Search</h2>
+
+<ul>
+<li>User search. Sorting users by rating, number of messages, and activity.</li>
+<li>Search for messages with attachments, images, audio and video, links, code examples, 18+ content.</li>
+<li>Search in favorite topics and messages.</li>
+<li>Search in private messages.</li>
+<li>Search in a specific topic.</li>
+<li>Ability to display only messages meeting the search criteria within a multi-page topic — only messages from the topic author, only own messages in the topic, only images, only videos, only thematic ones.</li>
+<li>Ability to display found messages as a common virtual topic or show only messages meeting the search criteria for each topic.</li>
+<li>Search by tags. A user can create tags and mark messages with them.</li>
+<li>Search in deleted topics and deleted messages (for moderators).</li>
+</ul>

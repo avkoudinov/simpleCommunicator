@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://red-forum.ru/sitemap.xml

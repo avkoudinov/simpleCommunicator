@@ -1,0 +1,47 @@
+<!-- begin: 152 Cookie Consent Banner script -->
+<script id="cookie-consent-logic">
+(function() {
+    function getCookie(name) {
+        const cookies = document.cookie ? document.cookie.split(';') : [];
+        for (let i = cookies.length - 1; i >= 0; i--) {
+            const cookie = cookies[i];
+            const separatorIndex = cookie.indexOf('=');
+            if (separatorIndex === -1) continue;
+            const cookieName = decodeURIComponent(cookie.slice(0, separatorIndex).trim());
+            if (cookieName === name) {
+                const cookieValue = cookie.slice(separatorIndex + 1);
+                try { return decodeURIComponent(cookieValue); } catch (e) { return cookieValue; }
+            }
+        }
+        return null;
+    }
+
+    function loadQConsentStatistics() {
+        // Вставляем и выполняем скрипты аналитики
+        const scriptsContainer = document.createElement('div');
+        const scriptsString = "<!-- Yandex.Metrika custom parameters -->\r\n<script>\r\n   var customYaParams = {ipaddress: \"<?php echo $_SERVER['REMOTE_ADDR']; ?>\"};\r\n<\/script>\r\n<!-- \/Yandex.Metrika custom parameters -->\r\n<!-- Yandex.Metrika counter -->\r\n<script>\r\n   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};\r\n   m[i].l=1*new Date();\r\n   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}\r\n   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})\r\n   (window, document, \"script\", \"https:\/\/mc.yandex.ru\/metrika\/tag.js\", \"ym\");\r\n\r\n   ym(<?php echo preg_replace('/\n$/', '', (file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/YM.counter'))); ?>, \"init\", {\r\n        clickmap:true,\r\n        trackLinks:true,\r\n        accurateTrackBounce:true,\r\n        webvisor:true,\r\n        params:window.customYaParams\r\n   });\r\n<\/script>\r\n<noscript><div><img src=\"https:\/\/mc.yandex.ru\/watch\/<?php echo preg_replace('/\n$/', '', (file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/YM.counter'))); ?>\" style=\"position:absolute; left:-9999px;\" alt=\"\"><\/div><\/noscript>\r\n<!-- End Yandex.Metrika counter -->";
+
+        scriptsContainer.innerHTML = scriptsString;
+
+        Array.from(scriptsContainer.querySelectorAll('script')).forEach(oldScript => {
+            const newScript = document.createElement('script');
+            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+            document.body.appendChild(newScript);
+        });
+    }
+
+    function loadQConsentMarketing() {
+        // Вставляем и выполняем скрипты маркетинга
+    }
+
+    if (getCookie("q_consent_statistics") == 1) {
+        loadQConsentStatistics();
+    }
+
+    if (getCookie("q_consent_marketing") == 1) {
+        loadQConsentMarketing();
+    }
+})();
+</script>
+<!-- end: 152 Cookie Consent Banner script -->

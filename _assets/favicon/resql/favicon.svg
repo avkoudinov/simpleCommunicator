@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="120"
+   height="120"
+   viewBox="0 0 120 120"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="matrix(1.2,0,0,1.2,-1.2054608e-6,9.0590378)">
+    <g
+       style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="matrix(0.23291216,-0.23291216,0.23291216,0.23291216,121.18496,-84.225229)"
+       id="g3875-7">
+      <path
+         style="fill:#5182b5;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -475.32813,18.877805 c -54.93714,0 -99.46875,44.562861 -99.46875,99.500005 0,54.93714 44.53161,99.46875 99.46875,99.46875 18.77905,0 36.32763,-5.20576 51.31251,-14.25 -28.85264,-17.41423 -48.125,-49.06065 -48.125,-85.21875 0,-36.158104 19.27236,-67.835774 48.125,-85.250004 -14.98488,-9.044241 -32.53346,-14.250001 -51.31251,-14.250001 z"
+         id="path2985-4-0-1-6" />
+      <path
+         style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -424.01562,33.127806 c -28.85264,17.41423 -48.125,49.06065 -48.125,85.218754 0,36.1581 19.27236,67.83577 48.125,85.25 28.85264,-17.41423 48.15625,-49.0919 48.15625,-85.25 0,-36.158104 -19.30361,-67.804524 -48.15625,-85.218754 z"
+         id="path2985-1-1" />
+      <path
+         style="fill:#5182b5;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m -372.67187,18.877805 c -18.77904,0 -36.35887,5.20576 -51.34375,14.250001 28.85264,17.41423 48.15625,49.0919 48.15625,85.250004 0,36.1581 -19.30361,67.80452 -48.15625,85.21875 14.98488,9.04424 32.56471,14.25 51.34375,14.25 54.93715,0 99.46875,-44.53161 99.46875,-99.46875 0,-54.937144 -44.5316,-99.500005 -99.46875,-99.500005 z"
+         id="path2985-8-3-3" />
+    </g>
+  </g>
+</svg>

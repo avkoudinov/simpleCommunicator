@@ -1,0 +1,310 @@
+<h1 style="margin-top: 0px; text-align: center">Über das Forum simpleCommunicator</h1>
+
+<h2>Lizenz</h2>
+
+<p>Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren; entweder gemäß Version 3 der Lizenz oder (nach Ihrem Ermessen) jeder späteren Version.</p>
+
+<p>Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, dass es von Nutzen sein wird, aber OHNE JEDE GEWÄHRLEISTUNG, sogar ohne die implizite Gewährleistung der MARKTREIFE oder der EIGNUNG FÜR EINEN BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License.</p>
+
+<h2>Download und Installation</h2>
+
+<p>Version: <?php echo(VERSION); ?><br>
+Release: <?php echo(date(text("DateFormat"), xstrtotime(RELEASE_DATE))); ?></p>
+
+<p><a href="https://github.com/avkoudinov/simpleCommunicator">simpleCommunicator Forum auf GitHub</a></p>
+
+<ol>
+<li>Entpacken Sie das Archiv und kopieren Sie die Dateien in das Zielverzeichnis des Webservers.</li>
+<li>Öffnen Sie die URL im Browser. Die Installation startet automatisch.</li>
+<li>Folgen Sie den Installationsschritten.</li>
+<li>Lesen Sie nach der Installation den Bereich „Hilfe“.</li>
+</ol>
+
+<h2>Technische Informationen und Systemanforderungen</h2>
+
+<p>Das Forum kann auf fast jedem Hosting installiert werden. Die Forensoftware stellt minimale Anforderungen an die Serverkonfiguration und die Einstellungen der Anwendungssoftware.</p>
+
+<ul>
+<li>Läuft auf PHP Version 8.x oder höher.</li>
+<li>Unterstützt Datenbank-Management-Systeme:
+    <ul>
+    <li>MySQL 8.0.x oder höher,</li>
+    <li>Microsoft SQL Server 2005 oder höher.</li>
+    </ul>
+</li>
+<li>Funktioniert in den Browsern:
+    <ul>
+    <li>Edge;</li>
+    <li>Firefox;</li>
+    <li>Safari;</li>
+    <li>Chrome;</li>
+    <li>Opera.</li>
+    </ul>
+</li>
+</ul>
+
+<h2>Vorteile</h2>
+
+<p>Das Forum ist einfach zu implementieren und komfortabel in der Anwendung.</p>
+
+<p>Skins, Zeitzonen und verschiedene Interfacesprachen werden unterstützt, auch für Gäste.</p>
+
+<p>Skins passen sich dem Gerät an – Desktop oder Mobilgerät.</p>
+
+<p>Das Interface des Forums ist intuitiv verständlich und erfordert kein Studium der Dokumentation.</p>
+
+<p>Der Funktionsumfang des Forums ist nicht überladen, unterstützt jedoch alle wesentlichen Funktionen, die Nutzer von einem Forum erwarten.</p>
+
+<p>Für viele Aktionen wird die AJAX-Technologie zur Datenübertragung im Hintergrundprozess verwendet, was eine hohe Geschwindigkeit gewährleistet und unnötige Seitenaktualisierungen vermeidet.</p>
+
+<p>Kernpunkte des benutzerfreundlichen Interfaces sind:
+
+<ul>
+<li>Verfügbarkeit und Übersichtlichkeit der Optionen zur Ausführung notwendiger Befehle je nach Kontext.</li>
+<li>Schnelle Ausführung von Befehlen.</li>
+<li>Verwendung „leichter“ Elemente und Funktionen – Lightboxes, asynchrones Senden.</li>
+<li>Unterstützung von Standard-Intuitivbefehlen und Hotkeys – Ctrl + Enter, Ctrl + ←, Ctrl + →, Escape, Tab usw.</li>
+<li>„Intelligente“ Fokussierung, die überflüssige Bewegungen und Mausklicks erspart.</li>
+<li>„Merken“ und automatisches Wiederherstellen von Positionen, was eine erneute Navigation zur gewünschten Stelle überflüssig macht.</li>
+<li>Komfortabler Mechanismus für den Übergang nach dem Absenden einer Nachricht – auf vorherigen Seiten erfolgt der Übergang zur Nachricht direkt nach derjenigen, auf die geantwortet wurde. So kann man lesen, antworten und weiterlesen. Wenn eine Nachricht auf der letzten Seite eines Themas gesendet wird, werden neue Nachrichten nachgeladen, sofern vorhanden.</li>
+<li>Beim Wechsel zwischen Themenseiten geht eine nicht gesendete Nachricht nicht verloren, sondern „wandert“ auf die neue Seite mit, wo man das Zitieren und Antworten fortsetzen kann.</li>
+<li>Automatisches Drehen von Bildern basierend auf EXIF-Informationen und Komprimierung auf eine weboptimierte Größe.</li>
+</ul>
+
+<p>Ein Nutzer kann seine Kriterien und Wünsche nicht immer klar artikulieren, aber genau die oben genannten Nuancen erzeugen ein positives Gefühl von Komfort und Benutzerfreundlichkeit bei der Arbeit mit der Anwendung.</p>
+
+<p>Unterstützte Interfacesprachen sind Russisch, Englisch, Deutsch und Ukrainisch. Übersetzungen für weitere Sprachen lassen sich leicht hinzufügen.</p>
+
+<p>Das Forum zeichnet sich durch hohe Performance aus, da die Anzahl der Nachrichten und Themen bereits bei deren Erstellung festgelegt wird. Beim Anzeigen von Themenlisten und Nachrichten müssen somit keine ressourcenintensiven Aggregationsfunktionen verwendet werden. Eine Neuberechnung der Anzahl ist nur bei Standardoperationen wie dem Löschen oder Verschieben von Themen und Nachrichten erforderlich.</p>
+
+<p>Lastverteilung wird durch die Aufteilung der Datenbank in ein Architektur-Schema (Master für Schreibvorgänge und Slave1...SlaveN für Lese- und Suchvorgänge) unterstützt.</p>
+
+<h2>Hauptfunktionen</h2>
+
+<ul>
+<li>Unterstützung von Likes und Dislikes.</li>
+<li>Private Nachrichten und private Gruppenthemen mit Moderation.</li>
+<li>Protokoll persönlicher Ereignisse für Nutzer.</li>
+<li>Protokoll der Moderationsaktionen.</li>
+<li>Statistiken zu Nutzern und Foren.</li>
+<li>Anzeige von Nutzern, Gästen und Bots, die ein Thema oder Unterforum gelesen haben oder sich gerade auf der Website befinden. Ein Klick auf den Namen eines Bots zeigt dessen Profil und die zuletzt besuchten Themen an.</li>
+<li>Gruppierung von Themen mit neuen Nachrichten – nach Unterforum, eigene Themen, Themen mit eigener Beteiligung, Themen aus der Favoritenliste.</li>
+<li>Digest neuer Nachrichten.</li>
+<li>Möglichkeit, gefundene Nachrichten als gemeinsames virtuelles Thema anzuzeigen oder für jedes Thema nur die Nachrichten einzublenden, die den Suchkriterien entsprechen.</li>
+</ul>
+
+<h2>Flexible allgemeine Einstellungen</h2>
+
+<ul>
+<li>Aktivierung/Deaktivierung der Genehmigungspflicht für Konten durch den Administrator.</li>
+<li>Aktivierung/Deaktivierung der Anzeige des Online-Status von Teilnehmern und der von ihnen besuchten Themen.</li>
+<li>Aktivierung/Deaktivierung von Bewertungen; es können nur Likes aktiviert werden, oder Dislikes können anonymisiert werden.</li>
+<li>Konfiguration verschiedener Einschränkungen – für die Größe von Anhängen, die Anzahl der Themen pro Tag, die Anzahl der Nachrichten pro Minute usw.</li>
+<li>Schutz von Gast-Nicknames von Stammgästen vor Diebstahl durch Registrierung.</li>
+<li>Schutz vor der Registrierung von Fake- und Spam-Accounts über temporäre E-Mail-Adressen.</li>
+<li>Führen eines Moderationsprotokolls. Sichtbarkeit einstellbar: nur für Administratoren, nur für Moderatoren, für alle, für alle (ohne Namen der Moderatoren).</li>
+<li>Anpassbare Liste von Emojis und Tastenkombinationen zu deren Einfügung. Möglichkeit zur Kategorisierung von Emojis.</li>
+<li>Aktivierung eines Feiertags- oder Trauermodus. Es erscheint ein Indikator-Bild, bei dessen Klick entweder festliche Bilder oder das Foto eines verstorbenen Teilnehmers angezeigt werden.</li>
+<li>Möglichkeit, das Forum in den Wartungsmodus zu versetzen (mit Angabe der geplanten Endzeit) sowie Besucher vorab über geplante Wartungsarbeiten zu informieren.</li>
+</ul>
+
+<h2>Flexible Einstellungen für einzelne Foren</h2>
+
+<ul>
+<li>Unterstützung geschlossener Foren mit Zugriff nur für bestimmte Teilnehmer oder nur für registrierte Nutzer.</li>
+<li>Unterstützung passwortgeschützter geschlossener Foren.</li>
+<li>Möglichkeit, das Schreibrecht im Forum an das Alter des Nicknames (seit Registrierung) und die Anzahl der Nachrichten zu binden.</li>
+<li>Möglichkeit, Gäste im Forum zu verbieten.</li>
+<li>Möglichkeit, einen eingeschränkten Modus für Gäste zu aktivieren: Es können nur Gäste schreiben, deren Token-Alter mehr als N Stunden beträgt oder deren IP-Adresse auf der Whitelist steht.</li>
+<li>Möglichkeit, Autoren das Editieren eigener Nachrichten zu erlauben oder zu verbieten.</li>
+<li>Möglichkeit, ein Forum als Forum mit strengeren Sonderregeln zu markieren, sodass Teilnehmer beim Verfassen von Nachrichten gewarnt werden.</li>
+</ul>
+
+<h2>Funktionen für Administratoren</h2>
+
+<ul>
+<li>Zuweisung von Forenmoderatoren.</li>
+<li>Möglichkeit, Konten registrierter Nutzer manuell zu aktivieren oder zu genehmigen.</li>
+<li>Möglichkeit, Konten registrierter Nutzer zu löschen.</li>
+<li>Möglichkeit, Nutzer zu privilegieren, sodass für sie keine Einschränkungen gelten.</li>
+<li>Möglichkeit, Nutzer als privilegierte Themenmoderatoren festzulegen.</li>
+<li>Möglichkeit, Nutzern das Senden privater Nachrichten zu untersagen.</li>
+<li>Möglichkeit, Forenmoderatoren globale Moderationsoperationen zu verbieten (globaler Bann, Verbergen von Profilen, Verbot von Bewertungen).</li>
+<li>Möglichkeit, Forenmoderatoren die Einsicht in IP-Adressen und Fingerprints zu untersagen.</li>
+<li>Möglichkeit, den Token (Read-Marker) eines Gastes zu löschen, um Missbrauch im eingeschränkten Gästemodus zu verhindern.</li>
+<li>Verwaltung der Whitelist für IP-Adressen.</li>
+<li>Verwaltung der TOR-Browser-IP-Adressen – alle blockieren oder einzelne zum Lesen/Schreiben zulassen/sperren.</li>
+<li>Sperrung eines Teilnehmers aufgrund von Tod oder Verlust des Nicknames – in diesem Fall wird der Login ins Konto gesperrt, nicht nur das Schreiben.</li>
+</ul>
+
+<h2>Funktionen für Forenmoderatoren</h2>
+
+<ul>
+<li>Schnellauswahl von Themen zum Schließen, Löschen, Zusammenführen und Verschieben.</li>
+<li>Schnellauswahl von Nachrichten zum Löschen oder Verschieben in ein anderes Thema.</li>
+<li>Anheften von Themen und Nachrichten (Header), Schließen und Öffnen von Themen.</li>
+<li>Löschen aller Nachrichten eines Nutzers oder Gastes mit einem Klick (im Thema, Forum oder global).</li>
+<li>Möglichkeit, den Avatar eines Gastes zu löschen.</li>
+<li>Ansehen und Wiederherstellen gelöschter Nachrichten, Anhänge, Themen und Foren.</li>
+<li>Effektive Flood-Bereinigung durch ein Tool, das Nachrichten in einem bestimmten Zeitraum für alle Gäste oder Nutzer (nach Account-Alter) löscht.</li>
+<li>Temporäre Banns mit automatischer Entsperrung.</li>
+<li>Sperren von Nutzern nur in einem bestimmten Forum oder Thema.</li>
+<li>Zuweisung eines Nutzers als Moderator für ein bestimmtes Thema.</li>
+<li>Zugriff auf ein geschlossenes Forum gewähren oder entziehen.</li>
+<li>Verbergen des Nutzerprofils (bei entsprechender Berechtigung).</li>
+<li>Verbot für Nutzer, Bewertungen abzugeben (bei entsprechender Berechtigung).</li>
+<li>Batch-Löschung von Bewertungen eines Nutzers im kontrollierten Forum.</li>
+<li>Blockieren von IP-Adressen und Fingerprints, auch temporär mit automatischem Entsperren.</li>
+</ul>
+
+<h2>Funktionen für Themenmoderatoren</h2>
+
+<ul>
+<li>Schnellauswahl von Nachrichten zum Löschen oder Verschieben.</li>
+<li>Anheften von Nachrichten im Header.</li>
+<li>Löschen aller Nachrichten eines ausgewählten Nutzers/Gastes im Thema mit einem Klick.</li>
+<li>Ansehen und Wiederherstellen gelöschter Nachrichten und Anhänge.</li>
+<li>Sperren von Nutzern nur innerhalb des Themas.</li>
+<li>Gäste im Thema erlauben oder verbieten.</li>
+</ul>
+
+<h2>Funktionen für Nutzer</h2>
+
+<ul>
+<li>Favorisierte Themen und Nachrichten.</li>
+<li>Möglichkeit, eigene Tags zu erstellen und Nachrichten damit zu markieren, um sie später über die Tag-Suche zu finden.</li>
+<li>Anheften von Themen nur für sich selbst.</li>
+<li>Editieren eigener Nachrichten innerhalb von N Minuten – sowohl für registrierte als auch für anonyme Teilnehmer innerhalb der Sitzung.</li>
+<li>Möglichkeit, eine Stimme bei Umfragen innerhalb von N Minuten zu ändern.</li>
+<li>Galerie für Anhänge zur Wiederverwendung; Favoriten-Markierung für schnellen Zugriff.</li>
+<li>Ignore-Liste für Nutzer, Ignorieren anonymer Nutzer (Blacklist/Whitelist) und Ignorieren uninteressanter Themen. Bei Ignorierung werden sogar Zitate des Nutzers in Beiträgen anderer versteckt. Zwei Modi: „stark“ (Beiträge komplett ausgeblendet) und „schwach“ (Text versteckt, aber einblendbar).</li>
+<li>Bevorzugte Foren (um nur Themen mit neuen Nachrichten aus diesen Foren zu sehen).</li>
+<li>Profil-Themen mit Trennung in fachliche Beiträge und Kommentare.</li>
+<li>18+ Markierung für Nachrichten mit sexuellen oder schockierenden Inhalten. Bilder werden gedimmt, Videos eingeklappt; der Leser entscheidet über die Anzeige.</li>
+
+<li>Umfangreiche Abonnement-Optionen:
+    <ul>
+    <li>Abo für neue Nachrichten im Thema.</li>
+    <li>Abo für Zitate und Antworten auf eigene Posts.</li>
+    <li>Abo für Zitate und Antworten auf beliebige fremde Posts.</li>
+    <li>Abo für neue Nachrichten eines Nutzers/Gastes.</li>
+    <li>Abo für Wort-Erwähnungen (inkl. Morphologie).</li>
+    <li>Abo für Benachrichtigungen über neue registrierte Nutzer.</li>
+    </ul>
+</li>
+
+<li>Unterstützung privater Nachrichten in Form von privaten Themen. Teilnehmer können das Thema jederzeit verlassen.</li>
+<li>Erstellung privater Themen mit eigener Moderation. Der Autor kann Teilnehmer hinzufügen/entfernen und Beiträge editieren. Eingeladene können gehen, der Autor kann das Thema nur löschen (und wiederherstellen).</li>
+<li>Unterstützung persönlicher Ansprachen (@-Erwähnungen).</li>
+<li>Erstellung von Umfragen (offen oder mit verzögerter Veröffentlichung der Ergebnisse).</li>
+<li>Themen mit verzögerter Veröffentlichung: Das Thema ist nur für den Autor sichtbar, bis er es fertiggestellt und veröffentlicht hat (ideal für Reiseberichte).</li>
+<li>Anzeige von Themen mit neuen Nachrichten im virtuellen Forum. Direkter Sprung zum ersten ungelesenen Beitrag. Farbliche Differenzierung besuchter/unbesuchter Themen.</li>
+<li>Digest neuer Nachrichten – eine Zusammenfassung von max. 5 neuen Beiträgen pro Thema als bequeme Lese-Alternative.</li>
+<li>Möglichkeit, eigene gelöschte Nachrichten und Anhänge einzusehen.</li>
+<li>Benachrichtigung über Ereignisse (Likes, Moderationsaktionen, Warnungen etc.) mit Filterfunktion und Erledigt-Markierung.</li>
+<li>Automatisches Skalieren von Bildern auf Bildschirmgröße und Zoom-Funktion. Bildbearbeitung vor dem Upload (Kompression/Drehung).</li>
+<li>Schutz vor zu langen Nachrichten: Diese werden automatisch gekürzt und können per Klick ausgeklappt werden.</li>
+<li>Konvertierung von Audiodateien in das Browser-kompatible MP3-Format.</li>
+<li>Integrierter Videoplayer für MP4-Dateien.</li>
+<li>Einbetten externer Videos als statische Bilder; das Video wird erst bei Klick geladen/abgespielt (verhindert Ladeverzögerungen).</li>
+<li>Einbetten animierter GIF- und WebP-Bilder ohne sofortiges Laden (Start per Button auf dem ersten Frame).</li>
+</ul>
+
+<h2>Flexible Einstellungen für Nutzer</h2>
+
+<ul>
+<li>Möglichkeit, Avatar und Foto hochzuladen.</li>
+<li>Option, die Anzeige von Bildern in Nachrichten zu deaktivieren (Icon-Vorschau).</li>
+<li>Upload eigener Emojis zur Verwendung neben den System-Emojis.</li>
+<li>Option, das automatische Ausklappen von Videoclips zu deaktivieren.</li>
+<li>Deaktivierung von E-Mail-Benachrichtigungen.</li>
+<li>Deaktivierung von Ereignis-Meldungen.</li>
+<li>Deaktivierung privater Nachrichten.</li>
+<li>Deaktivierung persönlicher Ansprachen.</li>
+<li>Deaktivierung von Bestätigungsdialogen.</li>
+<li>Deaktivierung der standardmäßigen 18+-Dimmung.</li>
+<li>Wahl der Sprache, des Skins und der Zeitzone.</li>
+<li>Möglichkeit, eigenes CSS zur Skin-Anpassung zu hinterlegen.</li>
+<li>Möglichkeit, das eigene Profil für eine bestimmte Zeit zu sperren.</li>
+<li>Option, individuelle Informationen anderer Teilnehmer (Avatar, Signatur, Status, Ort) auszublenden.</li>
+</ul>
+
+<h2>Flexible Einstellungen für Gäste</h2>
+
+<p>Umfangreiche Funktionen für Gäste; die meisten Optionen registrierter Nutzer werden unterstützt.</p>
+
+<ul>
+<li>Möglichkeit, einen Avatar hochzuladen.</li>
+<li>Deaktivierung der Bildanzeige (Icon-Modus).</li>
+<li>Deaktivierung des Ausklappens von Videos.</li>
+<li>Deaktivierung von Bestätigungsdialogen.</li>
+<li>Deaktivierung der 18+-Dimmung.</li>
+<li>Wahl der Sprache, des Skins und der Zeitzone.</li>
+<li>Eigenes CSS zur Skin-Anpassung.</li>
+<li>Ausblenden von Teilnehmer-Infos (Signatur, Avatar etc.).</li>
+<li>Export/Import von Einstellungen zur Synchronisation zwischen Geräten.</li>
+<li>Favorisierte Themen und Nachrichten.</li>
+<li>Anheften von Themen nur für sich selbst.</li>
+</ul>
+
+<h2>Statistiken für Nutzer</h2>
+
+<ul>
+<li>Anzeige statistischer Daten im Profil: Registrierungsdatum, letzte Aktivität, Anzahl der Beiträge, Likes, Dislikes, Durchschnittswerte pro Tag, Online-Zeit.</li>
+<li>Kontextmenü zur Suche nach Beiträgen, Themen, Anhängen sowie moderierten/ignorierten Themen des Nutzers.</li>
+<li>Optionen zum Einsehen des Moderationsprotokolls.</li>
+<li>Anzeige zuletzt gelesener Themen.</li>
+<li>Aktivitätsverlauf (Aufrufe/Nachrichten) über Zeiträume oder Stunden (basierend auf der Zeitzone).</li>
+<li>Informationen über Ignore-Status.</li>
+<li>Detaillierte Bewertungsstatistik: Wer hat den Autor bewertet, wen hat der Autor bewertet. Klick auf eine Bewertung zeigt die entsprechenden Beiträge.</li>
+<li>IP-Analytik für Moderatoren zur Identifizierung von Klonen/Zweitaccounts.</li>
+</ul>
+
+<h2>Statistiken für Gäste</h2>
+
+<ul>
+<li>Letzte Aktivität.</li>
+<li>Kontextoptionen für Suche und Moderation.</li>
+<li>Zuletzt gelesene Themen.</li>
+<li>IP-Analytik zur Klon-Erkennung.</li>
+</ul>
+
+<h2>Statistiken für Bots</h2>
+
+<ul>
+<li>Letzte Aktivität.</li>
+<li>Zuletzt gelesene Themen.</li>
+</ul>
+
+<h2>Forenstatistiken</h2>
+
+<p>Anzeige von Daten für gewählte Zeiträume (letzte/vorherige 24h):</p>
+
+<ul>
+<li>Neu registrierte Nutzer.</li>
+<li>Anzahl der Online-Besucher.</li>
+<li>Anzahl der Nachrichten.</li>
+<li>Anzahl der erstellten Themen.</li>
+<li>Anzahl der Seitenaufrufe (Views).</li>
+<li>Durchschnittliche Nachrichtenanzahl pro Tag.</li>
+<li>Anzahl der abgegebenen Bewertungen.</li>
+<li>Aktivitätsverlauf (Aufrufe/Nachrichten).</li>
+<li>Geografie der Besuche.</li>
+<li>Statistiken zu Browsern, Betriebssystemen und Bots.</li>
+</ul>
+
+<h2>Leistungsstarke und flexible Suche</h2>
+
+<ul>
+<li>Nutzersuche (Sortierung nach Bewertung, Beiträgen, Aktivität).</li>
+<li>Suche nach Nachrichten mit Anhängen, Bildern, Audio/Video, Links, Code-Beispielen oder 18+-Inhalten.</li>
+<li>Suche in Favoriten.</li>
+<li>Suche in privaten Nachrichten.</li>
+<li>Suche innerhalb eines bestimmten Themas.</li>
+<li>Gefilterte Anzeige innerhalb eines Themas (nur Autor, nur eigene Beiträge, nur Bilder etc.).</li>
+<li>Anzeige der Suchergebnisse als virtuelles Thema.</li>
+<li>Tag-Suche (Nutzer-Tags).</li>
+<li>Suche in gelöschten Inhalten (für Moderatoren).</li>
+</ul>
+
+</div>

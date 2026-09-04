@@ -1,0 +1,10 @@
+.file_input_control
+{
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: white url(../images/folder.png) no-repeat 10px center;
+  background-size: auto 100%;
+  padding-left: 60px;
+}

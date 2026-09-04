@@ -1,0 +1,110 @@
+.multiselect_control
+{
+  overflow-x: hidden;
+  overflow-y: scroll;
+  cursor: pointer;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.multiselect_control div
+{
+  padding-left: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.multiselect_control div.selected
+{
+  color: white;
+  background-color: #0078D7;
+}
+
+.multiselect_control div.forum_group_option_mc.selected
+{
+  color: white;
+  background-color: #145390;
+  text-lign: left;
+}
+
+.option_selector_overlay 
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  z-index: 11000;
+}
+
+.option_selector_overlay.active {
+    display: flex;
+}
+
+.option_selector_content table
+{
+  width: 100%;  
+}
+
+.option_selector_content table td
+{
+  vertical-align: top;
+  padding: 4px 4px 0px 0px;
+}
+
+.option_selector_content table td:first-child
+{
+  width: 1%;  
+}
+
+.option_selector_content .forum_group_title
+{
+  text-align: left;
+  font-weight: bold;
+  padding: 6px;
+}
+
+.option_selector
+{
+  width: 600px;
+  height: 70%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.option_selector_content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    padding-right: 12px; 
+    -webkit-overflow-scrolling: touch; 
+}
+
+.option_selector_footer {
+    border-top: 1px solid #ddd;
+    padding: 8px 8px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.option_selector_body
+{
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
