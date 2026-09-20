@@ -5,7 +5,7 @@ $GLOBALS['DEF_TEXTS']['ua']['ru'] = 'Російська';
 $GLOBALS['DEF_TEXTS']['ua']['ua'] = 'Українська';
 $GLOBALS['DEF_TEXTS']['ua']['ErrFilesMissingOrHaveErrors'] = 'Відсутні деякі файли програми або вони містять помилки програмування!';
 $GLOBALS['DEF_TEXTS']['ua']['ErrCreatingClassInstance'] = 'Клас \'%s\' не може бути завантажений. Чи не знайдено його определніє, або ж даний модуль не підтримує використовуваний тип бази даних \'%s\'!';
-$GLOBALS['DEF_TEXTS']['ua']['ErrNoDBConfig'] = 'Відсутня інформація для з\'єднання з базою даних!';
+$GLOBALS['DEF_TEXTS']['ua']['ErrNoDBConfig'] = 'Відсутня інформація для з\'єднання з базою даних! Будь ласка, увійдіть до системи як майстер-адміністраторо та перевірте налаштування з\'єднання з базою даних!';
 $GLOBALS['DEF_TEXTS']['ua']['ErrDbInaccessible'] = 'База даних недоступна!';
 $GLOBALS['DEF_TEXTS']['ua']['ErrDbExtenstionNotInstalled'] = 'PHP-додаток \'%s\' не встановлений або занадто застарів. Робота з базою даних \'%s\' неможлива!';
 $GLOBALS['DEF_TEXTS']['ua']['ErrDbConnNoAccess'] = 'Сервер \'%s\' недоступний або невірне ім\'я користувача \'%s\' або пароль!';
@@ -1054,9 +1054,9 @@ $GLOBALS['DEF_TEXTS']['ua']['DatabasePassword'] = 'Пароль';
 $GLOBALS['DEF_TEXTS']['ua']['ErrInstallDatabasePasswordEmpty'] = 'Не заданий пароль користувача бази даних!';
 $GLOBALS['DEF_TEXTS']['ua']['DatabaseTablePrefix'] = 'Префікс для таблиць';
 $GLOBALS['DEF_TEXTS']['ua']['ErrDatabaseTablePrefixEmpty'] = 'Не заданий префікс для таблиць!';
-$GLOBALS['DEF_TEXTS']['ua']['DBCreationComment'] = 'База даних повинна існувати. Якщо вона ще не створена, створіть базу даних і користувача для неї, перш ніж продовжити інсталяцію.';
-$GLOBALS['DEF_TEXTS']['ua']['DBUserComment'] = 'Користувач бази даних повинен мати повні права, достатні для створення,
-                видалення та зміни її властивостей і об\'єктів.
+$GLOBALS['DEF_TEXTS']['ua']['DBCreationComment'] = 'Якщо база даних з вказаним ім\'ям не існує, її буде створено.';
+$GLOBALS['DEF_TEXTS']['ua']['DBUserComment'] = 'Користувач бази даних повинен мати права, достатні для створення
+                бази даних та її об\'єктів.
             ';
 $GLOBALS['DEF_TEXTS']['ua']['DBPrefixComment'] = 'Щоб уникнути конфлікту імен, вкажіть префікс, який буде доданий в початок імені
                 кожного об\'єкту бази даних, що відноситься до додатка.
@@ -1504,7 +1504,6 @@ $GLOBALS['DEF_TEXTS']['ua']['ErrPostsMoveStartDate'] = 'Повідомлення
 $GLOBALS['DEF_TEXTS']['ua']['Picture'] = 'Картинка';
 $GLOBALS['DEF_TEXTS']['ua']['MathFormula'] = 'Математична формула';
 $GLOBALS['DEF_TEXTS']['ua']['Widget'] = 'Віджет';
-$GLOBALS['DEF_TEXTS']['ua']['Markdown'] = 'Markdown';
 $GLOBALS['DEF_TEXTS']['ua']['Video'] = 'Відеокліп';
 $GLOBALS['DEF_TEXTS']['ua']['Audio'] = 'Аудіокліп';
 $GLOBALS['DEF_TEXTS']['ua']['Gallery'] = 'Галерея';

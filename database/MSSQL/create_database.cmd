@@ -8,7 +8,7 @@ rem set the instance name
 
 set HOST="(local)"
 
-set DB_NAME=simple_communicator
+set DB_NAME=forum
 
 rem Due to the restriction that the SQL driver sticks to the encoding
 rem of the Windows and ignores the database and server collation, the 

@@ -14,23 +14,9 @@ setlocale(LC_ALL,
          );
 
 $SUPPORTED_DATABASES = array(
-  "MySQL" => "MySQL 8.0.17+ / MariaDB 11.5.2+",
-  "PostgreSQL" => "PostgreSQL 16+",
-  "Oracle" => "Oracle 12c+",
-  "MSSQL" => "Microsoft SQL Server 2005+"
+  "MySQL" => "MySQL 8.0.x",
+  "MSSQL" => "Microsoft SQL Server 2005 or higher"
 );
-
-$SUPPORTED_AI = array(
-  "ChatGPT",
-  "Claude",
-  "Gemini",
-  "DeepSeek",
-  "Grok",
-  "GigaChat",
-  "Алиса"
-);
-
-asort($SUPPORTED_AI, SORT_LOCALE_STRING);
 
 $SUPPORTED_CODES = array(
     "apache" => "Apache",
@@ -135,17 +121,9 @@ define('WAIT_TIME_AFTER_ATTACK', 10); // minutes
 define('JOB_PER_CRON', 0);
 define('REFRESH_TOR_IPS', 1);
 
-define('RANDOM_AVATARS', 0);
-
 define('BULK_DELETE_COUNT', 5);
 
 define('MAX_SEARCH_RESULTS', 10000);
-
-// GeoIP keys
-
-define('GETGEOAPI_API_LANGUAGE', 'ru');
-define('GETGEOAPI_API_KEYS', [
-]);
 
 // The keys and token for retrival of the video meta data
 
@@ -186,7 +164,6 @@ define('TRACE_ERROR_VARS', false);
 define('TRACE_ERROR_ARGS', false);
 define('TRACE_STACK', false);
 define('MAIL_TO_TRACE', false);
-define('OMIT_FILE_NAMES_AND_LINES', false);
 
 // SMTP settings
 

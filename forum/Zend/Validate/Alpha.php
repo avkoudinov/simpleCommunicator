@@ -82,7 +82,7 @@ class Zend_Validate_Alpha extends Zend_Validate_Abstract
             }
         }
 
-        $this->allowWhiteSpace = (bool) $allowWhiteSpace;
+        $this->allowWhiteSpace = (boolean) $allowWhiteSpace;
     }
 
     /**
@@ -103,7 +103,7 @@ class Zend_Validate_Alpha extends Zend_Validate_Abstract
      */
     public function setAllowWhiteSpace($allowWhiteSpace)
     {
-        $this->allowWhiteSpace = (bool) $allowWhiteSpace;
+        $this->allowWhiteSpace = (boolean) $allowWhiteSpace;
         return $this;
     }
 

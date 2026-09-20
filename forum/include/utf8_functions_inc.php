@@ -25,7 +25,7 @@ function ByteCount($s) {
     $has_mb_shadow = (int) ini_get('mbstring.func_overload');
    
     if ($has_mbstring && ($has_mb_shadow & 2) ) {
-       $size = mb_strlen($s ?? "",'latin1');
+       $size = mb_strlen($s,'latin1');
     } else {
        $size = strlen($s);
     }
@@ -198,7 +198,7 @@ function is_valid_utf8($content)
  * @see    utf8_decode()
  */
 function utf8_strlen($string){
-  return mb_strlen($string ?? "", "UTF-8");
+  return mb_strlen($string, "UTF-8");
 }
 
 function utf8_char_at($string, $pos){
@@ -222,9 +222,9 @@ function utf8_char_at($string, $pos){
 function utf8_substr($str, $offset, $length = null) {
     if(UTF8_MBSTRING){
         if( $length === null ){
-            return mb_substr($str ?? "", $offset);
+            return mb_substr($str, $offset);
         }else{
-            return mb_substr($str ?? "", $offset, $length);
+            return mb_substr($str, $offset, $length);
         }
     }
 
@@ -379,7 +379,7 @@ function  utf8_trim($str,$charlist='') {
  * @see    utf8_strtoupper()
  */
 function utf8_strtolower($string){
-  if(UTF8_MBSTRING) return mb_strtolower($string ?? "", 'utf-8');
+  if(UTF8_MBSTRING) return mb_strtolower($string,'utf-8');
 
   global $UTF8_UPPER_TO_LOWER;
   return strtr($string,$UTF8_UPPER_TO_LOWER);
@@ -395,7 +395,7 @@ function utf8_strtolower($string){
  * @see    utf8_strtoupper()
  */
 function utf8_strtoupper($string){
-  if(UTF8_MBSTRING) return mb_strtoupper($string ?? "",'utf-8');
+  if(UTF8_MBSTRING) return mb_strtoupper($string,'utf-8');
 
   global $UTF8_LOWER_TO_UPPER;
   return strtr($string,$UTF8_LOWER_TO_UPPER);
@@ -839,7 +839,7 @@ function unicode_to_utf8($arr,$strict=false) {
  */
 function utf8_to_utf16be(&$str, $bom = false) {
   $out = $bom ? "\xFE\xFF" : '';
-  if(UTF8_MBSTRING) return $out.mb_convert_encoding($str ?? "",'UTF-16BE','UTF-8');
+  if(UTF8_MBSTRING) return $out.mb_convert_encoding($str,'UTF-16BE','UTF-8');
 
   $uni = utf8_to_unicode($str);
   foreach($uni as $cp){

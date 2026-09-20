@@ -42,6 +42,7 @@ function convert_file($src_dir, $key)
   $content = "<?php\n";
 
   $auxkey = $key;
+  if($auxkey == "neru") $auxkey = "ru";
     
   $nodes = $xsdpath->evaluate("/document/texts/text/$auxkey");
   foreach($nodes as $node)
@@ -60,6 +61,8 @@ function convert_file($src_dir, $key)
     }
 
     $text = $node->nodeValue;
+    
+    if($id == "DateTimeFormat" && $key == "neru") $text = str_replace("d.m.Y, H:i", "d.m.Y, H:i:s", $text);
     
     $content .= "\$GLOBALS['DEF_TEXTS']['" . $key . "']['" . $id . "'] = '" . escape_php($text) . "';\n";
   }

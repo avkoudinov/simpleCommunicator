@@ -5,7 +5,7 @@ $GLOBALS['DEF_TEXTS']['de']['ru'] = 'Russisch';
 $GLOBALS['DEF_TEXTS']['de']['ua'] = 'Ukrainisch';
 $GLOBALS['DEF_TEXTS']['de']['ErrFilesMissingOrHaveErrors'] = 'Einige Anwendungsdateien scheinen abwesend zu sein oder sie beinhalten Programmierfehler!';
 $GLOBALS['DEF_TEXTS']['de']['ErrCreatingClassInstance'] = 'Die Klasse \'%s\' kann nicht geladen werden. Ihre Definition wurde nicht gefunden, oder das Modul unterstützt den aktuellen Datenbanktyp \'%s\' nicht!';
-$GLOBALS['DEF_TEXTS']['de']['ErrNoDBConfig'] = 'Keine Informationen zu der Datenbankverbindung vorhanden!';
+$GLOBALS['DEF_TEXTS']['de']['ErrNoDBConfig'] = 'Keine Informationen zu der Datenbankverbindung vorhanden! Loggen Sie sich bitte als Master-Administrator ein und überprüfen Sie die Einstellungen für die Datenbankverbindung!';
 $GLOBALS['DEF_TEXTS']['de']['ErrDbInaccessible'] = 'Die Datenbankverbindung kann nicht hergestellt werden!';
 $GLOBALS['DEF_TEXTS']['de']['ErrDbExtenstionNotInstalled'] = 'PHP-Extension \'%s\' ist nicht installiert oder ist zu alt. Arbeit mit der Datenbank \'%s\' ist nicht möglich!';
 $GLOBALS['DEF_TEXTS']['de']['ErrDbConnNoAccess'] = 'Der Server \'%s\' ist nicht erreichbar bzw. der Benutzername \'%s\' oder Password sind ungültig!';
@@ -1054,9 +1054,9 @@ $GLOBALS['DEF_TEXTS']['de']['DatabasePassword'] = 'Kennwort';
 $GLOBALS['DEF_TEXTS']['de']['ErrInstallDatabasePasswordEmpty'] = 'Das Kennwort des Datenbankbenutzers ist nicht angegeben!';
 $GLOBALS['DEF_TEXTS']['de']['DatabaseTablePrefix'] = 'Präfix für Tabellen';
 $GLOBALS['DEF_TEXTS']['de']['ErrDatabaseTablePrefixEmpty'] = 'Präfix für Tabellen ist nicht angegeben!';
-$GLOBALS['DEF_TEXTS']['de']['DBCreationComment'] = 'Die Datenbank muss vorhanden sein. Falls sie noch nicht erstellt wurde, legen Sie die Datenbank und einen Benutzer dafür an, bevor Sie mit der Installation fortfahren.';
-$GLOBALS['DEF_TEXTS']['de']['DBUserComment'] = 'Der Datenbankbenutzer muss über vollständige Rechte verfügen, die ausreichen,
-                um die Datenbank und ihre Objekte zu erstellen, zu löschen und zu ändern.
+$GLOBALS['DEF_TEXTS']['de']['DBCreationComment'] = 'Falls die Datenbank mit dem angegebenen Namen nicht existiert, wird diese erstellt.';
+$GLOBALS['DEF_TEXTS']['de']['DBUserComment'] = 'Der Datenbankbenutzer muss über genügende Rechte für die Erstellung
+                der Datenbank und derer Objekte verfügen.
             ';
 $GLOBALS['DEF_TEXTS']['de']['DBPrefixComment'] = 'Um die Namenskonflikte in der Datenbank zu vermeiden, geben Sie einen Präfix an,
                 der an alle Datenbankobjekte der Anwendung forne angefügt wird.
@@ -1499,7 +1499,6 @@ $GLOBALS['DEF_TEXTS']['de']['ErrPostsMoveStartDate'] = 'Die Nachrichten können 
 $GLOBALS['DEF_TEXTS']['de']['Picture'] = 'Bild';
 $GLOBALS['DEF_TEXTS']['de']['MathFormula'] = 'Mathematische Formel';
 $GLOBALS['DEF_TEXTS']['de']['Widget'] = 'Widget';
-$GLOBALS['DEF_TEXTS']['de']['Markdown'] = 'Markdown';
 $GLOBALS['DEF_TEXTS']['de']['Video'] = 'Video';
 $GLOBALS['DEF_TEXTS']['de']['Audio'] = 'Audio';
 $GLOBALS['DEF_TEXTS']['de']['Gallery'] = 'Galerie';

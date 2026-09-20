@@ -228,7 +228,7 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
      */
     public function enableHeaderCheck($headerCheck = true)
     {
-        $this->_headerCheck = (bool) $headerCheck;
+        $this->_headerCheck = (boolean) $headerCheck;
         return $this;
     }
 

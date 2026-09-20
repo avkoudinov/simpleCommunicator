@@ -25,7 +25,7 @@ if (!empty($maintenance_until) && empty($_SESSION["admdebug"])) {
 } elseif ($fmanager->is_master_admin()) {
     MessageHandler::setWarning(text("MsgMasterAdminWarning"));
 } else {
-    $response['success'] = $fmanager->load_attachments($response, reqvar("already_loaded_ids"));
+    $response['success'] = $fmanager->load_attachments($response, reqvar("last_att_post_id"), reqvar("last_att_id"));
 }
 
 //-----------------------------------------------------------------------

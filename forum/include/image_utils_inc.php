@@ -377,6 +377,8 @@ function get_image_info($img_path, &$img_info)
     $img_info["width"] = imagesx($img);
     $img_info["height"] = imagesy($img);
     
+    imagedestroy($img);
+    
     return true;
 } // get_image_info
 //-------------------------------------------------------------------
@@ -612,6 +614,9 @@ function detect_file_mime_type($fpath) {
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
     $mime_type = finfo_file($finfo, $fpath);
+
+    // Close the resource
+    finfo_close($finfo);
 
     if (empty($mime_type)) {
         return false;

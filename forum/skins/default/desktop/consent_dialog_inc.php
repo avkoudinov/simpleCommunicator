@@ -1,4 +1,4 @@
-<div id="consent_dialog_content" class="consent_dialog_content">
+<div id="consent_dialog" class="consent_dialog">
 
 <?php 
 if(file_exists($view_path . "lang/" . current_language() . "/data_consent.html")) 

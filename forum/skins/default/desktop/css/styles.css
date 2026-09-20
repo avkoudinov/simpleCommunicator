@@ -1388,8 +1388,6 @@ textarea
   margin-right: 3px;
 }
 
-.ai_selection_area,
-.markdown_selection_area,
 .code_selection_area,
 .media_selection_area
 {
@@ -1406,8 +1404,6 @@ textarea
           box-shadow: 5px 5px 10px gray;
 }
 
-.ai_selection_area div,
-.markdown_selection_area div,
 .code_selection_area div,
 .media_selection_area div
 {
@@ -1415,8 +1411,6 @@ textarea
   padding: 3px;
 }
 
-.ai_selection_area div:hover,
-.markdown_selection_area div:hover,
 .code_selection_area div:hover,
 .media_selection_area div:hover
 {
@@ -1958,8 +1952,6 @@ select.search_forum_select.tags_exist
   line-height: 16px;
 }
 
-.markdown_table td,
-.markdown_table th,
 .csv_table td,
 .csv_table th
 {
@@ -2498,7 +2490,7 @@ tr.selected_row td.checkbox_selector
 .attachment_gallery_area
 {
   overflow: auto;
-  padding: 0px 0px 0px 5px;
+  padding: 5px 0px 0px 5px;
 }
 
 .attachment_thumb
@@ -3571,14 +3563,6 @@ td.post_footer
   color: #3A5ECE;
 }
 
-.post_preview_container .hat_link,
-.message_text .hat_link
-{
-  color: #3A5ECE;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 .gif_placeholder
 {
   display: table;
@@ -4586,66 +4570,6 @@ a.more_users:link
 .search_member_area input[name=user_to_search]
 {
   width: 100%;
-}
-
-.gallery_filter_bar {
-  container-type: inline-size; /* включаем container queries по ширине этого блока */
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 10px;
-  row-gap: 6px;
-  margin-bottom: 8px;
-
-  padding: 5px 0px 5px 0px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #EEEEEE; /* important — sticky elements are transparent by default and content will show through */
-}
-
-.gallery_filter_bar {
-  display: none;
-}
-
-.gallery_filter_bar_block {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.gallery_filter_bar_block div.wrapper {
-  display: inline-block;
-}
-
-.gfb_label {
-  white-space: nowrap;
-  width: auto;
-}
-
-#gallery_filter_forum
-{
-  width: 334px;
-}
-
-._sys_lightbox .gallery_filter_bar input[type="button"]
-{
-  margin-left: 0px;
-}
-
-@container (max-width: 700px) {
-  .gallery_filter_bar_block {
-    flex: 1 1 100%;
-  }
-  .gfb_label {
-    width: 100px;
-    flex: 0 0 100px;
-  }
-}
-
-._sys_lightbox .gallery_filter_bar_button_table input[type="button"]
-{
-  margin-left: 0;
 }
 
 .search_topic_area
@@ -6211,7 +6135,6 @@ a.reference_link:hover
 }
 
 .post_preview_container .quote,
-.post_preview_container .markdown,
 .post_preview_container .ai
 {
   max-height: none !important;
@@ -6220,7 +6143,7 @@ a.reference_link:hover
 
 .ai
 {
-  background-color: #E4EFD6;
+  background-color: #DCE5DC;
   border: 1px solid gray;
   border-top: 0;
   padding: 6px;
@@ -6275,7 +6198,7 @@ a.reference_link:hover
 {
   position: absolute;
   bottom: 0px;
-  background-color: #E4EFD6;
+  background-color: #DCE5DC;
   height: 24px;
   width: 100%;
   z-index: 10500;
@@ -6413,7 +6336,6 @@ strong.strongly_ignored_author > .invisible_author
   text-align: right;
   background-color: #eeeeee;
   width: 40px;
-  white-space: pre-wrap;
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -7471,27 +7393,6 @@ a.dzen_short_container
 
 /* END: Dzen */
 
-/* BEGIN: OK */
-
-a.ok_short_container
-{
-  display: table-cell;
-  width:415px;
-  height:40px;
-  color:white;
-  font-weight: bold;
-  padding: 5px 5px 5px 60px;
-  background-color: black;
-  background-image: url(../images/ok_short.png);
-  background-repeat: no-repeat;
-  background-position: 10px center;
-  background-size: 34px;
-  text-decoration: none;
-  vertical-align: middle;
-}
-
-/* END: OK */
-
 /* BEGIN: Rambler */
 
 a.rambler_short_container
@@ -7874,8 +7775,6 @@ a.rutube_short_container
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  border: 2px solid white;
-  border-radius: 20px;
 }
 
 .rutube_play_rutube
@@ -7891,9 +7790,8 @@ a.rutube_short_container
   margin-top:-41px;
   background-image: url(../images/play_rutube.png);
   background-repeat: no-repeat;
-  background-size: cover;
-  border: 2px solid white;
-  border-radius: 20px;
+  background-position: -22px center;
+  background-size: auto 170px;
 }
 
 /* END: Rutube */
@@ -8023,41 +7921,10 @@ a.coub_short_container
   display: none;
 }
 
-.consent_dialog ._sys_lightbox_close
-{
-  display: none;
-}
-
-.consent_dialog_content
+.consent_dialog
 {
   padding: 5px;
   display: none;
-}
-
-.markdown_wrapper
-{
-  margin: 20px 0px 20px 0px;
-}
-
-.markdown_header {
-  background-color: #ddd;
-  border: 1px solid gray;
-  padding: 4px;
-  font-weight: bold;
-}
-
-.markdown
-{
-  border: 1px solid gray;
-  padding: 10px 10px 10px 10px;
-  background-color: #F9F9FB;
-  border-top: 0;
-  overflow: auto;
-}
-
-.ai_markdown .markdown
-{
-  background-color: #E4EFD6;
 }
 
 /* iPad Mini, Air, Pro 11" */

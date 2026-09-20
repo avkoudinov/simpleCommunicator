@@ -1731,8 +1731,7 @@ function postprocess_message(&$content, $lang = "", $html = true, $for_email = f
     $replacements["/{{audio}}/msi"] = text("Audio", $lang);
     $replacements["/{{code}}/msi"] = text("Code", $lang);
     $replacements["/{{maps}}/msi"] = text("Maps", $lang);
-    $replacements["/{{markdown}}/msi"] = text("Markdown", $lang);
-
+    
     if ($html) {
         foreach ($replacements as &$replacement) {
             $replacement = escape_html($replacement);

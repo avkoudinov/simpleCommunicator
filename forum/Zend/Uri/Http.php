@@ -554,7 +554,7 @@ class Zend_Uri_Http extends Zend_Uri
             throw new Zend_Uri_Exception('Internal error: path validation failed');
         }
 
-        return (bool) $status;
+        return (boolean) $status;
     }
 
     /**
@@ -740,7 +740,7 @@ class Zend_Uri_Http extends Zend_Uri
             throw new Zend_Uri_Exception('Internal error: fragment validation failed');
         }
 
-        return (bool) $status;
+        return (boolean) $status;
     }
 
     /**

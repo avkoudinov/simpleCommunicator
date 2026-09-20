@@ -80,40 +80,6 @@ function exec_reload_online_users()
   // no implementation in search mode
   return false;
 }
-
-var config = {
-  format: "<?php echo_js(text("DateFormat")); ?>",
-  start_year: 2000,
-  month_names: [
-    "<?php echo_js(text("January")); ?>",
-    "<?php echo_js(text("February")); ?>",
-    "<?php echo_js(text("March")); ?>",
-    "<?php echo_js(text("April")); ?>",
-    "<?php echo_js(text("May")); ?>",
-    "<?php echo_js(text("June")); ?>",
-    "<?php echo_js(text("July")); ?>",
-    "<?php echo_js(text("August")); ?>",
-    "<?php echo_js(text("September")); ?>",
-    "<?php echo_js(text("October")); ?>",
-    "<?php echo_js(text("November")); ?>",
-    "<?php echo_js(text("December")); ?>"
-  ],
-  
-  weekday_names: [
-    "<?php echo_js(text("MondayShort")); ?>",
-    "<?php echo_js(text("TuesdayShort")); ?>",
-    "<?php echo_js(text("WednesdayShort")); ?>",
-    "<?php echo_js(text("ThursdayShort")); ?>",
-    "<?php echo_js(text("FridayShort")); ?>",
-    "<?php echo_js(text("SaturdayShort")); ?>",
-    "<?php echo_js(text("SundayShort")); ?>"
-  ]
-};
-
-Forum.addXEvent(window, 'load', function () {
-  SimpleCalendar.assign("#start_date", config);
-  SimpleCalendar.assign("#end_date", config);
-});
 </script>
 
 <?php
@@ -765,6 +731,4 @@ unset($_SESSION["ensure_anchor_visible"]);
 ?>
 
 
-<?php
-require_once "gallery_filter_bar_inc.php";
-?>
+

@@ -1100,15 +1100,10 @@ textarea
   border: 2px solid gray;
   background-color: #F0F0F0;
   cursor: pointer;
-  min-width: 64px;
-  font-size: 24px;
-  padding: 6px 5px;
+  min-width: 62px;
+  font-size: 25px;
+  padding: 6px;
   height: 65px;
-}
-
-.large_toolbar_button
-{
-  font-size: 20px;
 }
 
 .help_button
@@ -1126,11 +1121,9 @@ textarea
 .toolbar_button_wrapper
 {
   float: left;
-  margin-right: 9px;
+  margin-right: 10px;
 }
 
-.ai_selection_area,
-.markdown_selection_area,
 .code_selection_area,
 .media_selection_area
 {
@@ -1147,15 +1140,11 @@ textarea
           box-shadow: 8px 8px 13px gray;
 }
 
-.ai_selection_area,
-.markdown_selection_area,
 .media_selection_area
 {
   font-size: 34px;
 }
 
-.ai_selection_area div,
-.markdown_selection_area div,
 .code_selection_area div,
 .media_selection_area div
 {
@@ -1163,8 +1152,6 @@ textarea
   padding: 3px;
 }
 
-.ai_selection_area div:hover,
-.markdown_selection_area div:hover,
 .code_selection_area div:hover,
 .media_selection_area div:hover
 {
@@ -2425,13 +2412,6 @@ div.post_preview_container a:hover
   font-size: 46px;
 }
 
-.post_preview_container .hat_link,
-.message_text .hat_link
-{
-  color: #3A5ECE;
-  cursor: pointer;
-  text-decoration: underline;
-}
 
 .post_preview_container a.attachment_link:link,
 .post_preview_container a.attachment_link:active,
@@ -2526,7 +2506,7 @@ div.post_preview_container a:hover
 .attachment_gallery_area
 {
   overflow: auto;
-  padding: 0px 0px 0px 12px;
+  padding: 12px 0px 0px 12px;
 }
 
 .attachment_thumb
@@ -4289,67 +4269,6 @@ a.more_users:link
   display: none;
 }
 
-.gallery_filter_bar {
-  container-type: inline-size; /* включаем container queries по ширине этого блока */
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 10px;
-  row-gap: 16px;
-  margin-bottom: 8px;
-
-  padding: 15px 15px 15px 0px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #EEEEEE; /* important — sticky elements are transparent by default and content will show through */
-}
-
-.gallery_filter_bar {
-  display: none;
-}
-
-.gallery_filter_bar_block {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* optional spacing between label/inputs */
-}
-
-.gfb_label {
-  width: 200px;
-  flex: 0 0 200px;
-}
-
-.gallery_filter_bar_block .wrapper {
-  flex: 1 1 0; /* grow equally, share remaining space */
-  min-width: 0; /* prevents flex overflow issues with inputs */
-  position: relative; /* keeps .calendar_container positioned correctly */
-}
-
-.gallery_filter_bar_block .wrapper .filter_field {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.gallery_filter_bar_block div.wrapper {
-  display: inline-block;
-}
-
-#gallery_filter_forum
-{
-  width: 100%;
-}
-
-._sys_lightbox .gallery_filter_bar input[type="button"]
-{
-  margin-left: 0px;
-}
-
-._sys_lightbox .gallery_filter_bar_button_table input[type="button"]
-{
-  margin-left: 0;
-}
-
 .search_topic_area
 {
   display: none;
@@ -5702,7 +5621,7 @@ a.reference_link:hover
 
 .ai
 {
-  background-color: #E4EFD6;
+  background-color: #DCE5DC;
   border: 2px solid gray;
   border-top: 0;
   padding: 12px;
@@ -5757,7 +5676,7 @@ a.reference_link:hover
 {
   position: absolute;
   bottom: 0px;
-  background-color: #E4EFD6;
+  background-color: #DCE5DC;
   width: 100%;
   z-index: 10500;
 }
@@ -5887,7 +5806,6 @@ strong.strongly_ignored_author > .invisible_author
   padding: 5px;
   text-align: right;
   width: 140px;
-  white-space: pre-wrap;
   background-color: #eeeeee;
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -7017,28 +6935,6 @@ a.dzen_short_container
 
 /* END: Dzen */
 
-/* BEGIN: OK */
-
-a.dzen_short_container
-{
-  font-size: 25px;
-  display: table-cell;
-  width:563px;
-  height:66px;
-  color:white;
-  font-weight: bold;
-  padding: 5px 5px 5px 80px;
-  background-color: black;
-  background-image: url(../images/ok_short.png);
-  background-repeat: no-repeat;
-  background-position: 10px center;
-  background-size: 52px;
-  text-decoration: none;
-  vertical-align: middle;
-}
-
-/* END: OK */
-
 /* BEGIN: Rambler */
 
 a.rambler_short_container
@@ -7439,9 +7335,7 @@ a.rutube_short_container
   background-image: url(../images/play_rutube_embedded.png);
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: contain;
-  border: 4px solid white;
-  border-radius: 40px;
+  background-size: cover;
 }
 
 .rutube_play_rutube
@@ -7457,10 +7351,8 @@ a.rutube_short_container
   margin-top:-64px;
   background-image: url(../images/play_rutube.png);
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: contain;
-  border: 4px solid white;
-  border-radius: 34px;
+  background-position: -36px center;
+  background-size: auto 270px;
 }
 
 /* END: Rutube */
@@ -7613,12 +7505,7 @@ label.rules_agreemnt
   display: none;
 }
 
-.consent_dialog ._sys_lightbox_close
-{
-  display: none;
-}
-
-.consent_dialog_content
+.consent_dialog
 {
   padding: 12px;
   display: none;
@@ -7630,31 +7517,6 @@ label.rules_agreemnt
   width: 100%;
 }
 
-.markdown_wrapper
-{
-  margin: 40px 0px 40px 0px;
-}
-
-.markdown_header {
-  background-color: #DDDDDD;
-  border: 2px solid gray;
-  padding: 10px;
-  font-weight: bold;
-}
-
-.markdown
-{
-  border: 2px solid gray;
-  padding: 40px 40px 40px 40px;
-  background-color: #F9F9FB;
-  border-top: 0;
-  overflow: auto;
-}
-
-.ai_markdown .markdown
-{
-  background-color: #E4EFD6;
-}
 
 /* iPad Mini, Air, Pro 11" */
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {

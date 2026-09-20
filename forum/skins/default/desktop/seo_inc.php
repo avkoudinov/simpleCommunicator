@@ -1,8 +1,5 @@
 <?php if(defined("CANONICAL_DOMAIN") && !empty(CANONICAL_DOMAIN) && CANONICAL_DOMAIN != get_host_name()): ?>
 <link rel="canonical" href="<?php echo((is_https() ? "https://" : "http://") . CANONICAL_DOMAIN . $_SERVER["REQUEST_URI"]); ?>">
-<meta property="og:url" content="<?php echo $canonical_url; ?>">
-<?php else: ?>
-<meta property="og:url" content="<?php echo(get_host_address() . $_SERVER["REQUEST_URI"]); ?>">
 <?php endif; ?>
 
 <link rel="icon" type="image/png" href="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-default-icon="<?php echo($view_path); ?>images/favicon.png<?php echo($cache_appendix); ?>" data-signal-icon="<?php echo($view_path); ?>images/favicon_new.png<?php echo($cache_appendix); ?>" id="fav_icon">

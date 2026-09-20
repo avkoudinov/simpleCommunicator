@@ -76,12 +76,12 @@ function toggle_spoiler(header)
   var _parent = header.parentNode;
   while(_parent)
   {
-    if(_parent.classList && _parent.classList.contains('quote'))
+    if(_parent.classList.contains('quote'))
     {
       remove_expander(_parent);
     }
 
-    if(_parent.classList && _parent.classList.contains('message_text'))
+    if(_parent.classList.contains('message_text'))
     {
       _parent.style.maxHeight = 'none';
 
@@ -281,7 +281,7 @@ function embed_rutube(elm, code, bmstart)
       iframe.style.width = parent.clientWidth + "px";
       iframe.style.height = parent.clientHeight + "px";
       iframe.style.border = "0";
-      iframe.src = "https://rutube.ru/play/embed/" + code + "?autoStart=1&t=" + bmstart;
+      iframe.src = "https://rutube.ru/play/embed/" + code + "?autoStart=1&bmstart=" + bmstart;
       iframe.setAttribute("allowfullscreen", "1");
       iframe.setAttribute("webkitallowfullscreen", "1");
       iframe.setAttribute("mozallowfullscreen", "1");
@@ -636,40 +636,6 @@ function toggle_media_selection_area()
   return false;
 }
 
-function toggle_ai_selection_area()
-{
-  var elm = document.getElementById("ai_selection_area");
-  if(!elm) return false;
-
-  var need_show = (elm.style.display == "none");
-
-  hide_all_popups();
-
-  if(need_show)
-  {
-    elm.style.display = "block";
-  }
-
-  return false;
-}
-
-function toggle_markdown_selection_area()
-{
-  var elm = document.getElementById("markdown_selection_area");
-  if(!elm) return false;
-
-  var need_show = (elm.style.display == "none");
-
-  hide_all_popups();
-
-  if(need_show)
-  {
-    elm.style.display = "block";
-  }
-
-  return false;
-}
-
 function toggle_code_selection_area()
 {
   var elm = document.getElementById("code_selection_area");
@@ -832,12 +798,6 @@ function hide_all_popups()
   }
 
   elm = document.getElementById("filter_actions");
-  if(elm) elm.style.display = "none";
-
-  elm = document.getElementById("ai_selection_area");
-  if(elm) elm.style.display = "none";
-
-  elm = document.getElementById("markdown_selection_area");
   if(elm) elm.style.display = "none";
 
   elm = document.getElementById("media_selection_area");
@@ -1085,7 +1045,7 @@ function reload_post(post)
             init_embedded_widgets();
 
             // highlichting code if not highlighted yet
-            var codes = post_area.querySelectorAll('pre code');
+            var codes = post_area.getElementsByTagName('code');
             for(var i = 0; i < codes.length; i++)
             {
               if(!codes[i].classList.contains("hljs")) hljs.highlightBlock(codes[i]);
@@ -1378,7 +1338,7 @@ function load_created_post(created_post, original_post, on_loaded)
           init_embedded_widgets();
         
           // highlichting code if not highlighted yet
-          var codes = post_area.querySelectorAll('pre code');
+          var codes = post_area.getElementsByTagName('code');
           for(var i = 0; i < codes.length; i++)
           {
             if(!codes[i].classList.contains("hljs")) hljs.highlightBlock(codes[i]);
@@ -1597,7 +1557,7 @@ function load_new_posts(topic, forum, highlight_message, target_url)
           init_embedded_widgets();
         
           // highlichting code if not highlighted yet
-          var codes = post_area.querySelectorAll('pre code');
+          var codes = post_area.getElementsByTagName('code');
           for(var i = 0; i < codes.length; i++)
           {
             if(!codes[i].classList.contains("hljs")) hljs.highlightBlock(codes[i]);
@@ -2392,7 +2352,6 @@ function process_selection()
            selection_parent.classList.contains("ai_wrapper") ||
            selection_parent.classList.contains("media_wrapper") ||
            selection_parent.classList.contains("code_wrapper") ||
-           selection_parent.classList.contains("markdown_wrapper") ||
            selection_parent.tagName == 'CODE' ||
            (selection_parent.tagName == 'TABLE' && selection_parent.classList.contains("csv_table")) ||
            selection_parent.tagName == 'UL' ||
@@ -2485,33 +2444,6 @@ function process_selection()
       selection_container.appendChild(spoiler_wrapper);
     }
   }
-  else if(parent_tag_container && parent_tag_container.classList.contains("markdown_wrapper"))
-  {
-    var tmp = document.createElement('div');
-    extract_selection_nodes(tmp);
-
-    if(tmp.childNodes.length == 2 &&
-       tmp.childNodes[0].classList && tmp.childNodes[0].classList.contains('markdown_header') &&
-       tmp.childNodes[1].classList && tmp.childNodes[1].classList.contains('markdown')
-      )
-    {
-      tmp.classList.add('markdown_wrapper');
-      if (parent_tag_container.classList.contains("ai_markdown")) tmp.classList.add('ai_markdown');
-      
-      selection_container.appendChild(tmp);
-    }
-    else
-    {
-      var markdown_wrapper = document.createElement('div');
-      markdown_wrapper.classList.add('markdown_wrapper');
-      if (parent_tag_container.classList.contains("ai_markdown")) markdown_wrapper.classList.add('ai_markdown');
-      
-      markdown_wrapper.appendChild(parent_tag_container.childNodes[0].cloneNode(true));
-      tmp.classList.add('markdown');
-      markdown_wrapper.appendChild(tmp);
-      selection_container.appendChild(markdown_wrapper);
-    }
-  }
   else if(parent_tag_container && parent_tag_container.classList.contains("ai_wrapper"))
   {
     var tmp = document.createElement('div');
@@ -2527,12 +2459,12 @@ function process_selection()
     }
     else
     {
-      var ai_wrapper = document.createElement('div');
-      ai_wrapper.classList.add('ai_wrapper');
-      ai_wrapper.appendChild(parent_tag_container.childNodes[0].cloneNode(true));
+      var spoiler_wrapper = document.createElement('div');
+      spoiler_wrapper.classList.add('ai_wrapper');
+      spoiler_wrapper.appendChild(parent_tag_container.childNodes[0].cloneNode(true));
       tmp.classList.add('ai');
-      ai_wrapper.appendChild(tmp);
-      selection_container.appendChild(ai_wrapper);
+      spoiler_wrapper.appendChild(tmp);
+      selection_container.appendChild(spoiler_wrapper);
     }
   }
   else if(parent_tag_container && parent_tag_container.classList.contains("code_wrapper"))

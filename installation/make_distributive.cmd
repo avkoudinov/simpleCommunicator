@@ -3,39 +3,35 @@
 set PHP_PATH="C:\web\php\php"
 set ZIP_PATH=%ProgramFiles%\7-Zip
 
-echo *****************************************************
-echo * Creating installation distributive                *
-echo *****************************************************
+rem generate langs and sqls
 
-echo -----------------------------------------------------
-echo Step 1: Generating langs
-echo -----------------------------------------------------
+@echo Generating langs
+@echo.
 
 %PHP_PATH% -f "scripts/genlangs.php"
 
-echo -----------------------------------------------------
-echo Step 2: Generating SQL commands
-echo -----------------------------------------------------
+@echo.
+
+@echo Generating sqls
+@echo.
 
 %PHP_PATH% -f "scripts/gensql.php"
 
-echo -----------------------------------------------------
-echo Step 3: Deleting old zips
-echo -----------------------------------------------------
+@echo.
+
+rem delete old zips
+
+@echo Copying files
 
 del *.zip
 
-echo -----------------------------------------------------
-echo Step 4: Copying application files
-echo -----------------------------------------------------
+rem copying application
 
 rmdir /S /Q application
 mkdir application
 xcopy ..\forum application /S /E /R /Y
 
-echo -----------------------------------------------------
-echo Step 5: Removing unnecessary stuff
-echo -----------------------------------------------------
+rem remove unnecessary stuff
 
 rmdir /S /Q application\.idea
 
@@ -55,9 +51,7 @@ del application\user_data\config\img_black_list.txt
 del application\user_data\config\email_black_list.txt
 del application\user_data\config\protected_guests.txt
 
-echo -----------------------------------------------------
-echo Step 6: Preparing skins
-echo -----------------------------------------------------
+rem skins handling
 
 rmdir /S /Q application\skins\debug
 
@@ -68,9 +62,7 @@ del application\skins\default\mobile\test.php
 
 "%ZIP_PATH%\7z.exe" a skins.zip .\application\skins\*
 
-echo -----------------------------------------------------
-echo Step 7: Remove old stuff and apply defaults
-echo -----------------------------------------------------
+rem remove old stuff and apply defaults
 
 rmdir /S /Q application\log
 
@@ -82,9 +74,7 @@ rmdir /S /Q application\user_data
 
 xcopy defaults application /S /E /R /Y
 
-echo -----------------------------------------------------
-echo Step 8: Preparing clear database project
-echo -----------------------------------------------------
+rem database
 
 rmdir /S /Q database
 mkdir database
@@ -93,28 +83,9 @@ xcopy ..\database database /S /E /R /Y /exclude:xcopy_exclude.cfg
 rmdir /S /Q database\MySQL\maintenance
 rmdir /S /Q database\MySQL\scripts
 rmdir /S /Q database\MySQL\update
-rmdir /S /Q database\MySQL\backup
-
-rmdir /S /Q database\PostgreSQL\maintenance
-rmdir /S /Q database\PostgreSQL\scripts
-rmdir /S /Q database\PostgreSQL\update
-rmdir /S /Q database\PostgreSQL\backup
-
-rmdir /S /Q database\MSSQL\maintenance
-rmdir /S /Q database\MSSQL\scripts
-rmdir /S /Q database\MSSQL\update
-rmdir /S /Q database\MSSQL\backup
-
-rmdir /S /Q database\Oracle\maintenance
-rmdir /S /Q database\Oracle\scripts
-rmdir /S /Q database\Oracle\update
-rmdir /S /Q database\Oracle\backup
-
 del "database\Power Designer Notes.docx"
 
-echo -----------------------------------------------------
-echo Step 9: Creationg zips
-echo -----------------------------------------------------
+rem zipping
 
 @echo Zipping
 
@@ -131,14 +102,14 @@ del application\include\admin_config_inc.php
 del application\include\config_inc.php
 del application\include\maintenance_inc.php
 del application\.htaccess
+del application\._README.TXT
 
 "%ZIP_PATH%\7z.exe" a simple_communicator_update.zip .\application\*
 
 rmdir /S /Q application
+rmdir /S /Q database
 
-echo -----------------------------------------------------
-echo Distributive successfully created
-echo -----------------------------------------------------
+@echo Done
 
 pause
 
