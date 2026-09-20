@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     20.09.2026 16:17:34                          */
+/* Created on:     07.03.2026 19:30:17                          */
 /*==============================================================*/
 
 
@@ -18,7 +18,7 @@ create table v1_attachment (
    user_id              int                  null,
    favourite            tinyint              not null default 0,
    last_post_id         int                  not null,
-   constraint PK_V1_ATTACHMENT primary key (id)
+   constraint v1_attachment_pk primary key (id)
 )
 go
 
@@ -193,14 +193,14 @@ go
 /* Table: v1_daily_statistics                                   */
 /*==============================================================*/
 create table v1_daily_statistics (
-   user_id              int                  not null,
-   forum_id             int                  not null,
+   user_id              int                  null,
+   forum_id             int                  null,
    dt                   date                 not null,
    hits_count           int                  not null default 0,
    bot_hits_count       int                  not null default 0,
    post_count           int                  not null default 0,
    time_online          bigint               not null default 0,
-   bot                  nvarchar(250)        not null
+   bot                  varchar(250)         null
 )
 go
 
@@ -274,10 +274,10 @@ create table v1_events (
    topic_id             int                  null,
    forum_name           nvarchar(255)        null,
    forum_id             int                  null,
-   note                 nvarchar(max)        null,
+   comment              nvarchar(max)        null,
    source_topic_name    nvarchar(1000)       null,
    source_topic_id      int                  null,
-   constraint PK_V1_EVENTS primary key (id)
+   constraint v1_events_pk primary key (id)
 )
 go
 
@@ -453,7 +453,7 @@ create table v1_forum (
    stringent_rules      tinyint              not null default 0,
    disable_ignore       tinyint              not null default 0,
    forum_group_id       int                  null,
-   constraint PK_V1_FORUM primary key nonclustered (id)
+   constraint v1_forum_pk primary key nonclustered (id)
 )
 go
 
@@ -529,9 +529,9 @@ go
 /*==============================================================*/
 create table v1_forum_group (
    id                   int                  identity,
-   name                 nvarchar(255)        not null,
+   name                 varchar(255)         not null,
    sort_order           int                  not null default 0,
-   constraint PK_V1_FORUM_GROUP primary key nonclustered (id)
+   constraint v1_forum_group_pk primary key nonclustered (id)
 )
 go
 
@@ -557,7 +557,7 @@ create table v1_forum_hits (
    referrer             varchar(700)         null,
    user_agent           nvarchar(700)        null,
    uri                  nvarchar(2000)       null,
-   ip                   varchar(250)         null,
+   ip                   nvarchar(250)        null,
    browser              nvarchar(250)        null,
    os                   nvarchar(250)        null,
    bot                  nvarchar(250)        null,
@@ -727,8 +727,8 @@ go
 /* Table: v1_forum_read_markers                                 */
 /*==============================================================*/
 create table v1_forum_read_markers (
-   read_marker          varchar(255)         not null,
-   forum_id             int                  not null,
+   read_marker          varchar(255)         null,
+   forum_id             int                  null,
    first_read_date      datetime             null,
    last_activity        datetime             null,
    first_activity       datetime             null,
@@ -1069,7 +1069,7 @@ go
 create table v1_ignored_users (
    user_id              int                  not null,
    ignored_user_id      int                  not null,
-   note                 nvarchar(max)        null
+   comment              nvarchar(max)        null
 )
 go
 
@@ -1102,7 +1102,7 @@ go
 /* Table: v1_ip_blocked                                         */
 /*==============================================================*/
 create table v1_ip_blocked (
-   ip                   varchar(250)         not null,
+   ip                   nvarchar(250)        not null,
    block_expires        datetime             null,
    tp                   varchar(10)          not null default 'IP',
    block_reason         nvarchar(max)        null
@@ -1213,16 +1213,16 @@ create table v1_moderator_log (
    author_name          nvarchar(255)        null,
    author_id            int                  null,
    post_id              int                  null,
-   ip                   varchar(250)         null,
+   ip                   nvarchar(250)        null,
    topic_name           nvarchar(1000)       null,
    topic_id             int                  null,
    forum_name           nvarchar(255)        null,
    forum_id             int                  null,
-   note                 nvarchar(max)        null,
+   comment              nvarchar(max)        null,
    redundant            tinyint              not null default 0,
    source_topic_name    nvarchar(1000)       null,
    source_topic_id      int                  null,
-   constraint PK_V1_MODERATOR_LOG primary key nonclustered (id)
+   constraint v1_moderator_log_pk primary key nonclustered (id)
 )
 go
 
@@ -1359,7 +1359,7 @@ create table v1_poll_options (
    id                   int                  identity,
    name                 nvarchar(700)        not null,
    topic_id             int                  not null,
-   constraint PK_V1_POLL_OPTIONS primary key (id)
+   constraint v1_poll_options_pk primary key (id)
 )
 go
 
@@ -1451,7 +1451,7 @@ create table v1_post (
    is_adult             tinyint              not null default 0,
    is_system            tinyint              not null default 0,
    ref                  int                  null,
-   constraint PK_V1_POST primary key nonclustered (id)
+   constraint v1_post_pk primary key nonclustered (id)
 )
 go
 
@@ -1660,7 +1660,7 @@ create table v1_post_history (
    text_content         nvarchar(max)        null,
    html_content         nvarchar(max)        null,
    post_id              int                  not null,
-   constraint PK_V1_POST_HISTORY primary key (id)
+   constraint v1_post_history_pk primary key (id)
 )
 go
 
@@ -1682,7 +1682,7 @@ create table v1_post_rating (
    post_id              int                  not null,
    user_id              int                  not null,
    rater_ignored        tinyint              not null default 0,
-   constraint PK_V1_POST_RATING primary key (id)
+   constraint v1_post_rating_pk primary key (id)
 )
 go
 
@@ -1972,7 +1972,7 @@ create table v1_topic (
    profiled_topic       tinyint              not null default 0,
    request_moderation   tinyint              not null default 0,
    ref                  int                  null,
-   constraint PK_V1_TOPIC primary key nonclustered (id)
+   constraint v1_topic_pk primary key nonclustered (id)
 )
 go
 
@@ -2154,8 +2154,8 @@ go
 /* Table: v1_topic_read_markers                                 */
 /*==============================================================*/
 create table v1_topic_read_markers (
-   topic_id             int                  not null,
-   read_marker          varchar(255)         not null,
+   topic_id             int                  null,
+   read_marker          varchar(255)         null,
    last_read_date       datetime             null,
    ip                   varchar(250)         null
 )
@@ -2262,8 +2262,8 @@ go
 /* Table: v1_topic_view_history                                 */
 /*==============================================================*/
 create table v1_topic_view_history (
-   user_id              int                  not null,
-   guest_name           nvarchar(255)        not null,
+   user_id              int                  null,
+   guest_name           nvarchar(255)        null,
    topic_id             int                  not null,
    dt                   datetime             not null,
    ip                   varchar(250)         null
@@ -2309,6 +2309,7 @@ go
 /*==============================================================*/
 create table v1_tor_ips (
    ip                   varchar(250)         not null,
+   hashed_ip            varchar(250)         not null,
    block_level          int                  not null default 0,
    refresh_date         datetime             null
 )
@@ -2328,11 +2329,11 @@ go
 create table v1_user (
    id                   int                  identity,
    login                nvarchar(255)        not null,
-   password_hash        nvarchar(255)        not null,
+   password_hash        varchar(255)         not null,
    user_name            nvarchar(255)        not null,
    user_name_hash       nvarchar(255)        null,
    email                nvarchar(255)        not null,
-   email_hash           nvarchar(255)        not null,
+   email_hash           nvarchar(255)        null,
    hide_email           tinyint              not null default 1,
    registration_date    datetime             not null,
    last_visit_date      datetime             null,
@@ -2350,7 +2351,7 @@ create table v1_user (
    activation_expire    datetime             null,
    activated            tinyint              not null default 0,
    died                 tinyint              not null default 0,
-   autologin_hash       nvarchar(255)        null,
+   autologin_hash       varchar(255)         null,
    blocked              tinyint              not null default 0,
    self_blocked         tinyint              not null default 0,
    block_expires        datetime             null,
@@ -2368,7 +2369,7 @@ create table v1_user (
    turnoff_events       tinyint              not null default 0,
    turnoff_personal_appeals tinyint              not null default 0,
    approved             tinyint              not null default 0,
-   read_marker          varchar(255)         not null,
+   read_marker          varchar(255)         null,
    ip                   varchar(250)         null,
    last_ip              varchar(250)         null,
    no_video_expand      tinyint              not null default 0,
@@ -2398,7 +2399,7 @@ create table v1_user (
    custom_smiles        nvarchar(max)        null,
    ref                  int                  null,
    email_changed        tinyint              not null default 0,
-   constraint PK_V1_USER primary key nonclustered (id)
+   constraint v1_user_pk primary key nonclustered (id)
 )
 go
 
@@ -2472,7 +2473,7 @@ go
 create table v1_user_comment (
    user_id              int                  not null,
    commented_user_id    int                  not null,
-   note                 nvarchar(max)        null
+   comment              nvarchar(max)        null
 )
 go
 
@@ -2529,8 +2530,8 @@ go
 /*==============================================================*/
 create table v1_user_subscription (
    user_id              int                  not null,
-   subscribed_user_id   int                  not null,
-   subscribed_user_name nvarchar(255)        not null,
+   subscribed_user_id   int                  null,
+   subscribed_user_name nvarchar(255)        null,
    tm                   datetime             not null,
    last_view            datetime             null
 )
@@ -2611,7 +2612,7 @@ create table v1_user_tags (
    id                   int                  identity,
    name                 nvarchar(255)        null,
    user_id              int                  not null,
-   constraint PK_V1_USER_TAGS primary key nonclustered (id)
+   constraint v1_user_tags_pk primary key nonclustered (id)
 )
 go
 
@@ -2633,7 +2634,10 @@ user_id ASC
 go
 
 
-create procedure v1_deep_collect_replies (@oid integer,@deep integer) as
+create procedure v1_deep_collect_replies
+  @oid integer,
+  @deep integer
+as
 begin
    set nocount on
 

@@ -52,10 +52,10 @@
         </text>
 
         <text id="ErrNoDBConfig">
-            <en>No database connection information available ot it is incomplete!</en>
-            <de>Keine Informationen zu der Datenbankverbindung vorhanden!</de>
-            <ru>Отсутствует информация для соединения с базой данных!</ru>
-            <ua>Відсутня інформація для з'єднання з базою даних!</ua>
+            <en>No database connection information available ot it is incomplete! Please login as Master Administrator and check the database connection settings!</en>
+            <de>Keine Informationen zu der Datenbankverbindung vorhanden! Loggen Sie sich bitte als Master-Administrator ein und überprüfen Sie die Einstellungen für die Datenbankverbindung!</de>
+            <ru>Отсутствует информация для соединения с базой данных! Пожалуйста, войдите в систему под мастер-администратором и проверьте установки соединения с базой данных!</ru>
+            <ua>Відсутня інформація для з'єднання з базою даних! Будь ласка, увійдіть до системи як майстер-адміністраторо та перевірте налаштування з'єднання з базою даних!</ua>
         </text>
 
         <text id="ErrDbInaccessible">
@@ -7262,26 +7262,27 @@
         </text>
 
         <text id="DBCreationComment">
-            <en>The database must exist. If it has not been created yet, create the database and a user for it before continuing the installation.</en>
-            <de>Die Datenbank muss vorhanden sein. Falls sie noch nicht erstellt wurde, legen Sie die Datenbank und einen Benutzer dafür an, bevor Sie mit der Installation fortfahren.</de>
-            <ru>База данных должна существовать. Если она еще не создана, создайте базу данных и пользователя для нее, прежде чем продолжить исталляцию.</ru>
-            <ua>База даних повинна існувати. Якщо вона ще не створена, створіть базу даних і користувача для неї, перш ніж продовжити інсталяцію.</ua>
+            <en>If the database with that name does not exist, it will be created.</en>
+            <de>Falls die Datenbank mit dem angegebenen Namen nicht existiert, wird diese erstellt.</de>
+            <ru>Если база данных с указанным именем не существует, она будет создана.</ru>
+            <ua>Якщо база даних з вказаним ім'ям не існує, її буде створено.</ua>
         </text>
+
         <text id="DBUserComment">
-            <en>The database user must have full privileges sufficient for creating,
-                deleting and modifying its properties and objects.
+            <en>The database user has to have
+                sufficient privileges for creation of the database and database objects.
             </en>
-            <de>Der Datenbankbenutzer muss über vollständige Rechte verfügen, die ausreichen,
-                um die Datenbank und ihre Objekte zu erstellen, zu löschen und zu ändern.
+            <de>Der Datenbankbenutzer muss über genügende Rechte für die Erstellung
+                der Datenbank und derer Objekte verfügen.
             </de>
-            <ru>Пользователь базы данных должен обладать полными правами, достаточными для создания,
-                удаления и изменения ее свойств и объектов.
+            <ru>Пользователь базы данных должен обладать правами, достаточными для создания
+                базы данных и ее объектов.
             </ru>
-            <ua>Користувач бази даних повинен мати повні права, достатні для створення,
-                видалення та зміни її властивостей і об'єктів.
+            <ua>Користувач бази даних повинен мати права, достатні для створення
+                бази даних та її об'єктів.
             </ua>
         </text>
-        
+
         <text id="DBPrefixComment">
             <en>To avoid naming conflicts in the database, specify a
                 prefix that will be pre-pended to any database object of the application.
@@ -10334,13 +10335,6 @@
             <de>Widget</de>
             <ru>Виджет</ru>
             <ua>Віджет</ua>
-        </text>
-
-        <text id="Markdown">
-            <en>Markdown</en>
-            <de>Markdown</de>
-            <ru>Markdown</ru>
-            <ua>Markdown</ua>
         </text>
 
         <text id="Video">

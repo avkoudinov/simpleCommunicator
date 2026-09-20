@@ -5,6 +5,19 @@
 class MySQL_ForumManager extends ForumManager
 {
     //-----------------------------------------------------------------
+    function get_new_where_appendix($prfx, $rm)
+    {
+        if (empty($rm)) {
+            return " and {$prfx}_post.creation_date > ifnull({$prfx}_topic_read_markers.last_read_date, {$prfx}_forum_read_markers.first_read_date)
+                    ";
+        }
+        
+        return " and {$prfx}_post.read_marker <> '$rm'
+                 and {$prfx}_post.creation_date > ifnull({$prfx}_topic_read_markers.last_read_date, {$prfx}_forum_read_markers.first_read_date)
+                ";
+    } // get_new_where_appendix
+    
+    //-----------------------------------------------------------------
     function get_query_min_topic_post($prfx, $first_post_topic_id, $first_post_id)
     {
         return "select id from {$prfx}_post
@@ -22,6 +35,30 @@ class MySQL_ForumManager extends ForumManager
                 order by id desc limit 1";    
     } // get_query_max_topic_post
 
+    //-----------------------------------------------------------------
+    function get_query_empty_topic($prfx, $topic_id)
+    {
+        return "select all_cnt.id from
+                (select {$prfx}_topic.id, count({$prfx}_post.topic_id) cnt
+                                             from
+                                             {$prfx}_topic
+                                             left join {$prfx}_post on ({$prfx}_topic.id = {$prfx}_post.topic_id)
+                                             where {$prfx}_topic.deleted <> 1 and
+                                             {$prfx}_topic.id = $topic_id
+                                             group by {$prfx}_topic.id) all_cnt
+                left join                             
+                (select {$prfx}_topic.id, count({$prfx}_post.topic_id) cnt
+                                             from
+                                             {$prfx}_topic
+                                             left join {$prfx}_post on ({$prfx}_topic.id = {$prfx}_post.topic_id)
+                                             where {$prfx}_topic.deleted <> 1 and
+                                             {$prfx}_topic.id = $topic_id and
+                                             {$prfx}_post.deleted = 1
+                                             group by {$prfx}_topic.id) deleted_cnt
+                on (deleted_cnt.id = all_cnt.id)
+                where (all_cnt.cnt - ifnull(deleted_cnt.cnt, 0)) = 0";
+    } // get_query_empty_topic
+    
     //-----------------------------------------------------------------
     function get_query_previous_valid_topic_post($prfx, $where)
     {
@@ -92,6 +129,23 @@ class MySQL_ForumManager extends ForumManager
                  order by dt desc
                  limit 1";
     } // get_query_last_guest_activity
+    
+    //-----------------------------------------------------------------
+    function get_query_tor_ip_list($prfx, $where)
+    {
+        return "select
+                 {$prfx}_tor_ips.ip,
+                 {$prfx}_tor_ips.block_level,
+                 min({$prfx}_post.creation_date) first_message,
+                 max({$prfx}_post.creation_date) last_message,
+                 count({$prfx}_post.ip) cnt
+                 from {$prfx}_tor_ips
+                 inner join {$prfx}_post on ({$prfx}_tor_ips.ip = {$prfx}_post.ip)
+                 $where 
+                 group by {$prfx}_tor_ips.ip, {$prfx}_tor_ips.block_level
+                 order by last_message desc
+                 ";
+    } // get_query_tor_ip_list
     
     //-----------------------------------------------------------------
     function get_query_topic_search(&$dbw, $prfx, $uid, $search)
@@ -215,7 +269,7 @@ class MySQL_ForumManager extends ForumManager
     //-----------------------------------------------------------------
     function get_query_blocked_user_list_order_clause($prfx)
     {
-        return "blocked desc, coalesce(block_expires, date_add(current_timestamp, interval 1 year)), registration_date desc";
+        return "blocked desc, ifnull(block_expires, date_add(current_timestamp, interval 1 year)), registration_date desc";
     }
     
     //-----------------------------------------------------------------
@@ -249,7 +303,7 @@ class MySQL_ForumManager extends ForumManager
            left join
              (select user_id, sum(hits_count) week_hits_count, sum(post_count) week_post_count, sum(time_online) week_time_online
                                   from  {$prfx}_daily_statistics
-                                  where dt > $start_date
+                                  where dt > '$start_date'
                                   group by user_id) week_statistics
              on ({$prfx}_user.id = week_statistics.user_id)
              
@@ -455,10 +509,10 @@ class MySQL_ForumManager extends ForumManager
                   ) t_delayed_cnt
                 on ({$prfx}_forum_statistics.forum_id = t_delayed_cnt.forum_id)
                 set
-                {$prfx}_forum_statistics.topic_count = coalesce(t_total_cnt.cnt, 0) - coalesce(t_invisible_cnt.cnt, 0),
-                {$prfx}_forum_statistics.topic_count_total = coalesce(t_total_cnt.cnt, 0) - coalesce(t_delayed_cnt.cnt, 0),
-                {$prfx}_forum_statistics.last_message_date = coalesce(t_last.last_message_date, {$prfx}_forum_statistics.last_message_date),
-                {$prfx}_forum_statistics.last_message_id = coalesce(t_last.last_message_id, {$prfx}_forum_statistics.last_message_id)
+                {$prfx}_forum_statistics.topic_count = ifnull(t_total_cnt.cnt, 0) - ifnull(t_invisible_cnt.cnt, 0),
+                {$prfx}_forum_statistics.topic_count_total = ifnull(t_total_cnt.cnt, 0) - ifnull(t_delayed_cnt.cnt, 0),
+                {$prfx}_forum_statistics.last_message_date = ifnull(t_last.last_message_date, {$prfx}_forum_statistics.last_message_date),
+                {$prfx}_forum_statistics.last_message_id = ifnull(t_last.last_message_id, {$prfx}_forum_statistics.last_message_id)
                 where {$prfx}_forum_statistics.forum_id = $fid";
     } // get_query_topic_cnt_update
     
@@ -486,10 +540,10 @@ class MySQL_ForumManager extends ForumManager
                   ) pdcnt
                 on ({$prfx}_topic_statistics.topic_id = pdcnt.topic_id)
                 set
-                {$prfx}_topic_statistics.post_count = coalesce(ptcnt.cnt, 0) - coalesce(pdcnt.cnt, 0),
-                {$prfx}_topic_statistics.post_count_total = coalesce(ptcnt.cnt, 0),
-                {$prfx}_topic_statistics.last_message_date = coalesce(plast.last_message_date, {$prfx}_topic_statistics.last_message_date),
-                {$prfx}_topic_statistics.last_message_id = coalesce(plast.last_message_id, {$prfx}_topic_statistics.last_message_id)
+                {$prfx}_topic_statistics.post_count = ifnull(ptcnt.cnt, 0) - ifnull(pdcnt.cnt, 0),
+                {$prfx}_topic_statistics.post_count_total = ifnull(ptcnt.cnt, 0),
+                {$prfx}_topic_statistics.last_message_date = ifnull(plast.last_message_date, {$prfx}_topic_statistics.last_message_date),
+                {$prfx}_topic_statistics.last_message_id = ifnull(plast.last_message_id, {$prfx}_topic_statistics.last_message_id)
                 where {$prfx}_topic_statistics.topic_id = $tid";
     } // get_query_post_cnt_update
     
@@ -512,8 +566,8 @@ class MySQL_ForumManager extends ForumManager
              group by user_id) user_topic_count
             on ({$prfx}_user_statistics.user_id = user_topic_count.user_id)
             set
-            {$prfx}_user_statistics.post_count = coalesce(user_post_count.cnt, 0),
-            {$prfx}_user_statistics.topic_count = coalesce(user_topic_count.cnt, 0)
+            {$prfx}_user_statistics.post_count = ifnull(user_post_count.cnt, 0),
+            {$prfx}_user_statistics.topic_count = ifnull(user_topic_count.cnt, 0)
             where {$prfx}_user_statistics.user_id = $uid";
     } // get_query_user_post_cnt_update
     
@@ -538,8 +592,8 @@ class MySQL_ForumManager extends ForumManager
               ) user_dislike_count
             on ({$prfx}_user_statistics.user_id = user_dislike_count.user_id)
             set
-            {$prfx}_user_statistics.like_count = coalesce(user_like_count.cnt, 0),
-            {$prfx}_user_statistics.dislike_count = coalesce(user_dislike_count.cnt, 0)
+            {$prfx}_user_statistics.like_count = ifnull(user_like_count.cnt, 0),
+            {$prfx}_user_statistics.dislike_count = ifnull(user_dislike_count.cnt, 0)
             where {$prfx}_user_statistics.user_id = $uid";
     } // get_query_user_rate_cnt_update
     
@@ -558,8 +612,8 @@ class MySQL_ForumManager extends ForumManager
                            ) cnt
                 on ({$prfx}_post_statistics.post_id = cnt.post_id)
                 set
-                   like_count = coalesce(cnt.likes, 0),
-                   dislike_count = coalesce(cnt.dislikes, 0)
+                   like_count = ifnull(cnt.likes, 0),
+                   dislike_count = ifnull(cnt.dislikes, 0)
                 where {$prfx}_post_statistics.post_id = $pid";
     } // get_query_post_rate_cnt_update
     
@@ -570,7 +624,7 @@ class MySQL_ForumManager extends ForumManager
         
         return "select
              {$prfx}_moderator_log.id, event_time, moderator_name, moderator_id, action, action_expires, author_name, author_id,
-             {$prfx}_moderator_log.ip, post_id, topic_name, topic_id, forum_name, forum_id, note,
+             {$prfx}_moderator_log.ip, post_id, topic_name, topic_id, forum_name, forum_id, comment,
              {$prfx}_user.last_visit_date, {$prfx}_user.logout, {$prfx}_ip_blocked.ip ip_blocked, {$prfx}_ip_blocked.block_expires,
              author.last_visit_date author_last_visit_date, author.logout author_logout
              from {$prfx}_moderator_log
@@ -584,6 +638,155 @@ class MySQL_ForumManager extends ForumManager
     } // get_query_moderator_events
     
     //-----------------------------------------------------------------
+    function get_query_subscribed_messages(&$dbw, $prfx, $uid, $mindate)
+    {
+        $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
+        if (!empty($forum_restriction_appendix)) {
+            $forum_restriction_appendix = " and " . $forum_restriction_appendix;
+        }
+        
+        $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
+        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
+        
+        return "select ifnull({$prfx}_user.user_name, {$prfx}_post.author) author, count(*) cnt
+                from {$prfx}_post {$prfx}_post use index ({$prfx}_post_creation_date_idx)
+                inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                left join {$prfx}_private_topics on ({$prfx}_topic.id = {$prfx}_private_topics.topic_id and {$prfx}_topic.is_private = 2 and {$prfx}_private_topics.participant_id = $uid)
+                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                inner join {$prfx}_user_subscription
+                on ({$prfx}_user_subscription.user_id = $uid and ({$prfx}_post.user_id = {$prfx}_user_subscription.subscribed_user_id or {$prfx}_post.author = {$prfx}_user_subscription.subscribed_user_name))
+                left join {$prfx}_user on ({$prfx}_user_subscription.subscribed_user_id = {$prfx}_user.id)
+                where {$prfx}_post.creation_date >= '$mindate' and {$prfx}_post.creation_date > {$prfx}_user_subscription.last_view
+                and publish_delay <> 1 and {$prfx}_post.deleted <> 1 and {$prfx}_topic.deleted <> 1 and {$prfx}_forum.deleted <> 1
+                and (is_private < 1 or {$prfx}_private_topics.topic_id is not NULL)
+                $forum_restriction_appendix
+                $ignore_forum_where_appendix
+                $ignore_topic_where_appendix
+                group by ifnull({$prfx}_user.user_name, {$prfx}_post.author)";
+    } // get_query_subscribed_messages
+    
+    //-----------------------------------------------------------------
+    function get_query_subscribed_topics(&$dbw, $prfx, $uid, $mindate)
+    {
+        $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
+        if (!empty($forum_restriction_appendix)) {
+            $forum_restriction_appendix = " and " . $forum_restriction_appendix;
+        }
+        
+        $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
+        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
+        
+        return "select ifnull({$prfx}_user.user_name, {$prfx}_topic.author) author, count(*) cnt
+                from {$prfx}_topic use index ({$prfx}_topic_creation_date_idx)
+                left join {$prfx}_private_topics on ({$prfx}_topic.id = {$prfx}_private_topics.topic_id and {$prfx}_topic.is_private = 2 and {$prfx}_private_topics.participant_id = $uid)
+                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+                inner join {$prfx}_user_subscription
+                on ({$prfx}_user_subscription.user_id = $uid and ({$prfx}_topic.user_id = {$prfx}_user_subscription.subscribed_user_id or {$prfx}_topic.author = {$prfx}_user_subscription.subscribed_user_name))
+                left join {$prfx}_user on ({$prfx}_user_subscription.subscribed_user_id = {$prfx}_user.id)
+                where {$prfx}_topic.creation_date >= '$mindate' and {$prfx}_topic.creation_date > {$prfx}_user_subscription.last_view
+                and publish_delay <> 1 and {$prfx}_topic.deleted <> 1 and {$prfx}_forum.deleted <> 1
+                and (is_private < 1 or {$prfx}_private_topics.topic_id is not NULL)
+                $forum_restriction_appendix
+                $ignore_forum_where_appendix
+                $ignore_topic_where_appendix
+                group by ifnull({$prfx}_user.user_name, {$prfx}_topic.author)";
+    } // get_query_subscribed_topics
+    
+    //-----------------------------------------------------------------
+    function get_query_subscribed_authors($prfx, $uid, $mindate)
+    {
+        return "select subscribed_user_id, subscribed_user_name, user_name, last_visit_date, {$prfx}_user.last_post_date user_last_post_date, logout, tm, last_view,
+                (select max(creation_date) from {$prfx}_post where ({$prfx}_post.user_id = {$prfx}_user_subscription.subscribed_user_id or {$prfx}_post.author = {$prfx}_user_subscription.subscribed_user_name) and creation_date > '$mindate') guest_last_post_date
+                from {$prfx}_user_subscription
+                left join {$prfx}_user on ({$prfx}_user_subscription.subscribed_user_id = {$prfx}_user.id)
+                where {$prfx}_user_subscription.user_id = $uid
+                order by ifnull(guest_last_post_date, user_last_post_date) desc, last_view desc";
+    } // get_query_subscribed_authors
+    
+    //-----------------------------------------------------------------
+    function get_query_fill_digest_posts($dbw, $prfx, $session_id, $now, $search_hash, $uid, $rm, $fid, $private_fid)
+    {
+        $new_tracking_period = defined('NEW_TRACKING_PERIOD') ? NEW_TRACKING_PERIOD : 30;
+        $mindate = $dbw->format_datetime(time() - $new_tracking_period * 24 * 3600);
+        
+        $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
+        
+        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
+        
+        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
+        
+        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
+
+        $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
+        if (!empty($forum_restriction_appendix)) {
+            $forum_restriction_appendix = " and " . $forum_restriction_appendix;
+        }
+        
+        $private_appendix = " and {$prfx}_topic.is_private < 1";
+        
+        $topic_appendix = "";
+        if ($fid == -1 || $fid == "favourites") {
+            if (empty($_SESSION["favourite_topics"])) {
+                $favourite_topics_in_list = "-1";
+            } else {
+                $favourite_topics_in_list = $dbw->escape(implode(",", $_SESSION["favourite_topics"]));
+            }
+            
+            $topic_appendix .= " and topic_id in ($favourite_topics_in_list)";
+        } elseif ($fid == -2 || $fid == "my_topics") {
+            $topic_appendix .= " and user_id = $uid";
+        } elseif ($fid == -3 || $fid == "my_part_topics") {
+            $topic_appendix .= " and (user_id is NULL or user_id <> $uid) and topic_id in (select topic_id from {$prfx}_topic_participants where user_id = $uid)";
+        } elseif ($fid == "private" || $fid == $private_fid) {
+            $private_appendix = " and {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = $uid)";
+        } elseif (!empty($fid) && is_numeric($fid)) {
+            $topic_appendix .= " and forum_id = $fid";
+        }
+        
+        // We do not use get_new_where_appendix because this expludes own posts.
+        // But we want to see our posts in the chain of communication in the digest.
+        
+        return "insert into {$prfx}_found_post_cache (post_id, topic_id, session_id, dt, search_hash)
+                              select id, topic_id, session_id, dt, search_hash
+                              from
+                              (
+                                  select {$prfx}_post.id, {$prfx}_post.topic_id, '$session_id' session_id, '$now' dt, '$search_hash' search_hash,
+                                  {$prfx}_topic.user_id, {$prfx}_topic.forum_id, {$prfx}_topic_statistics.last_message_id,
+                                  row_number() over (partition by {$prfx}_post.topic_id order by {$prfx}_post.id) nr
+                                  from {$prfx}_post use index ({$prfx}_post_creation_date_idx)
+                                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                                  inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
+                                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
+    
+                                  left join {$prfx}_topic_read_markers on ({$prfx}_topic.id = {$prfx}_topic_read_markers.topic_id and {$prfx}_topic_read_markers.read_marker = '$rm')
+                                  left join {$prfx}_forum_read_markers on ({$prfx}_topic.forum_id = {$prfx}_forum_read_markers.forum_id and {$prfx}_forum_read_markers.read_marker = '$rm')
+                            
+                                  where
+                            
+                                  {$prfx}_post.deleted <> 1 and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1 and {$prfx}_topic.publish_delay <> 1
+                            
+                                  $forum_restriction_appendix
+                                  
+                                  $private_appendix
+                                  
+                                  and {$prfx}_post.creation_date > '$mindate'
+                                  
+                                  and {$prfx}_post.creation_date > ifnull({$prfx}_topic_read_markers.last_read_date, {$prfx}_forum_read_markers.first_read_date)
+                            
+                                  $ignore_forum_where_appendix
+                                  
+                                  $ignore_topic_where_appendix
+                            
+                                  $ignore_post_where_appendix
+                                  
+                                  $ignore_comment_where_appendix
+                              ) srch
+                              where nr <= 5 $topic_appendix
+                              order by last_message_id desc
+                             ";
+    } // get_query_fill_digest_posts
+    
+    //-----------------------------------------------------------------
     function get_query_fill_search_posts($prfx, $session_id, $now, $search_hash, $topic_part_where, $post_part_where, $max_search_results, $order_by, &$hints)
     {
         $post_hint = "";
@@ -595,7 +798,7 @@ class MySQL_ForumManager extends ForumManager
         
         return "insert into {$prfx}_found_post_cache (post_id, topic_id, session_id, dt, search_hash)
                               select
-                              {$prfx}_post.id, {$prfx}_post.topic_id, '$session_id', $now, '$search_hash'
+                              {$prfx}_post.id, {$prfx}_post.topic_id, '$session_id', '$now', '$search_hash'
                               from {$prfx}_post $post_hint
                               left join {$prfx}_post_statistics on ({$prfx}_post.id = {$prfx}_post_statistics.post_id)
                               inner join {$prfx}_topic ignore index ({$prfx}_topic_is_private_idx, {$prfx}_topic_publish_delay_idx, {$prfx}_topic_is_deleted_idx) on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -616,7 +819,7 @@ class MySQL_ForumManager extends ForumManager
     {
         return "insert into {$prfx}_found_topic_cache (topic_id, session_id, dt, search_hash)
               select 
-              {$prfx}_topic.id, '$session_id', $now, '$search_hash'
+              {$prfx}_topic.id, '$session_id', '$now', '$search_hash'
               from {$prfx}_topic
               inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
               inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -987,7 +1190,7 @@ class MySQL_ForumManager extends ForumManager
     } // get_query_read_topics
     
     //-----------------------------------------------------------------
-    function get_query_guest_last_activity($dbw, $prfx, $guest)
+    function get_query_guest_last_activity($prfx, $guest)
     {
         if (empty($guest)) {
             $where = "where guest_name is NULL and user_id is NULL";
@@ -1044,6 +1247,22 @@ class MySQL_ForumManager extends ForumManager
     } // get_query_ignored_comments_list
 
     //-----------------------------------------------------------------
+    function get_query_post_count($prfx, $where)
+    {
+        return "select
+                user_name, {$prfx}_post.user_id, ifnull({$prfx}_post.user_id, {$prfx}_post.read_marker) uid, {$prfx}_user.registration_date,
+                count(*) cnt
+                from {$prfx}_post
+                inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
+                left join {$prfx}_user on ({$prfx}_post.user_id = {$prfx}_user.id)
+                $where
+                group by
+                user_name, {$prfx}_post.user_id, ifnull({$prfx}_post.user_id, {$prfx}_post.read_marker), {$prfx}_user.registration_date
+                order by count(*) desc
+                ";
+    } // get_query_post_count
+    
+    //-----------------------------------------------------------------
     function get_query_load_attachments($prfx, $uid, $current_appendex)
     {
         return "select {$prfx}_attachment.id, {$prfx}_attachment.post_id,
@@ -1064,7 +1283,6 @@ class MySQL_ForumManager extends ForumManager
                                   inner join {$prfx}_post on ({$prfx}_attachment.post_id = {$prfx}_post.id)
                                   inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
                                   inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                                  left join {$prfx}_post last_usage on ({$prfx}_attachment.last_post_id = last_usage.id)
                                   where
                                   {$prfx}_attachment.user_id = $uid and
                                   type in ('image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp') and
@@ -1073,7 +1291,7 @@ class MySQL_ForumManager extends ForumManager
                                   $current_appendex
                                   group by {$prfx}_topic.forum_id, {$prfx}_attachment.name)
                              
-                             order by {$prfx}_attachment.favourite desc, {$prfx}_attachment.id desc
+                             order by {$prfx}_attachment.favourite desc, {$prfx}_attachment.last_post_id desc, {$prfx}_attachment.id desc
                              limit 100";
     } // get_query_load_attachments
     
@@ -1179,7 +1397,7 @@ class MySQL_ForumManager extends ForumManager
                              from
                              {$prfx}_forum_hits
                              left join {$prfx}_user on ({$prfx}_forum_hits.user_id = {$prfx}_user.id)
-                             where dt >= $start_date and bot is NULL
+                             where dt >= '$start_date' and bot is NULL
                              group by user_id, guest_name, last_visit_date, logout
                              order by cnt desc
                              limit 20")) {
@@ -1223,8 +1441,8 @@ class MySQL_ForumManager extends ForumManager
         if (!$rodbw->execute_query("select {$prfx}_forum_hits.ip, {$prfx}_ip_blocked.ip blocked, count(*) cnt
                              from
                              {$prfx}_forum_hits
-                             left join {$prfx}_ip_blocked on ({$prfx}_forum_hits.ip = {$prfx}_ip_blocked.ip and (block_expires is NULL or block_expires > $now))
-                             where dt >= $start_date
+                             left join {$prfx}_ip_blocked on ({$prfx}_forum_hits.ip = {$prfx}_ip_blocked.ip and (block_expires is NULL or block_expires > '$now'))
+                             where dt >= '$start_date'
                              group by {$prfx}_forum_hits.ip, {$prfx}_ip_blocked.ip
                              order by cnt desc
                              limit 20")) {
@@ -1290,7 +1508,7 @@ class MySQL_ForumManager extends ForumManager
         if (!$rodbw->execute_query("select {$prfx}_forum_hits.user_agent, count(*) cnt
                              from
                              {$prfx}_forum_hits
-                             where dt >= $start_date
+                             where dt >= '$start_date'
                              group by {$prfx}_forum_hits.user_agent
                              order by cnt desc
                              limit 40")) {
@@ -1376,7 +1594,7 @@ class MySQL_ForumManager extends ForumManager
                              max(total_forum_rm_count) total_forum_rm_count
                              from
                              {$prfx}_load_statistics
-                             where dt >= $start_date 
+                             where dt >= '$start_date' 
                              group by extract(year from dt), extract(month from dt), extract(day from dt), extract(hour from dt), extract(minute from dt)
                              order by extract(year from dt), extract(month from dt), extract(day from dt), extract(hour from dt), extract(minute from dt)
                             ")) {
@@ -1414,7 +1632,7 @@ class MySQL_ForumManager extends ForumManager
                              sum(hits_count) hits_count
                              from
                              {$prfx}_forum_hits
-                             where dt >= $start_date
+                             where dt >= '$start_date'
                              group by extract(year from dt), extract(month from dt), extract(day from dt), extract(hour from dt), extract(minute from dt)
                              order by extract(year from dt), extract(month from dt), extract(day from dt), extract(hour from dt), extract(minute from dt)
                             ")) {
@@ -1544,11 +1762,11 @@ class MySQL_ForumManager extends ForumManager
 
         $date_appendix = "";
         if (!empty($start_date) && $start_date != "error") {
-            $date_appendix .= " and {$prfx}_post.creation_date >= " . $srdbw->format_datetime($start_date);
+            $date_appendix .= " and {$prfx}_post.creation_date >= '" . $srdbw->format_datetime($start_date) . "'";
         }
         
         if (!empty($end_date) && $end_date != "error") {
-            $date_appendix .= " and {$prfx}_post.creation_date <= " . $srdbw->format_datetime($end_date);
+            $date_appendix .= " and {$prfx}_post.creation_date <= '" . $srdbw->format_datetime($end_date) . "'";
         }
       
         if (!empty($author_id)) {
@@ -1741,10 +1959,10 @@ class MySQL_ForumManager extends ForumManager
     function get_hot_topic_clause($prfx, $start1, $start2)
     {
         $where = "";
-        $where .= " and {$prfx}_topic_statistics.last_message_date >= $start2" . "\n";
+        $where .= " and {$prfx}_topic_statistics.last_message_date >= '$start2'" . "\n";
         $where .= " and {$prfx}_topic_statistics.post_count_total >= 100" . "\n";
-        $where .= " and (exists (select 1 from {$prfx}_post use index ({$prfx}_post_creation_date_idx, {$prfx}_post_author_idx) where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_post.creation_date >= $start1 group by topic_id having count(*) >= 15 and count(distinct {$prfx}_post.author) > 2) or 
-                         exists (select 1 from {$prfx}_post use index ({$prfx}_post_creation_date_idx, {$prfx}_post_author_idx) where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_post.creation_date >= $start2 group by topic_id having count(*) >= 100 and count(distinct {$prfx}_post.author) > 2)
+        $where .= " and (exists (select 1 from {$prfx}_post use index ({$prfx}_post_creation_date_idx, {$prfx}_post_author_idx) where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_post.creation_date >= '$start1' group by topic_id having count(*) >= 15 and count(distinct {$prfx}_post.author) > 2) or 
+                         exists (select 1 from {$prfx}_post use index ({$prfx}_post_creation_date_idx, {$prfx}_post_author_idx) where {$prfx}_post.topic_id = {$prfx}_topic.id and {$prfx}_post.creation_date >= '$start2' group by topic_id having count(*) >= 100 and count(distinct {$prfx}_post.author) > 2)
                         )" . "\n";
         
         return $where;        
@@ -1762,141 +1980,13 @@ class MySQL_ForumManager extends ForumManager
     } // get_query_next_post
 
     //-----------------------------------------------------------------
-    function get_query_subscribed_messages(&$dbw, $prfx, $uid, $mindate)
+    function get_query_check_comments($prfx, $tid, $first_post, $last_post)
     {
-        $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
-        if (!empty($forum_restriction_appendix)) {
-            $forum_restriction_appendix = " and " . $forum_restriction_appendix;
-        }
-        
-        $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
-        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
-        
-        return "select coalesce({$prfx}_user.user_name, {$prfx}_post.author) author, count(*) cnt
-                from {$prfx}_post {$prfx}_post use index ({$prfx}_post_creation_date_idx)
-                inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
-                left join {$prfx}_private_topics on ({$prfx}_topic.id = {$prfx}_private_topics.topic_id and {$prfx}_topic.is_private = 2 and {$prfx}_private_topics.participant_id = $uid)
-                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                inner join {$prfx}_user_subscription
-                on ({$prfx}_user_subscription.user_id = $uid and ({$prfx}_post.user_id = {$prfx}_user_subscription.subscribed_user_id or {$prfx}_post.author = {$prfx}_user_subscription.subscribed_user_name))
-                left join {$prfx}_user on ({$prfx}_user_subscription.subscribed_user_id = {$prfx}_user.id)
-                where {$prfx}_post.creation_date >= $mindate and {$prfx}_post.creation_date > {$prfx}_user_subscription.last_view
-                and publish_delay <> 1 and {$prfx}_post.deleted <> 1 and {$prfx}_topic.deleted <> 1 and {$prfx}_forum.deleted <> 1
-                and (is_private < 1 or {$prfx}_private_topics.topic_id is not NULL)
-                $forum_restriction_appendix
-                $ignore_forum_where_appendix
-                $ignore_topic_where_appendix
-                group by coalesce({$prfx}_user.user_name, {$prfx}_post.author)";
-    } // get_query_subscribed_messages
-
-    //-----------------------------------------------------------------
-    function get_query_subscribed_topics(&$dbw, $prfx, $uid, $mindate)
-    {
-        $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
-        if (!empty($forum_restriction_appendix)) {
-            $forum_restriction_appendix = " and " . $forum_restriction_appendix;
-        }
-        
-        $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
-        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
-        
-        return "select coalesce({$prfx}_user.user_name, {$prfx}_topic.author) author, count(*) cnt
-                from {$prfx}_topic use index ({$prfx}_topic_creation_date_idx)
-                left join {$prfx}_private_topics on ({$prfx}_topic.id = {$prfx}_private_topics.topic_id and {$prfx}_topic.is_private = 2 and {$prfx}_private_topics.participant_id = $uid)
-                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                inner join {$prfx}_user_subscription
-                on ({$prfx}_user_subscription.user_id = $uid and ({$prfx}_topic.user_id = {$prfx}_user_subscription.subscribed_user_id or {$prfx}_topic.author = {$prfx}_user_subscription.subscribed_user_name))
-                left join {$prfx}_user on ({$prfx}_user_subscription.subscribed_user_id = {$prfx}_user.id)
-                where {$prfx}_topic.creation_date >= $mindate and {$prfx}_topic.creation_date > {$prfx}_user_subscription.last_view
-                and publish_delay <> 1 and {$prfx}_topic.deleted <> 1 and {$prfx}_forum.deleted <> 1
-                and (is_private < 1 or {$prfx}_private_topics.topic_id is not NULL)
-                $forum_restriction_appendix
-                $ignore_forum_where_appendix
-                $ignore_topic_where_appendix
-                group by coalesce({$prfx}_user.user_name, {$prfx}_topic.author)";
-    } // get_query_subscribed_topics
-
-    //-----------------------------------------------------------------
-    function get_query_fill_digest_posts($dbw, $prfx, $session_id, $now, $search_hash, $uid, $rm, $fid, $private_fid)
-    {
-        $new_tracking_period = defined('NEW_TRACKING_PERIOD') ? NEW_TRACKING_PERIOD : 30;
-        $mindate = $dbw->format_datetime(time() - $new_tracking_period * 24 * 3600);
-        
-        $ignore_forum_where_appendix = $this->get_ignore_forum_where_appendix($dbw, $prfx);
-        
-        $ignore_topic_where_appendix = $this->get_ignore_topic_where_appendix($dbw, $prfx);
-        
-        $ignore_post_where_appendix = $this->get_ignore_post_where_appendix($dbw, $prfx);
-        
-        $ignore_comment_where_appendix = $this->get_ignore_comment_where_appendix($dbw, $prfx);
-
-        $forum_restriction_appendix = $this->get_forum_restriction_appendix($dbw, $prfx);
-        if (!empty($forum_restriction_appendix)) {
-            $forum_restriction_appendix = " and " . $forum_restriction_appendix;
-        }
-        
-        $private_appendix = " and {$prfx}_topic.is_private < 1";
-        
-        $topic_appendix = "";
-        if ($fid == -1 || $fid == "favourites") {
-            if (empty($_SESSION["favourite_topics"])) {
-                $favourite_topics_in_list = "-1";
-            } else {
-                $favourite_topics_in_list = $dbw->escape(implode(",", $_SESSION["favourite_topics"]));
-            }
-            
-            $topic_appendix .= " and topic_id in ($favourite_topics_in_list)";
-        } elseif ($fid == -2 || $fid == "my_topics") {
-            $topic_appendix .= " and user_id = $uid";
-        } elseif ($fid == -3 || $fid == "my_part_topics") {
-            $topic_appendix .= " and (user_id is NULL or user_id <> $uid) and topic_id in (select topic_id from {$prfx}_topic_participants where user_id = $uid)";
-        } elseif ($fid == "private" || $fid == $private_fid) {
-            $private_appendix = " and {$prfx}_topic.id in (select {$prfx}_private_topics.topic_id from {$prfx}_private_topics where {$prfx}_private_topics.participant_id = $uid)";
-        } elseif (!empty($fid) && is_numeric($fid)) {
-            $topic_appendix .= " and forum_id = $fid";
-        }
-        
-        // We do not use get_new_where_appendix because this expludes own posts.
-        // But we want to see our posts in the chain of communication in the digest.
-        
-        return "insert into {$prfx}_found_post_cache (post_id, topic_id, session_id, dt, search_hash)
-                              select id, topic_id, session_id, dt, search_hash
-                              from
-                              (
-                                  select {$prfx}_post.id, {$prfx}_post.topic_id, '$session_id' session_id, $now dt, '$search_hash' search_hash,
-                                  {$prfx}_topic.user_id, {$prfx}_topic.forum_id, {$prfx}_topic_statistics.last_message_id,
-                                  row_number() over (partition by {$prfx}_post.topic_id order by {$prfx}_post.id) nr
-                                  from {$prfx}_post use index ({$prfx}_post_creation_date_idx)
-                                  inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
-                                  inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
-                                  inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-    
-                                  left join {$prfx}_topic_read_markers on ({$prfx}_topic.id = {$prfx}_topic_read_markers.topic_id and {$prfx}_topic_read_markers.read_marker = '$rm')
-                                  left join {$prfx}_forum_read_markers on ({$prfx}_topic.forum_id = {$prfx}_forum_read_markers.forum_id and {$prfx}_forum_read_markers.read_marker = '$rm')
-                            
-                                  where
-                            
-                                  {$prfx}_post.deleted <> 1 and {$prfx}_forum.deleted <> 1 and {$prfx}_topic.deleted <> 1 and {$prfx}_topic.publish_delay <> 1
-                            
-                                  $forum_restriction_appendix
-                                  
-                                  $private_appendix
-                                  
-                                  and {$prfx}_post.creation_date > $mindate
-                                  
-                                  and {$prfx}_post.creation_date > coalesce({$prfx}_topic_read_markers.last_read_date, {$prfx}_forum_read_markers.first_read_date)
-                            
-                                  $ignore_forum_where_appendix
-                                  
-                                  $ignore_topic_where_appendix
-                            
-                                  $ignore_post_where_appendix
-                                  
-                                  $ignore_comment_where_appendix
-                              ) srch
-                              where nr <= 5 $topic_appendix
-                              order by last_message_id desc
-                             ";
-    } // get_query_fill_digest_posts
+        return "select {$prfx}_post.id, is_comment,
+                       ifnull(lead(is_comment) over (order by {$prfx}_post.id), 0) as has_comments
+                       from {$prfx}_post
+                       where {$prfx}_post.topic_id = $tid and {$prfx}_post.id between $first_post and $last_post
+                       ";
+    }    
 } // class MySQL_ForumManager
 ?>

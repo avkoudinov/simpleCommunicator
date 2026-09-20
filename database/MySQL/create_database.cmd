@@ -2,6 +2,8 @@
 
 rem set the path to mysql.exe
  
+set MYSQL_PATH="C:\web\mysql-5.6.10\bin\mysql.exe"
+set MYSQL_PATH="C:\web\mysql-5.7.18\bin\mysql.exe"
 set MYSQL_PATH="C:\mysql\bin\mysql.exe"
 
 rem set the root password

@@ -731,19 +731,6 @@ Forum.show_user_inputbox = function(title_text, field_caption, default_value, ic
   }
 }; // show_user_inputbox
 //----------------------------------------------------
-function show_hat() {
-  var mbuttons = [
-    {
-      caption: msg_OK,
-      handler: function () {
-        Forum.hide_user_msgbox();
-      }
-    }
-  ];
-
-  Forum.show_user_msgbox(msg_Information, 'Тынц!', 'icon-info.gif', mbuttons);
-}
-//----------------------------------------------------
 var zoom_preview_factor = 1;
 // --------------------------------------------------------
 Forum.scale_preview_image = function(img)
@@ -1161,7 +1148,7 @@ Forum.show_post_preview = function(title_text, html, buttons)
     html_container.innerHTML = html;
     body.appendChild(html_container);
 
-    var codes = document.body.querySelectorAll("pre code");
+    var codes = document.body.getElementsByTagName("code");
     for(var i = 0; i < codes.length; i++)
     {
       hljs.highlightBlock(codes[i]);
@@ -1209,16 +1196,9 @@ Forum.show_attachment_gallery = function(title_text, buttons)
   var body = document.getElementById("sys_lightbox_body");
   var toolbar = document.getElementById("sys_lightbox_toolbar");
 
-  var last_filter_bar = document.getElementById("gallery_filter_bar");
+  Forum.last_element_parent = null;
 
-  var last_filter_bar_parent = last_filter_bar.parentNode;
-  Forum.on_lightbox_close = function () {
-    last_filter_bar.style.display = "none";
-    last_filter_bar_parent.appendChild(last_filter_bar);
-    last_filter_bar_parent = null;
-  };
-
-  if(body && head && toolbar && last_filter_bar)
+  if(body && head && toolbar)
   {
     var dims = Forum.getClientDimensions();
 
@@ -1233,10 +1213,6 @@ Forum.show_attachment_gallery = function(title_text, buttons)
 
     var attachment_gallery_area = document.createElement("div");
     attachment_gallery_area.classList.add("attachment_gallery_area");
-
-    last_filter_bar.style.display = "flex";
-    attachment_gallery_area.appendChild(last_filter_bar);
-    
     body.appendChild(attachment_gallery_area);
     
     var computedStyle = getComputedStyle(attachment_gallery_area);
@@ -1279,8 +1255,6 @@ Forum.aux_show_consent_dialog = function(width)
 {
   var lbox = document.getElementById("sys_lightbox");
   if(!lbox) return;
-  
-  lbox.classList.add("consent_dialog");
 
   var title = document.getElementById("sys_lightbox_title");
   if(title) title.innerHTML = Forum.escape_html(msg_DataConsent);
@@ -1288,7 +1262,7 @@ Forum.aux_show_consent_dialog = function(width)
   var head = document.getElementById("sys_lightbox_head");
   var body = document.getElementById("sys_lightbox_body");
   var toolbar = document.getElementById("sys_lightbox_toolbar");
-  var elm = document.getElementById("consent_dialog_content");
+  var elm = document.getElementById("consent_dialog");
 
   Forum.last_element_parent = null;
 
@@ -1744,7 +1718,6 @@ Forum.hide_sys_lightbox = function()
   var lbox = document.getElementById("sys_lightbox");
   if(!lbox) return;
 
-  lbox.className = "_sys_lightbox";
   lbox.style.display = "none";
 
   var body = document.getElementById("sys_lightbox_body");
@@ -1789,8 +1762,6 @@ Forum.hide_sys_lightbox = function()
 
   var elm;
   while(elm = toolbar.lastChild) toolbar.removeChild(elm);
-
-  while(elm = body.lastChild) body.removeChild(elm);
 } // hide_sys_lightbox
 // --------------------------------------------------------
 Forum.handle_sys_msgbox_esc = function(ev)
@@ -2987,8 +2958,6 @@ if(document.location.href.indexOf('topic.php') == -1 &&
 }
 // --------------------------------------------------------
 Forum.addXEvent(window, 'popstate', function(e) {
-  debug_line('popstate called', 'history');
-
   if(typeof e.state == 'undefined' || !e.state) 
   {
     return;

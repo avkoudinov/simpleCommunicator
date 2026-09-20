@@ -185,47 +185,18 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[anim]','[/anim]', 0)" tabindex="-1">ANIM</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[url=]','[/url]', 0)" tabindex="-1">URL</button></div>
 
-<div class="toolbar_button_wrapper" style="float:right;margin-right: 0px;"><button class="toolbar_button" type="button" style="background: transparent url('<?php echo($view_path); ?>images/paste.png') no-repeat center center; background-size: 70% 70%;" onclick="return paste_text()" tabindex="-1">&nbsp;</button></div>
 </td>
 </tr>
 
 <tr>
 <td class="toolbar">
 
-<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[ai=]','[/ai]', 0)" tabindex="-1">AI</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
 
 <div class="toolbar_button_wrapper">
-<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_ai_selection_area()" tabindex="-1">AI</button>
-
-  <div id="ai_selection_area" class="ai_selection_area" style="display:none">
-
-    <div onclick="insert_tag('[ai]','[/ai]', 0)">AI</div>
-    <?php
-    echo $fmanager->build_ai_list("ai");
-    ?>
-
-  </div>
-  <div class="clear_both"></div>
-</div>
-
-<div class="toolbar_button_wrapper">
-<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_markdown_selection_area()" tabindex="-1">MARKDOWN</button>
-
-  <div id="markdown_selection_area" class="markdown_selection_area" style="display:none">
-
-    <div onclick="insert_tag('[markdown]','[/markdown]', 0)">MARKDOWN</div>
-    <div onclick="insert_tag('[markdown=AI]','[/markdown]', 0)">AI</div>
-    <?php
-    echo $fmanager->build_ai_list("markdown");
-    ?>
-
-  </div>
-  <div class="clear_both"></div>
-</div>
-
-<div class="toolbar_button_wrapper">
-<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_code_selection_area()" tabindex="-1">CODE</button>
+<button class="toolbar_button" type="button" onclick="return toggle_code_selection_area()" tabindex="-1">CODE</button>
   <div id="code_selection_area" class="code_selection_area" style="display:none">
 
     <?php
@@ -236,12 +207,12 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
   <div class="clear_both"></div>
 </div>
 
-<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[fixed]','[/fixed]', 0)" tabindex="-1">FIX</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[poem]','[/poem]', 0)" tabindex="-1">POEM</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[table]','[/table]', 0)" tabindex="-1">TABLE</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[fixed]','[/fixed]', 0)" tabindex="-1">FIX</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[poem]','[/poem]', 0)" tabindex="-1">POEM</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[table]','[/table]', 0)" tabindex="-1">TABLE</button></div>
 
 <div class="toolbar_button_wrapper">
-<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_media_selection_area()" tabindex="-1">MEDIA</button>
+<button class="toolbar_button" type="button" onclick="return toggle_media_selection_area()" tabindex="-1">MEDIA</button>
   <div id="media_selection_area" class="media_selection_area" style="display:none">
 
     <div onclick="insert_tag('[youtube]','[/youtube]', 0)">YOUTUBE</div>
@@ -256,7 +227,6 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
     <div onclick="insert_tag('[radikal]','[/radikal]', 0)">RADIKAL</div>
     <div onclick="insert_tag('[plvideo]','[/plvideo]', 0)">PLVIDEO</div>
     <div onclick="insert_tag('[dzen]','[/dzen]', 0)">YANDEX DZEN</div>
-    <div onclick="insert_tag('[ok]','[/ok]', 0)">OK</div>
     <div onclick="insert_tag('[rambler]','[/rambler]', 0)">RAMBLER</div>
     <div onclick="insert_tag('[tiktok]','[/tiktok]', 0)">TIKTOK</div>
     <div onclick="insert_tag('[anim]','[/anim]', 0)">ANIM</div>
@@ -271,6 +241,8 @@ if($fmanager->is_logged_in() && !empty($forum_data["user_posting_as_guest"]) && 
 
   </div>
 </div>
+
+<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" style="background: transparent url('<?php echo($view_path); ?>images/paste.png') no-repeat center center; background-size: 70% 70%;" onclick="return paste_text()" tabindex="-1">&nbsp;</button></div>
 
 <div class="clear_both"></div>
 </td>
@@ -482,7 +454,3 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
 </div>
 
 <!-- END: object for posting dialog -->
-
-<?php
-require_once "gallery_filter_bar_inc.php";
-?>

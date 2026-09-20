@@ -164,7 +164,7 @@ abstract class ForumAPIManager
 
         $query = "select read_marker, author
                   from {$prfx}_read_marker_activity 
-                  where (current_name_start > $start_time or current_name_hits < 500)
+                  where (current_name_start > '$start_time' or current_name_hits < 500)
                   and author is not NULL
                   and not exists (select 1 from {$prfx}_user where {$prfx}_user.user_name = {$prfx}_read_marker_activity.author)";
         
@@ -186,18 +186,18 @@ abstract class ForumAPIManager
         $now = $dbw->format_datetime(time());
 
         if (!$dbw->execute_query("update {$prfx}_user set blocked = 0, block_expires = NULL, block_reason = NULL
-                             where id = $uid and block_expires <= $now")) {
+                             where id = $uid and block_expires <= '$now'")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
         if (!$dbw->execute_query("delete from {$prfx}_forum_blocked
-                             where user_id = $uid and block_expires <= $now")) {
+                             where user_id = $uid and block_expires <= '$now'")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
     
         $host = $dbw->escape(get_host_address());
     
-        if (!$dbw->execute_query("update {$prfx}_user set last_host = '$host', last_visit_date = $now where id = $uid")) {
+        if (!$dbw->execute_query("update {$prfx}_user set last_host = '$host', last_visit_date = '$now' where id = $uid")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
 
@@ -263,7 +263,7 @@ abstract class ForumAPIManager
         
         $_SESSION["blocked_forums"] = array();
         
-        if (!$dbw->execute_query("select forum_id from {$prfx}_forum_blocked where user_id = $uid and (block_expires is NULL or block_expires > $now)")) {
+        if (!$dbw->execute_query("select forum_id from {$prfx}_forum_blocked where user_id = $uid and (block_expires is NULL or block_expires > '$now')")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
@@ -882,9 +882,9 @@ abstract class ForumAPIManager
             $start_timestamp = $rodbw->format_datetime($start_timestamp);
             
             if ($sort == "desc") {
-                $where .= " and {$prfx}_topic_statistics.last_message_date < $start_timestamp";
+                $where .= " and {$prfx}_topic_statistics.last_message_date < '$start_timestamp'";
             } else {
-                $where .= " and {$prfx}_topic_statistics.last_message_date > $start_timestamp";
+                $where .= " and {$prfx}_topic_statistics.last_message_date > '$start_timestamp'";
             }
         } 
 
@@ -1060,7 +1060,7 @@ abstract class ForumAPIManager
               from
               {$prfx}_post
               inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
-              where {$prfx}_post.creation_date >= $now
+              where {$prfx}_post.creation_date >= '$now'
               group by topic_id
               having count(*) >= 15 and count(distinct {$prfx}_post.author) > 2";
               
@@ -1084,7 +1084,7 @@ abstract class ForumAPIManager
               from
               {$prfx}_post
               inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
-              where {$prfx}_post.creation_date >= $now
+              where {$prfx}_post.creation_date >= '$now'
               group by topic_id
               having count(*) >= 100 and count(distinct {$prfx}_post.author) > 2";
         if (!$rodbw->execute_query($query)) {
@@ -1238,9 +1238,9 @@ abstract class ForumAPIManager
             $start_timestamp = $rodbw->format_datetime($start_timestamp);
             
             if ($sort == "desc") {
-                $where .= " and {$prfx}_post.creation_date < $start_timestamp";
+                $where .= " and {$prfx}_post.creation_date < '$start_timestamp'";
             } else {
-                $where .= " and {$prfx}_post.creation_date > $start_timestamp";
+                $where .= " and {$prfx}_post.creation_date > '$start_timestamp'";
             }
         }        
 
@@ -1423,7 +1423,7 @@ abstract class ForumAPIManager
         
         if (!$dbw->execute_query("select 1
                              from {$prfx}_banned_ips
-                             where banned_until > $now and ip = '$ip'")) {
+                             where banned_until > '$now' and ip = '$ip'")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
@@ -1443,7 +1443,7 @@ abstract class ForumAPIManager
         
         if (!$dbw->execute_query("select count(*) cnt
                              from {$prfx}_post
-                             where creation_date >= $now and ip = '$ip'")) {
+                             where creation_date >= '$now' and ip = '$ip'")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
@@ -1468,7 +1468,7 @@ abstract class ForumAPIManager
         
         $banned_until = $dbw->format_datetime(time() + $wait_time_after_attack * 60);
         
-        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, check_period, hit_limit, atype, statistics_request) values ($banned_until, '$ip', $hits, $check_period, $limit, '$atype', 0)")) {
+        if (!$dbw->execute_query("insert into {$prfx}_banned_ips (banned_until, ip, hits, check_period, hit_limit, atype, statistics_request) values ('$banned_until', '$ip', $hits, $check_period, $limit, '$atype', 0)")) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
@@ -1752,7 +1752,7 @@ abstract class ForumAPIManager
             $rm = $dbw->escape($READ_MARKER);
             $query = "select count(*) cnt, min(creation_date) first_topic_date
                 from {$prfx}_topic
-                where read_marker = '$rm' and creation_date >= $now and publish_delay <> 1 and is_private < 1";
+                where read_marker = '$rm' and creation_date >= '$now' and publish_delay <> 1 and is_private < 1";
         } elseif ($this->forum_manager->get_private_forum_id() == $fid) {
             // we count topics for the private messages separately
             $uid = $dbw->escape($uid);
@@ -1765,7 +1765,7 @@ abstract class ForumAPIManager
                 inner join {$prfx}_private_topics on ({$prfx}_topic.id = {$prfx}_private_topics.topic_id and participant_id = $receiver_id)
                 where
                 user_id = $uid and
-                creation_date >= $now and
+                creation_date >= '$now' and
                 publish_delay <> 1 and
                 is_private > 0";
         } else {
@@ -1774,7 +1774,7 @@ abstract class ForumAPIManager
             $query = "select count(*) cnt, min(creation_date) first_topic_date
                 from {$prfx}_topic where
                 user_id = $uid and
-                creation_date >= $now and
+                creation_date >= '$now' and
                 publish_delay <> 1 and
                 is_private < 1 and
                 not exists (select 1 from {$prfx}_forum_moderator where user_id = $uid and {$prfx}_forum_moderator.forum_id = {$prfx}_topic.forum_id)";
@@ -2161,7 +2161,7 @@ abstract class ForumAPIManager
                 select $tid, user_id, 1
                 from {$prfx}_ignored_users
                 where ignored_user_id = $uid 
-                and user_id in (select id from {$prfx}_user where last_visit_date > $now)
+                and user_id in (select id from {$prfx}_user where last_visit_date > '$now')
                 and (select 1 from {$prfx}_ignored_topics where user_id = $uid and topic_id = $tid) is NULL
                 and (select 1 from {$prfx}_topic where id = $tid and is_private > 0) is NULL
                 ";
@@ -2177,7 +2177,7 @@ abstract class ForumAPIManager
                 select $tid, id, 1
                 from {$prfx}_user
                 where ignore_guests_whitelist = '1'
-                and last_visit_date > $now
+                and last_visit_date > '$now'
                 and id not in (select user_id from {$prfx}_ignored_guests where whitelist = 1)
                 and (select 1 from {$prfx}_ignored_topics where user_id = {$prfx}_user.id and topic_id = $tid) is NULL";
             if (!$dbw->execute_query($query)) {
@@ -2190,7 +2190,7 @@ abstract class ForumAPIManager
                 select $tid, id, 1
                 from {$prfx}_user
                 where ignore_guests_blacklist = '1'
-                and last_visit_date > $now
+                and last_visit_date > '$now'
                 and id in (select user_id from {$prfx}_ignored_guests where guest_name = '$author' and whitelist = 0)
                 and (select 1 from {$prfx}_ignored_topics where user_id = {$prfx}_user.id and topic_id = $tid) is NULL";
             if (!$dbw->execute_query($query)) {
@@ -2203,7 +2203,7 @@ abstract class ForumAPIManager
                 select $tid, id, 1
                 from {$prfx}_user
                 where ignore_guests_whitelist = '1'
-                and last_visit_date > $now
+                and last_visit_date > '$now'
                 and (select 1 from {$prfx}_ignored_guests where user_id = {$prfx}_user.id and guest_name = '$author' and whitelist = 1) is NULL
                 and (select 1 from {$prfx}_ignored_topics where user_id = {$prfx}_user.id and topic_id = $tid) is NULL";
             if (!$dbw->execute_query($query)) {
@@ -2422,6 +2422,8 @@ abstract class ForumAPIManager
 
         $_SESSION["last_posted_user"] = $request_data["author"];
         
+        $author = $dbw->quotes_or_null($request_data["author"]);
+
         $tor_check = $this->forum_manager->check_tor_ip($ip);
         if (!$this->forum_manager->is_logged_in() && ($tor_check == "tor_block_write" || $tor_check == "tor_block_read")) {
             throw new ForumAPIException(text("ErrTorNodeBlocked"), ForumAPIException::ERR_CODE_ACCESS_ERROR);
@@ -2538,12 +2540,14 @@ abstract class ForumAPIManager
 
         $uid = $dbw->escape($this->forum_manager->get_user_id());
         if (empty($uid) || $forced_guest_posting) {
-            $uid = null;
+            $uid = "NULL";
         }
         
         $now = $dbw->format_datetime(time());
         
         $rm = $dbw->escape($READ_MARKER);
+        
+        $user_marker = $dbw->quotes_or_null($request_data["api_token"]);
         
         $ip = $dbw->escape($ip);
         
@@ -2556,7 +2560,7 @@ abstract class ForumAPIManager
         $is_pinned = 0;
         $poll_results_delayed = 0;
         $no_guests = 0;
-        $poll_comment = null;        
+        $poll_comment = "NULL";        
 
         $agent = $dbw->quotes_or_null("Forum API Version 1.0");
         
@@ -2569,6 +2573,7 @@ abstract class ForumAPIManager
         
         if ($new_topic) {
             $search_words_appendix .= " " . $request_data["subject"];
+            $subject = $dbw->quotes_or_null($request_data["subject"]);
             
             $is_blog = empty($request_data["blog"]) ? "0" : "2";
             $request_moderation = empty($request_data["request_moderation"]) ? "0" : "2";
@@ -2578,35 +2583,12 @@ abstract class ForumAPIManager
                 $no_guests = "0";
             }
 
-            if (!$dbw->prepare_query("insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker, user_marker, is_private, is_poll, poll_comment, poll_results_delayed, has_pinned_post, publish_delay, request_moderation, no_guests, profiled_topic)
-                values (:forum_id, :user_id, :author, :name, :creation_date, :read_marker, :user_marker, :is_private, :is_poll, :poll_comment, :poll_results_delayed, :has_pinned_post, :publish_delay, :request_moderation, :no_guests, :profiled_topic)")) {
+            $query = "insert into {$prfx}_topic (forum_id, user_id, author, name, creation_date, read_marker, user_marker, is_private, is_poll, poll_comment, poll_results_delayed, has_pinned_post, publish_delay, request_moderation, no_guests, profiled_topic)
+                values ($fid, $uid, $author, $subject, '$now', '$rm', $user_marker, $is_private, $is_poll, $poll_comment, $poll_results_delayed, $is_pinned, $publish_delay, $request_moderation, $no_guests, $is_blog)";
+            if (!$dbw->execute_query($query)) {
                 $dbw->rollback_transaction();
                 throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
             }
-
-            if (!$dbw->execute_prepared_query([
-                "forum_id"             => $fid,
-                "user_id"              => $uid,
-                "author"               => $request_data["author"],
-                "name"                 => $request_data["subject"],
-                "creation_date"        => $dbw->format_datetime_bind(time()),
-                "read_marker"          => $READ_MARKER,
-                "user_marker"          => $request_data["api_token"],
-                "is_private"           => $is_private,
-                "is_poll"              => $is_poll,
-                "poll_comment"         => clob($poll_comment),
-                "poll_results_delayed" => $poll_results_delayed,
-                "has_pinned_post"      => $is_pinned,
-                "publish_delay"        => $publish_delay,
-                "request_moderation"   => $request_moderation,
-                "no_guests"            => $no_guests,
-                "profiled_topic"       => $is_blog
-            ])) {
-                $dbw->rollback_transaction();
-                throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
-            }
-
-            $dbw->free_prepared_query();
             
             $tid = $dbw->insert_id();
             
@@ -2649,33 +2631,14 @@ abstract class ForumAPIManager
             }
         } // new topic
         
-        if (!$dbw->prepare_query("insert into {$prfx}_post (topic_id, user_id, author, creation_date, read_marker, user_marker, ip, pinned, is_comment, is_adult, self_edited, user_agent, bb_parser_version)
-              values (:topic_id, :user_id, :author, :creation_date, :read_marker, :user_marker, :ip, :pinned, :is_comment, :is_adult, 1, :user_agent, :bb_parser_version)")) {
+        $query = "insert into {$prfx}_post (topic_id, user_id, author, creation_date, read_marker, user_marker, ip, pinned, is_comment, is_adult, self_edited, user_agent, bb_parser_version)
+              values ($tid, $uid, $author, '$now', '$rm', $user_marker, '$ip', $is_pinned, $is_comment, $is_adult, 1, $agent, $BB_PARSER_VERSION)";
+        if (!$dbw->execute_query($query)) {
             $dbw->rollback_transaction();
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
-
-        if (!$dbw->execute_prepared_query([
-            "topic_id"          => $tid,
-            "user_id"           => $uid,
-            "author"            => $request_data["author"],
-            "creation_date"     => $dbw->format_datetime_bind(time()),
-            "read_marker"       => $READ_MARKER,
-            "user_marker"       => $request_data["api_token"],
-            "ip"                => System::getIPAddress(),
-            "pinned"            => $is_pinned,
-            "is_comment"        => $is_comment,
-            "is_adult"          => $is_adult,
-            "user_agent"        => "Forum API Version 1.0",
-            "bb_parser_version" => $BB_PARSER_VERSION
-        ])) {
-            $dbw->rollback_transaction();
-            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
-        }
-
-        $post_id = $dbw->insert_id();
         
-        $dbw->free_prepared_query();
+        $post_id = $dbw->insert_id();
         
         if ($uid != "NULL" && empty($forced_guest_posting)) {
             $query = "insert into {$prfx}_topic_participants (user_id, topic_id)
@@ -2789,38 +2752,26 @@ abstract class ForumAPIManager
         
         $short_message = $message;
         
-        if (!$dbw->prepare_query("update {$prfx}_post set
-              text_content = :text_content,
-              html_content = :html_content,
-              searchable_content = :searchable_content,
-              has_picture = :has_picture,
-              has_video = :has_video,
-              has_telegram = :has_telegram,
-              has_audio = :has_audio,
-              has_link = :has_link,
-              has_code = :has_code
-              where id = :post_id")) {
+        $message = $dbw->quotes_or_null($message);
+        $html_message = $dbw->quotes_or_null($html_message);
+        $plain_text = $dbw->quotes_or_null($plain_text);
+
+        $query = "update {$prfx}_post set
+              text_content = $message,
+              html_content = $html_message,
+              searchable_content = $plain_text,
+              has_picture = '$has_picture',
+              has_video = '$has_video',
+              has_telegram = '$has_telegram',
+              has_audio = '$has_audio',
+              has_link = '$has_link',
+              has_code = '$has_code'
+              where id = $post_id";
+        
+        if (!$dbw->execute_query($query)) {
             $dbw->rollback_transaction();
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
-
-        if (!$dbw->execute_prepared_query([
-            "text_content"       => clob($message),
-            "html_content"       => clob($html_message),
-            "searchable_content" => clob($plain_text),
-            "has_picture"        => $has_picture,
-            "has_video"          => $has_video,
-            "has_telegram"       => $has_telegram,
-            "has_audio"          => $has_audio,
-            "has_link"           => $has_link,
-            "has_code"           => $has_code,
-            "post_id"            => $post_id
-        ])) {
-            $dbw->rollback_transaction();
-            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
-        }
-
-        $dbw->free_prepared_query();
         
         // post hierarchy
         
@@ -2842,7 +2793,7 @@ abstract class ForumAPIManager
         $query = "update {$prfx}_topic_statistics set
               post_count = post_count + 1,
               post_count_total = post_count_total + 1,
-              last_message_date = $now,
+              last_message_date = '$now',
               last_message_id = $post_id
               where topic_id = $tid";
         if (!$dbw->execute_query($query)) {
@@ -2850,7 +2801,7 @@ abstract class ForumAPIManager
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
-        if (!empty($uid) && !$is_private && !$forced_guest_posting) {
+        if ($uid != "NULL" && !$is_private && !$forced_guest_posting) {
             $query = "update {$prfx}_user_statistics set
                 post_count = post_count + 1
                 where user_id = $uid";
@@ -2860,7 +2811,7 @@ abstract class ForumAPIManager
             }
             
             $query = "update {$prfx}_user set
-                last_post_date = $now
+                last_post_date = '$now'
                 where id = $uid";
             if (!$dbw->execute_query($query)) {
                 $dbw->rollback_transaction();
@@ -2870,12 +2821,12 @@ abstract class ForumAPIManager
         
         $dtnow = $dbw->format_datetime(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
         
-        if (!empty($uid)) {
+        if ($uid != "NULL") {
             $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id)
-                select $dtnow, $uid, $fid
+                select '$dtnow', $uid, $fid
                 from {$prfx}_dual
                 where
-                not exists (select 1 from {$prfx}_daily_statistics where dt = $dtnow and user_id = $uid and forum_id = $fid);
+                not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' and user_id = $uid and forum_id = $fid);
                ";
             if (!$dbw->execute_query($query)) {
                 $dbw->rollback_transaction();
@@ -2886,7 +2837,7 @@ abstract class ForumAPIManager
                 $query = "update {$prfx}_daily_statistics set
                     post_count = post_count + 1
                     where
-                    dt = $dtnow and user_id = $uid and forum_id = $fid;
+                    dt = '$dtnow' and user_id = $uid and forum_id = $fid;
                    ";
                 if (!$dbw->execute_query($query)) {
                     $dbw->rollback_transaction();
@@ -2895,10 +2846,10 @@ abstract class ForumAPIManager
             }
         } else {
             $query = "insert into {$prfx}_daily_statistics (dt, user_id, forum_id)
-                select $dtnow, NULL, $fid
+                select '$dtnow', NULL, $fid
                 from {$prfx}_dual
                 where
-                not exists (select 1 from {$prfx}_daily_statistics where dt = $dtnow and user_id is NULL and forum_id = $fid);
+                not exists (select 1 from {$prfx}_daily_statistics where dt = '$dtnow' and user_id is NULL and forum_id = $fid);
                ";
             if (!$dbw->execute_query($query)) {
                 $dbw->rollback_transaction();
@@ -2908,7 +2859,7 @@ abstract class ForumAPIManager
             $query = "update {$prfx}_daily_statistics set
                 post_count = post_count + 1
                 where
-                dt = $dtnow and user_id is NULL and bot is NULL and forum_id = $fid;
+                dt = '$dtnow' and user_id is NULL and bot is NULL and forum_id = $fid;
                ";
             if (!$dbw->execute_query($query)) {
                 $dbw->rollback_transaction();
@@ -2917,7 +2868,7 @@ abstract class ForumAPIManager
         }
         
         $query = "update {$prfx}_forum_statistics set
-              last_message_date = $now,
+              last_message_date = '$now',
               last_message_id = $post_id
               where forum_id = $fid";
         if (!$dbw->execute_query($query)) {
@@ -3085,7 +3036,7 @@ abstract class ForumAPIManager
 
         $where = "where {$prfx}_post.id = $post_id";
         
-        if (!$dbw->execute_query($this->forum_manager->get_query_topic_posts($prfx, $uid ?? "NULL", $where, "", ""))) {
+        if (!$dbw->execute_query($this->forum_manager->get_query_topic_posts($prfx, $uid, $where, "", ""))) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
         
@@ -3331,40 +3282,25 @@ abstract class ForumAPIManager
         $message = Emoji::Encode($message);
         $html_message = Emoji::Encode($html_message);
         
-        if (!$dbw->prepare_query("update {$prfx}_post set 
-                  text_content = :text_content,
-                  html_content = :html_content,
-                  has_attachment = :has_attachment,
-                  has_attachment_ref = :has_attachment_ref,
-                  has_picture = :has_picture,
-                  has_video = :has_video,
-                  has_telegram = :has_telegram,
-                  has_audio = :has_audio,
-                  has_link = :has_link,
-                  has_code = :has_code
-                  where id = :post_id")) {
+        $message = $dbw->quotes_or_null($message);
+        $html_message = $dbw->quotes_or_null($html_message);
+
+        $query = "update {$prfx}_post set 
+                  text_content = $message,
+                  html_content = $html_message,
+                  has_attachment = $has_attachment, 
+                  has_attachment_ref = $has_attachment_ref,
+                  has_picture = $has_picture, 
+                  has_video = $has_video, 
+                  has_telegram = $has_telegram, 
+                  has_audio = $has_audio, 
+                  has_link = $has_link, 
+                  has_code = $has_code 
+                  where id = $post_id";
+        if (!$dbw->execute_query($query)) {
             $dbw->rollback_transaction();
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
-
-        if (!$dbw->execute_prepared_query([
-            "text_content"       => clob($message),
-            "html_content"       => clob($html_message),
-            "has_attachment"     => $has_attachment,
-            "has_attachment_ref" => $has_attachment_ref,
-            "has_picture"        => $has_picture,
-            "has_video"          => $has_video,
-            "has_telegram"       => $has_telegram,
-            "has_audio"          => $has_audio,
-            "has_link"           => $has_link,
-            "has_code"           => $has_code,
-            "post_id"            => $post_id
-        ])) {
-            $dbw->rollback_transaction();
-            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
-        }
-
-        $dbw->free_prepared_query();
 
         if (!$dbw->commit_transaction()) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
@@ -4042,6 +3978,10 @@ abstract class ForumAPIManager
         
         $content_changed = ($old_message != $message);
         
+        $message = $dbw->quotes_or_null($message);
+        $html_message = $dbw->quotes_or_null($html_message);
+        $plain_text = $dbw->quotes_or_null($plain_text);
+
         $is_comment = 0;
         if ($profiled_topic && empty($request_data["is_thematic"])) {
             $is_comment = 1;
@@ -4100,7 +4040,7 @@ abstract class ForumAPIManager
             $query = "insert into {$prfx}_post_history
               (post_id, dt, author, self_edited, text_content, html_content)
               select
-              id, $last_updated, $last_updated_by, self_edited, text_content, html_content
+              id, '$last_updated', $last_updated_by, self_edited, text_content, html_content
               from {$prfx}_post
               where {$prfx}_post.id = $post_id
              ";
@@ -4110,50 +4050,29 @@ abstract class ForumAPIManager
             }
         }
         
-        $updated_by_bind = empty($post_author) ? null : $post_author;
+        $updated_by = $dbw->quotes_or_null($post_author);
 
-        if (!$dbw->prepare_query("update {$prfx}_post set
-              text_content = :text_content,
-              html_content = :html_content,
-              searchable_content = :searchable_content,
-              has_picture = :has_picture,
-              is_comment = :is_comment,
-              is_adult = :is_adult,
-              has_video = :has_video,
-              has_telegram = :has_telegram,
-              has_audio = :has_audio,
-              has_link = :has_link,
-              has_code = :has_code,
-              self_edited = :self_edited,
-              last_updated = :last_updated,
-              last_updated_by = :last_updated_by
-              where id = :post_id")) {
+        $query = "update {$prfx}_post set
+              text_content = $message,
+              html_content = $html_message,
+              searchable_content = $plain_text,
+              has_picture = '$has_picture',
+              is_comment = '$is_comment',
+              is_adult = '$is_adult',
+              has_video = '$has_video',
+              has_telegram = '$has_telegram',
+              has_audio = '$has_audio',
+              has_link = '$has_link',
+              has_code = '$has_code',
+              self_edited = $self_edited,
+              last_updated = '$now',
+              last_updated_by = $last_updated_by
+              where id = $post_id";
+        
+        if (!$dbw->execute_query($query)) {
             $dbw->rollback_transaction();
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
         }
-
-        if (!$dbw->execute_prepared_query([
-            "text_content"       => clob($message),
-            "html_content"       => clob($html_message),
-            "searchable_content" => clob($plain_text),
-            "has_picture"        => $has_picture,
-            "is_comment"         => $is_comment,
-            "is_adult"           => $is_adult,
-            "has_video"          => $has_video,
-            "has_telegram"       => $has_telegram,
-            "has_audio"          => $has_audio,
-            "has_link"           => $has_link,
-            "has_code"           => $has_code,
-            "self_edited"        => $self_edited,
-            "last_updated"       => $dbw->format_datetime_bind(time()),
-            "last_updated_by"    => $updated_by_bind,
-            "post_id"            => $post_id
-        ])) {
-            $dbw->rollback_transaction();
-            throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);
-        }
-
-        $dbw->free_prepared_query();
         
         if (!$dbw->commit_transaction()) {
             throw new ForumAPIException(text("ErrQueryFailed"), ForumAPIException::ERR_CODE_DATABASE_ERROR);

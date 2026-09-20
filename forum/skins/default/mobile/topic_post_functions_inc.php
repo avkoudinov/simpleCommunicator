@@ -1,39 +1,4 @@
 <script>
-var config = {
-    format: "<?php echo_js(text("DateFormat")); ?>",
-    start_year: 2000,
-    month_names: [
-        "<?php echo_js(text("January")); ?>",
-        "<?php echo_js(text("February")); ?>",
-        "<?php echo_js(text("March")); ?>",
-        "<?php echo_js(text("April")); ?>",
-        "<?php echo_js(text("May")); ?>",
-        "<?php echo_js(text("June")); ?>",
-        "<?php echo_js(text("July")); ?>",
-        "<?php echo_js(text("August")); ?>",
-        "<?php echo_js(text("September")); ?>",
-        "<?php echo_js(text("October")); ?>",
-        "<?php echo_js(text("November")); ?>",
-        "<?php echo_js(text("December")); ?>"
-    ],
-
-    weekday_names: [
-        "<?php echo_js(text("MondayShort")); ?>",
-        "<?php echo_js(text("TuesdayShort")); ?>",
-        "<?php echo_js(text("WednesdayShort")); ?>",
-        "<?php echo_js(text("ThursdayShort")); ?>",
-        "<?php echo_js(text("FridayShort")); ?>",
-        "<?php echo_js(text("SaturdayShort")); ?>",
-        "<?php echo_js(text("SundayShort")); ?>"
-    ]
-};
-
-Forum.addXEvent(window, 'load', function () {
-    SimpleCalendar.assign("#gallery_filter_start_date", config);
-    SimpleCalendar.assign("#gallery_filter_end_date", config);
-});
-
-
 var post_comment_action = null;
 function show_post_comment(title, author, pid, mode)
 {
@@ -71,54 +36,6 @@ function show_post_comment(title, author, pid, mode)
   Forum.show_post_comment(title, buttons, 800);
 
   return false;
-}
-
-function show_attachment_gallery()
-{
-    var errbuttons = [
-        {
-            caption: msg_OK,
-            handler: function() { Forum.hide_user_msgbox(); }
-        }
-    ];
-
-    var buttons = [
-        {
-            caption: "<?php echo_js(text("Cancel")); ?>",
-            handler: function() { Forum.hide_sys_lightbox(); }
-        },
-        {
-            caption: "<?php echo_js(text("Apply")); ?>",
-            addClass: "send_button",
-            handler: function() {
-                if(paste_gallery_attachment_placeholders())
-                    Forum.hide_sys_lightbox();
-                else
-                    Forum.show_user_msgbox(msg_Error, "<?php echo_js(text("ErrNoAttachmentSelected")); ?>", 'icon-error.gif', errbuttons);
-            }
-        }
-    ];
-
-    Forum.show_attachment_gallery("<?php echo_js(text("AttachmentGallery")); ?>", buttons);
-
-    var sys_lightbox_body = document.getElementById("sys_lightbox_body");
-    if(!sys_lightbox_body) return false;
-
-    var attachment_gallery_area = sys_lightbox_body.lastChild;
-    if(attachment_gallery_area)
-    {
-        Forum.addXEvent(attachment_gallery_area, 'scroll', function (ev) {
-            var gap_to_end = this.scrollHeight - this.offsetHeight - this.scrollTop;
-            if(gap_to_end < 200)
-            {
-                load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
-            }
-        });
-    }
-
-    load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
-
-    return false;
 }
 
 function set_to_me() {
@@ -775,12 +692,12 @@ function show_attachment_gallery()
       var gap_to_end = this.scrollHeight - this.offsetHeight - this.scrollTop;
       if(gap_to_end < 200)
       {
-        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
+        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", last_loaded_att_post_id, last_loaded_att_id);
       }
     });
   }
   
-  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
+  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", 0, 0);
 
   return false;
 }

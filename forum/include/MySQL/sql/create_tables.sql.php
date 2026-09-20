@@ -172,14 +172,14 @@ create table v1_cache_invalidation
 $sql_cmds[] = '
 create table v1_daily_statistics
 (
-   user_id              int not null,
-   forum_id             int not null,
+   user_id              int,
+   forum_id             int,
    dt                   date not null,
    hits_count           int not null default 0,
    bot_hits_count       int not null default 0,
    post_count           int not null default 0,
    time_online          bigint not null default 0,
-   bot                  varchar(250) not null
+   bot                  varchar(250)
 )
 ';
 
@@ -246,7 +246,7 @@ create table v1_events
    topic_id             int,
    forum_name           varchar(255),
    forum_id             int,
-   note                 text,
+   comment              text,
    source_topic_name    varchar(1000),
    source_topic_id      int,
    primary key (id)
@@ -649,8 +649,8 @@ create index v1_forum_moderator_forum_id_idx on v1_forum_moderator
 $sql_cmds[] = '
 create table v1_forum_read_markers
 (
-   read_marker          varchar(255) not null,
-   forum_id             int not null,
+   read_marker          varchar(255),
+   forum_id             int,
    first_read_date      datetime,
    last_activity        datetime,
    first_activity       datetime,
@@ -1088,7 +1088,7 @@ create table v1_moderator_log
    topic_id             int,
    forum_name           varchar(255),
    forum_id             int,
-   note                 text,
+   comment              text,
    redundant            tinyint not null default 0,
    source_topic_name    varchar(1000),
    source_topic_id      int,
@@ -1910,8 +1910,8 @@ create unique index v1_topic_participants_unq on v1_topic_participants
 $sql_cmds[] = '
 create table v1_topic_read_markers
 (
-   topic_id             int not null,
-   read_marker          varchar(255) not null,
+   topic_id             int,
+   read_marker          varchar(255),
    last_read_date       datetime,
    ip                   varchar(250)
 )
@@ -2006,8 +2006,8 @@ create index v1_topic_subscription_user_id_idx on v1_topic_subscription
 $sql_cmds[] = '
 create table v1_topic_view_history
 (
-   user_id              int not null,
-   guest_name           varchar(255) not null,
+   user_id              int,
+   guest_name           varchar(255),
    topic_id             int not null,
    dt                   datetime not null,
    ip                   varchar(250)
@@ -2048,6 +2048,7 @@ $sql_cmds[] = '
 create table v1_tor_ips
 (
    ip                   varchar(250) not null,
+   hashed_ip            varchar(250) not null,
    block_level          int not null default 0,
    refresh_date         datetime
 )
@@ -2067,9 +2068,9 @@ create table v1_user
    login                varchar(255) not null,
    password_hash        varchar(255) not null,
    user_name            varchar(255) not null,
-   user_name_hash       varchar(255) not null,
+   user_name_hash       varchar(255),
    email                varchar(255) not null,
-   email_hash           varchar(255) not null,
+   email_hash           varchar(255),
    hide_email           tinyint not null default 1,
    registration_date    datetime not null,
    last_visit_date      datetime,
@@ -2105,7 +2106,7 @@ create table v1_user
    turnoff_personal_appeals tinyint not null default 0,
    turnoff_events       tinyint not null default 0,
    approved             tinyint not null default 0,
-   read_marker          varchar(255) not null,
+   read_marker          varchar(255),
    ip                   varchar(250),
    last_ip              varchar(250),
    ignore_guests_blacklist tinyint not null default 0,
@@ -2200,7 +2201,7 @@ create table v1_user_comment
 (
    user_id              int not null,
    commented_user_id    int not null,
-   note                 text
+   comment              text
 )
 ';
 
@@ -2251,8 +2252,8 @@ $sql_cmds[] = '
 create table v1_user_subscription
 (
    user_id              int not null,
-   subscribed_user_id   int not null,
-   subscribed_user_name varchar(255) not null,
+   subscribed_user_id   int,
+   subscribed_user_name varchar(255),
    tm                   datetime not null,
    last_view            datetime
 )
@@ -2322,7 +2323,7 @@ $sql_cmds[] = '
 create table v1_user_tags
 (
    id                   int not null auto_increment,
-   name                 varchar(255) not null,
+   name                 varchar(255),
    user_id              int not null,
    primary key (id)
 )

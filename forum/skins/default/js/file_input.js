@@ -12,7 +12,7 @@ function resetFileField(file_input)
 
 function refreshFileInputControl(file_input)
 {
-  if(!file_input.previousSibling || !file_input.previousSibling.classList || !file_input.previousSibling.classList.contains('file_input_control')) return;
+  if(!file_input.previousSibling || !file_input.previousSibling.classList.contains('file_input_control')) return;
 
   if(file_input.value == '')
   {

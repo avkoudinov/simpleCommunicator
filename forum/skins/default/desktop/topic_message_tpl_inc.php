@@ -76,7 +76,7 @@ if (!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])) {
     $may_write = false;
 }
 
-if (!empty($user_data[$pinfo["user_id"] ?? ""]["ignored"]) || !empty($pinfo["guest_ignored"])) {
+if (!empty($user_data[$pinfo["user_id"]]["ignored"]) || !empty($pinfo["guest_ignored"])) {
     $may_rate = false;
     $may_answer = false;
     $citatable = "";
@@ -233,7 +233,7 @@ if(empty($pinfo["display_action_author"]) && (!$fmanager->is_moderator_log_visib
 <div class="moderator_warning_container">
 <div class="moderator_warning" id="modwarning_<?php echo_html($pid); ?>">
 <div id="modwarning_moderator_<?php echo_html($pid); ?>" class="moderator_name"><?php echo_html($warned_by); ?>:</div>
-<div id="modwarning_warning_<?php echo_html($pid); ?>" class="moderator_warning_text"><?php echo($pinfo["last_warning"]); ?></div>
+<div id="modwarning_warning_<?php echo_html($pid); ?>"><?php echo($pinfo["last_warning"]); ?></div>
 </div>
 </div>
 
@@ -1000,7 +1000,7 @@ $poll_rendered = true;
 <tr>
 <td class="message_action_cell">
 
-<?php if(!empty($user_data[$pinfo["user_id"] ?? ""]["signature"])): ?>
+<?php if(!empty($user_data[$pinfo["user_id"]]["signature"])): ?>
 <div class="message_signature"><?php echo($user_data[$pinfo["user_id"]]["signature"]); ?></div><div class="clear_both"></div>
 <?php endif; ?>
 
@@ -1021,7 +1021,7 @@ if(empty($pinfo["display_action_author"]) && (!$fmanager->is_moderator_log_visib
 
 <div class="moderator_warning" style="<?php echo($display); ?>" id="modwarning_<?php echo_html($pid); ?>">
 <div id="modwarning_moderator_<?php echo_html($pid); ?>" class="moderator_name"><?php echo_html($warned_by); ?>:</div>
-<div id="modwarning_warning_<?php echo_html($pid); ?>" class="moderator_warning_text"><?php echo($pinfo["last_warning"]); ?></div>
+<div id="modwarning_warning_<?php echo_html($pid); ?>"><?php echo($pinfo["last_warning"]); ?></div>
 </div>
 
 <!-- BEGIN: versions / rating -->

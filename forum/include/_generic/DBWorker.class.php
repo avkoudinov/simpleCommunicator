@@ -1,31 +1,5 @@
 <?php
 //----------------------------------------------------------------------
-// LOB value wrappers for use with execute_prepared_query.
-// Wrap a value in ClobValue or BlobValue to force binding as CLOB/BLOB
-// regardless of string length. Works across all DBWorker implementations.
-//
-// Usage:
-//   $dbw->execute_prepared_query([
-//       "text_content" => clob($long_text),
-//       "binary_data"  => blob($binary),
-//   ]);
-//----------------------------------------------------------------------
-class ClobValue
-{
-    public $value;
-    public function __construct($value) { $this->value = (string)$value; }
-} // ClobValue
-
-class BlobValue
-{
-    public $value;
-    public function __construct($value) { $this->value = $value; }
-} // BlobValue
-
-function clob($value) { return new ClobValue($value); }
-function blob($value) { return new BlobValue($value); }
-
-//----------------------------------------------------------------------
 // class DBWorker
 //----------------------------------------------------------------------
 abstract class DBWorker
@@ -101,10 +75,6 @@ abstract class DBWorker
     
     abstract function format_datetime($datetime);
     
-    abstract function format_date_bind($date);
-    
-    abstract function format_datetime_bind($datetime);
-
     //--------------------------------------------------------------------
     function set_connection_data($db_server, $db_name, $db_user, $db_password)
     {
