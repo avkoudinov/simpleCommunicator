@@ -56,12 +56,146 @@ function extract_db_object($db_type, $cmd, &$db_obects)
       }
     } // case "MSSQL"
     break;
+
+    case "PostgreSQL":
+    {
+        if(preg_match("/create table ([^\s]+)/smi", $cmd, $matches))
+        {
+            $db_obects[$matches[1]] = $matches[1];
+        }
+        elseif(preg_match("/CREATE\s+(?:OR\s+REPLACE\s+)?PROCEDURE ([^\s\(\)]+)/smi", $cmd, $matches))
+        {
+            $db_obects[$matches[1] . ":PROCEDURE"] = $matches[1] . ":PROCEDURE";
+        }
+        elseif(preg_match("/CREATE\s+(?:OR\s+REPLACE\s+)?FUNCTION ([^\s\(\)]+)/smi", $cmd, $matches))
+        {
+            $db_obects[$matches[1] . ":FUNCTION"] = $matches[1] . ":FUNCTION";
+        }
+    } // case "PostgreSQL"
+    break;
+
+    case "Oracle":
+    {
+        if(preg_match("/create\s+(?:global\s+temporary\s+)?table\s+([^\s]+)/smi", $cmd, $matches))
+        {
+            $db_obects[$matches[1]] = $matches[1];
+        }
+        elseif(preg_match("/CREATE\s+(?:OR\s+REPLACE\s+)?PROCEDURE\s+([^\s\(]+)/smi", $cmd, $matches))
+        {
+            $db_obects[$matches[1] . ":PROCEDURE"] = $matches[1] . ":PROCEDURE";
+        }
+        elseif(preg_match("/CREATE\s+(?:OR\s+REPLACE\s+)?FUNCTION\s+([^\s\(]+)/smi", $cmd, $matches))
+        {
+            $db_obects[$matches[1] . ":FUNCTION"] = $matches[1] . ":FUNCTION";
+        }
+    } // case "Oracle"
+    break;
+
   } // switch
   
   return true;
 } // extract_db_object
 //--------------------------------------------------------
-function gen_create_tables_sql($db_type)
+/**
+ * Parse an Oracle SQL script into individual commands.
+ *
+ * PowerDesigner exports Oracle DDL using ";" as the statement terminator
+ * (standard SQL style). SQL*Plus scripts use "/" on its own line instead.
+ * This function handles both styles and mixed files transparently.
+ *
+ * PL/SQL blocks (BEGIN...END, CREATE PROCEDURE/FUNCTION/TRIGGER ...) contain
+ * semicolons inside their bodies. We detect them and collect all lines until
+ * the matching END; is found (tracking nested BEGIN/END depth).
+ */
+function parse_oracle_commands($script)
+{
+  // Strip block comments /* ... */
+  $script = preg_replace('/\/\*.*?\*\//s', '', $script);
+
+  $lines       = explode("\n", $script);
+  $cmds        = array();
+  $buf         = '';
+  $in_plsql    = false;
+  $begin_depth = 0;
+
+  foreach ($lines as $line)
+  {
+    $trimmed = trim($line);
+
+    // Skip blank lines when no statement has started yet
+    if ($trimmed === '' && trim($buf) === '') continue;
+
+    // Standalone "/" on its own line — SQL*Plus hard terminator
+    if (preg_match('/^\s*\/\s*$/', $line))
+    {
+      $cmd = trim($buf);
+      if ($cmd !== '') $cmds[] = $cmd;
+      $buf         = '';
+      $in_plsql    = false;
+      $begin_depth = 0;
+      continue;
+    }
+
+    $buf .= $line . "\n";
+
+    if (!$in_plsql)
+    {
+      // Standalone anonymous block: line starts with BEGIN
+      if (preg_match('/^\s*BEGIN\b/i', $trimmed))
+      {
+        $in_plsql    = true;
+        $begin_depth = 1;
+      }
+      // CREATE ... whose header ends with AS or IS — PL/SQL body follows
+      elseif (preg_match('/\b(?:AS|IS)\s*$/i', $trimmed))
+      {
+        $in_plsql    = true;
+        $begin_depth = 0;
+      }
+    }
+    else
+    {
+      // Track BEGIN / END nesting inside PL/SQL body
+      preg_match_all('/\bBEGIN\b/i', $trimmed, $m);
+      $begin_depth += count($m[0]);
+      preg_match_all('/\bEND\b/i', $trimmed, $m);
+      $begin_depth -= count($m[0]);
+    }
+
+    // Does this line end with ";" ?
+    if (preg_match('/;\s*$/', $trimmed))
+    {
+      if (!$in_plsql)
+      {
+        // Normal DDL statement — semicolon ends it; strip trailing semicolon
+        $cmd = rtrim(trim($buf), " \t\n\r\0;");
+        if ($cmd !== '') $cmds[] = $cmd;
+        $buf = '';
+      }
+      else
+      {
+        // Inside PL/SQL — only END[...]; at nesting depth <= 0 closes the block
+        if ($begin_depth <= 0 && preg_match('/\bEND\b[^;]*;\s*$/i', $trimmed))
+        {
+          $cmd = rtrim(trim($buf), " \t\n\r\0;");
+          if ($cmd !== '') $cmds[] = $cmd;
+          $buf         = '';
+          $in_plsql    = false;
+          $begin_depth = 0;
+        }
+        // else: semicolon is inside the PL/SQL body — keep accumulating
+      }
+    }
+  } // foreach
+
+  // Flush any remaining content (e.g. last statement without trailing newline)
+  $cmd = rtrim(trim($buf), " \t\n\r\0;");
+  if ($cmd !== '') $cmds[] = $cmd;
+
+  return $cmds;
+} // parse_oracle_commands
+//--------------------------------------------------------
+function gen_create_objects_sql($db_type)
 {
   $in_file = APPLICATION_ROOT . "../database/$db_type/create_tables.sql";
 
@@ -106,6 +240,41 @@ function gen_create_tables_sql($db_type)
     } // case "MySQL"
     break;
 
+    case "PostgreSQL":
+    {
+      $sql_cmds = array();
+      $proc_cmds = array();
+
+      // strip all comments
+      $script = preg_replace("/\/\*.*\*\//", "", $script);
+
+      // find procedures/functions (body between $$ ... $$)
+      if(preg_match_all(
+          '/(\s*CREATE\s+(?:OR\s+REPLACE\s+)?(?:PROCEDURE|FUNCTION)\s+[\s\S]*?\$\$[\s\S]*?\$\$\s*;)/i',
+          $script,
+          $matches,
+          PREG_PATTERN_ORDER
+      ))
+      {
+          $proc_cmds = $matches[1];
+          $script = preg_replace(
+              '/\s*CREATE\s+(?:OR\s+REPLACE\s+)?(?:PROCEDURE|FUNCTION)\s+[\s\S]*?\$\$[\s\S]*?\$\$\s*;/i',
+              '',
+              $script
+          );
+      }
+
+      // find all other normal sql commands
+      $matches = array();
+      if(preg_match_all("/(.*);[\r\n]?/smiU", $script, $matches, PREG_PATTERN_ORDER))
+      {
+        $sql_cmds = $matches[1];
+      }
+
+      $cmds = array_merge($cmds, $sql_cmds, $proc_cmds);
+    } // case "PostgreSQL"
+    break;
+
     case "MSSQL":
     {
       // strip all comments
@@ -118,6 +287,13 @@ function gen_create_tables_sql($db_type)
       }
     } // case "MSSQL"
     break;
+
+    case "Oracle":
+    {
+      $cmds = parse_oracle_commands($script);
+    } // case "Oracle"
+    break;
+
   } // switch
 
   if(count($cmds) == 0)
@@ -143,7 +319,7 @@ function gen_create_tables_sql($db_type)
     // for MySQL lower 5.1, the trigger cannot be create by the owner of
     // the database. Only the SUPER user could do it.
     // It is fixed starting from the version 5.1.x.
-    
+
     //if($db_type == "MySQL" and stripos($cmd, "TRIGGER") !== FALSE) continue;
 
     $cmd_str = "\$sql_cmds[] = '\n" . escape_php($cmd) . "\n';";
@@ -159,10 +335,10 @@ function gen_create_tables_sql($db_type)
   if(fwrite($handle, "?>") === FALSE) die("File $out_file is not writable!");
   fclose($handle);
 
-  echo "Created: create_tables.sql.php\n";
+  echo "Created: create_tables.sql.php<br/>";
   
   return $cmd_counter;
-} // gen_create_tables_sql
+} // gen_create_objects_sql
 //--------------------------------------------------------
 function gen_sql($db_type, $in_file, $out_file)
 {
@@ -212,6 +388,41 @@ function gen_sql($db_type, $in_file, $out_file)
     } // case "MySQL"
     break;
 
+    case "PostgreSQL":
+    {
+      $sql_cmds = array();
+      $proc_cmds = array();
+
+      // strip all comments
+      $script = preg_replace("/\/\*.*\*\//", "", $script);
+
+      // find procedures/functions (body between $$ ... $$)
+      if(preg_match_all(
+          '/(\s*CREATE\s+(?:OR\s+REPLACE\s+)?(?:PROCEDURE|FUNCTION)\s+[\s\S]*?\$\$[\s\S]*?\$\$\s*;)/i',
+          $script,
+          $matches,
+          PREG_PATTERN_ORDER
+      ))
+      {
+          $proc_cmds = $matches[1];
+          $script = preg_replace(
+              '/\s*CREATE\s+(?:OR\s+REPLACE\s+)?(?:PROCEDURE|FUNCTION)\s+[\s\S]*?\$\$[\s\S]*?\$\$\s*;/i',
+              '',
+              $script
+          );
+      }
+
+      // find all other normal sql commands
+      $matches = array();
+      if(preg_match_all("/(.*);[\r\n]?/smiU", $script, $matches, PREG_PATTERN_ORDER))
+      {
+        $sql_cmds = $matches[1];
+      }
+
+      $cmds = array_merge($cmds, $sql_cmds, $proc_cmds);
+    } // case "PostgreSQL"
+    break;
+
     case "MSSQL":
     {
       // strip all comments
@@ -224,6 +435,13 @@ function gen_sql($db_type, $in_file, $out_file)
       }
     } // case "MSSQL"
     break;
+
+    case "Oracle":
+    {
+      $cmds = parse_oracle_commands($script);
+    } // case "Oracle"
+    break;
+
   } // switch
 
   if(count($cmds) == 0)
@@ -260,7 +478,7 @@ function gen_sql($db_type, $in_file, $out_file)
 } // gen_sql
 //--------------------------------------------------------
 
-$types = array("MySQL", "MSSQL");
+$types = array("MySQL", "MSSQL", "PostgreSQL", "Oracle");
 foreach($types as $db_type)
 {
   $cnt = 0;
@@ -291,14 +509,18 @@ foreach($types as $db_type)
                     APPLICATION_ROOT . "../database/$db_type/init_database.sql",
                     APPLICATION_ROOT . "include/$db_type/sql/init_database.sql.php"
                    );
-    echo "Created: init_database.sql.php\n";
+    echo "Created: init_database.sql.php.\n";
+  }
+  else
+  {
+    echo "File does not exists for this database.\n";
   }
 
   // 2. create tables
   echo "\nProcessing create_tables.sql\n";
   @ob_flush();
   @flush();
-  $cnt += gen_create_tables_sql($db_type);
+  $cnt += gen_create_objects_sql($db_type);
 
   // 3. init data
   if(file_exists(APPLICATION_ROOT . "../database/$db_type/init_data.sql"))
@@ -310,7 +532,11 @@ foreach($types as $db_type)
                     APPLICATION_ROOT . "../database/$db_type/init_data.sql",
                     APPLICATION_ROOT . "include/$db_type/sql/init_data.sql.php"
                    );
-    echo "Created: init_data.sql.php\n";
+    echo "Created: init_data.sql.php.\n";
+  }
+  else
+  {
+    echo "File does not exists for this database.\n";
   }
 
   // 4. final actions
@@ -323,7 +549,11 @@ foreach($types as $db_type)
                     APPLICATION_ROOT . "../database/$db_type/final_actions.sql",
                     APPLICATION_ROOT . "include/$db_type/sql/final_actions.sql.php"
                    );
-    echo "Created: final_actions.sql.php\n";
+    echo "Created: final_actions.sql.php.\n";
+  }
+  else
+  {
+    echo "File does not exists for this database.\n";
   }
 
   echo "\nGenerating update sql commands for $db_type\n";

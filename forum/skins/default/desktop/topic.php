@@ -818,6 +818,31 @@ var page_last_pipe_author = "<?php echo_js($page_last_pipe_author); ?>";
 var page_last_pipe_author_id = "<?php echo_js($page_last_pipe_author_id); ?>";
 </script>
 
+<script>
+var page_last_author = "<?php echo_js(val_or_empty($pinfo["author"])); ?>";
+var page_last_author_id = "<?php echo_js(val_or_empty($pinfo["user_id"])); ?>";
+var page_last_post_id = <?php echo_js($pinfo["post_id"] ?? 0); ?>;
+var page_last_post_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
+var page_last_post_editable = <?php echo_js($pinfo["editable"] ? "true" : "false"); ?>;
+
+<?php
+$page_last_pipe_author = "";
+$page_last_pipe_author_id = "";
+
+if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
+    $page_last_pipe_author = $matches[1];
+    $page_last_pipe_author_id = $matches[2];
+} elseif (preg_match("/\[kroleg-pipe\]([^\[\]]+)\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
+    $page_last_pipe_author = $matches[1];
+}
+?>
+
+var page_last_pipe_author = "<?php echo_js($page_last_pipe_author); ?>";
+var page_last_pipe_author_id = "<?php echo_js($page_last_pipe_author_id); ?>";
+</script>
+
+
+
 </div> <!-- foreach post -->
 
 <?php if(count($post_list) == 0): ?>
@@ -1295,4 +1320,42 @@ function startup_action()
 do_not_check_new = true;
 <?php endif; ?>
 
+var config = {
+  format: "<?php echo_js(text("DateFormat")); ?>",
+  start_year: 2000,
+  month_names: [
+    "<?php echo_js(text("January")); ?>",
+    "<?php echo_js(text("February")); ?>",
+    "<?php echo_js(text("March")); ?>",
+    "<?php echo_js(text("April")); ?>",
+    "<?php echo_js(text("May")); ?>",
+    "<?php echo_js(text("June")); ?>",
+    "<?php echo_js(text("July")); ?>",
+    "<?php echo_js(text("August")); ?>",
+    "<?php echo_js(text("September")); ?>",
+    "<?php echo_js(text("October")); ?>",
+    "<?php echo_js(text("November")); ?>",
+    "<?php echo_js(text("December")); ?>"
+  ],
+  
+  weekday_names: [
+    "<?php echo_js(text("MondayShort")); ?>",
+    "<?php echo_js(text("TuesdayShort")); ?>",
+    "<?php echo_js(text("WednesdayShort")); ?>",
+    "<?php echo_js(text("ThursdayShort")); ?>",
+    "<?php echo_js(text("FridayShort")); ?>",
+    "<?php echo_js(text("SaturdayShort")); ?>",
+    "<?php echo_js(text("SundayShort")); ?>"
+  ]
+};
+
+Forum.addXEvent(window, 'load', function () {
+  SimpleCalendar.assign("#start_date", config);
+  SimpleCalendar.assign("#end_date", config);
+});
+
 </script>
+
+<?php
+require_once "gallery_filter_bar_inc.php";
+?>
