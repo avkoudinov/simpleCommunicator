@@ -8,6 +8,7 @@ class MSSQL_DBWorker extends DBWorker
     private $connection = null;
     private $statement = null;
     private $last_query_is_insert = false;
+    private $prepared_query = "";
     
     public $row = null;
     public $field_names = null;
@@ -304,68 +305,66 @@ class MSSQL_DBWorker extends DBWorker
     } // execute_query
     
     //--------------------------------------------------------------------
+    // execute_prepared_query accepts either a positional list or an
+    // associative array [":name" => value] / ["name" => value].
+    // Named parameters may appear multiple times in the query — the value
+    // is automatically repeated for each occurrence.
+    //--------------------------------------------------------------------
+    protected $param_order = array(); // ordered list of param names from prepare_query
+
     function prepare_query($query_string)
     {
         if (!$this->connection) {
             $this->last_error_id = "conn_err";
             return false;
         }
-        
+
+        $this->param_order = array();
+
+        // Convert named :name params to ? and record order
+        $query_string = preg_replace_callback(
+            '/:([\w]+)/',
+            function ($m) {
+                $this->param_order[] = $m[1];
+                return '?';
+            },
+            $query_string
+        );
+
         $this->last_query = $query_string;
         $this->prepared_query = $query_string;
-        
+
         $params = array();
         $this->parameters = array();
-        
+
         $cnt = preg_match_all("/\\?/", $query_string, $matches);
-        
+
         for ($i = 0; $i < $cnt; $i++) {
             $this->parameters[$i] = null;
             $params[$i] = &$this->parameters[$i];
         }
-        
+
         $query_appendix = "";
-        
-        // to be able to get the insert id from prepared query
-        // we have to add this appendix
-        
+
         $this->last_query_is_insert = false;
         if (preg_match("/\s*INSERT/i", $query_string)) {
             $this->last_query_is_insert = true;
-            
             $query_appendix = "; SELECT SCOPE_IDENTITY() AS IID";
         }
-        
+
         $options = array();
-        /*
-        If the cursor is SQLSRV_CURSOR_STATIC or other than
-        SQLSRV_CURSOR_FORWARD, retreiving of the data
-        has sometimes very poor performance. Not the query execution,
-        but the data retrieving!
-    
-        The default is SQLSRV_CURSOR_FORWARD, but it is not possible
-        to get fetched_count by this type of cursor. So we sacrifice
-        the possibility to get fetched_count for the preformance.
-        The preformance is more important.
-    
-        if(preg_match("/\s*SELECT/i", $query_string))
-        {
-          $options = array("Scrollable" => SQLSRV_CURSOR_STATIC);
-        }
-        */
-        
+
         $this->statement = @sqlsrv_prepare($this->connection, $query_string . $query_appendix, $params, $options);
         if (!$this->statement) {
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "query_err";
-            
             trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             return false;
         }
-        
+
         return true;
     } // prepare_query
-    
+
     //--------------------------------------------------------------------
     function execute_prepared_query(/* arg list */)
     {
@@ -373,51 +372,66 @@ class MSSQL_DBWorker extends DBWorker
             $this->last_error_id = "conn_err";
             return false;
         }
-        
+
         if (empty($this->prepared_query) || empty($this->statement)) {
             $this->last_error = "no prepared query defined";
             $this->last_error_id = "query_err";
             return false;
         }
-        
+
         $args = func_get_args();
         if (count($args) == 1 && is_array($args[0])) {
             $args = $args[0];
         }
-        
+
+        // If associative array and param_order recorded — expand values by order,
+        // duplicating values for repeated parameter names
+        if (!empty($this->param_order) && count($args) > 0 && is_string(array_key_first($args))) {
+            $named = array();
+            foreach ($args as $k => $v) {
+                $named[ltrim($k, ':')] = $v;
+            }
+            $positional = array();
+            foreach ($this->param_order as $name) {
+                $positional[] = isset($named[$name]) ? $named[$name] : null;
+            }
+            $args = $positional;
+        } elseif (count($args) > 0 && is_string(array_key_first($args))) {
+            $args = array_values($args);
+        }
+
         $this->last_query = $this->prepared_query;
-        
+
         $counter = 0;
         foreach ($args as $argval) {
+            // Unwrap ClobValue/BlobValue — MSSQL treats both as strings
+            if ($argval instanceof ClobValue || $argval instanceof BlobValue) {
+                $argval = $argval->value;
+            }
+
             if ($argval === null) {
                 $this->parameters[$counter] = null;
-                
                 $this->last_query = preg_replace("/\\?/", "null", $this->last_query, 1);
             } elseif (is_int($argval)) {
                 $this->parameters[$counter] = $argval;
-                
                 $this->last_query = preg_replace("/\\?/", $argval, $this->last_query, 1);
             } elseif (is_float($argval)) {
                 $this->parameters[$counter] = $argval;
-                
                 $this->last_query = preg_replace("/\\?/", $argval, $this->last_query, 1);
             } else {
                 $this->parameters[$counter] = $argval;
-                
                 $this->last_query = preg_replace("/\\?/", preg_r_escape("'" . $this->escape($argval) . "'"), $this->last_query, 1);
             }
-            
             $counter++;
         }
-        
+
         if (!@sqlsrv_execute($this->statement)) {
             $this->last_error = $this->sys_get_errors();
             $this->last_error_id = "query_err";
-            
             trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
             return false;
         }
-        
+
         return true;
     } // execute_prepared_query
     
@@ -806,14 +820,41 @@ class MSSQL_DBWorker extends DBWorker
     //--------------------------------------------------------------------
     function format_date($date)
     {
-        return date("Ymd", $date);
+        if ($date === null || $date === "") {
+            return "NULL";
+        }
+
+        return "'" . date("Ymd", $date) . "'";
     } // format_date
     
     //--------------------------------------------------------------------
     function format_datetime($datetime)
     {
-        return date("Ymd H:i:s", $datetime);
+        if ($datetime === null || $datetime === "") {
+            return "NULL";
+        }
+
+        return "'" . date("Ymd H:i:s", $datetime) . "'";
     } // format_datetime
+    //--------------------------------------------------------------------
+    function format_date_bind($date)
+    {
+        if ($date === null || $date === "") {
+            return null;
+        }
+
+        return date("Ymd", $date);
+    } // format_date_bind
+    
+    //--------------------------------------------------------------------
+    function format_datetime_bind($datetime)
+    {
+        if ($datetime === null || $datetime === "") {
+            return null;
+        }
+
+        return date("Ymd H:i:s", $datetime);
+    } // format_datetime_bind
     //--------------------------------------------------------------------
 } // class MSSQL_DBWorker
 //----------------------------------------------------------------------
