@@ -13,7 +13,7 @@ class MySQL_DBWorker extends DBWorker
     public $field_names = null;
     //--------------------------------------------------------------------
     // make another object with the same connection (mysqli)
-    // for the cases of exucuting many queries in parrallel
+    // for the cases of executing many queries in parallel
     // to avoid result set conflicts
     //--------------------------------------------------------------------
     function create_clone()
@@ -280,32 +280,83 @@ class MySQL_DBWorker extends DBWorker
         
         return true;
     } // execute_query
-    //--------------------------------------------------------------------
-    // prepared qeries are not supported in MySQL, is just an imitation   //
-    // for better porting from/to other databases                         //
-    //--------------------------------------------------------------------
+
+    protected $param_order = array(); // ordered list of param names from prepare_query
+
     function prepare_query($query_string)
     {
         if (!$this->mysqli) {
             $this->last_error_id = "conn_err";
             return false;
         }
-        
+
+        $this->param_order = array();
+
+        // Match either a full quoted string literal (left untouched) or a
+        // :name placeholder (converted to ? and recorded). This prevents
+        // colons inside string literals (e.g. '12:34:56') from being
+        // misread as named parameters.
+        $query_string = preg_replace_callback(
+            '/\'(?:\\\\.|[^\'\\\\])*\'|"(?:\\\\.|[^"\\\\])*"|:([a-zA-Z_][a-zA-Z0-9_]*)/',
+            function ($m) {
+                // Quoted string literal branch (capture group 1 not set) - leave as-is
+                if (!isset($m[1])) {
+                    return $m[0];
+                }
+
+                $this->param_order[] = $m[1];
+                return '?';
+            },
+            $query_string
+        );
+
         $this->last_query = $query_string;
         $this->prepared_query = $query_string;
-        
+
         $this->statement = $this->mysqli->prepare($query_string);
         if (!$this->statement) {
             $this->last_error = $this->mysqli->error;
             $this->last_error_id = "query_err";
             trigger_error($this->last_error . "\n\n" . $query_string, E_USER_WARNING);
-            
             return false;
         }
-        
+
         return true;
     } // prepare_query
-    
+
+    function prepare_query2($query_string)
+    {
+        if (!$this->mysqli) {
+            $this->last_error_id = "conn_err";
+            return false;
+        }
+
+        $this->param_order = array();
+
+        // Convert named :name params to ? and record order
+        $query_string = preg_replace_callback(
+            '/:([\w]+)/',
+            function ($m) {
+                $this->param_order[] = $m[1];
+                return '?';
+            },
+            $query_string
+        );
+
+        $this->last_query = $query_string;
+        $this->prepared_query = $query_string;
+
+        $this->statement = $this->mysqli->prepare($query_string);
+        if (!$this->statement) {
+            $this->last_error = $this->mysqli->error;
+            $this->last_error_id = "query_err";
+            trigger_error($this->last_error . "\n\n" . $query_string, E_USER_WARNING);
+            return false;
+        }
+
+        return true;
+    } // prepare_query
+
     //--------------------------------------------------------------------
     function execute_prepared_query(/* arg list */)
     {
@@ -313,78 +364,97 @@ class MySQL_DBWorker extends DBWorker
             $this->last_error_id = "conn_err";
             return false;
         }
-        
+
         if (empty($this->prepared_query) || empty($this->statement)) {
             $this->last_error = "no prepared query defined";
             $this->last_error_id = "query_err";
             return false;
         }
-        
+
         $args = func_get_args();
         if (count($args) == 1 && is_array($args[0])) {
             $args = $args[0];
         }
-        
-        $parameters = array();
-        $parameters[0] = "";
-        
+
+        // If associative array and param_order recorded — expand values by order,
+        // duplicating values for repeated parameter names
+        if (!empty($this->param_order) && count($args) > 0 && is_string(array_key_first($args))) {
+            $named = array();
+            foreach ($args as $k => $v) {
+                $named[ltrim($k, ':')] = $v;
+            }
+            $positional = array();
+            foreach ($this->param_order as $name) {
+                $positional[] = isset($named[$name]) ? $named[$name] : null;
+            }
+            $args = $positional;
+        } elseif (count($args) > 0 && is_string(array_key_first($args))) {
+            $args = array_values($args);
+        }
+
+        $types  = "";
+        $values = array(); // holds actual values
+
         $this->last_query = $this->prepared_query;
-        
-        $counter = 1;
+
+        $counter = 0;
         foreach ($args as $argval) {
+            // Unwrap ClobValue/BlobValue — MySQL treats both as strings
+            if ($argval instanceof ClobValue || $argval instanceof BlobValue) {
+                $argval = $argval->value;
+            }
+
             if ($argval === null) {
-                $parameters[0] .= "i";
-                $parameters[$counter] = null;
-                
+                $types .= "i";
+                $values[$counter] = null;
                 $this->last_query = preg_replace("/\\?/", "null", $this->last_query, 1);
             } elseif (is_int($argval)) {
-                $parameters[0] .= "i";
-                $parameters[$counter] = $argval;
-                
+                $types .= "i";
+                $values[$counter] = $argval;
                 $this->last_query = preg_replace("/\\?/", $argval, $this->last_query, 1);
             } elseif (is_float($argval)) {
-                $parameters[0] .= "d";
-                $parameters[$counter] = $argval;
-                
+                $types .= "d";
+                $values[$counter] = $argval;
                 $this->last_query = preg_replace("/\\?/", $argval, $this->last_query, 1);
             } else {
-                $parameters[0] .= "s";
-                $parameters[$counter] = $argval;
-                
+                $types .= "s";
+                $values[$counter] = $argval;
                 $this->last_query = preg_replace("/\\?/", preg_r_escape("'" . $this->escape($argval) . "'"), $this->last_query, 1);
             }
-            
             $counter++;
         }
-        
-        if (!call_user_func_array(array($this->statement, 'bind_param'), $parameters)) {
+
+        // bind_param requires references — build params array with refs to $values entries
+        $params = array($types);
+        for ($i = 0; $i < count($values); $i++) {
+            $params[] = &$values[$i];
+        }
+
+        if (!call_user_func_array(array($this->statement, 'bind_param'), $params)) {
             $this->last_error = "Number of elements in type definition string doesn't match number of bind variables.";
             $this->last_error_id = "query_err";
             trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
-            
             return false;
         }
-        
+
         if (!$this->statement->execute()) {
             $this->last_error = $this->statement->error;
             $this->last_error_id = "query_err";
             trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
-            
             return false;
         }
-        
+
         if (!$this->statement->store_result()) {
             $this->last_error = $this->statement->error;
             $this->last_error_id = "query_err";
             trigger_error($this->last_error . "\n\n" . $this->last_query, E_USER_WARNING);
-            
             return false;
         }
-        
+
         if ($this->statement->num_rows) {
             $this->mysqli_result = $this->statement->result_metadata();
         }
-        
+
         return true;
     } // execute_prepared_query
     
@@ -735,14 +805,41 @@ class MySQL_DBWorker extends DBWorker
     //--------------------------------------------------------------------
     function format_date($date)
     {
-        return date("Y-m-d", $date);
+        if ($date === null || $date === "") {
+            return "NULL";
+        }
+
+        return "'" . date("Y-m-d", $date) . "'";
     } // format_date
     
     //--------------------------------------------------------------------
     function format_datetime($datetime)
     {
-        return date("Y-m-d H:i:s", $datetime);
+        if ($datetime === null || $datetime === "") {
+            return "NULL";
+        }
+
+        return "'" . date("Y-m-d H:i:s", $datetime) . "'";
     } // format_datetime
+    //--------------------------------------------------------------------
+    function format_date_bind($date)
+    {
+        if ($date === null || $date === "") {
+            return null;
+        }
+
+        return date("Y-m-d", $date);
+    } // format_date_bind
+    
+    //--------------------------------------------------------------------
+    function format_datetime_bind($datetime)
+    {
+        if ($datetime === null || $datetime === "") {
+            return null;
+        }
+
+        return date("Y-m-d H:i:s", $datetime);
+    } // format_datetime_bind
     //--------------------------------------------------------------------
 } // MySQL_DBWorker
 //----------------------------------------------------------------------

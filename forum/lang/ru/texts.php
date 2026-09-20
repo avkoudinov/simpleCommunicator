@@ -5,7 +5,7 @@ $GLOBALS['DEF_TEXTS']['ru']['ru'] = 'Русский';
 $GLOBALS['DEF_TEXTS']['ru']['ua'] = 'Украинский';
 $GLOBALS['DEF_TEXTS']['ru']['ErrFilesMissingOrHaveErrors'] = 'Отсутствуют некоторые файлы приложения или они содержат ошибки программирования!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrCreatingClassInstance'] = 'Класс \'%s\' не может быть загружен. Не найдено его определние, или же данный модуль не поддерживает используемый тип базы данных \'%s\'!';
-$GLOBALS['DEF_TEXTS']['ru']['ErrNoDBConfig'] = 'Отсутствует информация для соединения с базой данных! Пожалуйста, войдите в систему под мастер-администратором и проверьте установки соединения с базой данных!';
+$GLOBALS['DEF_TEXTS']['ru']['ErrNoDBConfig'] = 'Отсутствует информация для соединения с базой данных!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrDbInaccessible'] = 'База данных недоступна!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrDbExtenstionNotInstalled'] = 'PHP-расширение \'%s\' не установлено или слишком устаревшее. Работа с базой данных \'%s\' невозможна!';
 $GLOBALS['DEF_TEXTS']['ru']['ErrDbConnNoAccess'] = 'Сервер \'%s\' недоступен или неверное имя пользователя \'%s\' или пароль!';
@@ -162,7 +162,7 @@ $GLOBALS['DEF_TEXTS']['ru']['FirstAttack'] = 'Первая атака';
 $GLOBALS['DEF_TEXTS']['ru']['LastAttack'] = 'Посл. атака';
 $GLOBALS['DEF_TEXTS']['ru']['Attacks'] = 'Атаки';
 $GLOBALS['DEF_TEXTS']['ru']['Limit'] = 'Лимит';
-$GLOBALS['DEF_TEXTS']['ru']['DateTimeFormat'] = 'd.m.Y, H:i:s';
+$GLOBALS['DEF_TEXTS']['ru']['DateTimeFormat'] = 'd.m.Y, H:i';
 $GLOBALS['DEF_TEXTS']['ru']['DateFormat'] = 'd.m.Y';
 $GLOBALS['DEF_TEXTS']['ru']['ErrWrongDateFormat'] = 'Неправильный формат или значение даты или времени! Дату необходимо ввести в формате "%s".';
 $GLOBALS['DEF_TEXTS']['ru']['NoForums'] = 'Форумов не существует.';
@@ -1056,9 +1056,9 @@ $GLOBALS['DEF_TEXTS']['ru']['DatabasePassword'] = 'Пароль';
 $GLOBALS['DEF_TEXTS']['ru']['ErrInstallDatabasePasswordEmpty'] = 'Не задан пароль пользователя базы данных!';
 $GLOBALS['DEF_TEXTS']['ru']['DatabaseTablePrefix'] = 'Префикс для таблиц';
 $GLOBALS['DEF_TEXTS']['ru']['ErrDatabaseTablePrefixEmpty'] = 'Не задан префикс для таблиц!';
-$GLOBALS['DEF_TEXTS']['ru']['DBCreationComment'] = 'Если база данных с указанным именем не существует, она будет создана.';
-$GLOBALS['DEF_TEXTS']['ru']['DBUserComment'] = 'Пользователь базы данных должен обладать правами, достаточными для создания
-                базы данных и ее объектов.
+$GLOBALS['DEF_TEXTS']['ru']['DBCreationComment'] = 'База данных должна существовать. Если она еще не создана, создайте базу данных и пользователя для нее, прежде чем продолжить исталляцию.';
+$GLOBALS['DEF_TEXTS']['ru']['DBUserComment'] = 'Пользователь базы данных должен обладать полными правами, достаточными для создания,
+                удаления и изменения ее свойств и объектов.
             ';
 $GLOBALS['DEF_TEXTS']['ru']['DBPrefixComment'] = 'Во избежание конфликта имен укажите префикс, который будет добавлен в начало имени
                 каждого объекта базы данных, относящегося к приложению.
@@ -1506,6 +1506,7 @@ $GLOBALS['DEF_TEXTS']['ru']['ErrPostsMoveStartDate'] = 'Сообщения не 
 $GLOBALS['DEF_TEXTS']['ru']['Picture'] = 'Картинка';
 $GLOBALS['DEF_TEXTS']['ru']['MathFormula'] = 'Математическая формула';
 $GLOBALS['DEF_TEXTS']['ru']['Widget'] = 'Виджет';
+$GLOBALS['DEF_TEXTS']['ru']['Markdown'] = 'Markdown';
 $GLOBALS['DEF_TEXTS']['ru']['Video'] = 'Видеоклип';
 $GLOBALS['DEF_TEXTS']['ru']['Audio'] = 'Аудиоклип';
 $GLOBALS['DEF_TEXTS']['ru']['Gallery'] = 'Галерея';

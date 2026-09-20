@@ -5,7 +5,7 @@ $GLOBALS['DEF_TEXTS']['en']['ru'] = 'Russian';
 $GLOBALS['DEF_TEXTS']['en']['ua'] = 'Ukrainian';
 $GLOBALS['DEF_TEXTS']['en']['ErrFilesMissingOrHaveErrors'] = 'Some application files seem to be absent or contain programming errors!';
 $GLOBALS['DEF_TEXTS']['en']['ErrCreatingClassInstance'] = 'The class \'%s\' could not be loaded. Its definition is not found, or the module does not support the current database type \'%s\'!';
-$GLOBALS['DEF_TEXTS']['en']['ErrNoDBConfig'] = 'No database connection information available ot it is incomplete! Please login as Master Administrator and check the database connection settings!';
+$GLOBALS['DEF_TEXTS']['en']['ErrNoDBConfig'] = 'No database connection information available ot it is incomplete!';
 $GLOBALS['DEF_TEXTS']['en']['ErrDbInaccessible'] = 'The database cannot be conected!';
 $GLOBALS['DEF_TEXTS']['en']['ErrDbExtenstionNotInstalled'] = 'PHP extension \'%s\' is not installed or is too old. Work with the database \'%s\' is not possible!';
 $GLOBALS['DEF_TEXTS']['en']['ErrDbConnNoAccess'] = 'The server \'%s\' is unreachable or the user login \'%s\' or password are invalid!';
@@ -1054,9 +1054,9 @@ $GLOBALS['DEF_TEXTS']['en']['DatabasePassword'] = 'Password';
 $GLOBALS['DEF_TEXTS']['en']['ErrInstallDatabasePasswordEmpty'] = 'The password of the database user is not specified!';
 $GLOBALS['DEF_TEXTS']['en']['DatabaseTablePrefix'] = 'Prefix for tables';
 $GLOBALS['DEF_TEXTS']['en']['ErrDatabaseTablePrefixEmpty'] = 'Prefix for tables is not specified!';
-$GLOBALS['DEF_TEXTS']['en']['DBCreationComment'] = 'If the database with that name does not exist, it will be created.';
-$GLOBALS['DEF_TEXTS']['en']['DBUserComment'] = 'The database user has to have
-                sufficient privileges for creation of the database and database objects.
+$GLOBALS['DEF_TEXTS']['en']['DBCreationComment'] = 'The database must exist. If it has not been created yet, create the database and a user for it before continuing the installation.';
+$GLOBALS['DEF_TEXTS']['en']['DBUserComment'] = 'The database user must have full privileges sufficient for creating,
+                deleting and modifying its properties and objects.
             ';
 $GLOBALS['DEF_TEXTS']['en']['DBPrefixComment'] = 'To avoid naming conflicts in the database, specify a
                 prefix that will be pre-pended to any database object of the application.
@@ -1499,6 +1499,7 @@ $GLOBALS['DEF_TEXTS']['en']['ErrPostsMoveStartDate'] = 'The messages cannot be m
 $GLOBALS['DEF_TEXTS']['en']['Picture'] = 'Picture';
 $GLOBALS['DEF_TEXTS']['en']['MathFormula'] = 'Mathematical Formula';
 $GLOBALS['DEF_TEXTS']['en']['Widget'] = 'Widget';
+$GLOBALS['DEF_TEXTS']['en']['Markdown'] = 'Markdown';
 $GLOBALS['DEF_TEXTS']['en']['Video'] = 'Video';
 $GLOBALS['DEF_TEXTS']['en']['Audio'] = 'Audio';
 $GLOBALS['DEF_TEXTS']['en']['Gallery'] = 'Gallery';
