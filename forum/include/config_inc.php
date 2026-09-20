@@ -143,12 +143,11 @@ define('MAX_SEARCH_RESULTS', 10000);
 
 // The keys and token for retrival of the video meta data
 
-define('GMAPS_API_KEY', 'AIzaSyBe9vwPZtkdgBu0Ha4-ajAHtiEF0O4ZYco');
-define('YOUTUBE_API_KEY', 'AIzaSyBe9vwPZtkdgBu0Ha4-ajAHtiEF0O4ZYco');
-//define('YOUTUBE_API_KEY', 'AIzaSyCgQ5oIhW1ObyrWP42tu0lGCYh54gesjrQ');
+define('GMAPS_API_KEY', '');
+define('YOUTUBE_API_KEY', '');
 
-define('VK_CLIENT_SECRET', 'MVXwHgbawnzEK7HbJv32');
-define('VK_ACCESS_TOKEN', '2a487160f6575e720619530774b5fb026093bd2fcbb4ae47e01e7332ae826e4429460d1149e5e84924dcf');
+define('VK_CLIENT_SECRET', '');
+define('VK_ACCESS_TOKEN', '');
 
 // The email check key
 define('BLOCK_DISPOSABLE_EMAIL_KEY', '');
