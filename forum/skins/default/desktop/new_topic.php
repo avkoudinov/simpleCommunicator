@@ -20,6 +20,40 @@ else
 ?>
 
 <script>
+var config = {
+    format: "<?php echo_js(text("DateFormat")); ?>",
+    start_year: 2000,
+    month_names: [
+        "<?php echo_js(text("January")); ?>",
+        "<?php echo_js(text("February")); ?>",
+        "<?php echo_js(text("March")); ?>",
+        "<?php echo_js(text("April")); ?>",
+        "<?php echo_js(text("May")); ?>",
+        "<?php echo_js(text("June")); ?>",
+        "<?php echo_js(text("July")); ?>",
+        "<?php echo_js(text("August")); ?>",
+        "<?php echo_js(text("September")); ?>",
+        "<?php echo_js(text("October")); ?>",
+        "<?php echo_js(text("November")); ?>",
+        "<?php echo_js(text("December")); ?>"
+    ],
+
+    weekday_names: [
+        "<?php echo_js(text("MondayShort")); ?>",
+        "<?php echo_js(text("TuesdayShort")); ?>",
+        "<?php echo_js(text("WednesdayShort")); ?>",
+        "<?php echo_js(text("ThursdayShort")); ?>",
+        "<?php echo_js(text("FridayShort")); ?>",
+        "<?php echo_js(text("SaturdayShort")); ?>",
+        "<?php echo_js(text("SundayShort")); ?>"
+    ]
+};
+
+Forum.addXEvent(window, 'load', function () {
+    SimpleCalendar.assign("#gallery_filter_start_date", config);
+    SimpleCalendar.assign("#gallery_filter_end_date", config);
+});
+
 var in_search = 0;
 var topic_id = '';
 var final_url = '<?php echo_js($final_url); ?>';
@@ -168,7 +202,7 @@ function show_attachment_gallery()
       handler: function() { Forum.hide_user_msgbox(); }
     }
   ];
-  
+
   var buttons = [
     {
       caption: "<?php echo_js(text("Cancel")); ?>",
@@ -177,9 +211,9 @@ function show_attachment_gallery()
     {
       caption: "<?php echo_js(text("Apply")); ?>",
       addClass: "send_button",
-      handler: function() { 
-        if(paste_gallery_attachment_placeholders()) 
-          Forum.hide_sys_lightbox(); 
+      handler: function() {
+        if(paste_gallery_attachment_placeholders())
+          Forum.hide_sys_lightbox();
         else
           Forum.show_user_msgbox(msg_Error, "<?php echo_js(text("ErrNoAttachmentSelected")); ?>", 'icon-error.gif', errbuttons);
       }
@@ -187,10 +221,10 @@ function show_attachment_gallery()
   ];
 
   Forum.show_attachment_gallery("<?php echo_js(text("AttachmentGallery")); ?>", buttons);
-  
+
   var sys_lightbox_body = document.getElementById("sys_lightbox_body");
   if(!sys_lightbox_body) return false;
-  
+
   var attachment_gallery_area = sys_lightbox_body.lastChild;
   if(attachment_gallery_area)
   {
@@ -198,12 +232,12 @@ function show_attachment_gallery()
       var gap_to_end = this.scrollHeight - this.offsetHeight - this.scrollTop;
       if(gap_to_end < 200)
       {
-        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", last_loaded_att_post_id, last_loaded_att_id);
+        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
       }
     });
   }
-  
-  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", 0, 0);
+
+  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
 
   return false;
 }
@@ -419,6 +453,40 @@ function post_message(action)
 writing_message = true;
 
 activate_auto_save();
+
+var config = {
+  format: "<?php echo_js(text("DateFormat")); ?>",
+  start_year: 2000,
+  month_names: [
+    "<?php echo_js(text("January")); ?>",
+    "<?php echo_js(text("February")); ?>",
+    "<?php echo_js(text("March")); ?>",
+    "<?php echo_js(text("April")); ?>",
+    "<?php echo_js(text("May")); ?>",
+    "<?php echo_js(text("June")); ?>",
+    "<?php echo_js(text("July")); ?>",
+    "<?php echo_js(text("August")); ?>",
+    "<?php echo_js(text("September")); ?>",
+    "<?php echo_js(text("October")); ?>",
+    "<?php echo_js(text("November")); ?>",
+    "<?php echo_js(text("December")); ?>"
+  ],
+  
+  weekday_names: [
+    "<?php echo_js(text("MondayShort")); ?>",
+    "<?php echo_js(text("TuesdayShort")); ?>",
+    "<?php echo_js(text("WednesdayShort")); ?>",
+    "<?php echo_js(text("ThursdayShort")); ?>",
+    "<?php echo_js(text("FridayShort")); ?>",
+    "<?php echo_js(text("SaturdayShort")); ?>",
+    "<?php echo_js(text("SundayShort")); ?>"
+  ]
+};
+
+Forum.addXEvent(window, 'load', function () {
+  SimpleCalendar.assign("#start_date", config);
+  SimpleCalendar.assign("#end_date", config);
+});
 </script>
 
 <?php
@@ -866,8 +934,36 @@ if(!$fmanager->is_logged_in()):
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[url=]','[/url]', 0)" tabindex="-1">URL</button></div>
 
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[ai=]','[/ai]', 0)" tabindex="-1">AI</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
+
+<div class="toolbar_button_wrapper">
+<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_ai_selection_area()" tabindex="-1">AI</button>
+
+  <div id="ai_selection_area" class="ai_selection_area" style="display:none">
+
+    <div onclick="insert_tag('[ai]','[/ai]', 0)">AI</div>
+    <?php
+    echo $fmanager->build_ai_list("ai");
+    ?>
+
+  </div>
+  <div class="clear_both"></div>
+</div>
+
+<div class="toolbar_button_wrapper">
+<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_markdown_selection_area()" tabindex="-1">MARKDOWN</button>
+
+  <div id="markdown_selection_area" class="markdown_selection_area" style="display:none">
+
+    <div onclick="insert_tag('[markdown]','[/markdown]', 0)">MARKDOWN</div>
+    <div onclick="insert_tag('[markdown=AI]','[/markdown]', 0)">AI</div>
+    <?php
+    echo $fmanager->build_ai_list("markdown");
+    ?>
+
+  </div>
+  <div class="clear_both"></div>
+</div>
 
 <div class="toolbar_button_wrapper">
 <button class="toolbar_button" type="button" onclick="return toggle_code_selection_area()" tabindex="-1">CODE</button>
@@ -904,6 +1000,7 @@ if(!$fmanager->is_logged_in()):
     <div onclick="insert_tag('[radikal]','[/radikal]', 0)">RADIKAL</div>
     <div onclick="insert_tag('[plvideo]','[/plvideo]', 0)">PLVIDEO</div>
     <div onclick="insert_tag('[dzen]','[/dzen]', 0)">YANDEX DZEN</div>
+    <div onclick="insert_tag('[ok]','[/ok]', 0)">OK</div>
     <div onclick="insert_tag('[rambler]','[/rambler]', 0)">RAMBLER</div>
     <div onclick="insert_tag('[tiktok]','[/tiktok]', 0)">TIKTOK</div>
     <div onclick="insert_tag('[anim]','[/anim]', 0)">ANIM</div>
@@ -1090,3 +1187,7 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
 </div>
 
 </div>
+
+<?php
+require_once "gallery_filter_bar_inc.php";
+?>

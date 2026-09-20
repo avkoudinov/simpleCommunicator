@@ -20,6 +20,43 @@ else
 ?>
 
 <script>
+
+
+var config = {
+    format: "<?php echo_js(text("DateFormat")); ?>",
+    start_year: 2000,
+    month_names: [
+        "<?php echo_js(text("January")); ?>",
+        "<?php echo_js(text("February")); ?>",
+        "<?php echo_js(text("March")); ?>",
+        "<?php echo_js(text("April")); ?>",
+        "<?php echo_js(text("May")); ?>",
+        "<?php echo_js(text("June")); ?>",
+        "<?php echo_js(text("July")); ?>",
+        "<?php echo_js(text("August")); ?>",
+        "<?php echo_js(text("September")); ?>",
+        "<?php echo_js(text("October")); ?>",
+        "<?php echo_js(text("November")); ?>",
+        "<?php echo_js(text("December")); ?>"
+    ],
+
+    weekday_names: [
+        "<?php echo_js(text("MondayShort")); ?>",
+        "<?php echo_js(text("TuesdayShort")); ?>",
+        "<?php echo_js(text("WednesdayShort")); ?>",
+        "<?php echo_js(text("ThursdayShort")); ?>",
+        "<?php echo_js(text("FridayShort")); ?>",
+        "<?php echo_js(text("SaturdayShort")); ?>",
+        "<?php echo_js(text("SundayShort")); ?>"
+    ]
+};
+
+Forum.addXEvent(window, 'load', function () {
+    SimpleCalendar.assign("#gallery_filter_start_date", config);
+    SimpleCalendar.assign("#gallery_filter_end_date", config);
+});
+
+
 var in_search = 0;
 var topic_id = '';
 var final_url = '<?php echo_js($final_url); ?>';
@@ -198,12 +235,12 @@ function show_attachment_gallery()
       var gap_to_end = this.scrollHeight - this.offsetHeight - this.scrollTop;
       if(gap_to_end < 200)
       {
-        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", last_loaded_att_post_id, last_loaded_att_id);
+        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
       }
     });
   }
   
-  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", 0, 0);
+  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
 
   return false;
 }
@@ -858,18 +895,48 @@ onblur="lookup_delayed_hide('subject');">
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[anim]','[/anim]', 0)" tabindex="-1">ANIM</button></div>
 <div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[url=]','[/url]', 0)" tabindex="-1">URL</button></div>
 
+<div class="toolbar_button_wrapper" style="float:right;margin-right: 0px;"><button class="toolbar_button" type="button" style="background: transparent url('<?php echo($view_path); ?>images/paste.png') no-repeat center center; background-size: 70% 70%;" onclick="return paste_text()" tabindex="-1">&nbsp;</button></div>
+
 </td>
 </tr>
 
 <tr>
 <td class="toolbar">
 
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[ai=]','[/ai]', 0)" tabindex="-1">AI</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[quote=]','[/quote]', 0)" tabindex="-1">QUOTE</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[spoiler]','[/spoiler]', 0)" tabindex="-1">SPOILER</button></div>
 
 <div class="toolbar_button_wrapper">
-<button class="toolbar_button" type="button" onclick="return toggle_code_selection_area()" tabindex="-1">CODE</button>
+<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_ai_selection_area()" tabindex="-1">AI</button>
+
+  <div id="ai_selection_area" class="ai_selection_area" style="display:none">
+
+    <div onclick="insert_tag('[ai]','[/ai]', 0)">AI</div>
+    <?php
+    echo $fmanager->build_ai_list("ai");
+    ?>
+
+  </div>
+  <div class="clear_both"></div>
+</div>
+
+<div class="toolbar_button_wrapper">
+<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_markdown_selection_area()" tabindex="-1">MARKDOWN</button>
+
+  <div id="markdown_selection_area" class="markdown_selection_area" style="display:none">
+
+    <div onclick="insert_tag('[markdown]','[/markdown]', 0)">MARKDOWN</div>
+    <div onclick="insert_tag('[markdown=AI]','[/markdown]', 0)">AI</div>
+    <?php
+    echo $fmanager->build_ai_list("markdown");
+    ?>
+
+  </div>
+  <div class="clear_both"></div>
+</div>
+
+<div class="toolbar_button_wrapper">
+<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_code_selection_area()" tabindex="-1">CODE</button>
   <div id="code_selection_area" class="code_selection_area" style="display:none">
 
     <?php
@@ -880,12 +947,12 @@ onblur="lookup_delayed_hide('subject');">
   <div class="clear_both"></div>
 </div>
 
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[fixed]','[/fixed]', 0)" tabindex="-1">FIX</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[poem]','[/poem]', 0)" tabindex="-1">POEM</button></div>
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" onclick="return insert_tag('[table]','[/table]', 0)" tabindex="-1">TABLE</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[fixed]','[/fixed]', 0)" tabindex="-1">FIX</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[poem]','[/poem]', 0)" tabindex="-1">POEM</button></div>
+<div class="toolbar_button_wrapper"><button class="toolbar_button large_toolbar_button" type="button" onclick="return insert_tag('[table]','[/table]', 0)" tabindex="-1">TABLE</button></div>
 
 <div class="toolbar_button_wrapper">
-<button class="toolbar_button" type="button" onclick="return toggle_media_selection_area()" tabindex="-1">MEDIA</button>
+<button class="toolbar_button large_toolbar_button" type="button" onclick="return toggle_media_selection_area()" tabindex="-1">MEDIA</button>
   <div id="media_selection_area" class="media_selection_area" style="display:none">
 
     <div onclick="insert_tag('[youtube]','[/youtube]', 0)">YOUTUBE</div>
@@ -900,6 +967,7 @@ onblur="lookup_delayed_hide('subject');">
     <div onclick="insert_tag('[radikal]','[/radikal]', 0)">RADIKAL</div>
     <div onclick="insert_tag('[plvideo]','[/plvideo]', 0)">PLVIDEO</div>
     <div onclick="insert_tag('[dzen]','[/dzen]', 0)">YANDEX DZEN</div>
+    <div onclick="insert_tag('[ok]','[/ok]', 0)">OK</div>
     <div onclick="insert_tag('[rambler]','[/rambler]', 0)">RAMBLER</div>
     <div onclick="insert_tag('[tiktok]','[/tiktok]', 0)">TIKTOK</div>
     <div onclick="insert_tag('[anim]','[/anim]', 0)">ANIM</div>
@@ -913,8 +981,6 @@ onblur="lookup_delayed_hide('subject');">
 
   </div>
 </div>
-
-<div class="toolbar_button_wrapper"><button class="toolbar_button" type="button" style="background: transparent url('<?php echo($view_path); ?>images/paste.png') no-repeat center center; background-size: 70% 70%;" onclick="return paste_text()" tabindex="-1">&nbsp;</button></div>
 
 <div class="clear_both"></div>
 </td>
@@ -1091,3 +1157,7 @@ if(!$fmanager->is_logged_in() && !$fmanager->captcha_verified())
 </form>
 
 </div>
+
+<?php
+require_once "gallery_filter_bar_inc.php";
+?>

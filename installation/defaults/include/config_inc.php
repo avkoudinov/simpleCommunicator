@@ -14,8 +14,10 @@ setlocale(LC_ALL,
          );
 
 $SUPPORTED_DATABASES = array(
-  "MySQL" => "MySQL 8.0.x",
-  "MSSQL" => "Microsoft SQL Server 2005 or higher"
+  "MySQL" => "MySQL 8.0.17+ / MariaDB 11.5.2+",
+  "PostgreSQL" => "PostgreSQL 16+",
+  "Oracle" => "Oracle 12c+",
+  "MSSQL" => "Microsoft SQL Server 2005+"
 );
 
 $SUPPORTED_CODES = array(

@@ -3,35 +3,39 @@
 set PHP_PATH="C:\web\php\php"
 set ZIP_PATH=%ProgramFiles%\7-Zip
 
-rem generate langs and sqls
+echo *****************************************************
+echo * Creating installation distributive                *
+echo *****************************************************
 
-@echo Generating langs
-@echo.
+echo -----------------------------------------------------
+echo Step 1: Generating langs
+echo -----------------------------------------------------
 
 %PHP_PATH% -f "scripts/genlangs.php"
 
-@echo.
-
-@echo Generating sqls
-@echo.
+echo -----------------------------------------------------
+echo Step 2: Generating SQL commands
+echo -----------------------------------------------------
 
 %PHP_PATH% -f "scripts/gensql.php"
 
-@echo.
-
-rem delete old zips
-
-@echo Copying files
+echo -----------------------------------------------------
+echo Step 3: Deleting old zips
+echo -----------------------------------------------------
 
 del *.zip
 
-rem copying application
+echo -----------------------------------------------------
+echo Step 4: Copying application files
+echo -----------------------------------------------------
 
 rmdir /S /Q application
 mkdir application
-xcopy ..\forum application /S /E /R /Y
+xcopy ..\application application /S /E /R /Y
 
-rem remove unnecessary stuff
+echo -----------------------------------------------------
+echo Step 5: Removing unnecessary stuff
+echo -----------------------------------------------------
 
 rmdir /S /Q application\.idea
 
@@ -51,7 +55,9 @@ del application\user_data\config\img_black_list.txt
 del application\user_data\config\email_black_list.txt
 del application\user_data\config\protected_guests.txt
 
-rem skins handling
+echo -----------------------------------------------------
+echo Step 6: Preparing skins
+echo -----------------------------------------------------
 
 rmdir /S /Q application\skins\debug
 
@@ -62,7 +68,9 @@ del application\skins\default\mobile\test.php
 
 "%ZIP_PATH%\7z.exe" a skins.zip .\application\skins\*
 
-rem remove old stuff and apply defaults
+echo -----------------------------------------------------
+echo Step 7: Remove old stuff and apply defaults
+echo -----------------------------------------------------
 
 rmdir /S /Q application\log
 
@@ -74,7 +82,9 @@ rmdir /S /Q application\user_data
 
 xcopy defaults application /S /E /R /Y
 
-rem database
+echo -----------------------------------------------------
+echo Step 8: Preparing clear database project
+echo -----------------------------------------------------
 
 rmdir /S /Q database
 mkdir database
@@ -83,15 +93,54 @@ xcopy ..\database database /S /E /R /Y /exclude:xcopy_exclude.cfg
 rmdir /S /Q database\MySQL\maintenance
 rmdir /S /Q database\MySQL\scripts
 rmdir /S /Q database\MySQL\update
+rmdir /S /Q database\MySQL\backup
+
+rmdir /S /Q database\PostgreSQL\maintenance
+rmdir /S /Q database\PostgreSQL\scripts
+rmdir /S /Q database\PostgreSQL\update
+rmdir /S /Q database\PostgreSQL\backup
+
+rmdir /S /Q database\MSSQL\maintenance
+rmdir /S /Q database\MSSQL\scripts
+rmdir /S /Q database\MSSQL\update
+rmdir /S /Q database\MSSQL\backup
+
+rmdir /S /Q database\Oracle\maintenance
+rmdir /S /Q database\Oracle\scripts
+rmdir /S /Q database\Oracle\update
+rmdir /S /Q database\Oracle\backup
+
 del "database\Power Designer Notes.docx"
 
-rem zipping
+cscript replace.vbs "database\MySQL\MySQL.pdm" "oleg" "user1"
+cscript replace.vbs "database\MySQL\MySQL.pdm" "oschildt" "user1"
+cscript replace.vbs "database\MySQL\MySQL.pdm" "OLEG" "user1"
+cscript replace.vbs "database\MySQL\MySQL.pdm" "OSCHILDT" "user1"
+
+cscript replace.vbs "database\MSSQL\MSSQL.pdm" "oleg" "user1"
+cscript replace.vbs "database\MSSQL\MSSQL.pdm" "oschildt" "user1"
+cscript replace.vbs "database\MSSQL\MSSQL.pdm" "OLEG" "user1"
+cscript replace.vbs "database\MSSQL\MSSQL.pdm" "OSCHILDT" "user1"
+
+cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "oleg" "user1"
+cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "oschildt" "user1"
+cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "OLEG" "user1"
+cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "OSCHILDT" "user1"
+
+cscript replace.vbs "database\Oracle\Oracle.pdm" "oleg" "user1"
+cscript replace.vbs "database\Oracle\Oracle.pdm" "oschildt" "user1"
+cscript replace.vbs "database\Oracle\Oracle.pdm" "OLEG" "user1"
+cscript replace.vbs "database\Oracle\Oracle.pdm" "OSCHILDT" "user1"
+
+echo -----------------------------------------------------
+echo Step 9: Creationg zips
+echo -----------------------------------------------------
 
 @echo Zipping
 
 "%ZIP_PATH%\7z.exe" a simple_communicator.zip .\application\*
 "%ZIP_PATH%\7z.exe" a database.zip .\database\*
-"%ZIP_PATH%\7z.exe" a smileys.zip ..\forum\user_data\smileys\*
+"%ZIP_PATH%\7z.exe" a smileys.zip ..\application\user_data\smileys\*
 
 rmdir /S /Q application\log
 rmdir /S /Q application\tmp
@@ -106,10 +155,9 @@ del application\._README.TXT
 
 "%ZIP_PATH%\7z.exe" a simple_communicator_update.zip .\application\*
 
-rmdir /S /Q application
-rmdir /S /Q database
-
-@echo Done
+echo -----------------------------------------------------
+echo Distributive successfully created
+echo -----------------------------------------------------
 
 pause
 
