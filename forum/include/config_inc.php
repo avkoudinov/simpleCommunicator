@@ -14,9 +14,23 @@ setlocale(LC_ALL,
          );
 
 $SUPPORTED_DATABASES = array(
-  "MySQL" => "MySQL 8.0.x",
-  "MSSQL" => "Microsoft SQL Server 2005 or higher"
+  "MySQL" => "MySQL 8.0.17+ / MariaDB 11.5.2+",
+  "PostgreSQL" => "PostgreSQL 16+",
+  "Oracle" => "Oracle 12c+",
+  "MSSQL" => "Microsoft SQL Server 2005+"
 );
+
+$SUPPORTED_AI = array(
+  "ChatGPT",
+  "Claude",
+  "Gemini",
+  "DeepSeek",
+  "Grok",
+  "GigaChat",
+  "Алиса"
+);
+
+asort($SUPPORTED_AI, SORT_LOCALE_STRING);
 
 $SUPPORTED_CODES = array(
     "apache" => "Apache",
@@ -119,6 +133,7 @@ define('MAX_POSTS_PER_MINUTE', 10);
 define('WAIT_TIME_AFTER_ATTACK', 1); // minutes
 
 define('JOB_PER_CRON', 1);
+define('REFRESH_TOR_IPS', 1);
 
 define('RANDOM_AVATARS', 0);
 
@@ -128,15 +143,11 @@ define('MAX_SEARCH_RESULTS', 10000);
 
 // The keys and token for retrival of the video meta data
 
-define('GMAPS_API_KEY', 'AIzaSyBe9vwPZtkdgBu0Ha4-ajAHtiEF0O4ZYco');
-define('YOUTUBE_API_KEY', 'AIzaSyBe9vwPZtkdgBu0Ha4-ajAHtiEF0O4ZYco');
-//define('YOUTUBE_API_KEY', 'AIzaSyCgQ5oIhW1ObyrWP42tu0lGCYh54gesjrQ');
+define('GMAPS_API_KEY', '');
+define('YOUTUBE_API_KEY', '');
 
-define('VK_CLIENT_SECRET', 'MVXwHgbawnzEK7HbJv32');
-define('VK_ACCESS_TOKEN', '2a487160f6575e720619530774b5fb026093bd2fcbb4ae47e01e7332ae826e4429460d1149e5e84924dcf');
-
-// The geo analytics key
-//define('REVOLVERMAPS_KEY', '514a6bwxiuq');
+define('VK_CLIENT_SECRET', '');
+define('VK_ACCESS_TOKEN', '');
 
 // The email check key
 define('BLOCK_DISPOSABLE_EMAIL_KEY', '');
@@ -164,6 +175,7 @@ define('TRACE_ERROR_VARS', false);
 define('TRACE_ERROR_ARGS', false);
 define('TRACE_STACK', true);
 define('MAIL_TO_TRACE', true);
+define('OMIT_FILE_NAMES_AND_LINES', false);
 
 // SMTP settings
 
@@ -172,30 +184,31 @@ ini_set("smtp_port", 25);
 
 // Database settings
 
-/*
-define('DB_TYPE', 'MySQL');
-define('DB_SERVER', '127.0.0.1');
-define('DB_NAME', 'forum');
-define('DB_USER', 'root');
-define('DB_PASSWORD', 'root');
-define('DB_PREFIX', 'V1');
-define('DB_FT_MIN_WORD_LEN', '2');
-
-define('DB_TYPE', 'MSSQL');
-define('DB_SERVER', '127.0.0.1');
-define('DB_NAME', 'forum');
-define('DB_USER', 'sa');
-define('DB_PASSWORD', 'Tr75mfr75');
-define('DB_PREFIX', 'V1');
-*/
-
-if(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "ms.forum.loc")
+if(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "ms.forum.local")
 {
   define('DB_TYPE', 'MSSQL');
   define('DB_SERVER', '127.0.0.1');
-  define('DB_NAME', 'forum');
+  define('DB_NAME', 'basename_forum');
   define('DB_USER', 'sa');
-  define('DB_PASSWORD', 'D3v3l0p3r!');
+  define('DB_PASSWORD', 'root');
+  define('DB_PREFIX', 'v1');
+}
+elseif(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "pgs.forum.local")
+{
+  define('DB_TYPE', 'PostgreSQL');
+  define('DB_SERVER', '127.0.0.1');
+  define('DB_NAME', 'basename_forum');
+  define('DB_USER', 'postgres');
+  define('DB_PASSWORD', 'root');
+  define('DB_PREFIX', 'v1');
+}
+elseif(!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "oracle.forum.local")
+{
+  define('DB_TYPE', 'Oracle');
+  define('DB_SERVER', 'localhost:1521/ORCLPDB');
+  define('DB_NAME', 'basename_forum');
+  define('DB_USER', 'basename_forum');
+  define('DB_PASSWORD', 'root');
   define('DB_PREFIX', 'v1');
 }
 else
@@ -204,22 +217,11 @@ else
 
   define('DB_TYPE', 'MySQL');
   define('DB_SERVER', '127.0.0.1');
-  define('DB_NAME', 'forum');
+  define('DB_NAME', 'basename_forum');
+//  define('DB_NAME', 'sqlru_forum');
   define('DB_USER', 'root');
   define('DB_PASSWORD', 'root');
   define('DB_PREFIX', 'v1');
-
-  /*define('RO_DB_TYPE', 'MySQL');
-  define('RO_DB_SERVER', '127.0.0.1');
-  define('RO_DB_NAME', 'nosqlru_forum');
-  define('RO_DB_USER', 'root');
-  define('RO_DB_PASSWORD', 'root');
-
-  define('SR_DB_TYPE', 'MySQL');
-  define('SR_DB_SERVER', '127.0.0.1');
-  define('SR_DB_NAME', 'nosqlru_forum');
-  define('SR_DB_USER', 'root');
-  define('SR_DB_PASSWORD', 'root');*/
 }
 
 // ----------------------------------------------------------------- 

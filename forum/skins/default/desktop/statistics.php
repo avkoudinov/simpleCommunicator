@@ -372,7 +372,7 @@ $forum_selector_id = 1;
   <select name="fid" id="forum_activity_forum" onchange="reload_statistics()">
   <option value=""><?php echo_html(text("AllForums")); ?></option>
   <?php foreach($forum_list as $fid => $fdata):
-  $selected = (val_or_empty($_SESSION["forum_activity_forum"]) == $fid) ? "selected" : "";
+  $selected = (reqvar("fid") == $fid) ? "selected" : "";
   ?>
   <option value="<?php echo_html($fid); ?>" <?php echo($selected); ?>><?php echo_html($fdata["name"]); ?></option>
   <?php endforeach; ?>

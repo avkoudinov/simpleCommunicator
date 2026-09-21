@@ -1,4 +1,40 @@
 <script>
+
+var config = {
+    format: "<?php echo_js(text("DateFormat")); ?>",
+    start_year: 2000,
+    month_names: [
+        "<?php echo_js(text("January")); ?>",
+        "<?php echo_js(text("February")); ?>",
+        "<?php echo_js(text("March")); ?>",
+        "<?php echo_js(text("April")); ?>",
+        "<?php echo_js(text("May")); ?>",
+        "<?php echo_js(text("June")); ?>",
+        "<?php echo_js(text("July")); ?>",
+        "<?php echo_js(text("August")); ?>",
+        "<?php echo_js(text("September")); ?>",
+        "<?php echo_js(text("October")); ?>",
+        "<?php echo_js(text("November")); ?>",
+        "<?php echo_js(text("December")); ?>"
+    ],
+
+    weekday_names: [
+        "<?php echo_js(text("MondayShort")); ?>",
+        "<?php echo_js(text("TuesdayShort")); ?>",
+        "<?php echo_js(text("WednesdayShort")); ?>",
+        "<?php echo_js(text("ThursdayShort")); ?>",
+        "<?php echo_js(text("FridayShort")); ?>",
+        "<?php echo_js(text("SaturdayShort")); ?>",
+        "<?php echo_js(text("SundayShort")); ?>"
+    ]
+};
+
+Forum.addXEvent(window, 'load', function () {
+    SimpleCalendar.assign("#gallery_filter_start_date", config);
+    SimpleCalendar.assign("#gallery_filter_end_date", config);
+});
+
+
 var post_comment_action = null;
 function show_post_comment(title, author, pid, mode)
 {
@@ -692,12 +728,12 @@ function show_attachment_gallery()
       var gap_to_end = this.scrollHeight - this.offsetHeight - this.scrollTop;
       if(gap_to_end < 200)
       {
-        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", last_loaded_att_post_id, last_loaded_att_id);
+        load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
       }
     });
   }
   
-  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>", 0, 0);
+  load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");
 
   return false;
 }
