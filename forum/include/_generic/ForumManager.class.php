@@ -23260,7 +23260,9 @@ abstract class ForumManager
         $new_appealed_users = array();
 
         if (!reqvar_empty("citated_post")) {
-            $citated_posts = explode(",", trim(reqvar("citated_post"), ", "));
+            $citated_posts = array_filter(
+                explode(",", trim(reqvar("citated_post"), ", "))
+            );
         }
 
         // take possible new pasted citations of the top level only into concideration

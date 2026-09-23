@@ -131,6 +131,7 @@ del application\include\admin_config_inc.php
 del application\include\config_inc.php
 del application\include\maintenance_inc.php
 del application\.htaccess
+del application\._README.TXT
 
 "%ZIP_PATH%\7z.exe" a simple_communicator_update.zip .\application\*
 
