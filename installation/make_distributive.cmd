@@ -31,7 +31,7 @@ echo -----------------------------------------------------
 
 rmdir /S /Q application
 mkdir application
-xcopy ..\application application /S /E /R /Y
+xcopy ..\forum application /S /E /R /Y
 
 echo -----------------------------------------------------
 echo Step 5: Removing unnecessary stuff
@@ -112,26 +112,6 @@ rmdir /S /Q database\Oracle\backup
 
 del "database\Power Designer Notes.docx"
 
-cscript replace.vbs "database\MySQL\MySQL.pdm" "oleg" "user1"
-cscript replace.vbs "database\MySQL\MySQL.pdm" "oschildt" "user1"
-cscript replace.vbs "database\MySQL\MySQL.pdm" "OLEG" "user1"
-cscript replace.vbs "database\MySQL\MySQL.pdm" "OSCHILDT" "user1"
-
-cscript replace.vbs "database\MSSQL\MSSQL.pdm" "oleg" "user1"
-cscript replace.vbs "database\MSSQL\MSSQL.pdm" "oschildt" "user1"
-cscript replace.vbs "database\MSSQL\MSSQL.pdm" "OLEG" "user1"
-cscript replace.vbs "database\MSSQL\MSSQL.pdm" "OSCHILDT" "user1"
-
-cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "oleg" "user1"
-cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "oschildt" "user1"
-cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "OLEG" "user1"
-cscript replace.vbs "database\PostgreSQL\PostgreSQL.pdm" "OSCHILDT" "user1"
-
-cscript replace.vbs "database\Oracle\Oracle.pdm" "oleg" "user1"
-cscript replace.vbs "database\Oracle\Oracle.pdm" "oschildt" "user1"
-cscript replace.vbs "database\Oracle\Oracle.pdm" "OLEG" "user1"
-cscript replace.vbs "database\Oracle\Oracle.pdm" "OSCHILDT" "user1"
-
 echo -----------------------------------------------------
 echo Step 9: Creationg zips
 echo -----------------------------------------------------
@@ -140,7 +120,7 @@ echo -----------------------------------------------------
 
 "%ZIP_PATH%\7z.exe" a simple_communicator.zip .\application\*
 "%ZIP_PATH%\7z.exe" a database.zip .\database\*
-"%ZIP_PATH%\7z.exe" a smileys.zip ..\application\user_data\smileys\*
+"%ZIP_PATH%\7z.exe" a smileys.zip ..\forum\user_data\smileys\*
 
 rmdir /S /Q application\log
 rmdir /S /Q application\tmp
@@ -154,6 +134,8 @@ del application\.htaccess
 del application\._README.TXT
 
 "%ZIP_PATH%\7z.exe" a simple_communicator_update.zip .\application\*
+
+rmdir /S /Q application
 
 echo -----------------------------------------------------
 echo Distributive successfully created
