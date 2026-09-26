@@ -186,9 +186,7 @@ if (empty($ajax_processing)) {
         $_SESSION["trace_time_start"] = microtime(true);
         $_SESSION["execution_profiles"] = array();
         $_SESSION["execution_profiles"][] = array("action" => "start [" . val_or_empty($_SERVER['REQUEST_URI']) . "]", "time" => 0);
-        //debug_message("setting trace_time_start:" . round(1000*$_SESSION["trace_time_start"]));
     } else {
-        //debug_message("continue time counting after redirection to $_SERVER[REQUEST_URI]:" . round(1000*(microtime(true) - $_SESSION["trace_time_start"])));
         if (!empty($_SESSION["redirection_start_time"])) {
             $_SESSION["execution_profiles"][] = array("action" => "Redirection [" . $_SERVER['REQUEST_URI'] . "]", "time" => round(1000 * (microtime(true) - $_SESSION["redirection_start_time"])));
             unset($_SESSION["redirection_start_time"]);
@@ -209,7 +207,6 @@ if (empty($ajax_processing)) {
         $_SESSION["ajax_trace_time_start"] = microtime(true);
         $_SESSION["ajax_execution_profiles"] = array();
         $_SESSION["ajax_execution_profiles"][] = array("action" => "start [" . val_or_empty($_SERVER['REQUEST_URI']) . "]", "time" => 0);
-        //debug_message("setting trace_time_start:" . round(1000*$_SESSION["trace_time_start"]));
     }
 }
 

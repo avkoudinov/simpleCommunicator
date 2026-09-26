@@ -125,16 +125,9 @@ $first_new_message = 0;
 
 $fmanager->update_forum_read_status($fid);
 
-//debug_message("----------------------------------------------");
-//debug_message("user: " . $fmanager->get_user_name());
-//debug_message($_SERVER["PHP_SELF"]);
-
-//debug_message("starting ajax calculation of the remaining new posts for the topic: " . $tid);
-
 $last_post_read_date = 0;
 
 if (count($post_list) > 0) {
-    //debug_message("got " . count($post_list) . " posts");
     foreach ($post_list as $pid => $pdata) {
         if (empty($first_new_message)) {
             $first_new_message = $pid;
@@ -163,28 +156,13 @@ if (!empty($last_post_read_date)) {
     $fmanager->update_topic_new_messages_cache($tid, $remaining_new_posts_count, $last_post_read_date);
 }
 
-//debug_message("actual count of new posts stored in the session: " . $original_new_posts_count);
-//debug_message("remaining posts count: " . $remaining_new_posts_count);
-
 // If there were new posts, but all loaded posts for this page are ignored (new post count was not reduced),
 // we redirect to new page
 
 $force_redirect = 0;
 if ($original_new_posts_count > 0 && $remaining_new_posts_count == $original_new_posts_count) {
     $force_redirect = 1;
-    //debug_message("new count remained unchanged, force redirect");
 }
-
-/*
-debug_message("last_read_message: " . reqvar("last_read_message"));
-debug_message("limit: " . reqvar("limit"));
-debug_message("first_new_message: " . $first_new_message);
-debug_message("last_message: " . $last_message);
-debug_message("loaded_new_posts_count: " . count($post_list));
-debug_message("original_new_posts_count: " . $original_new_posts_count);
-debug_message("remaining_new_posts_count: " . $remaining_new_posts_count);
-debug_message("force_redirect: " . $force_redirect);
-*/
 
 $bulk_delete_count = 5;
 if (defined('BULK_DELETE_COUNT') && is_numeric(BULK_DELETE_COUNT)) {
