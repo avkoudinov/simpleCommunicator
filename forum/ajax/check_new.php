@@ -57,10 +57,6 @@ if ($response['success']) {
     if (!reqvar_empty("tid")) {
         $tid = reqvar("tid");
         
-        //debug_message("---------------------------------");
-        //debug_message("user: " . $fmanager->get_user_name());
-        //debug_message($_SERVER["PHP_SELF"]);
-        
         $response['new_messages_count'] = 0;
         if (isset($_SESSION["new_messages_info_cache"]["data"]["ignored_topics"][$tid])) {
             $response['new_messages_count'] = $_SESSION["new_messages_info_cache"]["data"]["ignored_topics"][$tid];
@@ -69,7 +65,6 @@ if ($response['success']) {
             $topic_is_ignored = true;
         } elseif (isset($_SESSION["new_messages_info_cache"]["data"]["topics"][$tid])) {
             $response['new_messages_count'] = $_SESSION["new_messages_info_cache"]["data"]["topics"][$tid];
-            //debug_message("new msg count for topic $tid taken from session (topics): " . $response['new_messages_count']);
             
             // we exclude the current topic from the count
             if ($response['topics_with_new_count'] > 0) {
@@ -77,7 +72,6 @@ if ($response['success']) {
             }
         } elseif (isset($_SESSION["new_messages_info_cache"]["data"]["private_topics"][$tid])) {
             $response['new_messages_count'] = $_SESSION["new_messages_info_cache"]["data"]["private_topics"][$tid];
-            //debug_message("new msg count for topic $tid taken from session (private_topics): " . $response['new_messages_count']);
             
             // we exclude the current topic from the count of private topics of topics with new if it is not ignored
             if ($response['private_topics_with_new_count'] > 0) {

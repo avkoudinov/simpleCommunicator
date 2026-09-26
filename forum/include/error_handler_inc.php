@@ -30,6 +30,7 @@ function handle_error($errno, $errstr, $errfile, $errline)
         strstr($errstr, "imagecreatefromstring") ||
         strstr($errstr, "imagecreatefromjpeg") ||
         strstr($errstr, "failed to open stream") ||
+        strstr($errstr, "Failed to open stream: php_network_getaddresses") ||
         strstr($errstr, "get_headers") ||
         strstr($errstr, "Detected an illegal character in input string")        
     ) {

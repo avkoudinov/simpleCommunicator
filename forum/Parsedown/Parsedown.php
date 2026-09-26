@@ -350,10 +350,6 @@ class Parsedown
     {
         global $SUPPORTED_CODES;
         
-        debug_message("blockCode");
-        debug_message($Line['text']);
-        debug_message($Line['body']);
-    
         if (isset($Block) and $Block['type'] === 'Paragraph' and ! isset($Block['interrupted']))
         {
             return;
