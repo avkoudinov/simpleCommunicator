@@ -679,8 +679,6 @@ class MySQL_ForumManager extends ForumManager
             if (!empty($contents)) {
                 $stop_words = preg_split("/[\r\n]+/", $contents, -1, PREG_SPLIT_NO_EMPTY);
             }
-            
-            //debug_message(print_r($stop_words, true));
         }
         
         $db_ft_min_word_len = defined('DB_FT_MIN_WORD_LEN') ? DB_FT_MIN_WORD_LEN : 3;
@@ -804,8 +802,6 @@ class MySQL_ForumManager extends ForumManager
             if (!empty($contents)) {
                 $stop_words = preg_split("/[\r\n]+/", $contents, -1, PREG_SPLIT_NO_EMPTY);
             }
-            
-            //debug_message(print_r($stop_words, true));
         }
         
         $db_ft_min_word_len = defined('DB_FT_MIN_WORD_LEN') ? DB_FT_MIN_WORD_LEN : 3;

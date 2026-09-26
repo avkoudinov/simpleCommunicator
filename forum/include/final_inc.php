@@ -13,7 +13,6 @@ if (empty($ajax_processing)) {
     
     unset($_SESSION["trace_time_start"]);
     unset($_SESSION["execution_profiles"]);
-    //debug_message("unsetting trace_time_start in final");
     
     if (!empty($_SESSION["trace_sql"])) {
         $_SESSION["trace_sql_log"] .= "Total execution time: " . $exec_time . "ms" . "\n";

@@ -39,8 +39,6 @@ if (!reqvar_empty("post_sort")) {
 }
 
 if (!reqvar_empty("do_search")) {
-    //debug_message("New search desired (do_search=1), forcing new fill search");
-    
     if (!reqvar_empty("start_from")) {
         $search_params .= "&start_from=" . urlencode(reqvar("start_from"));
     }
