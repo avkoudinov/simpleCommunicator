@@ -41474,8 +41474,6 @@ abstract class ForumManager
             $uid = 0;
         }
 
-        debug_message(print_r($_REQUEST, true));
-
         $current_appendix = "";
 
         $forum_restriction_appendix = $this->get_forum_restriction_appendix($rodbw, $prfx, true);
@@ -41511,8 +41509,6 @@ abstract class ForumManager
 
             $current_appendix .= " and {$prfx}_attachment.name not in (select name from {$prfx}_attachment where id in ($already_loaded_ids))";
         }
-
-        debug_message($this->get_query_load_attachments($prfx, $uid, $current_appendix));
 
         if (!$rodbw->execute_query($this->get_query_load_attachments($prfx, $uid, $current_appendix))) {
             MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());

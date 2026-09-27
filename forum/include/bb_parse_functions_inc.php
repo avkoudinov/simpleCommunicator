@@ -456,8 +456,6 @@ function bb_process_hat_simple($bbcode, $action, $name, $default, $params, $cont
 //------------------------------------------------------------------------------
 function bb_process_hat($bbcode, $action, $name, $default, $params, $content)
 {
-    debug_message("bb_process_hat");
-
     if ($action == BBCODE_CHECK) {
         return true;
     }
@@ -540,8 +538,6 @@ function check_image_url(&$url, &$large_url)
     foreach ($headers as $name => $value) {
         $headers[strtolower($name)] = $value;
     }
-
-    //debug_message($headers);
 
     $src_type = "";
     $src_length = 0;
@@ -2514,10 +2510,6 @@ function remove_nested_quotes(&$input, &$output, $limit)
 {
     $output = $input;
 
-    //debug_message("-------------------");
-    //debug_message($input);
-    //debug_message("====");
-
     if ($limit < 1) {
         return true;
     }
@@ -2525,8 +2517,6 @@ function remove_nested_quotes(&$input, &$output, $limit)
     if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output ?? "", $matches, PREG_OFFSET_CAPTURE)) {
         return true;
     }
-
-    //debug_message(print_r($matches, true));
 
     $nest_level = 0;
     $cut_start_position = false;
@@ -2537,13 +2527,10 @@ function remove_nested_quotes(&$input, &$output, $limit)
         if (strpos($token[0], '<div') !== false) {
             if (strpos($token[0], 'class="quote ') !== false) {
                 $nest_level++;
-                //debug_message("nest_level increased to:" . $nest_level);
-
                 // nest level riched the limit
                 // define the cut start position
                 if ($nest_level == $limit && $cut_start_position === false) {
                     $cut_start_position = $token[1] + strlen($token[0]) - $offset_through_removing;
-                    //debug_message("cut_start_position:" . $cut_start_position);
                 }
             }
 
@@ -2552,7 +2539,6 @@ function remove_nested_quotes(&$input, &$output, $limit)
             }
 
             $inner_div_count[$nest_level]++;
-            //debug_message("inner_div_count[$nest_level] increased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
         }
 
         if (strpos($token[0], '</div>') !== false) {
@@ -2561,13 +2547,11 @@ function remove_nested_quotes(&$input, &$output, $limit)
             }
 
             $inner_div_count[$nest_level]--;
-            //debug_message("inner_div_count[$nest_level] decreased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
 
             if ($inner_div_count[$nest_level] == 0 && $nest_level > 0) {
                 // the matching closing div is found
                 if ($nest_level == $limit && $cut_start_position !== false) {
                     $cut_end_position = $token[1] - $offset_through_removing;
-                    //debug_message("cut_end_position:" . $cut_end_position);
 
                     // do replacement
                     $replacement = "...";
@@ -2579,23 +2563,14 @@ function remove_nested_quotes(&$input, &$output, $limit)
                 }
 
                 $nest_level--;
-                //debug_message("nest_level decreased to:" . $nest_level);
             }
         }
     } // foreach
-
-    //debug_message("====");
-    //debug_message($output);
-    //debug_message("-------------------");
 } // remove_nested_quotes
 //------------------------------------------------------------------------------
 function remove_nested_spoilers(&$input, &$output, $limit)
 {
     $output = $input;
-
-    //debug_message("-------------------");
-    //debug_message($input);
-    //debug_message("====");
 
     if ($limit < 1) {
         return true;
@@ -2604,8 +2579,6 @@ function remove_nested_spoilers(&$input, &$output, $limit)
     if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output ?? "", $matches, PREG_OFFSET_CAPTURE)) {
         return true;
     }
-
-    //debug_message(print_r($matches, true));
 
     $nest_level = 0;
     $cut_start_position = false;
@@ -2616,13 +2589,10 @@ function remove_nested_spoilers(&$input, &$output, $limit)
         if (strpos($token[0], '<div') !== false) {
             if (strpos($token[0], 'class="spoiler"') !== false) {
                 $nest_level++;
-                //debug_message("nest_level increased to:" . $nest_level);
-
                 // nest level riched the limit
                 // define the cut start position
                 if ($nest_level == $limit && $cut_start_position === false) {
                     $cut_start_position = $token[1] + strlen($token[0]) - $offset_through_removing;
-                    //debug_message("cut_start_position:" . $cut_start_position);
                 }
             }
 
@@ -2631,7 +2601,6 @@ function remove_nested_spoilers(&$input, &$output, $limit)
             }
 
             $inner_div_count[$nest_level]++;
-            //debug_message("inner_div_count[$nest_level] increased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
         }
 
         if (strpos($token[0], '</div>') !== false) {
@@ -2640,13 +2609,11 @@ function remove_nested_spoilers(&$input, &$output, $limit)
             }
 
             $inner_div_count[$nest_level]--;
-            //debug_message("inner_div_count[$nest_level] decreased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
 
             if ($inner_div_count[$nest_level] == 0 && $nest_level > 0) {
                 // the matching closing div is found
                 if ($nest_level == $limit && $cut_start_position !== false) {
                     $cut_end_position = $token[1] - $offset_through_removing;
-                    //debug_message("cut_end_position:" . $cut_end_position);
 
                     // do replacement
                     $replacement = "...";
@@ -2658,23 +2625,14 @@ function remove_nested_spoilers(&$input, &$output, $limit)
                 }
 
                 $nest_level--;
-                //debug_message("nest_level decreased to:" . $nest_level);
             }
         }
     } // foreach
-
-    //debug_message("====");
-    //debug_message($output);
-    //debug_message("-------------------");
 } // remove_nested_spoilers
 //------------------------------------------------------------------------------
 function remove_nested_ais(&$input, &$output, $limit)
 {
     $output = $input;
-
-    //debug_message("-------------------");
-    //debug_message($input);
-    //debug_message("====");
 
     if ($limit < 1) {
         return true;
@@ -2683,8 +2641,6 @@ function remove_nested_ais(&$input, &$output, $limit)
     if (!preg_match_all('/(<div[^<>]*>|<\/div>)/i', $output ?? "", $matches, PREG_OFFSET_CAPTURE)) {
         return true;
     }
-
-    //debug_message(print_r($matches, true));
 
     $nest_level = 0;
     $cut_start_position = false;
@@ -2695,13 +2651,10 @@ function remove_nested_ais(&$input, &$output, $limit)
         if (strpos($token[0], '<div') !== false) {
             if (strpos($token[0], 'class="ai"') !== false) {
                 $nest_level++;
-                //debug_message("nest_level increased to:" . $nest_level);
-
                 // nest level riched the limit
                 // define the cut start position
                 if ($nest_level == $limit && $cut_start_position === false) {
                     $cut_start_position = $token[1] + strlen($token[0]) - $offset_through_removing;
-                    //debug_message("cut_start_position:" . $cut_start_position);
                 }
             }
 
@@ -2710,7 +2663,6 @@ function remove_nested_ais(&$input, &$output, $limit)
             }
 
             $inner_div_count[$nest_level]++;
-            //debug_message("inner_div_count[$nest_level] increased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
         }
 
         if (strpos($token[0], '</div>') !== false) {
@@ -2719,13 +2671,11 @@ function remove_nested_ais(&$input, &$output, $limit)
             }
 
             $inner_div_count[$nest_level]--;
-            //debug_message("inner_div_count[$nest_level] decreased to:" . $inner_div_count[$nest_level] . " - " . $token[0]);
 
             if ($inner_div_count[$nest_level] == 0 && $nest_level > 0) {
                 // the matching closing div is found
                 if ($nest_level == $limit && $cut_start_position !== false) {
                     $cut_end_position = $token[1] - $offset_through_removing;
-                    //debug_message("cut_end_position:" . $cut_end_position);
 
                     // do replacement
                     $replacement = "...";
@@ -2737,25 +2687,15 @@ function remove_nested_ais(&$input, &$output, $limit)
                 }
 
                 $nest_level--;
-                //debug_message("nest_level decreased to:" . $nest_level);
             }
         }
     } // foreach
-
-    //debug_message("====");
-    //debug_message($output);
-    //debug_message("-------------------");
 } // remove_nested_ais
 
 //------------------------------------------------------------------------------
 function remove_nested_quotes_bb(&$input, &$output, $limit)
 {
     $output = $input;
-
-    //debug_message("-------------------");
-    //debug_message("BEFORE:");
-    //debug_message($input);
-    //debug_message("====");
 
     if ($limit < 1) {
         return true;
@@ -2772,13 +2712,10 @@ function remove_nested_quotes_bb(&$input, &$output, $limit)
     foreach ($matches[0] as $token) {
         if (strpos($token[0], '[quote') !== false) {
             $nest_level++;
-            //debug_message("nest_level increased to:" . $nest_level);
-
             // nest level riched the limit
             // define the cut start position
             if ($nest_level == $limit && $cut_start_position === false) {
                 $cut_start_position = $token[1] - $offset_through_removing;
-                //debug_message("cut_start_position:" . $cut_start_position);
             }
         }
 
@@ -2788,7 +2725,6 @@ function remove_nested_quotes_bb(&$input, &$output, $limit)
                 // the matching closing div is found
                 if ($nest_level == $limit && $cut_start_position !== false) {
                     $cut_end_position = $token[1] + strlen($token[0]) - $offset_through_removing;
-                    //debug_message("cut_end_position:" . $cut_end_position);
 
                     // do replacement
                     $replacement = "...";
@@ -2800,25 +2736,14 @@ function remove_nested_quotes_bb(&$input, &$output, $limit)
                 }
 
                 $nest_level--;
-                //debug_message("nest_level decreased to:" . $nest_level);
             }
         }
     } // foreach
-
-    //debug_message("====");
-    //debug_message("AFTER:");
-    //debug_message($output);
-    //debug_message("-------------------");
 } // remove_nested_quotes_bb
 //------------------------------------------------------------------------------
 function remove_nested_spoilers_bb(&$input, &$output, $limit)
 {
     $output = $input;
-
-    //debug_message("-------------------");
-    //debug_message("BEFORE:");
-    //debug_message($input);
-    //debug_message("====");
 
     if ($limit < 1) {
         return true;
@@ -2835,13 +2760,11 @@ function remove_nested_spoilers_bb(&$input, &$output, $limit)
     foreach ($matches[0] as $token) {
         if (strpos($token[0], '[spoiler') !== false) {
             $nest_level++;
-            //debug_message("nest_level increased to:" . $nest_level);
 
             // nest level riched the limit
             // define the cut start position
             if ($nest_level == $limit && $cut_start_position === false) {
                 $cut_start_position = $token[1] - $offset_through_removing;
-                //debug_message("cut_start_position:" . $cut_start_position);
             }
         }
 
@@ -2851,8 +2774,6 @@ function remove_nested_spoilers_bb(&$input, &$output, $limit)
                 // the matching closing div is found
                 if ($nest_level == $limit && $cut_start_position !== false) {
                     $cut_end_position = $token[1] + strlen($token[0]) - $offset_through_removing;
-                    //debug_message("cut_end_position:" . $cut_end_position);
-
                     // do replacement
                     $replacement = "...";
                     $remove_length = $cut_end_position - $cut_start_position;
@@ -2863,26 +2784,15 @@ function remove_nested_spoilers_bb(&$input, &$output, $limit)
                 }
 
                 $nest_level--;
-                //debug_message("nest_level decreased to:" . $nest_level);
             }
         }
     } // foreach
-
-    //debug_message("====");
-    //debug_message("AFTER:");
-    //debug_message($output);
-    //debug_message("-------------------");
 } // remove_nested_spoilers_bb
 //------------------------------------------------------------------------------
 
 function remove_nested_ais_bb(&$input, &$output, $limit)
 {
     $output = $input;
-
-    //debug_message("-------------------");
-    //debug_message("BEFORE:");
-    //debug_message($input);
-    //debug_message("====");
 
     if ($limit < 1) {
         return true;
@@ -2899,13 +2809,11 @@ function remove_nested_ais_bb(&$input, &$output, $limit)
     foreach ($matches[0] as $token) {
         if (strpos($token[0], '[ai') !== false) {
             $nest_level++;
-            //debug_message("nest_level increased to:" . $nest_level);
 
             // nest level riched the limit
             // define the cut start position
             if ($nest_level == $limit && $cut_start_position === false) {
                 $cut_start_position = $token[1] - $offset_through_removing;
-                //debug_message("cut_start_position:" . $cut_start_position);
             }
         }
 
@@ -2915,7 +2823,6 @@ function remove_nested_ais_bb(&$input, &$output, $limit)
                 // the matching closing div is found
                 if ($nest_level == $limit && $cut_start_position !== false) {
                     $cut_end_position = $token[1] + strlen($token[0]) - $offset_through_removing;
-                    //debug_message("cut_end_position:" . $cut_end_position);
 
                     // do replacement
                     $replacement = "...";
@@ -2927,15 +2834,9 @@ function remove_nested_ais_bb(&$input, &$output, $limit)
                 }
 
                 $nest_level--;
-                //debug_message("nest_level decreased to:" . $nest_level);
             }
         }
     } // foreach
-
-    //debug_message("====");
-    //debug_message("AFTER:");
-    //debug_message($output);
-    //debug_message("-------------------");
 } // remove_nested_ais_bb
 //------------------------------------------------------------------------------
 
@@ -3390,16 +3291,28 @@ function gen_rutube_html($code, $start, $bbcode)
     $appendix = "?t=" . $start;
 
     try {
-        $url = "http://rutube.ru/api/video/$code";
+        $url = "https://rutube.ru/api/video/$code";
         $client = new Zend_Http_Client($url, array(
             'maxredirects' => 5,
             'timeout' => 50
         ));
 
-        $request = $client->request('GET');
-        $response = $request->getBody();
+        $client->setHeaders("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:156.0) Gecko/20100101 Firefox/156.0");
+        $client->setHeaders("Accept", "application/json, text/plain, */*'");
+        $client->setHeaders("Accept-Encoding", "gzip, deflate, br");
+        $client->setHeaders("Accept-Language", "ru-RU,ru;q=0.9");
+        $client->setHeaders("Connection", "keep-alive");
 
-        $json = json_decode($response, true);
+        $request = $client->request('GET');
+        $raw_response = $request->getRawBody();
+
+        if (strtolower($request->getHeader('Content-Encoding')) === 'gzip') {
+            $body = gzdecode($raw_response);
+        } else {
+            $body = $raw_response;
+        }
+
+        $json = json_decode($body, true);
         if ($json) {
             if (!empty($json["title"])) {
                 $title = $json["title"];
@@ -3418,8 +3331,6 @@ function gen_rutube_html($code, $start, $bbcode)
     $html .= "<div class='rutube_play_embedded' onclick='embed_rutube(this, \"$code\", \"$start\")'></div>";
     $html .= "<a class='rutube_play_rutube' href='https://rutube.ru/video/$code/$appendix' target='blank'></a>";
     $html .= "</div></div></div>";
-
-    debug_message($html);
 
     return $html;
 } // gen_rutube_html
@@ -4247,8 +4158,6 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
 //------------------------------------------------------------------------------
 function parse_bb_code_simple(&$text, $mode = "email")
 {
-    debug_message("parse_bb_code_simple");
-
     $bbcode = new BBCode;
     $bbcode->ClearRules();
     $bbcode->ClearSmileys();
