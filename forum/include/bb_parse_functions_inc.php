@@ -3212,16 +3212,28 @@ function gen_rutube_html($code, $start, $bbcode)
     $appendix = "?t=" . $start;
 
     try {
-        $url = "http://rutube.ru/api/video/$code";
+        $url = "https://rutube.ru/api/video/$code";
         $client = new Zend_Http_Client($url, array(
             'maxredirects' => 5,
             'timeout' => 50
         ));
 
-        $request = $client->request('GET');
-        $response = $request->getBody();
+        $client->setHeaders("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:156.0) Gecko/20100101 Firefox/156.0");
+        $client->setHeaders("Accept", "application/json, text/plain, */*'");
+        $client->setHeaders("Accept-Encoding", "gzip, deflate, br");
+        $client->setHeaders("Accept-Language", "ru-RU,ru;q=0.9");
+        $client->setHeaders("Connection", "keep-alive");
 
-        $json = json_decode($response, true);
+        $request = $client->request('GET');
+        $raw_response = $request->getRawBody();
+
+        if (strtolower($request->getHeader('Content-Encoding')) === 'gzip') {
+            $body = gzdecode($raw_response);
+        } else {
+            $body = $raw_response;
+        }
+
+        $json = json_decode($body, true);
         if ($json) {
             if (!empty($json["title"])) {
                 $title = $json["title"];
