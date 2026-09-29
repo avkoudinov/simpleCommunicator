@@ -6,8 +6,8 @@
                 onchange='Forum.show_sys_progress_indicator(true); reset_gallery_filter_area(); this.parentNode.parentNode.parentNode.scrollTo(0, 0); load_next_gallery_attachments("<?php echo_js(text("AddToFavourites")); ?>", "<?php echo_js(text("RemoveFromFavourites")); ?>");'>
             <option value="">-</option>
 
-            <?php foreach ($forum_list as $fid => $fdata): ?>
-                <option value="<?php echo_html($fid); ?>"><?php echo_html($fdata["name"]); ?></option>
+            <?php foreach ($forum_list as $sfid => $fdata): ?>
+                <option value="<?php echo_html($sfid); ?>"><?php echo_html($fdata["name"]); ?></option>
             <?php endforeach; ?>
 
         </select>
