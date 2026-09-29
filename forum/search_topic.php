@@ -81,7 +81,6 @@ if (!$cache_exists) {
     exit;
 }
 //------------------------------------------------------------------
-//debug_message("Cache valid, showing results");
 
 $search_title = text("Search");
 

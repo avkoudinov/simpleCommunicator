@@ -9869,7 +9869,7 @@ abstract class ForumManager
                                inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
                                inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                                where
-                               {$prfx}_forum.name <> 'PRIVATE_MESSAGES' and ({$prfx}_forum.deleted = 0 and {$prfx}_topic.deleted = 0 and {$prfx}_topic.is_private = 0 and
+                               {$prfx}_forum.name <> 'PRIVATE_MESSAGES' and {$prfx}_forum.deleted = 0 and {$prfx}_topic.deleted = 0 and {$prfx}_topic.is_private = 0 and
                                {$prfx}_topic.id in ($ignored_in_list)
                                order by {$prfx}_topic_statistics.last_message_id desc
                                ")) {
@@ -20135,8 +20135,8 @@ abstract class ForumManager
 
                     $query = "insert into {$prfx}_ignored_guests
                                  (user_id, guest_name, whitelist)
-                                 select $current_uid, '$guest_name_db', 0 from {$prfx}_dual
-                                 where '$guest_name_db' not in (select guest_name from {$prfx}_ignored_guests where user_id = $current_uid)
+                                 select $current_uid, $guest_name_db, 0 from {$prfx}_dual
+                                 where $guest_name_db not in (select guest_name from {$prfx}_ignored_guests where user_id = $current_uid)
                                  ";
                     if (!$dbw->execute_query($query)) {
                         MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -20576,8 +20576,8 @@ abstract class ForumManager
             if (!empty($current_uid)) {
                 $query = "insert into {$prfx}_hide_guest_avatars
                  (user_id, avatar)
-                 select $current_uid, '$guest_identifier_db' from {$prfx}_dual
-                 where '$guest_identifier_db' not in (select avatar from {$prfx}_hide_guest_avatars where user_id = $current_uid)
+                 select $current_uid, $guest_identifier_db from {$prfx}_dual
+                 where $guest_identifier_db not in (select avatar from {$prfx}_hide_guest_avatars where user_id = $current_uid)
                  ";
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
