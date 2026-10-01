@@ -17479,6 +17479,7 @@ abstract class ForumManager
         }
 
         global $settings;
+        global $READ_MARKER;
 
         if (!empty($_SESSION["rating_blocked"])) {
             MessageHandler::setWarning(text("ErrRatingBlocked"));
@@ -17514,7 +17515,8 @@ abstract class ForumManager
         if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.creation_date, forum_id, topic_id, {$prfx}_topic.name topic_name,
                              {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications, activated, approved,
                              donot_notify_on_rates, time_zone, interface_language, text_content,
-                             {$prfx}_ignored_users.user_id rater_ignored, is_private
+                             {$prfx}_ignored_users.user_id rater_ignored, is_private,
+                             {$prfx}_post.read_marker
                              from
                              {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -17527,6 +17529,7 @@ abstract class ForumManager
         }
 
         $post_id = "";
+        $read_marker = "";
         $post_date = null;
         $topic_id = "";
         $topic_name = "";
@@ -17557,6 +17560,8 @@ abstract class ForumManager
             $topic_name = $dbw->field_by_name("topic_name");
             $forum_name = $dbw->field_by_name("forum_name");
 
+            $read_marker = $dbw->field_by_name("read_marker");
+
             $forum_id = $dbw->field_by_name("forum_id");
             $forum_id_for_url = $dbw->field_by_name("is_private") ? "private" : $forum_id;
             $forum_name = $dbw->field_by_name("is_private") ? text("PrivateTopics") : $dbw->field_by_name("forum_name");
@@ -17575,6 +17580,10 @@ abstract class ForumManager
         $dbw->free_result();
 
         if ($author_id == $uid) {
+            return true;
+        }
+
+        if ($read_marker == $READ_MARKER) {
             return true;
         }
 
@@ -17830,6 +17839,8 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function reset_rating($pid, &$response)
     {
+        global $READ_MARKER;
+
         if ($this->demo_mode()) {
             MessageHandler::setWarning(text("MsgDemoMode"));
             return true;
@@ -17889,7 +17900,8 @@ abstract class ForumManager
         if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.creation_date, forum_id, topic_id, {$prfx}_topic.name topic_name,
                              {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications, activated, approved,
                              donot_notify_on_rates, time_zone, interface_language, text_content,
-                             {$prfx}_ignored_users.user_id rater_ignored, is_private
+                             {$prfx}_ignored_users.user_id rater_ignored, is_private,
+                             {$prfx}_post.read_marker
                              from
                              {$prfx}_post
                              inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
@@ -17902,6 +17914,7 @@ abstract class ForumManager
         }
 
         $post_id = "";
+        $read_marker = "";
         $post_date = "";
         $topic_id = "";
         $topic_name = "";
@@ -17929,6 +17942,7 @@ abstract class ForumManager
             $author_time_zone = $dbw->field_by_name("time_zone") ? $dbw->field_by_name("time_zone") : TIME_ZONE;
             $topic_id = $dbw->field_by_name("topic_id");
             $topic_name = $dbw->field_by_name("topic_name");
+            $read_marker = $dbw->field_by_name("read_marker");
 
             $forum_id = $dbw->field_by_name("forum_id");
             $forum_id_for_url = $dbw->field_by_name("is_private") ? "private" : $forum_id;
@@ -17947,6 +17961,10 @@ abstract class ForumManager
         $dbw->free_result();
 
         if ($author_id == $uid) {
+            return true;
+        }
+
+        if ($read_marker == $READ_MARKER) {
             return true;
         }
 

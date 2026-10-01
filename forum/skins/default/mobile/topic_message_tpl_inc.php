@@ -1106,7 +1106,7 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
 
 <td><?php echo_html(text("Rating")); ?>:</td>
 
-<?php if(!empty($may_rate) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && $pinfo["user_id"] != $fmanager->get_user_id()):
+<?php if(!empty($may_rate) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && $pinfo["user_id"] != $fmanager->get_user_id() && $pinfo["read_marker"] != $READ_MARKER):
 $display = empty($pinfo["already_rated"]) ? "" : "style='display:none'";
 ?>
 <td class="arrow plus" id="post_rating_up_<?php echo_html($pid); ?>" <?php echo($display); ?> onclick='do_action({ topic_action: "rate_post", post: "<?php echo_js($pid); ?>", rating: 1 })'></td>
@@ -1119,13 +1119,13 @@ $display = empty($pinfo["already_rated"]) ? "" : "style='display:none'";
       <?php endif; ?>
 </td>
 
-<?php if(!empty($may_rate) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && $pinfo["user_id"] != $fmanager->get_user_id() && !empty($settings["dislikes_active"])):
+<?php if(!empty($may_rate) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && $pinfo["user_id"] != $fmanager->get_user_id() && $pinfo["read_marker"] != $READ_MARKER && !empty($settings["dislikes_active"])):
 $display = empty($pinfo["already_rated"]) ? "" : "style='display:none'";
 ?>
   <td class="arrow minus" id="post_rating_down_<?php echo_html($pid); ?>" <?php echo($display); ?> onclick='confirm_action("<?php echo_js(text("MsgConfirmDislike"), true); ?>".replace(/%s/, "<?php echo_js($fmanager->get_display_name($pinfo["author"]), true); ?>"), { topic_action: "rate_post", post: "<?php echo_js($pid); ?>", rating: -1 })'></td>
 <?php endif; ?>
 
-<?php if(!empty($may_rate) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && $pinfo["user_id"] != $fmanager->get_user_id()):
+<?php if(!empty($may_rate) && $fmanager->is_logged_in() && !$fmanager->is_master_admin() && $pinfo["user_id"] != $fmanager->get_user_id() && $pinfo["read_marker"] != $READ_MARKER):
 $display = !empty($pinfo["may_reset_rating"]) && !empty($pinfo["already_rated"]) ? "" : "style='display:none'";
 ?>
 <td class="arrow reset" title="<?php echo_html(text("ResetMyRating")); ?>" id="post_rating_del_<?php echo_html($pid); ?>" <?php echo($display); ?> onclick='do_action({ topic_action: "reset_rating", post: "<?php echo_js($pid); ?>" })'></td>
