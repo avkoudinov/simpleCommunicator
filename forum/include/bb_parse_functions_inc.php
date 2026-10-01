@@ -3785,7 +3785,6 @@ function parse_bb_code(&$input, &$output, &$has_link, &$has_code, $post_id)
     $bbcode->AddRule('ai',
         array(
             'mode' => BBCODE_MODE_CALLBACK,
-            'content' => BBCODE_VERBATIM,
             'before_tag' => 'a',
             'after_endtag' => 'a',
             'after_tag' => 'a',
