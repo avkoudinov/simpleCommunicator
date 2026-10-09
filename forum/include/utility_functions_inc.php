@@ -2639,6 +2639,26 @@ function untranslit($value)
 }
 
 //------------------------------------------------------
+function shortenIPv6(string $ip, int $head = 2, int $tail = 2, string $glue = '...'): string
+{
+    // Not a valid IPv6 address (e.g. IPv4 or garbage): return unchanged
+    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+        return $ip;
+    }
+
+    // Expand to the full 8 groups (resolves "::" compression)
+    $groups = str_split(bin2hex(inet_pton($ip)), 4);
+
+    // Remove leading zeros per group (0db8 -> db8, 0000 -> 0)
+    $groups = array_map(static fn($g) => ltrim($g, '0') ?: '0', $groups);
+
+    $first = implode(':', array_slice($groups, 0, $head));
+    $last = implode(':', array_slice($groups, -$tail));
+
+    return $first . ':' . $glue . ':' . $last;
+}
+
+//------------------------------------------------------
 function build_trendline(&$in, &$out)
 {
     $range_length = 28;

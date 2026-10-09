@@ -1597,6 +1597,7 @@ $GLOBALS['DEF_TEXTS']['ua']['MsgUsersTopicBlocked'] = 'Користувачі з
 $GLOBALS['DEF_TEXTS']['ua']['MsgUsersTopicUnblocked'] = 'Користувачі розблоковані в темі';
 $GLOBALS['DEF_TEXTS']['ua']['GeoStatistics'] = 'Статистика геолокації';
 $GLOBALS['DEF_TEXTS']['ua']['Browsers'] = 'Браузери';
+$GLOBALS['DEF_TEXTS']['ua']['Browser'] = 'Браузер';
 $GLOBALS['DEF_TEXTS']['ua']['OperatingSystems'] = 'Операційні системи';
 $GLOBALS['DEF_TEXTS']['ua']['Bot'] = 'Бот';
 $GLOBALS['DEF_TEXTS']['ua']['Bots'] = 'Боти';

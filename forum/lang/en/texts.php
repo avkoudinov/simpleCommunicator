@@ -1592,6 +1592,7 @@ $GLOBALS['DEF_TEXTS']['en']['MsgUsersTopicBlocked'] = 'The users have been block
 $GLOBALS['DEF_TEXTS']['en']['MsgUsersTopicUnblocked'] = 'The users have been unblocked in the topic';
 $GLOBALS['DEF_TEXTS']['en']['GeoStatistics'] = 'Geolocation statistics';
 $GLOBALS['DEF_TEXTS']['en']['Browsers'] = 'Browsers';
+$GLOBALS['DEF_TEXTS']['en']['Browser'] = 'Browser';
 $GLOBALS['DEF_TEXTS']['en']['OperatingSystems'] = 'Operating systems';
 $GLOBALS['DEF_TEXTS']['en']['Bot'] = 'Bot';
 $GLOBALS['DEF_TEXTS']['en']['Bots'] = 'Bots';

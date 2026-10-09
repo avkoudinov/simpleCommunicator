@@ -10975,6 +10975,13 @@
             <ua>Браузери</ua>
         </text>
 
+        <text id="Browser">
+            <en>Browser</en>
+            <de>Browser</de>
+            <ru>Браузер</ru>
+            <ua>Браузер</ua>
+        </text>
+
         <text id="OperatingSystems">
             <en>Operating systems</en>
             <de>Betriebssysteme</de>
