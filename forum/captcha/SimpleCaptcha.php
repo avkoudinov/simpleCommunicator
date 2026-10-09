@@ -185,11 +185,6 @@ class SimpleCaptcha {
      * Creates the image resources
      */
     protected function ImageAllocate() {
-        // Cleanup
-        if (!empty($this->im)) {
-            imagedestroy($this->im);
-        }
-
         $this->im = imagecreatetruecolor($this->width*$this->scale, $this->height*$this->scale);
 
         // Background color
@@ -474,7 +469,7 @@ class SimpleCaptcha {
             $this->width, $this->height,
             $this->width*$this->scale, $this->height*$this->scale
         );
-        imagedestroy($this->im);
+
         $this->im = $imResampled;
     }
 
@@ -508,7 +503,6 @@ class SimpleCaptcha {
      * Cleanup
      */
     protected function Cleanup() {
-        imagedestroy($this->im);
     }
 }
 ?>

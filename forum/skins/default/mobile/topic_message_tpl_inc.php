@@ -1272,10 +1272,10 @@ $display = !empty($pinfo["may_reset_rating"]) && !empty($pinfo["already_rated"])
   <?php if(!empty($pinfo["ip"])): ?>
   <div class="post_ip_info">
   <?php
-  $ip = escape_html($pinfo["ip"]);
+  $ip = escape_html(shortenIPv6($pinfo["ip"], 3, 3));
   if(!empty($settings["whois_server"]))
   {
-    $ip_url = str_ireplace("{ip}", $ip, str_replace("&", "&", $settings["whois_server"]));
+    $ip_url = str_ireplace("{ip}", xrawurlencode($pinfo["ip"]), str_replace("&", "&", $settings["whois_server"]));
 
     $ip = "<a href='$ip_url' target='_blank'>" . $ip . "</a>";
   }
