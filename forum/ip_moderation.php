@@ -4,6 +4,8 @@ session_set_cookie_params(0, str_replace(basename($_SERVER["PHP_SELF"]), "", $_S
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
+require_once "botcheck/bot_check.php";
+//------------------------------------------------------------------
 if (reqvar("type") == "user_ips" && $fmanager->is_logged_in() && reqvar("user") == $fmanager->get_user_name()) {
   // Allow viewing own IPs
 } elseif (!$fmanager->is_moderator() || !$fmanager->may_see_ip()) {

@@ -1658,4 +1658,12 @@ $GLOBALS['DEF_TEXTS']['ru']['AcceptSelected'] = 'Принять выбранны
 $GLOBALS['DEF_TEXTS']['ru']['AcceptOnlyRequired'] = 'Принять только необходимые';
 $GLOBALS['DEF_TEXTS']['ru']['ShowAllReplies'] = 'Показать все ответы';
 $GLOBALS['DEF_TEXTS']['ru']['ShowDirectReplies'] = 'Показать только прямые ответы';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheck'] = 'Проверка браузера';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheckChecking'] = 'Проверяем браузер, подождите пару секунд ...';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheckJS'] = 'Для доступа к сайту включите JavaScript.';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheckError'] = 'Не удалось выполнить проверку. Обновите страницу.';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheckExpired'] = 'Ссылка проверки устарела или недействительна.';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheckCaptchaEnterText'] = 'Введите код с картинки';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheckCaptchaError'] = 'Код введён неверно, попробуйте ещё раз.';
+$GLOBALS['DEF_TEXTS']['ru']['BrowserCheckCaptchaTryAgain'] = 'Начните заново';
 ?>

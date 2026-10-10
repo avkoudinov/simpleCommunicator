@@ -1651,4 +1651,12 @@ $GLOBALS['DEF_TEXTS']['en']['AcceptSelected'] = 'Accept selected';
 $GLOBALS['DEF_TEXTS']['en']['AcceptOnlyRequired'] = 'Accept only required';
 $GLOBALS['DEF_TEXTS']['en']['ShowAllReplies'] = 'Show all replies';
 $GLOBALS['DEF_TEXTS']['en']['ShowDirectReplies'] = 'Show direct replies only';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheck'] = 'Browser check';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheckChecking'] = 'Checking your browser, please wait a few seconds ...';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheckJS'] = 'Please enable JavaScript to access the website.';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheckError'] = 'Verification failed. Please refresh the page.';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheckExpired'] = 'The verification link has expired or is invalid.';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheckCaptchaEnterText'] = 'Enter the code from the image';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheckCaptchaError'] = 'The code is incorrect, please try again.';
+$GLOBALS['DEF_TEXTS']['en']['BrowserCheckCaptchaTryAgain'] = 'Start over';
 ?>

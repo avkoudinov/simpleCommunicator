@@ -1651,4 +1651,12 @@ $GLOBALS['DEF_TEXTS']['de']['AcceptSelected'] = 'Ausgewählte akzeptieren';
 $GLOBALS['DEF_TEXTS']['de']['AcceptOnlyRequired'] = 'Nur erforderliche akzeptieren';
 $GLOBALS['DEF_TEXTS']['de']['ShowAllReplies'] = 'Показать все ответы';
 $GLOBALS['DEF_TEXTS']['de']['ShowDirectReplies'] = 'Nur direkte Antworten anzeigen';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheck'] = 'Browser-Überprüfung';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheckChecking'] = 'Browser wird überprüft, bitte warten Sie пару Sekunden ...';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheckJS'] = 'Bitte aktivieren Sie JavaScript, um auf die Website zuzugreifen.';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheckError'] = 'Überprüfung fehlgeschlagen. Bitte aktualisieren Sie die Seite.';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheckExpired'] = 'Der Überprüfungslink ist abgelaufen oder ungültig.';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheckCaptchaEnterText'] = 'Geben Sie den Code aus dem Bild ein';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheckCaptchaError'] = 'Der Code ist falsch, bitte versuchen Sie es erneut.';
+$GLOBALS['DEF_TEXTS']['de']['BrowserCheckCaptchaTryAgain'] = 'Von vorne beginnen';
 ?>
