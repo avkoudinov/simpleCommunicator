@@ -1,0 +1,94 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    font-family: sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+p {
+    margin-top: 0;
+}
+
+.box {
+    margin: auto; /* центрирует по вертикали и горизонтали, убирает растягивание */
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 600px;
+    min-width: 0; /* разрешает блоку сжиматься уже содержимого */
+    text-align: center;
+    padding: 20px;
+}
+
+.spinner {
+    background-image: url('loading-bar.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    max-width: 400px;
+    height: 20px;
+    margin: 0 auto;
+}
+
+.warning {
+    background-image: url('warning.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
+    width: 200px;
+    max-width: 60vw;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+}
+
+noscript {
+    color: #f66;
+}
+
+img.captcha_picture {
+    display: block;
+    margin: 12px auto;
+    cursor: pointer;
+    width: 220px;
+    border: 1px solid gray;
+}
+
+input[type=text] {
+    font-size: 18px;
+    padding: 6px 10px;
+    letter-spacing: 2px;
+    text-align: center;
+    width: 220px;
+    border: 1px solid gray;
+    outline: none;
+}
+
+button {
+    margin-top: 12px;
+    padding: 8px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 220px;
+    border: 1px solid gray;
+}
+
+.error {
+    color:#c00;
+}
+
+.captcha_error {
+    width: 220px;
+    margin: 10px auto 0 auto;
+}

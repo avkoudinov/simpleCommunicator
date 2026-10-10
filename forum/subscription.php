@@ -4,6 +4,8 @@ session_set_cookie_params(0, str_replace(basename($_SERVER["PHP_SELF"]), "", $_S
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
+require_once "botcheck/bot_check.php";
+//------------------------------------------------------------------
 if (!$fmanager->is_logged_in()) {
     $_SESSION["last_url"] = val_or_empty($_SERVER["REQUEST_URI"]);
     header("Location: login.php");

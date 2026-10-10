@@ -1656,4 +1656,12 @@ $GLOBALS['DEF_TEXTS']['ua']['AcceptSelected'] = 'Прийняти вибрані
 $GLOBALS['DEF_TEXTS']['ua']['AcceptOnlyRequired'] = 'Прийняти лише необхідні';
 $GLOBALS['DEF_TEXTS']['ua']['ShowAllReplies'] = 'Показати всі відповіді';
 $GLOBALS['DEF_TEXTS']['ua']['ShowDirectReplies'] = 'Показати лише прямі відповіді';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheck'] = 'Перевірка браузера';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheckChecking'] = 'Перевіряємо браузер, зачекайте пару секунд ...';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheckJS'] = 'Для доступу до сайту увімкніть JavaScript.';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheckError'] = 'Не вдалося виконати перевірку. Оновіть сторінку.';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheckExpired'] = 'Посилання перевірки застаріло або є недійсним.';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheckCaptchaEnterText'] = 'Введіть код з картинки';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheckCaptchaError'] = 'Код введено невірно, спробуйте ще раз.';
+$GLOBALS['DEF_TEXTS']['ua']['BrowserCheckCaptchaTryAgain'] = 'Почніть наново';
 ?>

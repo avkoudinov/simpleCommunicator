@@ -11388,5 +11388,61 @@
           <ua>Показати лише прямі відповіді</ua>
       </text>
 
+        <text id="BrowserCheck">
+            <en>Browser check</en>
+            <de>Browser-Überprüfung</de>
+            <ru>Проверка браузера</ru>
+            <ua>Перевірка браузера</ua>
+        </text>
+
+        <text id="BrowserCheckChecking">
+            <en>Checking your browser, please wait a few seconds ...</en>
+            <de>Browser wird überprüft, bitte warten Sie пару Sekunden ...</de>
+            <ru>Проверяем браузер, подождите пару секунд ...</ru>
+            <ua>Перевіряємо браузер, зачекайте пару секунд ...</ua>
+        </text>
+
+        <text id="BrowserCheckJS">
+            <en>Please enable JavaScript to access the website.</en>
+            <de>Bitte aktivieren Sie JavaScript, um auf die Website zuzugreifen.</de>
+            <ru>Для доступа к сайту включите JavaScript.</ru>
+            <ua>Для доступу до сайту увімкніть JavaScript.</ua>
+        </text>
+
+        <text id="BrowserCheckError">
+            <en>Verification failed. Please refresh the page.</en>
+            <de>Überprüfung fehlgeschlagen. Bitte aktualisieren Sie die Seite.</de>
+            <ru>Не удалось выполнить проверку. Обновите страницу.</ru>
+            <ua>Не вдалося виконати перевірку. Оновіть сторінку.</ua>
+        </text>
+
+        <text id="BrowserCheckExpired">
+            <en>The verification link has expired or is invalid.</en>
+            <de>Der Überprüfungslink ist abgelaufen oder ungültig.</de>
+            <ru>Ссылка проверки устарела или недействительна.</ru>
+            <ua>Посилання перевірки застаріло або є недійсним.</ua>
+        </text>
+
+        <text id="BrowserCheckCaptchaEnterText">
+            <en>Enter the code from the image</en>
+            <de>Geben Sie den Code aus dem Bild ein</de>
+            <ru>Введите код с картинки</ru>
+            <ua>Введіть код з картинки</ua>
+        </text>
+
+        <text id="BrowserCheckCaptchaError">
+            <en>The code is incorrect, please try again.</en>
+            <de>Der Code ist falsch, bitte versuchen Sie es erneut.</de>
+            <ru>Код введён неверно, попробуйте ещё раз.</ru>
+            <ua>Код введено невірно, спробуйте ще раз.</ua>
+        </text>
+
+        <text id="BrowserCheckCaptchaTryAgain">
+            <en>Start over</en>
+            <de>Von vorne beginnen</de>
+            <ru>Начните заново</ru>
+            <ua>Почніть наново</ua>
+        </text>
+
     </texts>
 </document>
