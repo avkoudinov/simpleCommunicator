@@ -24950,7 +24950,7 @@ abstract class ForumManager
                 $dbw->free_result();
 
                 $query = "insert into {$prfx}_poll_options (topic_id, name)
-                  values ($tid, '$option_db')";
+                  values ($tid, $option_db)";
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     $dbw->rollback_transaction();
