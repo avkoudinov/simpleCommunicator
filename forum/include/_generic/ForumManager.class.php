@@ -18669,9 +18669,6 @@ abstract class ForumManager
                 return false;
             }
 
-            // zzzz
-            return true;
-
             // get list of the subscribers of the target topic
 
             if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
