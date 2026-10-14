@@ -1259,7 +1259,7 @@ if(!empty($pinfo["disliked_users"])) $disliked_display = "display:block";
   $ip = escape_html($pinfo["ip"]);
   if(!empty($settings["whois_server"]))
   {
-    $ip_url = str_ireplace("{ip}", $ip, str_replace("&", "&", $settings["whois_server"]));
+    $ip_url = str_ireplace("{ip}", xrawurlencode($pinfo["ip"]), str_replace("&", "&", $settings["whois_server"]));
 
     $ip = "<a href='$ip_url' target='_blank'>" . $ip . "</a>";
   }

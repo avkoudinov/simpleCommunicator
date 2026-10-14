@@ -174,6 +174,10 @@ foreach($user_agent_list as $ua_data):
   </div>
 
   <div class="forum_info">
+        <?php echo_html(text("Browser") . " / " . text("Bot")); ?>: <span class="number"><?php echo_html($ua_data["agent_name"]); ?></span><br>
+    </div>
+
+  <div class="forum_info">
   <?php echo_html(text("Author")); ?>: 
 
   <?php

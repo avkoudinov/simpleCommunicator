@@ -88,6 +88,7 @@ $forum_selector_id = 1;
 <table class="user_agent_table">
 <tr>
 <th><?php echo_html(text("UserAgent")); ?></th>
+    <th><?php echo_html(text("Browser") . " / " . text("Bot")); ?></th>
 <th class='author_col'><?php echo_html(text("Author")); ?></th>
 <th><?php echo_html(text("IPAddress")); ?></th>
 <th><?php echo_html(text("DateTime")); ?></th>
@@ -108,6 +109,7 @@ foreach($user_agent_list as $ua_data):
 
 <tr>
 <td><?php echo_html($ua_data["user_agent"]); ?></td>
+    <td><?php echo_html($ua_data["agent_name"]); ?></td>
 <?php
 $author = "";
 if(!empty($ua_data["author"]))

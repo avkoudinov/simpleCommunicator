@@ -18669,9 +18669,6 @@ abstract class ForumManager
                 return false;
             }
 
-            // zzzz
-            return true;
-
             // get list of the subscribers of the target topic
 
             if (!$dbw->execute_query("select user_id, topic_id, email, user_name, last_host, send_notifications, activated, approved, interface_language
@@ -21360,7 +21357,7 @@ abstract class ForumManager
 
             if (!empty($period)) {
                 $event_data["action_expires"] = time() + $period;
-                $action_expires = "'" . $dbw->format_datetime(time() + $period) . "'";
+                $action_expires = $dbw->format_datetime(time() + $period);
 
                 $mail_job["params"]["{block_expires}"] = time() + $period;
             } else {
@@ -24950,7 +24947,7 @@ abstract class ForumManager
                 $dbw->free_result();
 
                 $query = "insert into {$prfx}_poll_options (topic_id, name)
-                  values ($tid, '$option_db')";
+                  values ($tid, $option_db)";
                 if (!$dbw->execute_query($query)) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     $dbw->rollback_transaction();
@@ -36772,9 +36769,10 @@ abstract class ForumManager
 
         $where = "";
         if (!reqvar_empty("search_key")) {
-            $search_key = $dbw->quotes_or_null("%" . reqvar("search_key") . "%");
+            $search_key_like = $dbw->quotes_or_null("%" . reqvar("search_key") . "%");
+            $search_key = $dbw->quotes_or_null(reqvar("search_key"));
 
-            $where = "where {$prfx}_read_marker_activity.read_marker = " . $search_key . " or {$prfx}_read_marker_activity.ip like " . $search_key . " or author like " . $search_key . " or user_agent like " . $search_key;
+            $where = "where {$prfx}_read_marker_activity.read_marker = " . $search_key . " or {$prfx}_read_marker_activity.ip like " . $search_key_like . " or author like " . $search_key_like . " or user_agent like " . $search_key_like;
         }
 
         // define the page count
@@ -41685,13 +41683,39 @@ abstract class ForumManager
             return false;
         }
 
+        $agent_mappings = [];
+
         while ($rodbw->fetch_row()) {
+            $agent = $rodbw->field_by_name("user_agent");
+            $agent_name = "";
+
+            if (!empty($agent_mappings[$agent])) {
+                $agent_name = $agent_mappings[$agent];
+            } else {
+                if ($bot_data = detect_bot(val_or_empty($agent))) {
+                    $agent_name = "Bot: " . $bot_data["name"];
+
+                    $agent_mappings[$agent] = $agent_name;
+                } elseif ($browser_data = detect_browser($agent)) {
+                    $agent_name = $browser_data["browser"];
+                    if (!empty($agent_name) && !empty($browser_data["os"])) {
+                        $agent_name .= ", ";
+                    }
+                    if (!empty($browser_data["os"])) {
+                        $agent_name .= $browser_data["os"];
+                    }
+
+                    $agent_mappings[$agent] = $agent_name;
+                }
+            }
+
             $user_agent_list[] = array(
                 "ip" => $rodbw->field_by_name("ip"),
                 "user_id" => $rodbw->field_by_name("user_id"),
                 "author" => $rodbw->field_by_name("guest_name"),
                 "author_online" => (xstrtotime($rodbw->field_by_name("last_visit_date")) > (time() - KEEP_ONLINE_PERIOD) && $rodbw->field_by_name("logout") == 0),
-                "user_agent" => $rodbw->field_by_name("user_agent"),
+                "user_agent" => $agent,
+                "agent_name" => $agent_name,
                 "uri" => $rodbw->field_by_name("uri"),
                 "dt" => adjust_and_format_timezone(xstrtotime($rodbw->field_by_name("dt")), text("DateTimeFormat")),
             );

@@ -4,6 +4,8 @@ session_set_cookie_params(0, str_replace(basename($_SERVER["PHP_SELF"]), "", $_S
 require_once "include/session_start_inc.php";
 require_once "include/general_inc.php";
 //------------------------------------------------------------------
+require_once "botcheck/bot_check.php";
+//------------------------------------------------------------------
 $forum_data = array();
 if(!$fmanager->get_forum_data(reqvar("fid"), $forum_data))
 {
