@@ -6,7 +6,7 @@
 
 return [
     'secret_key' => SALT_KEY,
-    'cookie_name' => 'q_bot55check_pass',
+    'cookie_name' => 'q_botcheck_pass',
     'cookie_secure' => (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
         || (($_SERVER['SERVER_PORT'] ?? null) == 443)
         || (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https'),
@@ -14,7 +14,7 @@ return [
     'ticket_ttl' => 120,         // сколько секунд действует тикет проверки (5 минут)
     'pass_threshold' => 70,          // итоговый балл (0-100), от которого пропускаем без капчи
     'difficulty' => 4,           // сложность proof-of-work (кол-во нулей в начале хэша)
-    'debug_log' => true,
+    'debug_log' => false,
 
     'challenge_url' => 'botcheck/challenge.php',
     'verify_url' => 'verify.php',

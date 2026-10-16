@@ -28,15 +28,6 @@ if (!$data || ($data['exp'] ?? 0) < time()) {
     exit;
 }
 
-// Тикет привязан к IP-диапазону — нельзя переиспользовать чужой валидный ответ
-if (($data['ip_bucket'] ?? null) !== bp_ip_bucket(bp_client_ip())) {
-    echo json_encode([
-        'action' => 'captcha',
-        'url'    => $cfg['captcha_url'] . '?ticket=' . urlencode($body['ticket']),
-    ]);
-    exit;
-}
-
 // --- Пересчитываем proof-of-work сами, не веря присланному хэшу на слово ---
 $seed       = $data['challenge_seed'] ?? '';
 $difficulty = $data['difficulty'] ?? $cfg['difficulty'];

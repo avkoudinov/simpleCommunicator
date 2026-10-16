@@ -14,10 +14,7 @@ require_once __DIR__ . '/bot_lib.php';
 // --- 1. Пропускная кука уже есть и валидна — ничего не делаем, страница работает как обычно ---
 $cookieData = bp_read_token($_COOKIE[$cfg['cookie_name']] ?? null, $cfg['secret_key']);
 
-if ($cookieData
-    && ($cookieData['exp'] ?? 0) > time()
-    && ($cookieData['ip_bucket'] ?? null) === bp_ip_bucket(bp_client_ip())
-) {
+if ($cookieData && ($cookieData['exp'] ?? 0) > time()) {
     return; // всё ок, выполнение страницы продолжается как обычно
 }
 
@@ -47,7 +44,6 @@ $returnUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUES
 $ticket = bp_make_token([
     'return_url'   => $returnUrl,
     'server_score' => $serverScore,
-    'ip_bucket'    => bp_ip_bucket(bp_client_ip()),
     'nonce'        => bin2hex(random_bytes(8)),
     'exp'          => time() + $cfg['ticket_ttl'],
 ], $cfg['secret_key']);
