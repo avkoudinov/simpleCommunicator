@@ -105,7 +105,6 @@ function bp_server_score(array $cfg): int {
 function bp_issue_pass_cookie(array $cfg, string $ip): void {
     $token = bp_make_token([
         'exp'       => time() + $cfg['cookie_ttl'],
-        'ip_bucket' => bp_ip_bucket($ip),
     ], $cfg['secret_key']);
 
     setcookie($cfg['cookie_name'], $token, [
