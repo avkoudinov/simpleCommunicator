@@ -1,2 +1,2 @@
-create database :dbname with template = template0 encoding = 'utf8' lc_collate = 'en_us.utf-8';
+create database :dbname with template = template0 encoding = 'utf8' lc_collate = 'en_US.UTF-8' lc_ctype   = 'en_US.UTF-8';
 
