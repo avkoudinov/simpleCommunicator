@@ -7,7 +7,7 @@ set PGSQL_PATH="c:\PostgreSQL\bin\psql.exe"
 rem set the root password
 
 set PGPASSWORD=root
-set DB_NAME="basename_forum"
+set DB_NAME="simple_communicator"
 
 echo *****************************************************
 echo * Creating PostgreSQL database                      *
