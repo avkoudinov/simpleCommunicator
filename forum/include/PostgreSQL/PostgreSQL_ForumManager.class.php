@@ -943,7 +943,7 @@ class PostgreSQL_ForumManager extends ForumManager
         if (empty($guest)) {
             $where = "where guest_name is NULL and user_id is NULL";
         } else {
-            $where = "where guest_name = '$guest'";
+            $where = "where guest_name = $guest";
         }
         
         return "select dt, ip from {$prfx}_topic_view_history $where order by dt desc limit 1";

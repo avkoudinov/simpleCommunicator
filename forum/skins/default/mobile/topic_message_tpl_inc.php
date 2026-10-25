@@ -76,7 +76,7 @@ if (!$fmanager->is_logged_in() && !empty($_SESSION["ip_blocked"])) {
     $may_write = false;
 }
 
-if (!empty($user_data[$pinfo["user_id"] ?? ""]["ignored"]) || !empty($pinfo["guest_ignored"])) {
+if (empty($forum_data["disable_ignore"]) && (!empty($user_data[$pinfo["user_id"] ?? ""]["ignored"]) || !empty($pinfo["guest_ignored"]))) {
     $may_rate = false;
     $may_answer = false;
     $citatable = "";

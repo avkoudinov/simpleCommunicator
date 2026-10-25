@@ -4663,6 +4663,11 @@ a.message_count:hover
   cursor: pointer;
 }
 
+.post_image.large_picture {
+  max-width: 350px;
+  max-height: 350px;
+}
+
 .message_signature .post_image,
 .moderator_event .post_image,
 .short_message .post_image,
@@ -6206,7 +6211,7 @@ a.not_preferred:hover
 
 ._user_msgbox
 {
-  z-index: 100000;
+  z-index: 100010;
   display: none;
   height: 200%; 
   width: 100%;
@@ -6224,7 +6229,7 @@ a.not_preferred:hover
 
 ._user_msgbox > div 
 {
-  z-index: 100000;
+  z-index: 100010;
   vertical-align: middle;
   display: table-cell;
   text-align: center;
@@ -6232,7 +6237,7 @@ a.not_preferred:hover
 
 ._user_msgbox > div  > div 
 {
-  z-index: 100000;
+  z-index: 100010;
   display: inline-block;
   position: relative;
   text-align: left;
@@ -6333,6 +6338,138 @@ a.not_preferred:hover
 }
 
 /* END: user message box */
+
+/* BEGIN: user input box */
+
+._user_inputbox
+{
+  z-index: 100000;
+  display: none;
+  height: 200%;
+  width: 100%;
+  position: fixed;
+  top: -50%;
+  left: 0px;
+  background: none repeat scroll 0 0 rgba(221, 221, 221, 0.7);
+}
+
+._user_inputbox,
+._user_inputbox td
+{
+  font-size: 36px;
+}
+
+._user_inputbox > div
+{
+  z-index: 100000;
+  vertical-align: middle;
+  display: table-cell;
+  text-align: center;
+}
+
+._user_inputbox > div  > div
+{
+  z-index: 100000;
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  -webkit-box-shadow: 8px 8px 13px gray;
+  -moz-box-shadow: 8px 8px 13px gray;
+  box-shadow: 8px 8px 13px gray;
+}
+
+._user_inputbox_buttons input[type="button"]
+{
+  margin-left: 12px;
+  font-size: 36px;
+}
+
+._user_inputbox_head
+{
+  background-color:#5182B5;
+
+  width: 780px;
+  height: 50px;
+  border: 2px solid gray;
+  border-bottom: 0px;
+}
+
+._user_inputbox_title
+{
+  padding: 3px 30px 0px 14px;
+  overflow: hidden;
+  position: absolute;
+  color: white;
+  font-weight: normal;
+}
+
+._user_inputbox_close
+{
+  display: block;
+  position: absolute;
+  left: 100%;
+  width: 30px;
+  padding-top: 1px;
+  margin-left: -40px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+}
+
+._user_inputbox_body
+{
+  width: 780px;
+  border: 2px solid gray;
+  background-color: #eeeeee;
+}
+
+._user_inputbox_body table
+{
+  border-collapse: collapse;
+  width: 100%;
+}
+
+._user_inputbox_body table td
+{
+  padding: 0px;
+  vertical-align: top;
+}
+
+._user_inputbox_body table td._user_inputbox_icon
+{
+  padding: 12px 15px 7px 15px;
+  width: 64px;
+}
+
+._user_inputbox_body table td._user_inputbox_icon img
+{
+  width: 64px;
+}
+
+._user_inputbox_text
+{
+  padding: 15px 15px 15px 15px;
+  overflow: auto;
+  max-height: 500px;
+  font-size: 32px;
+  word-break: break-word;
+}
+
+._user_inputbox_buttons
+{
+  text-align: center;
+  padding: 10px 15px 15px 15px;
+}
+
+._sys_user_input,
+._sys_user_textarea
+{
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* END: user input box */
 
 /* BEGIN: sys message box */
 

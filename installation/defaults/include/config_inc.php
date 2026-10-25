@@ -112,6 +112,18 @@ define('KEEP_ONLINE_PERIOD', 600); // seconds
 
 define('TIMEOUT', 60000); // milliseconds
 
+define('MAX_EMAIL_LENGTH', 200);
+define('MAX_PASSWORD_LENGTH', 100);
+define('MAX_LOCATION_LENGTH', 100);
+define('MAX_HOMEPAGE_LENGTH', 150);
+define('MAX_STATUS_MESSAGE_LENGTH', 200);
+define('MAX_SIGNATURE_LENGTH', 700);
+define('MAX_INFO_LENGTH', 1000);
+define('MAX_CUSTOM_CSS_LENGTH', 3000);
+define('MAX_CUSTOM_SMILES_LENGTH', 1000);
+define('MAX_NOTES_LENGTH', 500);
+define('MAX_COMMENT_LENGTH', 500);
+
 // The SALT_KEY is created by the installation and is used for hashes.
 // Changing it after the installation will cause that 
 // the users will be unable to login.

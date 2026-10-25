@@ -475,7 +475,7 @@ function check_hot_linking(&$url, &$alternative_code)
     return true;
 } // check_hot_linking
 //------------------------------------------------------------------------------
-function check_image_url(&$url, &$large_url)
+function check_image_url(&$url, &$large_url, &$large_detected)
 {
     $img_black_list = array();
 
@@ -553,6 +553,7 @@ function check_image_url(&$url, &$large_url)
     if (!empty($src_length) && $src_length > 10485760) {
         $large_url = $url;
         $url = "user_data/images/large_picture.png";
+        $large_detected = true;
         return true;
     }
 
@@ -665,7 +666,13 @@ function bb_process_img($bbcode, $action, $name, $default, $params, $content)
         return $alternative_code;
     }
 
-    check_image_url($src, $large_src);
+    $large_detected = false;
+    check_image_url($src, $large_src, $large_detected);
+
+    $large_class = "";
+    if ($large_detected) {
+        $large_class = "large_picture";
+    }
 
     $src = check_relative_url($src);
     $src = str_replace("&amp;", "&", $src);
@@ -673,7 +680,7 @@ function bb_process_img($bbcode, $action, $name, $default, $params, $content)
     $large_src = check_relative_url($large_src);
     $large_src = str_replace("&amp;", "&", $large_src);
 
-    return "<div class='picture_wrapper'><a href='$large_src' class='lightbox_image' target='_blank'><img class='post_image' src='$src' alt='{{picture}}'></a></div>";
+    return "<div class='picture_wrapper'><a href='$large_src' class='lightbox_image' target='_blank'><img class='post_image $large_class' src='$src' alt='{{picture}}'></a></div>";
 } // bb_process_img
 //------------------------------------------------------------------------------
 function bb_process_latex($bbcode, $action, $name, $default, $params, $content)
@@ -717,7 +724,8 @@ function bb_process_anim($bbcode, $action, $name, $default, $params, $content)
         return $alternative_code;
     }
 
-    check_image_url($src, $src);
+    $large_detected = false;
+    check_image_url($src, $src, $large_detected);
 
     $encoded_src = check_relative_url($src);
     // this url is to be passed as parameter and does not need to have entities
@@ -785,7 +793,13 @@ function bb_process_smile($bbcode, $action, $name, $default, $params, $content)
         $src = trim($content);
     }
 
-    check_image_url($src, $src);
+    $large_detected = false;
+    check_image_url($src, $src, $large_detected);
+
+    $large_class = "";
+    if ($large_detected) {
+        $large_class = "large_picture";
+    }
 
     $src = check_relative_url($src);
 
@@ -801,7 +815,7 @@ function bb_process_smile($bbcode, $action, $name, $default, $params, $content)
         return $src;
     }
 
-    return "<img class='bbcode_smiley bbcode_external_smiley' src='$src' alt='smile'>";
+    return "<img class='bbcode_smiley bbcode_external_smiley $large_class' src='$src' alt='smile'>";
 } // bb_process_smile
 //------------------------------------------------------------------------------
 function bb_process_smile_simple($bbcode, $action, $name, $default, $params, $content)

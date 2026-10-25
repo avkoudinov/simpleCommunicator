@@ -265,8 +265,6 @@ function confirm_delete_action(msg, params)
     {
       caption: msg_Yes,
       handler: function() {
-        Forum.hide_user_msgbox();
-        
         var elm = document.getElementById("sys_user_textarea");
         if(elm) params["comment"] = elm.value;
         
@@ -276,7 +274,7 @@ function confirm_delete_action(msg, params)
     {
       caption: msg_No,
       handler: function() {
-        Forum.hide_user_msgbox();
+        Forum.hide_user_inputbox();
       }
     }
   ];
