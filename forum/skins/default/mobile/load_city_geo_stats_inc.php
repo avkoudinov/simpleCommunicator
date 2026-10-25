@@ -13,13 +13,15 @@ $query_string = "?report1=city_stats&report2=" . urlencode($country) . "&title="
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("Cities")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_country_city_stats as $city => $val): ?>
+<?php foreach($_country_city_stats as $city => $stat): ?>
 <tr>
 <td><?php echo_html($city); ?></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+<td><?php echo_html(number_format($stat["amount"], 0, '', '.')); ?></td>
+<td><?php echo_html(number_format($stat["proportion"], 2, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 

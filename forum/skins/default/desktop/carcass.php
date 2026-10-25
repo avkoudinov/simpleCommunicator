@@ -432,6 +432,32 @@ $main_menu_id = "main_menu_bottom";
 
 <!-- END: user_msgbox -->
 
+<!-- BEGIN: user_inputbox -->
+
+<div class="_user_inputbox" id="user_inputbox">
+    <div>
+        <div>
+            <div class="_user_inputbox_head" id="user_user_inputbox_head">
+                <div class="_user_inputbox_title" id="user_inputbox_title"></div>
+                <div class="_user_inputbox_close" onclick="Forum.hide_user_inputbox()">x</div>
+            </div>
+            <div class="_user_inputbox_body" id="user_user_inputbox_body">
+
+                <table>
+                    <tr>
+                        <td class="_user_inputbox_icon" id="user_inputbox_icon"></td>
+                        <td><div class="_user_inputbox_text" id="user_inputbox_text"></div></td>
+                    </tr>
+                </table>
+
+                <div class="_user_inputbox_buttons" id="user_inputbox_buttons"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END: user_inputbox -->
+
 <script>
 // preload message box images
 var img_error = new Image();

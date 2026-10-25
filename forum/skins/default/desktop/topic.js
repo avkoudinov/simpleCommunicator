@@ -1724,8 +1724,6 @@ function confirm_action_with_comment(msg, params)
     {
       caption: msg_Yes,
       handler: function() {
-        Forum.hide_user_msgbox();
-        
         var elm = document.getElementById("sys_user_textarea");
         if(elm) params["comment"] = elm.value;
         
@@ -1743,7 +1741,7 @@ function confirm_action_with_comment(msg, params)
           if(selected_posts[params.deselect_pid]) delete selected_posts[params.deselect_pid];
         }
 
-        Forum.hide_user_msgbox();
+        Forum.hide_user_inputbox();
       }
     }
   ];
@@ -1800,6 +1798,8 @@ function do_action(params)
 
         if(response.success)
         {
+          Forum.hide_user_inputbox();
+
           if(response.target_url)
           {
             delay_redirect(response.target_url);
@@ -1815,7 +1815,7 @@ function do_action(params)
           if(this.params.topic_action == "delete_post" || this.params.topic_action == "restore_post") {
              Forum.fireEvent(window, this.params.topic_action);
           }
-          
+
           if(response.convert_action_link) convert_action_link(response.convert_action_link, this.params);
           
           if(this.params.subscribe_action == "subscribe_to_user" || this.params.subscribe_action == "unsubscribe_from_user") 
@@ -1885,6 +1885,7 @@ function do_action(params)
       }
       catch(err)
       {
+        Forum.hide_user_inputbox();
         Forum.handle_ajax_error(this, err.message, this.last_url, {});
       }
 

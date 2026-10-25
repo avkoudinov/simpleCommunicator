@@ -12,13 +12,15 @@ $query_string = "?report1=browser_stats&title=" . urlencode(text("Browsers"));
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("Browsers")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_SESSION["browser_stats"] as $browser => $val): ?>
+<?php foreach($_SESSION["browser_stats"] as $browser => $stat): ?>
 <tr>
 <td><?php echo_html($browser); ?></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+<td><?php echo_html($stat["amount"]); ?></td>
+<td><?php echo_html(number_format($stat["proportion"], 1, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 
@@ -38,13 +40,15 @@ $query_string = "?report1=os_stats&title=" . urlencode(text("OperatingSystems"))
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("OperatingSystems")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_SESSION["os_stats"] as $os => $val): ?>
+<?php foreach($_SESSION["os_stats"] as $os => $stat): ?>
 <tr>
 <td><?php echo_html($os); ?></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+    <td><?php echo_html($stat["amount"]); ?></td>
+    <td><?php echo_html(number_format($stat["proportion"], 1, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 
@@ -65,13 +69,15 @@ $query_string = "?report1=bot_stats&title=" . urlencode(text("Bots"));
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("Bots")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_SESSION["bot_stats"] as $bot => $val): ?>
+<?php foreach($_SESSION["bot_stats"] as $bot => $stat): ?>
 <tr>
 <td><a class="guest_link" href="view_bot_profile.php?bot=<?php echo(xrawurlencode($bot)); ?>"><?php echo_html($bot); ?></a></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+    <td><?php echo_html($stat["amount"]); ?></td>
+    <td><?php echo_html(number_format($stat["proportion"], 1, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 

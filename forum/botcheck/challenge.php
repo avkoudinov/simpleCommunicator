@@ -1,7 +1,7 @@
 <?php
 // challenge.php — страница, на которой выполняется клиентская JS-проверка
 
-session_set_cookie_params(0, str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]));
+session_set_cookie_params(0, str_replace("botcheck/" . basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]));
 require_once "../include/session_start_inc.php";
 require_once "../include/general_inc.php";
 
@@ -14,8 +14,9 @@ $cache_appendix = "?v=" . $skin_version;
 $cfg = require __DIR__ . '/bot_config.php';
 require_once __DIR__ . '/bot_lib.php';
 
+$token_error = "";
 $incomingTicket = $_GET['ticket'] ?? '';
-$data = bp_read_token($incomingTicket, $cfg['secret_key']);
+$data = bp_read_token($incomingTicket, $cfg['secret_key'], $token_error);
 
 $link_expired = false;
 if (!$data || ($data['exp'] ?? 0) < time()) {
@@ -61,6 +62,10 @@ $richTicket = bp_make_token(array_merge($data, [
         <p><?php echo_html(text("BrowserCheckChecking")); ?></p>
         <noscript><?php echo_html(text("BrowserCheckJS")); ?></noscript>
         <div class="spinner"></div>
+        <?php if (!empty($cfg['debug_log'])): ?>
+        <br>
+        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_challenge_reason"]); ?></p>
+        <?php endif; ?>
     </div>
 
     <script>

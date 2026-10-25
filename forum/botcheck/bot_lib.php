@@ -20,13 +20,48 @@ function bp_make_token(array $payload, string $secret): string {
     return $body . '.' . $sig;
 }
 
-function bp_read_token(?string $token, string $secret): ?array {
-    if (!$token || strpos($token, '.') === false) return null;
+function bp_get_client_data(): string
+{
+    $data = "";
+    $data .= "User-Agent: " . $_SERVER['HTTP_USER_AGENT'] . "\n";
+    $data .= "IP: " . $_SERVER['REMOTE_ADDR'] . "\n";
+    $data .= "URL: " . ($_SERVER['REQUEST_URI'] ?? '/') . "\n";
+
+    return $data;
+}
+function br_trace_checking($message, &$cfg)
+{
+    if (empty($cfg['debug_log'])) return;
+
+    trace_message_to_file($message . "------------------------------------------", "bot_check.log");
+}
+function bp_read_token(?string $token, string $secret, &$error): ?array {
+    if (!$token) {
+        $error = 'Ticket empty';
+        return null;
+    }
+
+    if (strpos($token, '.') === false) {
+        $error = 'Ticket invalid';
+        return null;
+    }
+
     [$body, $sig] = explode('.', $token, 2);
     $expected = bp_base64url_encode(hash_hmac('sha256', $body, $secret, true));
-    if (!hash_equals($expected, $sig)) return null; // подпись не сходится — токен подделан/битый
+
+    if (!hash_equals($expected, $sig)) {
+        $error = 'Ticket manipulated';
+        return null;
+    } // подпись не сходится — токен подделан/битый
+
     $data = json_decode(bp_base64url_decode($body), true);
-    return is_array($data) ? $data : null;
+
+    if (!is_array($data)) {
+        $error = 'Ticket invalid';
+        return null;
+    }
+
+    return $data;
 }
 
 // ---------- IP ----------
@@ -40,41 +75,6 @@ function bp_client_ip(): string {
         return trim($parts[0]);
     }
     return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-}
-
-function bp_ip_bucket(string $ip): string {
-    // Кука привязывается не к точному IP (ломает мобильный интернет/CGNAT),
-    // а к укрупнённому диапазону — /24 для IPv4.
-    if (strpos($ip, '.') !== false) {
-        $parts = explode('.', $ip);
-        return implode('.', array_slice($parts, 0, 3));
-    }
-    return substr($ip, 0, 19); // грубое укрупнение для IPv6
-}
-
-// ---------- Rate limiting (файловый, без Redis) ----------
-
-function bp_rate_limited(string $ip, array $cfg): bool {
-    $dir = $cfg['rate_limit_dir'];
-    if (!is_dir($dir)) @mkdir($dir, 0700, true);
-
-    $file = $dir . '/' . md5($ip) . '.json';
-    $now  = time();
-    $data = ['count' => 0, 'window_start' => $now];
-
-    if (is_file($file)) {
-        $decoded = json_decode((string) @file_get_contents($file), true);
-        if (is_array($decoded)) $data = $decoded;
-    }
-
-    if ($now - $data['window_start'] > $cfg['rate_limit_window']) {
-        $data = ['count' => 0, 'window_start' => $now];
-    }
-
-    $data['count']++;
-    @file_put_contents($file, json_encode($data));
-
-    return $data['count'] > $cfg['rate_limit_max'];
 }
 
 // ---------- Серверный скоринг (по заголовкам запроса) ----------
@@ -106,10 +106,10 @@ function bp_issue_pass_cookie(array $cfg, string $ip): void {
     $token = bp_make_token([
         'exp'       => time() + $cfg['cookie_ttl'],
     ], $cfg['secret_key']);
-
+    
     setcookie($cfg['cookie_name'], $token, [
         'expires'  => time() + $cfg['cookie_ttl'],
-        'path'     => '/',
+        'path'     => str_replace("botcheck/" . basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]),
         'secure'   => $cfg['cookie_secure'] ?? true, // на http:// (локальный *.local) ставь cookie_secure=false в конфиге
         'httponly' => true,
         'samesite' => 'Lax',

@@ -4695,6 +4695,13 @@ abstract class ForumManager
             $dbw->free_result();
         }
 
+        $maxln = get_max_limit("MAX_PASSWORD_LENGTH");
+        if (utf8_strlen(reqvar("password")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrPasswordTooLong"), $maxln));
+            MessageHandler::setErrorElement("password");
+            return false;
+        }
+
         if (Emoji::HasEmoji(reqvar("password"))) {
             MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
             MessageHandler::setErrorElement("password");
@@ -6057,20 +6064,28 @@ abstract class ForumManager
             return false;
         }
 
-        if (Emoji::HasEmoji(reqvar("password"))) {
-            MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
-            MessageHandler::setErrorElement("password");
-            return false;
-        }
-
-        if (utf8_strlen(reqvar("user_email")) > 100) {
-            MessageHandler::setError(sprintf(text("ErrEmailTooLong"), 100));
+        $maxln = get_max_limit("MAX_EMAIL_LENGTH");
+        if (utf8_strlen(reqvar("user_email")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrEmailTooLong"), $maxln));
             MessageHandler::setErrorElement("user_email");
             return false;
         }
 
         if (reqvar_empty("password", true)) {
             MessageHandler::setError(text("ErrPasswordEmpty"));
+            MessageHandler::setErrorElement("password");
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_PASSWORD_LENGTH");
+        if (utf8_strlen(reqvar("password")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrPasswordTooLong"), $maxln));
+            MessageHandler::setErrorElement("password");
+            return false;
+        }
+
+        if (Emoji::HasEmoji(reqvar("password"))) {
+            MessageHandler::setError(text("ErrStringContainsInvalidSymbols"));
             MessageHandler::setErrorElement("password");
             return false;
         }
@@ -10449,32 +10464,38 @@ abstract class ForumManager
                 $country_totals[$rodbw->field_by_name("country")] = 0;
             }
 
-            if (empty($country_stats[$rodbw->field_by_name("country")])) {
-                $country_stats[$rodbw->field_by_name("country")] = 0;
+            if (empty($country_stats[$rodbw->field_by_name("country")]["amount"])) {
+                $country_stats[$rodbw->field_by_name("country")]["amount"] = 0;
             }
 
             $total += $rodbw->field_by_name("cnt");
-            $country_stats[$rodbw->field_by_name("country")] += $rodbw->field_by_name("cnt");
+            $country_stats[$rodbw->field_by_name("country")]["amount"] += $rodbw->field_by_name("cnt");
 
             $country_totals[$rodbw->field_by_name("country")] += $rodbw->field_by_name("cnt");
-            $city_stats[$rodbw->field_by_name("country")][$rodbw->field_by_name("city")] = $rodbw->field_by_name("cnt");
+
+            $city_stats[$rodbw->field_by_name("country")][$rodbw->field_by_name("city")]["amount"] = $rodbw->field_by_name("cnt");
         }
 
         $rodbw->free_result();
 
-        arsort($country_stats);
+        uksort($country_stats, function ($a, $b) {
+            $c1 = $a["amount"] ?? 0;
+            $c2 = $b["amount"] ?? 0;
+
+            return -1 * ($c1 <=> $c2);
+        });
 
         foreach ($city_stats as $country => $_country_city_stats) {
-            $country_stats[$country] = 100 * $country_stats[$country] / $total;
+            $country_stats[$country]["proportion"] = 100 * $country_stats[$country]["amount"] / $total;
 
-            foreach ($_country_city_stats as $city => $val) {
-                $city_stats[$country][$city] = 100 * $val / $country_totals[$country];
+            foreach ($_country_city_stats as $city => $stat) {
+                $city_stats[$country][$city]["proportion"] = 100 * $stat["amount"] / $country_totals[$country];
             }
         }
 
         uksort($city_stats, function ($a, $b) use ($country_stats) {
-            $c1 = $country_stats[$a] ?? 0;
-            $c2 = $country_stats[$b] ?? 0;
+            $c1 = $country_stats[$a]["amount"] ?? 0;
+            $c2 = $country_stats[$b]["amount"] ?? 0;
 
             return -1 * ($c1 <=> $c2);
         });
@@ -10493,13 +10514,13 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $country_bot_stats[$rodbw->field_by_name("country")] = $rodbw->field_by_name("cnt");
+            $country_bot_stats[$rodbw->field_by_name("country")]["amount"] = $rodbw->field_by_name("cnt");
         }
 
         $rodbw->free_result();
 
-        foreach ($country_bot_stats as $country => $val) {
-            $country_bot_stats[$country] = 100 * $val / $total;
+        foreach ($country_bot_stats as $country => $stat) {
+            $country_bot_stats[$country]["proportion"] = 100 * $stat["amount"] / $total;
         }
 
         $query = "select is_tor, is_proxy, count(*) cnt from
@@ -10523,13 +10544,13 @@ abstract class ForumManager
             }
 
             $total += $rodbw->field_by_name("cnt");
-            $proxy_stats[$access_type] = $rodbw->field_by_name("cnt");
+            $proxy_stats[$access_type]["amount"] = $rodbw->field_by_name("cnt");
         }
 
         $rodbw->free_result();
 
-        foreach ($proxy_stats as $access_type => $val) {
-            $proxy_stats[$access_type] = 100 * $val / $total;
+        foreach ($proxy_stats as $access_type => $stat) {
+            $proxy_stats[$access_type]["proportion"] = 100 * $stat["amount"] / $total;
         }
 
         $query = "select is_ipv6, count(*) cnt from
@@ -10551,13 +10572,13 @@ abstract class ForumManager
             }
 
             $total += $rodbw->field_by_name("cnt");
-            $ip_type_stats[$ip_type] = $rodbw->field_by_name("cnt");
+            $ip_type_stats[$ip_type]["amount"] = $rodbw->field_by_name("cnt");
         }
 
         $rodbw->free_result();
 
-        foreach ($ip_type_stats as $ip_type => $val) {
-            $ip_type_stats[$ip_type] = 100 * $val / $total;
+        foreach ($ip_type_stats as $ip_type => $stat) {
+            $ip_type_stats[$ip_type]["proportion"] = 100 * $stat["amount"] / $total;
         }
 
         measure_action_time("get geo stat");
@@ -10613,13 +10634,13 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $browser_stat[$rodbw->field_by_name("browser")] = $rodbw->field_by_name("cnt");
+            $browser_stat[$rodbw->field_by_name("browser")]["amount"] = $rodbw->field_by_name("cnt");
         }
 
         $rodbw->free_result();
 
-        foreach ($browser_stat as $browser => $val) {
-            $browser_stat[$browser] = 100 * $val / $total;
+        foreach ($browser_stat as $browser => $stat) {
+            $browser_stat[$browser]["proportion"] = 100 * $stat["amount"] / $total;
         }
 
         $query = "select os, count(*) cnt from
@@ -10636,13 +10657,13 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $os_stat[$rodbw->field_by_name("os")] = $rodbw->field_by_name("cnt");
+            $os_stat[$rodbw->field_by_name("os")]["amount"] = $rodbw->field_by_name("cnt");
         }
 
         $rodbw->free_result();
 
-        foreach ($os_stat as $os => $val) {
-            $os_stat[$os] = 100 * $val / $total;
+        foreach ($os_stat as $os => $stat) {
+            $os_stat[$os]["proportion"] = 100 * $stat["amount"] / $total;
         }
 
         $query = "select bot, sum(bot_hits_count) cnt from
@@ -10659,13 +10680,13 @@ abstract class ForumManager
         $total = 0;
         while ($rodbw->fetch_row()) {
             $total += $rodbw->field_by_name("cnt");
-            $bot_stat[$rodbw->field_by_name("bot")] = $rodbw->field_by_name("cnt");
+            $bot_stat[$rodbw->field_by_name("bot")]["amount"] = $rodbw->field_by_name("cnt");
         }
 
         $rodbw->free_result();
 
-        foreach ($bot_stat as $bot => $val) {
-            $bot_stat[$bot] = 100 * $val / $total;
+        foreach ($bot_stat as $bot => $stat) {
+            $bot_stat[$bot]["proportion"] = 100 * $stat["amount"] / $total;
         }
 
         measure_action_time("get browser stat");
@@ -10702,12 +10723,6 @@ abstract class ForumManager
             return false;
         }
 
-        if (strlen(reqvar("custom_css")) > 3000) {
-            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 3000));
-            MessageHandler::setErrorElement("custom_css");
-            return false;
-        }
-
         if (reqvar_empty("user_email")) {
             MessageHandler::setError(text("ErrEmailEmpty"));
             MessageHandler::setErrorElement("user_email");
@@ -10720,8 +10735,9 @@ abstract class ForumManager
             return false;
         }
 
-        if (utf8_strlen(reqvar("user_email")) > 250) {
-            MessageHandler::setError(sprintf(text("ErrEmailTooLong"), 250));
+        $maxln = get_max_limit("MAX_EMAIL_LENGTH");
+        if (utf8_strlen(reqvar("user_email")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrEmailTooLong"), $maxln));
             MessageHandler::setErrorElement("user_email");
             return false;
         }
@@ -10730,6 +10746,7 @@ abstract class ForumManager
         if (preg_match("/[^@]+@(.*)/", $domain ?? "", $matches)) {
             $domain = $matches[1];
         }
+
         if (!$this->check_email_domain($domain)) {
             MessageHandler::setError(sprintf(text("ErrEmailDomainNotAllowed"), $domain));
             MessageHandler::setErrorElement("user_email");
@@ -10742,12 +10759,21 @@ abstract class ForumManager
             return false;
         }
 
-        if (utf8_strlen(reqvar("location")) > 100) {
-            MessageHandler::setError(sprintf(text("ErrLocationTooLong"), 100));
+        $maxln = get_max_limit("MAX_PASSWORD_LENGTH");
+        if (utf8_strlen(reqvar("password")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrPasswordTooLong"), $maxln));
+            MessageHandler::setErrorElement("password");
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_LOCATION_LENGTH");
+        if (utf8_strlen(reqvar("location")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrLocationTooLong"), $maxln));
             MessageHandler::setErrorElement("location");
             return false;
         }
 
+        $maxln = get_max_limit("MAX_HOMEPAGE_LENGTH");
         if (utf8_strlen(reqvar("homepage")) > 150) {
             MessageHandler::setError(sprintf(text("ErrHomepageTooLong"), 150));
             MessageHandler::setErrorElement("homepage");
@@ -10764,21 +10790,38 @@ abstract class ForumManager
         $_REQUEST["signature"] = preg_replace("/(\r\n|\n\r|\n\n){2,}/", "\n\n", val_or_empty($_REQUEST["signature"]));
         $_REQUEST["info"] = preg_replace("/(\r\n|\n\r|\n\n){2,}/", "\n\n", val_or_empty($_REQUEST["info"]));
 
-        if (utf8_strlen(reqvar("message")) > 200) {
-            MessageHandler::setError(sprintf(text("ErrMessageTooLong"), 200));
+        $maxln = get_max_limit("MAX_STATUS_MESSAGE_LENGTH");
+        if (utf8_strlen(reqvar("message")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrStatusMessageTooLong"), $maxln));
             MessageHandler::setErrorElement("message");
             return false;
         }
 
-        if (utf8_strlen(reqvar("signature")) > 1000) {
-            MessageHandler::setError(sprintf(text("ErrSignatureTooLong"), 1000));
+        $maxln = get_max_limit("MAX_SIGNATURE_LENGTH");
+        if (utf8_strlen(reqvar("signature")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrSignatureTooLong"), $maxln));
             MessageHandler::setErrorElement("signature");
             return false;
         }
 
-        if (utf8_strlen(reqvar("info")) > 3000) {
-            MessageHandler::setError(sprintf(text("ErrInformationTooLong"), 3000));
+        $maxln = get_max_limit("MAX_INFO_LENGTH");
+        if (utf8_strlen(reqvar("info")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrInformationTooLong"), $maxln));
             MessageHandler::setErrorElement("info");
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_CUSTOM_CSS_LENGTH");
+        if (strlen(reqvar("custom_css")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), $maxln));
+            MessageHandler::setErrorElement("custom_css");
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_CUSTOM_SMILES_LENGTH");
+        if (strlen(reqvar("custom_smiles")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("CustomSmiles"), $maxln));
+            MessageHandler::setErrorElement("custom_smiles");
             return false;
         }
 
@@ -10795,7 +10838,6 @@ abstract class ForumManager
             return false;
         }
 
-        $approved = false;
         $password_hash = "";
         $old_email_hash = "";
         $activation_hash = "";
@@ -10805,7 +10847,6 @@ abstract class ForumManager
 
         if ($dbw->fetch_row()) {
             $api_token = $dbw->field_by_name("api_token");
-            $approved = $dbw->field_by_name("approved");
             $password_hash = $dbw->field_by_name("password_hash");
             $old_email_hash = $dbw->field_by_name("email_hash");
             $user_login = $dbw->field_by_name("login");
@@ -11522,18 +11563,21 @@ abstract class ForumManager
             return false;
         }
 
-        if (utf8_strlen(reqvar("user_email")) > 250) {
-            MessageHandler::setError(sprintf(text("ErrEmailTooLong"), 250));
+        $maxln = get_max_limit("MAX_EMAIL_LENGTH");
+        if (utf8_strlen(reqvar("user_email")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrEmailTooLong"), $maxln));
             MessageHandler::setErrorElement("user_email");
             return false;
         }
 
-        if (utf8_strlen(reqvar("location")) > 100) {
-            MessageHandler::setError(sprintf(text("ErrLocationTooLong"), 100));
+        $maxln = get_max_limit("MAX_LOCATION_LENGTH");
+        if (utf8_strlen(reqvar("location")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrLocationTooLong"), $maxln));
             MessageHandler::setErrorElement("location");
             return false;
         }
 
+        $maxln = get_max_limit("MAX_HOMEPAGE_LENGTH");
         if (utf8_strlen(reqvar("homepage")) > 150) {
             MessageHandler::setError(sprintf(text("ErrHomepageTooLong"), 150));
             MessageHandler::setErrorElement("homepage");
@@ -11550,20 +11594,30 @@ abstract class ForumManager
         $_REQUEST["signature"] = preg_replace("/(\r\n|\n\r|\n\n){2,}/", "\n\n", val_or_empty($_REQUEST["signature"]));
         $_REQUEST["info"] = preg_replace("/(\r\n|\n\r|\n\n){2,}/", "\n\n", val_or_empty($_REQUEST["info"]));
 
-        if (utf8_strlen(reqvar("message")) > 200) {
-            MessageHandler::setError(sprintf(text("ErrMessageTooLong"), 200));
+        $maxln = get_max_limit("MAX_PASSWORD_LENGTH");
+        if (utf8_strlen(reqvar("password")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrPasswordTooLong"), $maxln));
+            MessageHandler::setErrorElement("password");
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_STATUS_MESSAGE_LENGTH");
+        if (utf8_strlen(reqvar("message")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrStatusMessageTooLong"), $maxln));
             MessageHandler::setErrorElement("message");
             return false;
         }
 
-        if (utf8_strlen(reqvar("signature")) > 700) {
-            MessageHandler::setError(sprintf(text("ErrSignatureTooLong"), 700));
+        $maxln = get_max_limit("MAX_SIGNATURE_LENGTH");
+        if (utf8_strlen(reqvar("signature")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrSignatureTooLong"), $maxln));
             MessageHandler::setErrorElement("signature");
             return false;
         }
 
-        if (utf8_strlen(reqvar("info")) > 1000) {
-            MessageHandler::setError(sprintf(text("ErrInformationTooLong"), 1000));
+        $maxln = get_max_limit("MAX_INFO_LENGTH");
+        if (utf8_strlen(reqvar("info")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrInformationTooLong"), $maxln));
             MessageHandler::setErrorElement("info");
             return false;
         }
@@ -11678,8 +11732,6 @@ abstract class ForumManager
 
         $dbw->free_result();
 
-        $location = Emoji::Encode(reqvar("location"));
-        $homepage = reqvar("homepage");
         $message_short = Emoji::Encode(reqvar("message"));
         $signature = Emoji::Encode(reqvar("signature"));
         $info = Emoji::Encode(reqvar("info"));
@@ -11752,6 +11804,7 @@ abstract class ForumManager
             return false;
         }
 
+        $user_name = $dbw->quotes_or_null(reqvar("user_name"));
         $user_name_raw = reqvar("user_name");
         $user_email_raw = reqvar("user_email");
         $user_login_raw = reqvar("user_login");
@@ -12135,6 +12188,13 @@ abstract class ForumManager
         if ($this->demo_mode()) {
             MessageHandler::setWarning(text("MsgDemoMode"));
             return true;
+        }
+
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
+            return false;
         }
 
         $dbw = System::getDBWorker();
@@ -12803,6 +12863,13 @@ abstract class ForumManager
             return false;
         }
 
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
+            return false;
+        }
+
         $dbw = System::getDBWorker();
         if (!$dbw) {
             return false;
@@ -13035,6 +13102,13 @@ abstract class ForumManager
         if ($this->demo_mode()) {
             MessageHandler::setWarning(text("MsgDemoMode"));
             return true;
+        }
+
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
+            return false;
         }
 
         global $settings;
@@ -14731,6 +14805,13 @@ abstract class ForumManager
             return true;
         }
 
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
+            return false;
+        }
+
         $dbw = System::getDBWorker();
         if (!$dbw) {
             return false;
@@ -15397,6 +15478,13 @@ abstract class ForumManager
 
         if (empty($pid)) {
             MessageHandler::setError(text("ErrNoPostSelected"));
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
             return false;
         }
 
@@ -16161,6 +16249,13 @@ abstract class ForumManager
 
         if (empty($pid)) {
             MessageHandler::setError(text("ErrNoPostSelected"));
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
             return false;
         }
 
@@ -17513,7 +17608,7 @@ abstract class ForumManager
         }
 
         if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.creation_date, forum_id, topic_id, {$prfx}_topic.name topic_name,
-                             {$prfx}_forum.name forum_name, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications, activated, approved,
+                             {$prfx}_forum.name forum_name, {$prfx}_forum.disable_ignore, {$prfx}_post.user_id, email, user_name, {$prfx}_post.author, last_host, send_notifications, activated, approved,
                              donot_notify_on_rates, time_zone, interface_language, text_content,
                              {$prfx}_ignored_users.user_id rater_ignored, is_private,
                              {$prfx}_post.read_marker
@@ -17545,6 +17640,7 @@ abstract class ForumManager
         $send_notifications = true;
         $donot_notify_on_rates = false;
         $rater_ignored = false;
+        $disable_ignore = false;
         $is_private = false;
 
         $lng = current_language();
@@ -17558,7 +17654,6 @@ abstract class ForumManager
             $author_time_zone = $dbw->field_by_name("time_zone") ? $dbw->field_by_name("time_zone") : TIME_ZONE;
             $topic_id = $dbw->field_by_name("topic_id");
             $topic_name = $dbw->field_by_name("topic_name");
-            $forum_name = $dbw->field_by_name("forum_name");
 
             $read_marker = $dbw->field_by_name("read_marker");
 
@@ -17569,6 +17664,7 @@ abstract class ForumManager
             $send_notifications = $dbw->field_by_name("send_notifications") && $dbw->field_by_name("activated") && $dbw->field_by_name("approved");
             $last_host = $dbw->field_by_name("last_host");
             $donot_notify_on_rates = $dbw->field_by_name("donot_notify_on_rates");
+            $disable_ignore = $dbw->field_by_name("disable_ignore");
 
             $lng = $dbw->field_by_name("interface_language");
             $short_message = $dbw->field_by_name("text_content");
@@ -17607,7 +17703,7 @@ abstract class ForumManager
                 return false;
             }
 
-            if ($dbw->fetch_row()) {
+            if ($dbw->fetch_row() && !$disable_ignore) {
                 MessageHandler::setWarning(text("ErrRatingIgnoredUsers"));
                 $dbw->free_result();
                 return false;
@@ -20361,6 +20457,13 @@ abstract class ForumManager
             return false;
         }
 
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
+            return false;
+        }
+
         // guest ignore
 
         if (!$this->is_logged_in() || $this->is_master_admin()) {
@@ -20911,6 +21014,13 @@ abstract class ForumManager
 
         if (!is_numeric($uid)) {
             MessageHandler::setError(sprintf(text("ErrUserDoesNotExist"), $uid));
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("reason_info")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Reason"), $maxln));
+            MessageHandler::setErrorElement("reason_info");
             return false;
         }
 
@@ -24166,6 +24276,13 @@ abstract class ForumManager
             return true;
         }
 
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
+            return false;
+        }
+
         if (empty($BB_PARSER_VERSION)) {
             $BB_PARSER_VERSION = 1;
         }
@@ -26289,8 +26406,9 @@ abstract class ForumManager
             return false;
         }
 
-        if (utf8_strlen(reqvar("post_comment")) > 3000) {
-            MessageHandler::setError(sprintf(text("ErrTextTooLong"), 3000));
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("post_comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
             MessageHandler::setErrorElement("post_comment");
             return false;
         }
@@ -26628,8 +26746,9 @@ abstract class ForumManager
             return false;
         }
 
-        if (utf8_strlen(reqvar("post_comment")) > 3000) {
-            MessageHandler::setError(sprintf(text("ErrTextTooLong"), 3000));
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("post_comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Warn"), $maxln));
             MessageHandler::setErrorElement("post_comment");
             return false;
         }
@@ -27285,7 +27404,7 @@ abstract class ForumManager
         } elseif ((!empty($_SESSION["ignore_guests_whitelist"]) && empty($_SESSION["ignored_guests_whitelist"])) || // ignores all guests
             (!empty($_SESSION["ignore_guests_blacklist"]) && !empty($_SESSION["ignored_guests_blacklist"][utf8_strtolower($author)])) || // ignores guests in the list
             (!empty($_SESSION["ignore_guests_whitelist"]) && empty($_SESSION["ignored_guests_whitelist"][utf8_strtolower($author)])) || // ignores guests not in the list
-            (!empty($_SESSION["ignore_new_guests"]) && empty($_SESSION["ignored_new_guests"][$author_readmarker])) // ignores new guests
+            (!empty($_SESSION["ignore_new_guests"]) && !empty($_SESSION["ignored_new_guests"][$author_readmarker])) // ignores new guests
         ) {
             $author_id = "";
             $author = "[" . text("ignored") . "]";
@@ -28373,6 +28492,13 @@ abstract class ForumManager
             return false;
         }
 
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
+            return false;
+        }
+
         $uid = $dbw->escape($this->get_user_id());
         if (empty($uid)) {
             $uid = 0;
@@ -28678,6 +28804,13 @@ abstract class ForumManager
 
         if (empty($uid) || !is_numeric($uid)) {
             MessageHandler::setError(text("ErrNoUserSelected"));
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
             return false;
         }
 
@@ -29472,7 +29605,6 @@ abstract class ForumManager
     //-----------------------------------------------------------------
     function track_hit($tid, $fid)
     {
-        global $settings;
         global $READ_MARKER;
 
         if (!empty($_SESSION["skip_next_hit"])) {
@@ -29712,7 +29844,6 @@ abstract class ForumManager
             }
         }
 
-        $user_clause = ($uid != "NULL") ? "and user_id = $uid" : "and user_id is NULL";
         $bot_clause = ($bot_db != "NULL") ? "and bot = $bot_db" : "and bot is NULL";
         $os_clause = ($os != "NULL") ? "and os = $os" : "and os is NULL";
         $browser_clause = ($browser != "NULL") ? "and browser = $browser" : "and browser is NULL";
@@ -32851,6 +32982,13 @@ abstract class ForumManager
             return false;
         }
 
+        $maxln = get_max_limit("MAX_PASSWORD_LENGTH");
+        if (utf8_strlen(reqvar("password")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrPasswordTooLong"), $maxln));
+            MessageHandler::setErrorElement("password");
+            return false;
+        }
+
         $password_hash = System::generateHash(reqvar("current_password"), SALT_KEY);
         if (ADMIN_PASSWORD != $password_hash) {
             MessageHandler::setError(text("ErrWrongPassword"));
@@ -33412,12 +33550,6 @@ abstract class ForumManager
             return true;
         }
 
-        if (strlen(reqvar("custom_css")) > 3000) {
-            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), 3000));
-            MessageHandler::setErrorElement("custom_css");
-            return false;
-        }
-
         if (!empty($_FILES["avatar"]["name"]) && reqvar_empty("user_name", true)) {
             MessageHandler::setError(text("ErrUserNameEmpty"));
             MessageHandler::setErrorElement("user_name");
@@ -33462,6 +33594,13 @@ abstract class ForumManager
         } elseif ($check == 3) {
             MessageHandler::setError(text("ErrUserNameProtected"));
             MessageHandler::setErrorElement("user_name");
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_CUSTOM_CSS_LENGTH");
+        if (strlen(reqvar("custom_css")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrUserCSSTooLong"), $maxln));
+            MessageHandler::setErrorElement("custom_css");
             return false;
         }
 
@@ -34136,6 +34275,13 @@ abstract class ForumManager
 
         if (empty($_REQUEST["selected_users"]) || count($_REQUEST["selected_users"]) == 0) {
             MessageHandler::setError(text("ErrNoUserSelected"));
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_COMMENT_LENGTH");
+        if (utf8_strlen(reqvar("comment")) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Comment"), $maxln));
+            MessageHandler::setErrorElement("comment");
             return false;
         }
 
@@ -41782,6 +41928,13 @@ abstract class ForumManager
     {
         if (empty($uid)) {
             MessageHandler::setError(text("ErrNoUserSelected"));
+            return false;
+        }
+
+        $maxln = get_max_limit("MAX_NOTES_LENGTH");
+        if (utf8_strlen($notes) > $maxln) {
+            MessageHandler::setError(sprintf(text("ErrTextTooLong"), text("Notes"), $maxln));
+            MessageHandler::setErrorElement("sys_user_textarea");
             return false;
         }
 
