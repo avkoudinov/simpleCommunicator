@@ -1136,7 +1136,7 @@ abstract class ForumManager
                 break;
         }
 
-        $bot = $dbw->quotes_or_null($bot);
+        $bot = $rodbw->quotes_or_null($bot);
         $where = "where bot = $bot";
 
         $now = $rodbw->format_datetime(mktime(0, 0, 0, date("n"), date("j"), date("Y")));
