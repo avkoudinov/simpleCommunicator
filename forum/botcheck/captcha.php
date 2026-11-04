@@ -86,8 +86,8 @@ if (!$data || ($data['exp'] ?? 0) < time()) {
 
     <?php else: ?>
 
-        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_scoring"]); ?></p>
-        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_scoring_failure"]); ?></p>
+        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_scoring"] ?? "Scoring: undefined\n"); ?></p>
+        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_scoring_failure"] ?? "Verification failed: reason undefined\n"); ?></p>
 
         <img class="captcha_picture" id="captcha_picture"
              src="../captcha/captcha.php?rnd=<?= rand(1000, 9999) ?>&session_var=<?= urlencode($sessionVar) ?>"

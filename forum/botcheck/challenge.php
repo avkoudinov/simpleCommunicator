@@ -64,7 +64,7 @@ $richTicket = bp_make_token(array_merge($data, [
         <div class="spinner"></div>
         <?php if (!empty($cfg['debug_log'])): ?>
         <br>
-        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_challenge_reason"]); ?></p>
+        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_challenge_reason"] ?? "Challenge reason: undefined\n"); ?></p>
         <?php endif; ?>
     </div>
 
