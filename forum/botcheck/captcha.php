@@ -6,7 +6,7 @@
 // ВАЖНО: этот файл — не то же самое, что captcha/captcha.php (это обёртка-страница
 // с формой; captcha/captcha.php — сам генератор картинки, он вызывается из <img>).
 
-session_set_cookie_params(0, str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]));
+session_set_cookie_params(0, str_replace("botcheck/" . basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]));
 require_once "../include/session_start_inc.php";
 require_once "../include/general_inc.php";
 
@@ -23,8 +23,9 @@ require_once __DIR__ . '/bot_lib.php';
 // чтобы кука сессии была ОБЩЕЙ с captcha/captcha.php (он использует $_SESSION).
 require_once "../include/session_start_inc.php";
 
+$token_error = "";
 $ticket = $_GET['ticket'] ?? ($_POST['ticket'] ?? '');
-$data = bp_read_token($ticket, $cfg['secret_key']);
+$data = bp_read_token($ticket, $cfg['secret_key'], $token_error);
 
 $sessionVar = $cfg['captcha_session_var'];
 $link_expired = false;
@@ -84,6 +85,9 @@ if (!$data || ($data['exp'] ?? 0) < time()) {
         </p>
 
     <?php else: ?>
+
+        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_scoring"]); ?></p>
+        <p style="font-size: 90%; color: maroon"><?php echo_html($_SESSION["bot_check_scoring_failure"]); ?></p>
 
         <img class="captcha_picture" id="captcha_picture"
              src="../captcha/captcha.php?rnd=<?= rand(1000, 9999) ?>&session_var=<?= urlencode($sessionVar) ?>"

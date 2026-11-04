@@ -94,8 +94,9 @@ function show_tag_editor(tgid, text)
                                     {
                                       caption: msg_OK,
                                       handler: function() { 
-                                        Forum.hide_user_msgbox(); 
-                                        show_tag_editor(tgid, '');
+                                        Forum.hide_user_msgbox();
+                                        var elm = document.getElementById('sys_user_input');
+                                        if (elm) elm.focus();
                                       }
                                     }
                                   ]);
@@ -107,7 +108,7 @@ function show_tag_editor(tgid, text)
     },
     {
       caption: msg_Cancel,
-      handler: function() { Forum.hide_user_msgbox(); }
+      handler: function() { Forum.hide_user_inputbox(); }
     }
   ];
   
@@ -157,8 +158,9 @@ function show_merge_editor(tgid, text)
                                     {
                                       caption: msg_OK,
                                       handler: function() { 
-                                        Forum.hide_user_msgbox(); 
-                                        show_merge_editor(tgid, '');
+                                        Forum.hide_user_msgbox();
+                                        var elm = document.getElementById('sys_user_input');
+                                        if (elm) elm.focus();
                                       }
                                     }
                                   ]);
@@ -170,7 +172,7 @@ function show_merge_editor(tgid, text)
     },
     {
       caption: msg_Cancel,
-      handler: function() { Forum.hide_user_msgbox(); }
+      handler: function() { Forum.hide_user_inputbox(); }
     }
   ];
   
@@ -193,8 +195,9 @@ function add_new_tag2(text)
                                     {
                                       caption: msg_OK,
                                       handler: function() { 
-                                        Forum.hide_user_msgbox(); 
-                                        add_new_tag('');
+                                        Forum.hide_user_msgbox();
+                                        var elm = document.getElementById('sys_user_input');
+                                        if (elm) elm.focus();
                                       }
                                     }
                                   ]);
@@ -206,7 +209,7 @@ function add_new_tag2(text)
     },
     {
       caption: msg_Cancel,
-      handler: function() { Forum.hide_user_msgbox(); }
+      handler: function() { Forum.hide_user_inputbox(); }
     }
   ];
   

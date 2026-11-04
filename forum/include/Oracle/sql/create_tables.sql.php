@@ -131,31 +131,33 @@ create table v1_browser_daily_statistics (
 ';
 
 $sql_cmds[] = '
-create index v1_brwr_dstatistics_dt_idx on v1_browser_daily_statistics (
+create index v1_brwr_dstat_dt_idx on v1_browser_daily_statistics (
    dt ASC
 )
 ';
 
 $sql_cmds[] = '
-create index v1_brwr_dstatistics_brwr_idx on v1_browser_daily_statistics (
-   browser ASC
+create index v1_brwr_dstat_brwr_dt_idx on v1_browser_daily_statistics (
+   browser ASC,
+   dt ASC
 )
 ';
 
 $sql_cmds[] = '
-create index v1_brwr_dstatistics_os_idx on v1_browser_daily_statistics (
-   os ASC
+create index v1_brwr_dstat_os_dt_idx on v1_browser_daily_statistics (
+   os ASC,
+   dt ASC
 )
 ';
 
 $sql_cmds[] = '
-create index v1_brwr_dstatistics_bot_idx on v1_browser_daily_statistics (
+create index v1_brwr_dstat_bot_idx on v1_browser_daily_statistics (
    bot ASC
 )
 ';
 
 $sql_cmds[] = '
-create index v1_brwr_dstatistics_rm_idx on v1_browser_daily_statistics (
+create index v1_brwr_dstat_rm_idx on v1_browser_daily_statistics (
    read_marker ASC
 )
 ';
@@ -189,14 +191,13 @@ create unique index v1_daily_statistics_unq on v1_daily_statistics (
 ';
 
 $sql_cmds[] = '
-create index v1_daily_statistics_dt_idx on v1_daily_statistics (
-   dt ASC
-)
-';
-
-$sql_cmds[] = '
-create index v1_daily_statistics_user_idx on v1_daily_statistics (
-   user_id ASC
+create index v1_daily_statistics_cover_idx on v1_daily_statistics (
+   dt ASC,
+   user_id ASC,
+   forum_id ASC,
+   hits_count ASC,
+   bot_hits_count ASC,
+   post_count ASC
 )
 ';
 
@@ -484,8 +485,10 @@ create index v1_forum_hits_dt_idx on v1_forum_hits (
 ';
 
 $sql_cmds[] = '
-create index v1_forum_hits_user_idx on v1_forum_hits (
-   user_id ASC
+create index v1_forum_hits_cov_idx on v1_forum_hits (
+   user_id ASC,
+   dt ASC,
+   hits_count ASC
 )
 ';
 
@@ -900,9 +903,9 @@ create table v1_ip_daily_statistics (
    dt                   DATE                  not null,
    ip                   VARCHAR2(250),
    country_code         VARCHAR2(10),
-   country              VARCHAR2(250 CHAR),
-   city                 VARCHAR2(250 CHAR),
-   bot                  VARCHAR2(250 CHAR),
+   country              VARCHAR2(100 CHAR),
+   city                 VARCHAR2(100 CHAR),
+   bot                  VARCHAR2(100 CHAR),
    is_tor               SMALLINT             default 0  not null,
    is_proxy             SMALLINT             default 0  not null,
    is_ipv6              SMALLINT             default 0  not null,
@@ -912,26 +915,40 @@ create table v1_ip_daily_statistics (
 ';
 
 $sql_cmds[] = '
-create index v1_ip_daily_statistics_dt_idx on v1_ip_daily_statistics (
+create index v1_ip_dstat_dt_idx on v1_ip_daily_statistics (
    dt ASC
 )
 ';
 
 $sql_cmds[] = '
-create index v1_ip_daily_statistics_ip_idx on v1_ip_daily_statistics (
+create index v1_ip_dstat_ip_idx on v1_ip_daily_statistics (
    ip ASC
 )
 ';
 
 $sql_cmds[] = '
-create index v1_ip_dstatistics_country_idx on v1_ip_daily_statistics (
-   country ASC
+create index v1_ip_dstat_cov_idx on v1_ip_daily_statistics (
+   bot ASC,
+   is_tor ASC,
+   is_proxy ASC,
+   country ASC,
+   city ASC,
+   dt ASC
 )
 ';
 
 $sql_cmds[] = '
-create index v1_ip_dstatistics_city_idx on v1_ip_daily_statistics (
-   city ASC
+create index v1_ip_dstat_country_cov_idx on v1_ip_daily_statistics (
+   country ASC,
+   bot ASC,
+   dt ASC
+)
+';
+
+$sql_cmds[] = '
+create index v1_ip_dstat_ipv6_dt_idx on v1_ip_daily_statistics (
+   is_ipv6 ASC,
+   dt ASC
 )
 ';
 
@@ -1189,8 +1206,10 @@ create index v1_post_is_deleted_idx on v1_post (
 ';
 
 $sql_cmds[] = '
-create index v1_post_user_id_idx on v1_post (
-   user_id ASC
+create index v1_post_user_date_topic_idx on v1_post (
+   user_id ASC,
+   creation_date ASC,
+   topic_id ASC
 )
 ';
 
@@ -1369,8 +1388,10 @@ create unique index v1_post_rating_unq on v1_post_rating (
 ';
 
 $sql_cmds[] = '
-create index v1_post_rating_post_idx on v1_post_rating (
-   post_id ASC
+create index v1_post_rating_cov_idx on v1_post_rating (
+   post_id ASC,
+   user_id ASC,
+   rating ASC
 )
 ';
 

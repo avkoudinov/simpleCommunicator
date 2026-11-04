@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     20.09.2026 16:18:08                          */
+/* Created on:     25.10.2026 18:05:00                          */
 /*==============================================================*/
 
 
@@ -135,17 +135,19 @@ dt
 );
 
 /*==============================================================*/
-/* Index: v1_brwr_dstatistics_brwr_idx                          */
+/* Index: v1_brwr_dstatistics_brwr_dt_idx                       */
 /*==============================================================*/
-create  index v1_brwr_dstatistics_brwr_idx on v1_browser_daily_statistics (
-browser
+create  index v1_brwr_dstatistics_brwr_dt_idx on v1_browser_daily_statistics (
+browser,
+dt
 );
 
 /*==============================================================*/
-/* Index: v1_brwr_dstatistics_os_idx                            */
+/* Index: v1_brwr_dstatistics_os_dt_idx                         */
 /*==============================================================*/
-create  index v1_brwr_dstatistics_os_idx on v1_browser_daily_statistics (
-os
+create  index v1_brwr_dstatistics_os_dt_idx on v1_browser_daily_statistics (
+os,
+dt
 );
 
 /*==============================================================*/
@@ -194,17 +196,15 @@ bot
 );
 
 /*==============================================================*/
-/* Index: v1_daily_statistics_dt_idx                            */
+/* Index: v1_daily_statistics_cover_idx                         */
 /*==============================================================*/
-create  index v1_daily_statistics_dt_idx on v1_daily_statistics (
-dt
-);
-
-/*==============================================================*/
-/* Index: v1_daily_statistics_user_idx                          */
-/*==============================================================*/
-create  index v1_daily_statistics_user_idx on v1_daily_statistics (
-user_id
+create  index v1_daily_statistics_cover_idx on v1_daily_statistics (
+dt,
+user_id,
+forum_id,
+hits_count,
+bot_hits_count,
+post_count
 );
 
 /*==============================================================*/
@@ -524,10 +524,12 @@ dt
 );
 
 /*==============================================================*/
-/* Index: v1_forum_hits_user_idx                                */
+/* Index: v1_forum_hits_cov_idx                                 */
 /*==============================================================*/
-create  index v1_forum_hits_user_idx on v1_forum_hits (
-user_id
+create  index v1_forum_hits_cov_idx on v1_forum_hits (
+user_id,
+dt,
+hits_count
 );
 
 /*==============================================================*/
@@ -1003,9 +1005,9 @@ create table v1_ip_daily_statistics (
    dt                   DATE                 not null,
    ip                   VARCHAR(250)         null,
    country_code         VARCHAR(10)          null,
-   country              VARCHAR(250)         null,
-   city                 VARCHAR(250)         null,
-   bot                  VARCHAR(250)         null,
+   country              VARCHAR(100)         null,
+   city                 VARCHAR(100)         null,
+   bot                  VARCHAR(100)         null,
    is_tor               INT2                 not null default 0,
    is_proxy             INT2                 not null default 0,
    is_ipv6              INT2                 not null default 0,
@@ -1014,31 +1016,46 @@ create table v1_ip_daily_statistics (
 );
 
 /*==============================================================*/
-/* Index: v1_ip_daily_statistics_dt_idx                         */
+/* Index: v1_ip_dailystat_dt_idx                                */
 /*==============================================================*/
-create  index v1_ip_daily_statistics_dt_idx on v1_ip_daily_statistics (
+create  index v1_ip_dailystat_dt_idx on v1_ip_daily_statistics (
 dt
 );
 
 /*==============================================================*/
-/* Index: v1_ip_daily_statistics_ip_idx                         */
+/* Index: v1_ip_dailystat_ip_idx                                */
 /*==============================================================*/
-create  index v1_ip_daily_statistics_ip_idx on v1_ip_daily_statistics (
+create  index v1_ip_dailystat_ip_idx on v1_ip_daily_statistics (
 ip
 );
 
 /*==============================================================*/
-/* Index: v1_ip_dstatistics_country_idx                         */
+/* Index: v1_ip_dailystat_cov_idx                               */
 /*==============================================================*/
-create  index v1_ip_dstatistics_country_idx on v1_ip_daily_statistics (
-country
+create  index v1_ip_dailystat_cov_idx on v1_ip_daily_statistics (
+bot,
+is_tor,
+is_proxy,
+country,
+city,
+dt
 );
 
 /*==============================================================*/
-/* Index: v1_ip_daily_statistics_city_idx                       */
+/* Index: v1_ip_dailystat_country_cov_idx                       */
 /*==============================================================*/
-create  index v1_ip_daily_statistics_city_idx on v1_ip_daily_statistics (
-city
+create  index v1_ip_dailystat_country_cov_idx on v1_ip_daily_statistics (
+country,
+bot,
+dt
+);
+
+/*==============================================================*/
+/* Index: v1_ip_dailystat_ipv6_dt_idx                           */
+/*==============================================================*/
+create  index v1_ip_dailystat_ipv6_dt_idx on v1_ip_daily_statistics (
+is_ipv6,
+dt
 );
 
 /*==============================================================*/
@@ -1317,10 +1334,12 @@ deleted
 );
 
 /*==============================================================*/
-/* Index: v1_post_user_id_idx                                   */
+/* Index: v1_post_user_date_topic_idx                           */
 /*==============================================================*/
-create  index v1_post_user_id_idx on v1_post (
-user_id
+create  index v1_post_user_date_topic_idx on v1_post (
+user_id,
+creation_date,
+topic_id
 );
 
 /*==============================================================*/

@@ -2077,7 +2077,12 @@
   .post_image
   {
     min-width: 60px;
-    max-width: 800px;
+    max-width: 600px;
+  }
+
+  .post_image.large_picture {
+    max-width: 250px;
+    max-height: 250px;
   }
 
   .message_signature .post_image,
@@ -2090,7 +2095,7 @@
   .user_notes .post_image,
   .ignore_reason .post_image
   {
-    max-width: 400px;
+    max-width: 300px;
   }
 
   ._user_msgbox_text .post_image
@@ -3367,6 +3372,137 @@
   }
 
   /* END: user message box */
+
+  /* BEGIN: user input box */
+
+  ._user_inputbox
+  {
+    z-index: 100000;
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    background: none repeat scroll 0 0 rgba(221, 221, 221, 0.7);
+  }
+
+  ._user_inputbox,
+  ._user_inputbox td
+  {
+    font-size: 20px;
+  }
+
+  ._user_inputbox > div
+  {
+    z-index: 100000;
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;
+  }
+
+  ._user_inputbox > div  > div
+  {
+    z-index: 100000;
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    -webkit-box-shadow: 5px 5px 10px gray;
+    -moz-box-shadow: 5px 5px 10px gray;
+    box-shadow: 5px 5px 10px gray;
+  }
+
+  ._user_inputbox_head
+  {
+    background-color:#5182B5;
+
+    width: 550px;
+    height: 30px;
+    border: 1px solid gray;
+    border-bottom: 0px;
+  }
+
+  ._user_inputbox_title
+  {
+    padding-left: 4px;
+    overflow: hidden;
+    position: absolute;
+    padding-right: 30px;
+    color: white;
+    font-weight: normal;
+  }
+
+  ._user_inputbox_close
+  {
+    display: block;
+    position: absolute;
+    left: 100%;
+    width: 30px;
+    margin-left: -30px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    padding-top: 2px;
+  }
+
+  ._user_inputbox_body
+  {
+    width: 550px;
+    border: 1px solid gray;
+    background-color: #eeeeee;
+  }
+
+  ._user_inputbox_body table
+  {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  ._user_inputbox_body table td
+  {
+    padding: 0px;
+    vertical-align: top;
+  }
+
+  ._user_inputbox_body table td._user_inputbox_icon
+  {
+    padding: 12px 15px 7px 15px;
+    width: 32px;
+  }
+
+  ._user_inputbox_text
+  {
+    padding: 7px 7px 7px 7px;
+    overflow: auto;
+    max-height: 300px;
+    font-size: 20px;
+  }
+
+  ._sys_user_input,
+  ._sys_user_textarea
+  {
+    margin-top: 6px;
+  }
+
+  ._sys_user_input_wrapper
+  {
+    padding-right: 10px;
+  }
+
+  ._user_inputbox_buttons
+  {
+    text-align: center;
+    padding: 5px 9px 9px 9px;
+  }
+
+  ._user_inputbox_buttons input[type="button"]
+  {
+    margin-left: 7px;
+    font-size: 20px;
+  }
+
+  /* END: user input box */
 
   /* BEGIN: sys message box */
 

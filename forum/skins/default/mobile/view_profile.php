@@ -185,8 +185,6 @@ function confirm_action_with_comment(msg, params)
     {
       caption: msg_Yes,
       handler: function() {
-        Forum.hide_user_msgbox();
-        
         var elm = document.getElementById("sys_user_textarea");
         if(elm) params["comment"] = elm.value;
         
@@ -196,7 +194,7 @@ function confirm_action_with_comment(msg, params)
     {
       caption: msg_No,
       handler: function() {
-        Forum.hide_user_msgbox();
+        Forum.hide_user_inputbox();
       }
     }
   ];
@@ -231,6 +229,8 @@ function do_action(params)
 
         if(response.success)
         {
+          Forum.hide_user_inputbox();
+
           if(response.target_url)
           {
             delay_redirect(response.target_url);

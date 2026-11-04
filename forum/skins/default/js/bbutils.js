@@ -1,8 +1,5 @@
 //----------------------------------------------------------------------
 function convert_quote_to_bbcode(quote, quote_level) {
-    console.log("convert_quote_to_bbcode");
-    console.log(quote.outerHTML);
-
     // We need to omit citates if the author is ignored.
     // We could do getComputedStyle(quote) but
     // Opera and Chrome return empty getComputedStyle object
@@ -91,8 +88,6 @@ function convert_spoiler_to_bbcode(quote, quote_level) {
 } // convert_spoiler_to_bbcode
 //----------------------------------------------------------------------
 function convert_ai_to_bbcode(ai, quote_level) {
-    console.log("convert_ai_to_bbcode");
-
     var title = "";
     var titles = ai.getElementsByClassName('ai_header');
     if (titles.length > 0) {
@@ -118,9 +113,6 @@ function convert_ai_to_bbcode(ai, quote_level) {
 } // convert_ai_to_bbcode
 //----------------------------------------------------------------------
 function convert_markdown_block_to_bbcode(markdown) {
-    console.log("convert_markdown_block_to_bbcode");
-    console.log(markdown.outerHTML);
-
     var title = "";
     var titles = markdown.getElementsByClassName('markdown_header');
     if (titles.length > 0 && markdown.classList.contains('ai_markdown')) {
@@ -461,9 +453,6 @@ function md_block(container) {
 } // md_block
 //----------------------------------------------------------------------
 function convert_markdown_html_to_bbcode(markdown) {
-    console.log("convert_markdown_html_to_bbcode");
-    console.log(markdown.outerHTML);
-
     var markdown_bb_code = md_block(markdown);
 
     // collapse accidental multiple blank lines and trim the ends
@@ -611,9 +600,6 @@ function convert_video_to_bbcode(video) {
 } // convert_video_to_bbcode
 //----------------------------------------------------------------------
 function convert_nodes_to_bbcode(container, quote_level) {
-    console.log("convert_nodes_to_bbcode");
-    console.log(container.outerHTML);
-
     var current_node = null;
     var re, matches, tmp, text = '';
 

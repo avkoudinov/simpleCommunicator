@@ -245,7 +245,6 @@ function scale_image($src, $target, $max_x = false, $max_y = false)
         
         // the image is already smaller
         if ($x <= $max_x && $y <= $max_y) {
-            imagedestroy($src_img);
             $ret = rename($src, $target);
             
             //$ret = image_save($src_img, $target);
@@ -282,9 +281,6 @@ function scale_image($src, $target, $max_x = false, $max_y = false)
         imagecopyresampled($target_img, $src_img, 0, 0, 0, 0, $target_x, $target_y, $x, $y);
         
         $ret = image_save($target_img, $target);
-        
-        imagedestroy($src_img);
-        imagedestroy($target_img);
     } // if($im)
     
     return $ret;
@@ -350,9 +346,6 @@ function rotate_image($src, $target, $degree)
         }
         
         $ret = image_save($target_img, $target);
-        
-        imagedestroy($src_img);
-        imagedestroy($target_img);
     } // if($im)
     
     return $ret;
@@ -414,9 +407,6 @@ function resize_image($src, $target, $new_x, $new_y)
         imagecopyresampled($target_img, $src_img, 0, 0, 0, 0, $new_x, $new_y, $x, $y);
         
         $ret = image_save($target_img, $target);
-        
-        imagedestroy($src_img);
-        imagedestroy($target_img);
     } // if($im)
     
     return $ret;

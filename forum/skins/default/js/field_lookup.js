@@ -290,8 +290,6 @@ function lookup_delayed_hide(eid)
 
 function lookup_apply_selection_if_active(eid)
 {
-  console.log("lookup_apply_selection_if_active");
-
   var elm = document.getElementById(eid);
   var lst = document.getElementById(eid + "_lookup");
 

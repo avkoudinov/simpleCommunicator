@@ -11,13 +11,15 @@ $query_string = "?report1=country_stats&title=" . urlencode(text("Browsers"));
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("Countries")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_SESSION["country_stats"] as $country => $val): ?>
+<?php foreach($_SESSION["country_stats"] as $country => $stat): ?>
 <tr>
 <td><?php echo_html($country); ?></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+<td><?php echo_html(number_format($stat["amount"], 0, '', '.')); ?></td>
+<td><?php echo_html(number_format($stat["proportion"], 2, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 
@@ -37,13 +39,15 @@ $query_string = "?report1=country_bot_stats&title=" . urlencode(text("Bots"));
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("Countries")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_SESSION["country_bot_stats"] as $country => $val): ?>
+<?php foreach($_SESSION["country_bot_stats"] as $country => $stat): ?>
 <tr>
 <td><?php echo_html($country); ?></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+<td><?php echo_html(number_format($stat["amount"], 0, '', '.')); ?></td>
+<td><?php echo_html(number_format($stat["proportion"], 2, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 
@@ -64,13 +68,15 @@ $query_string = "?report1=proxy_stats&title=" . urlencode(text("Proxys"));
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("Proxys")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_SESSION["proxy_stats"] as $access_type => $val): ?>
+<?php foreach($_SESSION["proxy_stats"] as $access_type => $stat): ?>
 <tr>
 <td><?php echo_html($access_type); ?></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+<td><?php echo_html(number_format($stat["amount"], 0, '', '.')); ?></td>
+<td><?php echo_html(number_format($stat["proportion"], 2, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 
@@ -90,13 +96,15 @@ $query_string = "?report1=ip_type_stats&title=" . urlencode(text("IPTypes"));
 <table class="general_statistics_table">
 <tr>
 <th><?php echo_html(text("IPTypes")); ?></th>
-<th><?php echo_html(text("Value")); ?></th>
+<th><?php echo_html(text("Amount")); ?></th>
+<th><?php echo_html(text("Proportion")); ?></th>
 </tr>
 
-<?php foreach($_SESSION["ip_type_stats"] as $ip_type => $val): ?>
+<?php foreach($_SESSION["ip_type_stats"] as $ip_type => $stat): ?>
 <tr>
 <td><?php echo_html($ip_type); ?></td>
-<td><?php echo_html(number_format($val, 1, ',', '') . " %"); ?></td>
+<td><?php echo_html(number_format($stat["amount"], 0, '', '.')); ?></td>
+<td><?php echo_html(number_format($stat["proportion"], 2, ',', '') . " %"); ?></td>
 </tr>
 <?php endforeach; ?>
 

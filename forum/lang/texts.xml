@@ -2080,6 +2080,20 @@
             <ua>Максимальний розмір повідомлення</ua>
         </text>
 
+        <text id="ErrTextTooLong">
+            <en>Text length for the field '%s' cannot exceed %s characters!</en>
+            <de>Die Textlänge für das Feld '%s' darf %s Zeichen nicht überschreiten!</de>
+            <ru>Размер текста для поля '%s' не должен превышать %s символов!</ru>
+            <ua>Розмір тексту для поля '%s' не повинен перевищувати %s символів!</ua>
+        </text>
+
+        <text id="ErrStatusMessageTooLong">
+            <en>Status message cannot contain more than %s characters!</en>
+            <de>Statusmeldung darf höchstens %s Zeichen beinhalten!</de>
+            <ru>Размер статусного сообщения не должен превышать %s символов!</ru>
+            <ua>Довжина статусного повідомлення не повинна перевищувати %s символів!</ua>
+        </text>
+
         <text id="ErrMessageTooLong">
             <en>The message exceeds the maximal length %s KB!</en>
             <de>Die Nachricht überschreitet die maximale Größe %s KB!</de>
@@ -2262,13 +2276,6 @@
             <ua>Ви зробили %s невдалих спроб входа в систему! Зачекайте %s секунд перш ніж продовжити!</ua>
         </text>
 
-        <text id="ErrTextTooLong">
-            <en>The length of the text cannot be more than %s characters!</en>
-            <de>Die Textgröße kann höchstens %s Zeichen betragen!</de>
-            <ru>Длина текста не должна превышать %s символов!</ru>
-            <ua>Довжина тексту не може перевищувати %s символів!</ua>
-        </text>
-
         <text id="ForumName">
             <en>Тame of the forum</en>
             <de>Forumname</de>
@@ -2358,6 +2365,13 @@
             <de>E-Mail kann höchstens %s Zeichen beinhalten!</de>
             <ru>Длина электронного адреса не должна превышать %s символов!</ru>
             <ua>Довжина електронної адреси не повинна перевищувати %s символів!</ua>
+        </text>
+
+        <text id="ErrPasswordTooLong">
+            <en>Password cannot contain more than %s characters!</en>
+            <de>Passwort darf höchstens %s Zeichen beinhalten!</de>
+            <ru>Длина пароля не должна превышать %s символов!</ru>
+            <ua>Довжина пароля не повинна перевищувати %s символів!</ua>
         </text>
 
         <text id="MsgRegistrationSuccess">
@@ -9176,6 +9190,20 @@
             <de>Wert</de>
             <ru>Значение</ru>
             <ua>Значення</ua>
+        </text>
+
+        <text id="Amount">
+            <en>Amount</en>
+            <de>Anzahl</de>
+            <ru>Количество</ru>
+            <ua>Кількість</ua>
+        </text>
+
+        <text id="Proportion">
+            <en>Proportion</en>
+            <de>Anteil</de>
+            <ru>Доля</ru>
+            <ua>Частка</ua>
         </text>
 
         <text id="HitsCount">

@@ -585,17 +585,40 @@ Forum.hide_user_msgbox = function(suppress_on_hide)
   return was_open;
 }; // hide_user_msgbox
 // --------------------------------------------------------
+Forum.hide_user_inputbox = function(suppress_on_hide)
+{
+  var msgbox = document.getElementById("user_inputbox");
+  if(!msgbox) return false;
+
+  var was_open = (msgbox.style.display == "table");
+
+  msgbox.style.display = "none";
+
+  if(msgbox.timeout)
+  {
+    clearTimeout(msgbox.timeout);
+    msgbox.timeout = null;
+  }
+
+  if(!suppress_on_hide && msgbox.on_hide)
+  {
+    msgbox.on_hide();
+  }
+
+  return was_open;
+}; // hide_user_msgbox
+// --------------------------------------------------------
 Forum.show_user_textarea = function(title_text, field_caption, default_value, icon, buttons, height)
 {
-  var msgbox = document.getElementById("user_msgbox");
+  var msgbox = document.getElementById("user_inputbox");
   if(!msgbox) return;
 
   msgbox.on_hide = null;
   
-  var title = document.getElementById("user_msgbox_title");
+  var title = document.getElementById("user_inputbox_title");
   if(title) title.innerHTML = Forum.escape_html(title_text);
 
-  var mbox_icon = document.getElementById("user_msgbox_icon");
+  var mbox_icon = document.getElementById("user_inputbox_icon");
   
   if(mbox_icon) 
   {
@@ -603,14 +626,14 @@ Forum.show_user_textarea = function(title_text, field_caption, default_value, ic
     else           mbox_icon.innerHTML = "";
   }    
 
-  var txt = document.getElementById("user_msgbox_text");
+  var txt = document.getElementById("user_inputbox_text");
   
   if(field_caption != '') field_caption += '<br>';
   if(txt) txt.innerHTML = '<div class="_sys_user_input_wrapper">' + field_caption + '<textarea id="sys_user_textarea" name="sys_user_textarea" class="_sys_user_textarea" style="height:' + height + 'px">' + Forum.escape_html(default_value) + '</textarea></div>';
 
   var sys_user_textarea = document.getElementById("sys_user_textarea");
 
-  var mbox_buttons = document.getElementById("user_msgbox_buttons");
+  var mbox_buttons = document.getElementById("user_inputbox_buttons");
   if(mbox_buttons)
   {
     var elm;
@@ -662,15 +685,15 @@ Forum.show_user_textarea = function(title_text, field_caption, default_value, ic
 //----------------------------------------------------
 Forum.show_user_inputbox = function(title_text, field_caption, default_value, icon, buttons)
 {
-  var msgbox = document.getElementById("user_msgbox");
+  var msgbox = document.getElementById("user_inputbox");
   if(!msgbox) return;
 
   msgbox.on_hide = null;
   
-  var title = document.getElementById("user_msgbox_title");
+  var title = document.getElementById("user_inputbox_title");
   if(title) title.innerHTML = Forum.escape_html(title_text);
 
-  var mbox_icon = document.getElementById("user_msgbox_icon");
+  var mbox_icon = document.getElementById("user_inputbox_icon");
   
   if(mbox_icon) 
   {
@@ -678,12 +701,12 @@ Forum.show_user_inputbox = function(title_text, field_caption, default_value, ic
     else           mbox_icon.innerHTML = "";
   }    
 
-  var txt = document.getElementById("user_msgbox_text");
+  var txt = document.getElementById("user_inputbox_text");
   if(txt) txt.innerHTML = '<div class="_sys_user_input_wrapper">' + field_caption + ':<br><input type="text" id="sys_user_input" name="sys_user_input" class="_sys_user_input" value="' + Forum.escape_html(default_value) + '"></div>';
 
   var sys_user_input = document.getElementById("sys_user_input");
 
-  var mbox_buttons = document.getElementById("user_msgbox_buttons");
+  var mbox_buttons = document.getElementById("user_inputbox_buttons");
   if(mbox_buttons)
   {
     var elm;
@@ -1565,13 +1588,13 @@ Forum.show_notes_editor = function(title, elm_id, uid, height)
         if(ta) 
           save_notes(uid, elm_id, ta.value);
         else
-          Forum.hide_user_msgbox();
+          Forum.hide_user_inputbox();
       }
     },
     {
       caption: msg_Cancel,
       handler: function() {
-        Forum.hide_user_msgbox();
+        Forum.hide_user_inputbox();
       }
     }
   ];
@@ -1630,15 +1653,20 @@ function save_notes(uid, elm_id, notes)
             elm.setAttribute('data-notes', this.notes);
             elm.innerHTML = response.notes;
           }
-        }
 
-        Forum.show_sys_progress_indicator(false);
-        Forum.hide_user_msgbox(); 
+          Forum.show_sys_progress_indicator(false);
+          Forum.hide_user_inputbox();
+        }
+        else
+        {
+          Forum.show_sys_progress_indicator(false);
+          Forum.handle_response_messages(response);
+        }
       }
       catch(err)
       {
         Forum.show_sys_progress_indicator(false);
-        Forum.hide_user_msgbox(); 
+        Forum.hide_user_inputbox();
         
         Forum.handle_ajax_error(this, err.message, this.last_url, {});
       }
@@ -1647,7 +1675,7 @@ function save_notes(uid, elm_id, notes)
     save_notes_ajax.onerror = function(error, url, info)
     {
       Forum.show_sys_progress_indicator(false);
-      Forum.hide_user_msgbox(); 
+      Forum.hide_user_inputbox();
 
       Forum.handle_ajax_error(this, error, url, info);
     };
@@ -1798,7 +1826,7 @@ Forum.handle_sys_msgbox_esc = function(ev)
   if(ev.keyCode == 27) // Esc
   {
     // user message box was open. Close only this upon escape.
-    if(!Forum.hide_user_msgbox() && !Forum.hide_image_preview())
+    if(!Forum.hide_user_msgbox() && !Forum.hide_user_inputbox() && !Forum.hide_image_preview())
     {
       Forum.hide_sys_lightbox();
       Forum.hide_sys_bubblebox();
@@ -2843,8 +2871,6 @@ function switch_skin(skin)
           var url = window.location.href.replace(/(\?|&)(mobile|tablet|desktop)=[^&]*/, "");
           
           url = url.replace(/#.*/, "");
-          
-          console.log(url);
           
           delay_redirect(url);
           return;

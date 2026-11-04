@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     20.09.2026 16:17:34                          */
+/* Created on:     25.10.2026 18:50:40                          */
 /*==============================================================*/
 
 
@@ -18,7 +18,7 @@ create table v1_attachment (
    user_id              int                  null,
    favourite            tinyint              not null default 0,
    last_post_id         int                  not null,
-   constraint PK_V1_ATTACHMENT primary key (id)
+   constraint v1_attachment_pk primary key (id)
 )
 go
 
@@ -150,18 +150,20 @@ dt ASC
 go
 
 /*==============================================================*/
-/* Index: v1_browser_daily_statistics_browser_idx               */
+/* Index: v1_browser_daily_statistics_browser_dt_idx            */
 /*==============================================================*/
-create index v1_browser_daily_statistics_browser_idx on v1_browser_daily_statistics (
-browser ASC
+create index v1_browser_daily_statistics_browser_dt_idx on v1_browser_daily_statistics (
+browser ASC,
+dt ASC
 )
 go
 
 /*==============================================================*/
-/* Index: v1_browser_daily_statistics_os_idx                    */
+/* Index: v1_browser_daily_statistics_os_dt_idx                 */
 /*==============================================================*/
-create index v1_browser_daily_statistics_os_idx on v1_browser_daily_statistics (
-os ASC
+create index v1_browser_daily_statistics_os_dt_idx on v1_browser_daily_statistics (
+os ASC,
+dt ASC
 )
 go
 
@@ -216,18 +218,15 @@ bot ASC
 go
 
 /*==============================================================*/
-/* Index: v1_daily_statistics_dt_idx                            */
+/* Index: v1_daily_statistics_coverage_idx                      */
 /*==============================================================*/
-create index v1_daily_statistics_dt_idx on v1_daily_statistics (
-dt ASC
-)
-go
-
-/*==============================================================*/
-/* Index: v1_daily_statistics_user_idx                          */
-/*==============================================================*/
-create index v1_daily_statistics_user_idx on v1_daily_statistics (
-user_id ASC
+create index v1_daily_statistics_coverage_idx on v1_daily_statistics (
+dt ASC,
+user_id ASC,
+forum_id ASC,
+hits_count ASC,
+bot_hits_count ASC,
+post_count ASC
 )
 go
 
@@ -277,7 +276,7 @@ create table v1_events (
    note                 nvarchar(max)        null,
    source_topic_name    nvarchar(1000)       null,
    source_topic_id      int                  null,
-   constraint PK_V1_EVENTS primary key (id)
+   constraint v1_events_pk primary key (id)
 )
 go
 
@@ -453,7 +452,7 @@ create table v1_forum (
    stringent_rules      tinyint              not null default 0,
    disable_ignore       tinyint              not null default 0,
    forum_group_id       int                  null,
-   constraint PK_V1_FORUM primary key nonclustered (id)
+   constraint v1_forum_pk primary key nonclustered (id)
 )
 go
 
@@ -531,7 +530,7 @@ create table v1_forum_group (
    id                   int                  identity,
    name                 nvarchar(255)        not null,
    sort_order           int                  not null default 0,
-   constraint PK_V1_FORUM_GROUP primary key nonclustered (id)
+   constraint v1_forum_group_pk primary key nonclustered (id)
 )
 go
 
@@ -584,10 +583,12 @@ dt ASC
 go
 
 /*==============================================================*/
-/* Index: v1_forum_hits_user_idx                                */
+/* Index: v1_forum_hits_cov_idx                                 */
 /*==============================================================*/
-create index v1_forum_hits_user_idx on v1_forum_hits (
-user_id ASC
+create index v1_forum_hits_cov_idx on v1_forum_hits (
+user_id ASC,
+dt ASC,
+hits_count ASC
 )
 go
 
@@ -1124,9 +1125,9 @@ create table v1_ip_daily_statistics (
    dt                   date                 not null,
    ip                   varchar(250)         null,
    country_code         varchar(10)          null,
-   country              nvarchar(250)        null,
-   city                 nvarchar(250)        null,
-   bot                  nvarchar(250)        null,
+   country              nvarchar(100)        null,
+   city                 nvarchar(100)        null,
+   bot                  nvarchar(100)        null,
    is_tor               tinyint              not null default 0,
    is_proxy             tinyint              not null default 0,
    is_ipv6              tinyint              not null default 0,
@@ -1152,18 +1153,34 @@ ip ASC
 go
 
 /*==============================================================*/
-/* Index: v1_ip_daily_statistics_country_idx                    */
+/* Index: v1_ip_daily_statistics_cov_idx                        */
 /*==============================================================*/
-create index v1_ip_daily_statistics_country_idx on v1_ip_daily_statistics (
-country ASC
+create index v1_ip_daily_statistics_cov_idx on v1_ip_daily_statistics (
+bot ASC,
+is_tor ASC,
+is_proxy ASC,
+country ASC,
+city ASC,
+dt ASC
 )
 go
 
 /*==============================================================*/
-/* Index: v1_ip_daily_statistics_city_idx                       */
+/* Index: v1_ip_daily_statistics_country_cov_idx                */
 /*==============================================================*/
-create index v1_ip_daily_statistics_city_idx on v1_ip_daily_statistics (
-city ASC
+create index v1_ip_daily_statistics_country_cov_idx on v1_ip_daily_statistics (
+country ASC,
+bot ASC,
+dt ASC
+)
+go
+
+/*==============================================================*/
+/* Index: v1_ip_daily_statistics_ipv6_dt_idx                    */
+/*==============================================================*/
+create index v1_ip_daily_statistics_ipv6_dt_idx on v1_ip_daily_statistics (
+is_ipv6 ASC,
+dt ASC
 )
 go
 
@@ -1222,7 +1239,7 @@ create table v1_moderator_log (
    redundant            tinyint              not null default 0,
    source_topic_name    nvarchar(1000)       null,
    source_topic_id      int                  null,
-   constraint PK_V1_MODERATOR_LOG primary key nonclustered (id)
+   constraint v1_moderator_log_pk primary key nonclustered (id)
 )
 go
 
@@ -1359,7 +1376,7 @@ create table v1_poll_options (
    id                   int                  identity,
    name                 nvarchar(700)        not null,
    topic_id             int                  not null,
-   constraint PK_V1_POLL_OPTIONS primary key (id)
+   constraint v1_poll_options_pk primary key (id)
 )
 go
 
@@ -1451,7 +1468,7 @@ create table v1_post (
    is_adult             tinyint              not null default 0,
    is_system            tinyint              not null default 0,
    ref                  int                  null,
-   constraint PK_V1_POST primary key nonclustered (id)
+   constraint v1_post_pk primary key nonclustered (id)
 )
 go
 
@@ -1464,10 +1481,12 @@ deleted ASC
 go
 
 /*==============================================================*/
-/* Index: v1_post_user_id_idx                                   */
+/* Index: v1_post_user_date_topic_idx                           */
 /*==============================================================*/
-create index v1_post_user_id_idx on v1_post (
-user_id ASC
+create index v1_post_user_date_topic_idx on v1_post (
+user_id ASC,
+creation_date ASC,
+topic_id ASC
 )
 go
 
@@ -1660,7 +1679,7 @@ create table v1_post_history (
    text_content         nvarchar(max)        null,
    html_content         nvarchar(max)        null,
    post_id              int                  not null,
-   constraint PK_V1_POST_HISTORY primary key (id)
+   constraint v1_post_history_pk primary key (id)
 )
 go
 
@@ -1682,7 +1701,7 @@ create table v1_post_rating (
    post_id              int                  not null,
    user_id              int                  not null,
    rater_ignored        tinyint              not null default 0,
-   constraint PK_V1_POST_RATING primary key (id)
+   constraint v1_post_rating_pk primary key (id)
 )
 go
 
@@ -1696,10 +1715,12 @@ user_id ASC
 go
 
 /*==============================================================*/
-/* Index: v1_post_rating_post_idx                               */
+/* Index: v1_post_rating_cov_idx                                */
 /*==============================================================*/
-create index v1_post_rating_post_idx on v1_post_rating (
-post_id ASC
+create index v1_post_rating_cov_idx on v1_post_rating (
+post_id ASC,
+user_id ASC,
+rating ASC
 )
 go
 
@@ -1972,7 +1993,7 @@ create table v1_topic (
    profiled_topic       tinyint              not null default 0,
    request_moderation   tinyint              not null default 0,
    ref                  int                  null,
-   constraint PK_V1_TOPIC primary key nonclustered (id)
+   constraint v1_topic_pk primary key nonclustered (id)
 )
 go
 
@@ -2398,7 +2419,7 @@ create table v1_user (
    custom_smiles        nvarchar(max)        null,
    ref                  int                  null,
    email_changed        tinyint              not null default 0,
-   constraint PK_V1_USER primary key nonclustered (id)
+   constraint v1_user_pk primary key (id)
 )
 go
 
@@ -2611,7 +2632,7 @@ create table v1_user_tags (
    id                   int                  identity,
    name                 nvarchar(255)        null,
    user_id              int                  not null,
-   constraint PK_V1_USER_TAGS primary key nonclustered (id)
+   constraint v1_user_tags_pk primary key nonclustered (id)
 )
 go
 
