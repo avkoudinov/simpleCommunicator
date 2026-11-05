@@ -970,7 +970,7 @@ textarea
 .forum_selector_table td:nth-child(2)
 {
   width: 1%;
-  background: white url('../images/arrow_down.png') no-repeat center right;
+  background: white url('../images/arrow_down.png') no-repeat right center;
   background-size: auto 100%;
 }
 
@@ -7100,7 +7100,7 @@ a.plvideo_short_container
   font-weight: bold; 
   padding: 5px 5px 5px 80px;
   background-color: black;
-  background-image: url(../images/plvideo_short.png);
+  background-image: url(../images/plvideo_short.jpg);
   background-repeat: no-repeat;
   background-position: 10px center;
   background-size: 58px;
