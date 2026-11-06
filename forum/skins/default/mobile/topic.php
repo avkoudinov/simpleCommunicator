@@ -55,9 +55,9 @@ do_not_check_new = true;
 <?php endif; ?>
 
 var user_tags = {};
-<?php foreach($user_tags as $tgid => $tgname): ?> 
+<?php foreach($user_tags as $tgid => $tgname): ?>
 user_tags['#<?php echo_js($tgid); ?>'] = '<?php echo_js($tgname); ?>';
-<?php endforeach; ?> 
+<?php endforeach; ?>
 
 <?php
 $gotomsg_appendix = "";
@@ -75,24 +75,24 @@ function exec_load_new_posts(highlight_message, target_url)
 
 function exec_reload_nav_control(ctrl, all_entry_post)
 {
-  var params = { 
-    topic: '<?php echo_js($tid); ?>', 
-    forum: '<?php echo_html($fid); ?>', 
-    ctrl: ctrl, 
-    base_url: '<?php echo_js($base_url); ?>', 
-    mode: '<?php echo_js($pagination_info["mode"]); ?>', 
-    startmsg: '<?php echo_js($pagination_info["startmsg"]); ?>', 
-    msg: '<?php echo_js($pagination_info["msg"]); ?>', 
-    pinned_message_count: '<?php echo_js($pagination_info["pinned_message_count"]); ?>', 
+  var params = {
+    topic: '<?php echo_js($tid); ?>',
+    forum: '<?php echo_html($fid); ?>',
+    ctrl: ctrl,
+    base_url: '<?php echo_js($base_url); ?>',
+    mode: '<?php echo_js($pagination_info["mode"]); ?>',
+    startmsg: '<?php echo_js($pagination_info["startmsg"]); ?>',
+    msg: '<?php echo_js($pagination_info["msg"]); ?>',
+    pinned_message_count: '<?php echo_js($pagination_info["pinned_message_count"]); ?>',
 
-    first_page_message: first_message, 
-    last_page_message: get_actual_last_message(), 
-    loaded_message_count: loaded_message_count, 
-    posts_per_page: posts_per_page, 
+    first_page_message: first_message,
+    last_page_message: get_actual_last_message(),
+    loaded_message_count: loaded_message_count,
+    posts_per_page: posts_per_page,
 
-    all_entry_post: all_entry_post 
+    all_entry_post: all_entry_post
   };
-    
+
   return reload_nav_control(params);
 }
 
@@ -181,7 +181,7 @@ function search_user(form)
                                  );
           found_users.options[found_users.options.length] = option;
         }
-        
+
         Forum.fireEvent(found_users, 'change');
       }
       catch(err)
@@ -425,12 +425,12 @@ require_once "topic_post_objects_inc.php";
 
 <?php if(!empty($topic_data["is_private"])): ?>
 
-  <?php 
-  if($fmanager->is_topic_moderator($tid)) 
+  <?php
+  if($fmanager->is_topic_moderator($tid))
     echo_html(text("Moderator"));
   elseif($topic_data["user_id"] == $fmanager->get_user_id())
     echo_html(text("Author"));
-  else  
+  else
     echo_html(text("Member"));
   ?>:<br>
 
@@ -440,20 +440,20 @@ require_once "topic_post_objects_inc.php";
   <?php else: ?>
   <a href="<?php echo($base_url . $gotomsg_appendix); ?>&hide_deleted=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("HideDeleted")); ?></a><br>
   <?php endif; ?>
-  
+
   <?php if(empty($topic_data["deleted"])): ?>
   <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmTopicDelete"), true); ?>", { topic_action: "delete_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" });'><?php echo_html(text("DeleteTopic")); ?></a><br>
   <?php else: ?>
   <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return do_action({ topic_action: "restore_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("RestoreTopic")); ?></a><br>
   <?php endif; ?>
-  
+
   <?php if(empty($topic_data["closed"])): ?>
   <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmTopicClose"), true); ?>", { topic_action: "close_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" });'><?php echo_html(text("CloseTopic")); ?></a><br>
   <?php else: ?>
   <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return do_action({ topic_action: "open_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("OpenTopic")); ?></a><br>
   <?php endif; ?>
   <?php endif; // if topic moderator ?>
-  
+
   <?php if($topic_data["user_id"] == $fmanager->get_user_id() && $topic_data["is_private"] == 2): ?>
   <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return select_private_members()'><?php echo_html(text("ManageMembers")); ?></a>
   <?php endif; ?>
@@ -512,19 +512,19 @@ require_once "topic_post_objects_inc.php";
 
   &nbsp;&nbsp;<?php echo_html(text("Forum")); ?>:
     <div class="select_container">
-      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>" 
-         onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })" 
-         onkeyup="return filter_entries(this, event)" 
+      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>"
+         onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })"
+         onkeyup="return filter_entries(this, event)"
          onfocus="reset_forum_selector(this.id);">
 
       <select id="forum_selector_move_lookup" size="15"
          data-hide-on-show="forum_selection_area"
-         onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
-         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
+         onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }"
+         onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }"
          onkeypress="return forum_move_handle_enter('forum_selector_move', event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })"
       >
 
-      <?php foreach($forum_list as $sfid => $fdata): 
+      <?php foreach($forum_list as $sfid => $fdata):
          if($sfid == $fid) continue;
       ?>
       <option value="<?php echo_html($sfid); ?>"><?php echo_html($fdata["name"]); ?></option>
@@ -585,7 +585,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -629,7 +629,7 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <span class="closed">[<?php echo_html(text("closed_for_guests")); ?>]</span>
 <?php endif; ?>
 
-/ 
+/
 
 <?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
 <span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
@@ -671,7 +671,7 @@ if(!empty($topic_data["new_messages_count"])) $display = "";
 <span class="new">[<?php echo_html(text("downloaded")); ?>]</span>
 <?php endif; ?>
 
-/ 
+/
 
 <?php
 $all_entry_post = $first_message;
@@ -770,16 +770,16 @@ var page_last_author = "<?php echo_js(val_or_empty($pinfo["author"])); ?>";
 var page_last_author_id = "<?php echo_js(val_or_empty($pinfo["user_id"])); ?>";
 var page_last_post_id = <?php echo_js($pinfo["post_id"] ?? 0); ?>;
 var page_last_post_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
-var page_last_post_editable = <?php echo_js($pinfo["editable"] ? "true" : "false"); ?>;
+var page_last_post_editable = <?php echo_js(!empty($pinfo["editable"]) ? "true" : "false"); ?>;
 
 <?php
 $page_last_pipe_author = "";
 $page_last_pipe_author_id = "";
 
-if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
+if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $pinfo["text_content"] ?? "", $matches)) {
     $page_last_pipe_author = $matches[1];
     $page_last_pipe_author_id = $matches[2];
-} elseif (preg_match("/\[kroleg-pipe\]([^\[\]]+)\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
+} elseif (preg_match("/\[kroleg-pipe\]([^\[\]]+)\[\/kroleg-pipe\]/", $pinfo["text_content"] ?? "", $matches)) {
     $page_last_pipe_author = $matches[1];
 }
 ?>
@@ -851,7 +851,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -895,7 +895,7 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <span class="closed">[<?php echo_html(text("closed_for_guests")); ?>]</span>
 <?php endif; ?>
 
-/ 
+/
 
 <?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
 <span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
@@ -937,7 +937,7 @@ if(!empty($topic_data["new_messages_count"])) $display = "";
 <span class="new">[<?php echo_html(text("downloaded")); ?>]</span>
 <?php endif; ?>
 
-/ 
+/
 
 <span class="message_info_bar">
 <?php require "message_info_bar_inc.php"; ?>
@@ -994,9 +994,9 @@ if(!empty($topic_data["new_messages_count"])) $display = "";
 
 <form action="topic.php" id="search_blocked_user_area_form" method="post">
 
-   <?php 
+   <?php
    $caption = text("UnblockUsers");
-   if($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || !empty($_SESSION["privileged_topic_moderator"])): 
+   if($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || !empty($_SESSION["privileged_topic_moderator"])):
    $caption = text("FoundUsers");
    ?>
    <table class="aux_table search_member_area_table" style="width:100%">
@@ -1176,7 +1176,7 @@ if($rcnt > 0)
       {
           $online_status = "&nbsp;<span class='online_text'>✓</span>";
       }
-      
+
       $active_ignorer = "";
       if (empty($uinfo["auto_ignored"])) {
           $active_ignorer = "class='active_ignorer'";
@@ -1210,7 +1210,7 @@ function startup_action()
 
   <?php
   if(!empty($_SESSION["do_write"])):
-  
+
   $container = "";
   if($_SESSION["do_write"] == "first_message") $container = "first_post_container";
   ?>

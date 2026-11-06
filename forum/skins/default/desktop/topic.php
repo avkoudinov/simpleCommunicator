@@ -55,9 +55,9 @@ do_not_check_new = true;
 <?php endif; ?>
 
 var user_tags = {};
-<?php foreach($user_tags as $tgid => $tgname): ?> 
+<?php foreach($user_tags as $tgid => $tgname): ?>
 user_tags['#<?php echo_js($tgid); ?>'] = '<?php echo_js($tgname); ?>';
-<?php endforeach; ?> 
+<?php endforeach; ?>
 
 <?php
 $gotomsg_appendix = "";
@@ -75,24 +75,24 @@ function exec_load_new_posts(highlight_message, target_url)
 
 function exec_reload_nav_control(ctrl, all_entry_post)
 {
-  var params = { 
-    topic: '<?php echo_js($tid); ?>', 
-    forum: '<?php echo_html($fid); ?>', 
-    ctrl: ctrl, 
-    base_url: '<?php echo_js($base_url); ?>', 
-    mode: '<?php echo_js($pagination_info["mode"]); ?>', 
-    startmsg: '<?php echo_js($pagination_info["startmsg"]); ?>', 
-    msg: '<?php echo_js($pagination_info["msg"]); ?>', 
-    pinned_message_count: '<?php echo_js($pagination_info["pinned_message_count"]); ?>', 
+  var params = {
+    topic: '<?php echo_js($tid); ?>',
+    forum: '<?php echo_html($fid); ?>',
+    ctrl: ctrl,
+    base_url: '<?php echo_js($base_url); ?>',
+    mode: '<?php echo_js($pagination_info["mode"]); ?>',
+    startmsg: '<?php echo_js($pagination_info["startmsg"]); ?>',
+    msg: '<?php echo_js($pagination_info["msg"]); ?>',
+    pinned_message_count: '<?php echo_js($pagination_info["pinned_message_count"]); ?>',
 
-    first_page_message: first_message, 
-    last_page_message: get_actual_last_message(), 
-    loaded_message_count: loaded_message_count, 
-    posts_per_page: posts_per_page, 
+    first_page_message: first_message,
+    last_page_message: get_actual_last_message(),
+    loaded_message_count: loaded_message_count,
+    posts_per_page: posts_per_page,
 
-    all_entry_post: all_entry_post 
+    all_entry_post: all_entry_post
   };
-    
+
   return reload_nav_control(params);
 }
 
@@ -181,7 +181,7 @@ function search_user(form)
                                  );
           found_users.options[found_users.options.length] = option;
         }
-        
+
         Forum.fireEvent(found_users, 'change');
       }
       catch(err)
@@ -369,12 +369,12 @@ if(!empty($topic_data["moderators"]))
 
 <?php if(!empty($topic_data["is_private"])): ?>
 
-  <?php 
-  if($fmanager->is_topic_moderator($tid)) 
+  <?php
+  if($fmanager->is_topic_moderator($tid))
     echo_html(text("Moderator"));
   elseif($topic_data["user_id"] == $fmanager->get_user_id())
     echo_html(text("Author"));
-  else  
+  else
     echo_html(text("Member"));
   ?>:
 
@@ -384,32 +384,32 @@ if(!empty($topic_data["moderators"]))
   <?php else: ?>
   <span class="separator">|</span> <a href="<?php echo($base_url . $gotomsg_appendix); ?>&hide_deleted=1&hash=<?php echo_html($_SESSION["hash"]); ?>" onclick="check_actual_hash(this)" class="moderator_link"><?php echo_html(text("HideDeleted")); ?></a>
   <?php endif; ?>
-  
+
   <?php if(empty($topic_data["deleted"])): ?>
   <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmTopicDelete"), true); ?>", { topic_action: "delete_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" });'><?php echo_html(text("DeleteTopic")); ?></a>
   <?php else: ?>
   <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return do_action({ topic_action: "restore_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("RestoreTopic")); ?></a>
   <?php endif; ?>
-  
+
   <?php if(empty($topic_data["closed"])): ?>
   <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmTopicClose"), true); ?>", { topic_action: "close_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" });'><?php echo_html(text("CloseTopic")); ?></a>
   <?php else: ?>
   <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return do_action({ topic_action: "open_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("OpenTopic")); ?></a>
   <?php endif; ?>
-  
+
   <?php endif; // if moderator ?>
 
   <?php if($topic_data["user_id"] == $fmanager->get_user_id() && $topic_data["is_private"] == 2): ?>
-  <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return select_private_members()'><?php echo_html(text("ManageMembers")); ?></a> 
+  <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return select_private_members()'><?php echo_html(text("ManageMembers")); ?></a>
   <?php endif; ?>
-  
+
   <?php if($topic_data["is_private"] != 2 || $topic_data["user_id"] != $fmanager->get_user_id()): ?>
     <?php if($topic_data["user_id"] == $fmanager->get_user_id() && $topic_data["is_private"] == 2): ?>|<?php endif; ?>
-  
+
     <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmLeaveTopic"), true); ?>", { topic_action: "leave_topic", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("LeaveTopic")); ?></a>
   <?php endif; ?>
 
-<?php 
+<?php
 elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager->is_topic_moderator($tid)): ?>
 
 <?php if(empty($_SESSION["show_deleted"])): ?>
@@ -422,7 +422,7 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 
 <?php if($fmanager->is_topic_moderator($tid) && !($fmanager->is_admin() || $fmanager->is_forum_moderator($fid))): ?>
 
-  <?php 
+  <?php
   if(empty($forum_data["no_guests"]) || !empty($forum_data["user_posting_as_guest"])): ?>
     <?php if(empty($topic_data["no_guests"])): ?>
     <span class="separator">|</span> <a href="<?php echo($base_url); ?>" class="moderator_link" onclick='return confirm_action("<?php echo_js(text("MsgConfirmDisallowGuests"), true); ?>", { topic_action: "disallow_guests", topic: "<?php echo_js($tid); ?>", forum: "<?php echo_js($fid); ?>" })'><?php echo_html(text("DisallowGuests")); ?></a>
@@ -458,19 +458,19 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 
   &nbsp;&nbsp;<?php echo_html(text("Forum")); ?>:
     <div class="select_container">
-      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>" 
-         onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })" 
-         onkeyup="return filter_entries(this, event)" 
+      <input type="text" class="search_field" id="forum_selector_move" autocomplete="off" placeholder="<?php echo_html(text("FindForum")); ?>"
+         onkeypress="return forum_move_handle_enter(this.id, event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })"
+         onkeyup="return filter_entries(this, event)"
          onfocus="reset_forum_selector(this.id);">
 
       <select id="forum_selector_move_lookup" size="15"
          data-hide-on-show="forum_selection_area"
-         onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }" 
+         onclick="if(!mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }"
          onchange="if(mustAdjustMultiSelect()) { lookup_move_to_forum('forum_selector_move', { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' }); }"
          onkeypress="return forum_move_handle_enter('forum_selector_move', event, { topic_action: 'move_topic', forum: '<?php echo_js($fid); ?>', topic: '<?php echo_js($tid); ?>' })"
       >
 
-      <?php foreach($forum_list as $sfid => $fdata): 
+      <?php foreach($forum_list as $sfid => $fdata):
          if($sfid == $fid) continue;
       ?>
       <option value="<?php echo_html($sfid); ?>"><?php echo_html($fdata["name"]); ?></option>
@@ -563,32 +563,32 @@ elseif($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || $fmanager
 <a href="<?php echo($base_url . $startmsg_appendix . "&download=1"); ?>"><?php echo_html(text("Download")); ?></a> |
 <?php endif; ?>
 
-<a href="<?php echo($base_url); ?>" onclick='return toggle_filter_actions()'><?php echo_html(text("Filter")); ?></a> 
+<a href="<?php echo($base_url); ?>" onclick='return toggle_filter_actions()'><?php echo_html(text("Filter")); ?></a>
 
   <div id="filter_actions" class="filter_actions" style="display:none">
     <div style="position: absolute;right:2px;top:2px;cursor:pointer" onclick="return toggle_filter_actions()"><img src="<?php echo($view_path); ?>images/cross.png" alt="<?php echo_html(text("Close")); ?>"></div>
 
     <span style="font-weight: bold"><?php echo_html(text("Filter")); ?>:</span><br>
-    
+
     <?php if($fmanager->get_user_name() != ""): ?>
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&author_mode=wrote_post&author=<?php echo(xrawurlencode($fmanager->get_user_name())); ?>&start_from=<?php echo($first_message); ?>"><?php echo_html(text("MyMessages")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&author_mode=wrote_post&author=<?php echo(xrawurlencode($fmanager->get_user_name())); ?>&start_from=<?php echo($first_message); ?>"><?php echo_html(text("MyMessages")); ?></a>
     <?php endif; ?>
 
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&author_mode=wrote_post&author=<?php echo(xrawurlencode($topic_data["author"])); ?>&start_from=<?php echo($first_message); ?>"><?php echo_html(text("TopicAuthorMessages")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&author_mode=wrote_post&author=<?php echo(xrawurlencode($topic_data["author"])); ?>&start_from=<?php echo($first_message); ?>"><?php echo_html(text("TopicAuthorMessages")); ?></a>
 
     <?php if(empty($_SESSION["hide_ignored"]) && $fmanager->has_ignored()): ?>
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&non_ignored_by_author=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("TopicNotIgnoredMessages")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&non_ignored_by_author=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("TopicNotIgnoredMessages")); ?></a>
     <?php endif; ?>
 
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_attachment=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAttachmentsOnly")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_attachment=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAttachmentsOnly")); ?></a>
 
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_picture=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchPicturesOnly")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_picture=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchPicturesOnly")); ?></a>
 
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_video=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchVideosOnly")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_video=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchVideosOnly")); ?></a>
 
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_audio=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAudioOnly")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_audio=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAudioOnly")); ?></a>
 
-    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_adult=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAdultOnly")); ?></a> 
+    <a href="search.php?do_search=1&tid=<?php echo_html($tid); ?>&has_adult=1&start_from=<?php echo($first_message); ?>"><?php echo_html(text("SearchAdultOnly")); ?></a>
   </div>
 
 </div>
@@ -620,7 +620,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -664,7 +664,7 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <span class="closed">[<?php echo_html(text("closed_for_guests")); ?>]</span>
 <?php endif; ?>
 
-/ 
+/
 
 <?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
 <span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
@@ -800,16 +800,16 @@ var page_last_author = "<?php echo_js(val_or_empty($pinfo["author"])); ?>";
 var page_last_author_id = "<?php echo_js(val_or_empty($pinfo["user_id"])); ?>";
 var page_last_post_id = <?php echo_js($pinfo["post_id"] ?? 0); ?>;
 var page_last_post_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
-var page_last_post_editable = <?php echo_js($pinfo["editable"] ? "true" : "false"); ?>;
+var page_last_post_editable = <?php echo_js(!empty($pinfo["editable"]) ? "true" : "false"); ?>;
 
 <?php
 $page_last_pipe_author = "";
 $page_last_pipe_author_id = "";
 
-if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
+if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $pinfo["text_content"] ?? "", $matches)) {
     $page_last_pipe_author = $matches[1];
     $page_last_pipe_author_id = $matches[2];
-} elseif (preg_match("/\[kroleg-pipe\]([^\[\]]+)\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
+} elseif (preg_match("/\[kroleg-pipe\]([^\[\]]+)\[\/kroleg-pipe\]/", $pinfo["text_content"] ?? "", $matches)) {
     $page_last_pipe_author = $matches[1];
 }
 ?>
@@ -817,30 +817,6 @@ if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $p
 var page_last_pipe_author = "<?php echo_js($page_last_pipe_author); ?>";
 var page_last_pipe_author_id = "<?php echo_js($page_last_pipe_author_id); ?>";
 </script>
-
-<script>
-var page_last_author = "<?php echo_js(val_or_empty($pinfo["author"])); ?>";
-var page_last_author_id = "<?php echo_js(val_or_empty($pinfo["user_id"])); ?>";
-var page_last_post_id = <?php echo_js($pinfo["post_id"] ?? 0); ?>;
-var page_last_post_time = <?php echo_js($pinfo["creation_date_sec"] ?? 0); ?>;
-var page_last_post_editable = <?php echo_js($pinfo["editable"] ? "true" : "false"); ?>;
-
-<?php
-$page_last_pipe_author = "";
-$page_last_pipe_author_id = "";
-
-if (preg_match("/\[[^\[\]]+uid=(\d+)[^\[\]]+\]([^\[\]]+):\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
-    $page_last_pipe_author = $matches[1];
-    $page_last_pipe_author_id = $matches[2];
-} elseif (preg_match("/\[kroleg-pipe\]([^\[\]]+)\[\/kroleg-pipe\]/", $pinfo["text_content"], $matches)) {
-    $page_last_pipe_author = $matches[1];
-}
-?>
-
-var page_last_pipe_author = "<?php echo_js($page_last_pipe_author); ?>";
-var page_last_pipe_author_id = "<?php echo_js($page_last_pipe_author_id); ?>";
-</script>
-
 
 
 </div> <!-- foreach post -->
@@ -921,7 +897,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -965,7 +941,7 @@ if(!empty($forum_data["topics_with_new_count"])) $display = "";
 <span class="closed">[<?php echo_html(text("closed_for_guests")); ?>]</span>
 <?php endif; ?>
 
-/ 
+/
 
 <?php if(val_or_empty($topic_data["profiled_topic"]) == 1): ?>
 <span class="topic_type_indicator"><?php echo_html(text("Dedicated")); ?>:</span>
@@ -1066,9 +1042,9 @@ if(!empty($topic_data["new_messages_count"])) $display = "";
 
 <form action="topic.php" id="search_blocked_user_area_form" method="post">
 
-   <?php 
+   <?php
    $caption = text("UnblockUsers");
-   if($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || !empty($_SESSION["privileged_topic_moderator"])): 
+   if($fmanager->is_admin() || $fmanager->is_forum_moderator($fid) || !empty($_SESSION["privileged_topic_moderator"])):
    $caption = text("FoundUsers");
    ?>
    <table class="aux_table search_member_area_table" style="width:100%">
@@ -1223,7 +1199,7 @@ if($rcnt > 0)
       {
           $online_status = "&nbsp;<span class='online_text'>✓</span>";
       }
-      
+
       $active_ignorer = "";
       if (empty($uinfo["auto_ignored"])) {
           $active_ignorer = "class='active_ignorer'";
@@ -1248,7 +1224,7 @@ if($rcnt > 0)
       {
           $online_status = "&nbsp;<span class='online_text'>✓</span>";
       }
-      
+
       $active_ignorer = "";
       if (empty($uinfo["auto_ignored"])) {
           $active_ignorer = "class='active_ignorer'";
@@ -1284,7 +1260,7 @@ function startup_action()
 
   <?php
   if(!empty($_SESSION["do_write"])):
-  
+
   $container = "";
   if($_SESSION["do_write"] == "first_message") $container = "first_post_container";
   ?>
@@ -1337,7 +1313,7 @@ var config = {
     "<?php echo_js(text("November")); ?>",
     "<?php echo_js(text("December")); ?>"
   ],
-  
+
   weekday_names: [
     "<?php echo_js(text("MondayShort")); ?>",
     "<?php echo_js(text("TuesdayShort")); ?>",

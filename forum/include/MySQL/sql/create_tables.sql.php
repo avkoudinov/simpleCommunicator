@@ -2138,6 +2138,7 @@ create table v1_user
    last_events_view_date datetime,
    video_audio_blocked  tinyint not null default 0,
    attachments_blocked  tinyint not null default 0,
+   images_blocked       tinyint not null default 0,
    rating_blocked       tinyint not null default 0,
    time_zone            varchar(255),
    privileged           tinyint not null default 0,

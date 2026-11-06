@@ -1,0 +1,15 @@
+Die Bilderbeschränkung im Forum '{site_name}' wurde aufgehoben 
+
+Sehr geehrte(r) {user_name},
+
+Moderator '{moderator_name}' hat die Bilderbeschränkung für Sie im Forum '{site_name}' aufgehoben
+
+{site_url}
+
+Kommentar des Moderators:
+
+{comment}
+
+Mit freundlichen Grüßen,
+
+Forumsverwaltung

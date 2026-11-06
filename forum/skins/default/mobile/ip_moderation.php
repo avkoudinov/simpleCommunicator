@@ -1,6 +1,6 @@
 <script>
 
-<?php if(!empty($_SESSION["jump_to_log"])): 
+<?php if(!empty($_SESSION["jump_to_log"])):
 unset($_SESSION["jump_to_log"]);
 ?>
 Forum.addXEvent(window, 'load', function () {
@@ -12,10 +12,10 @@ var action_ajax = null;
 
 function activate_ban_checkbox()
 {
-  var elm = document.getElementById("block_ip");  
-  if(elm) 
+  var elm = document.getElementById("block_ip");
+  if(elm)
   {
-    elm.checked = true;    
+    elm.checked = true;
     Forum.fireEvent(elm, "change");
   }
 }
@@ -38,7 +38,7 @@ function toggle_id_info_actions(evid)
   {
     elm.style.display = "block";
     if(document.getElementById("evid_link_" + evid)) focus_field("evid_link_" + evid);
-    
+
     current_displayed_event_id_info = elm;
   }
 
@@ -52,7 +52,7 @@ function do_action()
 
   if(form.elements['type'].value == "ip_users")
   {
-    if(form.elements['ip'].value == "") 
+    if(form.elements['ip'].value == "")
     {
       var mbuttons = [
         {
@@ -94,7 +94,7 @@ function do_action()
           var author_appendix = "";
           var author = document.getElementById("author");
           if(author && author.value) author_appendix = "&author=" + encodeURIComponent(author.value);
-          
+
           delay_redirect('ip_moderation.php?type=<?php echo(reqvar("type")); ?>&ip=' + encodeURIComponent(form.elements['ip'].value) + author_appendix);
           return;
         }
@@ -121,7 +121,7 @@ function do_action()
   var formData = new FormData(form);
 
   formData.append('hash', get_protection_hash());
-  formData.append('user_logged', user_logged);  
+  formData.append('user_logged', user_logged);
   formData.append('moderate_ip', "1");
 
   action_ajax.setFormData(formData);
@@ -134,7 +134,7 @@ function do_action()
 function show_guest_ips(link)
 {
   var elm = document.getElementById("ip");
-  if(!elm || elm.value == "") 
+  if(!elm || elm.value == "")
   {
     var mbuttons = [
       {
@@ -156,7 +156,7 @@ function show_guest_ips(link)
 function show_ip_users(link)
 {
   var elm = document.getElementById("ip");
-  if(!elm || elm.value == "") 
+  if(!elm || elm.value == "")
   {
     var mbuttons = [
       {
@@ -182,7 +182,7 @@ function show_ip_users(link)
 function moderate_ip(link)
 {
   var elm = document.getElementById("ip");
-  if(!elm || elm.value == "") 
+  if(!elm || elm.value == "")
   {
     var mbuttons = [
       {
@@ -208,7 +208,7 @@ function moderate_ip(link)
 function show_um_users(link)
 {
   var elm = document.getElementById("ip");
-  if(!elm || elm.value == "") 
+  if(!elm || elm.value == "")
   {
     var mbuttons = [
       {
@@ -234,7 +234,7 @@ function show_um_users(link)
 function moderate_um(link)
 {
   var elm = document.getElementById("ip");
-  if(!elm || elm.value == "") 
+  if(!elm || elm.value == "")
   {
     var mbuttons = [
       {
@@ -283,7 +283,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -291,8 +291,9 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <span class="closed <?php echo($self_blocked_class); ?>">[<?php echo_html(empty($_SESSION["block_time_left"]) ? text("blocked") : sprintf(text("blocked_until"), $_SESSION["block_time_left"])); ?>]</span>
 <?php endif; ?>
 
-/ <a href="moderation.php"><?php echo_html(text("Moderation")); ?></a> 
+/ <a href="moderation.php"><?php echo_html(text("Moderation")); ?></a>
 
+<?php if ($fmanager->is_admin()): ?>
 / <a href="rm_moderation.php"><?php echo_html(text("ReadmarkerModeration")); ?></a>
 
 / <a href="user_agents.php"><?php echo_html(text("UserAgents")); ?></a>
@@ -300,6 +301,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 / <a href="guest_ips.php"><?php echo_html(text("GuestIPs")); ?></a>
 
 / <a href="tor_ips.php"><?php echo_html(text("TorIPs")); ?></a>
+<?php endif; ?>
 
 / <span class="topic_title_main"><?php echo_html($subtitle); ?></span>
 </div>
@@ -316,7 +318,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <th><?php echo_html($subtitle); ?></th>
 </tr>
 
-<?php 
+<?php
 $aname_appendix = "";
 if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
   $aname_appendix .= "&aname=" . $user_data["aname"];
@@ -558,15 +560,15 @@ echo $ip;
   <?php if(empty($user_data["hidden"]) && !empty($user_data["hidden_by_me"])): ?>
   <br><span class="error_text"><?php echo_html(text("HiddenByMe")); ?></span>
   <?php endif; ?>
-  
+
   <?php if(!empty($user_data["hiding_me"])): ?>
   <br><span class="error_text"><?php echo_html(text("HidingMe")); ?></span>
-  <?php endif; ?>  
-  
+  <?php endif; ?>
+
   <?php if(!empty($user_data["ignored"])): ?>
   <br><span class="error_text"><?php echo_html(text("Ignored")); ?></span>
 
-    <?php if(!empty($user_data["ignored_comment"])): ?> 
+    <?php if(!empty($user_data["ignored_comment"])): ?>
     <div class="ignore_reason">
     <?php echo($user_data["ignored_comment"]); ?>
     </div>
@@ -582,21 +584,21 @@ echo $ip;
   <?php elseif(val_or_empty($user_data["ignoring_me"]) == 3): ?>
   <br><span class="error_text"><?php echo_html(text("IgnoringNewGuests")); ?></span>
   <?php endif; ?>
-  
-  <?php 
+
+  <?php
   $separator = "";
-  if(!empty($user_data["blocked"])): 
+  if(!empty($user_data["blocked"])):
   $separator = "<br>";
   $class = "";
   $death_sign = "";
   if(val_or_empty($user_data["self_blocked"]) == 1) $class = "self_blocked";
-  elseif(val_or_empty($user_data["self_blocked"]) == 2) 
+  elseif(val_or_empty($user_data["self_blocked"]) == 2)
   {
     $class = "author_dead";
     $death_sign = "&nbsp;†";
   }
   ?>
-  
+
   <br><span class="error_text <?php echo($class); ?>"><?php echo_html(empty($user_data["block_expires"]) ? text("Blocked") : sprintf(text("BlockedUntil"), $user_data["block_expires"])); ?><?php echo($death_sign); ?></span>
     <?php if(!empty($user_data["block_time_left"])): ?>
     <span style="color:gray">[<?php echo_html($user_data["block_time_left"]); ?>]</span>
@@ -607,17 +609,17 @@ echo $ip;
   <?php if(!empty($user_data["forum_blocked"])): ?>
   <?php echo($separator); ?>
   <br><?php echo_html(text("ForumBlocking")); ?>:<br>
-  <?php foreach($user_data["forum_blocked"] as $fid => $forum_data): 
+  <?php foreach($user_data["forum_blocked"] as $fid => $forum_data):
     $not_preferred = "";
     if(!empty($_SESSION["ignored_forums"][$fid]) && $forum_data["fid_for_url"] != "private") $not_preferred = "not_preferred";
     ?>
     <br><a href="forum.php?fid=<?php echo_html($forum_data["fid_for_url"]); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($forum_data["name"]); ?></a>
-  
+
     <br><span class="error_text"><?php echo_html(empty($forum_data["block_expires"]) ? text("Blocked") : sprintf(text("BlockedUntil"), $forum_data["block_expires"])); ?></span>
         <?php if(!empty($forum_data["block_time_left"])): ?>
         <span style="color:gray">[<?php echo_html($forum_data["block_time_left"]); ?>]</span>
         <?php endif; ?>
-        
+
   <?php endforeach; ?>
   <?php endif; ?>
 
@@ -854,16 +856,16 @@ if(!empty($_SESSION["ignored_forums"][$fid])) $not_preferred = "not_preferred";
 <?php endif; // user data ?>
 
 <?php if(reqvar("type") == "moderation" || reqvar("type") == "ip_users" ||
-         reqvar("type") == "um_moderation" || reqvar("type") == "um_users"): 
+         reqvar("type") == "um_moderation" || reqvar("type") == "um_users"):
 ?>
 
 <tr>
 <td>
-<?php 
-if(reqvar("type") == "um_moderation" || reqvar("type") == "um_users") 
-  echo_html(text("FingerPrint")); 
+<?php
+if(reqvar("type") == "um_moderation" || reqvar("type") == "um_users")
+  echo_html(text("FingerPrint"));
 else
-  echo_html(text("IPAddress")); 
+  echo_html(text("IPAddress"));
 ?>:</td>
 </tr>
 <tr>
@@ -931,7 +933,7 @@ else
   <?php if(empty($ip_blocked)): ?>
    <tr>
      <td>
-  <input type="checkbox" id="block_ip" name="block_ip"> 
+  <input type="checkbox" id="block_ip" name="block_ip">
      </td>
      <td>
   <label for="block_ip"><?php echo_html(text("Block")); ?></label>
@@ -940,7 +942,7 @@ else
   <?php else: ?>
    <tr>
      <td>
-  <input type="checkbox" id="unblock_ip" name="unblock_ip"> 
+  <input type="checkbox" id="unblock_ip" name="unblock_ip">
      </td>
      <td>
   <label for="unblock_ip"><?php echo_html(text("Unblock")); ?></label>
@@ -1079,7 +1081,7 @@ if(!empty($uifno["user_name"]))
     $user = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uifno["user_name"]) . "' >" . escape_html(text("MasterAdministrator")) . "</a>";
   else
     $user = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uifno["user_name"]) . "' >" . escape_html($uifno["user_name"]) . "</a>";
-  
+
   if(empty($settings["hide_online_status"]) && (!empty($uifno["online"]) || !empty($online_users["g_" . $uifno["user_name"]])))
   {
     $user .= "&nbsp;<span class='online_text'>✓</span>";
@@ -1261,7 +1263,7 @@ if(!empty($uifno["user_name"]))
     $user = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($uifno["user_name"]) . "' >" . escape_html(text("MasterAdministrator")) . "</a>";
   else
     $user = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($uifno["user_name"]) . "' >" . escape_html($uifno["user_name"]) . "</a>";
-  
+
   if(empty($settings["hide_online_status"]) && (!empty($uifno["online"]) || !empty($online_users["g_" . $uifno["user_name"]])))
   {
     $user .= "&nbsp;<span class='online_text'>✓</span>";
@@ -1323,7 +1325,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -1352,7 +1354,7 @@ if(reqvar("type") == "um_moderation")
   $ip .= "&nbsp;<a href='ip_moderation.php?type=um_moderation&ip=" . xrawurlencode(reqvar("ip")) . $author_appendix . "' class='moderator_link $ip_class' title='" . escape_html(text("Moderate")) . "'>$ip_sign</a>";
 else
   $ip .= "&nbsp;<a href='ip_moderation.php?type=moderation&ip=" . xrawurlencode(reqvar("ip")) . $author_appendix . "' class='moderator_link $ip_class' title='" . escape_html(text("Moderate")) . "'>$ip_sign</a>";
-  
+
 echo($ip);
 ?>
 
@@ -1411,7 +1413,7 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
 
   <div id="event_id_info_<?php echo_html($evid); ?>" class="event_id_info_actions" style="display:none">
   <div style="position: absolute;right:2px;top:2px;cursor:pointer" onclick="toggle_id_info_actions('<?php echo_html($evid); ?>')"><img src="<?php echo($view_path); ?>images/cross.png" alt="<?php echo_html(text("Close")); ?>"></div>
-  
+
   <div class="inner_label"><?php echo_html(text("LinkToEvent")); ?>:</div>
     <table class="aux_table">
     <tr>
@@ -1420,7 +1422,7 @@ $selected = (val_or_empty($_SESSION["moderator_log_filter"]["action_name"]) == $
     <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('evid_link_<?php echo_html($evid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
     </tr>
     </table>
-  
+
   </div>
 </div>
 
@@ -1447,7 +1449,7 @@ echo_html(str_ireplace("{time}", $evinfo["action_expires"], ForumManager::get_ac
 $moderator = escape_html($evinfo["moderator_name"]);
 if(!empty($moderator))
 {
-  if(!empty($evinfo["moderator_id"])) 
+  if(!empty($evinfo["moderator_id"]))
     $moderator = "<a href='view_profile.php?uid=" . $evinfo["moderator_id"] . "' >" . $moderator . "</a>";
   else
     $moderator = '<span class="number">' . $moderator . "</span>";
@@ -1479,13 +1481,13 @@ $author = "";
 
 if(!empty($evinfo["author_name"]))
 {
-  if(!empty($evinfo["author_id"])) 
+  if(!empty($evinfo["author_id"]))
     $author .= "<a href='view_profile.php?uid=" . $evinfo["author_id"] . "' >" . escape_html($evinfo["author_name"]) . "</a>";
   elseif($evinfo["author_name"] == "admin")
     $author = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($evinfo["author_name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>";
   else
     $author = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($evinfo["author_name"]) . "'>" . escape_html($evinfo["author_name"]) . "</a>";
-  
+
   if(empty($settings["hide_online_status"]) && (!empty($evinfo["author_online"]) || !empty($online_users["g_" . $evinfo["author_name"]])))
   {
     $author .= "&nbsp;<span class='online_text'>✓</span>";
@@ -1503,7 +1505,7 @@ if($evinfo["action"] == "block_ip" || $evinfo["action"] == "unblock_ip")
       $url = str_ireplace("{ip}", $evinfo["ip"], $settings["whois_server"]);
       $author .= "<a href='$url' target='_blank'>" . escape_html($evinfo["ip"]) . "</a>";
     }
-    
+
     $ip_sign = "✘";
     $ip_class = "ip_moderation";
     if(!empty($evinfo["ip_blocked"]))
@@ -1549,11 +1551,11 @@ $topic = escape_html(postprocess_message($evinfo["topic_name"]));
 if(!empty($topic) && !empty($evinfo["topic_id"]) && !empty($evinfo["topic_id"]))
 {
   $post_appx = "";
-  if(!empty($evinfo["post_id"])) 
+  if(!empty($evinfo["post_id"]))
   {
     $post_appx = " [<a href='topic.php?fid=" . $evinfo["forum_id"] . "&tid=" . $evinfo["topic_id"] . "&msg=" . $evinfo["post_id"] . "' >#" . $evinfo["post_id"] . "</a>]";
   }
-  
+
   $topic = "<a href='topic.php?fid=" . $evinfo["forum_id"] . "&tid=" . $evinfo["topic_id"] . "&gotonew=1' rel='nofollow' >" . $topic . "</a>" . $post_appx;
 }
 ?>
@@ -1616,7 +1618,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";

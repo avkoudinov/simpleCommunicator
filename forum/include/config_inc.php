@@ -189,28 +189,28 @@ ini_set("smtp_port", 25);
 // Database settings
 
 define('DB_TYPE', 'MySQL');
-define('DB_SERVER', '');
-define('DB_NAME', '');
-define('DB_USER', '');
-define('DB_PASSWORD', '');
+define('DB_SERVER', '127.0.0.1');
+define('DB_NAME', 'basename_forum');
+define('DB_USER', 'root');
+define('DB_PASSWORD', 'root');
 define('DB_PREFIX', 'v1');
 
 //// Read 
 
 define('RO_DB_TYPE', 'MySQL');
-define('RO_DB_SERVER', '');
-define('RO_DB_NAME', '');
-define('RO_DB_USER', '');
-define('RO_DB_PASSWORD', '');
+define('RO_DB_SERVER', '127.0.0.1');
+define('RO_DB_NAME', 'basename_forum');
+define('RO_DB_USER', 'root');
+define('RO_DB_PASSWORD', 'root');
 define('RO_DB_PREFIX', 'v1');
 
 //// Search
 
 define('SR_DB_TYPE', 'MySQL');
-define('SR_DB_SERVER', '');
-define('SR_DB_NAME', '');
-define('SR_DB_USER', '');
-define('SR_DB_PASSWORD', '');
+define('SR_DB_SERVER', '127.0.0.1');
+define('SR_DB_NAME', 'basename_forum');
+define('SR_DB_USER', 'root');
+define('SR_DB_PASSWORD', 'root');
 define('SR_DB_PREFIX', 'v1');
 
 define('DB_FT_MIN_WORD_LEN', '3');
