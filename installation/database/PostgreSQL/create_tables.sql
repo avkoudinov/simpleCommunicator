@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     25.10.2026 18:05:00                          */
+/* Created on:     06.11.2026 21:02:56                          */
 /*==============================================================*/
 
 
@@ -2139,6 +2139,7 @@ create table v1_user (
    last_events_view_date TIMESTAMP            null,
    video_audio_blocked  INT2                 not null default 0,
    attachments_blocked  INT2                 not null default 0,
+   images_blocked       INT2                 not null default 0,
    rating_blocked       INT2                 not null default 0,
    time_zone            VARCHAR(255)         null,
    privileged           INT2                 not null default 0,
