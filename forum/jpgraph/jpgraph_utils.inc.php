@@ -423,10 +423,10 @@ Class ReadFileData {
                 return false;
         }
         $tmp = array();
-        $lineofdata = fgetcsv($rh, 1000, $aSepChar, "\"", "\\");
+        $lineofdata = fgetcsv($rh, 1000, ',');
         while ( $lineofdata !== FALSE) {
             $tmp = array_merge($tmp,$lineofdata);
-            $lineofdata = fgetcsv($rh, $aMaxLineLength, $aSepChar, "\"", "\\");
+            $lineofdata = fgetcsv($rh, $aMaxLineLength, $aSepChar);
         }
         fclose($rh);
 
@@ -490,8 +490,8 @@ Class ReadFileData {
         $aLine  = fgetcsv($rh,
                           $aOptions['readlength'],
                           $aOptions['separator'],
-                          $aOptions['enclosure'],
-                          $aOptions['escape']
+                          $aOptions['enclosure']
+                          /*, $aOptions['escape']     # PHP >= 5.3 only */
                           );
 
         // Use numeric array keys for the columns by default
@@ -524,8 +524,8 @@ Class ReadFileData {
             $aLine = fgetcsv($rh,
                              $aOptions['readlength'],
                              $aOptions['separator'],
-                             $aOptions['enclosure'],
-                             $aOptions['escape']
+                             $aOptions['enclosure']
+                             /*, $aOptions['escape']     # PHP >= 5.3 only*/
                 );
         }
 

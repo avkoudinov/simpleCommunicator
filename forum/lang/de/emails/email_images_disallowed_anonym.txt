@@ -1,0 +1,15 @@
+Eine Bilderbeschränkung wurde im Forum '{site_name}' gesetzt 
+
+Sehr geehrte(r) {user_name},
+
+Für Sie wurde eine Bilderbeschränkung im Forum '{site_name}' gesetzt
+
+{site_url}
+
+Grund:
+
+{comment}
+
+Mit freundlichen Grüßen,
+
+Forumsverwaltung

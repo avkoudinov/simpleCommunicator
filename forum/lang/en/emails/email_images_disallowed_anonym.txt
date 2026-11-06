@@ -1,0 +1,15 @@
+Image restriction has been set on the forum '{site_name}' 
+
+Dear {user_name},
+
+An image restriction has been set for you on the forum '{site_name}'
+
+{site_url}
+
+Reason:
+
+{comment}
+
+Best regards,
+
+Forum Administration

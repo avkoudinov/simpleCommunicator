@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 12c                           */
-/* Created on:     25.10.2026 18:07:53                          */
+/* Created on:     06.11.2026 21:03:09                          */
 /*==============================================================*/
 
 
@@ -2178,6 +2178,7 @@ create table v1_user (
    last_events_view_date TIMESTAMP,
    video_audio_blocked  SMALLINT             default 0  not null,
    attachments_blocked  SMALLINT             default 0  not null,
+   images_blocked       SMALLINT             default 0  not null,
    rating_blocked       SMALLINT             default 0  not null,
    time_zone            VARCHAR2(255),
    privileged           SMALLINT             default 0  not null,

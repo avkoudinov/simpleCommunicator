@@ -1,0 +1,21 @@
+{
+  "127.0.0.1": {
+    "forums": [
+      21,
+      31
+    ],
+    "restrictions": [
+      "attachments_blocked",
+      "video_audio_blocked",
+      "images_blocked"
+    ]
+  },
+  "192.168.1.1": {
+    "forums": [
+      31
+    ],
+    "restrictions": [
+      "images_blocked"
+    ]
+  }
+}

@@ -1899,6 +1899,7 @@ create table v1_user (
    rating_blocked       tinyint              not null default 0,
    video_audio_blocked  tinyint              not null default 0,
    attachments_blocked  tinyint              not null default 0,
+   images_blocked       tinyint              not null default 0,
    time_zone            varchar(255)         null,
    privileged           tinyint              not null default 0,
    privileged_topic_moderator tinyint              not null default 0,

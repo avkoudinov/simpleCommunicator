@@ -338,35 +338,35 @@ $GLOBALS['DEF_TEXTS']['en']['ErrUserNameTooLong'] = 'User name cannot contain mo
 $GLOBALS['DEF_TEXTS']['en']['ErrUserCSSTooLong'] = 'The custom CSS is too large. It cannot contain more than %s characters!';
 $GLOBALS['DEF_TEXTS']['en']['ErrEmailTooLong'] = 'Email cannot contain more than %s characters!';
 $GLOBALS['DEF_TEXTS']['en']['ErrPasswordTooLong'] = 'Password cannot contain more than %s characters!';
-$GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccess'] = 'Your user account has been successfully created! 
+$GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccess'] = 'Your user account has been successfully created!
 
-                To complete the registration process, you need to activate your user account by confirming your entered e-mail address by clicking on the activation link that was sent to you.                
+                To complete the registration process, you need to activate your user account by confirming your entered e-mail address by clicking on the activation link that was sent to you.
 
-                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You can also activate your user account by clicking the activation link that was sent to you. 
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You can also activate your user account by clicking the activation link that was sent to you.
 
-                If the activation link email does not arrive, you can log in to the forum and request that the activation link email be resent or change your email address. 
+                If the activation link email does not arrive, you can log in to the forum and request that the activation link email be resent or change your email address.
 
                 If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.
             ';
 $GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccessApproval'] = 'Your user account has been successfully created!
-                
+
                 However, you need to wait for the administrator to confirm your user account!
-                
-                In the meantime, you can now set additional properties for your profile, such as a photo, avatar, signature, etc., and activate your user account by confirming the email address you entered by clicking on the activation link that was sent to you.                
-                
-                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
-                
+
+                In the meantime, you can now set additional properties for your profile, such as a photo, avatar, signature, etc., and activate your user account by confirming the email address you entered by clicking on the activation link that was sent to you.
+
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address.
+
                 If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.';
 $GLOBALS['DEF_TEXTS']['en']['MsgRegistrationSuccessApprovalDelayed'] = 'Your user account has been successfully created!
-            
+
                 However, you need to wait for the administrator to confirm your user account!
-                
+
                 After confirmation, you will be sent an email with a link to activate your user account. Please confirm your entered email address by clicking on this link.
 
-                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You will also be able to set additional properties for your profile.                
-                
-                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
-                
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You will also be able to set additional properties for your profile.
+
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address.
+
                 If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.';
 $GLOBALS['DEF_TEXTS']['en']['MessageEditingAllowed'] = 'Allow editing own messages';
 $GLOBALS['DEF_TEXTS']['en']['RegistrationComment'] = 'After completion of the registration, you will be able to setup additional properties of your user profile like photo, avatar, location, signature etc.';
@@ -709,6 +709,8 @@ $GLOBALS['DEF_TEXTS']['en']['AllowRating'] = 'Allow message rating';
 $GLOBALS['DEF_TEXTS']['en']['DisallowRating'] = 'Disallow message rating';
 $GLOBALS['DEF_TEXTS']['en']['AllowAttachments'] = 'Allow attachments';
 $GLOBALS['DEF_TEXTS']['en']['DisallowAttachments'] = 'Disallow attachments';
+$GLOBALS['DEF_TEXTS']['en']['AllowImages'] = 'Allow images';
+$GLOBALS['DEF_TEXTS']['en']['DisallowImages'] = 'Disallow images';
 $GLOBALS['DEF_TEXTS']['en']['AllowVideoAudio'] = 'Allow audio and video plugins';
 $GLOBALS['DEF_TEXTS']['en']['DisallowVideoAudio'] = 'Disallow message rating';
 $GLOBALS['DEF_TEXTS']['en']['MsgVideoAudioDisallowed'] = 'The audio and video plugin has been disallowed for this user.';
@@ -871,6 +873,7 @@ $GLOBALS['DEF_TEXTS']['en']['MsgRatingDisallowed'] = 'The message rating has bee
 $GLOBALS['DEF_TEXTS']['en']['MsgRatingAllowed'] = 'The message rating has been allowed for this user.';
 $GLOBALS['DEF_TEXTS']['en']['ErrRatingBlocked'] = 'You are disallowed to rate messages!';
 $GLOBALS['DEF_TEXTS']['en']['ErrAttachmentsBlocked'] = 'You are disallowed to post attachments!';
+$GLOBALS['DEF_TEXTS']['en']['ErrImagesBlocked'] = 'You are not allowed to post images!';
 $GLOBALS['DEF_TEXTS']['en']['ErrVideoAudioBlocked'] = 'You are disallowed to plugin video and audio!';
 $GLOBALS['DEF_TEXTS']['en']['ActionRatingDisallowed'] = 'The message rating has been disallowed';
 $GLOBALS['DEF_TEXTS']['en']['ActionRatingAllowed'] = 'The message rating has been allowed';
@@ -882,6 +885,14 @@ $GLOBALS['DEF_TEXTS']['en']['MsgEventAttachmentsAllowed'] = 'The moderator {auth
 $GLOBALS['DEF_TEXTS']['en']['MsgEventAttachmentsAllowedAnonym'] = 'You have been allowed to post attachments.';
 $GLOBALS['DEF_TEXTS']['en']['ActionAttachmentsDisallowed'] = 'The attachment posting has been disallowed';
 $GLOBALS['DEF_TEXTS']['en']['ActionAttachmentsAllowed'] = 'The attachment posting has been allowed';
+$GLOBALS['DEF_TEXTS']['en']['MsgImagesDisallowed'] = 'Image posting has been disabled for this user.';
+$GLOBALS['DEF_TEXTS']['en']['MsgImagesAllowed'] = 'Image posting has been enabled for this user.';
+$GLOBALS['DEF_TEXTS']['en']['MsgEventImagesDisallowed'] = 'The moderator {author} has disabled your ability to post images.';
+$GLOBALS['DEF_TEXTS']['en']['MsgEventImagesDisallowedAnonym'] = 'Image posting has been disabled for you.';
+$GLOBALS['DEF_TEXTS']['en']['MsgEventImagesAllowed'] = 'The moderator {author} has enabled your ability to post images.';
+$GLOBALS['DEF_TEXTS']['en']['MsgEventImagesAllowedAnonym'] = 'Image posting has been enabled for you.';
+$GLOBALS['DEF_TEXTS']['en']['ActionImagesDisallowed'] = 'Image posting disabled';
+$GLOBALS['DEF_TEXTS']['en']['ActionImagesAllowed'] = 'Image posting enabled';
 $GLOBALS['DEF_TEXTS']['en']['ErrModeratorBlockNotAllowed'] = 'A moderator or administrator cannot be blocked!';
 $GLOBALS['DEF_TEXTS']['en']['ErrBlockOnlyGlobal'] = 'Blocking for this reason can only be global und unlimited and not on a forum and not for a certain period!';
 $GLOBALS['DEF_TEXTS']['en']['ErrBlockReasonNotSpecified'] = 'Specify the reason of the blocking or revoking access!';
@@ -1396,19 +1407,19 @@ $GLOBALS['DEF_TEXTS']['en']['PrivacyPolicy'] = 'Privacy policy';
 $GLOBALS['DEF_TEXTS']['en']['PrivacyPolicyShort'] = 'Privacy policy';
 $GLOBALS['DEF_TEXTS']['en']['Maintenance'] = 'Maintenance';
 $GLOBALS['DEF_TEXTS']['en']['MaintenanceLink'] = 'More';
-$GLOBALS['DEF_TEXTS']['en']['MaintenanceComment'] = 'The forum is currently under maintenance presumably until%s 
+$GLOBALS['DEF_TEXTS']['en']['MaintenanceComment'] = 'The forum is currently under maintenance presumably until%s
             (time zone: %s).';
-$GLOBALS['DEF_TEXTS']['en']['MaintenanceNotification'] = 'The forum will be on maintenance presumably 
-            
-            from %s to %s 
+$GLOBALS['DEF_TEXTS']['en']['MaintenanceNotification'] = 'The forum will be on maintenance presumably
+
+            from %s to %s
             time zone: %s
-            
+
             During this period, individual functions or the entire forum may be unavailable!';
 $GLOBALS['DEF_TEXTS']['en']['BackupNotification'] = 'ATTENTION! In the period
-            
-              from %s to %s 
+
+              from %s to %s
               time zone: %s
-            
+
               backup work is being carried out, so the forum may slow down!';
 $GLOBALS['DEF_TEXTS']['en']['CreationLoading'] = 'creation / loading';
 $GLOBALS['DEF_TEXTS']['en']['ErrMessageDoesNotExist'] = 'Message with that ID (%s) does not exist!';
@@ -1582,11 +1593,11 @@ $GLOBALS['DEF_TEXTS']['en']['WarnNotAllAppealed'] = 'The following users will no
 $GLOBALS['DEF_TEXTS']['en']['RequestModeration'] = 'Request moderation rights';
 $GLOBALS['DEF_TEXTS']['en']['ErrSystemMessageСhange'] = 'System message cannot be changed, deleted or moved!';
 $GLOBALS['DEF_TEXTS']['en']['NotSpecified'] = 'Not specified';
-$GLOBALS['DEF_TEXTS']['en']['RegistrationWarning'] = 'ATTENTION! An email with the activation link might get into SPAM or be blocked by your mail server. 
-            
+$GLOBALS['DEF_TEXTS']['en']['RegistrationWarning'] = 'ATTENTION! An email with the activation link might get into SPAM or be blocked by your mail server.
+
                 If the e-mail with the activation link does not come, please contact the administration of the forum over the menu "Contact".';
-$GLOBALS['DEF_TEXTS']['en']['PasswordRestoreWarning'] = 'ATTENTION! An email with the password reset link might get into SPAM or be blocked by your mail server. 
-            
+$GLOBALS['DEF_TEXTS']['en']['PasswordRestoreWarning'] = 'ATTENTION! An email with the password reset link might get into SPAM or be blocked by your mail server.
+
                 If the e-mail with the password reset link does not come, please contact the administration of the forum over the menu "Contact".';
 $GLOBALS['DEF_TEXTS']['en']['MsgTryLogin'] = 'If you have an account, log in to get access!';
 $GLOBALS['DEF_TEXTS']['en']['MsgUserPrivateTopicLeft'] = 'The user has left the private topic';

@@ -1,6 +1,6 @@
 <script>
 
-<?php if(!empty($_SESSION["jump_to_log"])): 
+<?php if(!empty($_SESSION["jump_to_log"])):
 unset($_SESSION["jump_to_log"]);
 ?>
 Forum.addXEvent(window, 'load', function () {
@@ -12,7 +12,7 @@ var action_ajax = null;
 
 function activate_ban_checkbox()
 {
-  var elm = document.getElementById("block_user");  
+  var elm = document.getElementById("block_user");
   if(elm) elm.checked = true;
 }
 
@@ -34,7 +34,7 @@ function toggle_id_info_actions(evid)
   {
     elm.style.display = "block";
     if(document.getElementById("evid_link_" + evid)) focus_field("evid_link_" + evid);
-    
+
     current_displayed_event_id_info = elm;
   }
 
@@ -75,7 +75,7 @@ function do_action()
       {
         Forum.handle_ajax_error(this, err.message, this.last_url, {});
       }
-      
+
       Forum.show_sys_progress_indicator(false);
     };
 
@@ -93,7 +93,7 @@ function do_action()
   var formData = new FormData(form);
 
   formData.append('hash', get_protection_hash());
-  formData.append('user_logged', user_logged);  
+  formData.append('user_logged', user_logged);
   formData.append('moderate_user', "1");
 
   action_ajax.setFormData(formData);
@@ -124,7 +124,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -132,7 +132,7 @@ elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "auth
 <span class="closed <?php echo($self_blocked_class); ?>">[<?php echo_html(empty($_SESSION["block_time_left"]) ? text("blocked") : sprintf(text("blocked_until"), $_SESSION["block_time_left"])); ?>]</span>
 <?php endif; ?>
 
-/ <a href="moderation.php"><?php echo_html(text("Moderation")); ?></a> / 
+/ <a href="moderation.php"><?php echo_html(text("Moderation")); ?></a> /
 
 <span class="topic_title_main"><?php echo_html($fmanager->is_moderator() ? text("ModerateUser") : text("ModeratorLog")); ?></span>
 
@@ -256,15 +256,15 @@ if(!empty($user_data["avatar"]))
   <?php if(empty($user_data["hidden"]) && !empty($user_data["hidden_by_me"])): ?>
   <br><span class="error_text"><?php echo_html(text("HiddenByMe")); ?></span>
   <?php endif; ?>
-  
+
   <?php if(!empty($user_data["hiding_me"])): ?>
   <br><span class="error_text"><?php echo_html(text("HidingMe")); ?></span>
-  <?php endif; ?>  
-  
+  <?php endif; ?>
+
   <?php if(!empty($user_data["ignored"])): ?>
   <br><span class="error_text"><?php echo_html(text("Ignored")); ?></span>
 
-    <?php if(!empty($user_data["ignored_comment"])): ?> 
+    <?php if(!empty($user_data["ignored_comment"])): ?>
     <div class="ignore_reason">
     <?php echo($user_data["ignored_comment"]); ?>
     </div>
@@ -280,42 +280,42 @@ if(!empty($user_data["avatar"]))
   <?php elseif(val_or_empty($user_data["ignoring_me"]) == 3): ?>
   <br><span class="error_text"><?php echo_html(text("IgnoringNewGuests")); ?></span>
   <?php endif; ?>
-  
-  <?php 
+
+  <?php
   $separator = "";
-  if(!empty($user_data["blocked"])): 
+  if(!empty($user_data["blocked"])):
   $separator = "<br>";
   $class = "";
   $death_sign = "";
   if(val_or_empty($user_data["self_blocked"]) == 1) $class = "self_blocked";
-  elseif(val_or_empty($user_data["self_blocked"]) == 2) 
+  elseif(val_or_empty($user_data["self_blocked"]) == 2)
   {
     $class = "author_dead";
     $death_sign = "&nbsp;†";
   }
   ?>
-  
+
   <br><span class="error_text <?php echo($class); ?>"><?php echo_html(empty($user_data["block_expires"]) ? text("Blocked") : sprintf(text("BlockedUntil"), $user_data["block_expires"])); ?><?php echo($death_sign); ?></span>
     <?php if(!empty($user_data["block_time_left"])): ?>
     <span style="color:gray">[<?php echo_html($user_data["block_time_left"]); ?>]</span>
     <?php endif; ?>
 
   <?php endif; ?>
-  
+
   <?php if(!empty($user_data["forum_blocked"])): ?>
   <?php echo($separator); ?>
   <br><?php echo_html(text("ForumBlocking")); ?>:<br>
-  <?php foreach($user_data["forum_blocked"] as $fid => $forum_data): 
+  <?php foreach($user_data["forum_blocked"] as $fid => $forum_data):
     $not_preferred = "";
     if(!empty($_SESSION["ignored_forums"][$fid]) && $forum_data["fid_for_url"] != "private") $not_preferred = "not_preferred";
     ?>
     <br><a href="forum.php?fid=<?php echo_html($forum_data["fid_for_url"]); ?>" class="<?php echo($not_preferred); ?>"><?php echo_html($forum_data["name"]); ?></a>
-  
+
     <br><span class="error_text"><?php echo_html(empty($forum_data["block_expires"]) ? text("Blocked") : sprintf(text("BlockedUntil"), $forum_data["block_expires"])); ?></span>
         <?php if(!empty($forum_data["block_time_left"])): ?>
         <span style="color:gray">[<?php echo_html($forum_data["block_time_left"]); ?>]</span>
         <?php endif; ?>
-        
+
   <?php endforeach; ?>
   <?php endif; ?>
 
@@ -497,7 +497,7 @@ if(!empty($_SESSION["ignored_forums"][$fid])) $not_preferred = "not_preferred";
 <tr>
 <td></td>
 <td>
-<a href="profile.php" class="moderator_link"><?php echo_html(text("ProfileSettings")); ?></a> 
+<a href="profile.php" class="moderator_link"><?php echo_html(text("ProfileSettings")); ?></a>
 </td>
 </tr>
 
@@ -509,7 +509,7 @@ $aname_appendix = "";
 if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
   $aname_appendix .= "&aname=" . $user_data["aname"];
 ?>
-<a href="ip_moderation.php?type=user_ips&user=<?php echo(xrawurlencode($user_data["user_name"])); ?><?php echo($aname_appendix); ?>" class="moderator_link"><?php echo_html(text("ShowAuthorIPs")); ?></a> 
+<a href="ip_moderation.php?type=user_ips&user=<?php echo(xrawurlencode($user_data["user_name"])); ?><?php echo($aname_appendix); ?>" class="moderator_link"><?php echo_html(text("ShowAuthorIPs")); ?></a>
 </td>
 </tr>
 
@@ -518,7 +518,7 @@ if(!empty($user_data["aname"]) && $user_data["aname"] != "admin")
 
 
 
-<?php if($fmanager->is_moderator()): 
+<?php if($fmanager->is_moderator()):
 $moderator_caption = $fmanager->is_admin() ? text("Administrator") : text("Moderator");
 ?>
 
@@ -535,10 +535,10 @@ $moderator_caption = $fmanager->is_admin() ? text("Administrator") : text("Moder
 
 <tr>
 <td>
-<?php 
-if(!empty($moderator_caption)) 
+<?php
+if(!empty($moderator_caption))
 {
-  echo_html($moderator_caption . ": "); 
+  echo_html($moderator_caption . ": ");
   $moderator_caption = "";
 }
 ?>
@@ -558,10 +558,10 @@ if(!empty($moderator_caption))
 <?php if(!empty($settings["rates_active"])): ?>
 <tr>
 <td>
-<?php 
-if(!empty($moderator_caption)) 
+<?php
+if(!empty($moderator_caption))
 {
-  echo_html($moderator_caption . ": "); 
+  echo_html($moderator_caption . ": ");
   $moderator_caption = "";
 }
 ?>
@@ -578,10 +578,10 @@ if(!empty($moderator_caption))
 
 <tr>
 <td>
-<?php 
-if(!empty($moderator_caption)) 
+<?php
+if(!empty($moderator_caption))
 {
-  echo_html($moderator_caption . ": "); 
+  echo_html($moderator_caption . ": ");
   $moderator_caption = "";
 }
 ?>
@@ -593,10 +593,10 @@ if(!empty($moderator_caption))
 
 <tr>
 <td>
-<?php 
-if(!empty($moderator_caption)) 
+<?php
+if(!empty($moderator_caption))
 {
-  echo_html($moderator_caption . ": "); 
+  echo_html($moderator_caption . ": ");
   $moderator_caption = "";
 }
 ?>
@@ -639,7 +639,7 @@ if(!empty($moderator_caption))
      <input type="checkbox" id="forum_access_<?php echo_html($fid); ?>" name="forum_access[<?php echo_html($fid); ?>]" value="1" <?php echo($checked); ?>>
      </td>
      <td>
-     <label for="forum_access_<?php echo_html($fid); ?>"><?php echo_html($fname); ?></label> 
+     <label for="forum_access_<?php echo_html($fid); ?>"><?php echo_html($fname); ?></label>
      </td>
    </tr>
   <?php endforeach; ?>
@@ -655,10 +655,10 @@ if(!empty($moderator_caption))
 <?php endif; ?>
 
 
-<?php 
+<?php
 if(!empty($user_data["forum_blocked"])) $user_data["forum_blocked"] = array_intersect_key($user_data["forum_blocked"], $moderated_forum_list);
 
-if(!empty($user_data["forum_blocked"])): 
+if(!empty($user_data["forum_blocked"])):
 ?>
 
 <tr>
@@ -677,13 +677,13 @@ if(!empty($user_data["forum_blocked"])):
      </td>
      <td>
   <label for="unblock_user_for_forum_<?php echo_html($fid); ?>"><?php echo_html($forum_data["name"]); ?>
-  
+
     <br><span class="error_text"><?php echo_html(empty($forum_data["block_expires"]) ? text("Blocked") : sprintf(text("BlockedUntil"), $forum_data["block_expires"])); ?></span>
         <?php if(!empty($forum_data["block_time_left"])): ?>
         <span style="color:gray">[<?php echo_html($forum_data["block_time_left"]); ?>]</span>
         <?php endif; ?>
-    
-  </label> 
+
+  </label>
      </td>
    </tr>
   <?php endforeach; ?>
@@ -711,7 +711,7 @@ if(!empty($user_data["forum_blocked"])):
     <?php if(empty($user_data["hidden"])): ?>
      <tr>
        <td>
-    <input type="checkbox" id="hide_profile" name="hide_profile"> 
+    <input type="checkbox" id="hide_profile" name="hide_profile">
        </td>
        <td>
     <label for="hide_profile"><?php echo_html(text("HideProfile")); ?></label>
@@ -720,19 +720,19 @@ if(!empty($user_data["forum_blocked"])):
     <?php else: ?>
      <tr>
        <td>
-    <input type="checkbox" id="open_profile" name="open_profile"> 
+    <input type="checkbox" id="open_profile" name="open_profile">
        </td>
        <td>
     <label for="open_profile"><?php echo_html(text("OpenProfile")); ?></label>
        </td>
      </tr>
     <?php endif; ?>
-    
+
     <?php if(!empty($settings["rates_active"])): ?>
       <?php if(empty($user_data["rating_blocked"])): ?>
        <tr>
          <td>
-      <input type="checkbox" id="disallow_rating" name="disallow_rating"> 
+      <input type="checkbox" id="disallow_rating" name="disallow_rating">
          </td>
          <td>
       <label for="disallow_rating"><?php echo_html(text("DisallowRating")); ?></label>
@@ -741,7 +741,7 @@ if(!empty($user_data["forum_blocked"])):
       <?php else: ?>
        <tr>
          <td>
-      <input type="checkbox" id="allow_rating" name="allow_rating"> 
+      <input type="checkbox" id="allow_rating" name="allow_rating">
          </td>
          <td>
       <label for="allow_rating"><?php echo_html(text("AllowRating")); ?></label>
@@ -749,11 +749,11 @@ if(!empty($user_data["forum_blocked"])):
        </tr>
       <?php endif; ?>
     <?php endif; ?>
-    
+
     <?php if(empty($user_data["attachments_blocked"])): ?>
      <tr>
        <td>
-    <input type="checkbox" id="disallow_attachments" name="disallow_attachments"> 
+    <input type="checkbox" id="disallow_attachments" name="disallow_attachments">
        </td>
        <td>
     <label for="disallow_attachments"><?php echo_html(text("DisallowAttachments")); ?></label>
@@ -762,18 +762,41 @@ if(!empty($user_data["forum_blocked"])):
     <?php else: ?>
      <tr>
        <td>
-    <input type="checkbox" id="allow_attachments" name="allow_attachments"> 
+    <input type="checkbox" id="allow_attachments" name="allow_attachments">
        </td>
        <td>
     <label for="allow_attachments"><?php echo_html(text("AllowAttachments")); ?></label>
        </td>
      </tr>
     <?php endif; ?>
-    
+
+    <?php if (empty($user_data["images_blocked"])): ?>
+        <tr>
+            <td>
+                <input type="checkbox" id="disallow_images" name="disallow_images">
+            </td>
+            <td>
+                <label for="disallow_images"><?php echo_html(text("DisallowImages")); ?>
+                </label>
+            </td>
+        </tr>
+    <?php else: ?>
+        <tr>
+            <td>
+                <input type="checkbox" id="allow_images" name="allow_images">
+            </td>
+            <td>
+                <label for="allow_images">
+                    <?php echo_html(text("AllowImages")); ?>
+                </label>
+            </td>
+        </tr>
+    <?php endif; ?>
+
     <?php if(empty($user_data["video_audio_blocked"])): ?>
      <tr>
        <td>
-    <input type="checkbox" id="disallow_video_audio" name="disallow_video_audio"> 
+    <input type="checkbox" id="disallow_video_audio" name="disallow_video_audio">
        </td>
        <td>
     <label for="disallow_video_audio"><?php echo_html(text("DisallowVideoAudio")); ?></label>
@@ -782,14 +805,14 @@ if(!empty($user_data["forum_blocked"])):
     <?php else: ?>
      <tr>
        <td>
-    <input type="checkbox" id="allow_video_audio" name="allow_video_audio"> 
+    <input type="checkbox" id="allow_video_audio" name="allow_video_audio">
        </td>
        <td>
     <label for="allow_video_audio"><?php echo_html(text("AllowVideoAudio")); ?></label>
        </td>
      </tr>
     <?php endif; ?>
-    
+
    </table>
 </td>
 </tr>
@@ -805,7 +828,7 @@ if(!empty($user_data["forum_blocked"])):
      <table class="checkbox_table">
      <tr>
        <td>
-        <input type="checkbox" id="unblock_user" name="unblock_user"> 
+        <input type="checkbox" id="unblock_user" name="unblock_user">
        </td>
        <td>
         <label for="unblock_user"><?php echo_html(text("Unblock")); ?></label>
@@ -831,7 +854,7 @@ if(!empty($user_data["forum_blocked"])):
    <table class="checkbox_table">
    <tr>
      <td>
-     <input type="checkbox" id="block_user" name="block_user"> 
+     <input type="checkbox" id="block_user" name="block_user">
      </td>
      <td>
      <label for="block_user"><?php echo_html(text("Block")); ?></label>
@@ -969,7 +992,7 @@ if(!empty($topics_with_new_count)) $display = "";
 <span class="closed">[<?php echo_html(text("notActivated")); ?>]</span>
 <?php elseif($fmanager->is_logged_in() && empty($_SESSION["approved"])): ?>
 <span class="closed">[<?php echo_html(text("notApproved")); ?>]</span>
-<?php elseif(!empty($_SESSION["blocked"])): 
+<?php elseif(!empty($_SESSION["blocked"])):
 $self_blocked_class = "";
 if(val_or_empty($_SESSION["self_blocked"]) == 1) $self_blocked_class = "self_blocked";
 elseif(val_or_empty($_SESSION["self_blocked"]) == 2) $self_blocked_class = "author_dead";
@@ -1050,7 +1073,7 @@ $forum_selector_id = 2;
 $moderator = "";
 if(!empty($evinfo["moderator_name"]))
 {
-  if(!empty($evinfo["moderator_id"])) 
+  if(!empty($evinfo["moderator_id"]))
     $moderator = "<a href='view_profile.php?uid=" . $evinfo["moderator_id"] . "' >" . escape_html($evinfo["moderator_name"]) . "</a>";
   elseif($evinfo["moderator_name"] == "#system#")
     $moderator = escape_html(text("System"));
@@ -1098,13 +1121,13 @@ echo_html(str_ireplace("{time}", $evinfo["action_expires"], ForumManager::get_ac
 $author = "";
 if(!empty($evinfo["author_name"]))
 {
-  if(!empty($evinfo["author_id"])) 
+  if(!empty($evinfo["author_id"]))
     $author = "<a href='view_profile.php?uid=" . $evinfo["author_id"] . "' >" . escape_html($evinfo["author_name"]) . "</a>";
   elseif($evinfo["author_name"] == "admin")
     $author = "<a class='admin_link' href='view_guest_profile.php?guest=" . xrawurlencode($evinfo["author_name"]) . "'>" . escape_html(text("MasterAdministrator")) . "</a>";
   else
     $author = "<a class='guest_link' href='view_guest_profile.php?guest=" . xrawurlencode($evinfo["author_name"]) . "'>" . escape_html($evinfo["author_name"]) . "</a>";
-  
+
   if(empty($settings["hide_online_status"]) && (!empty($evinfo["author_online"]) || !empty($online_users["g_" . $evinfo["author_name"]])))
   {
     $author .= "&nbsp;<span class='online_text'>✓</span>";
@@ -1114,7 +1137,7 @@ if(!empty($evinfo["author_name"]))
 if($evinfo["action"] == "block_ip" || $evinfo["action"] == "unblock_ip")
 {
   if(!empty($author)) $author .= ", ";
-  
+
   if(($fmanager->is_moderator() && $fmanager->may_see_ip()) || $evinfo["ip"] == System::getIPAddress())
   {
     if(!empty($settings["whois_server"]))
@@ -1122,7 +1145,7 @@ if($evinfo["action"] == "block_ip" || $evinfo["action"] == "unblock_ip")
       $url = str_ireplace("{ip}", $evinfo["ip"], $settings["whois_server"]);
       $author .= "<a href='$url' target='_blank'>" . escape_html($evinfo["ip"]) . "</a>";
     }
-    
+
     $ip_sign = "✘";
     $ip_class = "ip_moderation";
     if(!empty($evinfo["ip_blocked"]))
@@ -1169,11 +1192,11 @@ $topic = escape_html(postprocess_message($evinfo["topic_name"]));
 if(!empty($topic) && !empty($evinfo["topic_id"]) && !empty($evinfo["topic_id"]))
 {
   $post_appx = "";
-  if(!empty($evinfo["post_id"])) 
+  if(!empty($evinfo["post_id"]))
   {
     $post_appx = " &nbsp;[<a href='topic.php?fid=" . $evinfo["forum_id"] . "&tid=" . $evinfo["topic_id"] . "&msg=" . $evinfo["post_id"] . "' >#" . $evinfo["post_id"] . "</a>]";
   }
-  
+
   $topic = "<a href='topic.php?fid=" . $evinfo["forum_id"] . "&tid=" . $evinfo["topic_id"] . "&gotonew=1' rel='nofollow' >" . $topic . "</a>" . $post_appx;
 }
 echo($topic);
@@ -1199,7 +1222,7 @@ echo($forum);
     <div style="position: relative">
       <div id="event_id_info_<?php echo_html($evid); ?>" class="event_id_info_actions" style="display:none">
       <div style="position: absolute;right:2px;top:2px;cursor:pointer" onclick="toggle_id_info_actions('<?php echo_html($evid); ?>')"><img src="<?php echo($view_path); ?>images/cross.png" alt="<?php echo_html(text("Close")); ?>"></div>
-      
+
       <div class="inner_label"><?php echo_html(text("Link")); ?>:</div>
         <table class="aux_table">
         <tr>
@@ -1217,10 +1240,10 @@ echo($forum);
         <td><input type="button" class="standard_button" value="&nbsp;" onclick="focus_field('evid_levt_<?php echo_html($evid); ?>')" title="<?php echo_html(text("MarkForCopy")); ?>"></td>
         </tr>
         </table>
-      
+
       </div>
     </div>
-    
+
     <div onclick="toggle_id_info_actions('<?php echo_html($evid); ?>')">
     &nbsp;
     </div>
@@ -1246,7 +1269,7 @@ echo($forum);
 $display = "style='display:none'";
 if(!empty($topics_with_new_count)) $display = "";
 ?>
-<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span> 
+<span class="new topics_with_new_indicator" <?php echo($display); ?>>[<a rel="nofollow" href="new_messages.php"><?php echo_html(text("new")); ?>:<span class='topics_with_new_count'><?php echo($topics_with_new_count); ?></span></a>]</span>
 
 / <a href="moderation_log.php"><?php echo_html(text("ModeratorLog")); ?></a>:
 <a href="view_profile.php?uid=<?php echo_html($user_data["id"]); ?>"><?php echo_html($user_data["user_name"]); ?></a>

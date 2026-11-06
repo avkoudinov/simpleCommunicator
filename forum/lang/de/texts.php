@@ -338,35 +338,35 @@ $GLOBALS['DEF_TEXTS']['de']['ErrUserNameTooLong'] = 'Benutzername kann höchsten
 $GLOBALS['DEF_TEXTS']['de']['ErrUserCSSTooLong'] = 'Das benutzerdefinierte CSS ist zu groß. Es darf nicht mehr als %s Zeichen enthalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrEmailTooLong'] = 'E-Mail kann höchstens %s Zeichen beinhalten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrPasswordTooLong'] = 'Passwort darf höchstens %s Zeichen beinhalten!';
-$GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccess'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt! 
+$GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccess'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt!
 
-                Um den Registrierungsprozess abzuschließen, müssen Sie Ihr Benutzerkonto aktivieren, indem Sie die eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
+                Um den Registrierungsprozess abzuschließen, müssen Sie Ihr Benutzerkonto aktivieren, indem Sie die eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.
 
-                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto aktivieren, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde. 
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto aktivieren, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.
 
-                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern.
 
                 Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".
             ';
 $GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccessApproval'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt!
-                
+
                 Sie müssen jedoch noch auf die Bestätigung Ihres Kontos durch den Administrator warten!
-                
-                In der Zwischenzeit können Sie weitere Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw., und Ihr Benutzerkonto aktivieren, indem Sie die von Ihnen eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
-                
-                Wenn Sie keine E-Mail mit dem Aktivierungslink erhalten, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
-                
+
+                In der Zwischenzeit können Sie weitere Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw., und Ihr Benutzerkonto aktivieren, indem Sie die von Ihnen eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.
+
+                Wenn Sie keine E-Mail mit dem Aktivierungslink erhalten, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern.
+
                 Wenn Sie die E-Mail immer noch nicht erhalten haben, kontaktieren Sie bitte die Forum-Administration über das Menü "Kontakt".';
 $GLOBALS['DEF_TEXTS']['de']['MsgRegistrationSuccessApprovalDelayed'] = 'Ihr Benutzerkonto wurde erfolgreich erstellt!
-            
+
                 Sie müssen jedoch auf die Bestätigung Ihres Kontos durch den Administrator warten!
-                
+
                 Nach der Bestätigung wird Ihnen eine E-Mail mit einem Link zur Aktivierung Ihres Kontos zugesandt. Bitte bestätigen Sie Ihre eingegebene E-Mail-Adresse, indem Sie auf diesen Link klicken.
 
-                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto auch aktivieren, indem Sie auf diesen Link klicken.                
-                
-                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
-                
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto auch aktivieren, indem Sie auf diesen Link klicken.
+
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern.
+
                 Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".';
 $GLOBALS['DEF_TEXTS']['de']['MessageEditingAllowed'] = 'Bearbeiten eigener Nachrichten erlauben';
 $GLOBALS['DEF_TEXTS']['de']['RegistrationComment'] = 'Nach der Registirierung können Sie weitere Eigenschaften Ihres Benutzerprofils wie Foto, Avatar, Ort usw. festlegen.';
@@ -709,6 +709,8 @@ $GLOBALS['DEF_TEXTS']['de']['AllowRating'] = 'Nachrichtenbewertung erlauben';
 $GLOBALS['DEF_TEXTS']['de']['DisallowRating'] = 'Nachrichtenbewertung verbieten';
 $GLOBALS['DEF_TEXTS']['de']['AllowAttachments'] = 'Anhänge erlauben';
 $GLOBALS['DEF_TEXTS']['de']['DisallowAttachments'] = 'Anhänge verbieten';
+$GLOBALS['DEF_TEXTS']['de']['AllowImages'] = 'Bilder erlauben';
+$GLOBALS['DEF_TEXTS']['de']['DisallowImages'] = 'Bilder verbieten';
 $GLOBALS['DEF_TEXTS']['de']['AllowVideoAudio'] = 'Audio- und Video-Plugins erlauben';
 $GLOBALS['DEF_TEXTS']['de']['DisallowVideoAudio'] = 'Nachrichtenbewertung verbieten';
 $GLOBALS['DEF_TEXTS']['de']['MsgVideoAudioDisallowed'] = 'Die Einpluggen von Video und Audio wurde dem Benutzer verboten.';
@@ -870,7 +872,8 @@ $GLOBALS['DEF_TEXTS']['de']['ActionProfileOpened'] = 'Profil wurde aufgemacht';
 $GLOBALS['DEF_TEXTS']['de']['MsgRatingDisallowed'] = 'Die Nachrichtenbewertung wurde dem Benutzer verboten.';
 $GLOBALS['DEF_TEXTS']['de']['MsgRatingAllowed'] = 'Die Nachrichtenbewertung wurde dem Benutzer erlaubt.';
 $GLOBALS['DEF_TEXTS']['de']['ErrRatingBlocked'] = 'Ihnen ist verboten, die Nachrichten zu beweren!';
-$GLOBALS['DEF_TEXTS']['de']['ErrAttachmentsBlocked'] = 'Ihnen ist verboten, die Anhänge zu post!';
+$GLOBALS['DEF_TEXTS']['de']['ErrAttachmentsBlocked'] = 'Ihnen ist verboten, die Anhänge zu posten!';
+$GLOBALS['DEF_TEXTS']['de']['ErrImagesBlocked'] = 'Es ist Ihnen untersagt, Bilder zu posten!';
 $GLOBALS['DEF_TEXTS']['de']['ErrVideoAudioBlocked'] = 'Ihnen ist verboten, Videos und Audiodateien einzufügen!';
 $GLOBALS['DEF_TEXTS']['de']['ActionRatingDisallowed'] = 'Die Nachrichtenbewertung wurde verboten';
 $GLOBALS['DEF_TEXTS']['de']['ActionRatingAllowed'] = 'Die Nachrichtenbewertung wurde erlaubt';
@@ -882,6 +885,14 @@ $GLOBALS['DEF_TEXTS']['de']['MsgEventAttachmentsAllowed'] = 'Der Moderator {auth
 $GLOBALS['DEF_TEXTS']['de']['MsgEventAttachmentsAllowedAnonym'] = 'Ihnen wurde die Anhang-Veröffentlichung erlaubt.';
 $GLOBALS['DEF_TEXTS']['de']['ActionAttachmentsDisallowed'] = 'Die Anhang-Veröffentlichung wurde verboten';
 $GLOBALS['DEF_TEXTS']['de']['ActionAttachmentsAllowed'] = 'Die Anhang-Veröffentlichung wurde erlaubt';
+$GLOBALS['DEF_TEXTS']['de']['MsgImagesDisallowed'] = 'Das Posten von Bildern wurde für diesen Benutzer deaktiviert.';
+$GLOBALS['DEF_TEXTS']['de']['MsgImagesAllowed'] = 'Das Posten von Bildern wurde für diesen Benutzer aktiviert.';
+$GLOBALS['DEF_TEXTS']['de']['MsgEventImagesDisallowed'] = 'Der Moderator {author} hat Ihnen das Posten von Bildern verboten.';
+$GLOBALS['DEF_TEXTS']['de']['MsgEventImagesDisallowedAnonym'] = 'Das Posten von Bildern wurde für Sie deaktiviert.';
+$GLOBALS['DEF_TEXTS']['de']['MsgEventImagesAllowed'] = 'Der Moderator {author} hat Ihnen das Posten von Bildern erlaubt.';
+$GLOBALS['DEF_TEXTS']['de']['MsgEventImagesAllowedAnonym'] = 'Das Posten von Bildern wurde für Sie aktiviert.';
+$GLOBALS['DEF_TEXTS']['de']['ActionImagesDisallowed'] = 'Bilderverbot';
+$GLOBALS['DEF_TEXTS']['de']['ActionImagesAllowed'] = 'Bilderlaubnis';
 $GLOBALS['DEF_TEXTS']['de']['ErrModeratorBlockNotAllowed'] = 'Ein Moderator oder Administrator kann nicht geblockt werden!';
 $GLOBALS['DEF_TEXTS']['de']['ErrBlockOnlyGlobal'] = 'Blockierung aus diesem Grund kann nur global und unbefristet sein und nicht auf ein Forum und nicht für einen Zeitraum!';
 $GLOBALS['DEF_TEXTS']['de']['ErrBlockReasonNotSpecified'] = 'Geben Sie bitte den Grund der Blockierung oder der Wegnahme des Zugriffs an!';
@@ -1396,19 +1407,19 @@ $GLOBALS['DEF_TEXTS']['de']['PrivacyPolicy'] = 'Datenschutzbestimmungen';
 $GLOBALS['DEF_TEXTS']['de']['PrivacyPolicyShort'] = 'Datenschutzbest.';
 $GLOBALS['DEF_TEXTS']['de']['Maintenance'] = 'Wartung';
 $GLOBALS['DEF_TEXTS']['de']['MaintenanceLink'] = 'Mehr Info';
-$GLOBALS['DEF_TEXTS']['de']['MaintenanceComment'] = 'Das Forum wird momentan gewartet, voraussichtlich bis %s 
+$GLOBALS['DEF_TEXTS']['de']['MaintenanceComment'] = 'Das Forum wird momentan gewartet, voraussichtlich bis %s
             (Zeitzone: %s).';
-$GLOBALS['DEF_TEXTS']['de']['MaintenanceNotification'] = 'Das Forum wird voraussichtlich 
-            
-            von %s bis %s 
+$GLOBALS['DEF_TEXTS']['de']['MaintenanceNotification'] = 'Das Forum wird voraussichtlich
+
+            von %s bis %s
             Zeitzone: %s
-            
+
             gewartet. Während dieser Zeit kann es sein, dass einige Funktionen oder das gesamte Forum nicht verfügbar sind!';
 $GLOBALS['DEF_TEXTS']['de']['BackupNotification'] = 'ACHTUNG! Im Zeitraum
-            
-             von %s bis %s 
+
+             von %s bis %s
              Zeitzone: %s
-            
+
              werden Backup-Arbeiten durchgeführt, daher kann die Geschwindigkeit des Forums abnehmen!';
 $GLOBALS['DEF_TEXTS']['de']['CreationLoading'] = 'Erstellen / Laden';
 $GLOBALS['DEF_TEXTS']['de']['ErrMessageDoesNotExist'] = 'Nachricht mit dieser ID (%s) existiert nicht!';
@@ -1583,10 +1594,10 @@ $GLOBALS['DEF_TEXTS']['de']['RequestModeration'] = 'Moderatoren-Rechte anfragen'
 $GLOBALS['DEF_TEXTS']['de']['ErrSystemMessageСhange'] = 'System-Meldung kann nicht geändert, gelöscht oder verschoben werden!';
 $GLOBALS['DEF_TEXTS']['de']['NotSpecified'] = 'Nicht angegeben';
 $GLOBALS['DEF_TEXTS']['de']['RegistrationWarning'] = 'ACHTUNG! Eine E-Mail mit dem Aktivierungs-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
-                
+
                 Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"';
 $GLOBALS['DEF_TEXTS']['de']['PasswordRestoreWarning'] = 'ACHTUNG! Eine E-Mail mit dem Reset-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
-                
+
                 Wenn die E-Mail mit dem Reset-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"';
 $GLOBALS['DEF_TEXTS']['de']['MsgTryLogin'] = 'Wenn Sie ein Benutzerkonto haben, melden Sie sich an, um Zugang zu erhalten!';
 $GLOBALS['DEF_TEXTS']['de']['MsgUserPrivateTopicLeft'] = 'Der Benutzer hat das private Thema verlassen';
