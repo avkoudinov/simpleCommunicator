@@ -8,6 +8,48 @@ set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 require_once APPLICATION_ROOT . "Zend/Http/Client.php";
 
 //------------------------------------------------------------------------------
+// Match an individual IPv4/IPv6 address or a CIDR subnet.
+function is_ip_in($ip, $ipnetwork)
+{
+    $parts = explode("/", trim($ipnetwork));
+    if (count($parts) > 2) {
+        return false;
+    }
+
+    $address = @inet_pton(trim($ip));
+    $network = @inet_pton($parts[0]);
+    if ($address === false || $network === false || strlen($address) != strlen($network)) {
+        return false;
+    }
+
+    if (count($parts) == 1) {
+        return $address === $network;
+    }
+
+    if (!preg_match('/^[0-9]{1,3}$/D', $parts[1])) {
+        return false;
+    }
+
+    $prefix = (int)$parts[1];
+    if ($prefix > strlen($address) * 8) {
+        return false;
+    }
+
+    $bytes = intdiv($prefix, 8);
+    $bits = $prefix % 8;
+    if (substr($address, 0, $bytes) !== substr($network, 0, $bytes)) {
+        return false;
+    }
+
+    if ($bits == 0) {
+        return true;
+    }
+
+    $mask = (0xff << (8 - $bits)) & 0xff;
+    return (ord($address[$bytes]) & $mask) == (ord($network[$bytes]) & $mask);
+} // is_ip_in
+
+//------------------------------------------------------------------------------
 function val_or_empty(&$param)
 {
     return isset($param) ? $param : "";

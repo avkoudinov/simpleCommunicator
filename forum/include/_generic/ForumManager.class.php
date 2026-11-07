@@ -8113,16 +8113,23 @@ abstract class ForumManager
 
         $restrictions = json_decode($json, true);
         $ip = System::getIPAddress();
-        if (!is_array($restrictions) || !isset($restrictions[$ip]) || !is_array($restrictions[$ip])) {
+        if (!is_array($restrictions)) {
             return false;
         }
 
-        $restriction = $restrictions[$ip];
-        return isset($restriction["forums"], $restriction["restrictions"])
+        foreach ($restrictions as $ipnetwork => $restriction) {
+            if (is_ip_in($ip, $ipnetwork)
+                && is_array($restriction)
+                && isset($restriction["forums"], $restriction["restrictions"])
             && is_array($restriction["forums"])
             && is_array($restriction["restrictions"])
             && in_array($fid, $restriction["forums"])
-            && in_array($action, $restriction["restrictions"], true);
+                && in_array($action, $restriction["restrictions"], true)) {
+                return true;
+            }
+        }
+
+        return false;
     } // is_guest_action_blocked
 
     //-----------------------------------------------------------------
@@ -8149,7 +8156,7 @@ abstract class ForumManager
             $ip_white_list = preg_split("/[\n\r]+/", $ip_white_list, -1, PREG_SPLIT_NO_EMPTY);
 
             foreach ($ip_white_list as $ip_sample) {
-                if (strpos($ip, $ip_sample) === 0) {
+                if (is_ip_in($ip, $ip_sample)) {
                     return true;
                 }
             }
@@ -8161,7 +8168,7 @@ abstract class ForumManager
             $ip_black_list = preg_split("/[\n\r]+/", $ip_black_list, -1, PREG_SPLIT_NO_EMPTY);
 
             foreach ($ip_black_list as $ip_sample) {
-                if (strpos($ip, $ip_sample) === 0) {
+                if (is_ip_in($ip, $ip_sample)) {
                     exit("<h3>Your IP address '$ip' is blacklisted! Connect the administrator of the server!</h3>");
                 }
             }
