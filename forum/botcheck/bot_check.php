@@ -20,7 +20,7 @@ if (file_exists(APPLICATION_ROOT . "user_data/config/ip_white_list.txt")) {
 
     $ip = bp_client_ip();
     foreach ($ip_white_list as $ip_sample) {
-        if (strpos($ip, $ip_sample) === 0) {
+        if (is_ip_in($ip, $ip_sample)) {
             br_trace_checking($_SESSION["bot_check_client_data"] . "Check passed: IP '" . $ip . "' is whitelisted\n", $cfg);
             return;
         }

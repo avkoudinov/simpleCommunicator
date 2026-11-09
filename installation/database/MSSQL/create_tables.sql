@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     25.10.2026 18:50:40                          */
+/* Created on:     06.11.2026 21:03:27                          */
 /*==============================================================*/
 
 
@@ -2402,6 +2402,7 @@ create table v1_user (
    rating_blocked       tinyint              not null default 0,
    video_audio_blocked  tinyint              not null default 0,
    attachments_blocked  tinyint              not null default 0,
+   images_blocked       tinyint              not null default 0,
    time_zone            varchar(255)         null,
    privileged           tinyint              not null default 0,
    privileged_topic_moderator tinyint              not null default 0,

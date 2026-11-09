@@ -192,7 +192,7 @@ abstract class ForumManager
                                              where {$prfx}_topic.deleted <> 1 and
                                              {$prfx}_topic.id = $topic_id
                                              group by {$prfx}_topic.id) all_cnt
-                left join                             
+                left join
                 (select {$prfx}_topic.id, count({$prfx}_post.topic_id) cnt
                                              from
                                              {$prfx}_topic
@@ -216,7 +216,7 @@ abstract class ForumManager
                  count({$prfx}_post.ip) cnt
                  from {$prfx}_tor_ips
                  inner join {$prfx}_post on ({$prfx}_tor_ips.ip = {$prfx}_post.ip)
-                 $where 
+                 $where
                  group by {$prfx}_tor_ips.ip, {$prfx}_tor_ips.block_level
                  order by last_message desc
                  ";
@@ -455,6 +455,11 @@ abstract class ForumManager
                 return text("ActionAttachmentsDisallowed");
             case "allow_attachments":
                 return text("ActionAttachmentsAllowed");
+
+            case "disallow_images":
+                return text("ActionImagesDisallowed");
+            case "allow_images":
+                return text("ActionImagesAllowed");
 
             case "disallow_video_audio":
                 return text("ActionVideoAudioDisallowed");
@@ -2688,7 +2693,7 @@ abstract class ForumManager
         if (!$rodbw->execute_query("select {$prfx}_forum.id, name, description, {$prfx}_forum.creation_date,
                              user_posting_as_guest,
                              topic_count, topic_count_total,
-                             last_message_date, 
+                             last_message_date,
                              {$prfx}_forum.deleted, closed, disable_ignore,
                              {$prfx}_post.user_id, {$prfx}_post.author, {$prfx}_user.user_name, {$prfx}_post.read_marker,
                              last_visit_date, logout
@@ -4965,7 +4970,7 @@ abstract class ForumManager
                     return false;
                 }
 
-                $query = "insert into {$prfx}_forum_member (forum_id, user_id) 
+                $query = "insert into {$prfx}_forum_member (forum_id, user_id)
                           select id, $mid from {$prfx}_forum where id = $fid and restricted_access = 1
                           and not exists (select 1 from {$prfx}_forum_member where {$prfx}_forum_member.forum_id = {$prfx}_forum.id and user_id = $mid)";
                 if (!$dbw->execute_query($query)) {
@@ -5181,7 +5186,7 @@ abstract class ForumManager
                              block_tor_ips, moderator_log, default_sender, receiver, whois_server, approval_required, delayed_reg_mailing, hide_online_status,
                              dislikes_active, rates_active, dislikes_anonym, skin, max_poll_options,
                              max_message_length, max_pinned_topics, max_private_members,
-                             max_att_size, max_att_size_audiovideo, max_messages_minute, max_messages_hour, max_messages_day, 
+                             max_att_size, max_att_size_audiovideo, max_messages_minute, max_messages_hour, max_messages_day,
                              max_topics_day, min_search_interval, max_rates_hour,
                              max_topic_name_symbols, max_user_name_symbols, hide_users_from_robots,
                              celebration_active, mourning_active, snow_effect, archive_mode, request_cookie_consent, hash_ip_addresses
@@ -6187,7 +6192,7 @@ abstract class ForumManager
         // By registration, the READ_MARKER changes. Pass the captcha verifiaction status to the new read marker
         $captcha_verified = !empty($_SESSION[$READ_MARKER]["captcha_verified"]);
 
-        $READ_MARKER = System::generateHash(reqvar("user_login"), SALT_KEY);
+        $READ_MARKER = System::generateHash(reqvar("user_login") . time(), SALT_KEY);
 
         $_SESSION[$READ_MARKER]["captcha_verified"] = $captcha_verified;
 
@@ -6495,7 +6500,7 @@ abstract class ForumManager
         $start_time = $dbw->format_datetime(time() - 2 * 3600);
 
         $query = "select read_marker, author
-                  from {$prfx}_read_marker_activity 
+                  from {$prfx}_read_marker_activity
                   where (current_name_start > $start_time or current_name_hits < 500)
                   and author is not NULL
                   and not exists (select 1 from {$prfx}_user where {$prfx}_user.user_name = {$prfx}_read_marker_activity.author)";
@@ -6605,7 +6610,7 @@ abstract class ForumManager
 
         if (!$dbw->execute_query("select login, user_name, email, turnoff_events, no_private_messages, send_notifications, activated, approved, donot_hide_adult_pictures,
                              donot_notify_on_rates, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, skin, self_blocked,
-                             custom_css, custom_smiles, skin_properties, time_zone, interface_language, read_marker, activated, approved, rating_blocked, video_audio_blocked, attachments_blocked, is_admin, privileged, last_logout_date,
+                             custom_css, custom_smiles, skin_properties, time_zone, interface_language, read_marker, activated, approved, rating_blocked, video_audio_blocked, images_blocked, attachments_blocked, is_admin, privileged, last_logout_date,
                              privileged_topic_moderator, global_ban_allowed, show_ip, ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist, blocked, block_expires, block_reason, password_hash
                              from {$prfx}_user
                              where id = $uid")) {
@@ -6682,6 +6687,7 @@ abstract class ForumManager
 
         $_SESSION["rating_blocked"] = $dbw->field_by_name("rating_blocked");
         $_SESSION["video_audio_blocked"] = $dbw->field_by_name("video_audio_blocked");
+        $_SESSION["images_blocked"] = $dbw->field_by_name("images_blocked");
         $_SESSION["attachments_blocked"] = $dbw->field_by_name("attachments_blocked");
 
         $_SESSION["user_login"] = $dbw->field_by_name("login");
@@ -6959,8 +6965,8 @@ abstract class ForumManager
 
         $_SESSION["ignored_topics"] = array();
 
-        $query = "select {$prfx}_ignored_topics.topic_id 
-                  from {$prfx}_ignored_topics 
+        $query = "select {$prfx}_ignored_topics.topic_id
+                  from {$prfx}_ignored_topics
                   left join {$prfx}_topic_statistics on ({$prfx}_ignored_topics.topic_id = {$prfx}_topic_statistics.topic_id)
                   where user_id = $uid
                   order by last_message_date desc";
@@ -6978,9 +6984,9 @@ abstract class ForumManager
 
         $_SESSION["ignored_topics_archive"] = array();
 
-        $query = "select 
-                  {$prfx}_ignored_topics_archive.topic_id 
-                  from {$prfx}_ignored_topics_archive 
+        $query = "select
+                  {$prfx}_ignored_topics_archive.topic_id
+                  from {$prfx}_ignored_topics_archive
                   left join {$prfx}_topic_statistics on ({$prfx}_ignored_topics_archive.topic_id = {$prfx}_topic_statistics.topic_id)
                   where user_id = $uid
                   order by last_message_date desc";
@@ -7000,7 +7006,7 @@ abstract class ForumManager
 
         $_SESSION["pinned_topics"] = array();
 
-        $query = "select topic_id 
+        $query = "select topic_id
         from {$prfx}_pinned_topics
         where user_id = $uid
         ";
@@ -7020,8 +7026,8 @@ abstract class ForumManager
 
         $_SESSION["favourite_topics"] = array();
 
-        $query = "select {$prfx}_favourite_topics.topic_id 
-                  from {$prfx}_favourite_topics 
+        $query = "select {$prfx}_favourite_topics.topic_id
+                  from {$prfx}_favourite_topics
                   left join {$prfx}_topic_statistics on ({$prfx}_favourite_topics.topic_id = {$prfx}_topic_statistics.topic_id)
                   where user_id = $uid
                   order by last_message_date desc
@@ -7462,6 +7468,7 @@ abstract class ForumManager
         unset($_SESSION["rating_blocked"]);
         unset($_SESSION["video_audio_blocked"]);
         unset($_SESSION["attachments_blocked"]);
+        unset($_SESSION["images_blocked"]);
 
         unset($_SESSION["forum_member"]);
         unset($_SESSION["forum_moderator"]);
@@ -8088,6 +8095,44 @@ abstract class ForumManager
     } // ajust_check_limits
 
     //-----------------------------------------------------------------
+    function is_guest_action_blocked($fid, $action)
+    {
+        if ($this->is_logged_in()) {
+            return false;
+        }
+
+        $restriction_file = APPLICATION_ROOT . "user_data/config/ip_restrictions.json";
+        if (!file_exists($restriction_file)) {
+            return false;
+        }
+
+        $json = file_get_contents($restriction_file);
+        if ($json === false) {
+            return false;
+        }
+
+        $restrictions = json_decode($json, true);
+        $ip = System::getIPAddress();
+        if (!is_array($restrictions)) {
+            return false;
+        }
+
+        foreach ($restrictions as $ipnetwork => $restriction) {
+            if (is_ip_in($ip, $ipnetwork)
+                && is_array($restriction)
+                && isset($restriction["forums"], $restriction["restrictions"])
+            && is_array($restriction["forums"])
+            && is_array($restriction["restrictions"])
+            && in_array($fid, $restriction["forums"])
+                && in_array($action, $restriction["restrictions"], true)) {
+                return true;
+            }
+        }
+
+        return false;
+    } // is_guest_action_blocked
+
+    //-----------------------------------------------------------------
     function check_ip($ip, $user_agent)
     {
         global $settings;
@@ -8111,7 +8156,7 @@ abstract class ForumManager
             $ip_white_list = preg_split("/[\n\r]+/", $ip_white_list, -1, PREG_SPLIT_NO_EMPTY);
 
             foreach ($ip_white_list as $ip_sample) {
-                if (strpos($ip, $ip_sample) === 0) {
+                if (is_ip_in($ip, $ip_sample)) {
                     return true;
                 }
             }
@@ -8123,7 +8168,7 @@ abstract class ForumManager
             $ip_black_list = preg_split("/[\n\r]+/", $ip_black_list, -1, PREG_SPLIT_NO_EMPTY);
 
             foreach ($ip_black_list as $ip_sample) {
-                if (strpos($ip, $ip_sample) === 0) {
+                if (is_ip_in($ip, $ip_sample)) {
                     exit("<h3>Your IP address '$ip' is blacklisted! Connect the administrator of the server!</h3>");
                 }
             }
@@ -8382,7 +8427,7 @@ abstract class ForumManager
                              from {$prfx}_forum_hits
                              left join {$prfx}_user on ({$prfx}_forum_hits.user_id = {$prfx}_user.id)
                              where topic_id = $tid and dt >= $now
-                             group by {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout 
+                             group by {$prfx}_user.id, {$prfx}_forum_hits.read_marker, {$prfx}_user.user_name, guest_name, activated, forum_id, topic_id, {$prfx}_forum_hits.ip, user_agent, logout
                              order by max(dt) desc")) {
             MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
             return false;
@@ -8845,26 +8890,26 @@ abstract class ForumManager
 
         if (!$dbw->execute_query("select
                              id, login, user_name, email, hide_email, message, homepage, signature, api_active, api_token, activated, approved, hidden,
-                             rating_blocked, attachments_blocked, video_audio_blocked, is_admin, privileged_topic_moderator, privileged, global_ban_allowed, show_ip, location, info, skin, interface_language, notify_citation,
+                             rating_blocked, images_blocked, attachments_blocked, video_audio_blocked, is_admin, privileged_topic_moderator, privileged, global_ban_allowed, show_ip, location, info, skin, interface_language, notify_citation,
                              notify_about_new_users, notify_on_words, words_to_notify, hide_pictures, hide_user_info, hide_user_avatars, hide_ignored, no_private_messages,
-                             ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist, 
+                             ignore_new_guests, ignore_guests_blacklist, ignore_guests_whitelist,
                              last_host, send_notifications, donot_notify_on_rates, turnoff_events, turnoff_personal_appeals,
                              blocked, self_blocked, block_expires, time_zone, donot_hide_adult_pictures,
                              registration_date, last_visit_date, logout, ip, last_ip, custom_css, custom_smiles, skin_properties,
-                             read_marker, 
-                             
+                             read_marker,
+
                              post_count,
                              like_count,
                              dislike_count,
 
                              100.0 * {$prfx}_user_statistics.like_count / case when {$prfx}_user_statistics.post_count > 1000 then {$prfx}_user_statistics.post_count else 1000 end like_count_weighed,
                              100.0 * {$prfx}_user_statistics.dislike_count / case when {$prfx}_user_statistics.post_count > 1000 then {$prfx}_user_statistics.post_count else 1000 end dislike_count_weighed,
-                             
+
                              topic_count,
                              time_online
-                             
+
                              from {$prfx}_user
-                             
+
                              left join {$prfx}_user_statistics
                              on ({$prfx}_user.id = {$prfx}_user_statistics.user_id)
 
@@ -8909,6 +8954,7 @@ abstract class ForumManager
             $user_data["hidden"] = $dbw->field_by_name("hidden");
             $user_data["rating_blocked"] = $dbw->field_by_name("rating_blocked");
             $user_data["attachments_blocked"] = $dbw->field_by_name("attachments_blocked");
+            $user_data["images_blocked"] = $dbw->field_by_name("images_blocked");
             $user_data["video_audio_blocked"] = $dbw->field_by_name("video_audio_blocked");
             $user_data["time_zone"] = $dbw->field_by_name("time_zone");
             if (empty($user_data["time_zone"]) || !in_array($user_data["time_zone"], $GLOBALS['time_zones'])) {
@@ -9915,18 +9961,18 @@ abstract class ForumManager
               select id, user_name
               from
               {$prfx}_user where ignore_guests_whitelist = 1 and id not in (select user_id from {$prfx}_ignored_guests where whitelist = 1)
-              
+
               union
-              
+
               select id, user_name
               from
               {$prfx}_user
               inner join {$prfx}_ignored_guests on ({$prfx}_user.id = {$prfx}_ignored_guests.user_id and whitelist = 0)
               where
               ignore_guests_blacklist = 1 and guest_name = $author
-              
+
               union
-              
+
               select id, user_name
               from
               (select id, user_name from {$prfx}_user where ignore_guests_whitelist = 1) except_user
@@ -10555,7 +10601,7 @@ abstract class ForumManager
 
         $query = "select is_ipv6, count(*) cnt from
                     {$prfx}_ip_daily_statistics
-                    where dt >= $start_date 
+                    where dt >= $start_date
                     group by is_ipv6
                     order by cnt desc";
 
@@ -11696,7 +11742,7 @@ abstract class ForumManager
         }
 
         // old approval state and name
-        if (!$dbw->execute_query("select user_name, approved, activated, privileged, privileged_topic_moderator, email_changed, 
+        if (!$dbw->execute_query("select user_name, approved, activated, privileged, privileged_topic_moderator, email_changed,
                                   is_admin, show_ip, global_ban_allowed, last_host, interface_language from {$prfx}_user where id = $uid")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -11774,7 +11820,7 @@ abstract class ForumManager
             $activation_expire = $dbw->format_datetime(time() + 3600);
 
             $activation_sql = "
-            activation_hash = $activation_hash_db, 
+            activation_hash = $activation_hash_db,
             activation_expire = $activation_expire,
             ";
         }
@@ -16359,7 +16405,7 @@ abstract class ForumManager
         if (!$dbw->execute_query("select id, email, user_name, last_host, send_notifications, activated, approved, interface_language, last_host
                              from {$prfx}_user
                              where
-                             id in (select user_id from {$prfx}_topic_moderator where topic_id = $tid) 
+                             id in (select user_id from {$prfx}_topic_moderator where topic_id = $tid)
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             $dbw->rollback_transaction();
@@ -18997,7 +19043,7 @@ abstract class ForumManager
 
             // text("MsgTopicCreatedFromMerge")
             $query = "update {$prfx}_post set
-              last_warned_by = $tauthor, 
+              last_warned_by = $tauthor,
               last_warning = 'MSG(MsgTopicCreatedFromMerge)'
               where id = $first_post_id";
             if (!$dbw->execute_query($query)) {
@@ -19416,7 +19462,7 @@ abstract class ForumManager
             $query = "insert into {$prfx}_ignored_topics (topic_id, user_id, auto_ignored)
                 select $tid, user_id, 1
                 from {$prfx}_ignored_users
-                where ignored_user_id = $uid 
+                where ignored_user_id = $uid
                 and user_id in (select id from {$prfx}_user where last_visit_date > $now)
                 and (select 1 from {$prfx}_ignored_topics where user_id = $uid and topic_id = $tid) is NULL
                 and (select 1 from {$prfx}_topic where id = $tid and is_private > 0) is NULL
@@ -19628,7 +19674,7 @@ abstract class ForumManager
 
             // text("MsgTopicCreatedFromPostMove")
             $query = "update {$prfx}_post set
-              last_warned_by = $tauthor, 
+              last_warned_by = $tauthor,
               last_warning = 'MSG(MsgTopicCreatedFromPostMove)'
               where id = $first_post";
             if (!$dbw->execute_query($query)) {
@@ -21332,6 +21378,94 @@ abstract class ForumManager
             $messages[text("MsgAttachmentsAllowed")] = text("MsgAttachmentsAllowed");
         }
         //---------------------------------------------------------------
+        if (!reqvar_empty("disallow_images")) {
+            if (!empty($user_data["moderator"]) || !empty($user_data["is_admin"])) {
+                MessageHandler::setError(text("ErrModeratorBlockNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+
+            if (!$this->global_ban_allowed()) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+
+            if (!$dbw->execute_query("update {$prfx}_user set images_blocked = 1 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+
+            $event_data["action"] = "disallow_images";
+
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+
+            $mail_job = array();
+
+            $mail_job["email_template"] = "email_images_disallowed{$anonym_appendix}.txt";
+            $mail_job["event_code"] = "MsgEventImagesDisallowed{$anonym_appendix2}"; // text("MsgEventImagesDisallowed") text("MsgEventImagesDisallowedAnonym")
+
+            $mail_job["receiver"] = $user_data["user_email"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
+            $mail_job["last_host"] = $user_data["last_host"];
+            $mail_job["interface_language"] = $user_data["interface_language"];
+            $mail_job["author_time_zone"] = $user_data["time_zone"];
+
+            $mail_job["params"]["{user_name}"] = $user_data["user_name"];
+            $mail_job["params"]["{moderator_name}"] = $this->get_user_name();
+            $mail_job["params"]["{site_url}"] = get_host_address($user_data["last_host"]) . get_url_path();
+            $mail_job["params"]["{comment}"] = $comment;
+
+            $mail_jobs[] = $mail_job;
+
+            $messages[text("MsgImagesDisallowed")] = text("MsgImagesDisallowed");
+        }
+        //---------------------------------------------------------------
+        if (!reqvar_empty("allow_images")) {
+            if (!$this->global_ban_allowed()) {
+                MessageHandler::setError(text("ErrActionNotAllowed"));
+                $dbw->rollback_transaction();
+                return false;
+            }
+
+            if (!$dbw->execute_query("update {$prfx}_user set images_blocked = 0 where id = $uid")) {
+                MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
+                $dbw->rollback_transaction();
+                return false;
+            }
+
+            $event_data["action"] = "allow_images";
+
+            if (!$this->log_moderator_event($dbw, $prfx, $event_data)) {
+                $dbw->rollback_transaction();
+                return false;
+            }
+
+            $mail_job = array();
+
+            $mail_job["email_template"] = "email_images_allowed{$anonym_appendix}.txt";
+            $mail_job["event_code"] = "MsgEventImagesAllowed{$anonym_appendix2}";  // text("MsgEventImagesAllowed") text("MsgEventImagesAllowedAnonym")
+
+            $mail_job["receiver"] = $user_data["user_email"];
+            $mail_job["send_notifications"] = $user_data["send_notifications"] && $user_data["approved"] && $user_data["activated"];
+            $mail_job["last_host"] = $user_data["last_host"];
+            $mail_job["interface_language"] = $user_data["interface_language"];
+            $mail_job["author_time_zone"] = $user_data["time_zone"];
+
+            $mail_job["params"]["{user_name}"] = $user_data["user_name"];
+            $mail_job["params"]["{moderator_name}"] = $this->get_user_name();
+            $mail_job["params"]["{site_url}"] = get_host_address($user_data["last_host"]) . get_url_path();
+            $mail_job["params"]["{comment}"] = $comment;
+
+            $mail_jobs[] = $mail_job;
+
+            $messages[text("MsgImagesAllowed")] = text("MsgImagesAllowed");
+        }
+        //---------------------------------------------------------------
         if (!reqvar_empty("disallow_video_audio")) {
             if (!empty($user_data["moderator"]) || !empty($user_data["is_admin"])) {
                 MessageHandler::setError(text("ErrModeratorBlockNotAllowed"));
@@ -21540,7 +21674,7 @@ abstract class ForumManager
                 if (!reqvar_empty("forum")) {
                     if ($this->is_admin()) {
                         $query = "select id, name
-                                  from {$prfx}_forum where deleted <> 1 
+                                  from {$prfx}_forum where deleted <> 1
                                   and {$prfx}_forum.id = " . $dbw->escape(reqvar("forum"));
                     } else {
                         $query = "select id, name
@@ -23075,13 +23209,19 @@ abstract class ForumManager
             return false;
         }
 
-        if (!empty($_SESSION["attachments_blocked"]) && !empty($has_attachment)) {
+        if ((!empty($_SESSION["attachments_blocked"]) || $this->is_guest_action_blocked($fid, "attachments_blocked")) && !empty($has_attachment)) {
             MessageHandler::setWarning(text("ErrAttachmentsBlocked"));
             $dbw->rollback_transaction();
             return false;
         }
 
-        if (!empty($_SESSION["video_audio_blocked"]) && (!empty($has_video) || !empty($has_audio))) {
+        if ((!empty($_SESSION["images_blocked"]) || $this->is_guest_action_blocked($fid, "images_blocked")) && !empty($has_picture)) {
+            MessageHandler::setWarning(text("ErrImagesBlocked"));
+            $dbw->rollback_transaction();
+            return false;
+        }
+
+        if ((!empty($_SESSION["video_audio_blocked"]) || $this->is_guest_action_blocked($fid, "video_audio_blocked")) && (!empty($has_video) || !empty($has_audio))) {
             MessageHandler::setWarning(text("ErrVideoAudioBlocked"));
             $dbw->rollback_transaction();
             return false;
@@ -23094,17 +23234,17 @@ abstract class ForumManager
 
         $is_adult = reqvar_empty("is_adult") ? 0 : 1;
 
-        $query = "update {$prfx}_post set 
-                  has_attachment = $has_attachment, 
-                  has_attachment_ref = $has_attachment_ref, 
-                  has_picture = $has_picture, 
-                  has_video = $has_video, 
-                  has_audio = $has_audio, 
-                  has_telegram = $has_telegram, 
-                  has_link = $has_link, 
-                  has_code = $has_code, 
-                  is_comment = $is_comment, 
-                  is_adult = $is_adult 
+        $query = "update {$prfx}_post set
+                  has_attachment = $has_attachment,
+                  has_attachment_ref = $has_attachment_ref,
+                  has_picture = $has_picture,
+                  has_video = $has_video,
+                  has_audio = $has_audio,
+                  has_telegram = $has_telegram,
+                  has_link = $has_link,
+                  has_code = $has_code,
+                  is_comment = $is_comment,
+                  is_adult = $is_adult
                   where id = $edited_post";
         if (!$dbw->execute_query($query)) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -25291,13 +25431,19 @@ abstract class ForumManager
             }
         }
 
-        if (!empty($_SESSION["attachments_blocked"]) && !empty($has_attachment)) {
+        if ((!empty($_SESSION["attachments_blocked"]) || $this->is_guest_action_blocked($fid, "attachments_blocked")) && !empty($has_attachment)) {
             MessageHandler::setWarning(text("ErrAttachmentsBlocked"));
             $dbw->rollback_transaction();
             return false;
         }
 
-        if (!empty($_SESSION["video_audio_blocked"]) && (!empty($has_video) || !empty($has_audio))) {
+        if ((!empty($_SESSION["images_blocked"]) || $this->is_guest_action_blocked($fid, "images_blocked")) && !empty($has_picture)) {
+            MessageHandler::setWarning(text("ErrImagesBlocked"));
+            $dbw->rollback_transaction();
+            return false;
+        }
+
+        if ((!empty($_SESSION["video_audio_blocked"]) || $this->is_guest_action_blocked($fid, "video_audio_blocked")) && (!empty($has_video) || !empty($has_audio))) {
             MessageHandler::setWarning(text("ErrVideoAudioBlocked"));
             $dbw->rollback_transaction();
             return false;
@@ -25717,7 +25863,7 @@ abstract class ForumManager
         // get subscribed users
         // if a user ignores the current user or guests, do not notify him
 
-        if (!$dbw->execute_query("select {$prfx}_topic_subscription.user_id, 
+        if (!$dbw->execute_query("select {$prfx}_topic_subscription.user_id,
                              email, user_name, last_host, send_notifications, activated, approved, interface_language,
                              ignore_guests_whitelist, {$prfx}_ignored_topics.topic_id topic_ignored
                              from {$prfx}_topic_subscription
@@ -25767,7 +25913,7 @@ abstract class ForumManager
 
             // user subscribed to own messages
 
-            if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id, 
+            if (!$dbw->execute_query("select {$prfx}_post.id, {$prfx}_post.user_id,
                                       email, user_name, last_host, send_notifications, activated, approved, interface_language,
                                       ignore_guests_whitelist, notify_citation, {$prfx}_ignored_topics.topic_id topic_ignored,
                                       {$prfx}_post.topic_id citated_topic_id, citated_topic.forum_id citated_forum_id
@@ -29797,9 +29943,9 @@ abstract class ForumManager
                 $dbw->free_result();
 
                 if (!$entry_exists) {
-                    $query = "insert into {$prfx}_topic_view_history 
-                    (user_id, guest_name, topic_id, dt, ip) 
-                    select 
+                    $query = "insert into {$prfx}_topic_view_history
+                    (user_id, guest_name, topic_id, dt, ip)
+                    select
                     $uid, $guest_name, $tid, $now, $ip
                     from {$prfx}_dual
                     where not exists (select 1 from {$prfx}_topic_view_history where user_id = $uid and topic_id = $tid and guest_name = $guest_name)
@@ -29826,7 +29972,7 @@ abstract class ForumManager
                 $dbw->free_result();
 
                 if (!$entry_exists) {
-                    $query = "insert into {$prfx}_topic_view_history 
+                    $query = "insert into {$prfx}_topic_view_history
                               (user_id, guest_name, topic_id, dt, ip)
                               select
                               0, $guest_name, $tid, $now, $ip
@@ -29909,7 +30055,7 @@ abstract class ForumManager
         }
 
         $query = "update {$prfx}_daily_statistics set
-          hits_count = hits_count + $browser_increment, bot_hits_count = bot_hits_count + $bot_increment, 
+          hits_count = hits_count + $browser_increment, bot_hits_count = bot_hits_count + $bot_increment,
           time_online = time_online + $duration
           where
           dt = $dtnow and forum_id = $fid and user_id = $sentinel_uid and bot = '$sentinel_bot'
@@ -30135,7 +30281,7 @@ abstract class ForumManager
 
         $query = "insert into {$prfx}_read_marker_activity
          (read_marker, ip, first_activity, last_activity, current_name_start, author, user_agent, hits, current_name_hits)
-         select 
+         select
          '$rm', '$ip', $now, $now, $now, $author, $agent, 0, 0
          from {$prfx}_dual
          where not exists (select 1 from {$prfx}_read_marker_activity where read_marker = '$rm')";
@@ -30710,7 +30856,7 @@ abstract class ForumManager
         }
 
         return " and (($ignore_clause)
-                     and {$prfx}_post.is_system <> 1 
+                     and {$prfx}_post.is_system <> 1
                     )
                ";
     } // get_calc_ignore_post_where_appendix
@@ -30919,7 +31065,7 @@ abstract class ForumManager
                              $where_appendix
 
                              $ignore_post_where_appendix
-                             
+
                              $ignore_comment_where_appendix
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -30948,7 +31094,7 @@ abstract class ForumManager
                              $where_appendix2
 
                              $ignore_post_where_appendix
-                             
+
                              $ignore_comment_where_appendix
                             ")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -31452,26 +31598,26 @@ abstract class ForumManager
 
         $query = "
           select count(*) cnt
-    
+
           from {$prfx}_post
           inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
           inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-          
+
           left join {$prfx}_topic_read_markers on ({$prfx}_topic.id = {$prfx}_topic_read_markers.topic_id and {$prfx}_topic_read_markers.read_marker = '$rm')
           left join {$prfx}_forum_read_markers on ({$prfx}_topic.forum_id = {$prfx}_forum_read_markers.forum_id and {$prfx}_forum_read_markers.read_marker = '$rm')
-    
+
           where
-          
+
           {$prfx}_post.topic_id = $tid
-    
+
           and ({$prfx}_post.deleted + {$prfx}_topic.publish_delay) = 0
-    
+
           and {$prfx}_post.creation_date > $mindate
-          
+
           $new_where_appendix
-    
+
           $ignore_post_where_appendix
-          
+
           $ignore_comment_where_appendix
         ";
 
@@ -32483,6 +32629,8 @@ abstract class ForumManager
 
         $action_list["disallow_attachments"] = text("ActionAttachmentsDisallowed");
         $action_list["allow_attachments"] = text("ActionAttachmentsAllowed");
+        $action_list["disallow_images"] = text("ActionImagesDisallowed");
+        $action_list["allow_images"] = text("ActionImagesAllowed");
         $action_list["disallow_video_audio"] = text("ActionVideoAudioDisallowed");
         $action_list["allow_video_audio"] = text("ActionVideoAudioAllowed");
 
@@ -32715,7 +32863,7 @@ abstract class ForumManager
             if ($author_id != "NULL") {
                 if (!$dbw->prepare_query("update {$prfx}_events set redundant = 1
                                           where event_code = :event_code and post_id = :post_id and user_id = :user_id
-                                          and event_time > :start_date 
+                                          and event_time > :start_date
                                           and author_id = :author_id")) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     return false;
@@ -32734,7 +32882,7 @@ abstract class ForumManager
             } else {
                 if (!$dbw->prepare_query("update {$prfx}_events set redundant = 1
                                           where event_code = :event_code and post_id = :post_id and user_id = :user_id
-                                          and event_time > :start_date 
+                                          and event_time > :start_date
                                           and author_name = :author_name")) {
                     MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
                     return false;
@@ -35458,7 +35606,7 @@ abstract class ForumManager
         $pid = $dbw->escape($pid);
 
         $query = "select {$prfx}_post.creation_date, is_adult, topic_id, forum_id
-                  from {$prfx}_post 
+                  from {$prfx}_post
                   inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
                   where {$prfx}_post.id = $pid";
 
@@ -37058,8 +37206,8 @@ abstract class ForumManager
         }
 
         // define the page count
-        if (!$rodbw->execute_query("select count(*) cnt 
-                                    from {$prfx}_user 
+        if (!$rodbw->execute_query("select count(*) cnt
+                                    from {$prfx}_user
                                     left join {$prfx}_user_statistics
                                     on ({$prfx}_user.id = {$prfx}_user_statistics.user_id)
                                     $where")) {
@@ -37632,7 +37780,7 @@ abstract class ForumManager
             last_user.last_visit_date last_user_last_visit_date, last_user.logout last_user_logout,
             disable_ignore
             from
-            {$prfx}_topic 
+            {$prfx}_topic
             inner join {$prfx}_forum on ({$prfx}_forum.id = {$prfx}_topic.forum_id)
             inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
             left join {$prfx}_post on ({$prfx}_topic_statistics.last_message_id = {$prfx}_post.id)
@@ -37816,10 +37964,10 @@ abstract class ForumManager
 
             $query = "select id topic_id from {$prfx}_topic where id in ($ignored_in_list) and id in ($in_list)";
         } else {
-            $query = "select topic_id from {$prfx}_ignored_topics 
+            $query = "select topic_id from {$prfx}_ignored_topics
                       where user_id = $uid and topic_id in ($in_list)
-                      union 
-                      select topic_id from {$prfx}_ignored_topics_archive 
+                      union
+                      select topic_id from {$prfx}_ignored_topics_archive
                       where user_id = $uid and topic_id in ($in_list)
                       ";
         }
@@ -38037,7 +38185,7 @@ abstract class ForumManager
         // get position of the first message
 
         if (!$dbw->execute_query("select count(*) cnt from {$prfx}_post
-                     where topic_id = $tid 
+                     where topic_id = $tid
                      and {$prfx}_post.id <= " . $pid
         )) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
@@ -38239,7 +38387,7 @@ abstract class ForumManager
         if ($pagination_info["mode"] == "gotomsg" && !empty($pagination_info["msg"])) {
             $pid = $rodbw->escape($pagination_info["msg"]);
 
-            if (!$rodbw->execute_query("select read_marker from {$prfx}_post 
+            if (!$rodbw->execute_query("select read_marker from {$prfx}_post
                                         where id = $pid and deleted = 1")) {
                 MessageHandler::setError(text("ErrQueryFailed"), $rodbw->get_last_error() . "\n\n" . $rodbw->get_last_query());
                 return false;
@@ -38314,7 +38462,7 @@ abstract class ForumManager
                           (select
                            row_number() over (order by {$prfx}_post.id) nr,
                            {$prfx}_post.id
-                          from {$prfx}_post 
+                          from {$prfx}_post
                           inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
                           inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
                           where {$prfx}_post.topic_id = $tid $pinned_deleted_appendix) posts
@@ -39000,6 +39148,8 @@ abstract class ForumManager
             'MsgEventRatingDisallowedAnonym',
             'MsgEventAttachmentsDisallowed',
             'MsgEventAttachmentsDisallowedAnonym',
+            'MsgEventImagesDisallowed',
+            'MsgEventImagesDisallowedAnonym',
             'MsgEventVideoAudioDisallowed',
             'MsgEventVideoAudioDisallowedAnonym'
         );
@@ -39222,11 +39372,11 @@ abstract class ForumManager
         if (!empty($reverse_mapping)) {
             $in_list = $rodbw->escape(implode(",", array_keys($reverse_mapping)));
 
-            $query = "select {$prfx}_post.id from 
+            $query = "select {$prfx}_post.id from
                       {$prfx}_post
                       inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
                       inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
-                      where 
+                      where
                       {$prfx}_post.id in ($in_list) and
                       ({$prfx}_post.deleted = 1 or {$prfx}_topic.deleted = 1 or {$prfx}_forum.deleted = 1)
             ";
@@ -39670,7 +39820,7 @@ abstract class ForumManager
             {$prfx}_post.user_id last_author_id, {$prfx}_post.author last_author, {$prfx}_post.read_marker last_author_readmarker,
             last_user.last_visit_date last_user_last_visit_date, last_user.logout last_user_logout
             from
-            {$prfx}_topic 
+            {$prfx}_topic
             inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
             inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
             left join {$prfx}_post on ({$prfx}_topic_statistics.last_message_id = {$prfx}_post.id)
@@ -39871,10 +40021,10 @@ abstract class ForumManager
 
             $query = "select id topic_id from {$prfx}_topic where id in ($ignored_in_list) and id in ($in_list)";
         } else {
-            $query = "select topic_id from {$prfx}_ignored_topics 
+            $query = "select topic_id from {$prfx}_ignored_topics
                       where user_id = $uid and topic_id in ($in_list)
-                      union 
-                      select topic_id from {$prfx}_ignored_topics_archive 
+                      union
+                      select topic_id from {$prfx}_ignored_topics_archive
                       where user_id = $uid and topic_id in ($in_list)
                       ";
         }
@@ -40159,7 +40309,7 @@ abstract class ForumManager
                           (select
                            row_number() over ($order_by) nr,
                            {$prfx}_post.id
-                          from {$prfx}_post 
+                          from {$prfx}_post
                           inner join {$prfx}_topic on ({$prfx}_post.topic_id = {$prfx}_topic.id)
                           inner join {$prfx}_topic_statistics on ({$prfx}_topic.id = {$prfx}_topic_statistics.topic_id)
                           inner join {$prfx}_forum on ({$prfx}_topic.forum_id = {$prfx}_forum.id)
@@ -41519,7 +41669,7 @@ abstract class ForumManager
                 {$prfx}_post.topic_id
                 from {$prfx}_found_post_cache
                 inner join {$prfx}_post on ({$prfx}_found_post_cache.post_id = {$prfx}_post.id)
-                where session_id = '$session_id' and search_hash = '$search_hash' 
+                where session_id = '$session_id' and search_hash = '$search_hash'
                 )" . "\n";
 
             // Handling of the case if words should be search in topic names and posts
@@ -42475,9 +42625,9 @@ abstract class ForumManager
 
         if (!$dbw->execute_query("select
                              id, name, sort_order
-                             
+
                              from {$prfx}_forum_group
-                             
+
                              order by sort_order")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;
@@ -42581,8 +42731,8 @@ abstract class ForumManager
                 if ($id < 0) {
                     $query = "insert into {$prfx}_forum_group (name, sort_order) values ('$name', $sort_order)";
                 } else {
-                    $query = "update {$prfx}_forum_group set 
-                    name = $name, 
+                    $query = "update {$prfx}_forum_group set
+                    name = $name,
                     sort_order = $sort_order
                     where id = $id
                     ";
@@ -42618,7 +42768,7 @@ abstract class ForumManager
 
         if (!$dbw->execute_query("select
                              id, name
-                             from {$prfx}_forum_group                             
+                             from {$prfx}_forum_group
                              order by name")) {
             MessageHandler::setError(text("ErrQueryFailed"), $dbw->get_last_error() . "\n\n" . $dbw->get_last_query());
             return false;

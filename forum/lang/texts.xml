@@ -29,7 +29,7 @@
             <ru>Русский</ru>
             <ua>Російська</ua>
         </text>
-        
+
         <text id="ua">
             <en>Ukrainian</en>
             <de>Ukrainisch</de>
@@ -196,20 +196,20 @@
             <ru>Выйти из всех сессий</ru>
             <ua>Вийти з усіх сесій</ua>
         </text>
-        
+
         <text id="WarnLogoutForced">
             <en>The session has been ended because the user had forced the logout on all devices or has changed his password!</en>
             <de>Die Sitzung wurde beendet, weil der Benutzer das Abmelden auf allen Geräten erzwungen oder sein Kennwort geändert hatte!</de>
             <ru>Сеанс прекращен, поскольку пользователь инициировал выход на всех устройствах или сменил пароль!</ru>
             <ua>Сеанс припинений, оскільки користувач ініціював вихід на всіх пристроях або змінив пароль!</ua>
-        </text>        
+        </text>
 
         <text id="MsgPasswordChangeWarning">
             <en>You have changed your password, all sessions on other devices has been herewith ended!</en>
             <de>Sie haben Ihr Passwort geändert, alle Sitzungen auf anderen Geräten wurden hiermit beendet!</de>
             <ru>Вы сменили пароль, все сеансы на других устройствах тем самым были прекращены!</ru>
             <ua>Ви змінили пароль, всі сеанси на інших пристроях тим самим були припинені!</ua>
-        </text>        
+        </text>
 
         <text id="Search">
             <en>Search</en>
@@ -231,7 +231,7 @@
             <ru>Автор "Гости" означает любой гость.</ru>
             <ua>Автор "Гості" означає будь-який гість.</ua>
         </text>
-        
+
         <text id="WarnSearchCriteriaNotSpecified">
             <en>Search criteria are not specified!</en>
             <de>Suchkriterien sind nicht angegeben!</de>
@@ -399,7 +399,7 @@
             <ru>Искать</ru>
             <ua>Шукати</ua>
         </text>
-        
+
             <en>Turn off personal appeals</en>
             <de>Persönliche Ansprachen abschalten</de>
             <ru>Отключить персональные обращения</ru>
@@ -410,7 +410,7 @@
             <de>Nur bis zu %s Benutzer können in einer Nachrichrich persönlich angesprochen werden!</de>
             <ru>Одно сообщение может содержать не более %s персональных обращений к пользователям!</ru>
             <ua>Одне повідомлення може містити не більше %s персональних звернень до користувачів!</ua>
-        </text>        
+        </text>
 
         <text id="AuthorModeratingTopic">
             <en>Search topics moderated by the author</en>
@@ -544,13 +544,13 @@
             <ru>Избр.</ru>
             <ua>Обране</ua>
         </text>
-        
+
         <text id="MsgWarnNewTrackingPeriod">
             <en>The desired date %s of unread messages is outside the period of tracking the new messages (%s days)!</en>
             <de>Das gewünschte Datum %s von ungelesenen Nachrichten liegt außerhalb des Zeitraums der Verfolgung der neuen Nachrichten (%s Tage)!</de>
             <ru>Желаемая дата непрочитанных сообщений %s находится за пределами периода отслеживания новых сообщений (%s дней)!</ru>
             <ua>Бажана дата непрочитаних повідомлень %s знаходиться за межами періоду відстежування нових повідомлень (%s днів)!</ua>
-        </text>        
+        </text>
 
         <text id="Digest">
             <en>Digest</en>
@@ -586,7 +586,7 @@
             <ru>Нов.</ru>
             <ua>Нові</ua>
         </text>
-        
+
         <text id="Topics">
             <en>Topics</en>
             <de>Themen</de>
@@ -607,14 +607,14 @@
             <ru>Мои</ru>
             <ua>Мої</ua>
         </text>
-        
+
         <text id="MyMessages">
             <en>My messages</en>
             <de>Meine Nachrichten</de>
             <ru>Мои сообщения</ru>
             <ua>Мої повідомлення</ua>
         </text>
-        
+
         <text id="MyMessagesShort">
             <en>messages</en>
             <de>Nachricht.</de>
@@ -677,7 +677,7 @@
             <ru>Участ.</ru>
             <ua>Участ.</ua>
         </text>
-        
+
         <text id="Password">
             <en>Password</en>
             <de>Kennwort</de>
@@ -705,14 +705,14 @@
             <ru>Очистить</ru>
             <ua>Очистити</ua>
         </text>
-        
+
         <text id="MsgConfirmClearData">
             <en>Are you sure to clear all saved profile data?</en>
             <de>Sind Sie sicher, dass Sie alle gespeicherten Profildaten löschen möchten?</de>
             <ru>Вы уверены, что хотите удалить все сохраненные данные профиля?</ru>
             <ua>Ви упевнені, що бажаєте видалити всі збережені дані профілю?</ua>
         </text>
-        
+
         <text id="MsgConfirmLogout">
             <en>Are you sure to log out?</en>
             <de>Sind Sie sicher, dass Sie sich ausloggen möchten?</de>
@@ -1071,7 +1071,7 @@
             <ru>Хиты</ru>
             <ua>Хіти</ua>
         </text>
-        
+
         <text id="TopicsCount">
             <en>Topics count</en>
             <de>Themenananzahl</de>
@@ -1085,7 +1085,7 @@
             <ru>Рейтинг</ru>
             <ua>Рейтинг</ua>
         </text>
-        
+
         <text id="Weighed">
             <en>Weighed</en>
             <de>Erwogen</de>
@@ -1120,7 +1120,7 @@
             <ru>Первая атака</ru>
             <ua>Перша атака</ua>
         </text>
-        
+
         <text id="LastAttack">
             <en>Last attack</en>
             <de>Letzte Attacke</de>
@@ -1134,7 +1134,7 @@
             <ru>Атаки</ru>
             <ua>Атаки</ua>
         </text>
-        
+
         <text id="Limit">
             <en>Limit</en>
             <de>Limit</de>
@@ -1687,7 +1687,7 @@
             <ru>Вы уверены, что хотите пометить сообщения непрочитанными начиная отсюда?</ru>
             <ua>Ви упевнені, що бажаєте позначити повідомлення непрочитаними починаючи звідси?</ua>
         </text>
-        
+
         <text id="AddToFavourites">
             <en>Add to favourites</en>
             <de>Zu Favoriten hinzufg.</de>
@@ -1813,7 +1813,7 @@
             <ru>Подп.</ru>
             <ua>Підп.</ua>
         </text>
-        
+
         <text id="Subscribe">
             <en>Subscribe</en>
             <de>Abonnieren</de>
@@ -1939,7 +1939,7 @@
             <ru>Галерея вложений</ru>
             <ua>Галерея вкладень</ua>
         </text>
-        
+
         <text id="Restrictions">
             <en>Restrictions</en>
             <de>Einschränkungen</de>
@@ -1974,7 +1974,7 @@
             <ru>Вы можете оценивать сообщения или голосовать лишь через %s дня после регистрации!</ru>
             <ua>Ви можете оцінювати повідомлення або голосувати лише через %s дні після реєстрації!</ua>
         </text>
-        
+
         <text id="ErrMessagePrivateMessagesAllowed">
             <en>You can write private messages only after %s days after the registration!</en>
             <de>Sie dürfen erst in %s Tagen nach der Registrierung die privaten Nachrichten senden!</de>
@@ -2002,7 +2002,7 @@
             <ru>Картинки в буфере обмена не найдены или не могут быть извлечены из-за защитных ограничений!</ru>
             <ua>Картинки в буфері обміну не знайдені або не можуть бути вилучені з-за захисних обмежень!</ua>
         </text>
-        
+
         <text id="MaxAttachmentSizeAudioVideo">
             <en>Maximal attachment size for audio/video</en>
             <de>Maximale Anhangsgröße für Audio/Video</de>
@@ -2375,43 +2375,43 @@
         </text>
 
         <text id="MsgRegistrationSuccess">
-            <en>Your user account has been successfully created! 
+            <en>Your user account has been successfully created!
 
-                To complete the registration process, you need to activate your user account by confirming your entered e-mail address by clicking on the activation link that was sent to you.                
+                To complete the registration process, you need to activate your user account by confirming your entered e-mail address by clicking on the activation link that was sent to you.
 
-                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You can also activate your user account by clicking the activation link that was sent to you. 
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You can also activate your user account by clicking the activation link that was sent to you.
 
-                If the activation link email does not arrive, you can log in to the forum and request that the activation link email be resent or change your email address. 
+                If the activation link email does not arrive, you can log in to the forum and request that the activation link email be resent or change your email address.
 
                 If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.
             </en>
-            <de>Ihr Benutzerkonto wurde erfolgreich erstellt! 
+            <de>Ihr Benutzerkonto wurde erfolgreich erstellt!
 
-                Um den Registrierungsprozess abzuschließen, müssen Sie Ihr Benutzerkonto aktivieren, indem Sie die eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
+                Um den Registrierungsprozess abzuschließen, müssen Sie Ihr Benutzerkonto aktivieren, indem Sie die eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.
 
-                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto aktivieren, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde. 
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto aktivieren, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.
 
-                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern.
 
                 Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".
             </de>
-            <ru>Ваша учетная запись успешно создана! 
+            <ru>Ваша учетная запись успешно создана!
 
-                Для завершения процесса регистрации вам необходимо активировать вашу учетную запись, подтвердив введенный электронный адрес переходом по ссылке активации, которая была выслана вам на него.                
+                Для завершения процесса регистрации вам необходимо активировать вашу учетную запись, подтвердив введенный электронный адрес переходом по ссылке активации, которая была выслана вам на него.
 
-                Тем временем, вы можете уже сейчас вы можете задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др. 
+                Тем временем, вы можете уже сейчас вы можете задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др.
 
-                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес. 
+                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес.
 
                 Если электронное сообщение так и не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".
             </ru>
-            <ua>Ваш обліковий запис успішно створено! 
+            <ua>Ваш обліковий запис успішно створено!
 
-                Для завершення процесу реєстрації вам необхідно активувати ваш обліковий запис, підтвердивши введену електронну адресу переходом за посиланням активації, що було надіслано вам на неї.                
+                Для завершення процесу реєстрації вам необхідно активувати ваш обліковий запис, підтвердивши введену електронну адресу переходом за посиланням активації, що було надіслано вам на неї.
 
-                Тим часом, ви можете вже зараз ви можете задати додаткові властивості вашого профілю, такі як фотографія, аватар, підпис тощо. 
+                Тим часом, ви можете вже зараз ви можете задати додаткові властивості вашого профілю, такі як фотографія, аватар, підпис тощо.
 
-                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу. 
+                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу.
 
                 Якщо електронне повідомлення так і не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".
             </ua>
@@ -2419,89 +2419,89 @@
 
         <text id="MsgRegistrationSuccessApproval">
             <en>Your user account has been successfully created!
-                
+
                 However, you need to wait for the administrator to confirm your user account!
-                
-                In the meantime, you can now set additional properties for your profile, such as a photo, avatar, signature, etc., and activate your user account by confirming the email address you entered by clicking on the activation link that was sent to you.                
-                
-                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
-                
+
+                In the meantime, you can now set additional properties for your profile, such as a photo, avatar, signature, etc., and activate your user account by confirming the email address you entered by clicking on the activation link that was sent to you.
+
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address.
+
                 If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.</en>
             <de>Ihr Benutzerkonto wurde erfolgreich erstellt!
-                
+
                 Sie müssen jedoch noch auf die Bestätigung Ihres Kontos durch den Administrator warten!
-                
-                In der Zwischenzeit können Sie weitere Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw., und Ihr Benutzerkonto aktivieren, indem Sie die von Ihnen eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.                
-                
-                Wenn Sie keine E-Mail mit dem Aktivierungslink erhalten, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
-                
+
+                In der Zwischenzeit können Sie weitere Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw., und Ihr Benutzerkonto aktivieren, indem Sie die von Ihnen eingegebene E-Mail-Adresse bestätigen, indem Sie auf den Aktivierungslink klicken, der Ihnen zugesandt wurde.
+
+                Wenn Sie keine E-Mail mit dem Aktivierungslink erhalten, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern.
+
                 Wenn Sie die E-Mail immer noch nicht erhalten haben, kontaktieren Sie bitte die Forum-Administration über das Menü "Kontakt".</de>
             <ru>Ваша учетная запись успешно создана!
-                
+
                 Однако вам необходимо дождаться, когда администратор подтвердит вашу учетную запись!
-                
-                Тем временем, вы можете уже сейчас задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др., а также активировать вашу учетную запись, подтвердив введенный электронный адрес переходом по ссылке активации, которая была выслана вам на него.                
-                
-                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес. 
-                
+
+                Тем временем, вы можете уже сейчас задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др., а также активировать вашу учетную запись, подтвердив введенный электронный адрес переходом по ссылке активации, которая была выслана вам на него.
+
+                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес.
+
                 Если электронное сообщение так и не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".
             </ru>
             <ua>Ваш обліковий запис успішно створено!
-                
+
                 Однак вам необхідно дочекатися, коли адміністратор підтвердить ваш обліковий запис!
-                
-                Тим часом, ви можете вже зараз задати додаткові властивості вашого профілю, як-от фотографія, аватар, підпис тощо, а також активувати ваш обліковий запис, підтвердивши введену електронну адресу, перейшовши за посиланням активації, що було надіслано вам на неї.                
-                
-                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу. 
-                
+
+                Тим часом, ви можете вже зараз задати додаткові властивості вашого профілю, як-от фотографія, аватар, підпис тощо, а також активувати ваш обліковий запис, підтвердивши введену електронну адресу, перейшовши за посиланням активації, що було надіслано вам на неї.
+
+                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу.
+
                 Якщо електронне повідомлення так і не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
         </text>
 
         <text id="MsgRegistrationSuccessApprovalDelayed">
             <en>Your user account has been successfully created!
-            
+
                 However, you need to wait for the administrator to confirm your user account!
-                
+
                 After confirmation, you will be sent an email with a link to activate your user account. Please confirm your entered email address by clicking on this link.
 
-                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You will also be able to set additional properties for your profile.                
-                
-                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address. 
-                
+                In the meantime, you can already set additional properties for your profile, such as a photo, avatar, signature, etc. You will also be able to set additional properties for your profile.
+
+                If the email with the activation link does not arrive, you can log in to the forum and request to resend the email with the activation link or change your email address.
+
                 If the e-mail still does not arrive, please contact the forum administration via the "Contact" menu item.</en>
             <de>Ihr Benutzerkonto wurde erfolgreich erstellt!
-            
+
                 Sie müssen jedoch auf die Bestätigung Ihres Kontos durch den Administrator warten!
-                
+
                 Nach der Bestätigung wird Ihnen eine E-Mail mit einem Link zur Aktivierung Ihres Kontos zugesandt. Bitte bestätigen Sie Ihre eingegebene E-Mail-Adresse, indem Sie auf diesen Link klicken.
 
-                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto auch aktivieren, indem Sie auf diesen Link klicken.                
-                
-                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern. 
-                
+                In der Zwischenzeit können Sie bereits zusätzliche Eigenschaften für Ihr Profil festlegen, wie z. B. ein Foto, einen Avatar, eine Signatur usw. Sie können Ihr Benutzerkonto auch aktivieren, indem Sie auf diesen Link klicken.
+
+                Sollte die E-Mail mit dem Aktivierungslink nicht ankommen, können Sie sich im Forum anmelden und die erneute Zusendung der E-Mail mit dem Aktivierungslink anfordern oder Ihre E-Mail-Adresse ändern.
+
                 Wenn Sie immer noch keine E-Mail erhalten haben, kontaktieren Sie bitte die Forum-Administration über den Menüpunkt "Kontakt".</de>
             <ru>Ваша учетная запись успешно создана!
-            
+
                 Однако вам необходимо дождаться, когда администратор подтвердит вашу учетную запись!
-                
+
                 После подтверждения, вам будет выслано электронное сообщение со ссылкой активации вашей учетной записи. Подтвердите введенный электронный адрес переходом по данной ссылке.
 
-                Тем временем, вы можете уже сейчас задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др.                
-                
-                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес. 
-                
+                Тем временем, вы можете уже сейчас задать дополнительные свойства вашего профиля, такие как фотография, аватар, подпись и др.
+
+                Если электронное сообщение со ссылкой активации не приходит, вы можете авторизоваться на форуме и запросить повторную отправку электронного сообщения со ссылкой активации или сменить электронный адрес.
+
                 Если электронное сообщение так и не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".
             </ru>
             <ua>Ваш обліковий запис успішно створено!
-            
+
                 Однак вам необхідно дочекатися, коли адміністратор підтвердить ваш обліковий запис!
-                
+
                 Після підтвердження, вам буде надіслано електронне повідомлення з посиланням активації вашого облікового запису. Підтвердіть введену електронну адресу переходом за цим посиланням.
 
-                Тим часом, ви можете вже зараз задати додаткові властивості вашого профілю, такі як фотографія, аватар, підпис тощо.                
-                
-                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу. 
-                
+                Тим часом, ви можете вже зараз задати додаткові властивості вашого профілю, такі як фотографія, аватар, підпис тощо.
+
+                Якщо електронне повідомлення з посиланням активації не надходить, ви можете авторизуватися на форумі та запросити повторне надсилання електронного повідомлення з посиланням активації або змінити електронну адресу.
+
                 Якщо електронне повідомлення так і не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
         </text>
 
@@ -2539,13 +2539,13 @@
             <ru>Данное имя пользователя зарезервировано и не может быть использовано!</ru>
             <ua>Це ім'я користувача зарезервовано і не може бути використано!</ua>
         </text>
-        
+
         <text id="ErrUserNameProtected">
             <en>This guest name is protected and cannot be used for registration! If you are a regular guest with this nickname and want to become a registered user, contact the forum administration.</en>
             <de>Dieser Gastname ist geschützt und kann nicht zur Registrierung verwendet werden! Wenn Sie ein regelmäßiger Gast mit diesem Nicknamen sind und ein registrierter Benutzer werden möchten, wenden Sie sich an die Forum-Administration.</de>
             <ru>Данное имя гостя защищено и не может быть использовано для регистрации! Если вы являетесь гостем завсегдатаем с данным ником и хотите стать зарегистрированным пользователем, обратитесь к администрации форума.</ru>
             <ua>Дане ім'я гостя захищено і не може бути використано для реєстрації! Якщо ви є гостем завсідником з даними ніком і хочете стати зареєстрованим користувачем, зверніться до адміністрації форуму.</ua>
-        </text>        
+        </text>
 
         <text id="ErrUserEmailInUse">
             <en>This e-mail address is already used! If it is your address, and you do not remember the login data, use the password reset function.</en>
@@ -2996,7 +2996,7 @@
             <ru>Поскольку вы изменили электронный адрес, ваш профиль был деактивирован, на новый адрес было отправлено сообщение со ссылкой активации. Перейдите по ссылке активации, чтобы подтвердить изменение электронного адреса.</ru>
             <ua>Оскільки ви змінили електронну адресу, ваш профіль деактивовано, на нову адресу було надіслано повідомлення з посиланням активації. Перейдіть по посиланню активації, аби підтвердити зміну електронної адреси.</ua>
         </text>
-        
+
         <text id="MsgNewApprovalActivationRequired">
             <en>Because you have changed your e-mail address, your profile has been deactivated and must be approved by the forum administration. Once approved, you will be sent an email with a link to activate your user account.</en>
             <de>Da Sie Ihre E-Mail-Adresse geändert haben, wurde Ihr Profil deaktiviert und muss von der Forum-Administration genehmigt werden. Nach der Genehmigung erhalten Sie eine E-Mail mit einem Link zur Aktivierung Ihres Benutzerkontos.</de>
@@ -3094,7 +3094,7 @@
             <ru>Профиль гостя</ru>
             <ua>Профіль гостя</ua>
         </text>
-        
+
         <text id="MyProfile">
             <en>My profile</en>
             <de>Mein Profil</de>
@@ -3129,7 +3129,7 @@
             <ru>Скрывает мой профиль</ru>
             <ua>Приховує мій профіль</ua>
         </text>
-        
+
         <text id="Hidden">
             <en>Hidden</en>
             <de>Versteckt</de>
@@ -3185,7 +3185,7 @@
             <ru>Искать последние сообщения автора</ru>
             <ua>Шукати останні повідомлення автора</ua>
         </text>
-        
+
         <text id="SearchAuthorLastReplies">
             <en>Search last replies to the autor</en>
             <de>Nach letzten Antworten an den Autor suchen</de>
@@ -3262,7 +3262,7 @@
             <ru>Личные</ru>
             <ua>Особисті</ua>
         </text>
-        
+
         <text id="Moderate">
             <en>Moderate</en>
             <de>Moderieren</de>
@@ -4340,7 +4340,7 @@
             <ru>Цитир.</ru>
             <ua>Цитув.</ua>
         </text>
-        
+
         <text id="CitateForCopy">
             <en>Citate for copy</en>
             <de>Zitieren zum Kopieren</de>
@@ -4389,7 +4389,7 @@
             <ru>Пожал.</ru>
             <ua>Поскар.</ua>
         </text>
-        
+
         <text id="More">
             <en>More ...</en>
             <de>Mehr ...</de>
@@ -4864,6 +4864,20 @@
             <de>Anhänge verbieten</de>
             <ru>Запретить вложения</ru>
             <ua>Заборонити вкладення</ua>
+        </text>
+
+        <text id="AllowImages">
+            <en>Allow images</en>
+            <de>Bilder erlauben</de>
+            <ru>Разрешить отправку картинок</ru>
+            <ua>Дозволити надсилання картинок</ua>
+        </text>
+
+        <text id="DisallowImages">
+            <en>Disallow images</en>
+            <de>Bilder verbieten</de>
+            <ru>Запретить отправку картинок</ru>
+            <ua>Заборонити надсилання картинок</ua>
         </text>
 
         <text id="AllowVideoAudio">
@@ -5746,14 +5760,14 @@
             <ru>Просмотр</ru>
             <ua>Перегляд</ua>
         </text>
-        
+
         <text id="ProfilePreview">
             <en>Profile preview</en>
             <de>Profilvorschau</de>
             <ru>Просмотр профиля</ru>
             <ua>Перегляд профілю</ua>
         </text>
-        
+
         <text id="ProfileSettings">
             <en>Profile settings</en>
             <de>Profileinstellungen</de>
@@ -5851,13 +5865,13 @@
             <ru>Оскорбление / угроза родственникам</ru>
             <ua>Образа / загроза родичам</ua>
         </text>
-        
+
         <text id="Extremism">
             <en>Extremism</en>
             <de>Extremismus</de>
             <ru>Экстремизм</ru>
             <ua>Екстремізм</ua>
-        </text>        
+        </text>
 
         <text id="Flood">
             <en>Flood</en>
@@ -5973,9 +5987,16 @@
 
         <text id="ErrAttachmentsBlocked">
             <en>You are disallowed to post attachments!</en>
-            <de>Ihnen ist verboten, die Anhänge zu post!</de>
+            <de>Ihnen ist verboten, die Anhänge zu posten!</de>
             <ru>Вам запрещено отправлять вложения!</ru>
             <ua>Вам заборонено відправляти вкладення!</ua>
+        </text>
+
+        <text id="ErrImagesBlocked">
+            <en>You are not allowed to post images!</en>
+            <de>Es ist Ihnen untersagt, Bilder zu posten!</de>
+            <ru>Вам запрещено отправлять картинки!</ru>
+            <ua>Вам заборонено відправляти картинки!</ua>
         </text>
 
         <text id="ErrVideoAudioBlocked">
@@ -6054,6 +6075,62 @@
             <de>Die Anhang-Veröffentlichung wurde erlaubt</de>
             <ru>Отправка вложений разрешена</ru>
             <ua>Відправлення вкладень дозволене</ua>
+        </text>
+
+        <text id="MsgImagesDisallowed">
+            <en>Image posting has been disabled for this user.</en>
+            <de>Das Posten von Bildern wurde für diesen Benutzer deaktiviert.</de>
+            <ru>Отправка картинок данным пользователем запрещена.</ru>
+            <ua>Відправлення картинок цим користувачем заборонено.</ua>
+        </text>
+
+        <text id="MsgImagesAllowed">
+            <en>Image posting has been enabled for this user.</en>
+            <de>Das Posten von Bildern wurde für diesen Benutzer aktiviert.</de>
+            <ru>Отправка картинок данным пользователем разрешена.</ru>
+            <ua>Відправлення картинок цим користувачем дозволене.</ua>
+        </text>
+
+        <text id="MsgEventImagesDisallowed">
+            <en>The moderator {author} has disabled your ability to post images.</en>
+            <de>Der Moderator {author} hat Ihnen das Posten von Bildern verboten.</de>
+            <ru>Модератор {author} запретил вам отправлять картинки.</ru>
+            <ua>Модератор {author} заборонив вам надсилати картинки.</ua>
+        </text>
+
+        <text id="MsgEventImagesDisallowedAnonym">
+            <en>Image posting has been disabled for you.</en>
+            <de>Das Posten von Bildern wurde für Sie deaktiviert.</de>
+            <ru>Для вас установлен запрет на отправку картинок.</ru>
+            <ua>Для вас встановлено заборону на відправлення картинок.</ua>
+        </text>
+
+        <text id="MsgEventImagesAllowed">
+            <en>The moderator {author} has enabled your ability to post images.</en>
+            <de>Der Moderator {author} hat Ihnen das Posten von Bildern erlaubt.</de>
+            <ru>Модератор {author} снял с вас запрет на отправку картинок.</ru>
+            <ua>Модератор {author} зняв з вас заборону на відправлення картинок.</ua>
+        </text>
+
+        <text id="MsgEventImagesAllowedAnonym">
+            <en>Image posting has been enabled for you.</en>
+            <de>Das Posten von Bildern wurde für Sie aktiviert.</de>
+            <ru>С вас снят запрет на отправку картинок.</ru>
+            <ua>З вас знято заборону на відправлення картинок.</ua>
+        </text>
+
+        <text id="ActionImagesDisallowed">
+            <en>Image posting disabled</en>
+            <de>Bilderverbot</de>
+            <ru>Отправка картинок запрещена</ru>
+            <ua>Відправлення картинок заборонене</ua>
+        </text>
+
+        <text id="ActionImagesAllowed">
+            <en>Image posting enabled</en>
+            <de>Bilderlaubnis</de>
+            <ru>Отправка картинок разрешена</ru>
+            <ua>Відправлення картинок дозволене</ua>
         </text>
 
         <text id="ErrModeratorBlockNotAllowed">
@@ -6301,7 +6378,7 @@
             <ru>Заблокированные IP адреса</ru>
             <ua>Заблоковані IP адреси</ua>
         </text>
-        
+
         <text id="WhiteIPAddresses">
             <en>White IP addresses</en>
             <de>Weiße IP-Adressen</de>
@@ -6777,7 +6854,7 @@
             <ru>Результаты после публикации</ru>
             <ua>Результати після публікації</ua>
         </text>
-        
+
         <text id="DelayPublishing">
             <en>Delay publishing</en>
             <de>Publizierung verlegen</de>
@@ -6812,7 +6889,7 @@
             <ru>Неопубликовано</ru>
             <ua>Неопубліковано</ua>
         </text>
-        
+
         <text id="not_published">
             <en>not published</en>
             <de>nicht publiziert</de>
@@ -6987,7 +7064,7 @@
             <ru>Дизлайки</ru>
             <ua>Дизлайки</ua>
         </text>
-        
+
         <text id="ActivateRates">
             <en>Activate rates</en>
             <de>Bewertungen aktivieren</de>
@@ -7190,7 +7267,7 @@
             <ru>Тип</ru>
             <ua>Тип</ua>
         </text>
-        
+
         <text id="DatabaseType">
             <en>Database type</en>
             <de>Datenbanktyp</de>
@@ -7295,7 +7372,7 @@
                 видалення та зміни її властивостей і об'єктів.
             </ua>
         </text>
-        
+
         <text id="DBPrefixComment">
             <en>To avoid naming conflicts in the database, specify a
                 prefix that will be pre-pended to any database object of the application.
@@ -7531,7 +7608,7 @@
             <ru>Профиль участника скрывают</ru>
             <ua>Профіль участника приховують</ua>
         </text>
-        
+
         <text id="RateStatistics">
             <en>Rate statistics</en>
             <de>Bewertungs-Statistik</de>
@@ -7615,7 +7692,7 @@
             <ru>Сообщения, которым пользователь '%s' поставил дизлайк</ru>
             <ua>Повідомлення, яким користувач '%s' поставив дизлайк</ua>
         </text>
-        
+
         <text id="MessagesMemberWasLiked">
             <en>Messages of the user '%s' that have been liked</en>
             <de>Die Nachrichten vom Benutzer '%s', die geliket wurden</de>
@@ -7657,7 +7734,7 @@
             <ru>Сообщения, которым автор поставил дизлайк</ru>
             <ua>Повідомлення, яким автор поставив дизлайк</ua>
         </text>
-        
+
         <text id="AuthorWasLiked">
             <en>Messages of the author that have been liked</en>
             <de>Die Nachrichten vom Autor, die geliket wurden</de>
@@ -7671,7 +7748,7 @@
             <ru>Сообщения автора, за которые поставили дизлайк</ru>
             <ua>Повідомлення автора, за які поставили дизлайк</ua>
         </text>
-        
+
         <text id="Events">
             <en>Events</en>
             <de>Ereignisse</de>
@@ -7825,7 +7902,7 @@
             <ru>Владелец форума забрал у вас права администратора.</ru>
             <ua>Власник форуму забрав у вас права адміністратора.</ua>
         </text>
-        
+
         <text id="MsgEventNewAdministratorAdded">
             <en>The forum owner has given the user {administrator} the administrator rights.</en>
             <de>Das Forumbesitzer hat dem Benutzer {administrator} die Administratorenrechte gegeben.</de>
@@ -7838,7 +7915,7 @@
             <de>Das Forumbesitzer hat dem Benutzer {administrator} die Administratorenrechte entnommen.</de>
             <ru>Владелец форума забрал у пользователя {administrator} права администратора.</ru>
             <ua>Власник форуму забрав у користувача {administrator} права адміністратора.</ua>
-        </text>        
+        </text>
 
         <text id="MsgEventGrantForumModerator">
             <en>The administrator {author} has given you the moderator rights on the forum {forum}.</en>
@@ -8021,7 +8098,7 @@
             <ru>Пользоватеть {author} запросил модераторские права на тему {topic} на форуме {forum}.</ru>
             <ua>Користувач {author} запросив модераторські права на тему {topic} на форумі {forum}.</ua>
         </text>
-        
+
         <text id="MsgAuthorRequestedModeration">
             <en>The user has requested the moderation rigths for the topic.</en>
             <de>Der Benutzer hat die Moderatoren-Rechte auf das Thema angefragt.</de>
@@ -8082,7 +8159,7 @@
             <en>An attachment in your message {message} from {post_date} has been restored in the topic {topic} on the forum {forum}.</en>
             <de>Ein Anhang in Ihrer Nachricht {message} vom {post_date} wurde im Thema {topic} auf dem Forum {forum} wiederherstellt.</de>
             <ru>Вложение в Вашем сообщении {message} от {post_date} было восстановлено в теме {topic} на форуме {forum}.</ru>
-            <ua>Вкладення в Вашому повідомленні {message} від {post_date} було відновлено в темі {topic} на форумі {forum}.</ua>            
+            <ua>Вкладення в Вашому повідомленні {message} від {post_date} було відновлено в темі {topic} на форумі {forum}.</ua>
         </text>
 
         <text id="MsgEventMessageDeleted">
@@ -8714,8 +8791,8 @@
             <ru>Ваша учетная запись была отклонена.</ru>
             <ua>Ваш обліковий запис було відхилено.</ua>
         </text>
-        
-        
+
+
         <text id="MsgEventUserMadePrivileged">
             <en>Administrator {author} has granted you privileged user status.</en>
             <de>Administrator {author} hat Ihnen den Status eines privilegierten Benutzers gewährt.</de>
@@ -8771,7 +8848,7 @@
             <ru>У вас отнят статус привилегированного модератора тем.</ru>
             <ua>У вас відібрано статус привілейованого модератора тем.</ua>
         </text>
-        
+
         <text id="MsgEventUserAllowedGlobalBan">
             <en>Administrator {author} has granted you the right to globally ban the users.</en>
             <de>Administrator {author} hat Ihnen das Recht eingeräumt, die Benutzer global zu blockieren.</de>
@@ -8799,7 +8876,7 @@
             <ru>У вас отнято право глобального бана пользователей.</ru>
             <ua>У вас забрано право глобального бану користувачів.</ua>
         </text>
-        
+
         <text id="MsgEventUserAllowedSeeIP">
             <en>Administrator {author} has granted you the right to see IP addresses in moderated forums.</en>
             <de>Administrator {author} hat Ihnen das Recht eingeräumt, IP-Adressen in moderierten Foren zu sehen.</de>
@@ -9387,7 +9464,7 @@
             <ru>Пользовательский CSS</ru>
             <ua>Користувальницький CSS</ua>
         </text>
-        
+
         <text id="CustomCSSComment">
             <en>Use the browser debugger and overload the CSS rules as you see fit.</en>
             <de>Verwenden Sie einen Browser-Debugger und überladen Sie CSS-Regeln nach Belieben.</de>
@@ -9649,67 +9726,67 @@
         </text>
 
         <text id="MaintenanceComment">
-            <en>The forum is currently under maintenance presumably until%s 
+            <en>The forum is currently under maintenance presumably until%s
             (time zone: %s).</en>
-            <de>Das Forum wird momentan gewartet, voraussichtlich bis %s 
+            <de>Das Forum wird momentan gewartet, voraussichtlich bis %s
             (Zeitzone: %s).</de>
-            <ru>Форум на обслуживании предположительно до %s 
+            <ru>Форум на обслуживании предположительно до %s
             (временная зона: %s).</ru>
-            <ua>Форум на обслуговуванні імовірно до %s 
+            <ua>Форум на обслуговуванні імовірно до %s
             (часова зона: %s).</ua>
         </text>
 
         <text id="MaintenanceNotification">
-            <en>The forum will be on maintenance presumably 
-            
-            from %s to %s 
+            <en>The forum will be on maintenance presumably
+
+            from %s to %s
             time zone: %s
-            
+
             During this period, individual functions or the entire forum may be unavailable!</en>
-            <de>Das Forum wird voraussichtlich 
-            
-            von %s bis %s 
+            <de>Das Forum wird voraussichtlich
+
+            von %s bis %s
             Zeitzone: %s
-            
+
             gewartet. Während dieser Zeit kann es sein, dass einige Funktionen oder das gesamte Forum nicht verfügbar sind!</de>
-            <ru>Форум будет на техническом обслуживании предположительно 
-            
-            с %s до %s 
+            <ru>Форум будет на техническом обслуживании предположительно
+
+            с %s до %s
             временная зона: %s
-            
+
             В этот период могут быть недоступны отдельные функции или весь форум!</ru>
-            <ua>Форум буде на технічному обслуговуванні імовірно 
-            
-            з %s до %s 
+            <ua>Форум буде на технічному обслуговуванні імовірно
+
+            з %s до %s
             часова зона: %s
-            
+
             У цей період можуть бути недоступні окремі функції або весь форум!</ua>
         </text>
 
         <text id="BackupNotification">
             <en>ATTENTION! In the period
-            
-              from %s to %s 
+
+              from %s to %s
               time zone: %s
-            
+
               backup work is being carried out, so the forum may slow down!</en>
             <de>ACHTUNG! Im Zeitraum
-            
-             von %s bis %s 
+
+             von %s bis %s
              Zeitzone: %s
-            
+
              werden Backup-Arbeiten durchgeführt, daher kann die Geschwindigkeit des Forums abnehmen!</de>
             <ru>ВНИМАНИЕ! В период
-            
-            с %s до %s 
+
+            с %s до %s
             временная зона: %s
-            
+
             выполняются работы по резервному копированию, поэтому возможно снижение скорости работы форума!</ru>
             <ua>УВАГА! В період
-            
-             з %s до %s 
+
+             з %s до %s
              часова зона: %s
-            
+
              виконуються роботи щодо створення резервної копії, тому можливе зниження швидкості роботи форуму!</ua>
         </text>
 
@@ -9887,7 +9964,7 @@
             <ru>Удалить текущее вложение</ru>
             <ua>Видалити поточне вкладення</ua>
         </text>
-        
+
         <text id="Tags">
             <en>Tags</en>
             <de>Tags</de>
@@ -10412,7 +10489,7 @@
           <ru>Сортировать по убыванию</ru>
           <ua>Сортувати по спадаючій</ua>
         </text>
-        
+
         <text id="Filter">
             <en>Filter</en>
             <de>Filter</de>
@@ -10461,7 +10538,7 @@
             <ru>Профильный</ru>
             <ua>Профільний</ua>
         </text>
-        
+
         <text id="ShowAllMessages">
             <en>All messages</en>
             <de>Alle Nachrichten</de>
@@ -10475,7 +10552,7 @@
             <ru>Только тематические</ru>
             <ua>Тільки тематичні</ua>
         </text>
-        
+
         <text id="MessageIsThematic">
             <en>This message is thematic</en>
             <de>Dise Nachricht ist thematisch</de>
@@ -10496,7 +10573,7 @@
             <ru>Вы уверены, что хотите включить профильный режим для данной темы?</ru>
             <ua>Ви упевнені, що бажаєте включити профільний режим для даної теми?</ua>
         </text>
-        
+
         <text id="TurnProfiledModeOff">
             <en>Dedicated mode off</en>
             <de>Dediz. Modus aus</de>
@@ -10531,7 +10608,7 @@
             <ru>Вы уверены, что хотите включить блог-режим для данной темы?</ru>
             <ua>Ви упевнені, що бажаєте включити блог-режим для даної теми?</ua>
         </text>
-        
+
         <text id="TurnBlogModeOff">
             <en>Blog mode off</en>
             <de>Blog-Modus aus</de>
@@ -10622,14 +10699,14 @@
             <ru>Вы уверены, что хотите сделать выбранные сообщения комментариями?</ru>
             <ua>Ви впевнені, що бажаєте зробити вибрані повідомлення коментарями?</ua>
         </text>
-        
+
         <text id="MsgPostsConvertedToThematic">
           <en>Messages has been made thematic.</en>
           <de>Nachrichten wurden tematisch gemacht.</de>
           <ru>Сообщения сделаны тематическими.</ru>
           <ua>Повідомлення зроблені тематичними.</ua>
-        </text>        
-        
+        </text>
+
         <text id="MsgPostsConvertedToComments">
           <en>Messages has been made to comments.</en>
           <de>Nachrichten wurden zu Kommentaren gemacht.</de>
@@ -10692,14 +10769,14 @@
             <ru>Вы уверены, что хотите сделать выбранные сообщения не 18+?</ru>
             <ua>Ви впевнені, що бажаєте зробити вибрані повідомлення не 18+?</ua>
         </text>
-        
+
         <text id="MsgPostsConvertedToAdult">
           <en>Messages has been made 18+.</en>
           <de>Nachrichten wurden 18+ gemacht.</de>
           <ru>Сообщения сделаны 18+.</ru>
           <ua>Повідомлення зроблені 18+.</ua>
-        </text>        
-        
+        </text>
+
         <text id="MsgPostsConvertedToNonAdults">
           <en>Messages has been made to non 18+.</en>
           <de>Nachrichten wurden zu nicht 18+ gemacht.</de>
@@ -10755,7 +10832,7 @@
             <ru>Вы игнорируете данного пользователя и не можете выставлять ему оценки!</ru>
             <ua>Ви ігноруєте даного користувача і не можете виставляти йому оцінки!</ua>
         </text>
-        
+
         <text id="ErrPrivateMessageIgnoredUsers">
             <en>You are ignoring this user, and therefore, you cannot send him private messages!</en>
             <de>Sie ignorieren diesen Benutzer und deshalb können Sie ihm keine privaten Nachrichten senden!</de>
@@ -10818,13 +10895,13 @@
             <ru>Запись запрещена</ru>
             <ua>Запис заборонена</ua>
         </text>
-        
+
         <text id="ErrTorNodeBlocked">
             <en>Your TOR Exit Node is blocked! Login or register to get access.</en>
             <de>Ihre TOR-Exit-Node is geblockt! Loggen Sie sich ein oder registrieren, um den Zugang zu bekommen.</de>
             <ru>Данная точка выхода TOR заблокирована! Авторизуйтесь или зарегистрируйтесь, чтобы получить доступ.</ru>
             <ua>Дана точка виходу TOR заблокована! Авторизуйтесь або зареєструйтесь, щоб отримати доступ.</ua>
-        </text>        
+        </text>
 
         <text id="InformAboutNewUsers">
             <en>Notify about new user registrations</en>
@@ -10881,7 +10958,7 @@
             <ru>Информация</ru>
             <ua>Інформація</ua>
         </text>
-        
+
         <text id="System">
             <en>System</en>
             <de>System</de>
@@ -10895,7 +10972,7 @@
             <ru>Следующие пользователи не будут уведомлены, поскольку они либо не имеют доступа к теме, либо отключили персональные обращения, либо игнорируют вас, либо вы игнорируете их, либо вы обратились к самому себе: %s!</ru>
             <ua>Наступні користувачі не будуть повідомлені, оскільки вони або не мають доступу до теми, або відключили персональні звернення, або вас ігнорують, або ви ігноруєте їх, або ви звернулися до самого себе: %s!</ua>
         </text>
-        
+
         <text id="RequestModeration">
             <en>Request moderation rights</en>
             <de>Moderatoren-Rechte anfragen</de>
@@ -10918,32 +10995,32 @@
         </text>
 
         <text id="RegistrationWarning">
-            <en>ATTENTION! An email with the activation link might get into SPAM or be blocked by your mail server. 
-            
+            <en>ATTENTION! An email with the activation link might get into SPAM or be blocked by your mail server.
+
                 If the e-mail with the activation link does not come, please contact the administration of the forum over the menu "Contact".</en>
             <de>ACHTUNG! Eine E-Mail mit dem Aktivierungs-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
-                
+
                 Wenn die E-Mail mit dem Aktivierungs-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"</de>
-            <ru>ВНИМАНИЕ! Электронное сообщение со ссылкой активации может попасть в СПАМ или быть заблокировано вашим мейл-сервером. 
-            
+            <ru>ВНИМАНИЕ! Электронное сообщение со ссылкой активации может попасть в СПАМ или быть заблокировано вашим мейл-сервером.
+
                 Если электронное сообщение со ссылкой активации не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".</ru>
             <ua>УВАГА! Електронне повідомлення з посиланням активації може потрапити в СПАМ або бути заблоковано вашим мейл-сервером.
-            
+
                 Якщо електронне повідомлення з посиланням активації не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
         </text>
 
         <text id="PasswordRestoreWarning">
-            <en>ATTENTION! An email with the password reset link might get into SPAM or be blocked by your mail server. 
-            
+            <en>ATTENTION! An email with the password reset link might get into SPAM or be blocked by your mail server.
+
                 If the e-mail with the password reset link does not come, please contact the administration of the forum over the menu "Contact".</en>
             <de>ACHTUNG! Eine E-Mail mit dem Reset-Link kann in SPAM gleangen oder von Ihrem Mailserver geblockt werden.
-                
+
                 Wenn die E-Mail mit dem Reset-Link nicht kommt, bitte setzten Sie sich mit der Forum-Administration in Verbindung über den Menüpunkt "Kontakt"</de>
-            <ru>ВНИМАНИЕ! Электронное сообщение со ссылкой переустановки пароля может попасть в СПАМ или быть заблокировано вашим мейл-сервером. 
-            
+            <ru>ВНИМАНИЕ! Электронное сообщение со ссылкой переустановки пароля может попасть в СПАМ или быть заблокировано вашим мейл-сервером.
+
                 Если электронное сообщение со ссылкой переустановки пароля не приходит, свяжитесь с администрацией форума через пункт меню "Контакт".</ru>
             <ua>УВАГА! Електронне повідомлення з посиланням перевстановлення пароля може потрапити в СПАМ або бути заблоковано вашим мейл-сервером.
-            
+
                 Якщо електронне повідомлення з посиланням перевстановлення пароля не приходить, зв'яжіться з адміністрацією форуму через пункт меню "Контакт".</ua>
         </text>
 
@@ -10953,7 +11030,7 @@
             <ru>Если у вас есть учетная запись, авторизуйтесь, чтобы получить доступ!</ru>
             <ua>Якщо у вас є обліковий запис, авторизуйтесь, щоб отримати доступ!</ua>
         </text>
-        
+
         <text id="MsgUserPrivateTopicLeft">
             <en>The user has left the private topic</en>
             <de>Der Benutzer hat das private Thema verlassen</de>
@@ -10967,7 +11044,7 @@
             <ru>Пользователи приглашены в приватную тему</ru>
             <ua>Користувачі запрошені в приватну тему</ua>
         </text>
-        
+
         <text id="MsgUsersPrivateTopicRemoved">
             <en>The users have been removed from the private topic</en>
             <de>Die Benutzer wurden aus dem privaten Thema entfernt</de>
@@ -10981,14 +11058,14 @@
             <ru>Пользователи заблокированы в теме</ru>
             <ua>Користувачі заблоковані в темі</ua>
         </text>
-        
+
         <text id="MsgUsersTopicUnblocked">
             <en>The users have been unblocked in the topic</en>
             <de>Die Benutzer wurden im Thema deblockiert</de>
             <ru>Пользователи разблокированы в теме</ru>
             <ua>Користувачі розблоковані в темі</ua>
         </text>
-        
+
         <text id="GeoStatistics">
             <en>Geolocation statistics</en>
             <de>Geolokalisierungsstatistik</de>
@@ -11030,7 +11107,7 @@
             <ru>Боты</ru>
             <ua>Боти</ua>
         </text>
-        
+
         <text id="Maps">
             <en>Maps</en>
             <de>Maps</de>
@@ -11051,7 +11128,7 @@
             <ru>Вложение удалено!</ru>
             <ua>Вкладення видалене!</ua>
         </text>
-        
+
         <text id="ErrAttachmentNotFound">
             <en>Attachment not found!</en>
             <de>Anhang wurde nicht gefunden!</de>
@@ -11079,13 +11156,13 @@
             <ru>Время для редактирования или модерирования сообщений истекло, либо у вас нет прав на выполнение данной операции!</ru>
             <ua>Час редагування або модерування повідомлення минув, або у вас відсутні права на виконання цієї операції!</ua>
         </text>
-        
+
         <text id="ErrAttachmentDeleteNotAllowed">
             <en>You are not allowed to delete this attachment, probably it is a reference from another message where you do have the moderator rights!</en>
             <de>Sie sind nicht berechtigt diesen Anhang zu löschen, wahrscheinlich handelt es sich um eine Referenz aus einer anderen Nachricht, in der Sie nicht über die Moderatorrechte verfügen!</de>
             <ru>У вас нет прав на удаление данного вложения, вероятно это ссылка из другого сообщения, где у вас нет модераторских прав!</ru>
             <ua>Ви не маєте права видаляти цей вкладення, можливо, це посилання з іншого повідомлення, в якому ви не маєте прав модератора!</ua>
-        </text>        
+        </text>
 
         <text id="TopicsExistWarning">
             <en>There are already topics with a similar name in this forum. If you want to post your message to an existing topic, click on its name in the list.</en>
@@ -11148,22 +11225,22 @@
             <de>Diese Nachricht wurde bereits gesendet!</de>
             <ru>Данное сообщение уже отправлено!</ru>
             <ua>Дане повідомлення вже відправлено!</ua>
-        </text>        
-        
+        </text>
+
         <text id="ErrNoValidCommand">
             <en>No valid command found!</en>
             <de>Kein gültiger Befehl gefunden!</de>
             <ru>Не найдена допустимая команда!</ru>
             <ua>Не знайдено допустиму команду!</ua>
         </text>
-        
+
         <text id="ErrLogoutForRegistration">
             <en>You are already logged in as a registered user! To register a new user, log out.</en>
             <de>Sie sind bereits als registrierter Benutzer eingeloggt! Um einen neuen Benutzer zu registrieren, melden Sie sich ab.</de>
             <ru>Вы уже авторизованы как зарегистрированный пользователь! Для регистрации нового пользователя выйдите из системы.</ru>
             <ua>Ви вже авторизовані як зареєстрований користувач! Для реєстрації нового користувача вийдіть із системи.</ua>
         </text>
-        
+
         <text id="MsgIPClauseIgnored">
             <en>IP address criterion has been ignored. You can search by IP address only for youк own messages!</en>
             <de>Das Kriterium IP-Adresse wurde ignoriert. Sie können nur für Ihre eigenen Nachrichten nach der IP-Adresse suchen!</de>
@@ -11275,7 +11352,7 @@
             <ru>Активность анонимов</ru>
             <ua>Активність анонімів</ua>
         </text>
-        
+
         <text id="ErrTooManyPostsFromIP">
             <en>Too many posts submitted from this IP address '%s'. Try again later!</en>
             <de>Zu viele Nachrichten von dieser IP-Adresse '%s' eingereicht. Versuchen Sie es später noch einmal!</de>
@@ -11387,7 +11464,7 @@
           <ru>Персонализация</ru>
           <ua>Персоналізація</ua>
       </text>
-      
+
       <text id="AcceptSelected">
           <en>Accept selected</en>
           <de>Ausgewählte akzeptieren</de>
