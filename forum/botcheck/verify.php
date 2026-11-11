@@ -66,6 +66,10 @@ $_SESSION["bot_check_scoring"] = sprintf(
     $body['screen'] ?? '?'
 );
 
+if (empty($_SESSION["bot_check_client_data"])) {
+    $_SESSION["bot_check_client_data"] = "";
+}
+
 $_SESSION["bot_check_client_data"] .= $_SESSION["bot_check_scoring"];
 
 if ($totalScore >= $cfg['pass_threshold']) {

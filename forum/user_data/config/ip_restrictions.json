@@ -1,8 +1,14 @@
-{
-  "127.0.0.1": {
+[
+  {
+    "ips": [
+    "192.168.177.51",
+    "127.0.0.3",
+    "127.0.0.2"
+    ],
     "forums": [
       21,
-      31
+      31,
+      36
     ],
     "restrictions": [
       "attachments_blocked",
@@ -10,12 +16,15 @@
       "images_blocked"
     ]
   },
-  "192.168.1.1": {
+  {
+    "ips": [
+    "192.168.1.2"
+    ],
     "forums": [
-      31
+      23
     ],
     "restrictions": [
       "images_blocked"
     ]
   }
-}
+]
