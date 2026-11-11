@@ -8095,38 +8095,65 @@ abstract class ForumManager
     } // ajust_check_limits
 
     //-----------------------------------------------------------------
-    function is_guest_action_blocked($fid, $action)
+    /**
+     * Checks whether a guest action is blocked by any matching IP restriction group.
+     *
+     * Each JSON group contains an ips array of IPv4/IPv6 addresses or CIDR subnets,
+     * a forums array of forum IDs, and a restrictions array of blocked action names.
+     * Invalid groups are skipped, and forum IDs are compared without strict typing.
+     *
+     * @param int|string $fid
+     * The forum ID to check.
+     *
+     * @param string $action
+     * The restriction name to check, such as images_blocked.
+     *
+     * @return bool
+     * Returns true if any group matches the guest IP, forum, and action; otherwise
+     * false, including for logged-in users or missing, unreadable, or invalid JSON.
+     */
+    public function is_guest_action_blocked($fid, $action): bool
     {
         if ($this->is_logged_in()) {
             return false;
         }
 
         $restriction_file = APPLICATION_ROOT . "user_data/config/ip_restrictions.json";
+
         if (!file_exists($restriction_file)) {
             return false;
         }
 
         $json = file_get_contents($restriction_file);
+
         if ($json === false) {
             return false;
         }
 
         $restrictions = json_decode($json, true);
         $ip = System::getIPAddress();
+
         if (!is_array($restrictions)) {
             return false;
         }
 
-        foreach ($restrictions as $ipnetwork => $restriction) {
-            if (is_ip_in($ip, $ipnetwork)
-                && is_array($restriction)
-                && isset($restriction["forums"], $restriction["restrictions"])
-            && is_array($restriction["forums"])
-            && is_array($restriction["restrictions"])
-            && in_array($fid, $restriction["forums"])
-                && in_array($action, $restriction["restrictions"], true)) {
+        foreach ($restrictions as $restriction) {
+            if (!is_array($restriction)
+                || !isset($restriction["ips"], $restriction["forums"], $restriction["restrictions"])
+                || !is_array($restriction["ips"])
+                || !is_array($restriction["forums"])
+                || !is_array($restriction["restrictions"])
+                || !in_array($fid, $restriction["forums"])
+                || !in_array($action, $restriction["restrictions"], true)
+            ) {
+                continue;
+            }
+
+            foreach ($restriction["ips"] as $ipnetwork) {
+                if (is_string($ipnetwork) && is_ip_in($ip, $ipnetwork)) {
                 return true;
             }
+        }
         }
 
         return false;
