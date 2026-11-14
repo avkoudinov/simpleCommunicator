@@ -14,7 +14,7 @@ return [
     'ticket_ttl' => 120,         // сколько секунд действует тикет проверки (5 минут)
     'pass_threshold' => 70,      // итоговый балл (0-100), от которого пропускаем без капчи
     'difficulty' => 4,           // сложность proof-of-work (кол-во нулей в начале хэша)
-    'debug_log' => true,
+    'debug_log' => false,
 
     'challenge_url' => 'botcheck/challenge.php',
     'verify_url' => 'verify.php',
